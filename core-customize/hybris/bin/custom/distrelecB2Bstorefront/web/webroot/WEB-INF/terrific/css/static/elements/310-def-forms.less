@@ -1,0 +1,393 @@
+/*
+ * Generic Forms Helpers
+ */
+
+/**
+ * Namespace: Generic Forms Helpers
+ *   use as #forms > .mixin()
+ */
+#forms {
+
+	.input-base() { // searchbar, login etc.
+		#typo > .size-m();
+		vertical-align: middle;
+		display: inline-block;
+	}
+
+	.input-field() {
+		#forms > .input-base();
+		padding: 6px 8px; // Review: KR:
+		border: 1px solid @c-border;
+
+		&:focus {
+			background-color: @c-greyC;
+			border-width: 2px;
+            outline:0;
+		}
+
+		&.error {
+			border: 2px solid @c-redC;
+			padding: 5px 8px; // compensate for the additional border-width
+            outline:0;
+		}
+	}
+
+	.input-field-small() {
+        width: 60px;
+    }
+
+    .input-field-big() {
+        width:100%;
+    }
+
+
+	////////////////////////////
+
+	.checkbox() {
+
+		// hide the checkbox, but not for tabindex
+		.vh();
+
+		// show sprite instead
+		&+label:before,
+		&+input+label:before,// there is a hidden input field inbetween because of hybris, so add +input to every rule
+		&+.popover+input+label:before {// FE validation case with additional .popover in between
+			content: "";
+			.s-forms-checkbox-grey-std();
+			display:inline-block;
+			margin-right: 15px;
+			background-color: @c-white;
+		}
+
+		// checked
+		&:checked+input+label:before,
+		&:checked+.popover+input+label:before,// FE validation case with additional .popover in between
+		&:checked+label:before {
+			.s-forms-checkbox-blue-act();
+		}
+
+		// hover
+		&+input+label:hover:before,
+		&+.popover+input+label:hover:before,// FE validation case with additional .popover in between
+		&+label:hover:before {
+			.s-forms-checkbox-blue-std-hov();
+		}
+
+
+		// checked & hover
+		&:checked+input+label:hover:before,
+		&:checked+input:nth-child(n)+label:hover:before, // nth-child(n) needed for chrome, see http://stackoverflow.com/questions/14201694/chrome-webkit-not-rendering-css-display-change-on-inputchecked-element-elem
+		&:checked+.popover+input+label:hover:before,// FE validation case with additional .popover in between
+		&:checked+label:hover:before {
+			.s-forms-checkbox-blue-act-hov();
+		}
+
+		// IE 8 and below fallback to default checkbox, Standard Styles DO also NOT work in IE 8
+		.lt-ie9 & {
+			display: inline-block;
+			margin-right: 15px;
+			position: relative;
+			height: auto;
+			width: auto;
+		}
+
+		.lt-ie9 &+input+label:before,
+		.lt-ie9 &+.popover+input+label:before,// FE validation case with additional .popover in between
+		.lt-ie9 &+label:before {
+			display: none;
+		}
+
+		//
+		// Tabindex Focus the real Checkbox, but visually show on our checkbox
+
+		// Focus & unchecked
+		&:focus+input+label:before,
+		&:focus+.popover+input+label:before,// FE validation case with additional .popover in between
+		&:focus+label:before {
+			.s-forms-checkbox-blue-std-hov();
+		}
+
+		// Focus & checked
+		&:checked:focus+input+label:before,
+		&:checked:focus+.popover+input+label:before,// FE validation case with additional .popover in between
+		&:checked:focus+label:before {
+			.s-forms-checkbox-blue-act-hov();
+		}
+
+	}
+	////////////////////////////
+
+	.checkbox-big() {
+		&+label,
+		&+input+label {
+			display: inline-block;
+			font-size: 15px;
+			padding: 5px 0;
+			line-height: 24px;
+		}
+
+		// show sprite instead
+		&+label:before,
+		&+input+label:before { // there is a hidden input field inbetween because of hybris, so add +input to every rule
+			.s-forms-checkbox-big-grey-std();
+			margin-right: 15px;
+			float: left;
+		}
+
+		// hover
+		&+input+label:hover:before,
+		&+label:hover:before {
+			.s-forms-checkbox-big-blue-std-hov();
+		}
+
+		// checked
+		&:checked+input+label:before,
+		&:checked+label:before {
+			.s-forms-checkbox-big-grey-act();
+		}
+
+		// checked & hover
+		&:checked+input+label:hover:before,
+		&:checked+label:hover:before {
+			.s-forms-checkbox-big-blue-act-hov();
+		}
+
+		//
+		// Tabindex Focus the real Checkbox, but visually show on our checkbox
+
+		// Focus & unchecked
+		&:focus+input+label:before,
+		&:focus+label:before {
+			.s-forms-checkbox-big-blue-std-hov();
+		}
+
+		// Focus & checked
+		&:checked:focus+input+label:before,
+		&:checked:focus+label:before {
+			.s-forms-checkbox-big-blue-act-hov();
+		}
+
+	}
+
+	////////////////////////////
+
+	// Links that should look like checkboxes i.e. facet filter
+	// -> maybe add .active class with JS if necessary
+
+	.checkbox-link() {
+
+		text-decoration: none !important; // remove underlines if checkbox is inside a .base
+
+		// add checkbox as sprite
+		&:before {
+			content: "";
+			.s-forms-checkbox-grey-std();
+			display: inline-block;
+			margin-right: 20px; // review: 20px for search result
+			background-color: @c-white;
+		}
+
+		// hover & focus
+		&:focus:before,
+		&:hover:before {
+			.s-forms-checkbox-blue-std-hov();
+		}
+
+		// checked
+		&.active:before,
+		&:active:before {
+			.s-forms-checkbox-blue-act();
+		}
+
+		// checked & hover
+		&.active:hover:before,
+		&:active:hover:before {
+			.s-forms-checkbox-blue-act-hov();
+		}
+	}
+
+	.checkbox-big-link() {
+
+		text-decoration: none !important; // remove underlines if checkbox is inside a .base
+
+		// add checkbox as sprite
+		&:before {
+			content: "";
+			.s-forms-checkbox-big-grey-std();
+			display: inline-block;
+			margin-right: 20px;
+			background-color: @c-white;
+		}
+
+		// hover & focus
+		&:focus:before,
+		&:hover:before {
+			.s-forms-checkbox-big-blue-std-hov();
+		}
+
+		// checked
+		&.active:before,
+		&:active:before {
+			.s-forms-checkbox-big-grey-act();
+		}
+
+		// checked & hover
+		&.active:hover:before,
+		&:active:hover:before {
+			.s-forms-checkbox-big-blue-act-hov();
+		}
+	}
+
+	////////////////////////////
+
+	.radio-button() {
+
+		// hide the radio button, but not for tabindex
+		.vh();
+
+		// show sprite instead
+		&+label:before,
+		&+input+label:before {	// there is a hidden input field inbetween because of hybris, so add +input to every rule
+			content: "";
+			.s-forms-radio-button-grey-std();
+			display:inline-block;
+			margin-right: 15px;
+		}
+
+		// hover
+		&+label:hover:before,
+		&+input+label:hover:before {
+			.s-forms-radio-button-blue-std-hov();
+		}
+
+		// checked
+		&:checked+input+label:before,
+		&:checked+label:before {
+			.s-forms-radio-button-blue-act();
+		}
+
+		// checked & hover
+		&:checked+input+label:hover:before,
+		&:checked+label:hover:before {
+			.s-forms-radio-button-blue-act-hov();
+		}
+
+		// IE 8 and below fallback to default checkbox
+		.lt-ie9 & {
+			display: inline-block;
+			margin-right: 15px;
+			position: relative;
+			height: auto;
+			width: auto;
+		}
+
+		.lt-ie9 &+input+label:before,
+		.lt-ie9 &+label:before {
+			display: none;
+		}
+
+		//
+		// Tabindex Focus the real Radio Button, but visually show on our checkbox
+
+		// Focus & unchecked
+		&:focus+input+label:before,
+		&:focus+label:before {
+			.s-forms-radio-button-blue-std-hov();
+		}
+
+		// Focus & checked
+		&:checked:focus+input+label:before,
+		&:checked:focus+label:before {
+			.s-forms-radio-button-blue-act-hov();
+		}
+	}
+
+	////////////////////////////
+
+	.radio-button-big() {
+		&+label,
+		&+input+label {
+			display: inline-block;
+			padding: 5px 0;
+			line-height: 20px;
+		}
+
+		// show sprite instead
+		&+label:before,
+		&+input+label:before {	// there is a hidden input field inbetween because of hybris, so add +input to every rule
+			.s-forms-radio-button-big-grey-std();
+			margin-right: 15px;
+			float: left;
+		}
+
+		// hover
+		&+label:hover:before,
+		&+input+label:hover:before {
+			.s-forms-radio-button-big-blue-std-hov();
+		}
+
+		// checked
+		&:checked+input+label:before,
+		&:checked+label:before {
+			.s-forms-radio-button-big-grey-act();
+		}
+
+		// checked & hover
+		&:checked+input+label:hover:before,
+		&:checked+label:hover:before {
+			.s-forms-radio-button-big-blue-act-hov();
+		}
+
+		//
+		// Tabindex Focus the real Radio Button, but visually show on our checkbox
+
+		// Focus & unchecked
+		&:focus+input+label:before,
+		&:focus+label:before {
+			.s-forms-radio-button-big-blue-std-hov();
+		}
+
+		// Focus & checked
+		&:checked:focus+input+label:before,
+		&:checked:focus+label:before {
+			.s-forms-radio-button-big-blue-act-hov();
+		}
+	}
+
+	////////////////////////////
+
+	// Links that should look like radio buttons i.e. facet filter
+	// -> maybe add .active class with JS if necessary
+
+	.radio-button-link() {
+
+		text-decoration: none !important; // remove underlines if checkbox is inside a .base
+
+		// add checkbox as sprite
+		&:before {
+			content: "";
+			.s-forms-radio-button-grey-std();
+			display: inline-block;
+			margin-right: 15px;
+			vertical-align: -2px;
+		}
+
+		// hover & focus
+		&:focus:before,
+		&:hover:before {
+			.s-forms-radio-button-blue-std-hov();
+		}
+
+		// checked
+		&.active:before,
+		&:active:before {
+			.s-forms-radio-button-blue-act();
+		}
+
+		// checked & hover
+		&.active:hover:before,
+		&:active:hover:before {
+			.s-forms-radio-button-blue-act-hov();
+		}
+	}
+}

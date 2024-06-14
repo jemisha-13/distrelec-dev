@@ -1,0 +1,25 @@
+<ng-container *ngIf="categoryData">
+  <div
+    *ngIf="categoryData.sourceCategory?.introText"
+    class="category-description"
+    [class.category-description--expanded]="isExpanded"
+  >
+    <div class="category-description__description" [innerHTML]="categoryData.sourceCategory?.introText"></div>
+    <div *ngIf="isExpanded" class="category-description__sections">
+      <ng-container *ngFor="let section of categoryData.sourceCategory?.seoSections">
+        <div class="category-description__section-title">
+          {{ section.header }}
+        </div>
+        <div class="category-description__section-body" [innerHTML]="section.text"></div>
+      </ng-container>
+    </div>
+    <button
+      *ngIf="categoryData.sourceCategory?.seoSections.length > 0"
+      class="btn category-description__read-more"
+      id="category-description-read-more"
+      (click)="toggleReadMore()"
+    >
+      <app-icon class="icon-arrow" [icon]="isExpanded ? arrowUp : arrowDown" height="24" width="24"></app-icon>
+    </button>
+  </div>
+</ng-container>

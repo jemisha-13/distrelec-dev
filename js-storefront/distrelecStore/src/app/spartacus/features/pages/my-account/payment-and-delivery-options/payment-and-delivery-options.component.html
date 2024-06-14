@@ -1,0 +1,284 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10 offset-lg-2">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-5 offset-lg-2">
+      <ng-container class="account-information-main">
+        <div class="row mt-4">
+          <div class="col-md-12 col-lg-12 col-sm-12">
+            <h1 id="paymentAndDelivery.pageTitle">
+              {{ 'form.payment_and_delivery_options' | cxTranslate }}
+            </h1>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <h2 id="yourBillingAddress">{{ 'form.choose_shipment' | cxTranslate }}</h2>
+            <br />
+            <hr />
+            <app-action-message
+              id="paymentAndDeliveryOptions"
+              [type]="responseType"
+              [message]="responseMessage"
+            ></app-action-message>
+          </div>
+
+          <div class="col-md-12">
+            <div *ngIf="deliveryOptions$ | async as deliveryOptions; else loading">
+              <div *ngFor="let deliveryOption of deliveryOptions.deliveryModes">
+                <div
+                  class="ml-2 mr-2 pl-3 mb-3"
+                  [ngClass]="deliveryOption.defaultDeliveryMode === true ? 'active' : 'box-option'"
+                  (click)="setDefaultDeliveryOption(deliveryOption.code)"
+                >
+                  <span
+                    *ngIf="deliveryOption.defaultDeliveryMode === true"
+                    class="badge rounded-pill bg-success float-right"
+                    id="paymentAndDelivery.defaultMode"
+                  >
+                    <fa-icon class="colorWhite" [icon]="checkIcon"></fa-icon>
+                  </span>
+                  <label id="paymentAndDelivery-shipUsing">{{ 'form.ship_using' | cxTranslate }}</label>
+                  <br />
+                  <strong id="paymentAndDelivery-optionName">{{ deliveryOption?.name }}</strong>
+                  <fa-icon class="ml-2" [icon]="boxOpenIcon"></fa-icon>
+                  <ng-container *ngIf="deliveryOption?.description">
+                    <p id="paymentAndDelivery-optionDescription">{{ deliveryOption?.description }}</p>
+                  </ng-container>
+                </div>
+                <div
+                  *ngIf="currentSiteId === 'distrelec_FR' && deliveryOption.code === 'SAP_N2'"
+                  class="col-md-12 shipping-note-express"
+                >
+                  <label id="paymentAndDelivery-shippingNoteExpress">
+                    {{ 'checkoutdeliveryoptionslist.shipUsing.express.note' | cxTranslate }}
+                  </label>
+                </div>
+              </div>
+            </div>
+            <ng-template #loading>
+              <div class="row mt-4">
+                <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+                  <img id="paymentAndDelivery-spinnerImg" src="app/spartacus/assets/media/spinner.gif" />
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="row mt-4 mb-4">
+          <div class="col-md-12">
+            <h2 id="yourBillingAddress">{{ 'form.select_payment_method' | cxTranslate }}</h2>
+            <br />
+            <hr />
+            <app-action-message
+              id="paymentAndDeliveryOptionsPayments"
+              [type]="responseTypePayment"
+              [message]="responseMessagePayment"
+            ></app-action-message>
+          </div>
+          <div class="col-md-12">
+            <div *ngIf="paymentOptions$ | async as paymentOptions; else loadingPaymentModes">
+              <div *ngFor="let paymentOption of paymentOptions.paymentOptions.paymentModes">
+                <div
+                  class="ml-2 mr-2 pl-3 mb-3"
+                  [ngClass]="paymentOption.defaultPaymentMode === true ? 'active' : 'box-option'"
+                  (click)="setDefaultPaymentOption(paymentOption.code)"
+                >
+                  <span
+                    *ngIf="paymentOption.defaultPaymentMode === true"
+                    class="badge rounded-pill bg-success float-right"
+                  >
+                    <fa-icon class="colorWhite" [icon]="checkIcon"></fa-icon>
+                  </span>
+                  <label id="paymentAndDelivery-payWith">{{ 'form.pay_with' | cxTranslate }}</label>
+                  <br />
+                  <strong id="paymentAndDelivery-paymentOptions">
+                    {{ paymentOption?.translationKey | cxTranslate }}
+                  </strong>
+                  <fa-icon *ngIf="paymentOption.code === 'Z017_Invoice'" class="ml-2" [icon]="fileIcon"></fa-icon>
+                  <img
+                    *ngIf="paymentOption.code === 'CreditCard' && currentSiteId === 'distrelec_EX'"
+                    class="ml-2 credit-card-amex"
+                    id="paymentAndDelivery-amex"
+                    src="app/spartacus/assets/media/checkout/Amex.svg"
+                  />
+                  <img
+                    *ngIf="paymentOption.code === 'CreditCard'"
+                    class="ml-2"
+                    id="paymentAndDelivery-creditCart"
+                    src="app/spartacus/assets/media/checkout/Mastercard-footer.svg"
+                  />
+                  <img
+                    *ngIf="paymentOption.code === 'CreditCard'"
+                    class="ml-2"
+                    id="paymentAndDelivery-creditCart2"
+                    src="app/spartacus/assets/media/checkout/Visa-footer.svg"
+                  />
+                  <img
+                    *ngIf="paymentOption.code === 'PayPal'"
+                    class="ml-2"
+                    id="paymentAndDelivery-payPal"
+                    src="app/spartacus/assets/media/checkout/PayPal-footer.svg"
+                  />
+                </div>
+
+                <div *ngIf="paymentOption.code === 'CreditCard'" class="ml-3 mr-3 mb-3 mt-3">
+                  <div *ngFor="let ccInfo of paymentOptions.ccPaymentInfos.payments">
+                    <div *ngIf="ccInfo.saved" class="row">
+                      <div class="col-md-6">
+                        <label id="paymentAndDelivery-creditCardName">
+                          {{ ccInfo.cardType?.name | titlecase }}
+                          <span *ngIf="!ccInfo.isValid">[EXPIRED]</span>
+                        </label>
+                        <br />
+                        <label id="paymentAndDelivery-creditCartNumber">
+                          {{ 'checkoutpaymentoptionslist.creditCard.number' | cxTranslate }} : {{ ccInfo.cardNumber }}
+                          <br />
+                          {{ 'checkoutpaymentoptionslist.creditCard.expDate' | cxTranslate }} :
+                          {{ ccInfo.expiryMonth }} / {{ ccInfo.expiryYear }}
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <span
+                          *ngIf="ccInfo.defaultPayment"
+                          class="badge rounded-pill bg-success"
+                          id="paymentAndDelivery-setDefault"
+                        >
+                          <fa-icon class="colorWhite" [icon]="checkIcon"></fa-icon>
+                        </span>
+                        <span
+                          class="editLink float-right ml-2"
+                          id="paymentAndDelivery-removeDefault"
+                          (click)="removeCC(ccInfo.id)"
+                        >
+                          {{ 'form.remove' | cxTranslate }}
+                        </span>
+                        <span
+                          *ngIf="ccInfo.isValid && !ccInfo.defaultPayment"
+                          class="editLink float-right"
+                          id="paymentAndDelivery-setDefaultCreditCard"
+                          (click)="seDefaultCreditCard(ccInfo.id)"
+                        >
+                          {{ 'form.set_as_default' | cxTranslate }}
+                        </span>
+                      </div>
+                    </div>
+                    <hr *ngIf="ccInfo.saved" />
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="paymentOptions.canRequestInvoicePaymentMode" class="col-md-12 ml-0 mr-0 pl-2 mb-3">
+                <div>
+                  <div
+                    [ngClass]="paymentOptions?.invoicePaymentModeRequested === true ? 'disabled' : 'box-option'"
+                    (click)="openRequestInvoicePayment = !openRequestInvoicePayment"
+                  >
+                    <span class="badge rounded-pill bg-success float-right" id="paymentAndDelivery-invoicePayment">
+                      <fa-icon
+                        *ngIf="openRequestInvoicePayment && paymentOptions?.invoicePaymentModeRequested === false"
+                        class="colorWhite"
+                        class="colorWhite"
+                        [icon]="checkIcon"
+                        [icon]="checkIcon"
+                      ></fa-icon>
+                    </span>
+                    <label id="paymentAndDelivery-invoicePaymentText">
+                      {{ 'checkoutpaymentoptionslist.requesttopaywith.invoice.title' | cxTranslate }}
+                    </label>
+                    <br />
+                    <strong>
+                      {{ 'payment.mode.invoice' | cxTranslate }}
+                      <ng-container *ngIf="paymentOptions?.invoicePaymentModeRequested">(en attente)</ng-container>
+                    </strong>
+                    <fa-icon class="ml-2" [icon]="fileIcon"></fa-icon>
+                  </div>
+
+                  <div
+                    *ngIf="openRequestInvoicePayment || paymentOptions?.invoicePaymentModeRequested"
+                    class="ml-2 mr-2 mb-3 mt-3"
+                  >
+                    <div>
+                      <div class="row">
+                        <div class="col-md-12 mod-request-invoice request-pay-message">
+                          <label id="paymentAndDelivery-invoicePaymentText2">
+                            {{ 'payment.mode.invoice.message' | cxTranslate }}
+                          </label>
+                        </div>
+                        <ng-container *ngIf="paymentOptions?.invoicePaymentModeRequested === false">
+                          <div class="col-md-12">
+                            <label id="paymentAndDelivery-invoicePaymentText3">
+                              {{ 'checkoutpaymentoptionslist.requesttopaywith.invoice.descr' | cxTranslate }}
+                            </label>
+                          </div>
+                          <div class="col-md-12">
+                            <button class="request-pay-invoice-btn" (click)="callRequestInvoicePayment()">
+                              {{ 'checkoutpaymentoptionslist.requesttopaywith.btn' | cxTranslate }}
+                            </button>
+                          </div>
+                        </ng-container>
+                        <div class="row" [hidden]="paymentOptions?.invoicePaymentModeRequested === false">
+                          <div class="col-md-2 text-center mt-4 pending-check">
+                            <fa-icon class="ml-2 check-circle-font-size" [icon]="checkCircleIcon"></fa-icon>
+                          </div>
+                          <div class="col-md-10">
+                            <p>
+                              <strong id="paymentAndDelivery-invoicePaymentText4">
+                                {{ 'checkoutpaymentoptionslist.requesttopaywith.pending.after' | cxTranslate }}
+                              </strong>
+                            </p>
+                            <label id="paymentAndDelivery-invoicePaymentText5">
+                              {{ 'checkoutpaymentoptionslist.requesttopaywith.pending.review' | cxTranslate }}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #loadingPaymentModes>
+            <div class="row mt-4">
+              <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+                <img src="app/spartacus/assets/media/spinner.gif" />
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template #loadingPaymentModes>
+            <div class="row mt-4">
+              <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+                <img src="app/spartacus/assets/media/spinner.gif" />
+              </div>
+            </div>
+          </ng-template>
+        </div>
+        <br />
+      </ng-container>
+
+      <app-confirm-popup
+        *ngIf="showConfirm"
+        [data]="{
+          title: 'form.confirm_remove_cc_title' | cxTranslate,
+          content: 'form.confirm_remove_cc_content' | cxTranslate,
+          type: 'danger'
+        }"
+        (confirmedEvents)="confirmedRemoveCreditCard($event)"
+      ></app-confirm-popup>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,270 @@
+.mod-account-list {
+	position: relative;
+
+	h2 {
+		#typo > .heading-content();
+		margin-bottom: 15px; // look at .btn-add-address if you change this value
+	}
+	h3 {
+		margin-bottom: 0;
+	}
+	
+	.address-change-info {
+		margin-bottom: 15px;
+	}
+
+	// Button: add new item
+	.btn-add {
+		i {
+			margin-top: 2px;
+			.s-plus-big-white();
+		}
+
+		&:hover i,
+		&:active i,
+		&:focus i {
+			.s-plus-big-red();
+		}
+	}
+
+	// Button: add to cart
+	.btn-add-to-cart {
+		i {
+			margin-top: 2px;
+			.s-polygon-cart-big-red();
+		}
+
+		&:hover i,
+		&:active i,
+		&:focus i {
+			.s-polygon-cart-big-white();
+		}
+	}
+
+	// Selectbox: order direction
+	.action-box {
+		#border .border-std(1px, 0, 0, 0);
+		padding: @spc-v/2 0;
+		margin-top: @spc-v;
+
+		.btn {
+			float: right;
+		}
+
+		.btn-add {
+			margin-top: 0;
+			padding-top: 7px;
+			padding-bottom: 0;
+			height: 36px;
+
+			i {
+				margin-top: 3px;
+			}
+		}
+	}
+
+	// List: address or order list
+	.data-list {
+		#border .border-std(1px, 0, 0, 0);
+
+		.row {
+			#border .border-std(0, 0, 1px, 0);
+			&.paged {
+				display: none;
+			}
+		}
+		.rowtemplate {
+			display: none;
+		}
+		// highlighted row
+		.row.highlight {
+			background: @c-redE;
+		}
+		.entry, .action {
+			float: left;
+			padding: 10px 5px 10px 2px;
+			word-wrap: break-word;
+		}
+		// Default: 3 cols
+		.entry {
+			width: 30%;
+
+			// reset
+			dl, dd {margin: 0;}
+
+			.label {
+				font-weight: bold;
+				#typo > .size-c-b();
+			}
+			.value{
+				overflow-x: hidden;
+				text-overflow: ellipsis;
+				#typo > .size-x-c();
+				line-height: 20px;
+			}
+			.value + .label {
+				margin-top: 10px;
+			}
+
+			.value.nok i {
+				.s-no();
+			}
+			.value.ok i {
+				.s-yes();
+			}
+			.value.neg {
+				color: @c-red;
+			}
+		}
+		.action {
+			width: 10%;
+			text-align: center;
+
+			// Link
+			.more {
+				display: inline-block;
+				width: 36px;
+				height: 36px;
+				.center();
+				margin-top: 25px;
+
+				i {
+					.s-polygon-right-big-lightblue();
+				}
+
+				&:hover i,
+				&:focus i,
+				&:active i {
+					.s-polygon-right-big-blue();
+				}
+			}
+
+			.pdf-quotes {
+				display: inline-block;
+				height: 36px;
+				margin: 0 auto;
+				overflow: hidden;
+				width: 36px;
+
+				i {
+					display: inline-block;
+					font-size: 28px;
+					line-height: 36px;
+					padding-top: 3px;
+				}
+
+			}
+			
+			// Link Pdf
+			.morePdf {
+				display: inline-block;
+				width: 36px;
+				height: 36px;
+				.center();
+				margin-top: 20px;
+
+				i {
+					.s-polygon-pdf-grey-bg();
+				}
+
+				&:focus i,
+				&:active i {
+					.s-polygon-pdf-blue();
+				}
+			}			
+		}
+	}
+
+	// Button: show more
+	.row-show-more {
+		#typo > .size-s();
+		#border .border-std(0, 0, 1px, 0);
+		font-weight: bold;
+
+		.show-more-link {
+			display: block;
+			vertical-align: middle;
+			padding: @spc-v/2 @spc-h/2;
+
+			i {
+				display: inline-block;
+				margin-right: @spc-h/2;
+				vertical-align: middle;
+				.s-polygon-down-lightblue();
+			}
+
+			&:hover i,
+			&:focus i,
+			&:active i {
+				.s-polygon-down-blue();
+			}
+		}
+	}
+	.ajax-invoices-loader{
+		display: none;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+
+		.background-overlay{
+			background: none repeat scroll 0 0 #D3D3D3;
+			opacity: 0.5;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+
+			.lt-ie9 & {
+				filter: alpha(opacity=50);        // IE6, IE7
+				-ms-filter: "alpha(opacity=50)"; // IE8
+			}
+		}
+
+		.message-wrapper{
+			height: 100%;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			position: relative;
+			width: 100%;
+		}
+
+		.loading-message{
+			z-index: 1060;
+			padding: 10px;
+			background: white;
+			visibility: hidden;
+			position: fixed;
+			top: 50%;
+			margin-left: 70px;
+			width: 500px;
+			text-align: center;
+
+			i{
+				background-image: url("@{path-imgs}/throbber_small_grey_white_matte.gif");
+				background-position:0 0;
+				width:24px;
+				height:24px;
+				margin-right: @spc-h;
+			}
+
+			&.stickToTop {
+				position: absolute;
+				top: 60px;
+			}
+			&.stickToBottom {
+				position: absolute;
+				top: auto;
+				bottom: 60px;
+			}
+		}
+	}
+}

@@ -1,0 +1,57 @@
+$solrPunchOutFilterType=punchOutFilterType
+$fullPunchOutJob=full-PunchOut-Fusion
+$productCatalog=distrelecProductCatalog
+$catalogVersions=catalogVersions(catalog(id), version);
+
+INSERT_UPDATE SolrIndexedType;identifier[unique=true] ;type(code)         ;variant;indexName
+                             ;$solrPunchOutFilterType ;DistPunchOutFilter ;false  ;distpunchoutfilter
+
+INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[unique=true];type(code);sortableType(code);currency[default=false];localized[default=false];multiValue[default=false];fieldValueProvider                     ;valueProviderParameter;ftsPhraseQuery[default=false];ftsPhraseQueryBoost;ftsQuery[default=false];ftsQueryBoost;ftsFuzzyQuery[default=false];ftsFuzzyQueryBoost;ftsWildcardQuery[default=false];ftsWildcardQueryType(code)[default=POSTFIX];ftsWildcardQueryBoost;ftsWildcardQueryMinTermLength
+                                 ;$solrPunchOutFilterType                 ;filter           ;string    ;                  ;                       ;                        ;                         ;distPunchOutAllAttributesValueResolver ;                      ;                             ;                   ;                       ;             ;                            ;                  ;                               ;                                           ;
+
+INSERT_UPDATE SolrIndexerQuery;solrIndexedType(identifier)[unique=true];identifier[unique=true];type(code);injectCurrentDate[default=false];injectCurrentTime[default=false];injectLastIndexTime[default=false];query;user(uid) ;parameterProvider
+                              ;$solrPunchOutFilterType                 ;punchOut-fullQuery     ;full      ;                                ;                                ;false                             ;"
+SELECT * FROM (
+  ({{
+       SELECT {pof.pk}
+        FROM {DistCUPunchOutFilter AS pof
+          JOIN Product AS p ON {pof.product} = {p.pk}
+          JOIN DistSalesOrg AS so ON {pof.salesorg} = {so.pk}
+        }
+       WHERE {pof.product} IS NOT NULL
+         AND {pof.validFromDate} <= current_timestamp
+         AND {pof.validUntilDate} >= current_timestamp
+  }})
+  UNION
+  ({{
+       SELECT {pof.pk}
+         FROM {DistCUPunchOutFilter AS pof
+           JOIN DistSalesOrg AS so ON {pof.salesorg} = {so.pk}
+         }
+        WHERE {pof.producthierarchy} IS NOT NULL
+          AND {pof.validFromDate} <= current_timestamp
+          AND {pof.validUntilDate} >= current_timestamp
+ }})
+ UNION
+ ({{
+       SELECT {pof.pk}
+         FROM {DistManufacturerPunchOutFilter AS pof
+           JOIN DistManufacturer AS m ON {pof.manufacturer} = {m.pk}
+           JOIN DistSalesOrg AS so ON {pof.salesorg} = {so.pk}
+         }
+        WHERE {pof.manufacturer} IS NOT NULL
+          AND {pof.validFromDate} <= current_timestamp
+          AND {pof.validUntilDate} >= current_timestamp
+ }})
+) uniontable
+"    ;anonymous ;
+
+INSERT_UPDATE SolrFacetSearchConfig;name[unique=true]             ;description        ;indexNamePrefix;languages(isocode);currencies(isocode);solrServerConfig(name);solrSearchConfig(description);solrIndexConfig(name);solrIndexedTypes(identifier);enabledLanguageFallbackMechanism;$catalogVersions
+                                   ;distPunchOutFacetSearchConfig ;index for PunchOut ;punchOut       ;                  ;                   ;fusionServerConfig    ;Default                      ;Default              ;$solrPunchOutFilterType     ;true                            ;$productCatalog:Online
+
+INSERT_UPDATE SolrIndexerCronJob;code[unique=true];job(code)      ;singleExecutable;sessionLanguage(isocode);active;facetSearchConfig(name)       ;indexerOperation(code);cmsSites(uid);sessionUser(uid)[default=techUserFusion]
+                                ;$fullPunchOutJob ;solrIndexerJob ;false           ;en                      ;true  ;distPunchOutFacetSearchConfig ;full                  ;distrelec_SE ;
+
+# every night at 1 AM -> expression is 23 since +2 hours is added on environment
+INSERT_UPDATE Trigger;code[unique=true]       ;cronJob(code)    ;cronExpression ;active
+                     ;$fullPunchOutJobTrigger ;$fullPunchOutJob ;0 0 23 * * ? * ;false

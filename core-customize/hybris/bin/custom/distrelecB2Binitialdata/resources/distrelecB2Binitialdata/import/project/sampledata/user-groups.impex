@@ -1,0 +1,38 @@
+#
+# Import Sample B2B Customers
+#
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+
+$b2bcustomergroup=b2bcustomergroup
+
+$passwordEncoding=md5
+# Load the distrelec.testuser_password config param
+$defaultUserPassword=$config-distrelec.testuser_password
+$setPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultUserPassword']
+
+
+
+INSERT_UPDATE B2BUnit;uid[unique=true];description;name;&B2BUnitID
+;Namics AG;Test B2B Unit Namics AG;Namics AG;NammicsID1
+;280401;Test Customer used for Movex PunchOut-Filter Import;Test Customer used for Movex PunchOut-Filter Import;notUsed280401
+
+INSERT_UPDATE B2BCustomer;uid[unique=true];originalUid;description;email;name;groups(uid);permissionGroups(uid);sessionCurrency(isocode)[default='CHF'];doubleOptInActivated[default=false];$setPassword;
+;dist.b2b.demouser1@gmail.com;dist.b2b.demouser1@gmail.com;B2B Demouser 1;dist.b2b.demouser1@gmail.com;Peter Muster;Namics AG,b2bcustomergroup;;;true;
+
+# Customers
+INSERT_UPDATE Customer;originalUid[unique=true];uid[unique=true];title(code);name;description;sessionLanguage(isocode)[default='de'];sessionCurrency(isocode)[default='CHF'];groups(uid);doubleOptInActivated[default=false];$setPassword;&userId;defaultPaymentAddress(&addId);defaultShipmentAddress(&addId)
+;dist.b2c.demouser1@gmail.com;dist.b2c.demouser1@gmail.com;mr;Hans Müller;B2C Demouser 1;;;customergroup;true;;b2cDemoUser1;;
+
+# Customer addresses
+INSERT_UPDATE Address;&addId;owner(&userId)[unique=true];streetname[unique=true];postalcode[unique=true];duplicate[unique=true];town;country(isocode);billingAddress;contactAddress;shippingAddress;unloadingAddress;firstname;lastname;email;gender(code);middlename;phone1;title(code);url;company;fax;department
+
+# TEST Employees
+INSERT_UPDATE Employee;UID[unique=true];$setPassword;description;name;groups(uid);sessionLanguage(isocode)[default=de];sessionCurrency(isocode)[default=CHF]
+;distadmin;;"Distrelec Admin Test User";"Distrelec Test Admin User";distAdminGroup
+;distcallcenteruser;;Distrelec Callcenter Test User;Distrelec Callcenter Test User;distCallcenterUserGroup
+;distcontentmanager;;Distrelec Content Test Manager;Distrelec Content Test Manager;distContentManagerGroup
+;distproductmanager;;Distrelec Product Test Manager;Distrelec Product Test Manager;distProductManagerGroup
+
+

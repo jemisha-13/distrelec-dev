@@ -1,0 +1,27 @@
+<ng-container *ngIf="productReferencesNEW?.alternatives?.carouselProducts.length">
+  <div class="container alternative" id="pdp_alternative">
+    <div class="col-12">
+      <h3 class="header-title" id="pdp_alternative_title">
+        {{ 'product.eol.alternative' | cxTranslate }}
+      </h3>
+      <ul #listRef *ngIf="currentChannelData$ | async as currentChannel" class="row">
+        <li
+          *ngFor="let product of productReferences; let index = index"
+          class="col-12 col-sm-6 col-lg-3 card-list-item"
+        >
+          <app-alternative-item
+            [currentChannel]="currentChannel"
+            [product]="product"
+            [index]="index"
+            [itemListEntity]="itemListEntity.ALTERNATIVE"
+          ></app-alternative-item>
+        </li>
+      </ul>
+      <ng-container *ngIf="alternative?.carouselProducts.length > 8">
+        <button class="mat-button mat-button--green" id="pdp_alternative_viewMore_btn" (click)="viewMore($event)">
+          {{ 'product.also_bought.view_more_btn' | cxTranslate }}
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,72 @@
+<ng-container *ngIf="{ showDrawer: showDrawer$ | async, showSecondPanel: showSecondPanel_ | async } as drawer">
+  <div
+    class="dist-canvas"
+    [class]="direction.toLowerCase()"
+    [class.open]="drawer.showDrawer"
+    [class.shadow]="drawer.showSecondPanel"
+    [style.top.px]="direction.toLowerCase() === 'from_search' && isBrowser && searchTop | async"
+  >
+    <ng-container *ngIf="drawer.showDrawer">
+      <div class="container drawer-container">
+        <div class="dist-canvas-header">
+          <h4 *ngIf="title" class="mb-0 dist-canvas-header__title">{{ title }}</h4>
+          <button
+            *ngIf="drawer.showSecondPanel === false"
+            class="dist-canvas-header__close close"
+            id="slide-drawer-close-btn"
+            (click)="closePanel($event)"
+            type="button"
+          >
+            <app-icon iconName="cancel" iconType="svg" iconAltText="Cancel icon"></app-icon>
+          </button>
+        </div>
+
+        <ng-container *ngIf="uid === 'products-flyout'; else noScrollCanvasContent">
+          <app-dist-scroll-bar scrollAxis="y">
+            <ng-container *ngTemplateOutlet="canvasContent"></ng-container>
+          </app-dist-scroll-bar>
+        </ng-container>
+
+        <ng-template #noScrollCanvasContent>
+          <ng-container *ngTemplateOutlet="canvasContent"></ng-container>
+        </ng-template>
+
+        <ng-template #canvasContent>
+          <div class="dist-canvas-content" [class.from_search]="direction.toLowerCase() === 'from_search'">
+            <ng-content></ng-content>
+          </div>
+        </ng-template>
+      </div>
+    </ng-container>
+  </div>
+  <div
+    *ngIf="enableSecondPanel"
+    class="second-panel dist-canvas"
+    [class]="direction.toLowerCase()"
+    [class.open]="drawer.showDrawer && drawer.showSecondPanel"
+  >
+    <ng-container *ngIf="drawer.showDrawer && drawer.showSecondPanel">
+      <div class="second-panel container">
+        <div class="dist-canvas-header">
+          <fa-icon class="dist-canvas-header__chevron" [icon]="faChevronLeft" (click)="closeSecondPanel()"></fa-icon>
+          <h4 *ngIf="secondTitle" class="mb-0 dist-canvas-header__title">{{ secondTitle }}</h4>
+          <button class="dist-canvas-header__close close" (click)="closePanel()" type="button">
+            <app-icon iconName="cancel" iconType="svg" iconAltText="Cancel icon"></app-icon>
+          </button>
+        </div>
+        <div class="second-panel dist-canvas-content">
+          <ng-content select="[secondPanel]"></ng-content>
+        </div>
+        <div class="secondPanel__back">
+          <app-dist-button
+            [text]="'text.back' | cxTranslate"
+            (click)="closeSecondPanel()"
+            type="outlined"
+            width="w-fill"
+            height="h-default"
+          ></app-dist-button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>

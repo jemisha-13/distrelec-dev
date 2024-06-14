@@ -1,0 +1,14 @@
+UPDATE composedtypes SET itemtypecode = 20064, itemjndiname = 'de.hybris.platform.persistence.distrelecB2Bcore_DistErpPriceConditionType' WHERE internalcode = 'DistErpPriceConditionType';
+UPDATE composedtypes SET itemtypecode = 20087, itemjndiname = 'de.hybris.platform.persistence.distrelecB2Bcore_DistCarpetContentTeaser' WHERE internalcode = 'DistCarpetContentTeaser';
+UPDATE composedtypes SET itemtypecode = 20088, itemjndiname = 'de.hybris.platform.persistence.distrelecB2Bcore_DistCarpetContentTeaserWithText' WHERE internalcode = 'DistCarpetContentTeaserWithText';
+UPDATE composedtypes SET itemtypecode = 20089, itemjndiname = 'de.hybris.platform.persistence.distrelecB2Bcore_DistCarpetItem' WHERE internalcode = 'DistCarpetItem';
+UPDATE composedtypes SET itemtypecode = 20092, itemjndiname = 'de.hybris.platform.persistence.distrelecB2Bcore_DistExtCarpetItem' WHERE internalcode = 'DistExtCarpetItem';
+UPDATE composedtypes SET itemtypecode = 20093, itemjndiname = 'de.hybris.platform.persistence.distrelecB2Bcore_DistExtHeroRotatingTeaser' WHERE internalcode = 'DistExtHeroRotatingTeaser';
+UPDATE composedtypes SET itemtypecode = 20094, itemjndiname = 'de.hybris.platform.persistence.distrelecB2Bcore_DistExtHeroRotatingTeaserItem' WHERE internalcode = 'DistExtHeroRotatingTeaserItem';
+UPDATE composedtypes SET itemtypecode = 20095, itemjndiname = 'de.hybris.platform.persistence.distrelecB2Bcore_DistHeroRotatingTeaser' WHERE internalcode = 'DistHeroRotatingTeaser';
+UPDATE composedtypes SET itemtypecode = 20096, itemjndiname = 'de.hybris.platform.persistence.distrelecB2Bcore_DistHeroRotatingTeaserItem' WHERE internalcode = 'DistHeroRotatingTeaserItem';
+UPDATE composedtypes SET itemtypecode = 20097, itemjndiname = 'de.hybris.platform.persistence.distrelecB2Bcore_DistHeroRotatingTeaserWithText' WHERE internalcode = 'DistHeroRotatingTeaserWithText';
+UPDATE composedtypes SET itemtypecode = 20065, itemjndiname = 'de.hybris.platform.persistence.distrelecB2Bcore_DistRmaRequestProcessEntry' WHERE internalcode = 'DistRmaRequestProcessEntry';
+UPDATE composedtypes SET itemtypecode = 20053, itemjndiname = 'de.hybris.platform.persistence.link.distrelecB2Bcore_BaseStore2RegCountryRel' WHERE internalcode = 'BaseStore2RegCountryRel';
+UPDATE composedtypes SET itemtypecode = 20063, itemjndiname = 'de.hybris.platform.persistence.link.distrelecB2Bcore_DistDownloadMedia2Language' WHERE internalcode = 'DistDownloadMedia2Language';
+UPDATE composedtypes SET itemtypecode = 20066, itemjndiname = 'de.hybris.platform.persistence.link.distrelecB2Bcore_DistVideoMedia2Language' WHERE internalcode = 'DistVideoMedia2Language';

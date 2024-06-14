@@ -1,0 +1,644 @@
+<form [formGroup]="billingForm">
+  <form [formGroup]="deliveryDetails" [id]="deliveryDetails.value.formName">
+    <!-- DISPLAY FORM BLOCK -->
+    <ng-container *ngIf="isB2BAccount() || isUserB2BKey">
+      <!-- COMPANYNAME FIELD: B2B ONLY -->
+      <!-- User cannot change the first company name fields -->
+      <div class="ch__component__details">
+        <label class="ch__component__details--title" id="checkout.delivery.companyname">
+          {{ 'checkout.delivery.companyname' | cxTranslate }}
+        </label>
+
+        <div class="p-relative">
+          <input
+            class="ch__component__details--input js-validate"
+            id="companyNameCheckout"
+            [class.empty-field]="!companyName()?.value"
+            [class.is-correct]="companyName()?.pristine && companyName()?.value"
+            [class.is-invalid]="
+              (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('companyName')) ||
+              companyName()?.errors?.erroring
+            "
+            (change)="onControlTouch('companyName')"
+            type="text"
+            formControlName="companyName"
+          />
+
+          <fa-icon
+            *ngIf="
+              (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('companyName')) ||
+              companyName()?.errors?.erroring
+            "
+            id="faTimesCompanyName"
+            [icon]="faTimes"
+          ></fa-icon>
+          <fa-icon
+            *ngIf="companyName()?.pristine && companyName()?.value"
+            id="faCheckCompanyName"
+            [icon]="faCheck"
+          ></fa-icon>
+
+          <small
+            *ngIf="
+              (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('companyName')) ||
+              companyName()?.errors?.erroring
+            "
+            class="error-text"
+            id="validations.enter_valid_field-companyName-be"
+          >
+            {{ getErrorMessage('companyName') }}
+          </small>
+        </div>
+      </div>
+
+      <!-- COMPANYNAME 2 FIELD: B2B ONLY -->
+      <!-- Company name 2 is not required -->
+      <div *ngIf="companyName2()" class="ch__component__details">
+        <div class="ch__component__details--flex">
+          <label class="ch__component__details--title" id="checkout.delivery.companyname_2">
+            {{ 'checkout.delivery.companyname_2' | cxTranslate }}
+          </label>
+
+          <label class="ch__component__details--title--optional" id="companyName2CheckoutOptional">
+            {{ 'form.optional' | cxTranslate }}
+          </label>
+        </div>
+
+        <div class="p-relative">
+          <input
+            class="ch__component__details--input js-validate js-validate-optional"
+            id="companyName2Checkout"
+            [class.empty-field]="!companyName2().value"
+            type="text"
+            formControlName="companyName2"
+            maxlength="35"
+          />
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="displayTitleFirstAndLast()">
+      <!-- TITLE FIELD: B2C/B2E/GUEST ONLY -->
+      <div *ngIf="titleCode()" class="ch__component__details ch__component__details--half">
+        <label class="ch__component__details--title" id="checkout.delivery.title">
+          {{ 'checkout.delivery.title' | cxTranslate }}
+        </label>
+
+        <div class="p-relative">
+          <select
+            class="ch__component__details--select js-validate"
+            id="titleCodeCheckout"
+            [class.is-correct]="!!titleCode()?.value && titleCode()?.value !== null"
+            [class.is-invalid]="
+              (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('titleCode')) ||
+              titleCode()?.errors?.erroring
+            "
+            (change)="onControlTouch('titleCode')"
+            aria-placeholder="Please select"
+            type="text"
+            formControlName="titleCode"
+          >
+            <option id="registration.general.select" [value]="null" disabled="disabled">
+              {{ 'registration.general.select' | cxTranslate }}
+            </option>
+
+            <option id="form.mr" value="mr">
+              {{ 'form.mr' | cxTranslate }}
+            </option>
+
+            <option id="form.ms" value="ms">
+              {{ 'form.ms' | cxTranslate }}
+            </option>
+          </select>
+
+          <fa-icon id="faAngleDownTitle" [icon]="faAngleDown"></fa-icon>
+
+          <small
+            *ngIf="
+              (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('titleCode')) ||
+              titleCode()?.errors?.erroring
+            "
+            class="error-text"
+            id="validations.enter_valid_field-title"
+          >
+            {{ 'validations.title_required' | cxTranslate }}
+          </small>
+        </div>
+      </div>
+
+      <!-- FIRST NAME FIELD: B2C/B2E/GUEST ONLY -->
+      <div class="ch__component__holder">
+        <div *ngIf="firstName()" class="ch__component__details ch__component__details--half">
+          <label class="ch__component__details--title" id="checkout.delivery.firstName">
+            {{ 'checkout.delivery.firstName' | cxTranslate }}
+          </label>
+
+          <div class="p-relative">
+            <input
+              class="ch__component__details--input js-validate"
+              id="firstNameCheckout"
+              [class.is-correct]="firstName()?.pristine && firstName()?.value"
+              [class.empty-field]="!firstName()?.value"
+              [class.is-invalid]="
+                (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('firstName')) ||
+                firstName()?.errors?.erroring
+              "
+              (change)="onControlTouch('firstName')"
+              autocomplete="given-name"
+              type="text"
+              formControlName="firstName"
+            />
+
+            <fa-icon
+              *ngIf="
+                (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('firstName')) ||
+                firstName()?.errors?.erroring
+              "
+              id="faTimesFirstName"
+              [icon]="faTimes"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="firstName()?.pristine && firstName()?.value"
+              id="faCheckFirstName"
+              [icon]="faCheck"
+            ></fa-icon>
+
+            <small
+              *ngIf="
+                (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('firstName')) ||
+                firstName()?.errors?.erroring
+              "
+              class="error-text"
+              id="validations.enter_valid_field-firstname"
+            >
+              {{ 'validations.first_name_required' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+
+        <!-- LAST NAME FIELD: B2C/B2E/GUEST ONLY -->
+        <div *ngIf="lastName()" class="ch__component__details ch__component__details--half">
+          <label class="ch__component__details--title" id="checkout.delivery.lastName">
+            {{ 'checkout.delivery.lastName' | cxTranslate }}
+          </label>
+
+          <div class="p-relative">
+            <input
+              class="ch__component__details--input js-validate"
+              id="lastNameCheckout"
+              [class.is-correct]="lastName()?.pristine && lastName()?.value"
+              [class.empty-field]="!lastName()?.value"
+              [class.is-invalid]="
+                (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('lastName')) ||
+                lastName()?.errors?.erroring
+              "
+              (change)="onControlTouch('lastName')"
+              autocomplete="family-name"
+              type="text"
+              formControlName="lastName"
+            />
+
+            <fa-icon
+              *ngIf="
+                (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('lastName')) ||
+                lastName()?.errors?.erroring
+              "
+              id="faTimesLastName"
+              [icon]="faTimes"
+            ></fa-icon>
+            <fa-icon *ngIf="lastName()?.pristine && lastName()?.value" id="faCheckLastName" [icon]="faCheck"></fa-icon>
+
+            <small
+              *ngIf="
+                (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('lastName')) ||
+                lastName()?.errors?.erroring
+              "
+              class="error-text"
+              id="validations.enter_valid_field-lastname"
+            >
+              {{ 'validations.surname_required' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMAIL FIELD: B2E ONLY -->
+      <div *ngIf="email()" class="ch__component__details">
+        <label class="ch__component__details--title" id="form.email">{{ 'form.email' | cxTranslate }}</label>
+
+        <div class="p-relative">
+          <input
+            class="ch__component__details--input js-validate"
+            id="emailCheckout"
+            [class.is-correct]="email()?.pristine && email()?.value"
+            [class.empty-field]="!email()?.value"
+            [class.is-invalid]="email().errors?.erroring"
+            (change)="onControlTouch('email')"
+            autocomplete="email"
+            type="text"
+            formControlName="email"
+          />
+
+          <fa-icon *ngIf="email()?.errors?.erroring" id="faTimesEmail" [icon]="faTimes"></fa-icon>
+          <fa-icon *ngIf="email()?.pristine && email()?.value" id="faCheckEmail" [icon]="faCheck"></fa-icon>
+
+          <small
+            *ngIf="email()?.errors?.erroring"
+            class="error-text"
+            id="validations.enter_valid_field-email"
+            id="validations.email_valid_example"
+          >
+            {{ 'validations.email_error_invalid' | cxTranslate }}
+          </small>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- STREET NAME FIELD -->
+    <div class="ch__component__details">
+      <label class="ch__component__details--title" id="checkout.delivery.line1">
+        {{ 'checkout.delivery.line1' | cxTranslate }}
+      </label>
+
+      <div class="p-relative">
+        <input
+          class="ch__component__details--input js-validate"
+          id="line1Checkout"
+          [class.is-correct]="line1()?.pristine && line1()?.value"
+          [class.empty-field]="!line1()?.value"
+          [class.is-invalid]="
+            (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('line1')) || line1().errors?.erroring
+          "
+          (change)="onControlTouch('line1')"
+          autocomplete="address-line1"
+          type="text"
+          formControlName="line1"
+        />
+
+        <fa-icon
+          *ngIf="(triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('line1')) || line1()?.errors?.erroring"
+          id="faTimesLine1"
+          [icon]="faTimes"
+        ></fa-icon>
+        <fa-icon *ngIf="line1()?.pristine && line1()?.value" id="faCheckLine1" [icon]="faCheck"></fa-icon>
+
+        <small
+          *ngIf="(triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('line1')) || line1()?.errors?.erroring"
+          class="error-text"
+          id="validations.enter_valid_field-line1"
+        >
+          {{ 'validations.enter_valid_street_name' | cxTranslate }}
+        </small>
+      </div>
+    </div>
+
+    <!-- STREET NR FIELD -->
+    <div class="ch__component__details">
+      <div class="ch__component__details--flex">
+        <label class="ch__component__details--title" id="checkout.delivery.line2">
+          {{ 'checkout.delivery.line2' | cxTranslate }}
+        </label>
+
+        <label class="ch__component__details--title--optional" id="companyName2CheckoutOptional">
+          {{ 'form.optional' | cxTranslate }}
+        </label>
+      </div>
+
+      <div class="p-relative">
+        <input
+          class="ch__component__details--input js-validate js-validate-optional"
+          id="line2Checkout"
+          [class.empty-field]="!line2()?.value"
+          (change)="onControlTouch('line2')"
+          autocomplete="address-line2"
+          type="text"
+          formControlName="line2"
+          maxlength="10"
+        />
+      </div>
+    </div>
+
+    <!-- TOWN FIELD -->
+    <div class="ch__component__details">
+      <label class="ch__component__details--title" id="checkout.delivery.town">
+        {{ 'checkout.delivery.town' | cxTranslate }}
+      </label>
+
+      <div class="p-relative">
+        <input
+          class="ch__component__details--input js-validate"
+          id="townCheckout"
+          [class.empty-field]="!town()?.value"
+          [class.is-correct]="town()?.pristine && town()?.value"
+          [class.is-invalid]="
+            (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('town')) || town()?.errors?.erroring
+          "
+          (change)="onControlTouch('town')"
+          autocomplete="city"
+          type="text"
+          formControlName="town"
+        />
+
+        <fa-icon
+          *ngIf="(triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('town')) || town()?.errors?.erroring"
+          id="faTimesTown"
+          [icon]="faTimes"
+        ></fa-icon>
+        <fa-icon *ngIf="town()?.pristine && town()?.value" id="faCheckqTown" [icon]="faCheck"></fa-icon>
+
+        <small
+          *ngIf="(triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('town')) || town()?.errors?.erroring"
+          class="error-text"
+          id="validations.enter_valid_field-town"
+        >
+          {{ 'validations.enter_valid_town' | cxTranslate }}
+        </small>
+      </div>
+    </div>
+
+    <ng-container *ngIf="countryData_ | async as countryData">
+      <ng-container *ngIf="countryData?.countries.length > 1; else singleCountry">
+        <!-- COUNTRY SELECTION -->
+        <div class="ch__component__details">
+          <label class="ch__component__details--title" id="checkout.billing.country">
+            {{ 'checkout.delivery.country' | cxTranslate }}
+          </label>
+
+          <div class="p-relative">
+            <select
+              class="ch__component__details--select js-validate"
+              id="countryCodeCheckoutSelect"
+              [class.is-correct]="!!countryCode()?.value && countryCode()?.value !== null"
+              [class.is-invalid]="
+                (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('countryCode')) ||
+                countryCode()?.errors?.erroring
+              "
+              (change)="onControlTouch('countryCode')"
+              aria-placeholder="Please select"
+              type="text"
+              formControlName="countryCode"
+            >
+              <option id="registration.general.select" [value]="null" disabled="disabled">
+                {{ 'registration.general.select' | cxTranslate }}
+              </option>
+
+              <ng-container *ngFor="let countryCode of countryData.countries">
+                <option [value]="countryCode.isocode" [id]="'countryCodeOptions' + countryCode">
+                  {{ getTranslationKey(countryCode.isocode) | cxTranslate }}
+                </option>
+              </ng-container>
+            </select>
+
+            <fa-icon id="faAngleDownCountry" [icon]="faAngleDown"></fa-icon>
+
+            <small
+              *ngIf="
+                (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('countryCode')) ||
+                countryCode()?.errors?.erroring
+              "
+              class="error-text"
+              id="validations.enter_valid_field-country"
+            >
+              {{ 'validations.enter_country' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #singleCountry>
+        <!-- COUNTRY SINGLE -->
+        <div class="ch__component__details">
+          <label class="ch__component__details--title" id="checkout.delivery.country">
+            {{ 'checkout.delivery.country' | cxTranslate }}
+          </label>
+
+          <label class="ch__component__details--title country" id="countryCodeCheckout">
+            {{
+              countryData?.countries[0].name ??
+                (getTranslationKey(countryData?.countries[0].isocode)
+                  | cxTranslateWithDefault: { defaultValue: countryData?.countries[0].name })
+            }}
+          </label>
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <!-- POSTAL CODE FIELD -->
+    <div class="ch__component__details ch__component__details--half">
+      <label class="ch__component__details--title" id="checkout.delivery.postalCode">
+        {{ 'checkout.delivery.postalCode' | cxTranslate }}
+      </label>
+
+      <div class="p-relative">
+        <input
+          class="ch__component__details--input js-validate"
+          id="postalCodeCheckout"
+          [class.is-correct]="checkIfFieldIsValid('postalCode')"
+          [class.is-invalid]="
+            (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('postalCode')) ||
+            postalCode()?.errors?.erroring
+          "
+          [class.empty-field]="!postalCode()?.value"
+          [ngModel]="postalCodeModel"
+          (input)="updatePostalCodeModel()"
+          (change)="onControlTouch('postalCode')"
+          autocomplete="postal-code"
+          type="text"
+          formControlName="postalCode"
+        />
+
+        <fa-icon
+          *ngIf="
+            (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('postalCode')) ||
+            postalCode()?.errors?.erroring
+          "
+          id="faTimesPostalCode"
+          [icon]="faTimes"
+        ></fa-icon>
+        <fa-icon *ngIf="checkIfFieldIsValid('postalCode')" id="faCheckPostalCode" [icon]="faCheck"></fa-icon>
+
+        <small
+          *ngIf="
+            (triggerDeliveryInlineValidationOnLoad && !checkIfFieldIsValid('postalCode')) ||
+            postalCode()?.errors?.erroring
+          "
+          class="error-text"
+          id="validations.enter_valid_field-postal"
+        >
+          {{ getPostalCodeValidationKey() | cxTranslate }}
+        </small>
+      </div>
+    </div>
+
+    <!-- PHONE NUMBER -->
+    <div class="ch__component__details">
+      <label class="ch__component__details--title" id="checkout.delivery.phone">
+        {{ 'checkout.delivery.phone' | cxTranslate }}
+      </label>
+
+      <div class="p-relative">
+        <input
+          class="ch__component__details--input js-validate"
+          id="phoneCheckout"
+          [class.is-correct]="phone()?.valid && isPhoneValidationVisible_ | async"
+          [class.empty-field]="!phone()?.value"
+          [class.is-invalid]="phone()?.invalid && isPhoneValidationVisible_ | async"
+          (change)="onControlTouch('phone'); isPhoneValidationVisible_.next(true)"
+          (input)="isPhoneValidationVisible_.next(false)"
+          autocomplete="tel"
+          type="text"
+          formControlName="phone"
+        />
+
+        <fa-icon
+          *ngIf="phone()?.invalid && isPhoneValidationVisible_ | async"
+          id="faTimesPhone"
+          [icon]="faTimes"
+        ></fa-icon>
+        <fa-icon
+          *ngIf="phone()?.valid && isPhoneValidationVisible_ | async"
+          id="faCheckPhone"
+          [icon]="faCheck"
+        ></fa-icon>
+
+        <small class="is-help-txt" id="checkout.delivery.phone_help_text">
+          {{ 'checkout.delivery.phone_help_text' | cxTranslate }}
+        </small>
+        <small
+          *ngIf="phone()?.invalid && isPhoneValidationVisible_ | async"
+          class="error-text"
+          id="validations.enter_valid_field-title"
+        >
+          {{ 'validations.enter_phone' | cxTranslate }}
+        </small>
+      </div>
+    </div>
+
+    <!-- CODICE CUP is not required -->
+    <div *ngIf="codiceCUP()" class="ch__component__details ch__component__details--half">
+      <div class="ch__component__details--flex">
+        <label class="ch__component__details--title" id="checkout.delivery.codice_CUP">
+          {{ 'checkout.delivery.codice_CUP' | cxTranslate }}
+        </label>
+
+        <label class="ch__component__details--title--optional" id="form.optional-codice">
+          {{ 'form.optional' | cxTranslate }}
+        </label>
+      </div>
+
+      <div class="p-relative">
+        <input
+          class="ch__component__details--input js-validate js-validate-optional"
+          id="codiceCUPCheckout"
+          [class.is-correct]="codiceCUP()?.pristine && codiceCUP()?.value"
+          [class.empty-field]="!codiceCUP().value"
+          [class.is-invalid]="codiceCUP()?.errors?.erroring"
+          type="text"
+          formControlName="codiceCUP"
+        />
+      </div>
+
+      <fa-icon *ngIf="codiceCUP()?.pristine && codiceCUP()?.value" id="faCheckCodice" [icon]="faCheck"></fa-icon>
+
+      <small
+        *ngIf="codiceCUP()?.hasError('errorFromBE')"
+        class="error-text"
+        id="validations.enter_valid_field-codiceCUP-be"
+      >
+        {{ getErrorMessage('codiceCUP') }}
+      </small>
+    </div>
+
+    <!-- CODICE CIG is not required -->
+    <div *ngIf="codiceCIG()" class="ch__component__details ch__component__details--half">
+      <div class="ch__component__details--flex">
+        <label class="ch__component__details--title" id="checkout.delivery.codice_CIG">
+          {{ 'checkout.delivery.codice_CIG' | cxTranslate }}
+        </label>
+
+        <label class="ch__component__details--title--optional" [id]="'form.optional-cig'">
+          {{ 'form.optional' | cxTranslate }}
+        </label>
+      </div>
+
+      <div class="p-relative">
+        <input
+          class="ch__component__details--input js-validate js-validate-optional"
+          id="codiceCIGCheckout"
+          [class.is-correct]="codiceCIG().value"
+          [class.empty-field]="!codiceCIG().value"
+          [class.is-invalid]="codiceCIG()?.errors && codiceCIG()?.touched"
+          type="text"
+          formControlName="codiceCIG"
+        />
+      </div>
+
+      <fa-icon *ngIf="codiceCIG().value" id="faCheckCIG" [icon]="faCheck"></fa-icon>
+
+      <small
+        *ngIf="codiceCIG()?.hasError('errorFromBE')"
+        class="error-text"
+        id="validations.enter_valid_field-codiceCIG-be"
+      >
+        {{ getErrorMessage('codiceCIG') }}
+      </small>
+    </div>
+
+    <ng-container *ngIf="countryData_ | async as countryData">
+      <div *ngIf="countryData.countries[0].regions?.length" class="ch__component__details">
+        <div class="ch__component__details--flex">
+          <label class="ch__component__details--title" id="checkout.delivery.regions">
+            {{ 'checkout.delivery.region' | cxTranslate }}
+          </label>
+
+          <label class="ch__component__details--title--optional" [id]="'form.optional-regions'">
+            {{ 'form.optional' | cxTranslate }}
+          </label>
+        </div>
+
+        <div class="p-relative">
+          <select
+            class="ch__component__details--select js-validate js-validate-optional"
+            id="regionCheckout"
+            (change)="onControlTouch('region')"
+            aria-placeholder="Please select"
+            type="text"
+            formControlName="region"
+          >
+            <option id="registration.general.select" [ngValue]="null" disabled="disabled">
+              {{ 'registration.general.select' | cxTranslate }}
+            </option>
+            <ng-container>
+              <option
+                *ngFor="let region of countryData.countries[0].regions"
+                [value]="region.name"
+                [id]="'regionNameOptions' + region.isocode"
+              >
+                {{ region.name }}
+              </option>
+            </ng-container>
+          </select>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="ch__component__button--holder">
+      <div>
+        <button
+          class="btn ch__component__details--submit"
+          id="checkout.delivery.save_continue_cta-delivery"
+          [disabled]="!deliveryDetails.valid"
+          (click)="triggerDetailsToSave()"
+        >
+          {{ 'checkout.delivery.save_continue_cta' | cxTranslate }}
+        </button>
+
+        <ng-container *ngIf="isEditable_ | async">
+          <button class="btn ch__component__details--cancel" id="form.cancel" (click)="cancelChanges()">
+            {{ 'form.cancel' | cxTranslate }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </form>
+</form>

@@ -1,0 +1,488 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="cXML">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Header">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="From">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Credential">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Identity">
+                            <xs:complexType mixed="true">
+                              <xs:attribute name="lastChangedTimestamp" type="xs:string"/>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:choice minOccurs="0">
+                            <xs:element name="SharedSecret">
+                              <xs:complexType mixed="true"/>
+                            </xs:element>
+                            <xs:element name="DigitalSignature">
+                              <xs:complexType mixed="true">
+                                <xs:attribute name="type" type="xs:string" default="PK7 self-contained"/>
+                                <xs:attribute name="encoding" type="xs:string" default="Base64"/>
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:choice>
+                        </xs:sequence>
+                        <xs:attribute name="domain" type="xs:string" use="required"/>
+                        <xs:attribute name="type">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:NMTOKEN">
+                              <xs:enumeration value="marketplace"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="To">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Credential">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Identity">
+                            <xs:complexType mixed="true">
+                              <xs:attribute name="lastChangedTimestamp" type="xs:string"/>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:choice minOccurs="0">
+                            <xs:element name="SharedSecret">
+                              <xs:complexType mixed="true"/>
+                            </xs:element>
+                            <xs:element name="DigitalSignature">
+                              <xs:complexType mixed="true">
+                                <xs:attribute name="type" type="xs:string" default="PK7 self-contained"/>
+                                <xs:attribute name="encoding" type="xs:string" default="Base64"/>
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:choice>
+                        </xs:sequence>
+                        <xs:attribute name="domain" type="xs:string" use="required"/>
+                        <xs:attribute name="type">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:NMTOKEN">
+                              <xs:enumeration value="marketplace"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Sender">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Credential">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Identity">
+                            <xs:complexType mixed="true">
+                              <xs:attribute name="lastChangedTimestamp" type="xs:string"/>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:choice minOccurs="0">
+                            <xs:element name="SharedSecret">
+                              <xs:complexType mixed="true"/>
+                            </xs:element>
+                            <xs:element name="DigitalSignature">
+                              <xs:complexType mixed="true">
+                                <xs:attribute name="type" type="xs:string" default="PK7 self-contained"/>
+                                <xs:attribute name="encoding" type="xs:string" default="Base64"/>
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:choice>
+                        </xs:sequence>
+                        <xs:attribute name="domain" type="xs:string" use="required"/>
+                        <xs:attribute name="type">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:NMTOKEN">
+                              <xs:enumeration value="marketplace"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element type="xs:string" name="UserAgent"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Message">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Status" minOccurs="0">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="code" type="xs:string" use="required"/>
+                      <xs:attribute name="text" type="xs:string" use="required"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="PunchOutOrderMessage">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="BuyerCookie">
+                      <xs:complexType mixed="true"/>
+                    </xs:element>
+                    <xs:element name="PunchOutOrderMessageHeader">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Total">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="Money">
+                                  <xs:complexType>
+                                    <xs:simpleContent>
+                                      <xs:extension base="xs:string">
+                                        <xs:attribute name="currency" type="xs:string" use="required"/>
+                                        <xs:attribute name="alternateAmount" type="xs:string"/>
+                                        <xs:attribute name="alternateCurrency" type="xs:string"/>
+                                      </xs:extension>
+                                    </xs:simpleContent>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="ShipTo" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="Address">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element type="xs:string" name="Name"/>
+                                      <xs:element name="PostalAddress">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element type="xs:string" name="DeliverTo"/>
+                                            <xs:element type="xs:string" name="Street"/>
+                                            <xs:element type="xs:string" name="City"/>
+                                            <xs:element type="xs:string" name="State"/>
+                                            <xs:element type="xs:short" name="PostalCode"/>
+                                            <xs:element name="Country">
+                                              <xs:complexType>
+                                                <xs:simpleContent>
+                                                  <xs:extension base="xs:string">
+                                                    <xs:attribute type="xs:string" name="isoCountryCode"/>
+                                                  </xs:extension>
+                                                </xs:simpleContent>
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute type="xs:byte" name="addressID"/>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="Shipping" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="Money">
+                                  <xs:complexType>
+                                    <xs:simpleContent>
+                                      <xs:extension base="xs:string">
+                                        <xs:attribute name="currency" type="xs:string" use="required"/>
+                                        <xs:attribute name="alternateAmount" type="xs:string"/>
+                                        <xs:attribute name="alternateCurrency" type="xs:string"/>
+                                      </xs:extension>
+                                    </xs:simpleContent>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Description">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="ShortName">
+                                        <xs:complexType>
+                                          <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                              <xs:attribute name="name" type="xs:string"/>
+                                            </xs:extension>
+                                          </xs:simpleContent>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                              <xs:attribute name="trackingDomain" type="xs:string"/>
+                              <xs:attribute name="trackingId" type="xs:string"/>
+                              <xs:attribute name="tracking" type="xs:string"/>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="Tax" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="Money">
+                                  <xs:complexType>
+                                    <xs:simpleContent>
+                                      <xs:extension base="xs:string">
+                                        <xs:attribute name="currency" type="xs:string" use="required"/>
+                                        <xs:attribute name="alternateAmount" type="xs:string"/>
+                                        <xs:attribute name="alternateCurrency" type="xs:string"/>
+                                      </xs:extension>
+                                    </xs:simpleContent>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Description">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="ShortName">
+                                        <xs:complexType>
+                                          <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                              <xs:attribute name="name" type="xs:string"/>
+                                            </xs:extension>
+                                          </xs:simpleContent>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="operationAllowed" use="required">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:NMTOKEN">
+                              <xs:enumeration value="create"/>
+                              <xs:enumeration value="inspect"/>
+                              <xs:enumeration value="edit"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="ItemIn" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="ItemID">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:int" name="SupplierPartID"/>
+                                <xs:element name="SupplierPartAuxiliaryID">
+                                  <xs:complexType mixed="true"/>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="ItemDetail" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="UnitPrice">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="Money">
+                                        <xs:complexType>
+                                          <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                              <xs:attribute name="currency" type="xs:string" use="required"/>
+                                              <xs:attribute name="alternateAmount" type="xs:string"/>
+                                              <xs:attribute name="alternateCurrency" type="xs:string"/>
+                                            </xs:extension>
+                                          </xs:simpleContent>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Description" maxOccurs="unbounded">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="ShortName">
+                                        <xs:complexType>
+                                          <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                              <xs:attribute name="name" type="xs:string"/>
+                                            </xs:extension>
+                                          </xs:simpleContent>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="UnitOfMeasure" type="xs:string"/>
+                                <xs:element name="Classification" maxOccurs="unbounded">
+                                  <xs:complexType>
+                                    <xs:simpleContent>
+                                      <xs:extension base="xs:string">
+                                        <xs:attribute name="domain" type="xs:string" use="required"/>
+                                      </xs:extension>
+                                    </xs:simpleContent>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="ManufacturerPartID" type="xs:string" minOccurs="0"/>
+                                <xs:element name="ManufacturerName" type="xs:string" minOccurs="0"/>
+                                <xs:element name="URL" minOccurs="0">
+                                  <xs:complexType>
+                                    <xs:simpleContent>
+                                      <xs:extension base="xs:string">
+                                        <xs:attribute name="name" type="xs:string"/>
+                                      </xs:extension>
+                                    </xs:simpleContent>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Extrinsic" minOccurs="0" maxOccurs="unbounded">
+                                  <xs:complexType mixed="true">
+                                    <xs:attribute name="name" type="xs:string" use="required"/>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="SupplierID" minOccurs="0">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                  <xs:attribute name="domain" type="xs:string" use="required"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="ShipTo" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="Address">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element type="xs:string" name="Name"/>
+                                      <xs:element name="PostalAddress">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element type="xs:string" name="DeliverTo"/>
+                                            <xs:element type="xs:string" name="Street"/>
+                                            <xs:element type="xs:string" name="City"/>
+                                            <xs:element type="xs:string" name="State"/>
+                                            <xs:element type="xs:short" name="PostalCode"/>
+                                            <xs:element name="Country">
+                                              <xs:complexType>
+                                                <xs:simpleContent>
+                                                  <xs:extension base="xs:string">
+                                                    <xs:attribute type="xs:string" name="isoCountryCode"/>
+                                                  </xs:extension>
+                                                </xs:simpleContent>
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute type="xs:byte" name="addressID"/>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="Shipping" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="Money">
+                                  <xs:complexType>
+                                    <xs:simpleContent>
+                                      <xs:extension base="xs:string">
+                                        <xs:attribute name="currency" type="xs:string" use="required"/>
+                                        <xs:attribute name="alternateAmount" type="xs:string"/>
+                                        <xs:attribute name="alternateCurrency" type="xs:string"/>
+                                      </xs:extension>
+                                    </xs:simpleContent>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Description">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="ShortName">
+                                        <xs:complexType>
+                                          <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                              <xs:attribute name="name" type="xs:string"/>
+                                            </xs:extension>
+                                          </xs:simpleContent>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                              <xs:attribute name="trackingDomain" type="xs:string"/>
+                              <xs:attribute name="trackingId" type="xs:string"/>
+                              <xs:attribute name="tracking" type="xs:string"/>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="Tax" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="Money">
+                                  <xs:complexType>
+                                    <xs:simpleContent>
+                                      <xs:extension base="xs:string">
+                                        <xs:attribute name="currency" type="xs:string" use="required"/>
+                                        <xs:attribute name="alternateAmount" type="xs:string"/>
+                                        <xs:attribute name="alternateCurrency" type="xs:string"/>
+                                      </xs:extension>
+                                    </xs:simpleContent>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Description">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="ShortName">
+                                        <xs:complexType>
+                                          <xs:simpleContent>
+                                            <xs:extension base="xs:string">
+                                              <xs:attribute name="name" type="xs:string"/>
+                                            </xs:extension>
+                                          </xs:simpleContent>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="quantity" type="xs:string" use="required"/>
+                        <xs:attribute name="lineNumber" type="xs:string"/>
+                        <xs:attribute name="requisitionID" type="xs:string"/>
+                        <xs:attribute name="requestedDeliveryDate" type="xs:string"/>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="deploymentMode" default="production">
+              <xs:simpleType>
+                <xs:restriction base="xs:NMTOKEN">
+                  <xs:enumeration value="production"/>
+                  <xs:enumeration value="test"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="inReplyTo" type="xs:string"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" default="1.1.010"/>
+      <xs:attribute name="payloadID" type="xs:string" use="required"/>
+      <xs:attribute name="timestamp" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+

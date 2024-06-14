@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+           http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+    <!-- CORS -->
+
+    <bean id="occCorsFilter" class="org.springframework.web.filter.CorsFilter">
+        <constructor-arg name="configSource" ref="defaultCorsConfigurationSource"/>
+        <property name="corsProcessor" ref="defaultOccCorsProcessor"/>
+    </bean>
+
+    <bean id="defaultOccCorsProcessor" class="com.namics.distrelec.security.DefaultOccCorsProcessor">
+    </bean>
+
+    <bean id="cwsProductFacade" parent="defaultProductFacade">
+        <property name="productConfiguredPopulator" ref="cwsProductConfiguredPopulator"/>
+        <property name="productConverter" ref="cwsProductConverter"/>
+    </bean>
+
+    <bean id="cwsProductConfiguredPopulator" parent="defaultProductConfiguredPopulator">
+        <property name="populators">
+            <map key-type="de.hybris.platform.commercefacades.product.ProductOption" merge="true">
+                <entry key="GALLERY" value-ref="cwsProductGalleryPopulatorList"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="cwsProductGalleryPopulatorList" parent="abstractPopulatorList">
+        <property name="populators">
+            <list>
+                <ref bean="cwsProductGalleryImagesPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="cwsImageFormatMapping" alias="imageFormatMapping"/>
+    <bean id="cwsImageFormatMapping" parent="defaultImageFormatMapping">
+        <property name="mapping">
+            <map>
+                <entry key="superZoom" value="1200Wx1200H"/>
+                <entry key="zoom" value="515Wx515H"/>
+                <entry key="store" value="365Wx246H"/>
+                <entry key="product" value="300Wx300H"/>
+                <entry key="thumbnail" value="96Wx96H"/>
+                <entry key="cartIcon" value="65Wx65H"/>
+                <entry key="styleSwatch" value="30Wx30H"/>
+                <entry key="portrait_small" value="portrait_small"/>
+                <entry key="portrait_medium" value="portrait_medium"/>
+                <entry key="landscape_small" value="landscape_small"/>
+                <entry key="landscape_medium" value="landscape_medium"/>
+                <entry key="landscape_large" value="landscape_large"/>
+                <entry key="portrait_small_webp" value="portrait_small_webp"/>
+                <entry key="portrait_medium_webp" value="portrait_medium_webp"/>
+                <entry key="landscape_small_webp" value="landscape_small_webp"/>
+                <entry key="landscape_medium_webp" value="landscape_medium_webp"/>
+                <entry key="landscape_large_webp" value="landscape_large_webp"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="cwsProductPrimaryImagePopulator" parent="defaultProductPrimaryImagePopulator">
+        <property name="imageFormatMapping" ref="cwsImageFormatMapping"/>
+        <property name="imageFormats">
+            <list>
+                <value>zoom</value>
+                <value>product</value>
+                <value>thumbnail</value>
+                <value>cartIcon</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cwsProductGalleryImagesPopulator" parent="defaultProductGalleryImagesPopulator">
+        <property name="imageFormatMapping" ref="cwsImageFormatMapping"/>
+        <property name="imageFormats">
+            <list>
+                <value>zoom</value>
+                <value>product</value>
+                <value>thumbnail</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cwsProductPopulator"
+          parent="defaultProductPopulator">
+        <property name="productPrimaryImagePopulator" ref="cwsProductPrimaryImagePopulator"/>
+        <property name="productModelUrlResolver" ref="distrelecB2BOCCProductModelUrlResolver"/>
+    </bean>
+
+    <bean id="cwsProductConverter" parent="defaultProductConverter">
+        <property name="populators">
+            <list>
+                <ref bean="cwsProductPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cwsCatalogFacade" parent="defaultCatalogFacade">
+        <property name="catalogVersionPopulator" ref="cwsCatalogVersionPopulator"/>
+        <property name="categoryHierarchyPopulator" ref="cwsCategoryHierarchyPopulator"/>
+    </bean>
+
+    <bean id="cwsCatalogVersionPopulator" parent="defaultCatalogVersionPopulator">
+        <property name="categoryHierarchyPopulator" ref="cwsCategoryHierarchyPopulator"/>
+        <property name="categoriesUrl" value="/categories"/>
+    </bean>
+
+    <bean id="cwsCategoryHierarchyPopulator" parent="defaultCategoryHierarchyPopulator">
+        <property name="productConverter" ref="cwsProductConverter"/>
+        <property name="categoryUrlResolver" ref="distrelecB2BOCCCategoryModelUrlResolver"></property>
+    </bean>
+
+    <bean id="cwsProductExportFacade" parent="defaultProductExportFacade">
+        <property name="productConverter" ref="cwsProductConverter"/>
+        <property name="productCategoriesPopulator" ref="cwsProductCategoriesPopulator"/>
+    </bean>
+
+    <bean id="cwsProductCategoriesPopulator" parent="defaultProductCategoriesPopulator">
+        <property name="categoryConverter" ref="cwsCategoryConverter"/>
+    </bean>
+
+    <bean id="cwsCategoryConverter" parent="defaultCategoryConverter">
+        <lookup-method name="createTarget" bean="categoryData"/>
+        <property name="populators">
+            <list>
+                <ref bean="cwsCategoryPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cwsCategoryPopulator" parent="defaultCategoryPopulator">
+        <property name="categoryModelUrlResolver" ref="distrelecB2BOCCCategoryModelUrlResolver"/>
+    </bean>
+
+    <bean id="distrelecB2BOCCProductModelUrlResolver" parent="defaultProductModelUrlResolver">
+        <property name="defaultPattern" value="/{baseSite-uid}/products/{product-code}"/>
+    </bean>
+
+    <bean id="distrelecB2BOCCCategoryModelUrlResolver" parent="defaultCategoryModelUrlResolver">
+        <property name="pattern"
+                  value="/{baseSite-uid}/catalogs/{catalog-id}/{catalogVersion}/categories/{category-code}"/>
+    </bean>
+
+    <alias name="defaultCommerceStockFacade" alias="commerceStockFacade"/>
+    <bean id="defaultCommerceStockFacade" class="com.namics.distrelec.occ.core.stock.impl.DefaultCommerceStockFacade">
+        <property name="baseSiteService" ref="baseSiteService"/>
+        <property name="commerceStockService" ref="commerceStockService"/>
+        <property name="pointOfServiceService" ref="pointOfServiceService"/>
+        <property name="productService" ref="productService"/>
+        <property name="baseStoreForSiteSelectorStrategy" ref="baseStoreForSiteSelectorStrategy"/>
+    </bean>
+
+    <alias name="defaultBaseStoreForSiteSelectorStrategy" alias="baseStoreForSiteSelectorStrategy"/>
+    <bean id="defaultBaseStoreForSiteSelectorStrategy"
+          class="com.namics.distrelec.occ.core.strategies.impl.DefaultBaseStoreForSiteSelectorStrategy"/>
+
+    <alias name="distOauthUserAuditLoginStrategy" alias="userAuditLoginStrategy"/>
+    <bean id="distOauthUserAuditLoginStrategy"
+          class="com.namics.distrelec.occ.core.strategies.impl.DistOauthUserAuditLoginStrategy"
+          parent="defaultOauthUserAuditLoginStrategy">
+    </bean>
+
+    <bean id="distCommerceWebServicesCartFacade"
+          class="com.namics.distrelec.occ.core.cart.impl.DistCommerceWebServicesCartFacade"
+          parent="defaultCartFacade">
+        <property name="cartConverter" ref="defaultDistCartConverter"/>
+        <property name="commerceCartService" ref="commerceWebServicesCartService"/>
+    </bean>
+
+    <!-- Populator for title name -->
+    <alias name="defaultExtendedCustomerPopulator" alias="extendedCustomerPopulator"/>
+    <bean id="defaultExtendedCustomerPopulator"
+          class="com.namics.distrelec.occ.core.customer.populator.ExtendedCustomerPopulator">
+        <property name="addressConverter" ref="addressConverter"/>
+    </bean>
+
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="customerConverter"/>
+        <property name="add" ref="extendedCustomerPopulator"/>
+    </bean>
+
+    <!-- Update Queues -->
+
+    <bean id="abstractUpdateQueue"
+          class="com.namics.distrelec.occ.core.queues.impl.AbstractUpdateQueue" abstract="true">
+        <property name="maxCapacity" value="100000"/>
+    </bean>
+
+    <!--Express Update Queue functionality-->
+
+    <bean id="productExpressUpdateQueue"
+          class="com.namics.distrelec.occ.core.queues.impl.ProductExpressUpdateQueue"
+          parent="abstractUpdateQueue"/>
+
+    <bean id="productExpressUpdateChannelListener"
+          class="com.namics.distrelec.occ.core.queues.channel.ProductExpressUpdateChannelListener">
+        <property name="productExpressUpdateElementConverter" ref="productExpressUpdateElementConverter"/>
+        <property name="productExpressUpdateQueue" ref="productExpressUpdateQueue"/>
+    </bean>
+
+    <int:service-activator input-channel="productExpressUpdateChannel"
+                           ref="productExpressUpdateChannelListener"
+                           method="onMessage"/>
+
+    <bean id="productExpressUpdateElementData"
+          class="com.namics.distrelec.occ.core.queues.data.ProductExpressUpdateElementData" scope="prototype"/>
+
+    <alias name="defaultProductExpressUpdateElementPopulator" alias="productExpressUpdateElementPopulator"/>
+    <bean id="defaultProductExpressUpdateElementPopulator"
+          class="com.namics.distrelec.occ.core.queues.populators.ProductExpressUpdateElementPopulator"/>
+
+    <alias name="defaultProductExpressUpdateElementConverter" alias="productExpressUpdateElementConverter"/>
+    <bean id="defaultProductExpressUpdateElementConverter" parent="abstractPopulatingConverter">
+        <lookup-method name="createTarget" bean="productExpressUpdateElementData"/>
+        <property name="populators">
+            <list>
+                <ref bean="productExpressUpdateElementPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="productExpressUpdateCleanerJob"
+          class="com.namics.distrelec.occ.core.queues.cronjob.ProductExpressUpdateCleanerJob"
+          parent="abstractJobPerformable">
+        <property name="productExpressUpdateQueue" ref="productExpressUpdateQueue"/>
+    </bean>
+
+    <!-- Order Status Update Queue -->
+
+    <bean id="orderStatusUpdateQueue"
+          class="com.namics.distrelec.occ.core.queues.impl.OrderStatusUpdateQueue"
+          parent="abstractUpdateQueue"/>
+
+    <bean id="orderStatusUpdateChannelListener"
+          class="com.namics.distrelec.occ.core.queues.channel.OrderStatusUpdateChannelListener">
+        <property name="orderStatusUpdateElementConverter" ref="orderStatusUpdateElementConverter"/>
+        <property name="orderStatusUpdateQueue" ref="orderStatusUpdateQueue"/>
+    </bean>
+
+    <int:service-activator input-channel="orderStatusUpdateChannel"
+                           ref="orderStatusUpdateChannelListener"
+                           method="onMessage"/>
+
+    <bean id="orderStatusUpdateElementData"
+          class="com.namics.distrelec.occ.core.queues.data.OrderStatusUpdateElementData" scope="prototype"/>
+
+    <alias name="defaultOrderStatusUpdateElementPopulator" alias="orderStatusUpdateElementPopulator"/>
+    <bean id="defaultOrderStatusUpdateElementPopulator"
+          class="com.namics.distrelec.occ.core.queues.populators.OrderStatusUpdateElementPopulator"/>
+
+    <alias name="defaultProductExpressUpdateElementConverter" alias="orderStatusUpdateElementConverter"/>
+    <bean id="defaultOrderStatusUpdateElementConverter" parent="abstractPopulatingConverter">
+        <lookup-method name="createTarget" bean="orderStatusUpdateElementData"/>
+        <property name="populators">
+            <list>
+                <ref bean="orderStatusUpdateElementPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="orderStatusUpdateCleanerJob"
+          class="com.namics.distrelec.occ.core.queues.cronjob.OrderStatusUpdateCleanerJob"
+          parent="abstractJobPerformable">
+        <property name="orderStatusUpdateQueue" ref="orderStatusUpdateQueue"/>
+    </bean>
+
+    <!-- Old cart cleaner -->
+    <bean id="oldCartRemovalJob" class="com.namics.distrelec.occ.core.cronjob.OldCartRemovalJob"
+          parent="abstractJobPerformable">
+        <property name="commerceCartDao" ref="commerceCartDao"/>
+        <property name="timeService" ref="timeService"/>
+        <property name="userService" ref="userService"/>
+    </bean>
+
+    <alias alias="orderCodeIdentificationStrategy" name="defaultOrderCodeIdentificationStrategy"/>
+    <bean id="defaultOrderCodeIdentificationStrategy"
+          class="com.namics.distrelec.occ.core.strategies.impl.DefaultOrderCodeIdentificationStrategy">
+        <property name="idPattern" value="[0-9a-f]{40}|[0-9a-f-]{36}"/>
+    </bean>
+
+    <!-- Beans for user matching in commerce web services -->
+    <alias name="defaultWsUserFacade" alias="wsUserFacade"/>
+    <bean id="defaultWsUserFacade" parent="defaultUserFacade">
+        <property name="userMatchingService" ref="wsUserMatchingService"/>
+    </bean>
+
+    <alias name="defaultWsCustomerFacade" alias="wsCustomerFacade"/>
+    <bean id="defaultWsCustomerFacade" parent="defaultCustomerFacade">
+        <property name="userMatchingService" ref="wsUserMatchingService"/>
+        <property name="userFacade" ref="wsUserFacade"/>
+    </bean>
+
+    <alias name="defaultWsCustomerGroupFacade" alias="wsCustomerGroupFacade"/>
+    <bean id="defaultWsCustomerGroupFacade" parent="defaultCustomerGroupFacade">
+        <property name="userMatchingService" ref="wsUserMatchingService"/>
+    </bean>
+
+    <alias name="defaultWsUserMatchingService" alias="wsUserMatchingService"/>
+    <bean id="defaultWsUserMatchingService" parent="defaultUserMatchingService">
+        <property name="matchingStrategies">
+            <list>
+                <ref bean="customerIdMatchingStrategy"/>
+                <ref bean="userUIDMatchingStrategy"/>
+                <ref bean="externalCustomerIdMatchingStrategy"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias alias="baseStorePopulator" name="distrelecBaseStorePopulator"/>
+    <bean id="distrelecBaseStorePopulator" class="com.namics.distrelec.occ.core.populators.DistrelecBaseStorePopulator">
+        <property name="pointOfServiceConverter" ref="pointOfServiceConverter"/>
+        <property name="currencyConverter" ref="currencyConverter"/>
+        <property name="languageConverter" ref="languageConverter"/>
+        <property name="countryConverter" ref="countryConverter"/>
+        <property name="deliveryModeConverter" ref="deliveryModeConverter"/>
+        <property name="searchExperienceDTOConverter" ref="searchExperienceDTOConverter"/>
+    </bean>
+
+    <alias name="distrelecCmsComponentModelToDataRenderingPopulator" alias="cmsComponentModelToDataRenderingPopulator"/>
+    <bean id="distrelecCmsComponentModelToDataRenderingPopulator"
+          class="com.namics.distrelec.b2b.occ.core.cms.populators.DistrelecCmsComponentModelToDataPopulator"
+          parent="defaultCMSComponentModelToDataRenderingPopulator"/>
+
+    <!--Base Site-->
+
+    <alias name="distrelecCmsSiteModelToDataPopulator" alias="cmsSiteModelToDataPopulator"/>
+    <bean id="distrelecCmsSiteModelToDataPopulator"
+          class="com.namics.distrelec.b2b.occ.core.cms.populators.DistrelecCmsSiteModelToDataPopulator"/>
+
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="baseSiteConverter"/>
+        <property name="add" ref="cmsSiteModelToDataPopulator"/>
+    </bean>
+
+    <bean id="distProductAdditionalAttributesPopulator"
+          class="com.namics.distrelec.occ.core.populators.product.DistProductAdditionalAttributesPopulator"
+          parent="baseProductPopulator">
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+        <property name="productService" ref="distProductService"/>
+        <property name="configurationService" ref="configurationService"/>
+        <property name="erpStatusUtil" ref="erpStatusUtil"/>
+
+    </bean>
+
+    <alias name="occProductConfiguredPopulator" alias="productConfiguredPopulator"/>
+    <bean id="occProductConfiguredPopulator" parent="defaultDistProductConfiguredPopulator">
+        <property name="populators">
+            <map key-type="de.hybris.platform.commercefacades.product.ProductOption" merge="true">
+                <entry key="ADDITIONAL" value-ref="distProductAdditionalAttributesPopulator"/>
+            </map>
+        </property>
+    </bean>
+
+    <alias alias="distCustomerRegistrationFacade" name="defaultDistCustomerRegistrationFacade"/>
+    <bean id="defaultDistCustomerRegistrationFacade"
+          class="com.namics.distrelec.b2b.facades.customer.impl.DefaultDistCustomerRegistrationFacade"
+          parent="defaultDistCustomerFacade"/>
+
+    <bean id="distRegisterDataPopulator"
+          class="com.namics.distrelec.b2b.facades.customer.converters.populator.DistRegisterDataPopulator"/>
+
+    <bean id="distB2BRegisterDataPopulator"
+          class="com.namics.distrelec.b2b.facades.customer.converters.populator.DistB2BRegisterDataPopulator"
+          parent="distRegisterDataPopulator"/>
+
+    <bean id="distRegisterDataForExistingCustomerPopulator"
+          class="com.namics.distrelec.b2b.facades.customer.converters.populator.DistRegisterDataForExistingCustomerPopulator"/>
+
+    <bean id="distB2BRegisterDataForExistingCustomerPopulator"
+          class="com.namics.distrelec.b2b.facades.customer.converters.populator.DistB2BRegisterDataForExistingCustomerPopulator"
+          parent="distRegisterDataForExistingCustomerPopulator"/>
+
+    <bean id="searchExperienceDTOConverter"
+          class="com.namics.distrelec.occ.core.search.SearchExperienceDTOConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.search.data.SearchExperienceDTO"/>
+    </bean>
+
+    <bean id="distAbstractPageModelToDataRenderingPopulator" class="com.namics.distrelec.populator.DistAbstractPageModelToDataRenderingPopulator" />
+
+    <bean depends-on="cmsPageOtherPropertiesPopulators" parent="listMergeDirective">
+        <property name="add" ref="distAbstractPageModelToDataRenderingPopulator" />
+    </bean>
+
+    <alias name="distWsUserDetailsService" alias="wsUserDetailsService" />
+    <bean id="distWsUserDetailsService"
+          class="com.namics.distrelec.security.DistCoreUserDetailsService" />
+    
+    <bean id="seoPropertiesSupplier" class="com.namics.distrelec.populator.SEOPropertiesSupplier">
+        <constructor-arg name="itemModelPredicate" ref="abstractPageTypePredicate"/>
+        <constructor-arg name="restrictionContextProvider" ref="cmsRestrictionContextProvider"/>
+        <constructor-arg name="seoGroupName" value="${distrelecB2BOCC.seo.properties.name}"/>
+        <constructor-arg name="cmsSiteService" ref="cmsSiteService"/>
+        <constructor-arg name="distLogoUrlHelper" ref="distLogoUrlHelper"/>
+        <constructor-arg name="distSeoFacade" ref="distSeoFacade"/>
+    </bean>
+
+    <bean depends-on="cmsItemPropertiesSupplierList" parent="listMergeDirective">
+        <property name="add" ref="seoPropertiesSupplier"/>
+    </bean>
+
+    <alias alias="cmsLinkComponentModelToDataPopulator" name="distLinkComponentModelToDataPopulator"/>
+    <bean id="distLinkComponentModelToDataPopulator" class="com.namics.distrelec.occ.core.populators.DistLinkComponentModelToDataPopulator" parent="defaultLinkComponentModelToDataPopulator">
+        <property name="linkComponentPredicate" ref="cmsLinkComponentTypePredicate"/>
+        <property name="contentPageUrlResolver" ref="contentPageUrlResolver" />
+    </bean>
+
+    <alias name="distOauthTokenServices" alias="oauthTokenServices" />
+    <bean id="distOauthTokenServices"
+          class="com.namics.distrelec.occ.core.oauth.DistHybrisOpenIDTokenServices"
+          parent="defaultHybrisOpenIDTokenServices"
+          p:externalScopesStrategy-ref="externalScopesStrategy"
+          p:keyStoreHelper-ref="keyStoreHelper"
+          p:clientDetailsDao-ref="oauthClientDetailsDao">
+        <property name="configurationService" ref="configurationService"/>
+        <property name="userService" ref="userService"/>
+    </bean>
+
+    <bean id="onUserPasswordChangeTokenRevoker" class="com.namics.distrelec.occ.core.oauth.DistOnUserPasswordChangeTokenRevoker">
+        <constructor-arg name="oauthRevokeTokenService" ref="oauthRevokeTokenService" />
+        <constructor-arg name="configurationService" ref="configurationService" />
+    </bean>
+
+    <alias name="distWsAuthenticationProvider" alias="wsAuthenticationProvider" />
+    <bean id="distWsAuthenticationProvider"
+          class="com.namics.distrelec.security.DistCoreAuthenticationProvider" parent="defaultWsAuthenticationProvider">
+    </bean>
+
+    <bean id="readOnlyAspect" class="com.namics.distrelec.occ.core.readonly.ReadOnlyAspect" />
+
+    <bean id="readOnlyAspectMonitorInterceptor" class="com.namics.distrelec.occ.core.readonly.ReadOnlyAspectMonitorInterceptor" />
+
+    <bean id="readOnlyAspectMonitorInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+        <property name="interceptor" ref="readOnlyAspectMonitorInterceptor"/>
+        <property name="typeCode" value="Item"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.swagger.SwaggerIntegrationOverrideConfig"/>
+
+</beans>

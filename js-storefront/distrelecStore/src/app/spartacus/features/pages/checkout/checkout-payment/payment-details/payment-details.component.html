@@ -1,0 +1,130 @@
+<form [formGroup]="paymentForm">
+  <div *ngIf="paymentData_ | async as paymentData" class="ch__component">
+    <div class="ch__component__title">
+      <h2 id="paymentDetailsTitle">
+        {{ 'checkout.payment.payment_details' | cxTranslate }}
+      </h2>
+    </div>
+
+    <ng-container *ngFor="let paymentMode of paymentData.paymentOptions.paymentModes">
+      <div class="ch__component__payment-method" [id]="'paymentOption' + setPaymentMethodName(paymentMode)">
+        <div class="ch__component__payment-method__item">
+          <div class="ch__component__payment-method__item--row is-align-center">
+            <button
+              class="btn ch__component__payment-method__item__radio"
+              [id]="'radioBtn' + setPaymentMethodName(paymentMode)"
+              [class.is-checked]="paymentForm.value.payment === paymentMode.code"
+              (click)="onPaymentSelection(paymentMode.code)"
+            >
+              <input
+                class="custom-control-input"
+                [id]="'radioInput' + setPaymentMethodName(paymentMode)"
+                [value]="paymentMode.code"
+                type="radio"
+                formControlName="payment"
+              />
+            </button>
+
+            <div
+              class="ch__component__payment-method__item__radio-icon"
+              [class.is-checked]="paymentForm.value.payment === paymentMode.code"
+            ></div>
+
+            <div
+              *ngIf="!isPaypal(paymentMode)"
+              [class]="
+                'ch__component__payment-method__item__img-icon is-' + setPaymentMethodName(paymentMode) + '-icon'
+              "
+            >
+              <img
+                class="credit_card"
+                [src]="'app/spartacus/assets/media/checkout/' + setPaymentMethodName(paymentMode) + '-payment.svg'"
+              />
+            </div>
+            <div class="ch__component__payment-method__item__content">
+              <span
+                *ngIf="isInvoice(paymentMode)"
+                class="ch__component__payment-method__item__content--title"
+                id="checkout.payment.invoice"
+              >
+                {{ 'checkout.payment.invoice' | cxTranslate }}
+              </span>
+              <span
+                *ngIf="paymentMode.code === 'CreditCard'"
+                class="ch__component__payment-method__item__content--title"
+                id="checkout.payment.card"
+              >
+                {{ 'checkout.payment.card' | cxTranslate }}
+              </span>
+              <span
+                *ngIf="paymentMode.code === 'PayPal'"
+                class="ch__component__payment-method__item__content--title"
+                id="checkout.payment.PayPal"
+              >
+                <img src="app/spartacus/assets/media/checkout/PayPal-payment.svg" />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="paymentData.canRequestInvoicePaymentMode">
+      <div *ngIf="!paymentData.invoicePaymentModeRequested" class="ch__info-message">
+        <div class="ch__component__info-message">
+          <img id="checkoutPaymentInfoIconRequestInvoice" src="app/spartacus/assets/media/checkout/InfoIcon.svg" />
+
+          <div class="ch__component__info-message__content" id="requestInvoiceText">
+            <span class="bold">{{ 'checkout.payment.did_you_know' | cxTranslate }}</span>
+            <br />
+            <span>{{ 'checkout.payment.setup_future_orders' | cxTranslate }}</span>
+            <br />
+            <a class="link" (click)="requestInvoice()">{{ 'checkout.payment.request_now' | cxTranslate }}</a>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="paymentData.invoicePaymentModeRequested" class="ch__info-message">
+        <div class="ch__component__info-message is-success">
+          <img id="checkoutPaymentInfoIconInvoiceSuccess" src="app/spartacus/assets/media/checkout/InfoIcon.svg" />
+
+          <div class="ch__component__info-message__content" id="requestedInvoiceText">
+            <span class="bold">{{ 'checkout.payment.requesttopaywith_pending_after' | cxTranslate }}</span>
+            <br />
+            <span>{{ 'checkout.payment.requesttopaywith_pending_review' | cxTranslate }}</span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div *ngIf="paymentForm.value.payment === 'CreditCard'" class="ch__component__selections">
+      <app-card-holder
+        [paymentDetails_]="paymentDetails_"
+        [paymentForm]="paymentForm"
+        [isDisplayCardForm_]="isDisplayCardForm_"
+      ></app-card-holder>
+    </div>
+
+    <!-- TODO: flag below is not working because of undefined value in "this.userService.isB2BAny()" -->
+    <!-- TODO: styles on input needs to be adjusted, "empty-field" needs to be added when field is empty -->
+    <ng-container *ngIf="showOrderReference">
+      <div class="separator-simple"></div>
+
+      <div class="ch__component__details">
+        <app-reference-input
+          id="checkoutReference"
+          [value]="cartData.projectNumber"
+          [control]="paymentForm.get('checkoutReference')"
+          (keydown.enter)="$event.preventDefault()"
+          (onPaste)="onPasteProductRef($event)"
+          labelText="{{ 'checkout.payment.reference_label' | cxTranslate }}"
+          labelInfoText="{{ 'form.optional' | cxTranslate }}"
+          bottomInfoText="{{ 'checkout.payment.reference_hel_text' | cxTranslate }}"
+          type="payment"
+        ></app-reference-input>
+      </div>
+    </ng-container>
+
+    <app-component-loading-spinner *ngIf="isPaymentDetailsLoading_ | async"></app-component-loading-spinner>
+  </div>
+</form>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<process xmlns="http://www.hybris.de/xsd/processdefinition" start="initializePaymentNotifyTimestamp" name="paymentNotifyProcess" onError="error"
+	     processClass="com.namics.distrelec.b2b.core.model.process.PaymentNotifyProcessModel">
+
+	<action id="initializePaymentNotifyTimestamp" bean="initializePaymentNotifyTimestamp">
+		<transition name="OK" to="waitForSuccess" />
+		<transition name="NOK" to="success" />
+	</action>
+
+	<wait id="waitForSuccess" then="success" prependProcessCode="false">
+		<event>${process.code}_PaymentSuccessEvent</event> <!-- The event code is unique -->
+		<timeout delay="PT300S" then="paymentNotifyCheckOrder" />
+		<!-- timeout delay="PT60S" then="paymentNotifyCheckOrder" / --> <!-- this is used for test purpose -->
+		<!-- timeout delay="${distrelec.payment.notify.event.timeout}" then="paymentNotifyCheckOrder" / -->
+	</wait>
+
+	<action id="paymentNotifyCheckOrder" bean="paymentNotifyCheckOrder">
+		<transition name="OK" to="paymentNotifyPlaceOrder" />
+		<transition name="NOK" to="success" />
+	</action>
+
+	<action id="paymentNotifyPlaceOrder" bean="paymentNotifyPlaceOrder">
+		<transition name="OK" to="waitForErpOrderCode" />
+		<transition name="NOK" to="error" />
+	</action>
+
+	<wait id="waitForErpOrderCode" then="checkErpOrderCode" prependProcessCode="false">
+		<event>${process.code}_ErpOrderCodeEvent</event> <!-- The event code is unique -->
+		<!-- timeout delay="PT30S" then="checkErpOrderCode" / --> <!-- this is used for test purpose -->
+		<timeout delay="PT180S" then="checkErpOrderCode" />
+	</wait>
+
+	<action id="checkErpOrderCode" bean="paymentNotifyCheckErpOrderCode">
+		<transition name="OK" to="generatePaymentNotifyOrderEmail" />
+		<transition name="NOK" to="error" />
+	</action>
+
+	<action id="generatePaymentNotifyOrderEmail" bean="generatePaymentNotifyOrderEmail">
+		<transition name="OK" to="sendEmail" />
+		<transition name="NOK" to="error" />
+	</action>
+
+	<action id="sendEmail" bean="distSendEmail">
+		<transition name="OK" to="removeSentEmail" />
+		<transition name="NOK" to="failed" />
+	</action>
+
+	<action id="removeSentEmail" bean="distRemoveSentEmail">
+		<transition name="OK" to="success" />
+		<transition name="NOK" to="error" />
+	</action>
+
+	<end id="error" state="ERROR">Something went wrong.</end>
+	<end id="failed" state="FAILED">Could not wait for the success payment.</end>
+	<end id="success" state="SUCCEEDED">Order was created either with Success payment response or by This business process.</end>
+
+</process>

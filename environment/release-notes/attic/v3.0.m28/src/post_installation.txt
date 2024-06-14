@@ -1,0 +1,40 @@
+<h3>Post installations for QA & PROD</h3>
+
+
+
+<h4>Hybris Update:</h4>
+http://[app-node-0]:9001/hac/platform/update
+
+
+
+<h4>System Update:</h4>
+- nothing to do
+
+
+
+<h4>Run Impex:</h4>
+- nothing to do
+
+
+
+<h4>Blog entries:</h4>
+- https://wiki.namics.com/display/distrelint/2014/06/18/webtrekk+again
+
+
+
+<h4>Misc:</h4>
+- Remove all Message Entries for all content catalogs in the hMC (Internationalization --> Message Entries)
+  (use /environment/release-notes/samples-scripts/impexScripts/removeAllMessageResourceTableEntries.impex for large amount on items)
+- Production environment only:
+	I had to manually create a temporarily index TEMP_PRODUCTHIERARCHY on table DISTPUNCHOUTFILTER.
+	This index will now be created automatically with a different name. So the temp index can be removed again with the following statement:
+		drop index "HYB_DIST_P"."TEMP_PRODUCTHIERARCHY"
+- Remove deleted (orphaned) type "NamicsSendWishlistProcess"
+- Remove attribute "importStatus" from the type "PimImportNotificationProcess"
+- Install the new FF customization (distrelec-customClasses-1.1.42)
+- Install the new version of FF (fact-finder-6.9.2.243.war)
+
+
+
+<h4>Synchronization:</h4>
+- synchronize content catalog

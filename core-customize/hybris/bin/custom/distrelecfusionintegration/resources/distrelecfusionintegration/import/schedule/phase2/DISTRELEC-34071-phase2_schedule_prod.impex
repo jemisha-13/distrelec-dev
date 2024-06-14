@@ -1,0 +1,27 @@
+####################################
+# PROD -> Fusion PROD
+####################################
+
+$fullEOLIndexJob=full-Product-EOL-Fusion
+# start every night at 22:00 GMT
+$fullEOLIndexJobCronExpression=0 0 22 * * ? *
+INSERT_UPDATE Trigger;code[unique=true]       ;cronExpression
+                     ;$fullEOLIndexJobTrigger ;$fullEOLIndexJobCronExpression
+
+$fullIndexJob=full-ProdCatMan-Fusion
+# start every night at 22:00 GMT
+$fullIndexJobCronExpression=0 0 22 * * ? *
+INSERT_UPDATE Trigger;code[unique=true]    ;cronExpression
+                     ;$fullIndexJobTrigger ;$fullIndexJobCronExpression
+
+$updateIndexJob=update-ProdCatMan-Fusion
+# start 1 hour after full index finishes and last execution should finish before full index starts again
+$updateIndexJobCronExpression=0 0 3,6,9,12,15,18,21 * * ? *
+INSERT_UPDATE Trigger;code[unique=true]      ;cronExpression
+                     ;$updateIndexJobTrigger ;$updateIndexJobCronExpression
+
+$updateAtomicIndexJob=update-Product-Atomic-Fusion
+# start 2 hours after full index finishes and last execution should finish before full index starts again
+$updateAtomicIndexJobCronExpression=0 0 4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21 * * ? *
+INSERT_UPDATE Trigger;code[unique=true]            ;cronExpression
+                     ;$updateAtomicIndexJobTrigger ;$updateAtomicIndexJobCronExpression

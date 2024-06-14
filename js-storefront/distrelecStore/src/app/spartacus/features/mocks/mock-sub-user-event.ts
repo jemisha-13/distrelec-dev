@@ -1,0 +1,22 @@
+export const MOCK_SUBUSER_ORDER_EVENT = {
+  type: 'sales_order',
+  body: {
+    purchase_id: 's2b0000COZD',
+    purchase_status: 'CREATED',
+    voucher_code: 'EC1P2t59gb',
+    voucher_value: 73.6,
+    shipping_cost: 10,
+    local_currency: 'CHF',
+    location: 'https://distrelec-ch.local:4200/en/checkout/orderConfirmation/4ca45324-9ab8-4c03-a858-85b0588b7c6a',
+    web_store_url: 'https://distrelec-ch.local:4200',
+    product_list: ['Monitor, VP, 27 (68.6 cm), 2560 x 1440, IPS, 16:9'],
+    product_ids: ['30235023'],
+    total_quantity: 1,
+    total_price: 724.15,
+    total_price_without_tax: 736,
+    timestamp: '2023-10-04T07:00:53+0000',
+    customer_type: 'B2B',
+    placement: 'sub_user',
+    order_dispatch_date: '2023-10-04T07:00:53+0000',
+  },
+};

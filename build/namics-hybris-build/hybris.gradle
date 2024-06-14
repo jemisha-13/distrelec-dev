@@ -1,0 +1,231 @@
+//ant.importBuild hybris_build_file
+
+
+task hybris_clean {
+
+    description 'Performs HYBRIS clean task'
+    group 'HYBRIS - exec'
+
+    doLast {
+        execHybrisAntTask "clean"
+    }
+}
+
+task hybris_build {
+
+    description 'Performs HYBRIS build task'
+    group 'HYBRIS - exec'
+
+    doLast {
+        execHybrisAntTask "build"
+    }
+}
+
+task hybris_npminstall {
+    description 'Performs HYBRIS npminstall task'
+    group 'HYBRIS - exec'
+
+    doLast {
+        execHybrisAntTask "npminstall"
+    }
+}
+
+task hybris_all {
+
+    description 'Performs HYBRIS all task'
+    group 'HYBRIS - exec'
+
+    doLast {
+        execHybrisAntTask "all"
+    }
+}
+
+task hybris_yunitinit {
+
+    description 'Performs HYBRIS yunitinit task'
+    group 'HYBRIS - exec'
+
+    doLast {
+        logging.captureStandardOutput LogLevel.INFO
+        execHybrisAntTask "yunitinit"
+    }
+}
+
+task hybris_yunitupdate_origin {
+
+    description 'Performs HYBRIS yunitupdate task'
+    group 'HYBRIS - exec'
+
+    doLast {
+        logging.captureStandardOutput LogLevel.INFO
+        execHybrisAntTask "yunitupdate"
+    }
+}
+
+task hybris_yunitupdate {
+
+    description 'Performs HYBRIS updatesystem task for junit tenant with optional configFile [usage: hybris_yunitupdate -PconfigFile=path/to/update.json]'
+    group 'HYBRIS - exec'
+    doLast  {
+        ant.property(name: 'tenant', value: "junit")
+        println "Tenant: junit"
+        if (project.hasProperty('configFile')) {
+            ant.property(name: 'configFile', value: "$configFile")
+        } else {
+            ant.property(name: 'configFile', value: "core-customize/hybris/bin/custom/distrelecB2Bcore/resources/update.json")
+        }
+        logging.captureStandardOutput LogLevel.INFO
+        execHybrisAntTask "updatesystem"
+    }
+}
+
+task hybris_unittests {
+
+    description 'Performs HYBRIS unittests task'
+    group 'HYBRIS - exec'
+
+    doLast {
+        //add property extensions from gradle.properties
+        logging.captureStandardOutput LogLevel.INFO
+        println 'Project test_extensions : ' + project.test_extensions
+        println 'Project failbuildonerror : ' + project.failbuildonerror
+        Map antProps = ['testclasses.extensions':project.test_extensions, 'failbuildonerror': project.failbuildonerror]
+        execHybrisAntTask ("unittests", antProps)
+    }
+}
+
+task hybris_alltests {
+
+    description 'Performs HYBRIS unittests task'
+    group 'HYBRIS - exec'
+
+    doLast {
+        //add property extensions from gradle.properties
+        logging.captureStandardOutput LogLevel.INFO
+        println 'Project test_extensions : ' + project.test_extensions
+        println 'Project failbuildonerror : ' + project.failbuildonerror
+        Map antProps = ['testclasses.extensions':project.test_extensions, 'failbuildonerror': project.failbuildonerror]
+        execHybrisAntTask ("jacocoalltests", antProps)
+    }
+}
+
+task hybris_integrationtests {
+
+    description 'Performs HYBRIS integrationtests task'
+    group 'HYBRIS - exec'
+
+    doLast {
+        execHybrisAntTask "integrationtests"
+    }
+}
+
+task hybris_production {
+
+    description 'Performs HYBRIS production task'
+    group 'HYBRIS - exec'
+
+    doLast {
+        logging.captureStandardOutput LogLevel.INFO
+        execHybrisAntTask "production"
+    }
+}
+
+task hybris_initialize {
+
+    description 'Performs HYBRIS initialize task [usage: hybris_initialize -Ptenant=master]'
+    group 'HYBRIS - exec'
+
+    doLast  {
+        try{
+            assert "$tenant"
+            ant.property(name: 'tenant', value: "$tenant")
+            println "Tenant: $tenant"
+            logging.captureStandardOutput LogLevel.INFO
+            execHybrisAntTask "initialize"
+        }
+        catch(Exception e){
+            println("\033[31m"+ e.getMessage())
+            if(e.getMessage().contains("Could not find property 'tenant'"))
+                {
+                    println "Please set tenant property"
+                    println "usage[hybris_initialize -Ptenant=master]\033[37m"
+                }
+        }
+    }
+}
+
+task hybris_updatesystem_origin {
+
+    description 'Performs HYBRIS updatesystem task'
+    group 'HYBRIS - exec'
+    doLast  {
+        ant.property(name: 'tenant', value: "master")
+        println "Tenant: master"
+        logging.captureStandardOutput LogLevel.INFO
+        execHybrisAntTask "updatesystem"
+    }
+}
+
+task hybris_updatesystem {
+
+    description 'Performs HYBRIS updatesystem task with optional configFile [usage: hybris_updatesystem -PconfigFile=path/to/update.json]'
+    group 'HYBRIS - exec'
+    doLast  {
+        ant.property(name: 'tenant', value: "master")
+        println "Tenant: master"
+        if (project.hasProperty('configFile')) {
+            ant.property(name: 'configFile', value: "$configFile")
+        } else {
+            ant.property(name: 'configFile', value: "core-customize/hybris/bin/custom/distrelecB2Bcore/resources/update.json")
+        }
+        logging.captureStandardOutput LogLevel.INFO
+        execHybrisAntTask "updatesystem"
+    }
+}
+
+task hybris_customize {
+    description 'Performs HYBRIS customize task'
+    group 'HYBRIS - exec'
+    doLast  {
+            execHybrisAntTask "customize"
+    }
+}
+
+def execHybrisAntTaskCmdL(String taskName,String property){
+        ext ['buildfile'] = project.hybris_plattform_dir + "/build.xml"
+        ext ['target'] = taskName
+        exec {
+            commandLine 'ant',target,'-buildfile',buildfile,property
+        }
+}
+
+def execHybrisAntTask(String taskName, Map props = null) {
+
+    // set ant home
+    assert System.env.'ANT_HOME'
+
+    ant.'ant.home' = System.env.'ANT_HOME'
+
+    // set platformhome
+    ant.properties.platformhome = project.buildDir.parentFile.absolutePath + File.separator + project.hybris_plattform_dir
+
+    // set buildFile
+    def buildFile = project.hybris_plattform_dir + "/build.xml"
+
+    // Set properties
+    props.each { key, value ->
+      ant.properties[key] = value
+    }
+
+    // create arguments
+    def args = new HashMap() {
+        {
+            put("target", taskName);
+            put("antfile", buildFile);
+        }
+    }
+
+    // call ant
+    ant.invokeMethod("ant", args)
+
+}

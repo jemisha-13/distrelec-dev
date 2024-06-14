@@ -1,0 +1,166 @@
+@import 'global-utilities';
+
+:host {
+  background-color: inherit;
+  display: block;
+  max-width: 100%;
+  position: relative;
+
+  @include tabletPlus {
+    border: none;
+    display: flex;
+  }
+}
+
+.bottom-header {
+  display: none;
+  width: 56%;
+
+  @include tabletPlus {
+    display: inline-block;
+  }
+
+  @media #{$desktop} {
+    width: 100%;
+  }
+
+  .l1 {
+    max-width: 80%;
+
+    @media #{$desktop} {
+      max-width: none;
+    }
+  }
+
+  ul,
+  li {
+    display: inline-block;
+  }
+
+  ul {
+    .e1 {
+      margin: 0 ($spacing-unit * 2);
+      position: relative;
+
+      .a1 {
+        -webkit-font-smoothing: antialiased;
+        @include typography-text-sm;
+        color: $colour-white;
+        cursor: pointer;
+        display: inline;
+        -webkit-font-smoothing: antialiased;
+        font-weight: $font-weight-medium;
+        height: auto;
+        line-height: 2;
+        margin: 0;
+        outline: 0;
+        padding-top: 0;
+        position: relative;
+        width: 100%;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+.top-header {
+  display: flex;
+  height: 32px;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  $edge-space: 52px;
+
+  &--left {
+    padding: ($ux-spacing-unit * 2) 0 $ux-spacing-unit 0;
+    display: none;
+    float: left;
+    justify-content: flex-start;
+    position: relative;
+    width: auto;
+
+    @include tabletPlus {
+      display: flex;
+    }
+
+    .list {
+      display: flex;
+      gap: ($ux-spacing-unit * 4);
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      &__item {
+        cursor: pointer;
+        font-weight: $font-weight-medium;
+        @include typography-text-xs();
+        display: flex;
+        white-space: nowrap;
+
+        &__icon {
+          width: 20px;
+          height: 20px;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  &--right {
+    padding: ($ux-spacing-unit * 2) 0 0;
+    display: flex;
+    float: right;
+    gap: ($ux-spacing-unit * 8);
+    justify-content: flex-end;
+    position: relative;
+    width: 100%;
+
+    @include tabletDown {
+      margin-left: ($ux-spacing-unit * 3);
+      justify-content: center;
+    }
+  }
+
+  .flyout-list {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: static;
+    width: 100%;
+    @include transition(all 0.2s ease);
+
+    &__row {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      transition:
+        padding-left $ux-transition-time-default,
+        background-color $ux-transition-time-default;
+
+      &__label {
+        color: inherit;
+        display: inline-block;
+        font-weight: $font-weight-medium;
+        overflow: hidden;
+        padding: (($spacing-unit * 2) + 2) 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+        @include typography-text-sm;
+      }
+
+      &.no-touch {
+        &:hover {
+          background: $ux-hover-state;
+          padding-left: ($spacing-unit);
+          text-decoration: none;
+          transition: all $ux-transition-time-default ease;
+        }
+      }
+    }
+  }
+}

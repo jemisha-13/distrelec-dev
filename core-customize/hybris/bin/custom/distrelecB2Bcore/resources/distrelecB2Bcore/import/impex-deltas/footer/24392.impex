@@ -1,0 +1,10 @@
+$mode = Staged
+$contentCatalog = distrelec_SEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = $mode])[default = $contentCatalog:$mode]
+
+INSERT_UPDATE CMSNavigationNode ;uid[unique=true]   ;title[lang = en]                   ;title[lang = sv]                   ;$contentCV[unique = true]
+                                ;mo-fr              ;"Mo-Fr: 8h00-12h00, 13h00-16h30"   ;"Mån-fre: 8h00-12h00, 13h00-16h30" ;
+
+# Turn on the visibility for the Opening Times node for SV
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];visible;$contentCV[unique=true];children(uid, $contentCV)
+                               ;support-number  ;true   ;                       ;telnr, mo-fr

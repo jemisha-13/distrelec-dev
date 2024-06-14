@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<!--
+	ATTENTION: This is just an example file. You have to edit it according to your needs.
+-->
+
+<items 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xsi:noNamespaceSchemaLocation="items.xsd">
+
+	
+	<enumtypes>
+		<enumtype generate="false" code="SolrServerModes" autocreate="false">
+			<value code="fusion" />
+		</enumtype>
+
+		<enumtype code="FusionMigrationAuditType">
+			<value code="bulk" />
+			<value code="eol" />
+			<value code="atomic" />
+			<value code="incremental" />
+		</enumtype>
+
+		<enumtype code="FusionMigrationAuditStatus">
+			<value code="FAILURE" />
+			<value code="SUCCESS" />
+			<value code="COMPLETE" />
+		</enumtype>
+
+	</enumtypes>
+
+	<itemtypes>
+
+		<itemtype code="FusionPimWebUseMigrationCronJob" extends="CronJob"
+				  jaloclass="com.distrelec.solrfacetsearch.jalo.jobs.FusionPimWebUseMigrationCronJob">
+			<attributes>
+				<attribute qualifier="languages" type="LanguageList">
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="fullMigration" type="java.lang.Boolean">
+					<modifiers optional="false"/>
+					<defaultvalue>Boolean.FALSE</defaultvalue>
+					<persistence type="property"/>
+					<description>Indicates if the job will do full migration or delta</description>
+				</attribute>
+			</attributes>
+		</itemtype>
+
+		<itemtype code="FusionMigrationAuditSendCronJob" extends="CronJob"
+				  jaloclass="com.distrelec.solrfacetsearch.jalo.jobs.FusionMigrationAuditSendCronJob">
+			<attributes>
+				<attribute qualifier="migrationAuditType" type="FusionMigrationAuditType">
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="migrationAuditStatus" type="FusionMigrationAuditStatus">
+					<persistence type="property"/>
+				</attribute>
+			</attributes>
+		</itemtype>
+
+	</itemtypes>
+</items>

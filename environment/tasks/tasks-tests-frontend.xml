@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Testing of frontend (Agile Acceptance Testing)
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-tests-frontend" basedir=".">
+
+	<property name="frontend.libraries" value="lib" />
+	<property name="frontend.resource" value="resourcesfrontend" />
+	<property name="frontend.testsrc" value="testfrontend" />
+	<property name="frontend.testclasses" value="bin/frontendtest" />
+	<property name="frontend.docs" value="doc/frontendtest" />
+
+
+	<!--
+	=================================
+	macro: frontendtest
+	=================================
+	-->
+	<macrodef name="frontendtest" description="Runs all the agile acceptance tests (frontend tests) in the 'frontend' folder. This target is independent from hybris.">
+		<sequential>
+			<for list="${frontendtests.extensionlist}" param="extension">
+				<sequential>
+					<echo message="Building frontend tests for extension '@{extension}'." />
+					<frontendtestclean directory="${hybris.extensions.home}/@{extension}" />
+					<frontendtestcompile directory="${hybris.extensions.home}/@{extension}"/>
+					<frontendtestrun directory="${hybris.extensions.home}/@{extension}"/>
+
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: frontendtestclean
+	=================================
+	-->
+	<macrodef name="frontendtestclean" description="Removes all classes in the 'frontend' folder and all frontend documentation in folder 'doc/frontend'. This target is independent from hybris.">
+		<attribute name="directory"/>
+		<sequential>
+			<!-- clean the test classes -->
+			<delete verbose="true" failonerror="false">
+				<fileset dir="@{directory}/${frontend.testclasses}" includes="**/*.class" />
+			</delete>
+			<!-- clean the doc directory -->
+			<delete verbose="true" failonerror="false">
+				<fileset dir="@{directory}/${frontend.docs}" includes="**/*" />
+			</delete>
+
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: frontendtestcompile
+	=================================
+	-->
+	<macrodef name="frontendtestcompile" description="Compiles all the agile acceptance tests (frontend tests) in the 'frontend' folder. This target is independent from hybris.">
+		<attribute name="directory"/>
+		<sequential>
+			<echo message="Platform: ${hybris.platform.home}" />
+			<mkdir dir="@{directory}/${frontend.testclasses}" />
+			<javac srcdir="@{directory}/${frontend.testsrc}" destdir="@{directory}/${frontend.testclasses}" verbose="false" includeantruntime="true">
+				<classpath>
+					<fileset dir="${hybris.platform.home}" >
+						<include name="ext/core/lib/*.jar" />
+						<include name="ext/core/lib/**/*.jar" />
+					</fileset>
+					<fileset dir="@{directory}/${frontend.libraries}" >
+						<include name="**/*.jar" />
+					</fileset>
+					<fileset dir="@{directory}/${frontend.resource}" >
+						<include name="**/*.properties" />
+					</fileset>
+				</classpath>
+			</javac>
+			<copy todir="@{directory}/${frontend.testclasses}">
+				<fileset dir="@{directory}/${frontend.testsrc}">
+					<include name="**/*.properties" />
+					<include name="**/*.css" />
+					<include name="**/*.html" />
+				</fileset>
+				<fileset dir="@{directory}/${frontend.resource}" >
+					<include name="**/*.properties" />
+				</fileset>
+			</copy>
+			<zip destfile="@{directory}/${frontend.testclasses}/../frontendfiles.jar">
+				<fileset dir="@{directory}/${frontend.testclasses}" >
+					<include name="**/*.class" />
+					<include name="**/*.properties" />
+					<include name="**/*.css" />
+					<include name="**/*.html" />
+				</fileset>
+			</zip>
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: frontendtestrun
+	=================================
+	-->
+	<macrodef name="frontendtestrun" description="Runs all the agile acceptance tests (frontend tests) in the 'frontend' folder. This target is independent from hybris.">
+		<attribute name="directory"/>
+		<sequential>
+			<echo message="Testing frontend for directory '@{directory}/${frontend.testclasses}'." />
+			<echo message="Results are in directory '@{directory}/${frontend.docs}'." />
+			<mkdir dir="@{directory}/${frontend.docs}" />
+			<junit printsummary="true" showoutput="true" >
+				<classpath>
+					<fileset dir="${hybris.platform.home}" >
+						<include name="ext/core/lib/*.jar" />
+						<include name="ext/core/lib/**/*.jar" />
+					</fileset>
+					<fileset dir="@{directory}/${frontend.libraries}" >
+						<include name="**/*.jar" />
+					</fileset>
+					<fileset dir="@{directory}/bin" >
+						<include name="**/*.jar" />
+					</fileset>
+				</classpath>
+				
+
+				<!-- formatter type="brief" usefile="false" / -->
+				<batchtest todir="@{directory}/${frontend.docs}">
+					<formatter type="xml" usefile="true" />
+					<fileset dir="@{directory}/${frontend.testclasses}" includes="**/*Test.class" excludes="**/Abstract*Test.class"/>
+				</batchtest>
+			</junit>
+		</sequential>
+	</macrodef>
+
+</project>
+

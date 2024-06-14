@@ -1,0 +1,918 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SI_Hybris_IF15_out" targetNamespace="http://www.distrelec.com/hybris/IF15" xmlns:p2="http://www.distrelec.com/hybris" xmlns:p1="http://www.distrelec.com/hybris/IF15" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation/>
+  <wsp:UsingPolicy wsdl:required="true"/>
+  <wsp:Policy wsu:Id="OP_IF15_SearchOrders"/>
+  <wsp:Policy wsu:Id="OP_IF15_ReadAllOpenOrders"/>
+  <wsp:Policy wsu:Id="OP_IF15_ReadOrder"/>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.distrelec.com/sap/webshop/IF15" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.distrelec.com/sap/webshop/IF15">
+      <xsd:simpleType name="MFRPN">
+        <xsd:annotation>
+          <xsd:documentation>Manufacturer Part Number</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="40"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="MATNR">
+        <xsd:annotation>
+          <xsd:documentation>Material number</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="18"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="VBELN">
+        <xsd:annotation>
+          <xsd:documentation>Billing Document</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="10"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="MFRNR">
+        <xsd:annotation>
+          <xsd:documentation>Number of a Manufacturer</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="10"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="MAKTX">
+        <xsd:annotation>
+          <xsd:documentation>Material Description (Short Text)</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="40"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="QUANTITY">
+        <xsd:annotation>
+          <xsd:documentation>Quantity</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:long">
+          <xsd:totalDigits value="13"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="MEINS">
+        <xsd:annotation>
+          <xsd:documentation>Base unit of measure</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="3"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://www.distrelec.com/hybris" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.distrelec.com/hybris">
+      <xsd:element name="FaultMessage" type="FaultMessage"/>
+      <xsd:simpleType name="FaultUrl">
+        <xsd:annotation>
+          <xsd:documentation>URL to the long text of this message</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string"/>
+      </xsd:simpleType>
+      <xsd:simpleType name="Severity">
+        <xsd:annotation>
+          <xsd:documentation>URL to the long text of this message</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="1"/>
+          <xsd:enumeration value="A">
+            <xsd:annotation>
+              <xsd:documentation>Abend - error</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="E">
+            <xsd:annotation>
+              <xsd:documentation>Error</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="W">
+            <xsd:annotation>
+              <xsd:documentation>Warning</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="Text">
+        <xsd:annotation>
+          <xsd:documentation>Formatted T100 message text (in the language in which the service was executed)</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string"/>
+      </xsd:simpleType>
+      <xsd:simpleType name="FaultName">
+        <xsd:annotation>
+          <xsd:documentation>Fault message name</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="75"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="Id">
+        <xsd:annotation>
+          <xsd:documentation>Connection from work area and message number (for example, “XY(007)”).</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string"/>
+      </xsd:simpleType>
+      <xsd:simpleType name="Url">
+        <xsd:annotation>
+          <xsd:documentation>URL to the T100 long text (if available).</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string"/>
+      </xsd:simpleType>
+      <xsd:simpleType name="FaultId">
+        <xsd:annotation>
+          <xsd:documentation>Fault message ID</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="9"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="FaultText">
+        <xsd:annotation>
+          <xsd:documentation>Fault message text</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="200"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="FaultDetail">
+        <xsd:sequence>
+          <xsd:element name="severity" type="Severity"/>
+          <xsd:element name="text" type="Text"/>
+          <xsd:element name="url" type="Url"/>
+          <xsd:element name="id" type="Id"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="FaultMessage">
+        <xsd:sequence>
+          <xsd:element name="faultId" type="FaultId"/>
+          <xsd:element name="faultName" type="FaultName"/>
+          <xsd:element name="faultText" type="FaultText"/>
+          <xsd:element name="faultUrl" type="FaultUrl" minOccurs="0"/>
+          <xsd:element name="faultDetail" type="FaultDetail" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://www.distrelec.com/hybris/IF15" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sap="http://www.distrelec.com/sap/webshop/IF15" xmlns="http://www.distrelec.com/hybris/IF15">
+      <xsd:import namespace="http://www.distrelec.com/sap/webshop/IF15"/>
+      <xsd:element name="ReadOrderResponse" type="ReadOrderResponseV2"/>
+      <xsd:element name="ReadOrderRequest" type="ReadOrderRequestV2"/>
+      <xsd:element name="OrderSearchResponse" type="OrderSearchResponseV2"/>
+      <xsd:element name="ReadAllOpenOrdersRequest" type="ReadAllOpenOrdersRequestV2"/>
+      <xsd:element name="OrderSearchRequest" type="OrderSearchRequestV2"/>
+      <xsd:element name="ReadAllOpenOrdersResponse" type="ReadAllOpenOrdersResponseV2"/>
+      <xsd:simpleType name="CostCenterId">
+        <xsd:annotation>
+          <xsd:documentation>Cost Center ID</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="12"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="OrderChannel">
+        <xsd:annotation>
+          <xsd:documentation>Order Channel</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="4"/>
+          <xsd:enumeration value="0000">
+            <xsd:annotation>
+              <xsd:documentation>Web</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0001">
+            <xsd:annotation>
+              <xsd:documentation>Telephone</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0002">
+            <xsd:annotation>
+              <xsd:documentation>Fax</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0003">
+            <xsd:annotation>
+              <xsd:documentation>Letter</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0004">
+            <xsd:annotation>
+              <xsd:documentation>Shop</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0005">
+            <xsd:annotation>
+              <xsd:documentation>Email</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0006">
+            <xsd:annotation>
+              <xsd:documentation>Activity</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0007">
+            <xsd:annotation>
+              <xsd:documentation>EDI</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0008">
+            <xsd:annotation>
+              <xsd:documentation>EDI / Web</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0009">
+            <xsd:annotation>
+              <xsd:documentation>Student</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0010">
+            <xsd:annotation>
+              <xsd:documentation>Discount Card</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0011">
+            <xsd:annotation>
+              <xsd:documentation>not in use</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0012">
+            <xsd:annotation>
+              <xsd:documentation>not in use</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0013">
+            <xsd:annotation>
+              <xsd:documentation>not in use</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0014">
+            <xsd:annotation>
+              <xsd:documentation>ISBB order</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0015">
+            <xsd:annotation>
+              <xsd:documentation>Distrelec</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="0016">
+            <xsd:annotation>
+              <xsd:documentation>IPhone</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="Title">
+        <xsd:annotation>
+          <xsd:documentation>Title</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="Mr.">
+            <xsd:annotation>
+              <xsd:documentation>Mr.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="Mr. and Mrs.">
+            <xsd:annotation>
+              <xsd:documentation>Mr. and Mrs.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="Ms.">
+            <xsd:annotation>
+              <xsd:documentation>Ms.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="Company">
+            <xsd:annotation>
+              <xsd:documentation>Company</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="ArticleNumber">
+        <xsd:annotation>
+          <xsd:documentation>Article number</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="18"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="Name">
+        <xsd:annotation>
+          <xsd:documentation>Name</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="35"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="ResultSize">
+        <xsd:annotation>
+          <xsd:documentation>Return up to N rows.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:integer"/>
+      </xsd:simpleType>
+      <xsd:simpleType name="CustomerReference">
+        <xsd:annotation>
+          <xsd:documentation>Customer specific reference number for this item (sent in order simulation)</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="35"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="QuotationId">
+        <xsd:annotation>
+          <xsd:documentation>Reference id to a quotation (sent in order simulation)</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="10"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="CurrencyCode">
+        <xsd:annotation>
+          <xsd:documentation>Currency code</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="3"/>
+          <xsd:enumeration value="CHF">
+            <xsd:annotation>
+              <xsd:documentation>Swiss Franc</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="DKK">
+            <xsd:annotation>
+              <xsd:documentation>Danish Krone</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="EUR">
+            <xsd:annotation>
+              <xsd:documentation>Euros</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="LTL">
+            <xsd:annotation>
+              <xsd:documentation>Lithuanian Lita</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="LVL">
+            <xsd:annotation>
+              <xsd:documentation>Latvian Lat</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="NOK">
+            <xsd:annotation>
+              <xsd:documentation>Norwegian Krone</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="PLN">
+            <xsd:annotation>
+              <xsd:documentation>Polish Zloty</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="SEK">
+            <xsd:annotation>
+              <xsd:documentation>Swedish Krona</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="USD">
+            <xsd:annotation>
+              <xsd:documentation>United States Dollar</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="AddressId">
+        <xsd:annotation>
+          <xsd:documentation>Address ID</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="10"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="PaymentMethodCode">
+        <xsd:annotation>
+          <xsd:documentation>Payment Method Code</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="4"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="Country">
+        <xsd:annotation>
+          <xsd:documentation>Country</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="2"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="OrderStatus">
+        <xsd:annotation>
+          <xsd:documentation>Order Status</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="2"/>
+          <xsd:enumeration value="01">
+            <xsd:annotation>
+              <xsd:documentation>Received</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="02">
+            <xsd:annotation>
+              <xsd:documentation>In progress</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="03">
+            <xsd:annotation>
+              <xsd:documentation>Partially shipped</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="04">
+            <xsd:annotation>
+              <xsd:documentation>Shipped</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="05">
+            <xsd:annotation>
+              <xsd:documentation>Cancelled</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="DeliveryId">
+        <xsd:annotation>
+          <xsd:documentation>DeliveryId if already shipped</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="10"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="SalesOrganization">
+        <xsd:annotation>
+          <xsd:documentation>Sales Organization</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="4"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="CompanyName">
+        <xsd:annotation>
+          <xsd:documentation>Company name</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="35"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="CustomerId">
+        <xsd:annotation>
+          <xsd:documentation>Customer ID</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="10"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="OrderNote">
+        <xsd:annotation>
+          <xsd:documentation>Order Note</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="1000"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="CustomerReferenceHeaderLevel">
+        <xsd:annotation>
+          <xsd:documentation>Customer Reference Header Level</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="35"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="InvoiceId">
+        <xsd:annotation>
+          <xsd:documentation>Invoice ID</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="10"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="SortAscending">
+        <xsd:annotation>
+          <xsd:documentation>true = sort ascending false = sort descending</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:boolean"/>
+      </xsd:simpleType>
+      <xsd:simpleType name="OrderId">
+        <xsd:annotation>
+          <xsd:documentation>Order ID</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="10"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="ShippingMethodCode">
+        <xsd:annotation>
+          <xsd:documentation>Shipping method code</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="4"/>
+          <xsd:enumeration value="A1">
+            <xsd:annotation>
+              <xsd:documentation>Collection/pick up</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="E1">
+            <xsd:annotation>
+              <xsd:documentation>Economy to door</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="E2">
+            <xsd:annotation>
+              <xsd:documentation>Eco to pick up place</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="N1">
+            <xsd:annotation>
+              <xsd:documentation>Normal to door</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="N2">
+            <xsd:annotation>
+              <xsd:documentation>Norm. to pick up pl.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="O1">
+            <xsd:annotation>
+              <xsd:documentation>Other ExOther Export</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="S1">
+            <xsd:annotation>
+              <xsd:documentation>Shop</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="X1">
+            <xsd:annotation>
+              <xsd:documentation>Emergency</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="X4">
+            <xsd:annotation>
+              <xsd:documentation>Express delivery oder</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="ResultOffset">
+        <xsd:annotation>
+          <xsd:documentation>Result offset.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:integer"/>
+      </xsd:simpleType>
+      <xsd:simpleType name="ContactName">
+        <xsd:annotation>
+          <xsd:documentation>Contact Name</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="50"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="URL">
+        <xsd:annotation>
+          <xsd:documentation>URL string</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string"/>
+      </xsd:simpleType>
+      <xsd:simpleType name="ContactId">
+        <xsd:annotation>
+          <xsd:documentation>Contact ID</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="10"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="OrderPosition">
+        <xsd:annotation>
+          <xsd:documentation>Order Position</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="6"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="Date">
+        <xsd:annotation>
+          <xsd:documentation>YYYYMMDD</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:integer">
+          <xsd:totalDigits value="8"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="Deliveries">
+        <xsd:sequence>
+          <xsd:element name="Delivery" type="Delivery" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="HandlingUnit">
+        <xsd:sequence>
+          <xsd:element name="HandlingUnitID" type="sap:VBELN" minOccurs="0"/>
+          <xsd:element name="HandlingUnitTrackingURL" type="URL" minOccurs="0"/>
+          <xsd:element name="Items" type="Item" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ReadOrderResponseV2">
+        <xsd:sequence>
+          <xsd:element name="customerId" type="CustomerId"/>
+          <xsd:element name="contactName" type="ContactName"/>
+          <xsd:element name="orderId" type="OrderId"/>
+          <xsd:element name="orderDate" type="Date"/>
+          <xsd:element name="orderStatus" type="OrderStatus"/>
+          <xsd:element name="orderChannel" type="OrderChannel"/>
+          <xsd:element name="currencyCode" type="CurrencyCode"/>
+          <xsd:element name="webshopOrderCode" type="xsd:string"/>
+          <xsd:element name="billingAddress" type="AddressWithId"/>
+          <xsd:element name="shippingAddress" type="AddressWithId"/>
+          <xsd:element name="orderEntries" type="OrderReadEntry" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="subtotal1" type="xsd:double"/>
+          <xsd:element name="orderDiscounts" type="OrderDiscounts" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="shippingMethodCode" type="ShippingMethodCode"/>
+          <xsd:element name="shippingPrice" type="xsd:double"/>
+          <xsd:element name="paymentMethodCode" type="PaymentMethodCode"/>
+          <xsd:element name="paymentPrice" type="xsd:double"/>
+          <xsd:element name="vouchers" type="VoucherResponse" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="subtotal2" type="xsd:double"/>
+          <xsd:element name="tax" type="xsd:double"/>
+          <xsd:element name="total" type="xsd:double"/>
+          <xsd:element name="costCenterId" type="CostCenterId" minOccurs="0"/>
+          <xsd:element name="customerReferenceHeaderLevel" type="CustomerReferenceHeaderLevel" minOccurs="0"/>
+          <xsd:element name="orderNote" type="OrderNote" minOccurs="0"/>
+          <xsd:element name="Deliveries" type="Deliveries" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="AddressWithId">
+        <xsd:sequence>
+          <xsd:element name="addressId" type="AddressId"/>
+          <xsd:element name="companyName1" type="CompanyName" minOccurs="0"/>
+          <xsd:element name="companyName2" type="CompanyName" minOccurs="0"/>
+          <xsd:element name="companyName3" type="CompanyName" minOccurs="0"/>
+          <xsd:element name="title" type="Title" minOccurs="0"/>
+          <xsd:element name="firstName" type="Name" minOccurs="0"/>
+          <xsd:element name="lastName" type="Name" minOccurs="0"/>
+          <xsd:element name="additionalName" type="Name" minOccurs="0"/>
+          <xsd:element name="streetName" type="xsd:string"/>
+          <xsd:element name="streetNumber" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="pobox" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="postalCode" type="xsd:string"/>
+          <xsd:element name="town" type="xsd:string"/>
+          <xsd:element name="region" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="country" type="Country"/>
+          <xsd:element name="phoneNumber" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="OrderSearchResponseV2">
+        <xsd:sequence>
+          <xsd:element name="customerId" type="CustomerId"/>
+          <xsd:element name="orders" type="OrdersSearchLine" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="resultTotalSize" type="ResultSize"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ReadOrderRequestV2">
+        <xsd:sequence>
+          <xsd:element name="salesOrganization" type="SalesOrganization"/>
+          <xsd:element name="customerId" type="CustomerId"/>
+          <xsd:element name="orderId" type="OrderId"/>
+          <xsd:element name="webshopOrderFlag" type="xsd:boolean"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="OrderSearchRequestV2">
+        <xsd:sequence>
+          <xsd:element name="salesOrganization" type="SalesOrganization"/>
+          <xsd:element name="customerId" type="CustomerId"/>
+          <xsd:element name="filterOrderId" type="OrderId" minOccurs="0"/>
+          <xsd:element name="filterContactId" type="ContactId" minOccurs="0"/>
+          <xsd:element name="filterArticleId" type="ArticleNumber" minOccurs="0"/>
+          <xsd:element name="filterInvoiceId" type="InvoiceId" minOccurs="0"/>
+          <xsd:element name="filterCurrencyCode" type="CurrencyCode" minOccurs="0"/>
+          <xsd:element name="filterOrderTotalMin" type="xsd:double" minOccurs="0"/>
+          <xsd:element name="filterOrderTotalMax" type="xsd:double" minOccurs="0"/>
+          <xsd:element name="filterOrderDateStart" type="Date" minOccurs="0"/>
+          <xsd:element name="filterOrderDateEnd" type="Date" minOccurs="0"/>
+          <xsd:element name="filterOrderStatus" type="OrderStatus" minOccurs="0"/>
+          <xsd:element name="filterOrderReference" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="sortCriteria" type="xsd:string"/>
+          <xsd:element name="sortAscending" type="SortAscending"/>
+          <xsd:element name="resultSize" type="ResultSize"/>
+          <xsd:element name="resultOffset" type="ResultOffset"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="VoucherResponse">
+        <xsd:sequence>
+          <xsd:element name="code" type="xsd:string"/>
+          <xsd:element name="fixedValue" type="xsd:double"/>
+          <xsd:element name="percentage" type="xsd:double" minOccurs="0"/>
+          <xsd:element name="valid" type="xsd:boolean"/>
+          <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ReadAllOpenOrdersResponseV2">
+        <xsd:sequence>
+          <xsd:element name="openOrders" type="OpenOrders" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ReadAllOpenOrdersRequestV2">
+        <xsd:sequence>
+          <xsd:element name="salesOrganization" type="SalesOrganization"/>
+          <xsd:element name="customerId" type="CustomerId"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="OpenOrders">
+        <xsd:sequence>
+          <xsd:element name="customerId" type="CustomerId"/>
+          <xsd:element name="contactId" type="ContactId"/>
+          <xsd:element name="orderId" type="OrderId"/>
+          <xsd:element name="orderDate" type="Date"/>
+          <xsd:element name="orderStatus" type="OrderStatus"/>
+          <xsd:element name="orderChannel" type="OrderChannel"/>
+          <xsd:element name="currencyCode" type="CurrencyCode"/>
+          <xsd:element name="billingAddressId" type="AddressWithId"/>
+          <xsd:element name="shippingAddressId" type="AddressWithId"/>
+          <xsd:element name="orderEntries" type="OrderReadEntry" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="subtotal1" type="xsd:double"/>
+          <xsd:element name="orderDiscounts" type="OrderDiscounts" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="shippingMethodCode" type="ShippingMethodCode"/>
+          <xsd:element name="shippingPrice" type="xsd:double"/>
+          <xsd:element name="paymentMethodCode" type="PaymentMethodCode"/>
+          <xsd:element name="paymentPrice" type="xsd:double"/>
+          <xsd:element name="vouchers" type="VoucherResponse" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="subtotal2" type="xsd:double"/>
+          <xsd:element name="tax" type="xsd:double"/>
+          <xsd:element name="total" type="xsd:double"/>
+          <xsd:element name="costCenterId" type="CostCenterId" minOccurs="0"/>
+          <xsd:element name="customerReferenceHeaderLevel" type="CustomerReferenceHeaderLevel" minOccurs="0"/>
+          <xsd:element name="orderNote" type="OrderNote" minOccurs="0"/>
+          <xsd:element name="orderCloseDate" type="Date"/>
+          <xsd:element name="editableByAllContacts" type="xsd:boolean"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="OrdersSearchLine">
+        <xsd:sequence>
+          <xsd:element name="orderId" type="OrderId"/>
+          <xsd:element name="contactName" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="orderDate" type="Date"/>
+          <xsd:element name="orderStatus" type="OrderStatus"/>
+          <xsd:element name="invoiceIds" type="InvoiceId" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="deliveryTrackingUrl" type="URL" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="currencyCode" type="CurrencyCode"/>
+          <xsd:element name="orderTotal" type="xsd:double"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="OrderDiscounts">
+        <xsd:sequence>
+          <xsd:element name="fixedValue" type="xsd:double"/>
+          <xsd:element name="percentage" type="xsd:double" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Delivery">
+        <xsd:sequence>
+          <xsd:element name="DeliveryID" type="sap:VBELN"/>
+          <xsd:element name="DeliveryDate" type="xsd:date"/>
+          <xsd:element name="HandlingUnits" type="HandlingUnit" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="OrderReadEntry">
+        <xsd:sequence>
+          <xsd:element name="orderPosition" type="OrderPosition"/>
+          <xsd:element name="materialNumber" type="ArticleNumber"/>
+          <xsd:element name="orderQuantity" type="xsd:long"/>
+          <xsd:element name="unit" type="xsd:string"/>
+          <xsd:element name="price" type="xsd:double"/>
+          <xsd:element name="total" type="xsd:double"/>
+          <xsd:element name="quotationId" type="QuotationId" minOccurs="0"/>
+          <xsd:element name="customerReferenceItemLevel" type="CustomerReference" minOccurs="0"/>
+          <xsd:element name="estimatedDeliveryDate" type="Date"/>
+          <xsd:element name="deliveryId" type="DeliveryId" minOccurs="0"/>
+          <xsd:element name="deliveryDate" type="Date" minOccurs="0"/>
+          <xsd:element name="deliveryTrackingUrl" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="deliveryQuantity" type="xsd:long"/>
+          <xsd:element name="pendingQuantity" type="xsd:long"/>
+          <xsd:element name="invoiceId" type="InvoiceId" minOccurs="0"/>
+          <xsd:element name="discount" type="xsd:double"/>
+          <xsd:element name="totalAfterDiscount" type="xsd:double"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Item">
+        <xsd:sequence>
+          <xsd:element name="MaterialID" type="sap:MATNR"/>
+          <xsd:element name="ArticleName" type="sap:MAKTX"/>
+          <xsd:element name="Quantity" type="sap:QUANTITY"/>
+          <xsd:element name="Unit" type="sap:MEINS"/>
+          <xsd:element name="Type" type="sap:MFRPN"/>
+          <xsd:element name="Manufacturer" type="sap:MFRNR"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="p1.OrderSearchRequest">
+    <wsdl:documentation/>
+    <wsdl:part name="OrderSearchRequest" element="p1:OrderSearchRequest"/>
+  </wsdl:message>
+  <wsdl:message name="p1.OrderSearchResponse">
+    <wsdl:documentation/>
+    <wsdl:part name="OrderSearchResponse" element="p1:OrderSearchResponse"/>
+  </wsdl:message>
+  <wsdl:message name="p1.ReadAllOpenOrdersRequest">
+    <wsdl:documentation/>
+    <wsdl:part name="ReadAllOpenOrdersRequest" element="p1:ReadAllOpenOrdersRequest"/>
+  </wsdl:message>
+  <wsdl:message name="p1.ReadAllOpenOrdersResponse">
+    <wsdl:documentation/>
+    <wsdl:part name="ReadAllOpenOrdersResponse" element="p1:ReadAllOpenOrdersResponse"/>
+  </wsdl:message>
+  <wsdl:message name="p1.ReadOrderRequest">
+    <wsdl:documentation/>
+    <wsdl:part name="ReadOrderRequest" element="p1:ReadOrderRequest"/>
+  </wsdl:message>
+  <wsdl:message name="p1.ReadOrderResponse">
+    <wsdl:documentation/>
+    <wsdl:part name="ReadOrderResponse" element="p1:ReadOrderResponse"/>
+  </wsdl:message>
+  <wsdl:message name="p2.FaultMessage">
+    <wsdl:documentation/>
+    <wsdl:part name="FaultMessage" element="p2:FaultMessage"/>
+  </wsdl:message>
+  <wsdl:portType name="SI_Hybris_IF15_out">
+    <wsdl:documentation/>
+    <wsdl:operation name="IF15_SearchOrders">
+      <wsdl:documentation/>
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_IF15_SearchOrders"/>
+      </wsp:Policy>
+      <wsdl:input message="p1:p1.OrderSearchRequest"/>
+      <wsdl:output message="p1:p1.OrderSearchResponse"/>
+      <wsdl:fault name="p2.FaultMessage" message="p1:p2.FaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="IF15_ReadAllOpenOrders">
+      <wsdl:documentation/>
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_IF15_ReadAllOpenOrders"/>
+      </wsp:Policy>
+      <wsdl:input message="p1:p1.ReadAllOpenOrdersRequest"/>
+      <wsdl:output message="p1:p1.ReadAllOpenOrdersResponse"/>
+      <wsdl:fault name="p2.FaultMessage" message="p1:p2.FaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="IF15_ReadOrder">
+      <wsdl:documentation/>
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_IF15_ReadOrder"/>
+      </wsp:Policy>
+      <wsdl:input message="p1:p1.ReadOrderRequest"/>
+      <wsdl:output message="p1:p1.ReadOrderResponse"/>
+      <wsdl:fault name="p2.FaultMessage" message="p1:p2.FaultMessage"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SI_Hybris_IF15_outBinding" type="p1:SI_Hybris_IF15_out">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+    <wsdl:operation name="IF15_SearchOrders">
+      <soap:operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:output>
+      <wsdl:fault name="p2.FaultMessage">
+        <soap:fault use="literal" name="p2.FaultMessage" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="IF15_ReadAllOpenOrders">
+      <soap:operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:output>
+      <wsdl:fault name="p2.FaultMessage">
+        <soap:fault use="literal" name="p2.FaultMessage" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="IF15_ReadOrder">
+      <soap:operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:output>
+      <wsdl:fault name="p2.FaultMessage">
+        <soap:fault use="literal" name="p2.FaultMessage" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SI_Hybris_IF15_outService">
+    <wsdl:port name="HTTP_Port" binding="p1:SI_Hybris_IF15_outBinding">
+      <soap:address location="http://piqdisap.dat.datwyler.biz:52000/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=WSQ&amp;receiverParty=&amp;receiverService=&amp;interface=SI_Hybris_IF15_out&amp;interfaceNamespace=http%3A%2F%2Fwww.distrelec.com%2Fhybris%2FIF15" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+    </wsdl:port>
+    <wsdl:port name="HTTPS_Port" binding="p1:SI_Hybris_IF15_outBinding">
+      <soap:address location="https://piqdisap.dat.datwyler.biz:52001/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=WSQ&amp;receiverParty=&amp;receiverService=&amp;interface=SI_Hybris_IF15_out&amp;interfaceNamespace=http%3A%2F%2Fwww.distrelec.com%2Fhybris%2FIF15" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,153 @@
+<h2 class="card-item__title mb-3" id="checkout.becomeCustomer.title">
+  {{ 'checkout.confirmation.become_customer_title' | cxTranslate }}
+</h2>
+
+<div class="guest-registration">
+  <div class="guest-registration__item p-relative">
+    <div class="guest-registration__item-inner guest-registration__item-inner p-relative">
+      <h3 class="guest-registration__item-title" id="checkout.becomeCustomer.personal.title">
+        {{ 'checkout.confirmation.become_customer_personal_title' | cxTranslate }}
+      </h3>
+
+      <p class="card-item__txt" id="checkout.becomeCustomer.personal.info">
+        {{ 'checkout.confirmation.become_customer_personal_note' | cxTranslate }}
+      </p>
+
+      <form class="guest-registration__form mt-3" [formGroup]="checkoutGuestRegistrationForm">
+        <div class="form-group">
+          <label class="control-label" for="guestRegistrationFormPassword">
+            <strong id="guestRegistrationFormPasswordLabel">{{ 'form.password' | cxTranslate }}</strong>
+          </label>
+
+          <div class="p-relative">
+            <input
+              class="form-control"
+              id="guestRegistrationFormPassword"
+              [type]="passwordVisible ? 'text' : 'password'"
+              [class.is-valid]="isPasswordFieldValid() && !hasPasswordFieldErrors()"
+              [class.is-invalid]="!isPasswordFieldValid() && getPasswordField().dirty"
+              (keyup)="onPasswordFieldKeyup($event)"
+              formControlName="guestRegisterPassword"
+            />
+
+            <button
+              class="btn pwd-icon-btn"
+              id="passwordVisibilityToggle"
+              (click)="passwordVisible = !passwordVisible"
+              tabindex="-1"
+            >
+              <ng-container *ngIf="passwordVisible; else passwordNotVisible">
+                <app-icon id="faEyeSlashPwd" iconName="eye" iconType="svg"></app-icon>
+              </ng-container>
+
+              <ng-template #passwordNotVisible>
+                <app-icon id="faEyePwd" iconName="eye-slash" iconType="svg"></app-icon>
+              </ng-template>
+            </button>
+          </div>
+
+          <small class="form-group__info mt-2" id="guestRegistrationFormPasswordNote">
+            {{ 'setInitialPwd.pwd.invalid' | cxTranslate }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="guestRegistrationFormPasswordConfirm">
+            <strong id="guestRegistrationFormPasswordConfirmLabel">{{ 'form.confirm_pwd' | cxTranslate }}</strong>
+          </label>
+
+          <div class="p-relative">
+            <input
+              class="form-control"
+              id="guestRegistrationFormPasswordConfirm"
+              [type]="passwordConfirmVisible ? 'text' : 'password'"
+              [class.is-valid]="isPasswordConfirmFieldValid() && arePasswordsEqual()"
+              [class.is-invalid]="
+                (!isPasswordConfirmFieldValid() || !arePasswordsEqual()) && getPasswordConfirmField().dirty
+              "
+              formControlName="guestRegisterPasswordConfirm"
+            />
+
+            <button class="btn pwd-icon-btn" (click)="passwordConfirmVisible = !passwordConfirmVisible" tabindex="-1">
+              <ng-container *ngIf="passwordConfirmVisible; else passwordConfirmNotVisible">
+                <app-icon id="faEyeSlashPwdConfirm" iconName="eye" iconType="svg"></app-icon>
+              </ng-container>
+
+              <ng-template #passwordConfirmNotVisible>
+                <app-icon id="faEyePwdConfirm" iconName="eye-slash" iconType="svg"></app-icon>
+              </ng-template>
+            </button>
+          </div>
+
+          <small
+            *ngIf="(!isPasswordConfirmFieldValid() || !arePasswordsEqual()) && getPasswordConfirmField().dirty"
+            class="form-group__info is-error mt-2"
+            id="guestRegistrationFormPasswordConfirmError"
+          >
+            {{ 'validations.pwd_no_match_error' | cxTranslate }}
+          </small>
+        </div>
+
+        <app-password-strength-bar [passwordToCheck]="passwordFieldValue"></app-password-strength-bar>
+
+        <div class="guest-registration__cta">
+          <app-dist-button
+            [isDisabled]="!isFormValid()"
+            (click)="registerButtonClick(captchaRef)"
+            buttonId="checkoutGuestRegCreateAccBtn"
+            width="w-fill"
+          >
+            {{ 'checkout.login.reg_cta_create_acc' | cxTranslate }}
+          </app-dist-button>
+        </div>
+
+        <re-captcha
+          #captchaRef="reCaptcha"
+          (resolved)="$event && captchaResolvedFallback($event)"
+          size="invisible"
+        ></re-captcha>
+      </form>
+    </div>
+  </div>
+
+  <div class="guest-registration__item">
+    <div class="guest-registration__item-inner p-relative">
+      <h3 class="guest-registration__item-title" id="checkout.becomeCustomer.business.title">
+        {{ 'checkout.confirmation.become_customer_business_title' | cxTranslate }}
+      </h3>
+
+      <p class="card-item__txt" id="checkout.becomeCustomer.business.info">
+        {{ 'checkout.confirmation.become_customer_business_note' | cxTranslate }}
+      </p>
+
+      <div class="guest-registration__benefits mt-3">
+        <h4 class="guest-registration__benefits-title" id="checkout.becomeCustomer.business.benefits.title">
+          {{ 'checkout.confirmation.become_customer_business_benefits_note' | cxTranslate }}
+        </h4>
+
+        <ul class="guest-registration__benefits-list" id="checkout.becomeCustomer.business.benefits.items">
+          <li class="guest-registration__benefits-list__item" id="checkout.becomeCustomer.business.benefits.item1">
+            <app-icon iconName="bullet-success-tick" iconCategory="bullets" iconType="svg"></app-icon>
+            {{ 'checkout.confirmation.become_customer_business_benefits_item1' | cxTranslate }}
+          </li>
+
+          <li class="guest-registration__benefits-list__item" id="checkout.becomeCustomer.business.benefits.item2">
+            <app-icon iconName="bullet-success-tick" iconCategory="bullets" iconType="svg"></app-icon>
+            {{ 'checkout.confirmation.become_customer_business_benefits_item2' | cxTranslate }}
+          </li>
+
+          <li class="guest-registration__benefits-list__item" id="checkout.becomeCustomer.business.benefits.item3">
+            <app-icon iconName="bullet-success-tick" iconCategory="bullets" iconType="svg"></app-icon>
+            {{ 'checkout.confirmation.become_customer_business_benefits_item3' | cxTranslate }}
+          </li>
+        </ul>
+
+        <div class="guest-registration__cta">
+          <app-dist-button (click)="redirectToRegistrationPage()" buttonId="checkoutGuestRegRegisterBtn" width="w-fill">
+            {{ 'form.register' | cxTranslate }}
+          </app-dist-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

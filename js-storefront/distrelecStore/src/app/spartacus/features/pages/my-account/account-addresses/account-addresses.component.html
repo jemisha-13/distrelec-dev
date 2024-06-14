@@ -1,0 +1,317 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10 offset-lg-2">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-5 offset-lg-2">
+      <ng-container class="account-information-main">
+        <app-action-message
+          id="accountAddresses"
+          [type]="responseType"
+          [message]="responseMessage !== '' ? (responseMessage | cxTranslate) : responseMessage"
+        ></app-action-message>
+        <div class="row mt-4">
+          <div class="col-md-12 col-lg-12 col-sm-12">
+            <h1 id="accountaddresse_page_title">
+              {{ 'form.address' | cxTranslate }}
+            </h1>
+          </div>
+        </div>
+        <div class="row mt-4 mb-4">
+          <div class="col-md-12">
+            <p *ngIf="userDetails?.customerType === 'B2B'" id="accountAddress-companyName">
+              {{ 'form.company_name_changes' | cxTranslate }}
+            </p>
+            <p
+              *ngIf="userDetails?.customerType === 'B2B_KEY_ACCOUNT'"
+              id="accountAddress-cutomerType"
+              [innerHtml]="'form.company_name_changes_key_account' | cxTranslate"
+            ></p>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <h2 id="your_billing-address">{{ 'form.your_billing_address' | cxTranslate }}</h2>
+            <br />
+            <hr />
+          </div>
+        </div>
+
+        <div *ngIf="billingAddresses_ | async as billingAddress; else loadingBilling">
+          <div *ngFor="let address of billingAddress">
+            <div class="row mt-4 mb-4">
+              <div class="col-md-12">
+                <div *ngIf="userDetails?.customerType === 'B2C'">
+                  <h2 id="accountAddress-addressTitle">
+                    {{ address?.title }} {{ address?.firstName }} {{ address?.lastName }}
+                  </h2>
+                </div>
+                <div *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'">
+                  <h2 id="accountAddress.companyNameHeading">{{ address?.companyName }}</h2>
+                </div>
+                <br />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div
+                *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'"
+                class="col-md-4 mb-4"
+              >
+                <p id="accountAddress-companyName2Heading">
+                  <b>{{ 'form.company_name_2' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-companyName2Heading2">{{ address?.companyName2 }}</p>
+              </div>
+              <div
+                *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'"
+                class="col-md-8"
+              ></div>
+              <div class="col-md-4">
+                <p id="accountAddress-street">
+                  <b>{{ 'form.street' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-line1">{{ address?.line1 }} {{ address?.line2 }}</p>
+              </div>
+              <div class="col-md-3">
+                <p id="accountAddress-town">
+                  <b>{{ 'form.town' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-postalCode">{{ address?.postalCode }} {{ address?.town }}</p>
+              </div>
+              <div class="col-md-3">
+                <p id="accountAddress-countryText-1">
+                  <b>{{ 'form.country' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-countryValue-1">{{ address?.country.name }}</p>
+              </div>
+              <div class="col-md-2">
+                <br />
+                <div
+                  *ngIf="
+                    (!isExportShop && userDetails?.customerType !== 'B2B_KEY_ACCOUNT') ||
+                    (isExportShop && userDetails?.customerType === 'B2C')
+                  "
+                  class="view cursor"
+                  (click)="editAddress(address)"
+                ></div>
+              </div>
+              <div
+                *ngIf="!address.defaultBilling && billingAddress.length > 1 && userDetails?.customerType !== 'B2C'"
+                class="col-md-12"
+              >
+                <button
+                  class="btn btn-secondary btn-distrelec btn-gray ellipsis"
+                  id="btn-account-addresses-setDefault"
+                  (click)="setDefaultAddress(address.id, address.billingAddress, address.shippingAddress)"
+                >
+                  {{ 'text.setDefault' | cxTranslate }}
+                </button>
+              </div>
+            </div>
+            <hr />
+          </div>
+        </div>
+
+        <ng-template #loadingBilling>
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+              <img src="app/spartacus/assets/media/spinner.gif" />
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- Delivery addresses -->
+        <div class="row mt-4 align-items-end">
+          <div class="col-md-8">
+            <h2 id="your_delivery-address">{{ 'form.your_delivery_address' | cxTranslate }}</h2>
+          </div>
+          <div class="col-sm-12 col-md-12">
+            <hr />
+          </div>
+
+          <div class="col-sm-12 col-md-6">
+            <label for="accountAddress.sortiingList">{{ 'accountorder.addresses.order.by' | cxTranslate }}</label>
+            <ng-select
+              class="account-info"
+              id="accountAddress.sortiingList"
+              [(ngModel)]="selectedSortList"
+              (change)="onSortingSelected($event)"
+              name="addressSorting"
+            >
+              <ng-option *ngFor="let sortItem of sortingList" [value]="sortItem.value" [id]="sortItem.value">
+                {{ sortItem.name | cxTranslate }}
+              </ng-option>
+            </ng-select>
+          </div>
+          <div *ngIf="!isExportShop" class="col-sm-12 col-md-6">
+            <button
+              class="btn btn-secondary btn-distrelec float-right"
+              id="btn-account-addresses-search"
+              (click)="addAddress()"
+            >
+              <div class="float-sm-left ml-2">
+                <fa-icon [icon]="faPlus"></fa-icon>
+              </div>
+              {{ buttonText | cxTranslate }}
+            </button>
+          </div>
+
+          <div class="col-md-12">
+            <hr />
+          </div>
+        </div>
+
+        <div *ngIf="shippingAddresses_ | async as shippingAddress; else loadingShipping">
+          <div *ngFor="let shipAddress of shippingAddress">
+            <div class="row mb-2">
+              <div class="col-md-12 mb-4">
+                <div *ngIf="userDetails?.customerType === 'B2C'">
+                  <h2 id="accountAddress-shipAddressTitle">
+                    {{ shipAddress?.title }} {{ shipAddress?.firstName }} {{ shipAddress?.lastName }}
+                  </h2>
+                </div>
+                <div *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'">
+                  <h2 id="accountAddress-shipAddressCompanyName">{{ shipAddress?.companyName }}</h2>
+                </div>
+                <br />
+              </div>
+              <div *ngIf="userDetails?.customerType === 'B2C'" class="col-md-4">
+                <p id="accountAddress-streetText">
+                  <b>{{ 'form.street' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-shipAddress-line1">{{ shipAddress?.line1 }} {{ shipAddress?.line2 }}</p>
+              </div>
+              <div *ngIf="userDetails?.customerType === 'B2C'" class="col-md-3">
+                <p id="accountAddress-townText">
+                  <b>{{ 'form.town' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-shipAddress-postalCode">{{ shipAddress?.postalCode }} {{ shipAddress?.town }}</p>
+              </div>
+              <div *ngIf="userDetails?.customerType === 'B2C'" class="col-md-3">
+                <p id="accountAddress-countryText-2">
+                  <b>{{ 'form.country' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-CountryNameValue">{{ shipAddress?.country.name }}</p>
+              </div>
+              <div *ngIf="userDetails?.customerType === 'B2C'" class="col-md-2">
+                <br />
+                <div class="view cursor" (click)="editAddress(shipAddress)"></div>
+              </div>
+              <div *ngIf="userDetails?.customerType === 'B2C'" class="col-md-4">
+                <p id="accountAddress-contactPhoneText">
+                  <b>{{ 'form.contact_phone' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-contactPhoneValue">{{ shipAddress?.phone }}</p>
+              </div>
+              <div
+                *ngIf="
+                  !shipAddress.defaultShipping && userDetails?.customerType === 'B2C' && shippingAddress.length > 1
+                "
+                class="col-md-12"
+              >
+                <button
+                  class="btn btn-secondary btn-distrelec btn-gray ellipsis"
+                  id="btn-setDefault2-account-addresses"
+                  (click)="setDefaultAddress(shipAddress.id, false, true)"
+                >
+                  {{ 'text.setDefault' | cxTranslate }}
+                </button>
+              </div>
+
+              <div
+                *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'"
+                class="col-md-4"
+              >
+                <p id="accountAddress-companyName2-text">
+                  <b>{{ 'form.company_name_2' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-companyName2-value">{{ shipAddress?.companyName2 }}</p>
+              </div>
+              <div
+                *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'"
+                class="col-md-6"
+              >
+                <p id="accountAddress-countryText-3">
+                  <b>{{ 'form.country' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-countryValue-2">{{ shipAddress?.country.name }}</p>
+              </div>
+              <div
+                *ngIf="
+                  !isExportShop &&
+                  (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT')
+                "
+                class="col-md-2"
+              >
+                <br />
+                <div class="view cursor" (click)="editAddress(shipAddress)"></div>
+              </div>
+              <div
+                *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'"
+                class="col-md-4"
+              >
+                <p id="accountAddress-street-text">
+                  <b>{{ 'form.street' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-shipping-address">{{ shipAddress?.line1 }} {{ shipAddress?.line2 }}</p>
+              </div>
+              <div
+                *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'"
+                class="col-md-3"
+              >
+                <p id="accountAddress-town-text">
+                  <b>{{ 'form.town' | cxTranslate }}</b>
+                </p>
+                <p id="accountAddress-postalCode-2">{{ shipAddress?.postalCode }} {{ shipAddress?.town }}</p>
+              </div>
+              <div
+                *ngIf="
+                  !shipAddress.defaultShipping &&
+                  (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT') &&
+                  shippingAddress.length > 1
+                "
+                class="col-md-3"
+              >
+                <button
+                  class="btn btn-secondary btn-distrelec btn-gray ellipsis"
+                  id="btn-account-addresses-setDefault3"
+                  (click)="setDefaultAddress(shipAddress.id, false, true)"
+                >
+                  {{ 'text.setDefault' | cxTranslate }}
+                </button>
+              </div>
+            </div>
+            <hr *ngIf="shippingAddress.length > 1" />
+          </div>
+        </div>
+        <ng-template #loadingShipping>
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+              <img src="app/spartacus/assets/media/spinner.gif" />
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+
+      <app-confirm-popup
+        *ngIf="showConfirm"
+        [data]="{
+          title: 'form.confirm_default_message' | cxTranslate,
+          content: 'form.default_message_contents' | cxTranslate,
+          type: 'warning'
+        }"
+        (confirmedEvents)="confirmedDefaultAddress($event)"
+      ></app-confirm-popup>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

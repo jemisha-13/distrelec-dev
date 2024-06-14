@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+
+-->
+<!--
+ All hybris buildcallbacks.xml macrodefinitions:
+
+ Build/Documentation
+
+	 before/after ant macro "clean"
+		 <macrodef name="acceleratorfacades_before_clean"/>
+		 <macrodef name="distrelecB2Bfacades_after_clean"/>
+
+	 before/after ant macro "build"
+		 <macrodef name="distrelecB2Bfacades_before_build"/>
+		 <macrodef name="distrelecB2Bfacades_after_build"/>
+
+	 before/after ant macro "compile_core" - the core module of the extension
+		 <macrodef name="distrelecB2Bfacades_before_compile_core">
+		 <macrodef name="distrelecB2Bfacades_after_compile_core">
+
+	 before/after ant macro "compile_web" - the web module of the extension
+		 <macrodef name="distrelecB2Bfacades_before_compile_web" />
+		 <macrodef name="distrelecB2Bfacades_after_compile_web" />
+
+	 before/after ant macro "compile_hmc" - the hmc module of the extension
+		 <macrodef name="distrelecB2Bfacades_before_compile_hmc" />
+		 <macrodef name="distrelecB2Bfacades_after_compile_hmc" />
+
+ Preparing extension
+
+	 will be called in the beginning of the ant call and only once (also when using multiple 
+	 ant targets e.g. ant build yunittest)	
+		 <macrodef name="distrelecB2Bfacades_only_once_prepare"/>
+
+ Creating ear module/production
+
+	 before/after ant macro "ear"
+		 <macrodef name="distrelecB2Bfacades_before_ear"/>
+		 <macrodef name="distrelecB2Bfacades_after_ear"/>
+
+	 before/after ant macro "production" - for hybris server only
+		 <macrodef name="distrelecB2Bfacades_before_production" />
+		 <macrodef name="distrelecB2Bfacades_after_production" />
+
+ JUnit Test
+
+	 before/after ant macro "yunitinit" 
+		 <macrodef name="distrelecB2Bfacades_before_yunitinit" />
+		 <macrodef name="distrelecB2Bfacades_after_yunitinit" />
+
+	 before/after ant macro "yunit"
+		 <macrodef name="distrelecB2Bfacades_before_yunit" />
+		 <macrodef name="distrelecB2Bfacades_after_yunit" /> 
+
+ Distribution package
+
+ 	 before/after ant macro "dist" - internal target; only for use when platform is available in source code
+		 <macrodef name="distrelecB2Bfacades_after_dist"/>
+		 <macrodef name="distrelecB2Bfacades_before_dist"/>
+
+	 before/after ant macro "dist_copy" - internal target; only for use when platform is available in source code
+		 <macrodef name="distrelecB2Bfacades_before_dist_copy"/>
+		 <macrodef name="distrelecB2Bfacades_after_dist_copy"/>
+
+-->
+
+<project name="distrelecB2Bfacades_buildcallbacks" >
+
+	<macrodef name="distrelecB2Bfacades_before_build">
+		<sequential>
+			<echo message="Generating Datalayer POJOs 
+				from ${ext.distrelecB2Bfacades.path}/resources/distrelecB2Bfacades/digitalDatalayer/DigitalDatalayer.json
+				to ${ext.distrelecB2Bfacades.path}/gensrc
+				We are in ${ext.distrelecB2Bfacades.path}"
+			/>
+			
+			<!-- See https://joelittlejohn.github.io/jsonschema2pojo/site/0.5.1/Jsonschema2PojoTask.html for usage -->
+		    <jsonschema2pojo 
+		    	source="${ext.distrelecB2Bfacades.path}/resources/distrelecB2Bfacades/digitalDatalayer" 
+		    	targetDirectory="${ext.distrelecB2Bfacades.path}/gensrc" 
+		    	targetPackage="com.namics.distrelec.b2b.facades.adobe.datalayer.data"
+		    	useCommonsLang3="true"
+		    	targetVersion="1.8"
+		    	includeJsr303Annotations="true"
+		    />
+			
+			<echo message="Generated Datalayer POJOs" />
+		 </sequential>
+	</macrodef>
+		
+	<taskdef name="jsonschema2pojo" classname="org.jsonschema2pojo.ant.Jsonschema2PojoTask">
+		<classpath> 
+            <fileset dir="${ext.distrelecB2Bfacades.path}/lib">
+                <include name="**/*.jar" />
+            </fileset>
+			 <fileset dir="${platformhome}/ext/core/lib">
+			      <include name="**/*.jar" />
+			 </fileset>
+			<fileset dir="${platformhome}/ext/validation/lib">
+			      <include name="**/*.jar" />
+			 </fileset>
+        </classpath>
+	</taskdef>
+
+</project>

@@ -1,0 +1,42 @@
+@if (currentChannel.channel === 'B2C') {
+  <div *ngIf="price.priceWithVat" class="prices__priceholder" id="pdp_product_price">
+    <div class="prices__priceholder__price vat-price">
+      <p class="notranslate" id="pdp_product_price_currency_exc_vat">
+        {{ price.currencyIso }}
+        {{ price.basePrice | decimalPlaces: 4 | volumePrice: price.currencyIso : currentChannel : price.basePrice }}
+      </p>
+      <p class="vat-text" id="pdp_product_price_exc_vat">&nbsp; ({{ 'product.exc_vat' | cxTranslate }})</p>
+    </div>
+    <div class="prices__priceholder__price main-price">
+      <p class="notranslate" id="pdp_product_price_currency_inc_vat">
+        {{ price.currencyIso }}&nbsp;{{
+          priceService.getPriceWithVatForB2C(price)
+            | decimalPlaces: 4
+            | volumePrice: price.currencyIso : currentChannel : price.basePrice
+        }}
+      </p>
+      <p class="vat-text" id="pdp_product_price_inc_vat">&nbsp; ({{ 'product.inc_vat' | cxTranslate }})</p>
+    </div>
+  </div>
+} @else {
+  <div *ngIf="price.priceWithVat" class="prices__priceholder" id="pdp_product_price">
+    <div class="prices__priceholder__price vat-price">
+      <p class="notranslate" id="pdp_product_price_currency_inc_vat">
+        {{ price.currencyIso }}&nbsp;{{
+          price.priceWithVat | decimalPlaces: 4 | volumePrice: price.currencyIso : currentChannel : price.basePrice
+        }}
+      </p>
+      <p class="vat-text" id="pdp_product_price_exc_vat">&nbsp; ({{ 'product.inc_vat' | cxTranslate }})</p>
+    </div>
+    <div class="prices__priceholder__price main-price">
+      <p class="notranslate" id="pdp_product_price_currency_exc_vat">
+        {{ price.currencyIso }}&nbsp;{{
+          priceService.getPriceWithoutVatForB2B(price)
+            | decimalPlaces: 4
+            | volumePrice: price.currencyIso : currentChannel : price.basePrice
+        }}
+      </p>
+      <p class="vat-text" id="pdp_product_price_inc_vat">&nbsp; ({{ 'product.exc_vat' | cxTranslate }})</p>
+    </div>
+  </div>
+}

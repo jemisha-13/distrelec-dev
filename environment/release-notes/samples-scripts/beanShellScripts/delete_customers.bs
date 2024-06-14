@@ -1,0 +1,95 @@
+import java.util.*;
+import de.hybris.platform.servicelayer.search.*;
+import de.hybris.platform.servicelayer.search.impl.*;
+import de.hybris.platform.b2b.model.*;
+import de.hybris.platform.core.*;
+import de.hybris.platform.jalo.*;
+import de.hybris.platform.jalo.user.*;
+import de.hybris.platform.jalo.flexiblesearch.*;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import de.hybris.platform.servicelayer.model.ModelService;
+
+ 
+ 
+query = "SELECT {pk} FROM {" + B2BUnitModel._TYPECODE + "} WHERE {" + B2BUnitModel.ISHOPCUSTOMERID + "} IS NOT NULL";
+movex_orders_query = "SELECT {pk} FROM {MovexOrder} WHERE {hybrisContactId}=?hybrisContactId";
+
+if (!Registry.hasCurrentTenant()) {
+    Registry.activateMasterTenant();
+}
+
+JaloSession.getCurrentSession().setUser(UserManager.getInstance().getUserByLogin("admin"));
+modelService = (ModelService) SpringUtil.getBean("modelService");
+flexibleSearchService = (FlexibleSearchService) SpringUtil.getBean("flexibleSearchService");
+
+b2bUnits = flexibleSearchService.search(query).getResult();
+
+
+for (unit : b2bUnits) {
+    
+	if(unit.getAddresses() != null && !unit.getAddresses().isEmpty()) {
+		try{
+			modelService.removeAll(unit.getAddresses());
+		} catch(Exception e) {
+			out.println("Removing unit addresses problem --> "  + e.getMessage());
+		}
+	}
+    try{
+		modelService.remove(unit.getMovexCustomer());
+	} catch(Exception e) {
+		out.println("Removing unit Movex customer problem --> "  + e.getMessage());
+	}
+        
+    for (p : unit.getMembers()) {
+        if (p instanceof B2BCustomerModel) {
+            c = (B2BCustomerModel) p;
+            flexibleSearchQuery = new FlexibleSearchQuery(movex_orders_query);
+            flexibleSearchQuery.addQueryParameter("hybrisContactId", c.getCustomerID());
+            movex_orders = flexibleSearchService.search(flexibleSearchQuery).getResult();
+			
+			if(!movex_orders.isEmpty()) {
+				try{
+					modelService.removeAll(movex_orders);
+				} catch(Exception e) {
+					// NOP
+				}
+			}
+				
+			if(c.getAddresses() != null && !c.getAddresses().isEmpty()) {
+				try{
+					modelService.removeAll(c.getAddresses());
+				} catch(Exception e) {
+					// NOP
+				}
+			}
+				
+			if (c.getOrders() != null && !c.getOrders().isEmpty()) {
+				try{
+					modelService.removeAll(c.getOrders());
+				} catch(Exception e) {
+					// NOP
+				}
+            }
+			
+            if (c.getWishlist() != null && !c.getWishlist().isEmpty()) {
+				try{
+					modelService.removeAll(c.getWishlist());
+				} catch(Exception e) {
+					// NOP
+				}
+            }
+			
+			try{
+				modelService.remove(c);
+			} catch(Exception e) {
+				// NOP
+			}
+        }
+    }
+		
+	try {
+		modelService.remove(unit);
+    } catch ( Exception exp) {
+		out.println(exp.getMessage());
+    }
+}

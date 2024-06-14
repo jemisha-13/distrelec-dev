@@ -1,0 +1,130 @@
+<h3>post installations for QA & PROD </h3>
+
+<h4>Hybris Update:</h4>
+http://[app-node-0]:9001/hac/platform/update
+
+<h4>System Updates:</h4>
+  - Update running system
+  - Clear the hMC configuration from the database (DISTRELEC-3643)
+  - Localize types (DISTRELEC-3643)
+
+<h4>Run Impex:</h4>
+  - distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_CHContentCatalog/email-content.impex
+    (changed lines: 18, 38, 166, 291, 357 + 358, 479, 487, 518)
+  - distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_CHContentCatalog/email-content_en.impex
+    (changed lines: 40, 41, 69)
+  - distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_CHContentCatalog/email-content_de.impex
+    (changed lines: 40, 41, 69)
+  - distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_CHContentCatalog/email-content_fr.impex
+    (changed lines: 40, 41, 67)
+
+
+  - distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ATContentCatalog/email-content.impex
+    (changed lines: 18, 38, 166, 291, 357 + 358, 479, 487, 518)
+  - distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ATContentCatalog/email-content_en.impex
+    (changed lines: 40, 41, 69)
+  - distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ATContentCatalog/email-content_de.impex
+    (changed lines: 40, 41, 69)
+  
+  - /distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_CHContentCatalog/pdf-content.impex
+  - /distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ATContentCatalog/pdf-content.impex
+  - /distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ITContentCatalog/pdf-content.impex
+  - /distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_LTContentCatalog/pdf-content.impex
+  
+<h4>Blog entries:</h4>
+ - nothing to do
+
+<h4>Misc:</h4>
+ - Execute the following procedure for DISTRELEC-3546
+ 	+ Get all links in the system from the CH staged catalog version:
+		SELECT ';'||{comp.PK}||';"'||{comp.url}||'";'||{c.id}||':'||{cv.version} as link 
+		FROM {CMSLinkComponent AS comp JOIN CatalogVersion AS cv ON {comp.catalogVersion}={cv.PK} JOIN Catalog AS c ON {cv.catalog}={c.PK}} 
+		WHERE {c.id}='distrelec_CHContentCatalog' AND {cv.version}='Staged' AND {comp.url} IS NOT NULL
+
+	+ Take this list and reimport it with the following ImpEx:
+		UPDATE CMSLinkComponent;pk[unique=true];localizedUrl[lang=de];catalogVersion(catalog(id),version)[unique=true]
+	
+		UPDATE CMSLinkComponent;pk[unique=true];localizedUrl[lang=en];catalogVersion(catalog(id),version)[unique=true]
+	
+		UPDATE CMSLinkComponent;pk[unique=true];localizedUrl[lang=fr];catalogVersion(catalog(id),version)[unique=true]
+
+	+ Get all banners in the system from the CH staged catalog version:
+		SELECT {ct.code}||';'||{comp.PK}||';"'||{comp.urlLink}||'";'||{c.id}||':'||{cv.version} as link 
+		FROM {AbstractBannerComponent AS comp JOIN CatalogVersion AS cv ON {comp.catalogVersion}={cv.PK} JOIN Catalog AS c ON {cv.catalog}={c.PK} JOIN ComposedType AS ct ON {comp.itemtype}={ct.PK}} 
+		WHERE {c.id}='distrelec_CHContentCatalog' AND {cv.version}='Staged' AND {comp.urlLink} IS NOT NULL
+
+	+ Take this list and reimport it with the following ImpEx:
+		UPDATE AbstractBannerComponent;pk[unique=true];localizedUrlLink[lang=de];catalogVersion(catalog(id),version)[unique=true]
+		
+		UPDATE AbstractBannerComponent;pk[unique=true];localizedUrlLink[lang=en];catalogVersion(catalog(id),version)[unique=true]
+		
+		UPDATE AbstractBannerComponent;pk[unique=true];localizedUrlLink[lang=fr];catalogVersion(catalog(id),version)[unique=true]
+		
+	
+	+ Get all links in the system from the AT staged catalog version:
+		SELECT ';'||{comp.PK}||';"'||{comp.url}||'";'||{c.id}||':'||{cv.version} as link 
+		FROM {CMSLinkComponent AS comp JOIN CatalogVersion AS cv ON {comp.catalogVersion}={cv.PK} JOIN Catalog AS c ON {cv.catalog}={c.PK}} 
+		WHERE {c.id}='distrelec_ATContentCatalog' AND {cv.version}='Staged' AND {comp.url} IS NOT NULL
+
+	+ Take this list and reimport it with the following ImpEx:
+		UPDATE CMSLinkComponent;pk[unique=true];localizedUrl[lang=de];catalogVersion(catalog(id),version)[unique=true]
+	
+		UPDATE CMSLinkComponent;pk[unique=true];localizedUrl[lang=en];catalogVersion(catalog(id),version)[unique=true]
+
+	+ Get all banners in the system from the AT staged catalog version:
+		SELECT {ct.code}||';'||{comp.PK}||';"'||{comp.urlLink}||'";'||{c.id}||':'||{cv.version} as link 
+		FROM {AbstractBannerComponent AS comp JOIN CatalogVersion AS cv ON {comp.catalogVersion}={cv.PK} JOIN Catalog AS c ON {cv.catalog}={c.PK} JOIN ComposedType AS ct ON {comp.itemtype}={ct.PK}} 
+		WHERE {c.id}='distrelec_ATContentCatalog' AND {cv.version}='Staged' AND {comp.urlLink} IS NOT NULL
+
+	+ Take this list and reimport it with the following ImpEx:
+		UPDATE AbstractBannerComponent;pk[unique=true];localizedUrlLink[lang=de];catalogVersion(catalog(id),version)[unique=true]
+		
+		UPDATE AbstractBannerComponent;pk[unique=true];localizedUrlLink[lang=en];catalogVersion(catalog(id),version)[unique=true]
+	
+	
+	+ Get all links in the system from the IT staged catalog version:
+		SELECT ';'||{comp.PK}||';"'||{comp.url}||'";'||{c.id}||':'||{cv.version} as link 
+		FROM {CMSLinkComponent AS comp JOIN CatalogVersion AS cv ON {comp.catalogVersion}={cv.PK} JOIN Catalog AS c ON {cv.catalog}={c.PK}} 
+		WHERE {c.id}='distrelec_ITContentCatalog' AND {cv.version}='Staged' AND {comp.url} IS NOT NULL
+
+	+ Take this list and reimport it with the following ImpEx:
+		UPDATE CMSLinkComponent;pk[unique=true];localizedUrl[lang=it];catalogVersion(catalog(id),version)[unique=true]
+	
+		UPDATE CMSLinkComponent;pk[unique=true];localizedUrl[lang=en];catalogVersion(catalog(id),version)[unique=true]
+
+	+ Get all banners in the system from the IT staged catalog version:
+		SELECT {ct.code}||';'||{comp.PK}||';"'||{comp.urlLink}||'";'||{c.id}||':'||{cv.version} as link 
+		FROM {AbstractBannerComponent AS comp JOIN CatalogVersion AS cv ON {comp.catalogVersion}={cv.PK} JOIN Catalog AS c ON {cv.catalog}={c.PK} JOIN ComposedType AS ct ON {comp.itemtype}={ct.PK}} 
+		WHERE {c.id}='distrelec_ITContentCatalog' AND {cv.version}='Staged' AND {comp.urlLink} IS NOT NULL
+
+	+ Take this list and reimport it with the following ImpEx:
+		UPDATE AbstractBannerComponent;pk[unique=true];localizedUrlLink[lang=it];catalogVersion(catalog(id),version)[unique=true]
+		
+		UPDATE AbstractBannerComponent;pk[unique=true];localizedUrlLink[lang=en];catalogVersion(catalog(id),version)[unique=true]
+	
+	
+	+ Get all links in the system from the LT staged catalog version:
+		SELECT ';'||{comp.PK}||';"'||{comp.url}||'";'||{c.id}||':'||{cv.version} as link 
+		FROM {CMSLinkComponent AS comp JOIN CatalogVersion AS cv ON {comp.catalogVersion}={cv.PK} JOIN Catalog AS c ON {cv.catalog}={c.PK}} 
+		WHERE {c.id}='distrelec_LTContentCatalog' AND {cv.version}='Staged' AND {comp.url} IS NOT NULL
+
+	+ Take this list and reimport it with the following ImpEx:
+		UPDATE CMSLinkComponent;pk[unique=true];localizedUrl[lang=lt];catalogVersion(catalog(id),version)[unique=true]
+	
+		UPDATE CMSLinkComponent;pk[unique=true];localizedUrl[lang=en];catalogVersion(catalog(id),version)[unique=true]
+
+	+ Get all banners in the system from the LT staged catalog version:
+		SELECT {ct.code}||';'||{comp.PK}||';"'||{comp.urlLink}||'";'||{c.id}||':'||{cv.version} as link 
+		FROM {AbstractBannerComponent AS comp JOIN CatalogVersion AS cv ON {comp.catalogVersion}={cv.PK} JOIN Catalog AS c ON {cv.catalog}={c.PK} JOIN ComposedType AS ct ON {comp.itemtype}={ct.PK}} 
+		WHERE {c.id}='distrelec_LTContentCatalog' AND {cv.version}='Staged' AND {comp.urlLink} IS NOT NULL
+
+	+ Take this list and reimport it with the following ImpEx:
+		UPDATE AbstractBannerComponent;pk[unique=true];localizedUrlLink[lang=lt];catalogVersion(catalog(id),version)[unique=true]
+		
+		UPDATE AbstractBannerComponent;pk[unique=true];localizedUrlLink[lang=en];catalogVersion(catalog(id),version)[unique=true]
+		
+		
+		
+
+<h4>Synchronization:</h4>
+ - synchronize content catalog

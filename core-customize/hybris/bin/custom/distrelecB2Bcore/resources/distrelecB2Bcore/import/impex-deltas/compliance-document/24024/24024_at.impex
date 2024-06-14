@@ -1,0 +1,12 @@
+# AT
+$contentCatalog = distrelec_ATContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+$lang = de
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]            ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Privatsphäre/Cookie-Einstellungen ; #triggerCookieSettings
+
+UPDATE DistFooterComponent; UID[unique = true]  ; impressumLinks(uid, $contentCV); $contentCV[unique = true]
+                          ; DistFooterComponent ; AGBPageLink, ImpressumPageLink, PrivacyCookieLink, DatenschutzPageLink, comp_0000005Z, ADR-Link, ODR-link, QLLink

@@ -1,0 +1,32 @@
+$contentCatalog=distrelec_FRContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/international/import/other/media
+
+$defaultContentCatalog=Default
+$defaultContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $defaultContentCatalog]), CatalogVersion.version[default = Staged])[default = $defaultContentCatalog:Staged]
+
+# Hero Banner images
+INSERT_UPDATE Media;code[unique=true]  ;$defaultContentCV[unique=true];@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator, lang=en];mime[default=image/jpeg];&Media
+                   ;D4Logo             ;                              ;$siteResource/Logo-D4-03.png                                                       ;                        ;D4Logo
+                   ;D4FooterGelisteter ;                              ;$siteResource/Footer-gelisteter.png                                                ;                        ;D4FooterGelisteter
+                   ;D4FooterGeotrust   ;                              ;$siteResource/footer-logo-geotrust-def.png                                         ;                        ;D4FooterGeotrust
+                   ;D4FooterISO9001    ;                              ;$siteResource/footer-logo-iso9001-def.png                                          ;                        ;D4FooterISO9001
+                   ;D4FooterMastercard ;                              ;$siteResource/footer-logo-mastercard-def.png                                       ;                        ;D4FooterMastercard
+                   ;D4FooterPaypal     ;                              ;$siteResource/footer-logo-paypal.png                                               ;                        ;D4FooterPaypal
+                   ;D4FooterVisa       ;                              ;$siteResource/footer-logo-visa-def.png                                             ;                        ;D4FooterVisa
+
+
+UPDATE SimpleBannerComponent;uid[unique=true];$contentCV[unique=true];media[lang=en](&Media);media[lang=fr](&Media)
+                            ;LogoComponent   ;                       ;D4Logo                ;D4Logo
+
+UPDATE DistPaymentMethodComponent;uid[unique=true]                 ;$contentCV[unique=true];icon(&Media)       ;&PaymentMethod
+                                 ;FooterGelisteterPaymentComponent ;                       ;D4FooterGelisteter ;FooterGelisteterPaymentComponent
+                                 ;FooterGeotrustPaymentComponent   ;                       ;D4FooterGeotrust   ;FooterGeotrustPaymentComponent
+                                 ;FooterIso9001PaymentComponent    ;                       ;D4FooterISO9001    ;FooterIso9001PaymentComponent
+                                 ;FooterMastercardPaymentComponent ;                       ;D4FooterMastercard ;FooterMastercardPaymentComponent
+                                 ;paypal                           ;                       ;D4FooterPaypal     ;paypal
+                                 ;FooterVisaPaymentComponent       ;                       ;D4FooterVisa       ;FooterVisaPaymentComponent
+
+UPDATE DistFooterComponent;uid[unique=true]    ;$contentCV[unique=true];paymentMethods(&PaymentMethod)
+                          ;DistFooterComponent ;                       ;paypal,FooterMastercardPaymentComponent,FooterVisaPaymentComponent

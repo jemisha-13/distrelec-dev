@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ws71.webservice.adapters.factfinder.de" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws71.webservice.adapters.factfinder.de" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns2="http://campaign.ws71.webservice.factfinder.de" xmlns:ns1="http://ws71.webservice.factfinder.de" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:ns3="http://search.ws71.webservice.factfinder.de">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws71.webservice.factfinder.de">
+<xsd:complexType name="AuthenticationToken">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="timestamp" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="username" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfRecord">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Record" nillable="true" type="ns1:Record"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Record">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="id" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="record" nillable="true" type="tns:string2stringMap"/>
+<xsd:element minOccurs="0" name="simiMalusAdd" type="xsd:short"/>
+<xsd:element minOccurs="0" name="simiMalusMul" type="xsd:float"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws71.webservice.adapters.factfinder.de">
+<xsd:element name="getProductCampaigns">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" type="xsd:boolean"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in3" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:complexType name="ArrayOfString">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="string2stringMap">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="entry">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="0" name="key" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="0" name="value" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="getProductCampaignsResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:ArrayOfCampaign"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getShoppingCartCampaigns">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="tns:ArrayOfString"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" type="xsd:boolean"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in3" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getShoppingCartCampaignsResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:ArrayOfCampaign"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://campaign.ws71.webservice.factfinder.de">
+<xsd:complexType name="ArrayOfCampaign">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Campaign" nillable="true" type="ns2:Campaign"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Campaign">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="activeQuestions" nillable="true" type="ns2:ArrayOfQuestion"/>
+<xsd:element minOccurs="0" name="advisorTree" nillable="true" type="ns2:ArrayOfQuestion"/>
+<xsd:element minOccurs="0" name="category" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="feedbackTexts" nillable="true" type="ns2:ArrayOfFeedbackText"/>
+<xsd:element minOccurs="0" name="flavour" nillable="true" type="ns2:CampaignFlavour"/>
+<xsd:element minOccurs="0" name="id" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="pushedProductsRecords" nillable="true" type="ns1:ArrayOfRecord"/>
+<xsd:element minOccurs="0" name="target" nillable="true" type="ns2:Target"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:simpleType name="CampaignFlavour">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="ADVISOR"/>
+<xsd:enumeration value="REDIRECT"/>
+<xsd:enumeration value="FEEDBACK"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="ArrayOfQuestion">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Question" nillable="true" type="ns2:Question"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Question">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="answers" nillable="true" type="ns2:ArrayOfAnswer"/>
+<xsd:element minOccurs="0" name="id" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="visible" type="xsd:boolean"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfAnswer">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Answer" nillable="true" type="ns2:Answer"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Answer">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="id" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="params" nillable="true" type="ns3:Params"/>
+<xsd:element minOccurs="0" name="questions" nillable="true" type="ns2:ArrayOfQuestion"/>
+<xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="AdvisorCampaignStatusHolder">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="answerPath" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="campaignId" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="Target">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="destination" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfFeedbackText">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="FeedbackText" nillable="true" type="ns2:FeedbackText"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="FeedbackText">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="html" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="id" type="xsd:int"/>
+<xsd:element minOccurs="0" name="label" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://search.ws71.webservice.factfinder.de">
+<xsd:complexType name="Params">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="advisorStatus" nillable="true" type="ns2:AdvisorCampaignStatusHolder"/>
+<xsd:element minOccurs="0" name="articleNumber" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="channel" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="detailCustomParameters" nillable="true" type="ns3:ArrayOfCustomParameter"/>
+<xsd:element minOccurs="0" name="filters" nillable="true" type="ns3:ArrayOfFilter"/>
+<xsd:element minOccurs="0" name="followSearch" type="xsd:int"/>
+<xsd:element minOccurs="0" name="noArticleNumberSearch" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="page" type="xsd:int"/>
+<xsd:element minOccurs="0" name="query" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="resultsPerPage" type="xsd:int"/>
+<xsd:element minOccurs="0" name="searchField" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="seoPath" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="sortsList" nillable="true" type="ns3:ArrayOfSortItem"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfSortItem">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="SortItem" nillable="true" type="ns3:SortItem"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="SortItem">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="description" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="order" nillable="true" type="ns3:SortMethods"/>
+<xsd:element minOccurs="0" name="relevanceSortItem" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="searchParams" nillable="true" type="ns3:Params"/>
+<xsd:element minOccurs="0" name="selected" type="xsd:boolean"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:simpleType name="SortMethods">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="asc"/>
+<xsd:enumeration value="desc"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="ArrayOfFilter">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Filter" nillable="true" type="ns3:Filter"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Filter">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="substring" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="valueList" nillable="true" type="ns3:ArrayOfFilterValue"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfFilterValue">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="FilterValue" nillable="true" type="ns3:FilterValue"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="FilterValue">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="exclude" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="type" nillable="true" type="ns3:FilterValueType"/>
+<xsd:element minOccurs="0" name="value" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:simpleType name="FilterValueType">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="or"/>
+<xsd:enumeration value="and"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="ArrayOfCustomParameter">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="CustomParameter" nillable="true" type="ns3:CustomParameter"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="CustomParameter">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="cacheIgnored" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="values" nillable="true" type="tns:ArrayOfString"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getShoppingCartCampaignsRequest">
+    <wsdl:part name="parameters" element="tns:getShoppingCartCampaigns">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getShoppingCartCampaignsResponse">
+    <wsdl:part name="parameters" element="tns:getShoppingCartCampaignsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProductCampaignsResponse">
+    <wsdl:part name="parameters" element="tns:getProductCampaignsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProductCampaignsRequest">
+    <wsdl:part name="parameters" element="tns:getProductCampaigns">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="CampaignPortType">
+    <wsdl:operation name="getProductCampaigns">
+      <wsdl:input name="getProductCampaignsRequest" message="tns:getProductCampaignsRequest">
+    </wsdl:input>
+      <wsdl:output name="getProductCampaignsResponse" message="tns:getProductCampaignsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getShoppingCartCampaigns">
+      <wsdl:input name="getShoppingCartCampaignsRequest" message="tns:getShoppingCartCampaignsRequest">
+    </wsdl:input>
+      <wsdl:output name="getShoppingCartCampaignsResponse" message="tns:getShoppingCartCampaignsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CampaignHttpBinding" type="tns:CampaignPortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getProductCampaigns">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getProductCampaignsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getProductCampaignsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getShoppingCartCampaigns">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getShoppingCartCampaignsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getShoppingCartCampaignsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Campaign">
+    <wsdl:port name="CampaignHttpPort" binding="tns:CampaignHttpBinding">
+      <wsdlsoap:address location="http://test72-basic.fact-finder.de/Distrelec/webservice/ws71/Campaign"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

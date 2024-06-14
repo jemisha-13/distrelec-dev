@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<process xmlns="http://www.hybris.de/xsd/processdefinition" start="waitForUpdate" name="netPromoterScoreEmailProcess"
+		processClass="com.namics.distrelec.b2b.core.model.process.DistNpsProcessModel" onError="error">
+	
+	<!-- Wait for 5minutes before generating NPS email -->
+	<wait id="waitForUpdate" then="npsCheckValues" prependProcessCode="false">
+		<event>${process.code}_DistNetPromoterScoreEvent</event>
+		<!-- timeout delay="PT600S" then="npsCheckValues" / --> <!-- This is used for test purpose -->
+		<timeout delay="PT7200S" then="npsCheckValues" /> <!-- For Production we set the value to 2 hours -->
+	</wait>
+
+	<action id="npsCheckValues" bean="npsCheckValuesDecisionAction">
+		<transition name="OK" to="generateNPSEmail"/>
+		<transition name="NOK" to="success"/>
+	</action>
+
+	<action id="generateNPSEmail" bean="generateNPSEmail">
+		<transition name="OK" to="sendNPS"/>
+		<transition name="NOK" to="error"/>
+	</action>
+
+	<action id="sendNPS" bean="distSendEmail">
+		<transition name="OK" to="removeSentEmail"/>
+		<transition name="NOK" to="failed"/>
+	</action>
+
+	<action id="removeSentEmail" bean="distRemoveSentEmail">
+		<transition name="OK" to="success"/>
+		<transition name="NOK" to="error"/>
+	</action>
+
+	<end id="error" state="ERROR">Something went wrong.</end>
+	<end id="failed" state="FAILED">Could not send Net Promoter Score email.</end>
+	<end id="success" state="SUCCEEDED">All good, either the NPS email was sent or the sending condition was not fulfilled.</end>
+
+</process>

@@ -1,0 +1,48 @@
+## messageSource=classpath:/distrelecB2Bcore/messages/email-deactivateUser_$lang.properties
+#macro(genHtmlLink $url $label)
+<a style="color: #AA1936; text-decoration: underline;" href="$url" target="_blank"><span style="color: #AA1936;">$label</span></a>
+#end
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+<html>
+<head></head>
+<body style="padding: 0; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+	## HEADER include
+	${ctx.header}
+
+	## MOOD IMAGE
+	<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+		<tr>
+			<td style="border-left: 1px solid #cccccc; border-right: 1px solid #cccccc;">
+				${ctx.cmsSlotContents.MoodImage}
+			</td>
+		</tr>
+		<tr>
+			<td height="5" bgcolor="#AA1936"style="border-right: 1px solid #cccccc; border-left: 1px solid #cccccc;"></td>
+		</tr>
+	</table>
+
+	## CONTENT
+	<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+		<tr>
+			<td style="border-collapse: collapse; border-right: 1px solid #cccccc; border-left: 1px solid #cccccc; padding: 20px;">
+				## title
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 30px;">${ctx.messages.title}</p>
+
+				## text
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">$!StringEscapeUtils.escapeHtml(${ctx.title}) $!StringEscapeUtils.escapeHtml(${ctx.displayName})</p>
+
+				#set ($mailToUrl = "mailto:${ctx.adminEmailAddress}")
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.getMessage('text',"#genHtmlLink($mailToUrl ${ctx.adminEmailAddress})")}</p>
+				
+				#set ($mailToUrl = "mailto:${ctx.contactEmail}")		
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.getMessage('paragraphContactUs', "#genHtmlLink($mailToUrl ${ctx.contactEmail})")}</p>
+
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.complimentaryClosing}</p>
+			</td>
+		</tr>
+	</table>
+
+	## FOOTER include
+	${ctx.footer}
+</body>
+</html>

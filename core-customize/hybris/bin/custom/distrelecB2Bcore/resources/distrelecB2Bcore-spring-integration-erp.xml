@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- [y] hybris Platform Copyright (c) 2000-2012 hybris AG All rights reserved. This software is the confidential and proprietary information of hybris ("Confidential 
+	Information"). You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement you entered into 
+	with hybris. -->
+
+<beans profile="adm"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:file="http://www.springframework.org/schema/integration/file"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+
+	<alias alias="importService" name="defaultDistImportService"/>
+	<bean id="defaultDistImportService" class="com.namics.distrelec.b2b.core.dataimport.service.DefaultDistImportService" parent="defaultImportService" />
+
+	<bean id="batchRunnerTask" class="com.namics.distrelec.b2b.core.dataimport.batch.task.AbstractDistImpexRunnerTask">
+		<lookup-method name="getImportConfig" bean="importConfig" />
+		<property name="sessionService" ref="sessionService" />
+		<property name="importService" ref="importService" />
+		<property name="beforeImpexImport">
+			<map key-type="java.lang.String" value-type="java.util.List">
+				<entry key="erp_price10scales" value-ref="beforePriceImpexImportList" />
+				<entry key="erp_stock" value-ref="beforeStockImpexImportList" />
+				<entry key="erp_punchoutfilt_cu" value-ref="beforePunchoutCUImpexImportList" />
+			</map>
+		</property>
+		<property name="afterImpexImport">
+			<map key-type="java.lang.String" value-type="java.util.List">
+				<entry key="erp_price10scales" value-ref="afterPriceImpexImportList" />
+
+				<entry key="erp_punchoutfilt_co" value-ref="afterPunchoutImpexImportList"/>
+				<entry key="erp_punchoutfilt_ct" value-ref="afterPunchoutImpexImportList"/>
+				<entry key="erp_punchoutfilt_cu" value-ref="afterPunchoutImpexImportList"/>
+				<entry key="erp_punchoutfilt_man" value-ref="afterPunchoutImpexImportList"/>
+			</map>
+		</property>
+	</bean>
+
+	<util:list id="afterPriceImpexImportList" value-type="com.namics.distrelec.b2b.core.dataimport.batch.task.AfterImpexImport">
+		<ref bean="afterPriceImpexImport" />
+	</util:list>
+	<util:list id="afterPunchoutImpexImportList" value-type="com.namics.distrelec.b2b.core.dataimport.batch.task.AfterImpexImport">
+		<ref bean="afterPunchoutImpexImport" />
+	</util:list>
+	<util:list id="beforePriceImpexImportList" value-type="com.namics.distrelec.b2b.core.dataimport.batch.task.BeforeImpexImport">
+		<ref bean="beforePriceImpexImport" />
+	</util:list>
+	<util:list id="beforeStockImpexImportList" value-type="com.namics.distrelec.b2b.core.dataimport.batch.task.BeforeImpexImport">
+		<ref bean="beforeStockImpexImport" />
+	</util:list>
+	<util:list id="beforePunchoutCUImpexImportList" value-type="com.namics.distrelec.b2b.core.dataimport.batch.task.BeforeImpexImport">
+		<ref bean="beforePunchoutCUImpexImport" />
+	</util:list>
+
+	<bean id="erpFileOrderComparator" class="com.namics.distrelec.b2b.core.integration.azure.comparators.CloudBlockBlobOrderComparator">
+		<constructor-arg name="comparator" ref="cloudHotFolderModifiedComparator"/>
+		<property name="prefixPriority">
+			<map>
+				<entry key="erp_product" value="4" />
+				<entry key="erp_stock" value="3" />
+				<entry key="erp_price" value="2" />
+				<entry key="erp_price10scales" value="2" />
+				<entry key="erp_sales_status" value="1" />
+				<!-- All other files have default priority (0). -->
+			</map>
+		</property>
+	</bean>
+
+	<bean id="erpCompositeFilter" class="com.namics.distrelec.b2b.core.inout.spring.integration.DistCompositeFileListFilter">
+		<constructor-arg>
+			<list>
+				<bean class="de.hybris.platform.cloud.azure.hotfolder.remote.file.filters.AzureBlobRegexPatternFileListFilter">
+					<constructor-arg value="^(.*?)(-.*?-?(\d+)|_[A-Z\d]+)(\.csv)+$"/>
+				</bean>
+<!--				<bean class="com.namics.distrelec.b2b.core.inout.spring.integration.DistFileLocker" />-->
+<!--				<bean class="org.springframework.integration.file.filters.AcceptOnceFileListFilter"/>-->
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="erpBaseDirectory" class="java.lang.String">
+		<constructor-arg value="#{azureHotfolderRemotePath}/${import.erp.folder}" />
+	</bean>
+
+	<bean id="erpBaseProcessingDirectory" class="java.lang.String">
+		<constructor-arg value="#{erpBaseDirectory}/processing" />
+	</bean>
+
+	<bean id="erpImpexImportHeader" class="java.lang.String">
+		<constructor-arg>
+			<value>
+				#-------------------------------------------------------------------------------
+				# GERMAN is set as default locale for ImpEx. Then, the decimal separator would be a comma!
+				# Set locale to ch_DE. Hence, the usual number format can be used.  e.g.  7.2
+				#-------------------------------------------------------------------------------
+				#% impex.setLocale(new Locale("de","CH"));
+
+				# settings
+				$language=$LANGUAGE$
+				$defaultLanguage=de
+				$net=$NET$
+
+				# catalogs
+				$productCatalog=$CATALOG$
+				$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Online'])
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- 1) Scan for files -->
+	<int:inbound-channel-adapter id="erpBatchFiles"
+								 auto-startup="false"
+								 role="${cloud.hotfolder.storage.services.role}"
+								 channel="erpBatchFilesProc"
+								 ref="erpBatchFilesAzureBlobSynchronizingMessageSource">
+		<int:poller
+				fixed-rate="2000"
+				max-messages-per-poll="${azure.hotfolder.storage.polling.fetch.batch-size}"
+				task-executor="erpMainBatchFilesImpTaskExecutor"/>
+	</int:inbound-channel-adapter>
+
+	<bean id="erpBatchFilesAzureBlobSynchronizingMessageSource"
+		  class="de.hybris.platform.cloud.azure.hotfolder.remote.inbound.AzureBlobSynchronizingMessageSource">
+		<constructor-arg name="synchronizer" ref="erpBatchFilesAzureBlobInboundSynchronizer"/>
+		<property name="autoCreateLocalDirectory" value="true"/>
+		<property name="localDirectory"
+				  value="#{azureHotfolderLocalDirectoryBase}/#{erpBaseDirectory}"/>
+		<property name="maxFetchSize" value="${azure.hotfolder.storage.polling.fetch.batch-size}"/>
+	</bean>
+
+	<bean id="erpBatchFilesAzureBlobInboundSynchronizer"
+		  class="de.hybris.platform.cloud.azure.hotfolder.remote.inbound.AzureBlobInboundSynchronizer">
+		<constructor-arg name="sessionFactory" ref="azureBlobSessionFactory"/>
+		<property name="remoteDirectory" value="#{erpBaseDirectory}"/>
+		<property name="moveToRemoteDirectory" value="#{erpBaseProcessingDirectory}"/>
+		<property name="deleteRemoteFiles" value="${azure.hotfolder.storage.delete.remote.files}"/>
+		<property name="preserveTimestamp" value="true"/>
+		<property name="filter" ref="erpBatchFilesAzureChainFileListFilter"/>
+		<property name="comparator" ref="erpFileOrderComparator"/>
+	</bean>
+
+	<bean id="erpBatchFilesAzureChainFileListFilter"
+		  class="de.hybris.platform.cloud.commons.spring.integration.file.filters.ChainFileListFilter">
+		<constructor-arg name="fileFilters" ref="erpBatchFilesAzureFileFilterList"/>
+	</bean>
+
+	<bean id="erpMainBatchFilesImpTaskExecutor"
+		  class="de.hybris.platform.cloud.commons.scheduling.HybrisAwareThreadPoolTaskExecutor">
+		<property name="waitForTasksToCompleteOnShutdown" value="true"/>
+		<property name="threadNamePrefix" value="erpAzureIntegrationTaskExecutorThread-${tenantId}-"/>
+		<property name="threadGroupName" value="erpAzureIntegrationTaskExecutor-${tenantId}"/>
+		<property name="corePoolSize" value="${azure.hotfolder.storage.polling.core-pool-size}"/>
+		<property name="maxPoolSize" value="${azure.hotfolder.storage.polling.max-pool-size}"/>
+		<property name="queueCapacity" value="-1"/>
+		<property name="keepAliveSeconds" value="60"/>
+		<property name="rejectedExecutionHandler">
+			<bean class="java.util.concurrent.ThreadPoolExecutor$DiscardPolicy"/>
+		</property>
+		<property name="role" value="integration"/>
+		<property name="autoStartup" value="false"/>
+		<property name="phase" value="10"/>
+		<property name="awaitTerminationSeconds" value="60"/>
+	</bean>
+
+	<util:list id="erpBatchFilesAzureFileFilterList">
+		<ref bean="erpCompositeFilter"/>
+	</util:list>
+
+	<int:channel id="erpBatchFilesProc"/>
+	<!-- 2a) move the file to processing and create header -->
+	<int:service-activator input-channel="erpBatchFilesProc" output-channel="erpBatchFilesHeaderInit" ref="erpHeaderSetupTask" method="execute" async="false"/>
+	<bean id="erpHeaderSetupTask" class="com.namics.distrelec.b2b.core.dataimport.batch.task.DistHeaderSetupTask">
+		<property name="catalog" value="distrelecProductCatalog" />
+		<property name="net" value="false" />
+		<property name="storeBaseDirectory" ref="erpBaseDirectory" />
+	</bean>
+
+	<!-- 2b) move the file to processing and setup header, partly site dependent -->
+	<int:service-activator input-channel="erpBatchFilesHeaderInit" output-channel="erpBatchFilesHeader" ref="distHeaderInitTask" method="execute" async="false"/>
+	<bean id="distHeaderInitTask" class="com.namics.distrelec.b2b.core.dataimport.batch.task.DistHeaderInitTask">
+		<property name="erpSequenceIdParser" ref="distErpSequenceIdParser"/>
+		<property name="sequenceIdParser" ref="distBatchSequenceIdParser"/>
+		<property name="languageParser" ref="batchLanguageParser"/>
+		<property name="fallbackLanguage" value="en" />
+	</bean>
+	<bean id="distBatchSequenceIdParser" class="com.namics.distrelec.b2b.core.dataimport.batch.util.DistSequenceIdParser"
+			parent="batchSequenceIdParser">
+	</bean>
+	<bean id="distErpSequenceIdParser" class="com.namics.distrelec.b2b.core.dataimport.batch.util.ErpSequenceIdParser">
+		<property name="parser">
+			<bean class="de.hybris.platform.acceleratorservices.util.RegexParser">
+				<property name="regex" value="_([A-Z\d]+)_\d{4}\.csv" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 3) transform csv to impex file -->
+	<int:service-activator input-channel="erpBatchFilesHeader" output-channel="batchFilesTran" ref="erpBatchTransformerTask" method="execute" async="false"/>
+	<bean id="erpBatchTransformerTask" class="com.namics.distrelec.b2b.core.dataimport.batch.task.DistImpexTransformerTask" parent="batchTransformerTask" init-method="initConvertersMap">
+		<property name="fieldSeparator" value=";" />
+		<property name="encoding" value="UTF-8" />
+		<property name="linesToSkip" value="1"/>
+		<property name="cleanupHelper" ref="cleanupHelper" />
+	</bean>
+
+	<alias name="distCleanupHelper" alias="cleanupHelper"/>
+	<bean id="distCleanupHelper" class="com.namics.distrelec.b2b.core.dataimport.batch.task.DistCleanupHelper">
+		<property name="timeStampFormat" value="yyyyMMddHHmmssSSS" />
+		<property name="cleanupTransformedFiles" value="true" />
+		<property name="cleanupRemoteFolder" value="#{azureHotfolderRemotePath}/${import.erp.folder}" />
+		<property name="cleanupAzureBlobSessionFactory" ref="azureBlobSessionFactory" />
+	</bean>
+
+	<!-- Converter Mappings -->
+	<bean id="erpProductConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping"
+		p:mapping="erp_product" p:converter-ref="erpProductConverter" />
+
+	<bean id="erpPriceConverter10ScalesMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping"
+		p:mapping="erp_price10scales" p:converter-ref="erpPriceConverter10Scales" />
+
+	<bean id="erpStockConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping"
+		p:mapping="erp_stock" p:converter-ref="erpStockConverter" />
+
+	<bean id="erpSalesStatusConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping"
+		p:mapping="erp_sales_status" p:converter-ref="erpSalesStatusConverter" />
+
+	<bean id="erpPunchOutFilterCOConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping"
+		p:mapping="erp_punchoutfilt_co" p:converter-ref="erpPunchOutFilterCOConverter" />
+
+	<bean id="erpPunchOutFilterCTConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping"
+		p:mapping="erp_punchoutfilt_ct" p:converter-ref="erpPunchOutFilterCTConverter" />
+
+	<bean id="erpPunchOutFilterCUConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping"
+		p:mapping="erp_punchoutfilt_cu" p:converter-ref="erpPunchOutFilterCUConverter" />
+
+	<bean id="erpPunchOutFilterManufacturerConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping"
+		p:mapping="erp_punchoutfilt_man" p:converter-ref="erpPunchOutFilterManufacturerConverter" />
+
+	<bean id="erpProductBestSellersConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping"
+		p:mapping="erp_bestseller_status" p:converter-ref="erpProductBestSellersConverter" />
+
+	<!-- 4) run impex import -->
+	<!-- see configuration in acceleratorservices-spring-integration.xml -->
+
+	<!-- 5) Cleanup -->
+	<!-- see configuration in acceleratorservices-spring-integration.xml -->
+
+	<!-- Converters -->
+	<bean id="erpProductConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>#{erpImpexImportHeader}
+				# Insert/Update Products
+				INSERT_UPDATE Product[processor=com.namics.distrelec.b2b.core.dataimport.processor.LastModifiedErpImportProcessor];code[unique=true];codeMovex;codeElfa;codeNavision;countryOfOrigin(isocode);rohs(code);dangerousGoodsProfile(code);grossWeight;grossWeightUnit(code)[translator=com.namics.distrelec.b2b.core.dataimport.batch.converter.SapWeighUnitValueTranslator];dimensions;replacementProduct(code);replacementReason(code);replacementFromDate[dateformat=yyyyMMdd];replacementUntilDate[dateformat=yyyyMMdd];transportGroup(code);unit(code);salesUnit(code);materialType(code);productHierarchy;lastModifiedErp[dateformat=yyyyMMddHHmmss];sequenceId[translator=de.hybris.platform.acceleratorservices.dataimport.batch.converter.SequenceIdTranslator];sapMPN;sapPlantProfiles[translator=com.namics.distrelec.b2b.core.dataimport.batch.converter.SapPlantProfilesValueTranslator];batteryCompliance(code);approvalstatus(code)[default='approved'];$catalogVersion[unique=true]
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>;{+0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13};{+14};{+15};{16};{17};{18};{+19};{S};{20};{21};{22}</value>
+		</property>
+		<property name="type" value="Product" />
+	</bean>
+
+	<!--  -->
+	<bean id="erpPriceConverter10Scales" class="com.namics.distrelec.b2b.core.dataimport.batch.converter.impl.DefaultDistPriceImpexConverter">
+		<property name="version" value="10_SCALES" />
+		<property name="insertUpdateHeader">
+			<value>#{erpImpexImportHeader}
+				# Insert/Update Prices
+				INSERT_UPDATE DistPriceRow[processor=com.namics.distrelec.b2b.core.dataimport.processor.LastModifiedErpImportProcessor];priceConditionIdErp[unique=true];product(code, $catalogVersion)[unique=true];ug(code)[unique=true];currency(isocode)[unique=true];unit(code)[default=PC];unitFactor[unique=true];minqtd[unique=true];price;startTime[dateformat=yyyyMMddHHmmss];endTime[dateformat=yyyyMMddHHmmss];erpPriceConditionType(code);net;lastModifiedErp[dateformat=yyyyMMddHHmmss];pricePerX;pricePerXUoM(code)[default=PC];pricePerXUoMQty;pricePerXBaseQty;netMargin;netMarginPercentage;vatPercentage;vatValue;priceWithVat;sequenceId[translator=de.hybris.platform.acceleratorservices.dataimport.batch.converter.SequenceIdTranslator];erpSequenceId;$catalogVersion[unique=true];
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>;{+0};{+2};SalesOrg_UPG_{+3}_{+1};{4};;{5};{6};{7};{26}000000;{27}235959;{28};true;{30};{31};{41};{42};{43};{44};{45};{46};{47};{57};{S};{E};
+				;{+0};{+2};SalesOrg_UPG_{+3}_{+1};{4};;{5};{8};{9};{26}000000;{27}235959;{28};true;{30};{32};{41};{42};{43};{44};{45};{46};{48};{58};{S};{E};
+				;{+0};{+2};SalesOrg_UPG_{+3}_{+1};{4};;{5};{10};{11};{26}000000;{27}235959;{28};true;{30};{33};{41};{42};{43};{44};{45};{46};{49};{59};{S};{E};
+				;{+0};{+2};SalesOrg_UPG_{+3}_{+1};{4};;{5};{12};{13};{26}000000;{27}235959;{28};true;{30};{34};{41};{42};{43};{44};{45};{46};{50};{60};{S};{E};
+				;{+0};{+2};SalesOrg_UPG_{+3}_{+1};{4};;{5};{14};{15};{26}000000;{27}235959;{28};true;{30};{35};{41};{42};{43};{44};{45};{46};{51};{61};{S};{E};
+				;{+0};{+2};SalesOrg_UPG_{+3}_{+1};{4};;{5};{16};{17};{26}000000;{27}235959;{28};true;{30};{36};{41};{42};{43};{44};{45};{46};{52};{62};{S};{E};
+				;{+0};{+2};SalesOrg_UPG_{+3}_{+1};{4};;{5};{18};{19};{26}000000;{27}235959;{28};true;{30};{37};{41};{42};{43};{44};{45};{46};{53};{63};{S};{E};
+				;{+0};{+2};SalesOrg_UPG_{+3}_{+1};{4};;{5};{20};{21};{26}000000;{27}235959;{28};true;{30};{38};{41};{42};{43};{44};{45};{46};{54};{64};{S};{E};
+				;{+0};{+2};SalesOrg_UPG_{+3}_{+1};{4};;{5};{22};{23};{26}000000;{27}235959;{28};true;{30};{39};{41};{42};{43};{44};{45};{46};{55};{65};{S};{E};
+				;{+0};{+2};SalesOrg_UPG_{+3}_{+1};{4};;{5};{24};{25};{26}000000;{27}235959;{28};true;{30};{40};{41};{42};{43};{44};{45};{46};{56};{66};{S};{E};
+			</value>
+		</property>
+		<property name="removeHeader">
+			<value>#{erpImpexImportHeader}
+				# Insert/Update Prices
+				REMOVE DistPriceRow[batchmode=true];priceConditionIdErp[unique=true];product(code, $catalogVersion)[unique=true];ug(code)[unique=true];$catalogVersion[unique=true];
+			</value>
+		</property>
+		<property name="removeImpexRow">
+			<value>;{+0};{+2};SalesOrg_UPG_{+3}_{+1};</value>
+		</property>
+		<property name="type" value="DistPriceRow" />
+	</bean>
+
+	<bean id="erpStockConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>#{erpImpexImportHeader}
+				# Insert/Update stock information
+				INSERT_UPDATE StockLevel[processor=com.namics.distrelec.b2b.core.dataimport.processor.LastModifiedErpImportProcessor];productCode[unique=true];warehouse(code)[unique=true];available;nextDeliveryTime[dateformat=yyyyMMdd];nextDeliveryAvailable;lastModifiedErp[dateformat=yyyyMMddHHmmss];leadTimeErp
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>;{+0};{+1};{+2};{3};{4};{+5};{6}</value>
+		</property>
+		<property name="type" value="StockLevel" />
+	</bean>
+
+	<bean id="erpSalesStatusConverter" class="com.namics.distrelec.b2b.core.dataimport.batch.converter.impl.DistErpSalesStatusConverter">
+		<property name="header">
+			<value>#{erpImpexImportHeader}
+				# Insert/Update sales status
+				INSERT_UPDATE DistSalesOrgProduct[processor=com.namics.distrelec.b2b.core.dataimport.processor.LastModifiedErpImportProcessor];product(code,$catalogVersion)[unique=true];salesOrg(code)[unique=true];salesStatus(code);orderQuantityMinimum;orderQuantityStep;customsCode;productTaxGroup(code);lastModifiedErp[dateformat=yyyyMMddHHmmss];itemCategoryGroup;MviewFlag
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>;{+0};{+1};{+2};{3};{4};{5};{6};{+7};{+8};{9}</value>
+		</property>
+		<property name="type" value="DistSalesOrgProduct" />
+	</bean>
+
+	<bean id="erpPunchOutFilterCOConverter" class="com.namics.distrelec.b2b.core.dataimport.batch.converter.impl.DefaultDistPunchoutFilterCOImpexConverter">
+		<property name="header">
+			<value>#{erpImpexImportHeader}
+				# Insert/Update country punch-out-filter
+				INSERT_UPDATE DistCOPunchOutFilter[processor=com.namics.distrelec.b2b.core.dataimport.processor.LastModifiedErpImportProcessor];salesOrg(code)[unique=true];country(isocode)[unique=true];product(code,$catalogVersion)[unique=true];productHierarchy[unique=true];validFromDate[dateformat=yyyyMMdd];validUntilDate[dateformat=yyyyMMdd];lastModifiedErp[dateformat=yyyyMMddHHmmss];sequenceId
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>;{+0};{+1};{2};{3};{+4};{+5};{+6};{S}</value>
+		</property>
+		<property name="type" value="DistCOPunchOutFilter" />
+	</bean>
+
+	<bean id="erpPunchOutFilterCTConverter" class="com.namics.distrelec.b2b.core.dataimport.batch.converter.impl.DefaultDistImpexConverter">
+		<property name="header">
+			<value>#{erpImpexImportHeader}
+
+				# Replace SAP codes by hybris codes:
+				$customerTypeCodeMapping=[cellDecorator=com.namics.hybris.toolbox.impex.text.MultiReplaceTextDecorator][mapping-delimiter=->][replace-mapping0=Z100->B2B][replace-mapping1=Z200->B2C][replace-mapping2=COMPANY->B2B][replace-mapping3=PRIVATE->B2C]
+
+				# Insert/Update customer type punch-out-filter
+				INSERT_UPDATE DistCTPunchOutFilter[processor=com.namics.distrelec.b2b.core.dataimport.processor.LastModifiedErpImportProcessor];customerType(code)[unique=true]$customerTypeCodeMapping;product(code,$catalogVersion)[unique=true];validFromDate[dateformat=yyyyMMdd];validUntilDate[dateformat=yyyyMMdd];lastModifiedErp[dateformat=yyyyMMddHHmmss];sequenceId
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>;{+0};{+1};{+2};{+3};{+4};{S}</value>
+		</property>
+		<property name="type" value="DistCTPunchOutFilter" />
+	</bean>
+
+	<bean id="erpPunchOutFilterCUConverter" class="com.namics.distrelec.b2b.core.dataimport.batch.converter.impl.DefaultDistImpexConverter">
+		<property name="header">
+			<value>#{erpImpexImportHeader}
+				# Insert/Update customer punch-out-filter
+				INSERT_UPDATE DistCUPunchOutFilter[processor=com.namics.distrelec.b2b.core.dataimport.processor.LastModifiedErpImportProcessor];salesOrg(code)[unique=true];erpCustomerID[unique=true];product(code,$catalogVersion)[unique=true];productHierarchy[unique=true];validFromDate[dateformat=yyyyMMdd];validUntilDate[dateformat=yyyyMMdd];lastModifiedErp[dateformat=yyyyMMddHHmmss];sequenceId
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>;{+0};{+1};{2};{3};{+4};{+5};{+6};{S}</value>
+		</property>
+		<property name="rowFilter" ref="customerRowFilter" />
+		<property name="type" value="DistCUPunchOutFilter" />
+	</bean>
+
+	<bean id="erpPunchOutFilterManufacturerConverter" class="com.namics.distrelec.b2b.core.dataimport.batch.converter.impl.DefaultDistImpexConverter">
+		<property name="header">
+			<value>#{erpImpexImportHeader}
+				# Insert/Update customer punch-out-filter
+				INSERT_UPDATE DistManufacturerPunchOutFilter[processor=com.namics.distrelec.b2b.core.dataimport.processor.LastModifiedErpImportProcessor];salesOrg(code)[unique=true];erpCustomerID[unique=true];manufacturer(code)[unique=true];validFromDate[dateformat=yyyyMMdd];validUntilDate[dateformat=yyyyMMdd];lastModifiedErp[dateformat=yyyyMMddHHmmss];sequenceId
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>;{+0};{+1};man_{+2};{3};{+4};{+5};{S}</value>
+		</property>
+		<property name="beforeEachConverting" ref="beforeEachPunchOutFilterManufacturer" />
+		<property name="type" value="DistManufacturerPunchOutFilter" />
+	</bean>
+
+	<bean id="erpProductBestSellersConverter" class="com.namics.distrelec.b2b.core.dataimport.batch.converter.impl.DefaultDistImpexConverter">
+		<property name="header">
+			<value>
+				#{erpImpexImportHeader}
+				UPDATE DistSalesOrgProduct[processor=com.namics.distrelec.b2b.core.dataimport.processor.LastModifiedErpImportProcessor];product(code,$catalogVersion)[unique=true];salesOrg(code)[unique=true];showBestsellerLabelFromDate[dateformat=yyyyMMddHHmmss];showBestsellerLabelUntilDate[dateformat=yyyyMMddHHmmss]
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>;{+0};{+1};{+2};{+3}</value>
+		</property>
+		<property name="beforeConverting" ref="beforeProductBestSellers" />
+		<property name="beforeEachConverting" ref="beforeEachProductBestSellers" />
+		<property name="type" value="DistSalesOrgProduct" />
+	</bean>
+
+	<!-- Row filters -->
+	<bean id="customerRowFilter" class="com.namics.distrelec.b2b.core.dataimport.batch.rowfilters.CustomerRowFilter" >
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+	</bean>
+
+	<!-- Before and Before Each -->
+	<bean id="beforeEachPunchOutFilterManufacturer" class="com.namics.distrelec.b2b.core.dataimport.batch.converter.impl.before.BeforeEachPunchOutFilterManufacturer"  />
+
+	<bean id="beforeProductBestSellers" class="com.namics.distrelec.b2b.core.dataimport.batch.converter.impl.before.BeforeProductBestSellers" >
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+		<property name="modelService" ref="modelService" />
+	</bean>
+	<bean id="beforeEachProductBestSellers" class="com.namics.distrelec.b2b.core.dataimport.batch.converter.impl.before.BeforeEachProductBestSellers"  />
+
+	<!-- Before Impex import -->
+	<!-- Price -->
+	<bean id="beforePriceImpexImport" class="com.namics.distrelec.b2b.core.dataimport.batch.task.before.LegacyModeBeforeImpexImport" >
+		<property name="configurationService" ref="configurationService" />
+		<property name="legacyModePropertyName" value="erp.price.import.legacymode.enabled" />
+	</bean>
+	<!-- Stock -->
+	<bean id="beforeStockImpexImport" class="com.namics.distrelec.b2b.core.dataimport.batch.task.before.LegacyModeBeforeImpexImport" >
+		<property name="configurationService" ref="configurationService" />
+		<property name="legacyModePropertyName" value="erp.stock.import.legacymode.enabled" />
+	</bean>
+	<!-- Customer Punchouts -->
+	<bean id="beforePunchoutCUImpexImport" class="com.namics.distrelec.b2b.core.dataimport.batch.task.before.LegacyModeBeforeImpexImport" >
+		<property name="configurationService" ref="configurationService" />
+		<property name="legacyModePropertyName" value="erp.punchout.cu.import.legacymode.enabled" />
+	</bean>
+
+
+	<!-- After Impex Import -->
+	<bean id="afterPriceImpexImport" class="com.namics.distrelec.b2b.core.dataimport.batch.task.after.AfterPriceImpexImport" >
+		<property name="erpSequenceIdParser" ref="distErpSequenceIdParser"/>
+		<property name="sequenceIdParser" ref="distBatchSequenceIdParser" />
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+		<property name="modelService" ref="modelService" />
+		<property name="catalogService" ref="catalogService" />
+	</bean>
+
+	<bean id="afterPunchoutImpexImport" class="com.namics.distrelec.b2b.core.dataimport.batch.task.after.AfterPunchoutImpexImport">
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+		<property name="modelService" ref="modelService" />
+		<property name="sequenceIdParser" ref="distBatchSequenceIdParser" />
+	</bean>
+
+	<alias name="distImpExMediaInitDefaultsInterceptor" alias="impExMediaInitDefaultsInterceptor" />
+	<bean id="distImpExMediaInitDefaultsInterceptor" class="com.namics.distrelec.b2b.core.interceptor.DistImpExMediaInitDefaultsInterceptor" >
+		<property name="mediaCodeGenerator" ref="mediaCodeGenerator" />
+		<property name="mediaService" ref="mediaService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+
+</beans>

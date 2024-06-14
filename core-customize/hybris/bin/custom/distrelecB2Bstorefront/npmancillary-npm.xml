@@ -1,0 +1,58 @@
+<project>
+    <!-- copied from npmancillary/buildcallbacks.xml, target 'repairnpm'; converted to a macrodef -->
+    <macrodef name="repairnpmmacro">
+        <sequential>
+            <echo message="fixing node/npm symlinks and permissions"/>
+            <detectOS/>
+            <property file="${ext.npmancillary.path}${file.separator}resources${file.separator}ant${file.separator}${os.family}.properties" />
+            <if>
+                <not>
+                    <os family="windows"/>
+                </not>
+                <then>
+                    <!-- added by me -->
+                    <exec executable="chmod" dir="${ext.npmancillary.path}/resources/npm" failonerror="false">
+                        <arg line="+x linuxnpminstall.sh"/>
+                    </exec>
+                    <!-- added by me -->
+
+                    <!-- sometimes the npm link is converted to file -->
+                    <exec executable="${ext.npmancillary.path}/resources/npm/repairnpm.sh">
+                        <arg line="${os.family}"/>
+                    </exec>
+                </then>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <!-- copied from npmancillary/buildcallbacks.xml, macrodef 'invokeNpm' -->
+    <!-- added the option to specify the directory in which npm is invoked (workingDir) -->
+    <macrodef name="invokeNpmCustomWorkingDir">
+        <attribute name="arguments" default=""/>
+        <attribute name="workingDir" default=""/>
+        <sequential>
+            <echo message="Running [npm @{arguments}] in directory @{workingDir}"/>
+            <property environment="env"/>
+            <detectOS/>
+            <property file="${ext.npmancillary.path}${file.separator}resources${file.separator}ant${file.separator}${os.family}.properties" />
+
+            <if>
+                <os family="windows" />
+                <then>
+                    <exec executable="cmd" dir="@{workingDir}" failonerror="true">
+                        <arg value="/c"/>
+                        <arg value="${loc.NODE_HOME}${file.separator}npm"/>
+                        <arg line="@{arguments}"/>
+                    </exec>
+                </then>
+                <else>
+                    <exec dir="@{workingDir}" executable="${loc.NODE_HOME}${file.separator}bin${file.separator}npm" failonerror="true"
+                          output="@{workingDir}/invokeNpmLog.txt">
+                        <env key="PATH" value="${loc.EXTRA_PATH}${path.separator}${env.PATH}"/>
+                        <arg line="@{arguments}"/>
+                    </exec>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+</project>

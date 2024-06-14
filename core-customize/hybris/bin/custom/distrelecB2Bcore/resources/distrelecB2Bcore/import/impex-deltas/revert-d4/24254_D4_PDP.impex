@@ -1,0 +1,31 @@
+# Update the banner for D4 Homepage.
+$country=FR
+
+# Constants
+$mediaTranslator = de.hybris.platform.impex.jalo.media.MediaDataTranslator
+$siteResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/revert-d4/media/pdp
+$mode = Staged
+
+# FR Catalog
+$contentCatalog = distrelec_FRContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = $mode])[default = $contentCatalog:$mode]
+
+# Default Catalog
+$defaultContentCatalog=Default
+$defaultContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $defaultContentCatalog]), CatalogVersion.version[default = $mode])[default = $defaultContentCatalog:$mode]
+
+# International Catalog
+$internationalContentCatalog = distrelec_IntContentCatalog
+$internationalContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $internationalContentCatalog]), CatalogVersion.version[default = $mode])[default = $internationalContentCatalog:$mode]
+
+# Insert renewable banner for FR Shop - fr_FR locale
+INSERT_UPDATE Media;code[unique = true]         ;$defaultContentCV[unique = true]   ;@media[translator=$mediaTranslator, lang=fr_FR]    ;mime[default = image/jpeg]
+                   ;ren_energy_pdp_fr;                                   ;$siteResource/renewable-energy-pdp-FR.jpeg                    ;
+
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true] ;media(code, $defaultContentCV)[lang = fr_FR];$internationalContentCV[unique = true];localizedUrlLink[lang = fr_FR];&componentRef
+                                 ;cmsitem_00008593;ren_energy_pdp_fr;;/renewable-energy?int_cid=2119pdp.hero-Renewables21;cmsitem_00008593
+
+# Add banner to content slot
+UPDATE ContentSlot;uid[unique=true];$contentCV[unique=true];cmsComponents(&componentRef)
+                         ;PropositionBannerContentSlot;;cmsitem_00008593

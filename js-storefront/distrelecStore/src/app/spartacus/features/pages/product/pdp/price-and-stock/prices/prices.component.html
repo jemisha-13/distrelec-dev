@@ -1,0 +1,40 @@
+@if (promotionEndDate$ | async; as promotionEndDate) {
+  <app-alert-banner class="promotion-alert" alertType="regular-alert" bannerType="general">
+    {{ 'product.pricelist.promotion.valid.until' | cxTranslate }} {{ promotionEndDate }}
+  </app-alert-banner>
+}
+<span [appJsonLd]="schema"></span>
+@if (price$ | async; as price) {
+  <div class="prices" [ngClass]="{ hasVat: price.priceWithVat > 0, hasPromotion: promotionEndDate$ | async }">
+    <div>
+      <div class="prices__price-each" id="pdp_price_each_label">
+        <span>
+          {{ 'product.product_info.prices_per' | cxTranslate: { salesUnit } }}
+        </span>
+      </div>
+
+      <app-main-price [currentChannel]="currentChannel" [price]="price"></app-main-price>
+
+      <app-prices-xuom [price]="price"></app-prices-xuom>
+    </div>
+
+    @if (priceService.hasDiscountPrices(volumePricesMap)) {
+      <app-discount-prices
+        [volumePricesMap]="volumePricesMap"
+        [currentChannel]="currentChannel"
+        [price]="price"
+      ></app-discount-prices>
+    } @else {
+      <app-volume-prices
+        [volumePricesMap]="volumePricesMap"
+        [currentChannel]="currentChannel"
+        [price]="price"
+      ></app-volume-prices>
+    }
+
+    <app-bulk-discount-label
+      *ngIf="isBulkDiscountLabelVisible() | async"
+      [discountPrices]="priceService.hasDiscountPrices(volumePricesMap)"
+    ></app-bulk-discount-label>
+  </div>
+}

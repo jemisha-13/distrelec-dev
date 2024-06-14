@@ -1,0 +1,1 @@
+select c.pk, c.internalcode, count(l.pk) as cnt from composedtypes c inner join links l on c.pk = l.typepkstring where c.internalcode in ('BaseStore2RegCountryRel', 'DistDownloadMedia2Language', 'DistVideoMedia2Language') group by c.pk, c.internalcode; 

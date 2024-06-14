@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Configuration
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-configuration" basedir=".">
+
+	<!--
+	=================================
+	macro: configure
+	=================================
+	-->
+	<macrodef name="configure" description="Calls configure with the hybris as target home.">
+		<sequential>
+			<echo message="Configure for hybris..." />
+			<configureProjectHome />
+			<configureHybris hybrisTargetHome="${hybris.home}"/>
+			<ant target="customize" />
+		</sequential>
+	</macrodef>	
+	
+	
+	<!--
+	=================================
+	macro: configureHybrisServer
+	=================================
+	-->
+	<macrodef name="configureHybrisServer" description="Calls configure with the hybris server as target home.">
+		<sequential>
+			<echo message="Configure for hybris server..." />
+			<configureProjectHome />
+			<configureHybris hybrisTargetHome="${hybrisserver.home}"/>
+			<server />
+		</sequential>
+	</macrodef>		
+	
+
+	<!--
+	=================================
+	macro: configureHybris
+	=================================
+	-->
+	<macrodef name="configureHybris" description="This target will override the hybris config files with environment specific config files. Additionally, overlayed files will be copied into the hybris folder (never change files in the hybris folder).">
+		<attribute name="hybrisTargetHome" default="${hybris.home}"/>
+		<sequential>
+			<property name="platformhome" location="${hybris.home}/bin/platform" />
+			<echo message="Configure for hybris [@{hybrisTargetHome}]" />
+			<echo message="------------------------[COMMON: overlaying hybris files...]" />
+			<!-- overlaying hybris global common files -->
+			<copy todir="@{hybrisTargetHome}" overwrite="true" verbose="true">
+				<fileset dir="${common.hybris}">
+					<exclude name="**/*.svn" />
+				</fileset>
+			</copy>
+			
+			<!-- overlaying hybris environement common files -->
+			<echo message="------------------------[COMMON ENVIRONMENT ${target.environment}-common: overlaying hybris files...]" />
+			<copy todir="@{hybrisTargetHome}" overwrite="true" verbose="true">
+				<fileset dir="${environment.home}/${target.environment}-common/hybris">
+					<exclude name="**/*.svn" />
+				</fileset>
+			</copy>
+			
+			<echo message="------------------------[${target.environment}${target.environment.node}: overlaying hybris files...]" />
+			<copy todir="@{hybrisTargetHome}" overwrite="true" verbose="true">
+				<fileset dir="${environment.home}/${target.environment}${target.environment.node}/hybris">
+					<exclude name="**/*.svn" />
+				</fileset>
+			</copy>
+			
+			<if>
+				<available file="${common.hybris}/config/local.properties" />
+				<then>
+					<if>
+						<available file="${environment.home}/${target.environment}-common/hybris/config/local.properties" />
+						<then>
+							<propertymerge inputpropertyfile="${common.hybris}/config/local.properties" inputpropertyfileencoding="UTF-8" mergepropertyfile="${environment.home}/${target.environment}-common/hybris/config/local.properties" outputpropertyfile="${hybris.home}/config/local.properties" native2ascii="false" />
+							<if>
+								<available file="${environment.home}/${target.environment}${target.environment.node}/hybris/config/local.properties" />
+								<then>
+									<propertymerge inputpropertyfile="${hybris.home}/config/local.properties" inputpropertyfileencoding="UTF-8" mergepropertyfile="${environment.home}/${target.environment}${target.environment.node}/hybris/config/local.properties" outputpropertyfile="${hybris.home}/config/local.properties" native2ascii="false" />
+								</then>
+							</if>
+						</then>
+						<else>
+							<if>
+								<available file="${environment.home}/${target.environment}${target.environment.node}/hybris/config/local.properties" />
+								<then>
+									<propertymerge inputpropertyfile="${common.hybris}/config/local.properties" inputpropertyfileencoding="UTF-8" mergepropertyfile="${environment.home}/${target.environment}${target.environment.node}/hybris/config/local.properties" outputpropertyfile="${hybris.home}/config/local.properties" native2ascii="false" />
+								</then>
+								<else>
+									<copy todir="@{hybrisTargetHome}/config" overwrite="true" verbose="true">
+										<fileset file="${common.hybris}/config/local.properties" />
+									</copy>
+								</else>
+							</if>
+						</else>
+					</if>
+				</then>
+				<else>
+					<if>
+						<available file="${environment.home}/${target.environment}-common/hybris/config/local.properties" />
+						<then>
+							<if>
+								<available file="${environment.home}/${target.environment}${target.environment.node}/hybris/config/local.properties" />
+								<then>
+									<propertymerge inputpropertyfile="${environment.home}/${target.environment}-common/hybris/config/local.properties" inputpropertyfileencoding="UTF-8" mergepropertyfile="${environment.home}/${target.environment}${target.environment.node}/hybris/config/local.properties" outputpropertyfile="${hybris.home}/config/local.properties" native2ascii="false" />
+								</then>
+								<else>
+									<copy todir="@{hybrisTargetHome}/config" overwrite="true" verbose="true">
+										<fileset file="${common.hybris}/config/local.properties" />
+									</copy>
+								</else>
+							</if>
+						</then>
+						<else>
+							<if>
+								<available file="${environment.home}/${target.environment}${target.environment.node}/hybris/config/local.properties" />
+								<then>
+									<copy todir="@{hybrisTargetHome}/config" overwrite="true" verbose="true">
+										<fileset file="${environment.home}/${target.environment}${target.environment.node}/hybris/config/local.properties" />
+									</copy>
+								</then>
+							</if>
+						</else>
+					</if>
+				</else>
+			</if>
+
+			<!-- Copy the log4j.xml file -->
+
+			<!-- Load the cluster id property -->
+			<loadproperties srcfile="@{hybrisTargetHome}/config/local.properties" />
+
+			<if>
+				<available file="${environment.home}/${target.environment}${target.environment.node}/hybris/config/log4j.xml" />
+				<then>
+					<echo message="------------------------[${target.environment}${target.environment.node}: copying log4j config file from node env...]" />
+					<copy todir="@{hybrisTargetHome}/bin/custom/distrelecB2Bcore/resources" overwrite="true" verbose="true">
+						<fileset file="${environment.home}/${target.environment}${target.environment.node}/hybris/config/log4j.xml" />
+						<filterchain>
+							<expandproperties />
+						</filterchain>
+					</copy>
+				</then>
+				<else>
+					<if>
+						<available file="${environment.home}/${target.environment}-common/hybris/config/log4j.xml" />
+						<then>
+							<echo message="------------------------[${target.environment}${target.environment.node}: copying log4j config file from common env...]" />
+							<copy todir="@{hybrisTargetHome}/bin/custom/distrelecB2Bcore/resources" overwrite="true" verbose="true">
+								<fileset file="${environment.home}/${target.environment}-common/hybris/config/log4j.xml" />
+								<filterchain>
+									<expandproperties />
+								</filterchain>
+							</copy>
+						</then>
+					</if>	
+				</else>
+			</if>
+			
+			<!-- Copy the jdk_logging.properties file to tomcat/bin folder-->
+			
+			<if>
+				<available file="${environment.home}/${target.environment}-common/hybris/config/tomcat/bin/jdk_logging.properties" />
+				<then>
+					<echo message="------------------------[${target.environment}-common: copying jdk_logging config file from node env...]" />
+					<copy todir="@{hybrisTargetHome}/bin/platform/tomcat/bin" overwrite="true" verbose="true">
+						<fileset file="${environment.home}/${target.environment}-common/hybris/config/tomcat/bin/jdk_logging.properties" />
+						<filterchain>
+							<expandproperties />
+						</filterchain>
+					</copy>
+				</then>
+				<else>
+					<if>
+						<available file="${environment.home}/common/hybris/config/tomcat/bin/jdk_logging.properties" />
+						<then>
+							<echo message="------------------------[common: copying jdk logging config file from common env...]" />
+							<copy todir="@{hybrisTargetHome}/bin/platform/tomcat/bin" overwrite="true" verbose="true">
+								<fileset file="${environment.home}/common/hybris/config/tomcat/bin/jdk_logging.properties" />
+								<filterchain>
+									<expandproperties />
+								</filterchain>
+							</copy>
+						</then>
+					</if>	
+				</else>
+			</if>
+			
+			
+			<!-- Copy tomcat_context.tpl -->
+			<if>
+				<available file="${environment.home}/${target.environment}${target.environment.node}/hybris/config/tomcat/tomcat_context.tpl" />
+				<then>
+					<echo message="------------------------[${target.environment}${target.environment.node}: copying tomcat_context config file from node env...]" />
+					<copy todir="@{hybrisTargetHome}/config" overwrite="true" verbose="true">
+						<fileset file="${environment.home}/${target.environment}${target.environment.node}/hybris/config/tomcat/tomcat_context.tpl" />
+						<filterchain>
+							<expandproperties />
+						</filterchain>
+					</copy>
+				</then>
+				<else>
+					<if>
+						<available file="${environment.home}/${target.environment}-common/hybris/config/tomcat/tomcat_context.tpl" />
+						<then>
+							<echo message="------------------------[${target.environment}${target.environment.node}: copying tomcat_context config file from dependent common env...]" />
+							<copy todir="@{hybrisTargetHome}/config" overwrite="true" verbose="true">
+								<fileset file="${environment.home}/${target.environment}-common/hybris/config/tomcat/tomcat_context.tpl" />
+								<filterchain>
+									<expandproperties />
+								</filterchain>
+							</copy>
+						</then>
+						<else>
+							<if>
+								<available file="${environment.home}/common/hybris/config/tomcat/tomcat_context.tpl" />
+								<then>
+									<echo message="------------------------[${target.environment}${target.environment.node}: copying tomcat_context config file from common env...]" />
+									<copy todir="@{hybrisTargetHome}/config" overwrite="true" verbose="true">
+										<fileset file="${environment.home}/common/hybris/config/tomcat/tomcat_context.tpl" />
+										<filterchain>
+											<expandproperties />
+										</filterchain>
+									</copy>
+								</then>
+							</if>	
+						</else>
+					</if>
+				</else>
+			</if>	
+			
+		</sequential>
+	</macrodef>
+
+
+	<!--
+	=================================
+	macro: configureProjectHome
+	=================================
+	-->
+	<macrodef name="configureProjectHome" description="This target will copy all files from the configuration folder (jkconnector,log,etc.) into the project home except of hybris files.">
+		<sequential>
+			<!--
+			The hybris folder is not copied in this macro, because the target destination 
+			can be /hybris or /hybrisserver/hybris
+			The static folder is not copied. It can contain files that doesn't need to be 
+			copied, like eclipse configuration etc.
+			-->
+			<echo message="Configure for project [${project.home}]" />
+
+			<echo message="------------------------[COMMON: overlaying project files...]" />
+			<copy todir="${project.home}" overwrite="true" verbose="true">
+				<fileset dir="${common.dir}">
+					<exclude name="**/*.svn" />
+					<exclude name="hybris" />
+					<exclude name="hybris/**/*" />
+					<exclude name="static" />
+					<exclude name="static/**/*" />
+					<exclude name="unix" />
+					<exclude name="unix/**/*" />
+				</fileset>
+			</copy>
+			
+			<echo message="------------------------[COMMON ENVIRONMENT ${target.environment}-common: overlaying project files...]" />
+			<copy todir="${project.home}" overwrite="true" verbose="true">
+				<fileset dir="${environment.home}/${target.environment}-common">
+					<exclude name="**/*.svn" />
+					<exclude name="hybris" />
+					<exclude name="hybris/**/*" />
+					<exclude name="static" />
+					<exclude name="static/**/*" />
+					<exclude name="unix" />
+					<exclude name="unix/**/*" />
+				</fileset>
+			</copy>
+
+			<echo message="------------------------[${target.environment}${target.environment.node}: overlaying project files...]" />
+			<copy todir="${project.home}" overwrite="true" verbose="true">
+				<fileset dir="${environment.home}/${target.environment}${target.environment.node}">
+					<exclude name="**/*.svn" />
+					<exclude name="hybris" />
+					<exclude name="hybris/**/*" />
+					<exclude name="static" />
+					<exclude name="static/**/*" />
+					<exclude name="unix" />
+					<exclude name="unix/**/*" />
+				</fileset>
+			</copy>
+		</sequential>
+	</macrodef>
+</project>

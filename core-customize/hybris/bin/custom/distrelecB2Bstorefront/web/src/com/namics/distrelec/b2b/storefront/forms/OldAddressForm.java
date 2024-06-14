@@ -1,0 +1,100 @@
+/*
+ * Copyright 2000-2014 Namics AG. All rights reserved.
+ */
+
+package com.namics.distrelec.b2b.storefront.forms;
+
+public class OldAddressForm {
+
+    private String companyName;
+    private String firstName;
+    private String lastName;
+    private String department;
+    private String street;
+    private String number;
+    private String pobox;
+    private String zip;
+    private String place;
+    private String country;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(final String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(final String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(final String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(final String department) {
+        this.department = department;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(final String street) {
+        this.street = street;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(final String number) {
+        this.number = number;
+    }
+
+    public String getPobox() {
+        return pobox;
+    }
+
+    public void setPobox(final String pobox) {
+        this.pobox = pobox;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(final String zip) {
+        this.zip = zip;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(final String place) {
+        this.place = place;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(final String country) {
+        this.country = country;
+    }
+
+}

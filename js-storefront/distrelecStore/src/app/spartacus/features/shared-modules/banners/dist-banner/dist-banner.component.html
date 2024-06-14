@@ -1,0 +1,107 @@
+@if (data$ | async; as data) {
+  <div [class]="'container banner-normal banner-normal--' + data?.mode" [ngClass]="{ 'sbc-project': isSbcProject }">
+    @if (data?.mode === 'ARTICLE') {
+      <div class="bannner-article__info bannner-article__info--left">
+        <a
+          class="article-link"
+          [id]="'bannner-article__info-link' + data.uid"
+          [externalRouterLink]="data?.localizedUrlLink"
+          [title]="data?.media?.altText"
+        >
+          <app-media-image [mediaData]="data.media" [priority]="data.priority"></app-media-image>
+        </a>
+      </div>
+
+      <div class="bannner-article__info bannner-article__info--right">
+        <a
+          class="heading"
+          [id]="'bannner-article__info-header' + data.uid"
+          [externalRouterLink]="data?.localizedUrlLink"
+          [title]="data?.headline"
+        >
+          <p>{{ data?.headline }}</p>
+        </a>
+        <a
+          class="description"
+          [id]="'bannner-article__info-description' + data.uid"
+          [externalRouterLink]="data?.localizedUrlLink"
+          [title]="data?.headline"
+        >
+          {{ data?.content }}
+        </a>
+
+        <a
+          class="cta"
+          [id]="'bannner-article__info-cta' + data.uid"
+          [externalRouterLink]="data?.localizedUrlLink"
+          [title]="data?.headline"
+        >
+          {{ data?.localizedUrlText }}
+          <fa-icon [icon]="faAngleRight"></fa-icon>
+        </a>
+      </div>
+    }
+
+    @if (data?.mode === 'NORMAL') {
+      <div class="item">
+        <a class="item__links" [id]="'featured_brand_link_' + data.uid" [externalRouterLink]="data?.localizedUrlLink">
+          <app-media-image [mediaData]="data.media" [priority]="data.priority"></app-media-image>
+        </a>
+      </div>
+    }
+
+    @if (data?.mode === 'CARD') {
+      @if (data?.media) {
+        <div class="item card__item">
+          <div class="card__item__img">
+            <app-media-image [mediaData]="data.media" [priority]="data.priority"></app-media-image>
+          </div>
+          <div class="card__item__info">
+            <h2 class="card__item__title">{{ data?.headline }}</h2>
+            <p class="card__item__description">{{ data?.content }}</p>
+          </div>
+        </div>
+      }
+    }
+
+    @if (data?.mode === 'HERO') {
+      <div class="banner">
+        <div class="banner-hero row">
+          @if (data?.media) {
+            <div class="banner-hero__img-wrapper col-12 col-lg-6">
+              <a [id]="'banner-hero__img-wrapper' + data.uid" [externalRouterLink]="data?.localizedUrlLink">
+                <app-media-image [mediaData]="data.media" [priority]="data.priority"></app-media-image>
+              </a>
+            </div>
+          }
+          @if (data?.headline || data?.content) {
+            <div class="col-12 col-lg-6 banner-hero__text">
+              <span class="heading">
+            <a
+              class="heading"
+              [id]="'banner-hero__text-heading' + data.uid"
+              [externalRouterLink]="data?.localizedUrlLink"
+              [title]="data?.headline"
+            >
+              {{ data?.headline }}
+            </a>
+          </span>
+              <p class="description">
+                {{ data?.content }}
+              </p>
+              <a
+                class="cta"
+                [id]="'banner-hero__text-cta' + data.uid"
+                [externalRouterLink]="data?.localizedUrlLink"
+                [title]="data?.localizedUrlText"
+              >
+                {{ data?.localizedUrlText }}
+                <fa-icon [icon]="faAngleRight"></fa-icon>
+              </a>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}

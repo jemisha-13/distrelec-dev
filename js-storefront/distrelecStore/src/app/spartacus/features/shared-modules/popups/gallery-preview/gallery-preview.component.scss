@@ -1,0 +1,181 @@
+@import 'global-utilities';
+
+.gallery-preview {
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: $zindex-modal;
+  }
+
+  &__lightbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.35);
+    z-index: $zindex-fixed;
+
+    .count {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: $spacing-unit;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 7%;
+      height: 10%;
+      color: $colour-white;
+      opacity: 0.7;
+      font-size: 18px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0;
+      color: $colour-white;
+      background: 0 0;
+      border: 0;
+      cursor: pointer;
+      width: 7%;
+      height: 10%;
+      z-index: $zindex-modal;
+
+      .times-icon {
+        font-size: 25px;
+      }
+    }
+
+    .btn-lightbox-carousel {
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 45%;
+      width: 8%;
+      height: 8%;
+      padding: 0;
+      color: $colour-white;
+      background: 0 0;
+      border: 0;
+      cursor: pointer;
+      z-index: $zindex-modal;
+    }
+    .btn-prev {
+      left: 0;
+    }
+
+    .btn-next {
+      right: 0;
+    }
+
+    .fa-arrow {
+      color: $colour-white;
+      font-size: 30px;
+      opacity: 0.5;
+      transition: all 0.15s ease;
+    }
+
+    .fa-arrow:hover {
+      opacity: 0.9;
+    }
+
+    .fa-arrow:active {
+      opacity: 0.5;
+    }
+
+    .image img {
+      width: 100%;
+      border-radius: 0.35rem;
+      position: inherit;
+      z-index: $zindex-modal;
+      cursor: zoom-in;
+      transition: transform 0.3s ease;
+    }
+
+    .image .enlarged-image {
+      transform: scale(1.3);
+      cursor: zoom-out;
+      transition: transform 0.3s ease;
+    }
+
+    .image-gallery {
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      gap: 8px;
+
+      img {
+        margin: ($spacing-unit * 5) 0;
+        width: 140px;
+        height: 90px;
+        z-index: $zindex-modal;
+
+        @include mobileOnly {
+          width: 25%;
+          height: 78px;
+        }
+      }
+
+      img:hover {
+        cursor: pointer;
+        -webkit-filter: brightness(70%);
+        filter: brightness(70%);
+      }
+
+      .selected {
+        -webkit-filter: brightness(50%);
+        filter: brightness(50%);
+      }
+
+      .video-icon {
+        background-color: white;
+
+        .video-holder {
+          @include mobileOnly {
+            width: 78px;
+            height: 78px;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+.content {
+  width: 80%;
+
+  @include tablet {
+    width: 70%;
+  }
+
+  @include desktop {
+    width: 50%;
+  }
+
+  .video-frame {
+    width: 100%;
+    min-height: 30vh;
+
+    @include tabletPlus {
+      min-height: 70vh;
+    }
+  }
+}

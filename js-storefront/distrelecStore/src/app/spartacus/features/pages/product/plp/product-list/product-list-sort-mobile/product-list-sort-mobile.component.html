@@ -1,0 +1,33 @@
+<div class="container-fluid d-flex flex-column d-lg-none sort-list">
+  <div class="row vw-100 d-block" style="top: 0">
+    <div class="border-bottom-gray p-3">
+      <h5 class="strong text-center mb-0">{{ 'plp.facet_buttons_and_headers.order_by' | cxTranslate }}</h5>
+      <span class="position-absolute font-weight-light p-3" (click)="closeEmitter.emit()" style="right: 0; top: 0">
+        {{ 'plp.facet_buttons_and_headers.close' | cxTranslate }}
+      </span>
+    </div>
+  </div>
+
+  <div class="flex-grow-1 overflow-auto px-3">
+    <div class="select d-flex flex-column">
+      <span
+        *ngFor="let option of options"
+        class="small"
+        [class.text-danger]="option.value === selectedOption"
+        (click)="setOption(option.value)"
+      >
+        <fa-icon class="opacity-0" [class.opacity-100]="option.value === selectedOption" [icon]="faCheck"></fa-icon>
+        {{ 'plp.facet_buttons_and_headers.' + option.label | cxTranslate }}
+      </span>
+    </div>
+  </div>
+
+  <div class="row border-top-gray justify-content-end">
+    <button
+      class="btn apply-filters rounded w-100 py-2 px-4 my-2 mx-4 font-weight-bold"
+      (click)="filterList('sort', selectedOption)"
+    >
+      {{ 'plp.facet_buttons_and_headers.sort' | cxTranslate }}
+    </button>
+  </div>
+</div>

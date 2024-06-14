@@ -1,0 +1,100 @@
+@import 'global-utilities';
+
+.category-nav-wrapper {
+  @include transition(all 0.2s ease);
+  align-items: center;
+  background: transparent;
+  display: flex;
+  border-radius: ($spacing-unit - 3);
+  height: $size-mobile-nav-height;
+  position: relative;
+  width: 100%;
+
+  @include tabletPlus {
+    height: 38px;
+    margin-right: ($ux-spacing-unit * 4);
+    top: 0;
+  }
+
+  &__icon {
+    display: block;
+    height: 100%;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+
+    @include tablet {
+      display: none;
+    }
+  }
+
+  &__btn {
+    @include typography-ui-sm;
+    @include transition(all 0.2s ease);
+    color: $colour-white;
+    cursor: pointer;
+    display: none;
+    font-weight: $font-weight-medium;
+    outline: 0;
+    padding-left: 0;
+    position: relative;
+    text-decoration: none;
+    width: max-content;
+
+    @include tablet {
+      display: block;
+    }
+  }
+}
+
+.list {
+  @include hide-scrollbar;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  position: static;
+  width: 100%;
+
+  &__row {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+
+    &__icon {
+      float: right;
+      margin-right: 16px;
+    }
+
+    &__label {
+      color: inherit;
+      display: inline-block;
+      font-weight: $font-weight-medium;
+      overflow: hidden;
+      padding: (($spacing-unit * 2) + 2) 0;
+      text-overflow: ellipsis;
+      text-decoration: none;
+      white-space: nowrap;
+      width: 100%;
+      @include typography-text-sm;
+    }
+
+    &.no-touch {
+      transition:
+        padding $ux-transition-time-default,
+        background-color $ux-transition-time-default;
+      &:hover {
+        background: $ux-hover-state;
+        padding-left: ($spacing-unit);
+        text-decoration: none;
+      }
+    }
+
+    &.first {
+      &:nth-last-child(3) {
+        border-top: 1px solid $ux-outline;
+        color: $ux-red;
+      }
+    }
+  }
+}

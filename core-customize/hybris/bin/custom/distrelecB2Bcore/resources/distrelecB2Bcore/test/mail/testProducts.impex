@@ -1,0 +1,106 @@
+$catalog-id=distrelecProductCatalog
+$catalog-version=Online
+
+$classificationCatalog-id=DistrelecClassification
+$classificationCatalog-version=1.0
+
+$catalogVersion=catalogversion(catalog(id[default=$catalog-id]),version[default=$catalog-version])[unique=true,default=$catalog-id:$catalog-version]
+
+$supercategories=supercategories(code,catalogversion(catalog(id[default=$catalog-id]),version[default=$catalog-version]))
+$prices=europe1prices[translator=de.hybris.platform.europe1.jalo.impex.Europe1PricesTranslator]
+
+INSERT_UPDATE DistBrand;code[unique=true]
+;Distrelec
+
+INSERT_UPDATE DistErpSystem;code[unique=true];name[lang=en]
+;SAP;SAP1
+
+INSERT_UPDATE DistSalesOrg;code[unique=true];brand(code);country(isocode);erpSystem(code);nameErp[lang=en]
+;7310;Distrelec;CH;SAP;Distrelec CH
+;7800;Distrelec;DE;SAP;Distrelec DE
+
+
+INSERT_UPDATE Product;code[unique=true];$supercategories;$catalogVersion[unique=true];manufacturer(code)[default='manufacturer1']
+;P1_1_1___1;C1_1_1;;;;;# Sold 1 time
+;P1_1_1___2;C1_1_1;;;;;# Sold 2 times
+;P1_1_1___3;C1_1_1;;manufacturer2; #other manufacturer
+;P1_1_1___4;C1_1_1;;;; #Other SalesOrg
+;P1_1_1___5;C1_1_1;;;; #Inactive
+;P1_1_1___6;C1_1_1;;;;;# Not sold
+;P1_1_1___7;C1_1_1;;;;;#Out Of Stock
+;P1_1_2___1;C1_1_2;;;;;# Sold 1 time
+;P1_1_2___2;C1_1_2;;;;;# Sold 2 times
+;P1_1_2___3;C1_1_2;;manufacturer2; #other manufacturer
+;P1_1_2___4;C1_1_2;;;; #Other SalesOrg
+;P1_1_2___5;C1_1_2;;;; #Inactive
+;P1_1_2___6;C1_1_2;;;;;# Not sold
+;P1_1_2___7;C1_1_2;;;;;#Out Of Stock
+;P1_2_1___1;C1_2_1;;;;;# Sold 1 time
+;P1_2_1___2;C1_2_1;;;;;# Sold 2 times
+;P1_2_1___3;C1_2_1;;manufacturer2; #other manufacturer
+;P1_2_1___4;C1_2_1;;;; #Other SalesOrg
+;P1_2_1___5;C1_2_1;;;; #Inactive
+;P1_2_1___6;C1_2_1;;;;;# Not sold
+;P1_2_1___7;C1_2_1;;;;;#Out Of Stock
+
+INSERT_UPDATE DistSalesStatus;code[unique=true];buyableInShop
+;30;true
+;40;true
+;92;false
+
+$product=product(code,$catalogVersion)[unique=true,default=$catalog-id:$catalog-version]
+
+INSERT_UPDATE DistSalesOrgProduct;$product;salesOrg(code)[unique=true, default='7310'];salesStatus(code)[default='40'];orderQuantityMinimum[default='1000']
+;P1_1_1___1;
+;P1_1_1___2;
+;P1_1_1___3;
+;P1_1_1___4;7800;;; #Other SalesOrg
+;P1_1_1___5;;92;;; #Inactive
+;P1_1_1___6;
+;P1_1_1___7;
+;P1_1_2___1;
+;P1_1_2___2;
+;P1_1_2___3;
+;P1_1_2___4;7800;;; #Other SalesOrg
+;P1_1_2___5;;92;;; #Inactive
+;P1_1_2___6;
+;P1_1_2___7;
+;P1_2_1___1;
+;P1_2_1___2;
+;P1_2_1___3;
+;P1_2_1___4;7800;;; #Other SalesOrg
+;P1_2_1___5;;92;;; #Inactive
+;P1_2_1___6;
+;P1_2_1___7;
+
+INSERT_UPDATE Vendor;code[unique=true]
+;DistrelecVendor
+
+INSERT_UPDATE Warehouse;code[unique=true];stockManagementSystem(code)[default='SAP'];vendor(code)[default='DistrelecVendor']
+;7374;
+;7371;
+
+INSERT_UPDATE StockLevel;productCode[unique=true];available[default=100];warehouse(code)[unique=true,default='7374'];maxPreOrder[default=0];maxStockLevelHistoryCount[default=0];overSelling[default=0];preOrder[default=0];reserved;
+;P1_1_1___1;
+;P1_1_1___2;
+;P1_1_1___3;
+;P1_1_1___4;
+;P1_1_1___5;
+;P1_1_1___6;
+;P1_1_1___7;0;;;;;;;;;;; #Out Of Stock
+;P1_1_2___1;
+;P1_1_2___2;
+;P1_1_2___3;
+;P1_1_2___4;
+;P1_1_2___5;
+;P1_1_2___6;
+;P1_1_2___7;0;;;;;;;;;;; #Out Of Stock
+;P1_2_1___1;
+;P1_2_1___2;
+;P1_2_1___3;
+;P1_2_1___4;
+;P1_2_1___5;
+;P1_2_1___6;
+;P1_2_1___7;0;;;;;;;;;;; #Out Of Stock
+
+

@@ -1,0 +1,723 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-9">
+      <ng-container class="account-information-main">
+        <div class="order-detail-wrapper">
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-12">
+              <h1 id="orderHistoryOrderDetails-accountInformation_page_title">
+                {{ 'form.order_details_title' | cxTranslate }}
+              </h1>
+            </div>
+          </div>
+          <div class="row mt-1 notForPrint">
+            <div class="col-md-12">
+              <app-action-message
+                id="orderDetails"
+                [type]="responseType"
+                [message]="responseMessage"
+              ></app-action-message>
+              <button
+                *ngIf="!orderDetails"
+                class="btn btn-secondary btn-gray back-button"
+                id="myAccount-orderHistorysearch-backButton"
+                (click)="goBack()"
+              >
+                {{ 'form.back' | cxTranslate }}
+              </button>
+            </div>
+          </div>
+          <div *ngIf="loadedOrderDetails; else loadingOrderDetails">
+            <div class="row mt-5 notForPrint">
+              <div class="col-md-1 col-sm-12 mt-3">
+                <button
+                  class="btn btn-secondary btn-gray back-button"
+                  id="myAccount-orderHistorysearch-goBackButton"
+                  (click)="goBack()"
+                >
+                  {{ 'form.back' | cxTranslate }}
+                </button>
+              </div>
+              <div class="col-sm-12 col-md-6 mt-3 cursor">
+                <img
+                  class="mr-2"
+                  id="orderHistoryOrderDetails-printImg"
+                  (click)="printOrders()"
+                  src="app/spartacus/assets/media/general/print.svg"
+                />
+                <img
+                  *ngIf="loadingExport"
+                  class="min-width"
+                  id="orderHistoryOrderDetails-spinnerGif"
+                  src="app/spartacus/assets/media/spinner.gif"
+                />
+                <img
+                  *ngIf="!loadingExport"
+                  class="mr-2"
+                  id="orderHistoryOrderDetails-downloadImg"
+                  [ngbTooltip]="downloadLinks"
+                  src="app/spartacus/assets/media/general/download.svg"
+                  tooltipClass="distrelec-tooltip-class"
+                  triggers="click:blur"
+                />
+                <img
+                  id="orderHistoryOrderDetails-shoppingList"
+                  (click)="addToShoppingList()"
+                  src="app/spartacus/assets/media/general/add-to-list.svg"
+                />
+                <label
+                  class="ml-1 cursor fs-small"
+                  (click)="addToShoppingList()"
+                  for="orderHistoryOrderDetails-shoppingList"
+                >
+                  {{ 'toolsitem.add.list' | cxTranslate }}
+                </label>
+                <ng-template #downloadLinks class="cursor">
+                  <span
+                    class="text-underline"
+                    id="orderHistoryOrderDetails-saveAscsv"
+                    (click)="download(orderDetails?.code, 'xlsx')"
+                  >
+                    {{ 'toolsitem.save.as' | cxTranslate }} xlsx
+                  </span>
+                  <br />
+                  <span
+                    class="text-underline"
+                    id="orderHistoryOrderDetails-saveAscsv"
+                    (click)="download(orderDetails?.code, 'csv')"
+                  >
+                    {{ 'toolsitem.save.as' | cxTranslate }} csv
+                  </span>
+                </ng-template>
+              </div>
+              <div class="col-md-5 col-sm-4 mt-3">
+                <div class="d-flex justify-content-end">
+                  <app-atc-button
+                    [id]="'orderHistoryOrderDetails-reorder'"
+                    [shouldOpenFlyout]="true"
+                    [translationKey]="'toolsitem.reorder'"
+                    [getBulkItems]="orderEntries.bind(this)"
+                    [pageTrackingType]="itemListEntity.ORDER_DETAILS"
+                  ></app-atc-button>
+
+                  <label
+                    *ngIf="orderDetails?.status === 'ERP_STATUS_SHIPPED' && isProductReturnEnabled$ | async"
+                    class="ml-1 float-md-right mt-1 mr-2 fs-small cursor"
+                    id="orderHistoryOrderDetails-returnItem"
+                    (click)="showOrderReturns(orderDetails?.code)"
+                  >
+                    <img class="cursor" src="app/spartacus/assets/media/general/return.svg" />
+                    {{ 'toolsitem.return.items' | cxTranslate }}...
+                  </label>
+                </div>
+              </div>
+            </div>
+            <br />
+            <!-- Order general details -->
+            <div class="row mt-2">
+              <div class="col-md-2 col-sm-12">
+                <label class="label-bold" id="orderHistoryOrderDetails-orderDate-text">
+                  {{ 'orderOverviewBox.orderDate' | cxTranslate }}
+                </label>
+                <br />
+                <label id="orderHistoryOrderDetails-orderDate-value">
+                  {{ orderDetails?.orderDate | date: 'MMM dd' }}, {{ orderDetails?.orderDate | date: 'YYYY' }}
+                </label>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <label class="label-bold" id="orderHistoryOrderDetails-orderNr-text">
+                  {{ 'orderOverviewBox.orderNr' | cxTranslate }}
+                </label>
+                <br />
+                <label id="orderHistoryOrderDetails-orderNr-value">{{ orderDetails?.code }}</label>
+              </div>
+              <div
+                *ngIf="
+                  orderDetails?.b2bCustomerData?.roles && orderDetails?.b2bCustomerData?.roles.includes('b2badmingroup')
+                "
+                class="col-md-2 col-sm-12"
+              >
+                <label class="label-bold" id="orderHistoryOrderDetails-orderBy-text">
+                  {{ 'orderOverviewBox.orderedBy' | cxTranslate }}
+                </label>
+                <br />
+                <label id="orderHistoryOrderDetails-orderBy-value">{{ orderDetails?.placedBy }}</label>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <label class="label-bold" id="orderHistoryOrderDetails-ordRecvdby-text">
+                  {{ 'orderOverviewBox.orderReceivedVia' | cxTranslate }}
+                </label>
+                <br />
+                <label id="orderHistoryOrderDetails-ordRecvdby-value">{{ orderDetails?.salesApplication }}</label>
+              </div>
+              <div class="col-md-3 col-sm-12">
+                <label class="label-bold" id="orderHistoryOrderDetails-state">
+                  {{ 'orderOverviewBox.state' | cxTranslate }}
+                </label>
+                <br />
+                <div [ngClass]="orderStatusColor(orderDetails?.status)">
+                  <fa-icon class="mr-1" [icon]="orderStatusIcon(orderDetails?.status)"></fa-icon>
+                  <label id="orderHistoryOrderDetails-orderDetails-text">
+                    {{ getOrderStatusOverviewBox(orderDetails?.status) | cxTranslate | titlecase }}
+                  </label>
+                  <br />
+                  <label
+                    *ngIf="orderDetails.isRMARaised"
+                    class="ml-2 text-secondary"
+                    id="orderHistoryOrderDetails-orderDetails-value"
+                  >
+                    <fa-icon [icon]="replyIcon"></fa-icon>
+                    {{ 'accountlist.orderHistoryList.returnStatus' | cxTranslate }}
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              *ngIf="orderDetails?.deliveryData && orderDetails?.deliveryData.length > 0"
+              class="row mt-4 mb-2 border-top pt-5 pb-4"
+            >
+              <div class="col-md-12 col-sm-12">
+                <h3 id="orderHistoryOrderDetails-shipmentTracking-text">
+                  {{ 'form.shipment_tracking' | cxTranslate }}
+                </h3>
+                <br />
+                <label id="orderHistoryOrderDetails-shipmentTracking-value">
+                  {{ 'form.shipment_tracking_label_text' | cxTranslate }}
+                </label>
+              </div>
+              <div *ngFor="let deliveryDetails of orderDetails.deliveryData" class="col-md-6 col-sm-12">
+                <label
+                  class="editLink cursor"
+                  id="orderHistoryOrderDetails-handlineUnit"
+                  (click)="showDeliveryDetails(deliveryDetails)"
+                >
+                  {{ deliveryDetails?.deliveryID }} ({{ deliveryDetails?.handlingUnit.length }})
+                </label>
+              </div>
+            </div>
+
+            <div *ngIf="orderDetails?.customerType === 'B2B'" class="row mt-4 mb-2 border-top pt-5 pb-4">
+              <div class="col-md-12 col-sm-12">
+                <h3 id="orderHistoryOrderDetails-orderRef">
+                  {{ 'form.order_ref_purchase' | cxTranslate }}
+                </h3>
+                <br />
+              </div>
+              <div *ngIf="!isEditOrderReference" class="col-md-6 col-sm-12">
+                <label id="orderHistoryOrderDetails-projectNumber-text">{{ orderDetails?.projectNumber }}</label>
+                <br />
+                <label *ngIf="supportFailed" class="redFont" id="orderHistoryOrderDetails-projectNumber-value">
+                  {{ 'form.support_failed' | cxTranslate }}
+                </label>
+              </div>
+              <div *ngIf="isEditOrderReference" class="col-md-6 col-sm-12">
+                <div class="input-group">
+                  <input
+                    class="form-control text-height"
+                    id="orderHistoryOrderDetails-webshopOrder"
+                    [(ngModel)]="orderReferenceNumber"
+                    [placeholder]="'form.order_ref_purchase' | cxTranslate"
+                    type="text"
+                  />
+                  <div class="input-group-prepend">
+                    <button
+                      class="btn btn-outline-secondary btn-gray btn-gray-extended-width"
+                      id="myAccount-orderHistorysearch-saveButton"
+                      (click)="updateOrderRefernceNumber(orderDetails?.code)"
+                      type="button"
+                    >
+                      {{ 'form.save_reference' | cxTranslate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="isEditOrderReference" class="col-md-6 col-sm-12 notForPrint">
+                <a
+                  *ngIf="order.status === orderStatus.PENDING_APPROVAL"
+                  class="float-md-right editLink"
+                  (click)="orderReferenceUpdate()"
+                >
+                  {{ 'form.edit' | cxTranslate }}
+                </a>
+              </div>
+            </div>
+
+            <div *ngIf="orderDetails?.note" class="row mt-4 mb-2 border-top pt-5 pb-4">
+              <div class="col-md-12 col-sm-12">
+                <h3 id="orderHistoryOrderDetails-orderNote">
+                  {{ 'checkoutordersummarynotebox.title' | cxTranslate }}
+                </h3>
+                <br />
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <label id="orderHistoryOrderDetails-orderNote-text">{{ orderDetails?.note }}</label>
+                <br />
+              </div>
+            </div>
+
+            <div class="row mt-4 mb-4 border-top">
+              <div class="col-md-3 mt-3">
+                <h3 id="orderHistoryOrderDetails-billingAddress">
+                  {{ 'form.billing_address' | cxTranslate }}
+                </h3>
+                <br />
+                <label class="mb-0" id="orderHistoryOrderDetails-baLine-1">
+                  {{ orderDetails?.billingAddress?.line1 }}
+                </label>
+                <br />
+                <label class="mb-0" id="orderHistoryOrderDetails-baLine-2">
+                  {{ orderDetails?.billingAddress?.line2 }}
+                </label>
+                <br />
+                <label class="mb-0" id="orderHistoryOrderDetails-baLine-town">
+                  {{ orderDetails?.billingAddress?.town }}
+                </label>
+                <br />
+                <label class="mb-0" id="orderHistoryOrderDetails-pCode">
+                  {{ orderDetails?.billingAddress?.postalCode }}
+                </label>
+              </div>
+              <div class="col-md-3 mt-3">
+                <h3 id="orderHistoryOrderDetails-deliveryAddress">
+                  {{ 'form.delivery_address' | cxTranslate }}
+                </h3>
+                <br />
+                <span
+                  *ngIf="orderDetails?.customerType === 'B2B' && orderDetails?.deliveryAddress?.companyName"
+                  id="orderHistoryOrderDetails-compName"
+                >
+                  <label class="mb-0">{{ orderDetails?.deliveryAddress?.companyName }}</label>
+                  <br />
+                </span>
+                <span
+                  *ngIf="orderDetails?.customerType === 'B2B' && orderDetails?.deliveryAddress?.companyName2"
+                  id="orderHistoryOrderDetails-compName2"
+                >
+                  <label class="mb-0">{{ orderDetails?.deliveryAddress?.companyName2 }}</label>
+                  <br />
+                </span>
+                <span *ngIf="orderDetails?.deliveryAddress?.line1" id="orderHistoryOrderDetails-line1">
+                  <label class="mb-0">
+                    {{ orderDetails?.deliveryAddress?.line1 }} {{ orderDetails?.deliveryAddress?.line2 }}
+                  </label>
+                  <br />
+                </span>
+                <span *ngIf="orderDetails?.deliveryAddress?.postalCode" id="orderHistoryOrderDetails-town">
+                  <label class="mb-0">
+                    {{ orderDetails?.deliveryAddress?.postalCode }} {{ orderDetails?.deliveryAddress?.town }}
+                  </label>
+                  <br />
+                </span>
+                <span *ngIf="orderDetails?.deliveryAddress?.country.name" id="orderHistoryOrderDetails-countryName">
+                  <label class="mb-0">{{ orderDetails?.deliveryAddress?.country.name }}</label>
+                </span>
+              </div>
+
+              <div class="col-md-3 mt-3">
+                <h3 id="orderHistoryOrderDetails-shippingMethod">
+                  {{ 'form.shipping_method' | cxTranslate }}
+                </h3>
+                <br />
+                <label class="mb-0" id="orderHistoryOrderDetails-shippingMethod-value">
+                  {{ orderDetails?.deliveryMode?.name }}:
+                </label>
+                <br />
+                <label *ngIf="orderDetails?.deliveryCost?.value <= 0" class="mb-0" id="orderHistoryOrderDetails-free">
+                  {{ 'checkoutdeliveryoptionslist.placeholder' | cxTranslate }}
+                </label>
+                <label *ngIf="orderDetails?.deliveryCost?.value > 0" class="mb-0" id="orderHistoryOrderDetails-price">
+                  {{ orderDetails?.deliveryCost?.currencyIso }}
+                  {{ orderDetails?.deliveryCost?.value | price }}
+                </label>
+              </div>
+
+              <div class="col-md-3 mt-3">
+                <h3 id="orderHistoryOrderDetails-paymentMethod">
+                  {{ 'form.payment_method' | cxTranslate }}
+                </h3>
+                <br />
+                <label class="mb-0" id="orderHistoryOrderDetails-paymentMode">
+                  {{ orderDetails?.paymentMode?.translationKey | cxTranslate }}
+                </label>
+                <br />
+                <label
+                  *ngIf="orderDetails?.paymentCost?.value <= 0"
+                  class="mb-0"
+                  id="orderHistoryOrderDetails-paymentFree"
+                >
+                  {{ 'checkoutpaymentoptionslist.placeholder' | cxTranslate }}
+                </label>
+                <label
+                  *ngIf="orderDetails?.paymentCost?.value > 0"
+                  class="mb-0"
+                  id="orderHistoryOrderDetails-paymentCost"
+                >
+                  {{ orderDetails?.paymentCost?.currencyIso }}
+                  {{ orderDetails?.paymentCost?.value | price }}
+                </label>
+                <label
+                  *ngIf="orderDetails?.paymentMode?.paymentCost?.value > 0"
+                  class="mb-0"
+                  id="orderHistoryOrderDetails-paymentPercentage"
+                >
+                  {{ orderDetails?.paymentMode?.paymentCost?.value | price }}
+                  {{ checkoutordersummaryinfobox.paymentMethod.percentage | cxTranslate }}
+                </label>
+              </div>
+            </div>
+            <hr class="desktop-only" />
+            <div class="row mt-4">
+              <div class="col-sm-2 col-md-6 desktop-only"></div>
+              <div class="col-sm-2 col-md-2 desktop-only">
+                <label
+                  *ngIf="orderDetails?.status !== 'ERP_STATUS_CANCELLED'"
+                  class="label-bold fs-small"
+                  id="orderHistoryOrderDetails-deliveryDateText"
+                >
+                  {{ 'form.delivery_date' | cxTranslate }}
+                </label>
+              </div>
+              <div class="col-sm-2 col-md-1 desktop-only">
+                <label
+                  *ngIf="isQuantityLabel && !isPendingLabel"
+                  class="label-bold fs-small"
+                  id="orderHistoryOrderDetails-deliveryDateValue"
+                >
+                  {{ 'form.quantity' | cxTranslate }}
+                </label>
+                <label
+                  *ngIf="isPendingLabel && !isQuantityLabel"
+                  class="label-bold fs-small"
+                  id="orderHistoryOrderDetails-deliveryDateValue"
+                >
+                  {{ 'orderOverviewBox.state.PENDING' | cxTranslate }}
+                </label>
+                <label
+                  *ngIf="(isPendingLabel && isQuantityLabel) || (!isPendingLabel && !isQuantityLabel)"
+                  class="label-bold fs-small"
+                  id="orderHistoryOrderDetails-deliveryDateValue"
+                  id="orderDetails_pending"
+                >
+                  {{ 'form.quantity' | cxTranslate }}
+                  <br />
+                  ({{ 'orderOverviewBox.state.PENDING' | cxTranslate }})
+                </label>
+              </div>
+              <div class="col-sm-2 col-md-2 desktop-only">
+                <label class="label-bold fs-small" id="orderHistoryOrderDetails-mySinglePriceText">
+                  {{ 'form.my_single_price' | cxTranslate }}
+                </label>
+              </div>
+              <div class="col-sm-2 col-md-1">
+                <label class="label-bold fs-small" id="orderHistoryOrderDetails-subTotal">
+                  {{ 'form.my_subtotal' | cxTranslate }}
+                </label>
+              </div>
+            </div>
+            <hr />
+            <div *ngFor="let entry of orderDetails.entries">
+              <div class="row mt-2">
+                <div class="col-sm-12 col-md-6">
+                  <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                      <div class="cell">
+                        <div class="wrap-image">
+                          <img
+                            class="img-thumbnail"
+                            src="{{
+                              entry?.product?.images &&
+                              entry?.product?.images.length > 0 &&
+                              entry?.product?.images[0].url
+                                ? entry?.product?.images[0].url
+                                : '/app/spartacus/assets/media/img/missing_portrait_small.png'
+                            }}"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div class="col-md-12">
+                        <strong class="redFont" id="orderHistoryOrderDetails-productName">
+                          <a class="editLink" [routerLink]="entry?.product?.url" [innerHTML]="entry?.product?.name"></a>
+                        </strong>
+                      </div>
+                      <div class="col-sm-4 d-md-inline-block mt-3">
+                        <strong class="fs-small" id="orderHistoryOrderDetails-artNr">
+                          {{ 'form.art_nr' | cxTranslate }}
+                        </strong>
+                        <br />
+                        <label class="fs-e-small" id="orderHistoryOrderDetails-artNrValue">
+                          {{ entry?.product?.codeErpRelevant | articleNumber: entry?.product?.codeErpRelevant }}
+                        </label>
+                      </div>
+                      <span *ngIf="entry?.product?.typeName || entry?.product?.distManufacturer?.name">
+                        <div class="col-sm-4 d-md-inline-block mt-3">
+                          <strong class="fs-small" id="orderHistoryOrderDetails-mpn">
+                            {{ 'form.mpn' | cxTranslate }}
+                          </strong>
+                          <br />
+                          <label class="fs-e-small" id="orderHistoryOrderDetails-typeName">
+                            {{ entry?.product?.typeName }}
+                          </label>
+                        </div>
+                        <div class="col-sm-4 d-md-inline-block mt-3">
+                          <strong class="fs-small" id="orderHistoryOrderDetails-manufacturer">
+                            {{ 'form.manufacturer' | cxTranslate }}
+                          </strong>
+                          <br />
+                          <label class="fs-e-small" id="orderHistoryOrderDetails-distManufacturer">
+                            {{ entry?.product?.distManufacturer?.name }}
+                          </label>
+                        </div>
+                      </span>
+                      <div class="col-md-12">
+                        <strong class="fs-small" id="orderHistoryOrderDetails-yourRef">
+                          {{ 'form.your_reference' | cxTranslate }}
+                        </strong>
+                        <br />
+                        <label class="fs-e-small" id="orderHistoryOrderDetails-customerRef">
+                          {{ entry?.customerReference }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <div *ngIf="entry?.deliveryDate">
+                    <label class="fs-small" id="OH-OrderDetails-deliveryDate">
+                      {{ entry?.deliveryDate | date: dateFormat }}
+                    </label>
+                  </div>
+                  <div *ngIf="entry?.availabilities && entry?.availabilities.length > 0">
+                    <label
+                      *ngFor="let avail of entry.availabilities"
+                      class="fs-small"
+                      id="OH-OrderDetails-estimatedDate"
+                    >
+                      {{ avail?.estimatedDate | date: dateFormat }}*
+                    </label>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-1">
+                  <label *ngIf="entry?.availabilities && entry?.availabilities.length > 0" class="fs-small">
+                    ({{ entry?.availabilities[0].quantity }})
+                  </label>
+                  <label *ngIf="entry?.deliveryDate" class="fs-small">{{ entry?.quantity }}</label>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <label class="fs-small" id="OH-OrderDetails-priceValue">
+                    {{ entry?.totalPrice?.currencyIso }}
+                    {{ entry?.totalPrice?.value | price }}
+                  </label>
+                </div>
+                <div class="col-sm-12 col-md-1">
+                  <label class="fs-small" id="OH-OrderDetails-priceValue2">
+                    {{ entry?.totalAfterDiscountPrice?.currencyIso }}&nbsp;{{
+                      entry?.totalAfterDiscountPrice.value | price
+                    }}
+                  </label>
+                </div>
+              </div>
+              <hr class="desktop-only" />
+            </div>
+            <!--entry loop ends here-->
+            <div
+              *ngIf="orderDetails?.status !== 'ERP_STATUS_SHIPPED' && orderDetails?.status !== 'ERP_STATUS_CANCELLED'"
+              class="row"
+            >
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <label id="form.order_warning_note" [innerHTML]="'form.order_warning_note' | cxTranslate">.</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <div class="pricing">
+                  <div class="pricing-line">
+                    <div class="pricing-heading">
+                      <label class="float-left" id="OH-OrderDetails-subTotal">
+                        {{ 'form.subtotal' | cxTranslate }}:
+                      </label>
+                    </div>
+                    <div class="pricing-value">
+                      <label class="float-right" id="OH-OrderDetails-subTotal-value">
+                        {{ orderDetails?.subTotal?.currencyIso }}
+                        {{ orderDetails?.subTotal?.value | price }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <div class="pricing">
+                  <div class="pricing-line">
+                    <div class="pricing-heading">
+                      <label
+                        class="float-left"
+                        id="OH-OrderDetails-shipping"
+                        [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                      >
+                        {{ 'form.shipping' | cxTranslate }}:
+                      </label>
+                    </div>
+                    <div class="pricing-value">
+                      <label
+                        *ngIf="orderDetails?.deliveryCost?.value <= 0"
+                        class="float-right"
+                        id="OH-OrderDetails-freeText"
+                      >
+                        {{ 'form.free' | cxTranslate | uppercase }}
+                      </label>
+
+                      <label
+                        *ngIf="orderDetails?.deliveryCost?.value > 0"
+                        class="float-right"
+                        id="OH-OrderDetails-freeValue"
+                      >
+                        {{ orderDetails?.deliveryCost?.currencyIso }}
+                        {{ orderDetails?.deliveryCost?.value | price }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="orderDetails?.erpVoucherInfoData?.valid" class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <div class="pricing">
+                  <div class="pricing-line">
+                    <div class="pricing-heading">
+                      <label
+                        class="float-left"
+                        id="OH-OrderDetails-discount"
+                        [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                      >
+                        {{ 'form.discount' | cxTranslate }}:
+                      </label>
+                    </div>
+                    <div class="pricing-heading">
+                      <label
+                        class="float-left"
+                        id="OH-OrderDetails-erpVoucherinfoData"
+                        [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                      >
+                        {{ orderDetails?.erpVoucherInfoData?.code }}
+                      </label>
+                    </div>
+                    <div class="pricing-value">
+                      <label class="float-right" id="OH-OrderDetails-erpVoucherinfoDataValue">
+                        {{ orderDetails?.erpVoucherInfoData?.fixedValue?.currencyIso }} -{{
+                          orderDetails?.erpVoucherInfoData?.fixedValue?.value | price
+                        }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <div class="pricing">
+                  <div class="pricing-line">
+                    <div class="pricing-heading">
+                      <label
+                        class="float-left"
+                        id="OH-OrderDetails-tax"
+                        [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                      >
+                        {{ 'form.tax' | cxTranslate }}:
+                      </label>
+                    </div>
+                    <div class="pricing-value">
+                      <label class="float-right" id="OH-OrderDetails-taxValue">
+                        {{ orderDetails?.totalTax?.currencyIso }}
+                        {{ orderDetails?.totalTax?.value | price }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              *ngIf="orderDetails?.discounts && orderDetails?.discounts.length > 1 && orderDetails?.discounts[1].value"
+              class="row"
+            >
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <div class="pricing">
+                  <div class="pricing-line">
+                    <div class="pricing-heading">
+                      <label
+                        class="float-left"
+                        id="OH-OrderDetails-discount"
+                        [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                      >
+                        {{ 'form.discount' | cxTranslate }}:
+                      </label>
+                    </div>
+                    <div class="pricing-value">
+                      <label class="float-right" id="OH-OrderDetails-discounts-value">
+                        {{ orderDetails?.discounts[1].value }}%
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <div class="pricing">
+                  <div class="pricing-line">
+                    <div class="pricing-heading">
+                      <label
+                        class="float-left"
+                        id="OH-OrderDetails-totalPaybale"
+                        [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                      >
+                        <strong>{{ 'form.payable' | cxTranslate }}:</strong>
+                      </label>
+                    </div>
+                    <div class="pricing-value">
+                      <label class="float-right" id="OH-OrderDetails-totalPrice">
+                        <strong>
+                          {{ orderDetails?.totalPrice?.currencyIso }} {{ orderDetails?.totalPrice?.value | price }}
+                        </strong>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #loadingOrderDetails>
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+              <img src="app/spartacus/assets/media/spinner.gif" />
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

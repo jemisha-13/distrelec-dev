@@ -1,0 +1,179 @@
+# Import essential data for the Accelerator
+#
+# Includes:
+# * Languages
+# * Currencies
+# * Titles
+# * Vendors
+# * Supported Credit/Debit cards
+# * User Groups
+# * DistanceUnits for Storelocator
+# * MediaFolders
+# * Media Formats
+# * Tax & Tax Groups
+# * Checkout Payment Types
+# * B2BPermission Types
+
+# Languages
+INSERT_UPDATE Language;isocode[unique=true];fallbackLanguages(isocode);isocodePim;active[default=true]
+;en;;eng;
+;cs;en;cze;
+;da;en;dan;
+;de;en;ger;
+;et;en;est;
+;fi;en;fin;
+;fr;en;fre;
+;hu;en;hun;
+;it;en;ita;
+;lt;en;lit;
+;lv;en;lav;
+;nl;en;dut;
+;no;en;nor;
+;pl;en;pol;
+;ro;en;rum;
+;sk;en;slo;
+;sv;en;swe;
+# ;sk;en;slk;
+
+
+# languages which are not used in PIM import should not have a PIM-ID, this is now used for no-sql imports
+;uk;en;;
+;ja;en;;
+;ko;en;;
+;hr;en;;
+;ar;en;;
+;zh;en;;
+;tr;en;;
+;sl;en;;
+;ru;en;;
+;pt;en;;
+;is;en;;
+;es;en;;
+;el;en;;
+;bg;en;;
+;bs;en;;
+;sk;en;;
+
+#
+
+# Currencies (ISO 4217)
+INSERT_UPDATE Currency;isocode[unique=true];conversion;digits;symbol;roundCommercial;active[default=true];
+;CAD;1.5;2;C$;false;
+;CHF;1;2;CHF;true;
+;DKK;1;2;dkr;false;
+;EUR;1;2;€;false;
+;LTL;1;2;Lt;false;
+;LVL;1;2;Ls;false;
+;NOK;1;2;kr;false;
+;PLN;1;2;zł;false;
+;SEK;1;2;Skr;false;
+;USD;1.5;2;$;false;
+;BAM;1;2;KM;false;
+;ISK;1;2;ikr;false;
+;RUB;1;2;R;false;
+;TRY;1;2;TL;false;
+
+# Vendor
+INSERT_UPDATE Vendor;code[unique=true];name
+;default;Default Vendor
+
+# Titles
+INSERT_UPDATE Title;code[unique=true];sapCode;active
+;mr;Mr.;true
+;ms;Ms.;true
+;mr_and_ms;Mr. and Mrs.;false
+
+# Media Formats
+INSERT_UPDATE MediaFormat;qualifier[unique=true]
+;1200Wx1200H
+;300Wx300H
+;30Wx30H
+;365Wx246H
+;515Wx515H
+;65Wx65H
+;96Wx96H
+;LOGO
+;THUMB
+;MEDIUM
+;LARGE
+;PDF
+;landscape_small
+;landscape_medium
+;landscape_large
+;portrait_small
+;portrait_medium
+;brand_logo
+;360_small
+;360_medium
+;360_large
+
+# Units
+INSERT_UPDATE Unit;code[unique=true];unitType[unique=true];conversion
+;ARK;ARK;1
+;CCM;volume;0.000001
+;CM2;area;0.0001
+;CM;length;0.01
+;DM;length;0.1
+;FRP;pieces;1
+;G;weight;1
+;KG;weight;1000
+;M2;area;1
+;M;length;1
+;MM;length;0.001
+;P;pieces;1
+;PAA;pieces;2
+;PAC;pieces;1
+;PC;pieces;1
+;ROL;pieces;1
+;ST;pieces;1
+;ML;volume;
+;DZ;pieces;
+;EA;pieces;
+;L;volume;
+;C3S;area;
+;CL;volume;
+;BAG;pieces;
+;BT;pieces;
+;CAN;pieces;
+;CAR;pieces;
+;CDM;area;
+;CEL;pieces;
+;FT;area;
+;FT2;area;
+;FT3;area;
+;LB;weight;
+;KM;length;1000
+;MM2;area;0.0000001
+
+# Remove Customer Email constraint (uid validation)
+REMOVE B2BCustomerEmailConstraint;id[unique=true]
+;B2BCustomerValidEmail
+
+# Disable preview for email pages
+UPDATE CMSPageType;code[unique=true];previewDisabled
+;EmailPage;true
+
+# Remove hybris CreditCardTypes
+#REMOVE CreditCardType;code[unique=true]
+#;master
+#;mastercard_eurocard
+#;switch
+
+#ServicelayerJob
+INSERT_UPDATE ServicelayerJob; code[unique=true];springId[unique=true]
+;distGenericCleanUpJob;distGenericCleanUpJob;
+;distGenericFileCleanUpJob;distGenericFileCleanUpJob;
+;webSitemapJob;webSitemapJob;
+;distExportSeminarRegistrationJob;distExportSeminarRegistrationJob;
+
+# PaymentTypeCodeMap
+INSERT_UPDATE DistPaymentTypeCodeMap;paymentProviderCode[unique=true];creditCardTypeCode[unique=true]
+;VISA;visa
+;MasterCard;mastercard
+
+#Media Folders
+INSERT_UPDATE MediaFolder;qualifier[unique=true];path[unique=true]
+;images;images
+;pim_media;pim_media
+;cms_media;cms_media
+

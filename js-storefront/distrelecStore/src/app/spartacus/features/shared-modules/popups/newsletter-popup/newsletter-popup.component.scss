@@ -1,0 +1,330 @@
+@import 'global-utilities';
+
+.newsletter-popup {
+  top: 20%;
+
+  @media #{$ipad-landscape} {
+    left: 30%;
+    width: 40%;
+  }
+
+  align-items: center;
+  background-color: $colour-white;
+  border-radius: 8px;
+  border: 1px solid $colour-popup-border;
+  box-shadow:
+    0px 4px 6px -4px rgba(24, 39, 75, 0.12),
+    0px 8px 8px -4px rgba(24, 39, 75, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: ($spacing-unit * 1) ($spacing-unit * 1) ($spacing-unit * 1);
+  position: fixed;
+  z-index: $zindex-popover;
+  overflow-y: auto;
+
+  &__text {
+    padding: 0 10px 10px;
+    text-align: left;
+
+    p {
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    &--title {
+      @include font-size(20px);
+      @include line-height(24px);
+      font-weight: $font-weight-semiBold;
+      letter-spacing: -0.01em;
+      padding: $spacing-unit 0;
+    }
+
+    &--subtitle {
+      @include font-size(14px);
+      @include line-height(21px);
+      font-weight: $font-weight-normal;
+      max-height: 500px;
+
+      .form {
+        position: relative;
+
+        app-input-tooltip-popup {
+          position: absolute;
+          left: 105px;
+        }
+      }
+
+      .success {
+        font-size: 14px;
+        font-weight: $font-weight-bold;
+      }
+    }
+  }
+
+  &__close {
+    margin: ($spacing-unit * 2) auto auto;
+
+    .btn {
+      @include font-size(14px);
+      @include line-height(14px);
+      border: 1px solid $colour-popup-button-border;
+      box-sizing: border-box;
+      border-radius: 2px;
+      color: $colour-dark-grey;
+      font-weight: $font-weight-semiBold;
+      height: 30px;
+      width: auto;
+    }
+  }
+}
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  /* Stay in place */
+  z-index: $zindex-popover;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  background-color: rgba($colour-black, 0.8);
+  overflow-x: hidden;
+  /* Disable horizontal scroll */
+  transition: 0.5s;
+  /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}
+
+fa-icon.fa-envelope {
+  @include font-size(66px);
+
+  &:before {
+    content: '';
+  }
+}
+
+fa-icon.fa-times-circle {
+  @include font-size(24px);
+  line-height: 1;
+
+  &:before {
+    content: '';
+  }
+}
+
+app-confirm-popup {
+  position: relative;
+  z-index: $zindex-popover;
+}
+
+.popup-wrapper {
+  top: 25%;
+  height: 100%;
+  position: relative;
+}
+
+.image-holder {
+  display: table-cell;
+  background-image: url('/app/spartacus/assets/media/newsletter.png');
+  background-size: cover;
+  border-radius: ($spacing-unit + 3);
+  width: 50%;
+  max-width: 350px;
+
+  @include mobilePlusDown {
+    display: none;
+  }
+}
+
+.form-container {
+  display: table;
+  max-width: 900px;
+  width: 90%;
+  height: 448px;
+  margin: 0 auto;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  color: $colour-dist-grey;
+
+  &__title {
+    font-weight: $font-weight-semiBold;
+    @include typography-display-xl;
+    margin-top: ($spacing-unit * 8);
+    margin-bottom: ($spacing-unit * 2);
+    text-align: center;
+    width: 324px;
+
+    @include desktop {
+      width: 380px;
+    }
+  }
+
+  &__success {
+    font-weight: $font-weight-semiBold;
+    @include typography-display-xl;
+    margin-top: ($spacing-unit * 3);
+    margin-bottom: ($spacing-unit * 2);
+    text-align: center;
+    width: 324px;
+
+    @include desktop {
+      width: 380px;
+    }
+  }
+
+  &__subtitle {
+    @include typography-text-sm;
+    margin-bottom: ($spacing-unit * 2);
+    display: block;
+    font-weight: $font-weight-normal;
+    text-align: center;
+    width: 324px;
+
+    @include desktop {
+      width: 380px;
+    }
+  }
+
+  &__subtitle-privacy {
+    @include typography-text-sm;
+    margin-bottom: ($spacing-unit * 3);
+    text-align: left;
+    display: block;
+    color: $colour-dist-grey;
+    font-weight: $font-weight-normal;
+  }
+}
+
+.subscribe-photo {
+  display: table;
+  max-width: 900px;
+  width: 90%;
+  margin: 0 auto;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.newsletter-form {
+  margin: ($spacing-unit * 2);
+  padding: ($spacing-unit * 4);
+  background-color: $ux-popup-background;
+  color: $colour-dist-grey;
+  border-radius: ($spacing-unit + 3);
+
+  @include desktop {
+    border-radius: 0 ($spacing-unit + 3) ($spacing-unit + 3) 0;
+    padding: $spacing-unit * 8;
+    display: table-cell;
+    width: 400px;
+  }
+}
+
+.email-label {
+  font-weight: $font-weight-medium;
+  @include font-size(14px);
+  @include line-height(14px);
+}
+
+a {
+  cursor: pointer;
+  color: $colour-dist-grey;
+}
+
+.email-field {
+  border: 1px solid $colour-redesign-light-grey;
+  display: block;
+  height: ($spacing-unit * 8);
+  @include line-height(29px);
+  @include font-size(14px);
+  color: $colour-dist-grey;
+  padding: ($spacing-unit + 3) (($spacing-unit * 2) + 2);
+  width: 100%;
+  background-clip: padding-box;
+  border-radius: ($spacing-unit - 1);
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+
+  &:hover {
+    border: 2px solid $colour-redesign-light-grey;
+    box-shadow: none;
+  }
+
+  &:focus {
+    border: 1px solid $colour-redesign-light-grey;
+    outline: none;
+  }
+}
+
+.subscribe-button {
+  height: ($spacing-unit * 10);
+  font-weight: $font-weight-semiBold;
+  @include font-size(14px);
+  background: $border-correct-input-green;
+  border: none;
+  border-radius: ($spacing-unit - 1);
+  padding: (($spacing-unit * 2) + 1);
+  box-shadow: none;
+  margin-top: ($spacing-unit * 7);
+  text-shadow: none;
+  outline: none;
+
+  &:hover,
+  &:active {
+    background: $colour-redesign-dark-green;
+  }
+}
+
+.btn {
+  display: block;
+  text-align: center;
+}
+
+.btn-success {
+  height: ($spacing-unit * 9) + 3;
+  @include font-size(14px);
+  font-weight: $font-weight-semiBold;
+  box-shadow: none;
+  color: $colour-white;
+  background-color: $ux-green;
+  border-color: $ux-green;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.disabled {
+  color: $colour-disable-button;
+  border-color: $bg-cart-item-add-reference-mobile;
+  background-color: $bg-cart-item-add-reference-mobile;
+  border-radius: ($spacing-unit - 1);
+  height: ($spacing-unit * 9) + 3;
+  @include font-size(13px);
+  font-weight: $font-weight-semiBold;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.input-success {
+  border: 1px solid $border-correct-input-green;
+}
+
+.subscriber-success-input {
+  position: relative;
+}
+
+.text-right {
+  padding: (($spacing-unit * 2) + 2) 0;
+
+  @include desktop {
+    padding: 0;
+  }
+}
+
+.success-check {
+  position: absolute;
+  top: ($spacing-unit + 1);
+  right: ($spacing-unit * 2) - 1;
+  color: $icon-green;
+  width: 18px;
+  height: 14px;
+}

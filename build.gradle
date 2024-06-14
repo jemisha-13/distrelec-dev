@@ -1,0 +1,492 @@
+import com.google.common.base.Charsets
+import org.apache.tools.ant.filters.ReplaceTokens
+import com.github.eerohele.SaxonXsltTask;
+
+buildscript {
+    repositories {
+        jcenter{ url "https://jcenter.bintray.com/" }
+        maven {
+          url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'com.google.guava:guava:20.0'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
+        classpath "gradle.plugin.com.github.eerohele:saxon-gradle:0.7.0"
+    }
+}
+
+// include namics hybris standard tasks
+apply from: 'build/namics-hybris-build/namics.gradle'
+apply from: 'build/namics-hybris-build/hybris.gradle'
+
+apply from: 'build/namics-hybris-build/staticfiles.gradle'
+apply from: 'build/namics-hybris-build/tomcat.gradle'
+apply from: 'build/namics-hybris-build/redirect.gradle'
+
+apply plugin: "org.sonarqube"
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "distrelec_hybris_" + project.branchName
+        property "sonar.projectName", "Distrelec Hybris " + project.branchName
+        property "sonar.projectDescription", "Distrelec Hybris " + project.branchName
+        property "sonar.projectBaseDir", "${projectDir}/core-customize/hybris/bin/custom"
+        property "sonar.sources", "src"
+        property "sonar.tests", "testsrc"
+        property "sonar.java.binaries", "classes"
+        property "sonar.java.test.binaries", "classes"
+        property "sonar.sources", "src"
+        property "sonar.working.directory", "sonar"
+        property "sonar.scm.provider", "git"
+        property "sonar.scm.disabled", "true"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.junit.reportsPath", "${projectDir}/core-customize/hybris/log/junit"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${projectDir}/core-customize/hybris/log/jacocoTestReport.xml"
+        property "sonar.modules", "distrelecB2Bbackoffice,distrelecB2Bcore,distrelecB2Bfacades,distrelecB2Bfulfilmentprocess,distrelecB2BOCC,distrelecB2BOCCweb,distrelecB2Btest,distreleccmsfacades,distrelecfactfindersearch,distrelecfusionintegration,distrelecoci,distrelecwebexports,distrelecwebpimmedias"
+        property "sonar.exclusions", "**/adobe/datalayer/data/**"
+        property "distrelecB2BOCC.sonar.projectBaseDir", "${projectDir}/core-customize/hybris/bin/custom/distrelecB2BOCC/distrelecB2BOCC"
+        property "distrelecB2BOCCweb.sonar.projectBaseDir", "${projectDir}/core-customize/hybris/bin/custom/distrelecB2BOCC/distrelecB2BOCC"
+        property "distrelecB2BOCCweb.sonar.sources", "web/src"
+        property "distrelecB2BOCCweb.sonar.tests", "web/testsrc"
+        property "distrelecB2BOCCweb.sonar.java.binaries", "web/webroot/WEB-INF/classes"
+        property "distrelecB2BOCCweb.sonar.java.test.binaries", "web/testclasses"
+        property "distrelecB2Bstorefront.sonar.sources", "web/src"
+        property "distrelecB2Bstorefront.sonar.tests", "web/testsrc"
+        property "distrelecB2Bstorefront.sonar.java.binaries", "web/webroot/WEB-INF/classes"
+        property "distrelecB2Bstorefront.sonar.java.test.binaries", "web/testclasses"
+        property "distreleccmsfacades.sonar.projectBaseDir", "${projectDir}/core-customize/hybris/bin/custom/distrelecB2BOCC/distreleccmsfacades"
+    }
+}
+
+// build backend (run hybris ant build)
+task build_be {
+
+    description 'Performs BE build'
+    group 'Distrelec'
+
+    doLast {
+        println "build BE done"
+    }
+}
+build_be.dependsOn hybris_all
+
+// build project (FE & BE)
+task build {
+
+    description 'Performs BE & FE build'
+    group 'Distrelec'
+
+    doLast {
+        println "build done"
+    }
+}
+
+// clean project (FE & BE)
+task clean {
+
+    description 'Clean BE & FE build'
+    group 'Distrelec'
+
+    doLast {
+        println "clean done"
+    }
+}
+clean.dependsOn hybris_clean
+
+task prepare_env {
+
+    description 'Copy environment/env-development-template content into environment/env-development'
+    group 'Distrelec'
+
+    doLast {
+        copy {
+            def destination = project.file('environment/env-development')
+            from 'environment/env-development-template'
+            into destination
+            eachFile {
+                if (it.getRelativePath().getFile(destination).exists()) {
+                    it.exclude()
+                }
+            }
+        }
+    }
+}
+
+task install_githook {
+
+    description 'Copy githooks'
+    group 'Distrelec'
+
+    doLast {
+        copy {
+            from 'githooks'
+            into '.git/hooks'
+        }
+    }
+}
+
+// configure project from environment [usage: configure -Penv=env-development]
+task configure {
+
+    description 'Configure project from environment [usage: configure -Penv=env-development]'
+    group 'Distrelec'
+
+    doLast {
+        copy {
+            def destination = project.file('js-storefront/distrelecStore/src/environments')
+            from ('environment/env-development/js-storefront') {
+                include '*.template.*'
+            }
+            rename { String fileName ->
+              fileName.replace('.template','')
+            }
+            into destination
+            eachFile {
+                if (it.getRelativePath().getFile(destination).exists()) {
+                    it.exclude()
+                }
+            }
+        }
+        copy {
+            from ('environment/env-development/js-storefront') {
+                exclude '*.template.*'
+            }
+            into ('js-storefront')
+        }
+        println "configure done"
+    }
+}
+configure.dependsOn prepare_env, configure_env, hybris_customize, install_githook
+configure_env.mustRunAfter prepare_env
+
+// append deployment key to config file
+
+def addDeploymentUniqieKey(int key, String cfgFileName){
+    def cfg_deploy_key = "deployment.uniqueKey"
+    def cfgFile = new File(cfgFileName)
+    cfgFile.append(cfg_deploy_key+"="+key+"\n")
+}
+
+task check_version {
+    doLast {
+        if (project.getVersion() == null || "".equals(project.getVersion()) || Project.DEFAULT_VERSION.equals(project.getVersion())) {
+            throw new GradleException('Usage: gradle build_deploymentunit -Pversion=v1.2.3')
+        }
+    }
+}
+
+task p_build_deploymentunit {
+    description 'Build deployment unit and configuration of version $version for dev, dev2, stage & prod'
+}
+
+task build_deploymentunit {
+    doLast {
+        println "Building deployment unit"
+    }
+}
+
+/**
+ * Build the deployment unit without having any dependencies
+ */
+task build_deploymentunit_pipeline {
+
+    description 'Build deployment unit and configuration of version $version for dev, dev2, stage & prod'
+    group 'Distrelec'
+
+    doLast {
+
+        // create a 6 digit random number for deployment
+        def random = new Random()
+        def randomInt = random.nextInt(100000) + 100000
+
+        // configure dev
+        env_config_dir = env_config_dir_dev
+        configure_copy_dest_hybris = "\"hybris/config\";\"$env_config_dir_dev\""
+        hybris_config_file = env_config_dir_dev + "/customer.app.properties"
+
+        def env_list = getEnvironments("env-hc-dev", true)
+        configure_copy(env_list)
+        configure_deployment_merge(env_list, env_config_dir, false)
+        addDeploymentUniqieKey(randomInt, hybris_config_file)
+
+        // configure aws dev hyupg
+        env_config_dir = env_config_dir_aws_dev_hyupg
+        configure_copy_dest_hybris = "\"hybris/config\";\"$env_config_dir\""
+        hybris_config_file = env_config_dir + "/customer.properties"
+
+        env_list = getEnvironments("env-aws-dev-hyupg", true)
+        configure_copy(env_list)
+        configure_deployment_merge(env_list, env_config_dir, false)
+        addDeploymentUniqieKey(randomInt, hybris_config_file)
+
+        // configure stage
+        env_config_dir = env_config_dir_stag
+        configure_copy_dest_hybris = "\"hybris/config\";\"$env_config_dir_stag\""
+        hybris_config_file = env_config_dir_stag + "/customer.app.properties"
+
+        env_list = getEnvironments("env-hc-stag", true)
+        configure_copy(env_list)
+        configure_deployment_merge(env_list, env_config_dir, false)
+        addDeploymentUniqieKey(randomInt, hybris_config_file)
+
+        // configure poc hana
+        env_config_dir = env_config_dir_poc_hana
+        configure_copy_dest_hybris = "\"hybris/config\";\"$env_config_dir_poc_hana\""
+        hybris_config_file = env_config_dir_poc_hana + "/customer.app.properties"
+
+        env_list = getEnvironments("env-hc-poc-hana", true)
+        configure_copy(env_list)
+        configure_deployment_merge(env_list, env_config_dir, false)
+        addDeploymentUniqieKey(randomInt, hybris_config_file)
+
+        // configure prod
+        env_config_dir = env_config_dir_prod
+        configure_copy_dest_hybris = "\"hybris/config\";\"$env_config_dir_prod\""
+        hybris_config_file = env_config_dir_prod + "/customer.app.properties"
+
+        env_list = getEnvironments("env-hc-prod", true)
+        configure_copy(env_list)
+        configure_deployment_merge(env_list, env_config_dir, false)
+        addDeploymentUniqieKey(randomInt, hybris_config_file)
+
+
+        // Creating the folder and the zip
+
+        def versionFolder = env_deployment_dir + "/" + env_package_cid + "-" + env_package_pid + "_" + project.version
+        def target_hybris_folder_path = versionFolder + "/hybris"
+        def target_hybris_bin_folder_path = target_hybris_folder_path + "/bin"
+        def target_hybris_config_folder_path = target_hybris_folder_path + "/config"
+
+        // Create the required folders
+        def binFolder = new File(target_hybris_bin_folder_path)
+        binFolder.mkdirs()
+        def configFolder = new File(target_hybris_config_folder_path)
+        configFolder.mkdirs()
+
+        copy {
+            from "${env_hybris_server}"
+            into "${target_hybris_bin_folder_path}"
+            include 'hybrisServer-AllExtensions.zip'
+            include 'hybrisServer-Platform.zip'
+        }
+
+        copy {
+            from "${env_hybris_server}/config"
+            into "${target_hybris_config_folder_path}"
+        }
+    }
+}
+
+/**
+ * Generate the properties files for CCv2.
+ */
+task generateCCv2PropertiesFiles() {
+    doLast {
+
+        // configure common
+        def env_list = getEnvironments("env-hc-common", true)
+        def cfgFile = "local-common.properties"
+        configure_deployment_merge(env_list, env_config_ccv2_folder, true, cfgFile)
+
+        // configure dev
+        env_list = getEnvironments("env-hc-dev", false)
+        cfgFile = "local-dev.properties"
+        configure_deployment_merge(env_list, env_config_ccv2_folder, true, cfgFile)
+
+        // configure stag
+        env_list = getEnvironments("env-hc-stag", false)
+        cfgFile = "local-stag.properties"
+        configure_deployment_merge(env_list, env_config_ccv2_folder, true, cfgFile)
+
+        // configure prod
+        env_list = getEnvironments("env-hc-prod", false)
+        cfgFile = "local-prod.properties"
+        configure_deployment_merge(env_list, env_config_ccv2_folder, true, cfgFile)
+    }
+}
+
+
+/**
+ * Generate the metadata.properties file which will be included in the Zip file
+ */
+task generate_metadata() {
+    doLast {
+        // Create the metadata.properties file
+        def metadata_properties = new Properties()
+        metadata_properties.setProperty("package_version", "2.3")
+        metadata_properties.setProperty("pre-production-env", pre_production_env)
+        metadata_properties.setProperty("datahub_deploy", datahub_deploy)
+        metadata_properties.setProperty("datahub_infra", datahub_infra)
+
+        metadata_properties.store(new File(env_deployment_dir + "/" + env_package_cid + "-" + env_package_pid + "_" + project.version + "/metadata.properties").newWriter(), null)
+    }
+}
+
+/**
+ * Create the deployment package Zip file
+ */
+task createZip(type:Zip) {
+    def versionFolderName = env_package_cid + "-" + env_package_pid + "_" + project.version
+    def versionFolder = env_deployment_dir + "/" + versionFolderName
+
+    from "${versionFolder}"
+    into "${versionFolderName}"
+    baseName "${versionFolderName}"
+    destinationDir = file(env_deployment_dir)
+}
+
+def zipPrefix = env_package_cid + "-" + env_package_pid + "_" + project.version
+def zipArchiveName = zipPrefix + ".zip"
+def zipMd5Name = zipPrefix + ".md5"
+
+/**
+ * Create the md5 checksum file for the deployment package.
+ */
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files
+
+task createZipChecksum(dependsOn:createZip) {
+    doLast {
+        def input = file("${env_deployment_dir}/${zipArchiveName}")
+        def output = file("${env_deployment_dir}/${zipMd5Name}")
+
+        def hashCode = Files.asByteSource(input).hash(Hashing.md5())
+        def result = hashCode.toString() + "  " + zipArchiveName + System.lineSeparator()
+        Files.write(result, output, Charsets.UTF_8);
+    }
+}
+
+task archiveHybris() {
+    doLast {
+        println "Creating the archive"
+    }
+}
+
+task archiveHybrisPipeline(dependsOn:createZipChecksum) {
+}
+
+task expandConfig() {
+  doLast {
+    // Copy files replacing tokens with env vars
+    copy {
+      from ('environment/' + project.env) {
+       include '**/*.properties'
+       include '**/*.xml'
+       filter(ReplaceTokens, tokens: System.env)
+      }
+      rename { String fileName ->
+        fileName = fileName + '.expanded'
+      }
+      into 'environment/' + project.env
+      eachFile { println "Expanding file : " + it.file }
+    }
+
+    // Copy back to real file names
+    copy {
+      from ('environment/' + project.env) {
+       include '**/*.expanded'
+      }
+      rename { String fileName ->
+        fileName.replace('.expanded','')
+      }
+      into 'environment/' + project.env
+      eachFile { println "Renaming expanded file : " + it.file }
+    }
+
+
+    // Tidy temporary expanded files
+    delete fileTree('environment/' + project.env) {
+      include '**/*.expanded'
+    }
+  }
+}
+
+task copySmarteditCompiledJs {
+    description "Copy compiled smartedit js to customize folder"
+    group "Distrelec"
+
+    doLast {
+
+        def npmancillaryModulesDir = file(npmancillary_folder)
+        if (npmancillaryModulesDir.exists()) {
+            println("copy compiled smartedit js to customize folder")
+
+            String[] smarteditJsFolders = smartedit_js_folders.split(",")
+            for (String smarteditJsFolder : smarteditJsFolders) {
+                copy {
+                    from ("core-customize/hybris/bin/" + smarteditJsFolder) {
+                        include '*.css'
+                        include '*.js'
+                    }
+                    into repo_customize_dir + "/" +smarteditJsFolder
+                }
+            }
+        } else {
+            println("npm is not installed. do not copy compiled smartedit js to customize folder")
+        }
+    }
+}
+copySmarteditCompiledJs.mustRunAfter hybris_build
+
+task npmuninstallNpmancillary {
+    description 'Delete node_modules directory from npmancillary extension'
+    group 'Distrelec'
+
+    doLast {
+        println("Uninstalling npmacillary node modules")
+        def npmancillaryModulesDir = file(npmancillary_folder)
+        npmancillaryModulesDir.deleteDir()
+        println("npmacillary node modules removed")
+    }
+}
+
+task npmuninstallStorefront {
+    description 'Delete node_modules directory from distrelecB2Bstorefront extension'
+    group 'Distrelec'
+
+    doLast {
+        println("Uninstalling Storefront node modules")
+        def storefrontModulesDir = file("hybris/bin/custom/distrelecB2Bstorefront/node_modules")
+        storefrontModulesDir.deleteDir()
+        println("Storefront node modules removed")
+    }
+}
+
+task npmuninstall() {
+    description 'Delete node_modules directory from distrelecB2Bstorefront and npmancillary extensions'
+    group 'Distrelec'
+
+    doLast {
+        println("Uninstalled all node modules")
+    }
+}
+
+npmuninstall.dependsOn npmuninstallNpmancillary,npmuninstallStorefront
+
+/** For Production Use **/
+// build_deploymentunit.dependsOn check_version, checkout_tag, hybris_clean, build, build_fe_prod , hybris_production, p_build_deploymentunit, generate_metadata
+//checkout_tag.mustRunAfter check_version
+//hybris_clean.mustRunAfter checkout_tag
+//build.mustRunAfter hybris_clean
+//build_fe_prod.mustRunAfter build
+//hybris_production.mustRunAfter build_fe_prod
+/** End of Production Use */
+
+/** For Local Test Use **/
+build_deploymentunit.dependsOn check_version, hybris_clean, hybris_npminstall, build, hybris_production, p_build_deploymentunit, generate_metadata
+//checkout_tag.mustRunAfter check_version
+//hybris_clean.mustRunAfter checkout_tag
+build.mustRunAfter hybris_clean
+build.dependsOn build_be, generateCCv2PropertiesFiles, copySmarteditCompiledJs
+hybris_build.mustRunAfter hybris_npminstall
+hybris_production.dependsOn hybris_npminstall
+/** End of Local Test Use */
+
+p_build_deploymentunit.dependsOn build_deploymentunit_pipeline
+p_build_deploymentunit.mustRunAfter hybris_production
+generate_metadata.mustRunAfter build_deploymentunit_pipeline
+build_deploymentunit_pipeline.mustRunAfter hybris_production
+
+archiveHybris.dependsOn build_deploymentunit, archiveHybrisPipeline
+archiveHybrisPipeline.mustRunAfter build_deploymentunit

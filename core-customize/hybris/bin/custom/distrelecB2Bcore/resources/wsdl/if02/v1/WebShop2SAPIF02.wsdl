@@ -1,0 +1,203 @@
+<wsdl:definitions
+	xmlns:p2="http://www.distrelec.com/hybris"
+	xmlns:p1="http://www.distrelec.com/hybris/IF02"
+	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	name="SI_IF02_PricesTotals_out"
+	targetNamespace="http://www.distrelec.com/hybris/IF02">
+	<wsdl:documentation />
+	<wsp:UsingPolicy wsdl:required="true" />
+	<wsp:Policy wsu:Id="OP_IF02_Prices_Totals" />
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			xmlns="http://www.distrelec.com/hybris"
+			targetNamespace="http://www.distrelec.com/hybris">
+			<xsd:element name="FaultMessage" type="FaultMessage" />
+			<xsd:element name="PricesTotalsResponse"
+				type="PricesTotalsResponse" />
+			<xsd:element name="PricesTotals"
+				type="PricesTotalsRequest" />
+			<xsd:simpleType name="FaultUrl">
+				<xsd:annotation>
+					<xsd:documentation>URL to the long text of this message
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="Severity">
+				<xsd:annotation>
+					<xsd:documentation>URL to the long text of this message
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="1" />
+					<xsd:enumeration value="A">
+						<xsd:annotation>
+							<xsd:documentation>Abend - error</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="E">
+						<xsd:annotation>
+							<xsd:documentation>Error</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="W">
+						<xsd:annotation>
+							<xsd:documentation>Warning</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="FaultName">
+				<xsd:annotation>
+					<xsd:documentation>Fault message name</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="75" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="Id">
+				<xsd:annotation>
+					<xsd:documentation>
+						Connection from work area and message number (for example, “XY(007)”).
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="Url">
+				<xsd:annotation>
+					<xsd:documentation>URL to the T100 long text (if available).
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="FaultId">
+				<xsd:annotation>
+					<xsd:documentation>Fault message ID</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="9" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="Text">
+				<xsd:annotation>
+					<xsd:documentation>
+						Formatted T100 message text (in the language in which the service was
+						executed)
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="FaultText">
+				<xsd:annotation>
+					<xsd:documentation>Fault message text</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="200" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="File">
+				<xsd:sequence>
+					<xsd:element name="FileName" type="xsd:string" />
+					<xsd:element name="Records" type="xsd:integer" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="FaultDetail">
+				<xsd:sequence>
+					<xsd:element name="severity" type="Severity" />
+					<xsd:element name="text" type="Text" />
+					<xsd:element name="url" type="Url" />
+					<xsd:element name="id" type="Id" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="PricesTotalsRequest">
+				<xsd:sequence>
+					<xsd:element name="File" type="File" minOccurs="0" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="FaultMessage">
+				<xsd:sequence>
+					<xsd:element name="faultId" type="FaultId" />
+					<xsd:element name="faultName" type="FaultName" />
+					<xsd:element name="faultText" type="FaultText" />
+					<xsd:element name="faultUrl" type="FaultUrl"
+						minOccurs="0" />
+					<xsd:element name="faultDetail" type="FaultDetail"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="PricesTotalsResponse">
+				<xsd:sequence>
+					<xsd:element name="Response" type="xsd:string"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="p2.PricesTotals">
+		<wsdl:documentation />
+		<wsdl:part name="PricesTotals" element="p2:PricesTotals" />
+	</wsdl:message>
+	<wsdl:message name="p2.PricesTotalsResponse">
+		<wsdl:documentation />
+		<wsdl:part name="PricesTotalsResponse"
+			element="p2:PricesTotalsResponse" />
+	</wsdl:message>
+	<wsdl:message name="p2.FaultMessage">
+		<wsdl:documentation />
+		<wsdl:part name="FaultMessage" element="p2:FaultMessage" />
+	</wsdl:message>
+	<wsdl:portType name="SI_IF02_PricesTotals_out">
+		<wsdl:documentation />
+		<wsdl:operation name="IF02_Prices_Totals">
+			<wsdl:documentation />
+			<wsp:Policy>
+				<wsp:PolicyReference
+					URI="#OP_IF02_Prices_Totals" />
+			</wsp:Policy>
+			<wsdl:input message="p1:p2.PricesTotals" />
+			<wsdl:output message="p1:p2.PricesTotalsResponse" />
+			<wsdl:fault name="p2.FaultMessage"
+				message="p1:p2.FaultMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="SI_IF02_PricesTotals_outBinding"
+		type="p1:SI_IF02_PricesTotals_out">
+		<soap:binding
+			xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="IF02_Prices_Totals">
+			<soap:operation
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+				soapAction="http://sap.com/xi/WebService/soap1.1" />
+			<wsdl:input>
+				<soap:body
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="p2.FaultMessage">
+				<soap:fault
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"
+					name="p2.FaultMessage" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="SI_IF02_PricesTotals_outService">
+		<wsdl:port name="HTTP_Port"
+			binding="p1:SI_IF02_PricesTotals_outBinding">
+			<soap:address
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+				location="http://piqdisap.dat.datwyler.biz:52000/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=WSQ&amp;receiverParty=&amp;receiverService=&amp;interface=SI_IF02_PricesTotals_out&amp;interfaceNamespace=http%3A%2F%2Fwww.distrelec.com%2Fhybris%2FIF02" />
+		</wsdl:port>
+		<wsdl:port name="HTTPS_Port"
+			binding="p1:SI_IF02_PricesTotals_outBinding">
+			<soap:address
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+				location="https://piqdisap.dat.datwyler.biz:52001/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=WSQ&amp;receiverParty=&amp;receiverService=&amp;interface=SI_IF02_PricesTotals_out&amp;interfaceNamespace=http%3A%2F%2Fwww.distrelec.com%2Fhybris%2FIF02" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

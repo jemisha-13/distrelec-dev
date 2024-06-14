@@ -1,0 +1,51 @@
+$productCatalog=distrelecProductCatalog
+$catalogVersions=catalogVersions(catalog(id), version);
+$solrIndexedTypeClassificationAttribute=classificationAttributeAssignmentType
+
+$fullClassificationAttributeJob=full-ClassificationAttributeAssignment-Fusion
+
+INSERT_UPDATE SolrIndexedType;identifier[unique=true]                 ;type(code)               ;indexName
+                             ;$solrIndexedTypeClassificationAttribute ;ClassAttributeAssignment ;classattributeassignment
+
+INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[unique=true];type(code);sortableType(code);currency[default=false];localized[default=false];multiValue[default=false];fieldValueProvider                                 ;valueProviderParameter                 ;ftsPhraseQuery[default=false];ftsPhraseQueryBoost;ftsQuery[default=false];ftsQueryBoost;ftsFuzzyQuery[default=false];ftsFuzzyQueryBoost;ftsWildcardQuery[default=false];ftsWildcardQueryType(code)[default=POSTFIX];ftsWildcardQueryBoost;ftsWildcardQueryMinTermLength
+                                 ;$solrIndexedTypeClassificationAttribute ;code             ;string    ;                  ;                       ;                        ;                         ;distClassAttributeAssignmentValueResolver          ;                                       ;                             ;                   ;                       ;             ;                            ;                  ;                               ;                                           ;
+                                 ;$solrIndexedTypeClassificationAttribute ;name             ;string    ;                  ;                       ;true                    ;                         ;springELValueProvider                              ;classificationAttribute.getName(#lang) ;                             ;                   ;                       ;             ;                            ;                  ;                               ;                                           ;                     ;
+                                 ;$solrIndexedTypeClassificationAttribute ;unit             ;string    ;                  ;                       ;                        ;                         ;distClassAttributeAssignmentUnitValueResolver      ;                                       ;                             ;                   ;                       ;             ;                            ;                  ;                               ;                                           ;
+                                 ;$solrIndexedTypeClassificationAttribute ;fieldType        ;string    ;                  ;                       ;                        ;                         ;distClassAttributeAssignmentFieldTypeValueResolver ;                                       ;                             ;                   ;                       ;             ;                            ;                  ;                               ;                                           ;
+
+INSERT_UPDATE SolrIndexerQuery;solrIndexedType(identifier)[unique=true];identifier[unique=true]                     ;type(code);injectCurrentDate[default=false];injectCurrentTime[default=false];injectLastIndexTime[default=false];query;user(uid) ;parameterProvider
+                              ;$solrIndexedTypeClassificationAttribute ;classificationAttributeAssignment-fullQuery ;full      ;                                ;                                ;false                             ;"
+SELECT min({caa.pk})
+ FROM {ClassAttributeAssignment AS caa
+     JOIN ClassificationAttribute AS ca ON {caa.classificationAttribute} = {ca.pk}
+	 LEFT JOIN ClassificationAttributeUnit AS cau ON {caa.unit} = {cau.pk}
+     LEFT JOIN ClassificationAttributeUnit AS cabu ON {cau.unitType} = {cabu.unitType} AND {cabu.conversionfactor} = 1
+ }
+ GROUP BY {ca.code}
+"    ;anonymous ;
+
+INSERT_UPDATE SolrFacetSearchConfig;name[unique=true]                                      ;description                   ;indexNamePrefix         ;languages(isocode)                                 ;currencies(isocode);solrServerConfig(name);solrSearchConfig(description);solrIndexConfig(name);solrIndexedTypes(identifier)            ;enabledLanguageFallbackMechanism;$catalogVersions
+                                   ;distClassificationAttributeAssignmentFacetSearchConfig ;index for pimwebuse-meta-data ;classificationAttribute ;sv,en,de,fr,it,cs,da,fi,et,lv,nl,no,pl,ro,sk,hu,lt ;                   ;fusionServerConfig    ;Default                      ;Default              ;$solrIndexedTypeClassificationAttribute ;true                            ;$productCatalog:Online
+
+INSERT_UPDATE SolrIndexerCronJob;code[unique=true]               ;job(code)      ;singleExecutable;sessionLanguage(isocode);active;facetSearchConfig(name)                                ;indexerOperation(code);cmsSites(uid);sessionUser(uid)[default=techUserFusion]
+                                ;$fullClassificationAttributeJob ;solrIndexerJob ;false           ;en                      ;true  ;distClassificationAttributeAssignmentFacetSearchConfig ;full                  ;             ;
+
+# every night at 1 AM -> expression is 23 since +2 hours is added on environment
+INSERT_UPDATE Trigger;code[unique=true]                      ;cronJob(code)                   ;cronExpression ;active
+                     ;$fullClassificationAttributeJobTrigger ;$fullClassificationAttributeJob ;0 0 23 * * ? * ;false
+
+UPDATE ClassificationAttributeUnit;code[unique=true];excludedForUnitConversion[default=true];excludedForFusionFacetConversion[default=true];
+                                  ;unece.units.hrs
+                                  ;unece.unit.MON   ;false
+                                  ;unece.unit.DAY   ;false
+                                  ;unece.unit.ANN   ;false
+                                  ;unece.unit.ANNN
+                                  ;unece.unit.milOhm
+                                  ;uOhm
+                                  ;unece.unit.ohm.text
+                                  ;unece.unit.GOhm
+                                  ;unece.unit.kOhm
+                                  ;unit.k
+                                  ;unece.unit.MOhm
+                                  ;unece.unit.TOhm
+                                  ;unece.unit.D83

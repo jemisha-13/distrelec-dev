@@ -1,0 +1,148 @@
+<form class="checkout-delivery" [formGroup]="billingForm">
+  <div class="ch__component">
+    <div class="ch__component__title">
+      <h2 class="pr-0" id="checkout.delivery_options">{{ 'checkout.delivery_options' | cxTranslate }}</h2>
+    </div>
+
+    <div *ngIf="isStock0_ | async" class="ch__component__alert-message is-combine-items">
+      <fa-icon id="faCircleExclamation0Stock" [icon]="faCircleExclamation"></fa-icon>
+
+      <div class="ch__component__alert-message__content">
+        <span class="fw-sb" id="checkout.delivery.zero_stock_msg">
+          {{ 'checkout.delivery.zero_stock_msg' | cxTranslate }}
+        </span>
+
+        <div>
+          <button class="btn" id="combineStockBtn" (click)="onCombineStockClick()">
+            <fa-icon *ngIf="!billingForm.value.combineOutOfStock" id="faSquareCombine" [icon]="faSquare"></fa-icon>
+            <fa-icon
+              *ngIf="billingForm.value.combineOutOfStock"
+              id="faSquareCheckCombine"
+              [icon]="faSquareCheck"
+            ></fa-icon>
+            <span id="checkout.delivery.zero_stock_msg_select">
+              {{ 'checkout.delivery.zero_stock_msg_select' | cxTranslate }}
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="isBillingFormSaved_ | async as isBillingFormSaved">
+      <div class="ch__component__selections" [class.selections-disabled]="isSummaryLoading_ | async">
+        <ng-container *ngIf="deliveryModes_ | async as deliveryModes">
+          <ng-container *ngFor="let mode of deliveryModes.deliveryModes">
+            <app-delivery-mode
+              [mode]="mode"
+              [billingForm]="billingForm"
+              [activeSiteId]="activeSiteId"
+              [dateFormat]="dateFormat"
+              [setDeliveryAddressId_]="setDeliveryAddressId_"
+              [isDetailsFormSaved_]="isDetailsFormSaved_"
+              [products]="products"
+              [deliveryModesWarehouses]="deliveryModes.warehouses"
+              (isLoading)="deliveryOptLoading($event)"
+            ></app-delivery-mode>
+          </ng-container>
+        </ng-container>
+
+        <!-- LATER DELIVERY SELECTION -->
+        <!-- Display only is user is not a GUEST -->
+        <!-- Disabled if user selects express delivery-->
+        <div
+          *ngIf="isScheduleDisplayed"
+          class="ch__component__selections__item laterDelivery"
+          id="laterDeliveryBtn"
+          [class.selected]="billingForm.value.laterDelivery && !isLaterDeliveryDisabled(billingForm)"
+        >
+          <div
+            class="ch__component__selections__item--row laterDelivery"
+            [class.delivery-disabled]="isLaterDeliveryDisabled(billingForm)"
+          >
+            <button
+              class="btn laterDelivery__btn"
+              [disabled]="isLaterDeliveryDisabled(billingForm)"
+              (click)="onLaterDeliveryClick()"
+            ></button>
+
+            <div class="laterDelivery__icon">
+              <fa-icon
+                *ngIf="!billingForm.value.laterDelivery || isLaterDeliveryDisabled(billingForm)"
+                class="laterDelivery__icon__check"
+                id="faSquareLaterDelivery"
+                [icon]="faSquare"
+              ></fa-icon>
+              <fa-icon
+                *ngIf="!billingForm.value.laterDelivery || isLaterDeliveryDisabled(billingForm)"
+                class="laterDelivery__icon__check-hover"
+                id="faSquareLaterDeliveryHover"
+                [icon]="faSquare"
+              ></fa-icon>
+              <fa-icon
+                *ngIf="billingForm.value.laterDelivery && !isLaterDeliveryDisabled(billingForm)"
+                id="faSquareCheckLaterDelivery"
+                [icon]="faSquareCheck"
+                (click)="onLaterDeliveryClick()"
+              ></fa-icon>
+            </div>
+
+            <img
+              class="delivery-mode-icon is-later"
+              id="laterDeliveryIcon"
+              src="app/spartacus/assets/media/checkout/delivery/Later.svg"
+            />
+
+            <div class="ch__component__selections__item__content">
+              <span class="ch__component__selections__item__content--title" id="checkout.delivery.later_delivery">
+                {{ 'checkout.delivery.later_delivery' | cxTranslate }}
+              </span>
+
+              <ng-container *ngIf="!billingForm.value.selectedDate">
+                <span
+                  class="ch__component__selections__item__content--subtitle"
+                  id="checkout.delivery.select_later_delivery"
+                >
+                  {{ 'checkout.delivery.select_later_delivery' | cxTranslate }}
+                </span>
+              </ng-container>
+
+              <ng-container *ngIf="billingForm.value.selectedDate">
+                <span class="ch__component__selections__item__content--subtitle" id="selectedDeliveryDate">
+                  {{ billingForm.value.selectedDate | cxDate: 'EEEE' }}
+                  {{ billingForm.value.selectedDate | cxDate: 'd' }},
+                  {{ billingForm.value.selectedDate | cxDate: 'LLLL' }}
+                  {{ billingForm.value.selectedDate | cxDate: 'YYYY' }}.
+                  <button
+                    class="btn change-date-button"
+                    id="checkout.delivery.change_date"
+                    (click)="changeCalendarDate()"
+                  >
+                    {{ 'checkout.delivery.change_date' | cxTranslate }}
+                  </button>
+                </span>
+              </ng-container>
+            </div>
+          </div>
+
+          <ng-container
+            *ngIf="
+              billingForm.value.laterDelivery &&
+              !billingForm.value.selectedDate &&
+              !isLaterDeliveryDisabled(billingForm)
+            "
+          >
+            <app-checkout-calendar
+              [billingForm]="billingForm"
+              (isLoading)="deliveryOptLoading($event)"
+            ></app-checkout-calendar>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
+    <app-component-loading-spinner
+      *ngIf="isDeliveryOptLoading_ | async"
+      id="app-component-loading-spinner-deliverymode"
+    ></app-component-loading-spinner>
+  </div>
+</form>

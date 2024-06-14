@@ -1,0 +1,1 @@
+importScripts("https://elfadistrelec.pushengage.com/service-worker.js?ver=2.2.0");

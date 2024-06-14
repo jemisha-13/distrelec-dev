@@ -1,0 +1,194 @@
+@mod-lightbox-image-width: 760px;
+@mod-lightbox-image-padding-side: 30px;
+@mod-lightbox-image-hd-height: 85px;
+@mod-lightbox-image-bd-height: 495px;
+@mod-lightbox-image-box-height: 400px;
+@mod-lightbox-image-box-width: @mod-lightbox-image-width - @mod-lightbox-image-padding-side * 2;
+@mod-lightbox-image-image-offset-h: 50px; // adjusted offset by 10px to be consistent with magic360 initialized height
+@mod-lightbox-image-image-offset-v: 32px; // adjusted offset by 8px to be consistent with magic360 initialized height
+@mod-lightbox-image-innerbox-width: @mod-lightbox-image-box-width - @mod-lightbox-image-image-offset-h * 2;
+@mod-lightbox-image-innerbox-height: @mod-lightbox-image-box-height - @mod-lightbox-image-image-offset-v * 2;
+
+.mod-lightbox-image {
+	.modal {
+		#obj > .modal;
+
+		.hd {
+			height: @mod-lightbox-image-hd-height;
+		}
+
+		.bd {
+			padding: 10px @mod-lightbox-image-padding-side 0 @mod-lightbox-image-padding-side;
+			margin-bottom: 0px;
+
+			.title {
+			
+				width: 500px;
+				float: left;
+
+				& {
+					margin-bottom: 10px;
+				}
+
+				h2 {
+					font-size: 14px;
+					padding-top: 16px;
+					color: @c-grey20;
+				}
+
+				p {
+					font-size: 13px;
+					padding-bottom: 10px;
+					color: @c-grey20;
+				}
+			}
+			
+			.images-counter{
+				float: right;
+				padding-top: 16px;
+			}
+		}
+
+		& {
+			width: @mod-lightbox-image-width;
+			margin-left: -380px;
+		}
+
+		.box {
+			border: 1px solid @c-border;
+			height: @mod-lightbox-image-box-height;
+			background: @c-white;
+			position: relative;
+		}
+
+		.navi {
+			a {
+				position: absolute;
+				display: block;
+				cursor: pointer;
+				top: 0;
+				bottom: 0;
+
+				i {
+					margin-top: (@mod-lightbox-image-box-height / 2) - (46.5); // Half the size of the sprite icon
+				}
+			}
+
+			.next {
+				right: 0;
+				i {
+					.s-flaps-next-blue();
+				}
+
+				&:hover i,
+				&:focus i {
+					.s-flaps-next-grey();
+				}
+
+				&:active i, &.active i {
+					.s-flaps-next-grey();
+				}
+
+				&[disabled], &.disabled {
+					i {
+						.s-flaps-next-blue();
+					}
+				}
+				&:disabled {// keep this selector separate (unsupported pseudo class ie8)
+					i {
+						.s-flaps-next-blue();
+					}
+				}
+			}
+
+			.prev {
+				left: 0;
+				i {
+					.s-flaps-prev-blue();
+				}
+
+				&:hover i,
+				&:focus i {
+					.s-flaps-prev-grey();
+				}
+
+				&:active i, &.active i {
+					.s-flaps-prev-grey();
+				}
+
+				&[disabled], &.disabled {
+					i {
+						.s-flaps-prev-blue();
+					}
+				}
+				&:disabled {// keep this selector separate (unsupported pseudo class ie8)
+					i {
+						.s-flaps-prev-blue();
+					}
+				}
+			}
+		}
+
+		.image {
+			position: relative;
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+		}
+
+		.image-offset {
+			position: absolute;
+			top: @mod-lightbox-image-image-offset-v;
+			right: @mod-lightbox-image-image-offset-h;
+			bottom: @mod-lightbox-image-image-offset-v;
+			left: @mod-lightbox-image-image-offset-h;
+
+			.image {
+				width: @mod-lightbox-image-innerbox-width;
+				height: @mod-lightbox-image-innerbox-height;
+			}
+
+			img {
+				display: inline;
+				max-height: @mod-lightbox-image-innerbox-height;
+				max-width: @mod-lightbox-image-innerbox-width;
+			}
+		}
+		.lightbox-image-label {
+			position: absolute;
+			right: 0;
+			z-index: 9;
+			text-align: center;
+			font-size: 13px;
+			line-height: 18px;
+			color: @c-white;
+			padding: 20px 20px 0 10px;
+
+			.calibrationService {
+				background: transparent;
+				width: 122px;
+				margin-left: -4px;
+				margin-top: 4px;
+				padding: 0 15px;
+				white-space: nowrap;
+				line-height: 23px;
+
+				.iso{
+					background: @c-black;
+					color: @c-white;
+					width: 28px;
+					height: 26px;
+					float: left;
+					padding-top: 2px;
+				}
+				.calibrated{
+					background: @c-white;
+					color: @c-black;
+					border: 2px solid black;
+				}
+
+			}
+		}
+
+	}
+}

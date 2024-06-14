@@ -1,0 +1,116 @@
+@import 'global-utilities';
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.app-disruption-message {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  min-height: 53px;
+  max-height: 53px;
+  padding: $ux-spacing-unit * 4;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+  will-change: max-height;
+
+  .holder {
+    display: flex;
+    grid-template-rows: auto;
+    grid-template-columns: auto;
+    justify-content: center;
+    max-width: 856px;
+    font-weight: $font-weight-medium;
+    will-change: opacity;
+
+    @include typography-text-sm;
+
+    .hide {
+      &:not(.no-headline) {
+        position: absolute;
+        visibility: hidden;
+      }
+    }
+
+    .wrap {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .toggle {
+    @include typography-ui-sm;
+
+    font-weight: $font-weight-medium;
+    color: $ux-banner-link;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+  }
+
+  .fade-in {
+    animation: fade-in 0.5s ease-in-out;
+  }
+
+  .fade-out {
+    animation: fade-out 0.5s ease-in-out;
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+  }
+
+  .ghost {
+    position: absolute;
+    top: 0;
+    display: flex;
+    max-width: 856px;
+    padding: $ux-spacing-unit * 4;
+    margin-right: 32px;
+    font-weight: $font-weight-medium;
+    visibility: hidden;
+
+    @include typography-text-sm;
+
+    &--button {
+      line-height: 1;
+    }
+  }
+
+  .more {
+    flex-direction: column;
+  }
+
+  .less {
+    flex-direction: row;
+  }
+
+  .btn-close {
+    padding: 0;
+    line-height: 1;
+    background: 0;
+    border: 0;
+  }
+}

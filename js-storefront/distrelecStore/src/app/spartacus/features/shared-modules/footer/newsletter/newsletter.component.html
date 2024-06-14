@@ -1,0 +1,80 @@
+<ng-container *ngIf="isNewsletterEnabled$ | async">
+  <div class="footer-newsletter-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-10 col-lg-6 newsletter-content">
+          <div class="newsletter-content__holder">
+            <h3 class="newsletter-teaser" id="footerNewsletterHeaderTeaser">
+              {{ 'footer.newsletterSignup_title' | cxTranslate }}
+            </h3>
+            <span *rxIf="isMessageSuccess" class="success-message" id="footerNewsletterSuccessMessage">
+              {{ 'footer.newsletterSignup_form_success_text' | cxTranslate }}
+            </span>
+            <div *rxIf="!(isMessageSuccess | async)" class="row newsletter-content__form">
+              <div class="info-message" id="footerNewsletterInfoMessage">
+                {{ 'footer.newsletterSignup_form_subtitle' | cxTranslate }}
+              </div>
+              <form
+                class="newsletter-content__form__wrapper"
+                [formGroup]="subscribeForm"
+                (ngSubmit)="disableSubmitButton = true"
+              >
+                <div class="col-md-8 newsletter-content__form__wrapper--col">
+                  <div class="input-wrapper">
+                    <input
+                      id="newsletter_email"
+                      [class.is-invalid]="email.invalid"
+                      [placeholder]="'footer.newsletterSignup_form_email_placeholder' | cxTranslate"
+                      formControlName="email"
+                      type="email"
+                    />
+                    <app-input-tooltip-popup
+                      *ngIf="email.invalid && email.touched"
+                      [content]="'validations.email_error_invalid' | cxTranslate"
+                    ></app-input-tooltip-popup>
+                  </div>
+                </div>
+                <div class="col-md-4 newsletter-content__form__wrapper--col">
+                  <button
+                    *rxIf="!(isCaptchaDisabled_ | async)"
+                    class="btn-signup col-12"
+                    id="newsletter_signup_button"
+                    [disabled]="email.invalid || email.pristine"
+                    (click)="captchaRef.execute()"
+                    type="submit"
+                  >
+                    <fa-icon [icon]="faUser"></fa-icon>
+                    {{ 'footer.newsletterSignup_form_button_name' | cxTranslate }}
+                  </button>
+                  <button
+                    *rxIf="isCaptchaDisabled_"
+                    class="btn-signup col-12 disabled-captcha"
+                    id="newsletter_signup_button"
+                    [disabled]="email.invalid || email.pristine"
+                    (click)="onSubmit()"
+                    type="submit"
+                  >
+                    <fa-icon [icon]="faUser"></fa-icon>
+                    {{ 'footer.newsletterSignup_form_button_name' | cxTranslate }}
+                  </button>
+                  <re-captcha
+                    #captchaRef="reCaptcha"
+                    class="d-none"
+                    (resolved)="$event && onSubmit($event)"
+                    size="invisible"
+                  ></re-captcha>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-marketing-consent-notification-popup
+    *rxIf="showConfirmModal"
+    [confirmEmail]="this.subscribeForm.value.email"
+    [showAfterNavigation]="false"
+    (modalClosed)="onModalClose()"
+  ></app-marketing-consent-notification-popup>
+</ng-container>

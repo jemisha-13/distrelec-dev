@@ -1,0 +1,137 @@
+<ng-container *ngIf="cartData_ | async as cartData">
+  <div class="checkout-billing">
+    <div class="container">
+      <div class="row">
+        <div *ngIf="errorMessage_ | async as error" class="col-xl-10 offset-xl-1">
+          <div class="error">
+            <div class="inner">
+              <div class="center">
+                <p class="text" class="cart-holder__error" id="checkout.errorMessage">
+                  {{ error | cxTranslate }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="successMessage_ | async as successMessage" class="col-10 offset-xl-1">
+          <div class="success">
+            <div class="inner">
+              <div class="center">
+                <p class="text" class="cart-holder__success" id="cart.voucher_success">
+                  {{ successMessage | cxTranslate }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="showDoubleOptInInfoEmail" class="col-10 offset-xl-1">
+          <div class="ch__component__info-message">
+            <fa-icon [icon]="faCircleExclamation"></fa-icon>
+            <p class="ch__component__info-message__content" id="doubleOptInfoMessage">
+              {{ 'account.preferences.updated.below' | cxTranslate }}
+              <a [href]="'mailto:' + showDoubleOptInInfoEmail">{{ showDoubleOptInInfoEmail }}</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-7 col-xl-6 offset-xl-1">
+          <ng-container *ngIf="billingForm?.get('delivery')">
+            <app-checkout-delivery
+              [products]="cartData.entries"
+              [activeSiteId]="activeSiteId"
+              [billingForm]="billingForm"
+              [isBillingFormSaved_]="isBillingFormSaved_"
+              [isDetailsFormSaved_]="isDetailsFormSaved_"
+              [dateFormat]="dateFormat"
+              [setDeliveryAddressId_]="setDeliveryAddressId_"
+            ></app-checkout-delivery>
+          </ng-container>
+
+          <ng-container *ngIf="pickupData_ | async as pickupData">
+            <div *ngIf="isPickUpDelivery() && pickupData[0]?.name" class="ch__component">
+              <div class="ch__component__title">
+                <h2 id="checkout.delivery.pickup_title">{{ 'checkout.delivery.pickup_title' | cxTranslate }}</h2>
+                <!-- DISPLAY INFORMATION BLOCK -->
+                <div class="ch__component__details">
+                  <span id="pickUpPlaceeOfName">
+                    {{ pickupData[0].name }}
+                  </span>
+                  <span id="pickUpStreetNameNumber">
+                    {{ pickupData[0].streetName }} {{ pickupData[0].streetNumber }}
+                  </span>
+                  <span id="pickUpPostalTown">{{ pickupData[0].postalCode }} {{ pickupData[0].town }},</span>
+                  <span id="pickUpPhone">
+                    {{ pickupData[0].phone }}
+                  </span>
+                  <span id="pickUpHours">
+                    {{ 'checkout.pickup_info' | cxTranslate }} {{ 'checkout.mon_fri' | cxTranslate }}
+                    {{ pickupData[0].openingsHourMoFr }}
+                    <ng-container *ngIf="pickupData[0].openingsHourSa">
+                      {{ 'checkout.sat' | cxTranslate }} {{ pickupData[0].openingsHourSa }}
+                    </ng-container>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="separator-simple separator-simple__mobile"></div>
+
+          <div class="ch__component">
+            <ng-container *ngIf="isBillingDetailsLoaded | async">
+              <app-billing-details
+                [activeSiteId]="activeSiteId"
+                [billingForm]="billingForm"
+                [isBillingFormSaved_]="isBillingFormSaved_"
+                [isDetailsFormSaved_]="isDetailsFormSaved_"
+                [isSavedAddressValid]="isSavedAddressValid"
+                [checkIfAllFieldsArePrefilled]="checkIfAllFieldsArePrefilled"
+                [setDeliveryAddressId_]="setDeliveryAddressId_"
+                [isInputOptional]="isInputOptional"
+                [updateDefaultFlagOnAddresses]="updateDefaultFlagOnAddresses"
+                [isExportShop]="isExportShop"
+              ></app-billing-details>
+            </ng-container>
+          </div>
+
+          <ng-container *ngIf="!isPickUpDelivery() || (isPickUpDelivery && isExportShop)">
+            <ng-container *ngIf="isBillingDetailsLoaded | async">
+              <app-delivery-details
+                [activeSiteId]="activeSiteId"
+                [billingForm]="billingForm"
+                [isBillingFormSaved_]="isBillingFormSaved_"
+                [isDetailsFormSaved_]="isDetailsFormSaved_"
+                [setDeliveryAddressId_]="setDeliveryAddressId_"
+                [isSavedAddressValid]="isSavedAddressValid"
+                [updateDefaultFlagOnAddresses]="updateDefaultFlagOnAddresses"
+                [checkIfAllFieldsArePrefilled]="checkIfAllFieldsArePrefilled"
+                [isInputOptional]="isInputOptional"
+              ></app-delivery-details>
+            </ng-container>
+          </ng-container>
+
+          <div class="separator-simple separator-simple__mobile"></div>
+        </div>
+
+        <ng-container *ngIf="billingForm?.get('delivery')">
+          <div class="col-lg-5 col-xl-4">
+            <app-order-summary
+              [billingForm]="billingForm"
+              [products]="cartData.entries"
+              [isBillingFormSaved_]="isBillingFormSaved_"
+              [isDetailsFormSaved_]="isDetailsFormSaved_"
+              [setDeliveryAddressId_]="setDeliveryAddressId_"
+            ></app-order-summary>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<app-skeleton-loader
+  [isSkeletonLoading]="(isBillingDetailsLoaded | async) === false || (isDeliveryDetailsLoaded | async) === false"
+  pageName="checkout-delivery"
+></app-skeleton-loader>

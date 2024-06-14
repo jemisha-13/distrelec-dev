@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:security="http://www.springframework.org/schema/security"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+	<security:http pattern="/_ui/**" security="none" />
+
+	<!-- Security config for checkout - it has its own login page -->
+	<security:http  disable-url-rewriting="true" pattern="/checkout/**" authentication-manager-ref="authenticationManager" entry-point-ref="loginCheckoutUrlAuthenticationEntryPoint">
+
+		<security:csrf request-matcher-ref="csrfMatcher"/>
+		<security:headers>
+			<!-- <security:frame-options policy="SAMEORIGIN" /> -->
+			<security:frame-options disabled="true" />
+		</security:headers>
+		
+		<security:anonymous username="anonymous" granted-authority="ROLE_ANONYMOUS" />
+
+		<!-- session stealing is prevented by using secure GUID cookie -->
+		<security:session-management session-fixation-protection="none" />
+
+		<!-- SSL / AUTHENTICATED pages -->
+		<security:intercept-url pattern="/checkout*" requires-channel="https" />
+		<security:intercept-url pattern="/checkout/**" requires-channel="https" />
+
+ 		<security:custom-filter ref="checkoutCaptchaAuthenticationFilter" position="FORM_LOGIN_FILTER" />
+				
+		<security:intercept-url pattern="/checkout/j_spring_security_check" requires-channel="any" />
+		<security:logout logout-url="/logout" success-handler-ref="logoutSuccessHandler" />
+
+		<security:remember-me services-ref="rememberMeServices" key="hybrisDistrelec" />
+
+		<security:port-mappings>
+			<security:port-mapping http="#{configurationService.configuration.getProperty('tomcat.http.port')}"
+				https="#{configurationService.configuration.getProperty('tomcat.ssl.port')}" />
+			<security:port-mapping http="80" https="443" />
+			<!--security:port-mapping http="#{configurationService.configuration.getProperty('proxy.http.port')}"
+				https="#{configurationService.configuration.getProperty('proxy.ssl.port')}" /-->
+		</security:port-mappings>
+
+		<security:request-cache ref="httpSessionRequestCache" />
+
+	</security:http>
+
+	<!-- OCI security config -->
+	<security:http disable-url-rewriting="true" pattern="/ociEntry/**" use-expressions="true"
+			authentication-manager-ref="ociAuthenticationManager" entry-point-ref="http403EntryPoint">
+	    <security:intercept-url pattern="/ociEntry*" access="hasRole('ROLE_OCICUSTOMERGROUP')" requires-channel="https" />
+	    <security:intercept-url pattern="/ociEntry/**" access="hasRole('ROLE_OCICUSTOMERGROUP')" requires-channel="https" />
+	    <security:custom-filter position="PRE_AUTH_FILTER" ref="ociAuthenticationFilter" />
+		<security:csrf disabled="true"/>
+		<security:headers>
+			<security:frame-options disabled="true" />
+		</security:headers>
+	</security:http>
+	
+	
+	<!-- CXML security config -->
+	<security:http disable-url-rewriting="true" pattern="/cxmlEntry/**" use-expressions="true"
+			authentication-manager-ref="cxmlAuthenticationManager" entry-point-ref="http403EntryPoint">
+	    <security:intercept-url pattern="/cxmlEntry*" access="hasRole('ROLE_CXMLCUSTOMERGROUP')" requires-channel="https" />
+	    <security:intercept-url pattern="/cxmlEntry/**" access="hasRole('ROLE_CXMLCUSTOMERGROUP')" requires-channel="https" />
+	    <security:custom-filter position="PRE_AUTH_FILTER" ref="cxmlAuthenticationFilter" />
+		<security:csrf disabled="true"/>
+		<security:headers>
+			<security:frame-options disabled="true" />
+		</security:headers>
+	</security:http>
+	
+	<!-- Ariba security config -->
+	<security:http disable-url-rewriting="true" pattern="/ariba/authenticate/**" use-expressions="true"
+			authentication-manager-ref="aribaAuthenticationManager" entry-point-ref="http403EntryPoint">
+		<security:intercept-url pattern="/ariba/authenticate*" access="hasRole('ROLE_ARIBACUSTOMERGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/ariba/authenticate/**" access="hasRole('ROLE_ARIBACUSTOMERGROUP')" requires-channel="https" />
+		<security:custom-filter position="PRE_AUTH_FILTER" ref="aribaAuthenticationFilter" />
+		<security:csrf disabled="true"/>
+		<security:headers>
+			<security:frame-options disabled="true" />
+		</security:headers>
+	</security:http>
+	<security:http disable-url-rewriting="true" pattern="/aribaSuccess/**" use-expressions="true"
+			authentication-manager-ref="aribaAuthenticationManager" entry-point-ref="http403EntryPoint">
+		<security:intercept-url pattern="/aribaSuccess*" access="hasRole('ROLE_ARIBACUSTOMERGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/aribaSuccess/**" access="hasRole('ROLE_ARIBACUSTOMERGROUP')" requires-channel="https" />
+		<security:custom-filter position="PRE_AUTH_FILTER" ref="aribaAuthenticationFilter" />
+		<security:csrf disabled="true"/>
+		<security:headers>
+			<security:frame-options disabled="true" />
+		</security:headers>
+	</security:http>
+	
+	<!-- Default security config -->
+	<security:http disable-url-rewriting="true" authentication-manager-ref="authenticationManager" use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">
+		<security:anonymous username="anonymous" granted-authority="ROLE_ANONYMOUS" />
+
+		<security:csrf request-matcher-ref="csrfMatcher"/>
+		<security:headers>
+			<security:frame-options disabled="true" />
+
+			<security:content-security-policy policy-directives="script-src * 'unsafe-eval' 'unsafe-inline'; script-src-elem * 'unsafe-eval' 'unsafe-inline'; style-src * 'unsafe-eval' 'unsafe-inline'; style-src-elem * 'unsafe-eval' 'unsafe-inline'; frame-src *; default-src 'self' 'unsafe-eval' 'unsafe-inline' distrelec-public.s3.eu-central-1.amazonaws.com bat.bing.com *.cloudflare.com *.demdex.net *.emjcd.com smetrics.distrelec.ch *.distrelec.com *.dynamicyield.com nexus.ensighten.com connect.facebook.net www.google.com www.google-analytics.com www.googleadservices.com www.googletagmanager.com static.hotjar.com *.pushengage.com *.rapidspike.com *.reevoo.com *.emjcd.com *.mczbf.com *.pen.thesmilingpencils.com *.eraser.thesmilingpencils.com *.gstatic.com *.snapeda.com *.perfdrive.com; font-src 'self' data:; frame-ancestors *; img-src * data:; media-src *"
+
+											  report-only="true"/>
+		</security:headers>
+		
+		<!-- session stealing is prevented by using secure GUID cookie -->
+		<security:session-management session-fixation-protection="none" />
+		
+		<!-- every mapping which needs authentication should be https -->
+
+		<!-- Q&L Certification Bulk download -->
+		<security:intercept-url pattern="/environmental-documentation-download*" access="hasRole('ROLE_QUALITYANDLEGAL')" requires-channel="https" />
+		<security:intercept-url pattern="/environmental-documentation-download/**" access="hasRole('ROLE_QUALITYANDLEGAL')" requires-channel="https" />
+
+		<!--  BOM -->
+		<security:intercept-url pattern="/import-tool*" access="!(hasRole('ROLE_OCICUSTOMERGROUP') or hasRole('ROLE_ARIBACUSTOMERGROUP'))" requires-channel="https" />
+        <security:intercept-url pattern="/import-tool/**" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !(hasRole('ROLE_OCICUSTOMERGROUP') or hasRole('ROLE_ARIBACUSTOMERGROUP'))" requires-channel="https" />
+        
+        <!--  BOM -->
+		<security:intercept-url pattern="/bom-tool*" access="!(hasRole('ROLE_OCICUSTOMERGROUP') or hasRole('ROLE_ARIBACUSTOMERGROUP'))" requires-channel="https" />
+        <security:intercept-url pattern="/bom-tool/**" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !(hasRole('ROLE_OCICUSTOMERGROUP') or hasRole('ROLE_ARIBACUSTOMERGROUP'))" requires-channel="https" />
+		<security:intercept-url pattern="/my-account/savedBomEntries" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !(hasRole('ROLE_OCICUSTOMERGROUP') or hasRole('ROLE_ARIBACUSTOMERGROUP'))" requires-channel="https"/>
+        
+		<!-- Ajax calls can be either secure or insecure --> 
+		<security:intercept-url pattern="/shopping/favorite/add*" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="any" />
+		<security:intercept-url pattern="/shopping/favorite/remove*" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="any" />
+		<security:intercept-url pattern="/shopping/create*" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="any" />
+		<security:intercept-url pattern="/shopping/new/add*" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="any" />
+		<security:intercept-url pattern="/shopping/add*" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="any" />
+		<security:intercept-url pattern="/shopping/popup*" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="any" />
+		<security:intercept-url pattern="/shopping/popup/**" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="any" />
+		<security:intercept-url pattern="/shopping/remove*" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="any" />
+		<security:intercept-url pattern="/shopping/update*" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="any" />
+		<security:intercept-url pattern="/shopping/update/entry*" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="any" />
+		
+		<!-- SSL / AUTHENTICATED Shopping List pages -->
+		<security:intercept-url pattern="/shopping*" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/shopping/**" access="hasAnyRole('ROLE_CUSTOMERGROUP','ROLE_EPROCUREMENTGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+
+		<!-- SSL / AUTHENTICATED pages My Account pages -->
+		<security:intercept-url pattern="/my-account/order-approval-requests*" access="hasRole('ROLE_B2BCUSTOMERGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-account/order-approval-requests/**" access="hasRole('ROLE_B2BCUSTOMERGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-account/order-approval*" access="hasRole('ROLE_B2BADMINGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-account/order-approval/**" access="hasRole('ROLE_B2BADMINGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-account/company/information*" access="hasRole('ROLE_B2BCUSTOMERGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-account/company/information/**" access="hasRole('ROLE_B2BCUSTOMERGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-account/company*"  access="hasRole('ROLE_B2BADMINGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-account/company/**" access="hasRole('ROLE_B2BADMINGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-account/quote-history*" access="hasRole('ROLE_B2BCUSTOMERGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-account/quote-history/**" access="hasRole('ROLE_B2BCUSTOMERGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-account*" access="hasRole('ROLE_CUSTOMERGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-account/**" access="hasRole('ROLE_CUSTOMERGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-company*" access="hasRole('ROLE_B2BADMINGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/my-company/**" access="hasRole('ROLE_B2BADMINGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />		
+		<security:intercept-url pattern="/request-quotation*" access="hasRole('ROLE_B2BCUSTOMERGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/request-quotation/**" access="hasRole('ROLE_B2BCUSTOMERGROUP') and !hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+
+		<!-- Checkout rules applied only for B2BEESHOPGROUP members -->
+		<security:intercept-url pattern="/checkout/b2eaddress*" access="hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />
+		<security:intercept-url pattern="/checkout/b2eaddress/**" access="hasRole('ROLE_B2BEESHOPGROUP')" requires-channel="https" />	
+
+		<!-- SSL / ANONYMOUS pages Login pages need to be SSL, but occur before authentication -->
+		<security:intercept-url pattern="/login" requires-channel="https" />
+		<security:intercept-url pattern="/login/**" requires-channel="https" />
+		<security:intercept-url pattern="/j_spring_security_check" requires-channel="https" />
+		<security:intercept-url pattern="/logout" access="hasRole('ROLE_CUSTOMERGROUP')" requires-channel="https" />
+		<security:custom-filter position="LOGOUT_FILTER" ref="eProcurementLogoutFilter" />
+		
+		<!-- SSL / Register pages for anonymous user -->
+		<security:intercept-url pattern="/register" requires-channel="any" />
+		<security:intercept-url pattern="/register/doubleoptin/activation" requires-channel="any" />
+		<security:intercept-url pattern="/register/success" requires-channel="any" />
+		<security:intercept-url pattern="/register/existing/success" requires-channel="any" />
+		<security:intercept-url pattern="/register/**" requires-channel="https" />
+
+		<security:intercept-url pattern="checkOrder" requires-channel="any" />		
+		<security:intercept-url pattern="/checkOrder/**" requires-channel="https" />
+
+		<!-- MiniCart and CartPopup can occur on either secure or insecure pages -->
+		<security:intercept-url pattern="/cart/rollover/*" requires-channel="any" />
+		<security:intercept-url pattern="/cart/update" requires-channel="any" />
+		<security:intercept-url pattern="/cart/miniCart/*" requires-channel="any" />
+		<security:intercept-url pattern="/cart/json" requires-channel="any" />
+		<security:intercept-url pattern="/compare/**" requires-channel="any" />
+		<security:intercept-url pattern="/availability*" requires-channel="any" />
+		<security:intercept-url pattern="/availability/**" requires-channel="any" />
+		
+		<!-- SSL for secure autocomplete, needed for autocompletion out of https areas -->
+		<security:intercept-url pattern="/search/autocompleteSecure*" requires-channel="https" />
+		
+		<!-- SSL / ANONYMOUS pages Survey pages need to be SSL, but occur before authentication -->
+		<security:intercept-url pattern="/survey" requires-channel="https" />
+		<security:intercept-url pattern="/survey/**" requires-channel="https" />
+		
+		
+		<!-- SSL / ANONYMOUS pages NPS pages need to be SSL, but occur before authentication -->
+		<security:intercept-url pattern="/**/feedback/nps" requires-channel="https" />
+		<security:intercept-url pattern="/**/feedback/nps/**" requires-channel="https" />
+		
+		
+		<security:intercept-url pattern="/captcha*" requires-channel="any" />
+
+		<!-- OPEN / ANONYMOUS pages Run all other (public) pages openly. Note that while credentials are secure, the session id can be sniffed.
+			If this is a security concern, then this line should be re-considered -->
+		
+		<security:intercept-url pattern="/**" requires-channel="any" method="POST" /> <!-- Allow posts on either secure or insecure -->
+		<security:intercept-url pattern="/**" requires-channel="any" /> <!-- Everything else should be insecure -->
+
+		<!-- E-Procurement Configuration -->
+		<security:intercept-url pattern="/ariba/login*" requires-channel="https" />	
+		<!-- End E-Procurement Configuration -->
+
+ 		<security:custom-filter ref="captchaAuthenticationFilter" position="FORM_LOGIN_FILTER" />
+				
+		<security:remember-me services-ref="rememberMeServices" key="hybrisDistrelec" />
+
+		<security:port-mappings>
+			<security:port-mapping http="#{configurationService.configuration.getProperty('tomcat.http.port')}"
+				https="#{configurationService.configuration.getProperty('tomcat.ssl.port')}" />
+			<security:port-mapping http="80" https="443" />
+			<!--security:port-mapping http="#{configurationService.configuration.getProperty('proxy.http.port')}"
+				https="#{configurationService.configuration.getProperty('proxy.ssl.port')}" /-->
+		</security:port-mappings>
+
+		<security:request-cache ref="httpSessionRequestCache" />
+		<security:access-denied-handler error-page="/forbidden"/>
+	</security:http>
+
+	<bean id="csrfMatcher" class="org.springframework.security.web.util.matcher.NegatedRequestMatcher">
+		<constructor-arg>
+			<bean class="org.springframework.security.web.util.matcher.OrRequestMatcher">
+				<constructor-arg>
+					<util:list value-type="org.springframework.security.web.util.matcher.RequestMatcher">
+						<bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+							<constructor-arg name="pattern" value="/ariba/**"/>
+							<constructor-arg name="httpMethod" value="POST"/>
+						</bean>
+						<bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+							<constructor-arg name="pattern" value="/ociEntry*"/>
+							<constructor-arg name="httpMethod" value="POST"/>
+						</bean>
+						<bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+							<constructor-arg name="pattern" value="/ociEntry/**"/>
+							<constructor-arg name="httpMethod" value="POST"/>
+						</bean>
+						<bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+							<constructor-arg name="pattern" value="/**"/>
+							<constructor-arg name="httpMethod" value="GET"/>
+						</bean>
+						<bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+							<constructor-arg name="pattern" value="/DisplayOCIParameters"/>
+							<constructor-arg name="httpMethod" value="POST"/>
+						</bean>
+						<bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+							<constructor-arg name="pattern" value="/events/**"/>
+							<constructor-arg name="httpMethod" value="POST"/>
+						</bean>
+						<bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+							<constructor-arg name="pattern" value="/checkout/payment/notify/*"/>
+							<constructor-arg name="httpMethod" value="POST"/>
+						</bean>
+						<bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+							<constructor-arg name="pattern" value="/checkout/payment/jumpout/**"/>
+							<constructor-arg name="httpMethod" value="POST"/>
+						</bean>
+					</util:list>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<security:authentication-manager id="authenticationManager">
+		<security:authentication-provider ref="distAcceleratorAuthenticationProvider" />
+	</security:authentication-manager>
+	
+	<bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+    	<constructor-arg name="loginFormUrl" value="/login" />
+ 	</bean>
+	
+	<bean id="captchaAuthenticationFilter" class="com.namics.distrelec.b2b.storefront.filters.CaptchaAuthenticationFilter" >
+		<property name="usernameParameter" value="j_username" />
+		<property name="passwordParameter" value="j_password" />
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="authenticationSuccessHandler" ref="loginGuidAuthenticationSuccessHandler" />
+		<property name="authenticationFailureHandler" ref="loginAuthenticationFailureHandler" />
+		<property name="filterProcessesUrl" value="/j_spring_security_check" />
+	</bean>
+	
+	<bean id="loginCheckoutUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+    	<constructor-arg name="loginFormUrl" value="/login/checkout" />
+ 	</bean>
+	
+	<bean id="checkoutCaptchaAuthenticationFilter" class="com.namics.distrelec.b2b.storefront.filters.CaptchaAuthenticationFilter" >
+		<property name="usernameParameter" value="j_username" />
+		<property name="passwordParameter" value="j_password" />
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="authenticationSuccessHandler" ref="loginCheckoutGuidAuthenticationSuccessHandler" />
+		<property name="authenticationFailureHandler" ref="loginCheckoutAuthenticationFailureHandler" />
+		<property name="filterProcessesUrl" value="/checkout/j_spring_security_check" />
+	</bean>
+	
+	<bean id="acceleratorAuthenticationProvider" class="com.namics.distrelec.b2b.storefront.security.AcceleratorAuthenticationProvider"
+		>
+		<property name="userDetailsService" ref="originalUidUserDetailsService" />
+		<property name="adminGroup" value="ROLE_ADMINGROUP"/>
+		<property name="b2bUserGroupProvider" ref="b2bUserGroupProvider"/>
+		<property name="userService" ref="userService"/>
+		<property name="sessionService" ref="sessionService"/>
+		<property name="cmsSiteService" ref="cmsSiteService" />
+	</bean>
+
+	<!-- DISTRELEC 8285: allow login with contact ID and Email -->
+	<bean id="distAcceleratorAuthenticationProvider" class="com.namics.distrelec.b2b.storefront.security.DistAcceleratorAuthenticationProvider"
+		parent="acceleratorAuthenticationProvider" >
+		<property name="customerAccountService" ref="customerAccountService" />
+	</bean>
+	<bean id="coreUserDetailsService" class="de.hybris.platform.spring.security.CoreUserDetailsService"  />
+
+	<bean id="guidCookieStrategy" class="com.namics.distrelec.b2b.storefront.security.impl.DefaultGUIDCookieStrategy"
+		>
+		<property name="cookieGenerator" ref="guidCookieGenerator" />		
+	</bean>
+
+
+	<alias name="defaultGuidCookieGenerator" alias="guidCookieGenerator"/>
+	<bean id="defaultGuidCookieGenerator" class="com.namics.distrelec.b2b.storefront.security.cookie.EnhancedCookieGenerator" >
+		<property name="cookieSecure" value="true" />
+		<property name="cookieName" value="acceleratorSecureGUID" />		
+		<property name="httpOnly" value="false"/>
+		<!-- if context allows a httpOnly adjust to true  -->
+	</bean>
+
+	<bean id="autoLoginStrategy" class="com.namics.distrelec.b2b.storefront.security.impl.DefaultAutoLoginStrategy" >
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="customerFacade" ref="customerFacade" />
+		<property name="guidCookieStrategy" ref="guidCookieStrategy"/>
+	</bean>
+
+	<bean id="httpSessionRequestCache" class="com.namics.distrelec.b2b.storefront.security.impl.WebHttpSessionRequestCache"	 />
+
+	<bean id="redirectStrategy" class="org.springframework.security.web.DefaultRedirectStrategy"  />
+
+
+	<!-- Login Success Handlers -->
+	<bean id="distStorefrontAuthenticationSuccessProvider" class="com.namics.distrelec.b2b.storefront.security.DistStorefrontAuthenticationSuccessProvider" />
+	
+
+	<bean id="loginGuidAuthenticationSuccessHandler" class="com.namics.distrelec.b2b.storefront.security.GUIDAuthenticationSuccessHandler" >
+		<property name="authenticationSuccessHandler" ref="loginAuthenticationSuccessHandler" />
+		<property name="guidCookieStrategy" ref="guidCookieStrategy" />
+	</bean>
+
+	<bean id="loginAuthenticationSuccessHandler" class="com.namics.distrelec.b2b.storefront.security.StorefrontAuthenticationSuccessHandler" >
+		<property name="useReferer" value="true" />
+		<property name="requestCache" ref="httpSessionRequestCache" />
+		<property name="alwaysUseDefaultTargetUrl" value="false" />
+		<property name="defaultTargetUrl" value="/my-account" />
+		<property name="targetUrlParameter" value="spring-security-redirect" />
+		<property name="redirectStrategy" ref="distRedirectStrategy"/>
+	</bean>
+
+	<bean id="loginCheckoutGuidAuthenticationSuccessHandler" class="com.namics.distrelec.b2b.storefront.security.GUIDAuthenticationSuccessHandler" >
+		<property name="authenticationSuccessHandler" ref="loginCheckoutAuthenticationSuccessHandler" />
+		<property name="guidCookieStrategy" ref="guidCookieStrategy" />
+	</bean>
+
+	<bean id="loginCheckoutAuthenticationSuccessHandler" class="com.namics.distrelec.b2b.storefront.security.StorefrontAuthenticationSuccessHandler" >
+		<property name="defaultTargetUrl" value="/checkout" />
+		<property name="requestCache" ref="httpSessionRequestCache" />
+		<property name="alwaysUseDefaultTargetUrl" value="true" />
+		<property name="redirectStrategy" ref="distRedirectStrategy"/>
+	</bean>
+	
+	<bean id="distRedirectStrategy" class="com.namics.distrelec.b2b.storefront.security.DistRedirectStrategy" />
+	
+	<!-- Login Failure Handlers -->
+
+	<bean id="captchaAuthenticationFailureHandler" class="com.namics.distrelec.b2b.storefront.security.CaptchaAuthenticationFailureHandler" />
+
+	<bean id="loginAuthenticationFailureHandler" class="com.namics.distrelec.b2b.storefront.security.LoginAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="/login?error=true"/>
+	</bean>
+
+	<bean id="loginCheckoutAuthenticationFailureHandler" class="com.namics.distrelec.b2b.storefront.security.LoginAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="/login/checkout?error=true"/>
+	</bean>
+
+
+	<!-- Logout Success Handler -->
+
+	<bean id="logoutSuccessHandler" class="com.namics.distrelec.b2b.storefront.security.StorefrontLogoutSuccessHandler" >
+		<property name="useReferer" value="true"/>
+		<property name="defaultTargetUrl" value="/?logout=true"/>
+		<property name="guidCookieStrategy" ref="guidCookieStrategy"/>
+	</bean>
+	
+	<bean id="eProcurementLogoutFilter" class="com.namics.distrelec.b2b.storefront.security.filters.DistLogoutFilter" >
+		<constructor-arg name="logoutSuccessHandler" ref="logoutSuccessHandler" />
+		<constructor-arg name="handlers">
+			<list>
+				<ref bean="eProcurementLogoutHandler"/>
+				<ref bean="rememberMeServices"/>
+			</list>
+		</constructor-arg>
+		<property name="filterProcessesUrl" value="/logout" />
+	</bean>
+	
+	<bean id="eProcurementLogoutHandler" class="com.namics.distrelec.b2b.storefront.eprocurement.security.EProcurementLogoutHandler"  />
+
+
+	<!-- Define all possible roles -->
+	<bean id="b2bUserGroupProvider" class="com.namics.distrelec.b2b.storefront.security.impl.DefaultB2BUserGroupProvider">
+		<property name="userService" ref="userService" />
+		<property name="b2BCustomerService" ref="defaultB2BCustomerService" />
+		<property name="authorizedGroups">
+			<set value-type="java.lang.String">
+				<value>b2bcustomergroup</value>
+				<value>b2bmanagergroup</value>
+				<value>b2bapprovergroup</value>
+				<value>b2badmingroup</value>
+				<value>ociCustomerGroup</value>
+				<value>cxmlCustomerGroup</value>
+				<value>aribaCustomerGroup</value>
+			</set>
+		</property>
+		<property name="authorizedGroupsToCheckOut">
+			<set value-type="java.lang.String">
+				<value>customergroup</value>
+				<value>b2bcustomergroup</value>
+			</set>
+		</property>
+	</bean>
+	
+	<!-- Remember me beans -->
+   <bean id="rememberMeProcessingFilter" class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter" >
+        <property name="rememberMeServices" ref="rememberMeServices"/>
+        <property name="authenticationManager" ref="authenticationManager"/>
+    </bean>
+ 
+    <bean id="rememberMeServices" class="com.namics.distrelec.b2b.storefront.security.impl.DefaultRememberMeService" >
+    	<constructor-arg name="key" value="hybrisDistrelec" />
+    	<constructor-arg name="userDetailsService" ref="originalUidUserDetailsService" />
+        <property name="cookieName" value="hybrisDistrelecRememberMe" />
+        <property name="alwaysRemember" value="false" />
+        <property name="userService" ref="userService"/>
+        <property name="useSecureCookie" value="false"/>
+        <property name="customerFacade" ref="customerFacade"/>
+        <property name="tokenValiditySeconds" value="#{configurationService.configuration.getProperty('distrelec.rememberMe.tokenValiditySeconds')}"/>
+    </bean>
+ 
+    <bean id="rememberMeAuthenticationProvider" class="org.springframework.security.authentication.RememberMeAuthenticationProvider" >
+        <constructor-arg name="key" value="hybrisDistrelec"/>
+    </bean>
+    
+    <bean id="http403EntryPoint" class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint" />
+    
+    <!-- OCI beans -->
+    <security:authentication-manager id="ociAuthenticationManager">
+		<security:authentication-provider ref="ociAuthenticationProvider" />
+	</security:authentication-manager>
+	
+	<bean id="ociAuthenticationProvider" class="com.namics.distrelec.b2b.storefront.eprocurement.oci.security.OciAuthenticationProvider"
+		parent="acceleratorAuthenticationProvider"  />
+	
+    <bean id="ociAuthenticationFilter" class="com.namics.distrelec.b2b.storefront.eprocurement.oci.filters.OciAuthenticationFilter" >
+    	<property name="authenticationSuccessHandler" ref="loginOciGuidAuthenticationSuccessHandler" />
+    	<property name="authenticationManager" ref="ociAuthenticationManager" />
+  	</bean>
+  	
+  	<bean id="loginOciGuidAuthenticationSuccessHandler" parent="loginGuidAuthenticationSuccessHandler" >
+		<property name="authenticationSuccessHandler" ref="loginOciAuthenticationSuccessHandler" />
+	</bean>
+
+	<bean id="loginOciAuthenticationSuccessHandler" parent="loginAuthenticationSuccessHandler" >
+		<property name="defaultTargetUrl" value="/ociSuccess" />
+		<property name="useReferer" value="false" />
+	</bean>
+    
+    <!-- CXML beans -->
+    <security:authentication-manager id="cxmlAuthenticationManager">
+		<security:authentication-provider ref="cxmlAuthenticationProvider" />
+	</security:authentication-manager>
+	
+	<bean id="cxmlAuthenticationProvider" class="com.namics.distrelec.b2b.storefront.eprocurement.cxml.security.CxmlAuthenticationProvider"
+		parent="acceleratorAuthenticationProvider"  />
+	
+    <bean id="cxmlAuthenticationFilter" class="com.namics.distrelec.b2b.storefront.eprocurement.cxml.filters.CxmlAuthenticationFilter" >
+    	<property name="authenticationSuccessHandler" ref="loginCxmlGuidAuthenticationSuccessHandler" />
+    	<property name="authenticationManager" ref="cxmlAuthenticationManager" />
+  	</bean>
+  	
+  	<bean id="loginCxmlGuidAuthenticationSuccessHandler" parent="loginGuidAuthenticationSuccessHandler" >
+		<property name="authenticationSuccessHandler" ref="loginCxmlAuthenticationSuccessHandler" />
+	</bean>
+
+	<bean id="loginCxmlAuthenticationSuccessHandler" parent="loginAuthenticationSuccessHandler" >
+		<property name="defaultTargetUrl" value="/cxmlSuccess" />
+		<property name="useReferer" value="false" />
+	</bean>
+    
+    <!-- Ariba beans -->
+	<security:authentication-manager id="aribaAuthenticationManager">
+		<security:authentication-provider ref="aribaPreAuthenticationGrantedProvider" />
+	</security:authentication-manager>
+	
+  	<bean id="aribaAuthenticationFilter" class="com.namics.distrelec.b2b.storefront.eprocurement.ariba.filters.AribaAuthenticationFilter" >
+    	<property name="authenticationSuccessHandler" ref="loginAribaGuidAuthenticationSuccessHandler" />
+    	<property name="authenticationManager" ref="aribaAuthenticationManager" />
+    	<property name="distAribaService" ref="distAribaService" />
+  	</bean>
+  	
+	<bean id="aribaPreAuthenticationGrantedProvider" class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider" >
+		<property name="preAuthenticatedUserDetailsService" ref="aribaPreAuthenticatedUserDetailsService" />
+	</bean>
+	
+	<bean id="aribaPreAuthenticatedUserDetailsService" class="org.springframework.security.web.authentication.preauth.PreAuthenticatedGrantedAuthoritiesUserDetailsService"  />
+	
+	<bean id="aribaAuthenticationProvider" class="com.namics.distrelec.b2b.storefront.eprocurement.ariba.security.AribaAuthenticationProvider"
+		parent="acceleratorAuthenticationProvider"  />
+	
+	<bean id="loginAribaGuidAuthenticationSuccessHandler" parent="loginGuidAuthenticationSuccessHandler" >
+		<property name="authenticationSuccessHandler" ref="loginAribaAuthenticationSuccessHandler" />
+	</bean>
+	
+	<bean id="loginAribaAuthenticationSuccessHandler" parent="loginAuthenticationSuccessHandler" class="com.namics.distrelec.b2b.storefront.eprocurement.ariba.security.AribaAuthenticationSuccessHandler" >
+		<property name="alwaysUseDefaultTargetUrl" value="true" />
+		<property name="defaultTargetUrl" value="/aribaSuccess" />
+		<property name="useReferer" value="false" />
+	</bean>
+	
+	
+	<bean id="ffCookieStrategy" class="com.namics.distrelec.b2b.storefront.security.impl.DefaultFFCookieStrategy">
+		<property name="cookieGenerator" ref="ffCookieGenerator" />		
+	</bean>
+
+
+	<alias name="defaultffCookieGenerator" alias="ffCookieGenerator"/>
+	<bean id="defaultffCookieGenerator" class="com.namics.distrelec.b2b.storefront.security.cookie.EnhancedCookieGenerator" >
+		<property name="cookieSecure" value="true" />
+		<property name="cookieName" value="f_fid" />	
+		<property name="cookieMaxAge" value="#{configurationService.configuration.getProperty('factfinder.tracking.cookie.age')}" />		
+		<property name="httpOnly" value="false"/>
+		<!-- if context allows a httpOnly adjust to true  -->
+	</bean>
+	
+	<bean id="dyServerCookieStrategy" class="com.namics.distrelec.b2b.storefront.security.impl.DefaultDYServerCookieStrategy">
+		<property name="cookieGenerator" ref="dyServerCookieGenerator" />		
+	</bean>
+
+
+	<alias name="defaultDYServerCookieGenerator" alias="dyServerCookieGenerator"/>
+	<bean id="defaultDYServerCookieGenerator" class="com.namics.distrelec.b2b.storefront.security.cookie.EnhancedCookieGenerator" >
+		<property name="cookieSecure" value="true" />
+		<property name="cookieName" value="_dyid_server" />	
+		<property name="cookieMaxAge" value="#{configurationService.configuration.getProperty('dy.server.cookie.age')}" />		
+		<property name="httpOnly" value="false"/>
+		<!-- if context allows a httpOnly adjust to true  -->
+	</bean>
+
+	<bean id="distXFrameOptionsFilter" class="com.namics.distrelec.b2b.storefront.security.filters.DistXFrameOptionsFilter"/>
+</beans>

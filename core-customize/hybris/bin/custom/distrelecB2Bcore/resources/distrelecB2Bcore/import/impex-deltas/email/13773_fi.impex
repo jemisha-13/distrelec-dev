@@ -1,0 +1,18 @@
+#
+# Import the CMS content for the Distrelec site emails
+#
+# Localization fi
+#
+$contentMasterCatalog=distrelecContentCatalog
+$contentCatalog=distrelec_FIContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$emailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/emails
+$cmsSiteUID=distrelec_FI
+
+# Language
+$lang=fi
+
+# Email Pages
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang];masterTemplate(uid,$contentCV)
+ ;;CustomerRegistrationEmail;myynti@elfadistrelec.com;"Customerservice";CustomerRegistrationEmailTemplate
+ 

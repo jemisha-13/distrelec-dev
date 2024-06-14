@@ -1,0 +1,23 @@
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentCatalog = distrelec_IntContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]        ; name                        ; frontendTemplateName       ; restrictedPageTypes(code); active[default = true]
+                          ;                          ; ProductFamilyPageTemplate ; Product Family PageTemplate ; category/productFamilyPage ; ContentPage              ;
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]        ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+                   ;                          ; ProductFamilyPageTemplate ; $jarResourceCms/structure-view/structure_productFamilyPageTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductFamilyPageTemplate']
+                             ; Logo               ;
+                             ; MainNav            ;
+                             ; FooterLinks        ;
+                             ; MainCategoryNav    ;
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]                ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'ProductFamilyPageTemplate']; contentSlot(uid, $contentCV)[unique = true]
+                                    ;                          ; Logo-ProductFamilyPage            ; Logo                   ;                                                                                    ; InternationalLogoContentSlot
+                                    ;                          ; MainNav-ProductFamilyPage         ; MainNav                ;                                                                                    ; InternationaMainNavContentSlot
+                                    ;                          ; Footer-ProductFamilyPage          ; FooterLinks            ;                                                                                    ; InternationaFooterContentSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage ; MainCategoryNav        ;                                                                                    ; InternationalCategoryMainNavSlot
+INSERT_UPDATE ProductFamilyPage; $contentCV[unique = true]; uid[unique = true]     ; name                   ; title                         ; masterTemplate(uid, $contentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]
+                               ;                          ; product-family-default ; product-family-default ; "Default Product Family Page" ;                                                                                      ;

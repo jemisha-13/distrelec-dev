@@ -1,0 +1,89 @@
+#
+# Import the CMS content for the Distrelec site emails
+#
+# Localization en
+#
+$contentMasterCatalog=distrelecContentCatalog
+$contentCatalog=distrelec_ATContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$emailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/emails
+$cmsSiteUID=distrelec_AT
+
+# Language
+$lang=en
+
+# Email velocity templates
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];rendererType(code)[default='velocity']
+ ;$cmsSiteUID-BannerComponent-template;"CMSBannerComponent Template";$emailResource/email-bannerComponentTemplate.vm
+ ;$cmsSiteUID-CMSImageComponent-template;"CMSImageComponent Template";$emailResource/email-cmsImageComponentTemplate.vm
+ ;$cmsSiteUID-CMSLinkComponent-template;"CMSLinkComponent Template";$emailResource/email-cmsLinkComponentTemplate.vm
+ ;$cmsSiteUID-CMSParagraphComponent-template;"CMSParagraphComponent Template";$emailResource/email-cmsParagraphComponentTemplate.vm
+ ;$cmsSiteUID-SimpleBannerComponent-template;"CMSSimpleBannerComponent Template";$emailResource/email-bannerComponentTemplate.vm
+ 
+ ;$cmsSiteUID-Email_Header;"Email Header Template";$emailResource/email-header.vm
+ ;$cmsSiteUID-Email_Footer;"Email Footer Template";$emailResource/email-footer.vm
+ ;$cmsSiteUID-Email_Customer_Registration_Body;Body-E-Mail Kundenanmeldung;$emailResource/email-customerRegistrationBody.vm;
+ ;$cmsSiteUID-Email_Customer_Registration_Subject;E-Mail-Betreff Kundenanmeldung;$emailResource/email-customerRegistrationSubject.vm;
+ ;$cmsSiteUID-Email_Forgotten_Password_Body;E-Mail vergessenes Kennwort;$emailResource/email-forgottenPasswordBody.vm;
+ ;$cmsSiteUID-Email_Forgotten_Password_Subject;E-Mail-Betreff vergessenes Kennwort;$emailResource/email-forgottenPasswordSubject.vm;
+ ;$cmsSiteUID-Email_Send_To_Friend_Body;E-Mail send to friend;$emailResource/email-sendToFriendBody.vm;
+ ;$cmsSiteUID-Email_Send_To_Friend_Subject;E-Mail Subject send to friend;$emailResource/email-sendToFriendSubject.vm;
+ ;$cmsSiteUID-Email_Feedback_Body;E-Mail Feedback;$emailResource/email-feedbackBody.vm;
+ ;$cmsSiteUID-Email_Feedback_Subject;E-Mail-Subject Feedback;$emailResource/email-feedbackSubject.vm;
+ ;$cmsSiteUID-Email_Support_Body;E-Mail Support;$emailResource/email-supportBody.vm;
+ ;$cmsSiteUID-Email_Support_Subject;E-Mail-Betreff Support;$emailResource/email-supportSubject.vm;
+ ;$cmsSiteUID-Email_Quote_Product_Price_Body;E-Mail Quote Product Price;$emailResource/email-quoteProductPriceBody.vm;
+ ;$cmsSiteUID-Email_Quote_Product_Price_Subject;E-Mail-Subject Quote Product Price;$emailResource/email-quoteProductPriceSubject.vm;
+ ;$cmsSiteUID-Email_Catalog_Plus_Product_Price_Request_Body;E-Mail Catalog Plus Product Price Request;$emailResource/email-catalogPlusProductPriceRequestBody.vm;
+ ;$cmsSiteUID-Email_Catalog_Plus_Product_Price_Request_Subject;E-Mail-Subject Catalog Plus Product Price Request;$emailResource/email-catalogPlusProductPriceRequestSubject.vm;
+ ;$cmsSiteUID-Email_Set_Initial_Password_Body;E-Mail inital password;$emailResource/email-setInitialPasswordBody.vm;
+ ;$cmsSiteUID-Email_Set_Initial_Password_Subject;E-Mail Subject inital password;$emailResource/email-setInitialPasswordSubject.vm;
+ ;$cmsSiteUID-Email_Deactivate_User_Body;E-Mail deactivate User;$emailResource/email-deactivateUserBody.vm;
+ ;$cmsSiteUID-Email_Deactivate_User_Subject;E-Mail-Subject deactivate User;$emailResource/email-deactivateUserSubject.vm;
+ ;$cmsSiteUID-Email_Order_Pending_Approval_Body;E-Mail order pending approval;$emailResource/email-orderPendingApprovalBody.vm;
+ ;$cmsSiteUID-Email_Order_Pending_Approval_Subject;E-Mail Subject order pending approval;$emailResource/email-orderPendingApprovalSubject.vm;
+ ;$cmsSiteUID-Email_Order_Approval_Rejection_Body;E-Mail order approval rejection;$emailResource/email-orderApprovalRejectionBody.vm;
+ ;$cmsSiteUID-Email_Order_Approval_Rejection_Subject;E-Mail Subject order approval rejection;$emailResource/email-orderApprovalRejectionSubject.vm;
+ ;$cmsSiteUID-Email_Order_Confirmation_Body;E-Mail Order Confirmation;$emailResource/email-orderConfirmationBody.vm;
+ ;$cmsSiteUID-Email_Order_Confirmation_Subject;E-Mail Subject Order Confirmation;$emailResource/email-orderConfirmationSubject.vm;
+ ;$cmsSiteUID-Email_Rma_Request_Body;E-Mail RMA Request;$emailResource/email-rmaRequestBody.vm;
+ ;$cmsSiteUID-Email_Rma_Request_Subject;E-Mail Subject RMA Request;$emailResource/email-rmaRequestSubject.vm;
+ ;$cmsSiteUID-Email_Rma_Request_Confirmation_Body;E-Mail RMA Request Confirmation;$emailResource/email-rmaRequestConfirmationBody.vm;
+ ;$cmsSiteUID-Email_Rma_Request_Confirmation_Subject;E-Mail Subject RMA Request Confirmation;$emailResource/email-rmaRequestConfirmationSubject.vm;
+ ;$cmsSiteUID-Email_Address_Change_Body;E-Mail Address Change;$emailResource/email-addressChangeBody.vm;
+ ;$cmsSiteUID-Email_Address_Change_Subject;E-Mail Subject Address Change;$emailResource/email-addressChangeSubject.vm;
+ ;$cmsSiteUID-Email_Catalog_Order_Body;E-Mail Catalog Order;$emailResource/email-catalogOrderBody.vm;
+ ;$cmsSiteUID-Email_Catalog_Order_Subject;E-Mail Betreff Catalog Order;$emailResource/email-catalogOrderSubject.vm;
+
+ ;$cmsSiteUID-Email_Sap_Voucher_Body;E-Mail Sap Voucher;$emailResource/email-generatedSapVoucherBody.vm;
+ ;$cmsSiteUID-Email_Sap_Voucher_Subject;E-Mail-Subject Sap Voucher;$emailResource/email-generatedSapVoucherSubject.vm;
+
+# Email Pages
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang];masterTemplate(uid,$contentCV)
+ ;;CustomerRegistrationEmail;info-at@distrelec.com;"Distrelec Customerservice";CustomerRegistrationEmailTemplate
+ ;;ForgottenPasswordEmail;info-at@distrelec.com;"Distrelec Customerservice";ForgottenPasswordEmailTemplate
+ ;;SendToFriendEmail;info-at@distrelec.com;"Distrelec Customerservice";SendToFriendEmailTemplate
+ ;;FeedbackEmail;info-at@distrelec.com;"Distrelec Customer";FeedbackEmailTemplate
+ ;;SupportEmail;info-at@distrelec.com;"Distrelec Customer";SupportEmailTemplate
+ ;;QuoteProductPriceEmail;info-at@distrelec.com;"Distrelec Customer";QuoteProductPriceEmailTemplate
+ ;;CatalogPlusProductPriceRequestEmail;info-at@distrelec.com;"Distrelec Customer";CatalogPlusProductPriceRequestEmailTemplate
+ ;;SetInitialPasswordEmail;info-at@distrelec.com;"Distrelec Customerservice";SetInitialPasswordEmailTemplate
+ ;;DeactivateUserEmail;info-at@distrelec.com;"Distrelec Customerservice";DeactivateUserEmailTemplate
+ ;;OrderPendingApprovalEmail;info-at@distrelec.com;"Distrelec Customerservice";OrderPendingApprovalEmailTemplate
+ ;;OrderApprovalRejectionEmail;info-at@distrelec.com;"Distrelec Customerservice";OrderApprovalRejectionEmailTemplate
+ ;;OrderConfirmationEmail;info-at@distrelec.com;"Distrelec Customerservice";OrderConfirmationEmailTemplate
+ ;;RmaRequestEmail;info-at@distrelec.com;"Distrelec Customerservice";RmaRequestEmailTemplate
+ ;;RmaRequestConfirmationEmail;info-at@distrelec.com;"Distrelec Customerservice";RmaRequestConfirmationEmailTemplate
+ ;;AddressChangeEmail;info-at@distrelec.com;"Distrelec Customerservice";AddressChangeEmailTemplate
+ ;;CatalogOrderEmail;info-at@distrelec.com;"Distrelec Customer";CatalogOrderEmailTemplate
+ ;;SapVoucherEmail;info-at@distrelec.com;"Distrelec Customerservice";SapVoucherEmailTemplate
+ 
+ 
+
+#Localized
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];rendererType(code)[default='velocity']
+;$cmsSiteUID-Email_Net_Promoter_Score_Body;E-Mail NPS;$emailResource/email-netPromoterScoreBody.vm;
+;$cmsSiteUID-Email_Net_Promoter_Score_Subject;E-Mail-Subject NPS;$emailResource/email-netPromoterScoreSubject.vm;
+
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang];masterTemplate(uid,$contentCV)
+;;NPSEmail;customerservices@distrelec.com;"Distrelec Customerservice";NetPromoterScoreEmailTemplate

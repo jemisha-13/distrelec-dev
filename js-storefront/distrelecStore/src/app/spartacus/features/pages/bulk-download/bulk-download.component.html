@@ -1,0 +1,153 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-lg-9">
+      <div *ngIf="customerData$ | async" class="qualityPage" id="qualityPage">
+        <div class="content-banner" id="qualityPageBanner">
+          <h1>{{ 'product.information.environmental.documentation_title' | cxTranslate }}</h1>
+        </div>
+        <h3 class="documentation-download" id="qualityPageDownloadText">
+          {{ 'product.information.environmental.documentation_download' | cxTranslate }}
+        </h3>
+        <div class="form-group">
+          <label class="col-form-label" id="qualityPage_customer_name" for="qualityPage_customer_name_input">
+            <strong>{{ 'product.information.environmental.documentation_customer_name' | cxTranslate }}:</strong>
+          </label>
+          <div class="content">
+            <form [formGroup]="customerNameForm">
+              <input
+                class="form-control col-sm-6"
+                id="qualityPage_customer_name_input"
+                formControlName="name"
+                type="text"
+              />
+            </form>
+          </div>
+        </div>
+        <br />
+        <span
+          id="qualityPageUploadFileTitlePart1"
+          [innerHTML]="'product.information.environmental.documentation_files_part1' | cxTranslate"
+        ></span>
+        <a
+          class="download-template"
+          id="bulk_download_import_template_download_url"
+          (click)="downloadFileUploadTemplate($event)"
+        >
+          <span
+            id="qualityPageUploadFileTitlePart2"
+            [innerHTML]="'product.information.environmental.documentation_files_part2' | cxTranslate"
+          ></span>
+        </a>
+        <span
+          id="qualityPageUploadFileTitlePart3"
+          [innerHTML]="'product.information.environmental.documentation_files_part3' | cxTranslate"
+        ></span>
+        <br />
+        <br />
+        <form id="upload-form-file">
+          <div class="content">
+            <div class="content__item">
+              <input
+                #fileUpload
+                class="file-upload-input d-none"
+                (change)="onFileChange($event)"
+                type="file"
+                name="file"
+              />
+
+              <div class="advanced-upload">
+                <a
+                  class="upload-file"
+                  [ngClass]="{ 'upload-file--dragover': isDragOver }"
+                  (click)="fileUpload.click()"
+                  (drop)="onDrop($event)"
+                  (dragover)="onDragOver($event)"
+                  (dragleave)="onDragLeave($event)"
+                >
+                  <div class="upload-file__item">
+                    <div class="browser-other">
+                      <span class="icon">
+                        <fa-icon [icon]="faCloudUploadAlt"></fa-icon>
+                      </span>
+                      <span
+                        class="text"
+                        id="qualityPageUploadFileText"
+                        [innerHTML]="'product.information.environmental.documentation_file_download' | cxTranslate"
+                      ></span>
+                    </div>
+
+                    <div
+                      class="browser-ie mat-button mat-button__solid--action-blue"
+                      id="qualityPageUploadDescription"
+                      href="/welcome"
+                    >
+                      <fa-icon [icon]="faCloudUploadAlt"></fa-icon>
+                      {{ 'bomdataimport.uploaddescription' | cxTranslate }}
+                    </div>
+                    <span class="filename" id="qualityPageUploadedFileName">{{ selectedFile?.name }}</span>
+                  </div>
+                </a>
+              </div>
+              <div *ngIf="validationErrors.length" class="errors" id="qualityPageErrors">
+                <span class="errors__icon" id="qualityPageErrorsIcon">
+                  <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                </span>
+                <p *ngFor="let error of validationErrors">{{ error }}</p>
+              </div>
+              <div *ngIf="validationWarnings.length" class="warnings" id="qualityPageWarnings">
+                <span class="warnings__icon" id="qualityPageWarningsIcon">
+                  <fa-icon class="fa-info-circle" [icon]="faInfoCircle"></fa-icon>
+                </span>
+                <p *ngFor="let warning of validationWarnings">{{ warning }}</p>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="download" id="qualityPageDownloadExcel" [ngClass]="{ disabled: !isFileFormValid }">
+          <form id="download-excel-report" (click)="downloadExcelReport()" method="post">
+            <span class="download__excel" id="qualityPageExcelDownload">
+              <fa-icon [icon]="faDownload"></fa-icon>
+              <input
+                class="download__excel"
+                id="qualityPageExcelInput"
+                type="submit"
+                value="{{ 'product.information.environmental.documentation_download_excel' | cxTranslate }}"
+              />
+            </span>
+            <br />
+          </form>
+        </div>
+
+        <div class="download" id="qualityPageDownloadPDF" [ngClass]="{ disabled: !isFileFormValid }">
+          <form id="download-pdf-report" (click)="downloadPDFReport()" method="post">
+            <span class="download__PDF" id="qualityPagePDFDownload">
+              <fa-icon [icon]="faDownload"></fa-icon>
+              <input
+                class="download__PDF"
+                id="qualityPagePDFInput"
+                type="submit"
+                value="{{ 'product.information.environmental.documentation_download_pdf' | cxTranslate }}"
+              />
+            </span>
+            <br />
+          </form>
+        </div>
+        <div class="divider"></div>
+        <div id="qualityPageDownloadBulk" [ngClass]="{ disabled: !isFileFormValid }">
+          <form id="download-bulk-download" (click)="downloadBulkStatements()" method="post">
+            <button class="download-bulk" id="qualityPageBulkDownload" [disabled]="!isFileFormValid">
+              <input
+                class="download__bulk"
+                id="qualityPageBulkInput"
+                type="submit"
+                value="{{ 'product.information.environmental.documentation_download_bulk' | cxTranslate }}"
+              />
+            </button>
+            <br />
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

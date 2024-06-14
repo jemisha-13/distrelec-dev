@@ -1,0 +1,22 @@
+# RO
+$contentCatalog = distrelec_ROContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+
+$lang = en
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]  ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Privacy/Cookie Settings ; #triggerCookieSettings
+
+$lang = ro
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]                                  ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Setări de confidenţialitate/Setări ale modulelor cookie ; #triggerCookieSettings
+
+
+UPDATE DistFooterComponent; UID[unique = true]  ; impressumLinks(uid, $contentCV); $contentCV[unique = true]
+                          ; DistFooterComponent ; AGBLink, ImpressumLink, PrivacyCookieLink, DatenschutzLink, ADR-Link, ODR-link, QLLink
+
+

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.namics.distrelec.patches.release"/>
+
+    <bean id="groovyPatchAction" class="com.namics.distrelec.patches.actions.GroovyPatchAction">
+        <property name="configurationService" ref="configurationService"/>
+        <property name="releasesPath" value="#{configurationService.configuration.getProperty('patches.releases.folder.name')}"/>
+        <property name="releasePath" value="#{configurationService.configuration.getProperty('patches.release.folder.name')}"/>
+        <property name="patchPath" value="#{configurationService.configuration.getProperty('patches.patch.folder.name')}"/>
+        <property name="globalPath" value="#{configurationService.configuration.getProperty('patches.global.folder.name')}"/>
+        <property name="extensionPath" value="#{configurationService.configuration.getProperty('patches.extension.folder.name')}"/>
+    </bean>
+
+    <bean id="abstractDemoPatch" class="com.namics.distrelec.patches.release.AbstractDemoPatch" abstract="true"
+          parent="abstractPatch"/>
+
+    <bean id="distrelecpatchesSystemSetup" class="com.namics.distrelec.patches.setup.DistrelecpatchesSystemSetup"
+          parent="patchesSystemSetup"/>
+
+    <bean id="distrelecpatchesService" class="com.namics.distrelec.patches.service.impl.DefaultDistrelecpatchesService">
+        <!-- setter injection example -->
+        <property name="modelService" ref="modelService"/>
+        <property name="mediaService" ref="mediaService"/>
+        <property name="flexibleSearchService" ref="flexibleSearchService"/>
+    </bean>
+
+</beans>

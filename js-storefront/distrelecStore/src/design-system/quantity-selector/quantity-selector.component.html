@@ -1,0 +1,31 @@
+<div class="quantity-selector">
+  <button
+    class="btn quantity-selector__minus-button"
+    [attr.id]="ids.minusButtonId"
+    [disabled]="control?.value <= minimumQuantity || control?.disabled"
+    (click)="decrease()"
+  >
+    <app-icon class="minus-icon" [icon]="minusIcon"></app-icon>
+    <span class="sr-only">{{ 'base.increase-quantity' | cxTranslate }}</span>
+  </button>
+  <input
+    #input
+    class="quantity-selector__total-added"
+    [attr.id]="ids.inputId"
+    [min]="minimumQuantity"
+    [formControl]="control"
+    [placeholder]="minimumQuantity"
+    (input)="onInput($event)"
+    type="number"
+    tabindex="0"
+  />
+  <button
+    class="btn quantity-selector__plus-button"
+    [attr.id]="ids.plusButtonId"
+    [disabled]="control?.disabled || getMaxOrderQuantityDisplayed"
+    (click)="increase()"
+  >
+    <app-icon class="plus-icon" [icon]="plusIcon"></app-icon>
+    <span class="sr-only">{{ 'base.decrease-quantity' | cxTranslate }}</span>
+  </button>
+</div>

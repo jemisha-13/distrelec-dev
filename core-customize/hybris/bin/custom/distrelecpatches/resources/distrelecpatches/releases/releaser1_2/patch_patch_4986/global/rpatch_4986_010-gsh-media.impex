@@ -1,0 +1,29 @@
+$defaultCatalog=Default
+$defaultCVOnline=catalogVersion(catalog(id[default=$defaultCatalog]), version[default='Online'])[unique=true, default=$defaultCatalog:Online]
+
+# Remove from Online catalog
+REMOVE Media;code[unique=true];$defaultCVOnline[unique=true]
+            ;ghs01            ;
+            ;ghs02            ;
+            ;ghs03            ;
+            ;ghs04            ;
+            ;ghs05            ;
+            ;ghs06            ;
+            ;ghs07            ;
+            ;ghs08            ;
+            ;ghs09            ;
+
+$defaultCVStaged=catalogVersion(catalog(id[default=$defaultCatalog]), version[default='Staged'])[unique=true, default=$defaultCatalog:Staged]
+$siteResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/ghs_pictograms/images
+
+# Insert into Stage catalog
+INSERT_UPDATE Media;code[unique=true];$defaultCVStaged[unique=true];@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default=image/jpeg];
+                   ;ghs01            ;                             ;$siteResource/ghs01.jpg
+                   ;ghs02            ;                             ;$siteResource/ghs02.jpg
+                   ;ghs03            ;                             ;$siteResource/ghs03.jpg
+                   ;ghs04            ;                             ;$siteResource/ghs04.jpg
+                   ;ghs05            ;                             ;$siteResource/ghs05.jpg
+                   ;ghs06            ;                             ;$siteResource/ghs06.jpg
+                   ;ghs07            ;                             ;$siteResource/ghs07.jpg
+                   ;ghs08            ;                             ;$siteResource/ghs08.jpg
+                   ;ghs09            ;                             ;$siteResource/ghs09.jpg

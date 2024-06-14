@@ -1,0 +1,236 @@
+ <?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="sv" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>Dibs</title>
+    <link rel="stylesheet" type="text/css" href="/images/dibs_default_pageset/dibs_standard_style.css" />
+    <script type="text/javascript">
+    /*<![CDATA[*/
+    var btn = {
+        init : function() {
+            if (!document.getElementById || !document.createElement || !document.appendChild) return false;
+            as = btn.getElementsByClassName('btn(.*)');
+            for (i=0; i<as.length; i++) {
+                if ( as[i].tagName == "INPUT" && ( as[i].type.toLowerCase() == "submit" || as[i].type.toLowerCase() == "button" ) ) {
+                    var a1 = document.createElement("a");
+                    a1.appendChild(document.createTextNode(as[i].value));
+                    a1.className = as[i].className;
+                    a1.id = as[i].id;
+                    as[i] = as[i].parentNode.replaceChild(a1, as[i]);
+                    as[i] = a1;
+                    as[i].style.cursor = "pointer";
+                }
+                else if (as[i].tagName == "A") {
+                    var tt = as[i].childNodes;
+                }
+                else { return false };
+                var i1 = document.createElement('i');
+                var i2 = document.createElement('i');
+                var s1 = document.createElement('span');
+                var s2 = document.createElement('span');
+                s1.appendChild(i1);
+                s1.appendChild(s2);
+                while (as[i].firstChild) {
+                  s1.appendChild(as[i].firstChild);
+                }
+                as[i].appendChild(s1);
+                as[i] = as[i].insertBefore(i2, s1);
+            }
+            // The following lines submits the form if the button id is "submit_btn"
+            if(document.getElementById('submit_btn')!=null) {
+                btn.addEvent(document.getElementById('submit_btn'),'click',function() {
+                    var form = btn.findForm(this);
+                    form.submit();
+                });
+            }
+            // The following lines resets the form if the button id is "reset_btn"
+            if(document.getElementById('reset_btn')!=null) {
+                btn.addEvent(document.getElementById('reset_btn'),'click',function() {
+                    var form = btn.findForm(this);
+                    form.reset();
+                });
+            }
+        },
+        findForm : function(f) {
+            while(f.tagName != "FORM") {
+                f = f.parentNode;
+            }
+            return f;
+        },
+        addEvent : function(obj, type, fn) {
+            if (obj.addEventListener) {
+                obj.addEventListener(type, fn, false);
+            }
+            else if (obj.attachEvent) {
+                obj["e"+type+fn] = fn;
+                obj[type+fn] = function() { obj["e"+type+fn]( window.event ); }
+                obj.attachEvent("on"+type, obj[type+fn]);
+            }
+        },
+        getElementsByClassName : function(className, tag, elm) {
+            var testClass = new RegExp("(^|s)" + className + "(s|$)");
+            var tag = tag || "*";
+            var elm = elm || document;
+            var elements = (tag == "*" && elm.all)? elm.all : elm.getElementsByTagName(tag);
+            var returnElements = [];
+            var current;
+            var length = elements.length;
+            for(var i=0; i<length; i++){
+                current = elements[i];
+                if(testClass.test(current.className)){
+                    returnElements.push(current);
+                }
+            }
+            return returnElements;
+        }
+    }
+
+    btn.addEvent(window,'load', function() { btn.init();} );
+
+
+    /* //]]> */
+    </script>
+</head>
+<body>
+[ver formstart]
+<table width="654" border="0" align="center" cellpadding="0" cellspacing="0" class="main_container">
+  <tr>
+    <td colspan="5"><img src="/images/dibs_default_pageset/betalsida_skiss_3_02.jpg" width="654" height="139" alt="Dibs Payment Services"></td>
+  </tr>
+  <tr>
+    <td width="28" height="284" align="left" valign="top"><img src="/images/dibs_default_pageset/betalsida_skiss_3_04.jpg" width="28" height="284" alt=""/></td>
+    <td width="385" rowspan="2" align="left" valign="top" class="symbol" bgcolor="#FFFFFF"><table width="385" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td height="116" align="left" valign="top"><span class="rubrik"><img src="/images/dibs_default_pageset/trans_pix.gif" width="385" height="10" alt=""/><br/>
+            Att betala</span><br/>
+            <span class="brodtext">Du betalar genom att fylla i informationen i inmatningsf&auml;lten nedan.</span><br/>
+            <br/>
+            <span class="rubrik">Totalsumma: [ver sum] [ver valueof="currency"]</span></td>
+        </tr>
+      </table>
+      <table width="385" border="0" cellpadding="2" cellspacing="0" bgcolor="#90acc7">
+        <tr>
+          <td width="13">&nbsp;</td>
+          <td width="125">&nbsp;</td>
+          <td width="154">&nbsp;</td>
+          <td width="80">&nbsp;</td>
+          <td width="13">&nbsp;</td>
+        </tr>
+        [ver check="cc"]
+        <tr>
+          <td width="13" valign="middle">&nbsp;</td>
+          <td valign="middle"><span class="fetvitbrodtext">Kreditkortsnummer:</span></td>
+          <td width="154" valign="middle"><input name="cc" type="text" id="cc" size="20" maxlength="20" autocomplete="off" style="background: #FFE4E4;" /></td>
+          <td valign="middle">&nbsp;</td>
+          <td width="13" valign="middle">&nbsp;</td>
+        </tr>
+        [ver endcheck]
+        [ver check="expM"]
+        <tr id="datesrow">
+          <td width="13" valign="middle">&nbsp;</td>
+          <td valign="middle" class="fetvitbrodtext">Giltigt till:</td>
+          <td width="154" valign="middle">
+          [ver expM]
+          <span class="fetvitbrodtext">
+           / </span>
+          [ver expY]
+<!--
+          <select name="expY" id="expY" style="background: #FFE4E4;">
+              <option value="09">2009</option>
+              <option value="10">2010</option>
+              <option value="11">2011</option>
+              <option value="12">2012</option>
+              <option value="13">2013</option>
+              <option value="14">2014</option>
+              <option value="15">2015</option>
+              <option value="16">2016</option>
+          </select>
+-->
+          </td>
+          <td valign="middle">&nbsp;</td>
+          <td width="13" valign="middle">&nbsp;</td>
+        </tr>
+        [ver endcheck]
+        [ver check="securityCode"]
+        <tr>
+          <td valign="middle">&nbsp;</td>
+          <td valign="middle" class="fetvitbrodtext">CVC/CVV-kod:</td>
+          <td valign="middle"><input name="securityCode" type="text" id="securityCode" size="4" maxlength="4" autocomplete="off" style="background: #FFE4E4;"/>
+            <!--a href="./cvchelp.htm" target="_blank"><span class="vitbrodtext">Vad &auml;r det?</span></a--></td>
+          <td valign="middle">&nbsp;</td>
+          <td valign="middle">&nbsp;</td>
+        </tr>
+        [ver endcheck]
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+      <br/>
+      <table width="385" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="109" align="left" valign="middle" class="inforubrik">F&ouml;rnamn: </td>
+          <td align="left" valign="middle" class="brodtext">[ver valueof="billingFirstName"]</td>
+
+        </tr>
+        <tr>
+          <td width="109" align="left" valign="middle" class="inforubrik">Efternamn:</td>
+          <td align="left" valign="middle" class="brodtext">[ver valueof="billingLastName"]</td>
+        </tr>
+        <tr>
+          <td width="109" align="left" valign="middle" class="inforubrik">E-post:</td>
+          <td align="left" valign="middle" class="brodtext">[ver valueof="eMail"]</td>
+        </tr>
+
+      </table>
+      <br/>
+      <table width="385" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="right">
+            <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td>
+                  <img id="blue_arrows" src="/images/dibs_default_pageset/blapil.png" alt="Bl&aring; pil" width="119" height="46" />
+                </td>
+                <td>
+                  <input type="submit" id="submit_btn" value="Genomf&ouml;r betalningen" class="btn"/>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <p>&nbsp;</p>
+    </td>
+    <td width="13" rowspan="2" align="center" valign="top" bgcolor="#FFFFFF"><span class="stil1"><img src="/images/dibs_default_pageset/trans_pix.gif" width="13" height="10" alt=""/></span></td>
+    <td width="200" align="right" valign="top" bgcolor="#FFFFFF"><div align="left"><span class="stil1"><img src="/images/dibs_default_pageset/trans_pix.gif" width="200" height="10" alt="" /></span><br/>
+        <img src="/images/dibs_default_pageset/ikoner2.gif" alt="ikoner" width="200" height="96" /><br/>
+        <img src="/images/dibs_default_pageset/trans_pix.gif" width="200" height="10" alt="" /><br/>
+        <img src="/images/dibs_default_pageset/sidobild.jpg" alt="Kvinna med dator" width="200" height="127" /><br/>
+        <img src="/images/dibs_default_pageset/trans_pix.gif" width="200" height="10" alt="" /><br/>
+        <span class="inforubrik">S&auml;kerhetsinformation:</span><br/>
+        <span class="infostil">
+        Din betalning sker s&auml;kert genom DIBS system. Butiken kommer aldrig i kontakt med dina kortuppgifter utan all information skickas krypterad till din bank. DIBS system uppfyller bankernas och kortf&ouml;retagens regler och certifieras &aring;rligen.<br/>
+    <img src="/images/dibs_default_pageset/trans_pix.gif" width="200" height="10" alt="" /><br/>
+    <img src="/images/dibs_default_pageset/las.gif" alt="ssl l&aring;s" width="25" height="32" align="left" class="lasbox"/>Dibs anv&auml;nder SSL vilket &auml;r industribankstandard f&ouml;r s&auml;kra e-handelstransaktioner. <br/>
+    <br/></span>
+    </div></td>
+    <td width="28" rowspan="2" align="right" valign="top"><img src="/images/dibs_default_pageset/betalsida_skiss_3_06.jpg" width="28" height="284" alt=""/></td>
+  </tr>
+  <tr>
+    <td width="28">&nbsp;</td>
+    <td width="200" align="right" valign="bottom" bgcolor="#FFFFFF"><img src="/images/dibs_default_pageset/nerelogo.png" alt="Dibslogo" width="95" height="54"/><br/>
+    <span class="stil1"><img src="/images/dibs_default_pageset/trans_pix.gif" width="200" height="10" alt="" /></span></td>
+  </tr>
+  <tr>
+    <td height="32" colspan="5" align="center" valign="top"><img src="/images/dibs_default_pageset/betalsida_skiss_3_09.jpg" width="654" height="32" alt=""/></td>
+  </tr>
+</table>
+[ver formend]
+</body>
+</html>

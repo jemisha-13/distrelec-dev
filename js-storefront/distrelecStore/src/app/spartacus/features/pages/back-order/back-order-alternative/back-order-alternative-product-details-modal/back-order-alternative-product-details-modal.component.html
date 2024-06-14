@@ -1,0 +1,342 @@
+<ng-container *ngIf="product$ | async as product">
+  <app-modal size="lg" overflow="scroll">
+    <div class="modal__button">
+      <app-button [modifiers]="['sm']" (click)="onClose()" colour="red">
+        {{ 'backorder.item.modal.close' | cxTranslate }}
+      </app-button>
+    </div>
+
+    <div class="modal__body">
+      <div class="modal__body__title" id="backorder-modal-name">
+        {{ product.name }}
+      </div>
+
+      <div class="modal__body__attribute" id="backorder-modal-artnr">
+        {{ 'product.product_intro.article_number_title' | cxTranslate }}
+        <strong>{{ product.codeErpRelevant | articleNumber: product.codeErpRelevant }}</strong>
+      </div>
+
+      <div class="modal__body__attribute" id="backorder-modal-mpn">
+        {{ 'product.product_intro.man_number_title' | cxTranslate }}
+        <strong>{{ product.typeName }}</strong>
+      </div>
+
+      <div class="modal__body__attribute" id="backorder-modal-manufacturer">
+        {{ 'text.brand' | cxTranslate }}:
+        <strong>{{ product.distManufacturer.name }}</strong>
+      </div>
+
+      <div class="modal__body__image" id="backorder-modal-image">
+        <img [src]="configureUrl(product.images)" [alt]="product.name" width="61" height="46" />
+      </div>
+
+      <div class="modal__body__illustrate-text" id="backorder-modal-illustrative-text">
+        {{ 'product.gallery.image.illustrativeTitle' | cxTranslate }}
+      </div>
+
+      <hr />
+
+      <div class="product-details">
+        <span class="product-details__title" id="backorder-modal-product-details">
+          {{ 'text.productDetails' | cxTranslate }}
+        </span>
+
+        <div
+          *ngIf="product.productInformation?.usageNote?.length"
+          class="entry"
+          id="backorder-modal-product-information"
+        >
+          <span class="subtitle" id="backorder-modal-product-information-label">
+            {{ 'detailtabsproductinformation.notes' | cxTranslate }}
+          </span>
+
+          <ng-container *ngFor="let note of product.productInformation?.usageNote">
+            <span class="content" id="backorder-modal-product-information-text">
+              {{ note }}
+            </span>
+          </ng-container>
+        </div>
+
+        <div
+          *ngIf="product.productInformation?.familyDescriptionBullets.length"
+          class="entry"
+          id="backorder-modal-product-family"
+        >
+          <div class="subtitle" id="product-family-title">
+            {{ 'product.information.family.title' | cxTranslate }}
+          </div>
+
+          <div class="content">
+            <ng-container *ngFor="let description of product.productInformation?.familyDescriptionBullets; index as i">
+              <div [id]="'product_details_familyDescr_' + i">
+                {{ description }}
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="entry" id="backorder-modal-article-information">
+          <div class="subtitle" id="backorder-modal-article-information-label">
+            {{ 'product.article_information' | cxTranslate }}
+          </div>
+
+          <div class="content">
+            <ng-container *ngIf="siteCountryCode$ | async as siteCountryCode">
+              <div>
+                <ng-container
+                  *ngIf="
+                    siteCountryCode === countryCodesEnum.SWITZERLAND ||
+                    siteCountryCode === countryCodesEnum.AUSTRIA ||
+                    siteCountryCode === countryCodesEnum.ITALY ||
+                    siteCountryCode === countryCodesEnum.CZECH_REPUBLIC ||
+                    siteCountryCode === countryCodesEnum.HUNGARY ||
+                    siteCountryCode === countryCodesEnum.ROMANIA ||
+                    siteCountryCode === countryCodesEnum.SLOVAKIA
+                  "
+                >
+                  <span class="content__bold" id="product_details_movexArticleNumber">
+                    {{ 'product.previous_article' | cxTranslate }}
+                  </span>
+                  {{ product.movexArticleNumber }}
+                </ng-container>
+
+                <ng-container
+                  *ngIf="
+                    siteCountryCode === countryCodesEnum.DENMARK ||
+                    siteCountryCode === countryCodesEnum.FINLAND ||
+                    siteCountryCode === countryCodesEnum.NORWAY ||
+                    siteCountryCode === countryCodesEnum.SWEDEN ||
+                    siteCountryCode === countryCodesEnum.LITHUANIA ||
+                    siteCountryCode === countryCodesEnum.LATVIA ||
+                    siteCountryCode === countryCodesEnum.ESTONIA ||
+                    siteCountryCode === countryCodesEnum.NETHERLANDS ||
+                    siteCountryCode === countryCodesEnum.POLAND ||
+                    siteCountryCode === countryCodesEnum.EXPORT
+                  "
+                >
+                  <span class="content__bold" id="product_details_elfaArticleNumber">
+                    {{ 'product.previous_article' | cxTranslate }}
+                  </span>
+                  {{ product.elfaArticleNumber }}
+                </ng-container>
+
+                <ng-container *ngIf="siteCountryCode === countryCodesEnum.GERMANY">
+                  <span class="content__bold" id="product_details_navisionArticleNumber">
+                    {{ 'product.previous_article' | cxTranslate }}
+                  </span>
+                  {{ product.navisionArticleNumber }}
+                </ng-container>
+              </div>
+            </ng-container>
+
+            <div>
+              <ng-container *ngIf="product.productInformation?.paperCatalogPageNumber_16_17">
+                <span class="content__bold" id="product_details_paperCatalogPageNumber_16_17">
+                  {{ 'product.information.additional.paper_catalogue_title' | cxTranslate }}
+                </span>
+                {{
+                  'product.information.additional.paper_catalogue_16_17'
+                    | cxTranslate: { number: product.productInformation?.paperCatalogPageNumber_16_17 }
+                }}
+              </ng-container>
+            </div>
+
+            <div>
+              <ng-container *ngIf="product.productInformation?.paperCatalogPageNumber">
+                <span class="content__bold" id="product_details_paperCatalogPageNumber">
+                  {{ 'product.information.additional.paper_catalogue_title' | cxTranslate }}
+                </span>
+                {{
+                  'product.information.additional.paper_catalogue'
+                    | cxTranslate: { number: product.productInformation?.paperCatalogPageNumber }
+                }}
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div
+          *ngIf="product.rohs || product.svhc || product.svhcReviewDate || product.isDangerousGoods"
+          class="entry"
+          id="backorder-modal-environmental-details"
+        >
+          <div class="subtitle" id="backorder-modal-product-environmental-details-title">
+            {{ 'product.information.environmental.title' | cxTranslate }}
+          </div>
+
+          <div class="content">
+            <div id="backorder-modal-environmental-rohs">
+              <ng-container *ngIf="product.rohs">
+                <span class="content__bold">{{ 'product.information.environmental.rohs' | cxTranslate }}</span>
+                <ng-container *ngIf="product?.isROHSComplaint">
+                  <span id="pd_environmental_rohs_compliant">
+                    {{ 'product.information.environmental.rohs_compliant' | cxTranslate }}
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="!product?.isROHSComplaint && product?.rohsCode === '99'">
+                  <span id="pd_environmental_rohs_under_review">
+                    {{ 'product.information.environmental.rohs_under_review' | cxTranslate }}.
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="!product?.isROHSComplaint && product?.rohsCode === '13'">
+                  <span id="pd_environmental_rohs_not_compliant">
+                    {{ 'product.information.environmental.rohs_not_compliant' | cxTranslate }}
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="!product?.isROHSComplaint && product?.rohsCode === '11'">
+                  <span id="pd_environmental_rohs_not_applicable">
+                    {{ 'product.information.environmental.rohs_not_applicable' | cxTranslate }}.
+                  </span>
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    !(
+                      product?.isROHSComplaint ||
+                      product?.rohsCode == 99 ||
+                      product?.rohsCode == 13 ||
+                      product?.rohsCode == 11
+                    )
+                  "
+                >
+                  <span id="pd_environmental_rohs_otherwise">{{ product?.rohs }}</span>
+                </ng-container>
+
+                <ng-container *ngIf="!product?.isRNDProduct && product?.isROHSValidForCountry && product?.rohs">
+                  <a
+                    class="link"
+                    id="pd_environmental_rohs_download_link"
+                    id="ROHS-pdf-link"
+                    [href]="'/compliance-document/pdf/ROHS_' + product?.code"
+                    [data-file-name]="'ROHS_' + product?.code + '.pdf'"
+                    (click)="dispatchPDFEvent(product)"
+                    title="Download RoHS Certificate"
+                    text="Order Note"
+                    data-aainteraction="file download"
+                    data-file-type="pdf"
+                    target="_blank"
+                  >
+                    {{ 'product.information.environmental.rohs_download' | cxTranslate }}
+                  </a>
+                </ng-container>
+              </ng-container>
+            </div>
+
+            <div id="backorder-modal-environmental-svhc">
+              <ng-container *ngIf="product.hasSvhc; else noSvhc">
+                <span class="content__bold" id="backorder-modal-environmental-details-reach">
+                  {{ 'product.information.environmental.reach_regualation' | cxTranslate }}
+                </span>
+
+                <span id="backorder-modal-environmental-details-reach-named">
+                  {{ 'product.information.environmental.reach_svhc_named' | cxTranslate }}
+                </span>
+
+                <a
+                  class="link"
+                  id="pd_environmental_reach_statement_url"
+                  [data-file-name]="'SVHC_' + product?.code + '.pdf'"
+                  [href]="'/compliance-document/pdf/SVHC_' + product?.code"
+                  target="_blank"
+                  title="REACH Regulation Statement"
+                  data-aainteraction="file download"
+                  data-file-type="pdf"
+                >
+                  {{ 'product.information.environmental.reach_statement' | cxTranslate }}
+                </a>
+              </ng-container>
+
+              <ng-template #noSvhc>
+                <span class="content__bold" id="backorder-modal-environmental-no-svhc">
+                  {{ 'product.information.environmental.reach_regualation' | cxTranslate }}
+                </span>
+
+                <span id="backorder-modal-environmental-no-svhc-named">
+                  {{ 'product.information.environmental.reach_no_svhc_named' | cxTranslate }}
+                </span>
+
+                <a
+                  class="link"
+                  id="pd_environmental_reach_no_statement_url"
+                  [data-file-name]="'SVHC_' + product?.code + '.pdf'"
+                  [href]="'/compliance-document/pdf/SVHC_' + product?.code"
+                  data-aainteraction="file download"
+                  data-file-type="pdf"
+                  target="_blank"
+                  title="No SVHC Statement"
+                >
+                  {{ 'product.information.environmental.reach_no_statement' | cxTranslate }}
+                </a>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" id="backorder-modal-additional-information">
+          <div class="subtitle" id="backorder-modal-additional-information-title">
+            {{ 'product.information.additional.title' | cxTranslate }}
+          </div>
+
+          <div class="content">
+            <div *ngIf="product.countryOfOrigin">
+              <span class="content__bold" id="backorder-modal-product-origin-label">
+                {{ 'product.information.additional.country_origin' | cxTranslate }}
+              </span>
+              {{ product.countryOfOrigin?.name }} ({{ product.countryOfOrigin?.isocode }})
+            </div>
+
+            <div *ngIf="product.distManufacturer">
+              <span class="content__bold" id="backorder-modal-product-manufacturer-label">
+                {{ 'product.information.additional.manufacturer' | cxTranslate }}
+              </span>
+              <a class="link" [routerLink]="product.distManufacturer?.urlId">
+                {{ product.distManufacturer?.name }}
+              </a>
+            </div>
+
+            <div *ngIf="product.grossWeight !== ''">
+              <span class="content__bold" id="backorder-modal-product-gross-weight-label">
+                {{ 'product.information.additional.gross_weight' | cxTranslate }}
+              </span>
+              {{ product.grossWeight }}&nbsp;{{ product.grossWeightUnit }}
+            </div>
+
+            <div *ngIf="product.dimensions !== ''">
+              <span class="content__bold" id="backorder-modal-product-dimensions-label">
+                {{ 'product.information.additional.dimensions' | cxTranslate }}
+              </span>
+              {{ product.dimensions }}
+            </div>
+
+            <div *ngIf="product.customsCode !== ''">
+              <span class="content__bold" id="backorder-modal-product-customs-number-label">
+                {{ 'product.information.additional.customs_number' | cxTranslate }}
+              </span>
+              {{ product.customsCode }}
+            </div>
+
+            <div *ngIf="product.usspsc5 !== ''">
+              <span class="content__bold" id="backorder-modal-product-unuspsc-label">
+                {{ 'product.information.additional.unuspsc' | cxTranslate }}
+              </span>
+              {{ product.unspsc5 }}
+            </div>
+
+            <div *ngIf="product.ean !== ''">
+              <span class="content__bold" id="backorder-modal-product-ean-label">
+                {{ 'product.information.additional.ean' | cxTranslate }}
+              </span>
+              {{ product.ean }}
+            </div>
+
+            <div *ngIf="product.enumber !== ''">
+              <span class="content__bold" id="backorder-modal-product-e-number-label">
+                {{ 'product.information.additional.e_number' | cxTranslate }}
+              </span>
+              {{ product.enumber }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-modal>
+</ng-container>

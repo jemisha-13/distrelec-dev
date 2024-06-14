@@ -1,0 +1,19 @@
+# TR
+$contentCatalog = distrelec_TRContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+$lang = en
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]  ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Privacy/Cookie Settings ; #triggerCookieSettings
+
+$lang = tr
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]  ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Privacy/Cookie Settings ; #triggerCookieSettings
+
+
+UPDATE DistFooterComponent; UID[unique = true]  ; impressumLinks(uid, $contentCV); $contentCV[unique = true]
+                          ; DistFooterComponent ; PrivacyCookieLink, QLLink

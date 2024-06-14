@@ -1,0 +1,14 @@
+$productCatalog=distrelecProductCatalog
+$productCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $productCatalog]), CatalogVersion.version[default = Online])[default = $productCatalog:Online]
+
+$defaultCategoryCode=cat-01_Active_components_web_toc
+$defaultCategory=defaultPreviewCategory(code[default = $defaultCategoryCode], $productCV)
+
+$defaultProductCode=30112450
+$defaultProduct=defaultPreviewProduct(code[default = $defaultProductCode], $productCV)
+
+$defaultManufactureCode=man_rnp
+$defaultManufacturer=defaultPreviewManufacturer(code)[default=$defaultManufactureCode]
+
+UPDATE CMSSite;uid[unique=true];$defaultProduct;$defaultCategory;$defaultManufacturer
+              ;distrelec_FR    ;

@@ -1,0 +1,47 @@
+<div class="modal" id="modalApprovalReject">
+  <div class="hd">
+    <div class="left">
+      <h3 class="title" id="personalNote_modal_title">{{ 'lightboxrejectorder.personalNote' | cxTranslate }}</h3>
+    </div>
+    <div class="right">
+      <a class="btn btn-close" id="personalNote_modal_btn_close" (click)="closeModal()">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </a>
+    </div>
+  </div>
+  <form [formGroup]="shoppingListForm">
+    <div class="bd">
+      <div class="start-box">
+        <app-action-message
+          *ngIf="hasError"
+          [message]="'validations.personal_note_empty_error' | cxTranslate"
+          type="danger"
+        ></app-action-message>
+        <div class="form-row">
+          <textarea
+            class="approval-reject-note w-100"
+            id="approvalRejectNoteName"
+            [(ngModel)]="rejectNote"
+            name="approvalRejectNoteName"
+            formControlName="name"
+            rows="4"
+            cols="60"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="ft">
+      <button class="mat-button btn-cancel" id="approval_reject_modal_btn_cancel" (click)="closeModal()" type="submit">
+        {{ 'lightboxrejectorder.cancel' | cxTranslate }}
+      </button>
+      <button
+        class="mat-button mat-button--red btn-primary"
+        id="personalNote_modal_btn_save"
+        (click)="callSaveRejectionNote()"
+        type="submit"
+      >
+        {{ 'lightboxrejectorder.submit' | cxTranslate }}
+      </button>
+    </div>
+  </form>
+</div>

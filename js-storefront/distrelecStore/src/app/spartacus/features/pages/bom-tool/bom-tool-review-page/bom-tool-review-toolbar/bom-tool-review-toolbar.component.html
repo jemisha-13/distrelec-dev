@@ -1,0 +1,46 @@
+<div *ngIf="{ value: isAnySelected$ | async } as isAnySelected" class="toolbar">
+  <div class="toolbar__left">
+    <app-button
+      class="btn-add-shopping"
+      [dataAttributes]="{ aainteraction: 'add all to shopping list' }"
+      [disabled]="addedToShoppingList || isAnySelected.value === false"
+      (click)="onAddToShoppingList()"
+      buttonId="add_to_shopping_list_btn_{{ addedToShoppingList }}"
+      colour="grey"
+    >
+      {{ (addedToShoppingList ? 'text.shoppinglistadded' : 'text.addselectedtoshoppinglist') | cxTranslate }}
+    </app-button>
+
+    <app-button
+      [dataAttributes]="{ aainteraction: 'save BOM file' }"
+      [disabled]="!isDirty && !isNewFile"
+      (click)="onSave()"
+      buttonId="save_bom_file_btn_{{ isNewFile }}"
+      colour="grey"
+    >
+      {{ (isNewFile ? 'text.savebomfile' : 'update.bomfile') | cxTranslate }}
+    </app-button>
+  </div>
+
+  <div class="toolbar__right">
+    <app-atc-button
+      [getBulkItems]="format.bind(this)"
+      [id]="'bom_tool_add_to_cart_btn'"
+      [disabled]="isAnySelected.value === false"
+      [pageTrackingType]="itemListEntity.BOM"
+      [shouldOpenFlyout]="true"
+      (added)="onAddToCart()"
+      [control]="addToCartForm.get('quantity')"
+    ></app-atc-button>
+
+    <app-button
+      *ngIf="addedToCart"
+      [title]="'metahd.cart.viewCart' | cxTranslate"
+      (click)="goToCart()"
+      buttonId="go_to_cart_btn"
+      colour="orange"
+    >
+      {{ 'metahd.cart.viewCart' | cxTranslate }}
+    </app-button>
+  </div>
+</div>

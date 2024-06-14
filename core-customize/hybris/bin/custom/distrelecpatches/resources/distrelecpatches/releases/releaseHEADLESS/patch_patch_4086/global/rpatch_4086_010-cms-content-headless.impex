@@ -1,0 +1,10 @@
+$contentFRCatalog = distrelec_FRContentCatalog
+$frContentCV = catalogVersion(catalog(id[default=$contentFRCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+$contentCatalog = distrelec_IntContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+
+UPDATE ContentSlot; $frContentCV[unique = true]; uid[unique = true]             ; active; cmsComponents(uid, $contentCV)[mode=append]
+                         ;                          ; cs_0000099S          ; true  ; cmsitem_00092000

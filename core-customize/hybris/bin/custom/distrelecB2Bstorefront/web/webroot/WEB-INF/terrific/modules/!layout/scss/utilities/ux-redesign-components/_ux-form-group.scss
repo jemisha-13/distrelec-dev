@@ -1,0 +1,301 @@
+.ux-form-group {
+  @include font-size(14px);
+  @include line-height(18px);
+  margin-bottom: $spacing-unit * 5;
+  color: $colour-black;
+
+  &.mb-0 {
+    margin-bottom: 0;
+  }
+
+  &.has-error {
+    .ux-form-group__errors {
+      display: block;
+    }
+  }
+
+  &,
+  &__field {
+    font-weight: 500;
+  }
+
+  &__label {
+    display: inline-block;
+    margin-bottom: $spacing-unit + 3;
+    font-weight: 600;
+
+    &.has-optional-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      > span.is-optional {
+        padding-left: $spacing-unit * 2;
+        font-weight: 500;
+      }
+    }
+  }
+
+  // Overriding specificity from base.css styles without use of "!important"
+  .ux-form-group__field {
+    width: 100%;
+    height: $ux-form-el-height;
+    border: 1px solid $ux-input-border-color-light;
+    border-radius: $ux-form-el-border-radius;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: border .2s ease, background-color .2s ease;
+
+    &.is-populated {
+      &,
+      & + .selectboxit-container .ux-form-group__field {
+        background-color: $colour-white;
+      }
+    }
+
+    &[disabled],
+    &[readonly] {
+      &,
+      &:hover,
+      &:focus {
+        border: 1px solid $ux-input-border-color-light;
+        background-color: $ux-input-disabled-bg;
+        color: $ux-input-disabled-color;
+        cursor: not-allowed;
+      }
+    }
+
+    &,
+    &.success,
+    &.error {
+      padding-right: $spacing-unit * 8;
+      padding-left: $spacing-unit * 3;
+    }
+
+    &.success,
+    &.error {
+      &,
+      &:hover,
+      &:focus {
+        background-color: $colour-white;
+      }
+    }
+
+    &.success {
+      &,
+      &:hover,
+      &:focus {
+        border: 1px solid $ux-input-success-color;
+      }
+
+      ~ .tickItem {
+        display: block;
+      }
+    }
+
+    &.error {
+      &,
+      &:hover,
+      &:focus {
+        border: 1px solid $ux-input-error-color;
+      }
+
+      ~ .tickItemError {
+        display: block;
+      }
+    }
+
+    // Selectboxit element
+    &.selectboxit {
+      // States
+      &:focus,
+      &.selectboxit-hover {
+        .selectboxit-text {
+          color: inherit;
+        }
+      }
+
+      // Text
+      .selectboxit-text {
+        float: none;
+        max-width: 100% !important; // Overriding plugins style
+        width: 100%;
+        height: 100%;
+        line-height: 38px;
+        padding-right: $spacing-unit * 6;
+        padding-left: 0;
+        margin: 0;
+      }
+
+      // Arrow icon
+      .selectboxit-arrow-container {
+        top: 0;
+        right: 0;
+        height: $ux-form-el-height;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background-color: transparent;
+        color: $ux-grey;
+
+        &:before {
+          @include font-size(16px);
+          content: $fa-angle-down;
+          font-family: $fontAwesome;
+        }
+
+        .selectboxit-arrow {
+          display: none;
+        }
+      }
+    }
+  }
+
+  input.ux-form-group__field {}
+
+  select.ux-form-group__field {
+    padding-left: $spacing-unit * 3 - 1; //Fix for small indent in select items (which aren't SelectBoxit)
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+
+    &.success {
+      + .selectboxit-container {
+        .selectboxit.ux-form-group__field {
+          border-color: $ux-input-success-color;
+        }
+      }
+    }
+
+    &.error {
+      + .selectboxit-container {
+        .selectboxit.ux-form-group__field {
+          border-color: $ux-input-error-color;
+        }
+      }
+    }
+
+    &.success,
+    &.error {
+      + .selectboxit-container {
+        .selectboxit.ux-form-group__field {
+          background-color: $colour-white;
+
+          .selectboxit-text {
+            padding-right: 55px;
+          }
+          .selectboxit-arrow-container {
+            right: 34px;
+          }
+        }
+      }
+    }
+
+    // Main selectboxit element
+    + .selectboxit-container {
+      width: 100%;
+
+      // Dropdown list
+      .selectboxit-options.selectboxit-list {
+        box-shadow: 0 1px 6px rgba($colour-black, .1);
+
+        .selectboxit-option {
+          padding-left: 0;
+
+          &.selectboxit-disabled {
+            cursor: not-allowed;
+          }
+
+          &.selectboxit-selected {
+            &,
+            &.selectboxit-focus {
+              background-color: lighten($ux-light-grey, 7%);
+            }
+
+            .selectboxit-option-anchor {
+              color: inherit;
+            }
+          }
+
+          &.selectboxit-focus {
+            background-color: lighten($ux-light-grey, 9%);
+          }
+
+          .selectboxit-option-anchor {
+            padding-left: $spacing-unit * 3;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+
+  textarea.ux-form-group__field {}
+
+  &__info {
+    @include font-size(12px);
+    margin-top: $spacing-unit + 3;
+    color: $ux-txt-grey;
+    font-weight: 400;
+  }
+
+  &__errors {
+    @include font-size(12px);
+    display: none;
+    color: $ux-input-error-color;
+
+    > * {
+      margin-top: $spacing-unit + 3;
+    }
+  }
+
+  .tickItem,
+  .tickItemError {
+    @include font-size(18px);
+    position: absolute;
+    top: ($ux-form-el-height - 18px) * 0.5;
+    right: 15px;
+    display: none;
+  }
+
+  .tickItem {
+    color: $ux-input-success-color;
+  }
+
+  .tickItemError {
+    color: $ux-input-error-color;
+  }
+
+  .tickItem,
+  .tickItemError {
+    pointer-events: none;
+  }
+
+  .ux-checkbox__state {
+    top: 0;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.mod-checkout-rebuild-block {
+  .ux-form-group__label {
+    pointer-events: none;
+  }
+
+  .ux-form-group__field {
+    background-color: $ux-input-disabled-bg;
+
+    &:hover {
+      background-color: $ux-input-hover-bg;
+      border-color: $ux-input-hover-border;
+    }
+
+    &:focus {
+      border: 2px solid $colour-dist-marigold;
+      border-color: $colour-dist-marigold;
+    }
+  }
+}

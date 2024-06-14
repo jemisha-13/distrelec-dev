@@ -1,0 +1,37 @@
+#
+# Import payment modes
+#
+
+$defaultCatalog=Default
+$defaultCV=catalogVersion(catalog(id[default=$defaultCatalog]),version[default='Staged'])[unique=true,default=$defaultCatalog:Staged]
+$siteResource=jar:com.namics.distrelec.b2b.initialdata.setup.InitialDataSystemSetup&/distrelecB2Binitialdata/import/project/common/images
+
+INSERT_UPDATE Media;$defaultCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime;altText
+;;LGO_Accept_Maestro_min.png;LGO_Accept_Maestro_min.png;$siteResource/LGO_Accept_Maestro_min.png;image/png;Maestor Logo
+;;LGO_Accept_MasterCard_min.png;LGO_Accept_MasterCard_min.png;$siteResource/LGO_Accept_MasterCard_min.png;image/png;Master Card Logo
+;;LGO_Accept_Visa_Online_darkBG_min.png;LGO_Accept_Visa_Online_darkBG_min.png;$siteResource/LGO_Accept_Visa_Online_darkBG_min.png;image/png;Visa Logo
+;;LGO_AmericanExpress_min.png;LGO_AmericanExpress_min.png;$siteResource/LGO_AmericanExpress_min.png;image/png;Ammerican Express Logo
+;;LGO_DinersClub_min.png;LGO_DinersClub_min.png;$siteResource/LGO_DinersClub_min.png;image/png;Dinners Club Logo
+;;LGO_EC-Lastschrift_min.png;LGO_EC-Lastschrift_min.png;$siteResource/LGO_EC-Lastschrift_min.png;image/png;EC Lastschrift Logo
+;;LGO_giropay_min.png;LGO_giropay_min.png;$siteResource/LGO_giropay_min.png;image/png;Giro Pay Logo
+;;LGO_paypal_min.png;LGO_paypal_min.png;$siteResource/LGO_paypal_min.png;image/png;Pay Pal Logo
+;;LGO_ideal_min.png;LGO_paypal_min.png;$siteResource/LGO_ideal_min.png;image/png;iDEAL Logo
+
+
+UPDATE DistPaymentMode;code[unique=true];icons(code,$defaultCV)
+;CreditCard;LGO_Accept_MasterCard_min.png,LGO_Accept_Visa_Online_darkBG_min.png
+;PayPal;LGO_paypal_min.png
+;GiroPay;LGO_giropay_min.png
+;DirectDebit;LGO_EC-Lastschrift_min.png
+;Ideal;LGO_ideal_min.png
+
+
+UPDATE MovexPaymentMode;code[unique=true];icons(code,$defaultCV)
+;Movex_CreditCard;LGO_Accept_MasterCard_min.png,LGO_Accept_Visa_Online_darkBG_min.png
+
+UPDATE CreditCardType;code[unique=true];icon(code,$defaultCV);
+;mastercard;LGO_Accept_MasterCard_min.png
+;maestro;LGO_Accept_Maestro_min.png
+;amex;LGO_AmericanExpress_min.png
+;diners;LGO_DinersClub_min.png
+;visa;LGO_Accept_Visa_Online_darkBG_min.png

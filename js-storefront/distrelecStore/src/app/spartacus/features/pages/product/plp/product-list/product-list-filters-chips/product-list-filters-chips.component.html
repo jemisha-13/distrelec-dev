@@ -1,0 +1,40 @@
+<ng-container *ngIf="chips | async as chips">
+  <div *ngIf="chips?.length > 0" class="d-flex" [id]="'plp-chips-container-' + mode">
+    <div *ngIf="mode === 'top' || mode === 'sidebar'" class="title-group">
+      <h5 class="applied-filters-title" id="applied-filters-text">
+        {{ 'plp.facet_buttons_and_headers.applied_filters' | cxTranslate | uppercase }}
+      </h5>
+
+      <div *ngIf="mode === 'sidebar'" class="clear-all" id="clear-all-button" (click)="clearAll()">
+        <span>{{ 'plp.facet_buttons_and_headers.clear_all' | cxTranslate }}</span>
+      </div>
+    </div>
+
+    <div *ngIf="mode === 'top' || mode === 'sidebar'" class="chip-group">
+      <ng-container *ngFor="let chip of chips">
+        <app-chip
+          *ngFor="let item of chip.facetItems; let i = index"
+          [text]="item.propertyName ? (item.propertyName | cxTranslate) : item.name"
+          [id]="'clear-group-button' + i"
+          [tooltip]="chip.name"
+          (iconClick)="clearGroup(item.queryFilter)"
+        ></app-chip>
+      </ng-container>
+
+      <div *ngIf="mode === 'top'" class="clear-all" id="clear-all-button" (click)="clearAll()">
+        <span>{{ 'plp.facet_buttons_and_headers.clear_all' | cxTranslate }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="chips?.length && mode === 'mobile'" [id]="'plp-chips-container-' + mode">
+    <div
+      *ngIf="mode === 'mobile'"
+      class="btn clear-all py-1 px-4 my-2 mx-4 font-weight-bold"
+      id="clear-all-button"
+      (click)="clearAll()"
+    >
+      <span>{{ 'plp.facet_buttons_and_headers.clear_all' | cxTranslate }}</span>
+    </div>
+  </div>
+</ng-container>

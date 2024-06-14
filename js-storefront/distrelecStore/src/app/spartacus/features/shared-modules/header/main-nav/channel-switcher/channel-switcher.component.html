@@ -1,0 +1,31 @@
+<ng-container *rxLet="activeChannel_; let activeChannel">
+  <ng-container *rxLet="userId$; let userId">
+    <div class="wrapper" id="channel-toggle-switcher">
+      <span class="label">{{ 'header.channel_B2B' | cxTranslate }}</span>
+      <div
+        class="toggle"
+        id="channel-toggle-input"
+        [ngClass]="activeChannel === 'B2B' ? 'left' : 'right'"
+        [class.disabled]="userId === 'current'"
+        (click)="userId !== 'current' && switchChannel(activeChannel)"
+      >
+        <app-icon
+          *ngIf="userId === 'current'"
+          class="toggle__lock"
+          [ngClass]="activeChannel === 'B2B' ? 'left' : 'right'"
+          iconName="lock"
+          iconType="svg"
+        ></app-icon>
+        <div
+          class="toggle__knob"
+          [ngClass]="activeChannel === 'B2B' ? 'left' : 'right'"
+          [class.disabled]="userId === 'current'"
+        ></div>
+      </div>
+      <span class="label">{{ 'header.channel_B2C' | cxTranslate }}</span>
+      <div class="pipe"></div>
+      <span class="label">{{ currency$ | async }}</span>
+      <span class="label">{{ (activeChannel === 'B2B' ? 'product.exc_vat' : 'product.inc_vat') | cxTranslate }}</span>
+    </div>
+  </ng-container>
+</ng-container>

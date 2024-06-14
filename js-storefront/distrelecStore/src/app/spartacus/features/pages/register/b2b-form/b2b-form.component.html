@@ -1,0 +1,132 @@
+<form [formGroup]="generalRegForm">
+  <div class="register__form">
+    <h3 class="register__form--title" id="registration.b2b.company_title">
+      2. {{ 'registration.b2b.company_title' | cxTranslate }}
+    </h3>
+    <div class="row no-gutters">
+      <div class="col-12 col-lg-10">
+        <!--- COUNTRY INPUT: BIZ/EX --->
+        <app-country-list
+          [generalRegForm]="generalRegForm"
+          [disableCountryCodeOtherB2B$]="disableCountryCodeOtherB2B$"
+          (countrySelected)="countrySelected($event)"
+        ></app-country-list>
+        <!-- DISTRELEC ACCOUNT -->
+        <ng-container *ngIf="!isExportShop || this.generalRegForm.get('countryCodeOther')?.value">
+          <div class="register__form__holder is-company-name" [formGroup]="generalRegForm">
+            <div class="register__form__holder--full">
+              <label class="register__form__holder--title">{{ 'registration.b2b.company_name' | cxTranslate }}</label>
+              <div class="p-relative">
+                <!--- COMPANY NAME INPUT --->
+                <input
+                  class="register__form__holder--input companyname js-validate"
+                  id="companynameB2B"
+                  [class.is-correct]="generalRegForm.get('companyname').valid"
+                  [class.is-invalid]="
+                    generalRegForm.get('companyname').errors && generalRegForm.get('companyname').touched
+                  "
+                  [placeholder]="'registration.b2b.companyname_placeholder' | cxTranslate"
+                  (click)="onControlTouch('companyname')"
+                  type="text"
+                  formControlName="companyname"
+                />
+                <fa-icon
+                  *ngIf="generalRegForm.get('companyname').errors && generalRegForm.get('companyname').touched"
+                  id="faTimesOrgNumb"
+                  [icon]="faTimes"
+                ></fa-icon>
+                <fa-icon
+                  *ngIf="!generalRegForm.get('companyname').errors && generalRegForm.get('companyname').touched"
+                  id="faCheckOrgNumb"
+                  [icon]="faCheck"
+                ></fa-icon>
+                <small
+                  *ngIf="generalRegForm.get('companyname').errors && generalRegForm.get('companyname').touched"
+                  class="error"
+                  id="validations.vat.error_text_orgNo"
+                >
+                  {{ 'registration.b2b.company_name.invalid' | cxTranslate }}
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="register__form__holder">
+            <label class="register__form__holder--title" id="registration.general.have_account_q">
+              {{ 'registration.general.have_account_q' | cxTranslate }}
+            </label>
+          </div>
+          <div class="register__form__holder__have-account">
+            <div class="register__form__holder-btn" [class.is-checked]="!accountExists">
+              <button
+                class="btn"
+                id="form.no"
+                [disabled]="isValidNumberFound"
+                (click)="triggerCustNo(false)"
+                type="button"
+              >
+                {{ 'form.no' | cxTranslate }}
+              </button>
+            </div>
+            <div class="register__form__holder-btn" id="form.yes" [class.is-checked]="accountExists">
+              <button class="btn" [disabled]="isValidNumberFound" (click)="triggerCustNo(true)" type="button">
+                {{ 'form.yes' | cxTranslate }}
+              </button>
+            </div>
+          </div>
+          <ng-container *ngIf="accountExists; else accountDoesntExist">
+            <app-customer-number
+              [generalRegForm]="generalRegForm"
+              [displayNextSteps$]="displayNextSteps$"
+            ></app-customer-number>
+          </ng-container>
+          <ng-template #accountDoesntExist>
+            <div class="register__form__holder">
+              <div class="register__form__holder--full">
+                <label class="register__form__holder--title" id="registration.b2b.additional_det">
+                  {{ 'registration.b2b.additional_det' | cxTranslate }}
+                </label>
+              </div>
+            </div>
+            <app-it-bisnode-form
+              [generalRegForm]="generalRegForm"
+              [onControlTouch]="onControlTouch"
+            ></app-it-bisnode-form>
+            <app-vat-validation
+              [generalRegForm]="generalRegForm"
+              [vatIdValidation$]="vatIdValidation$"
+              [onControlTouch]="onControlTouch"
+              [disableCountryCodeOtherB2B$]="disableCountryCodeOtherB2B$"
+              [isLoading$]="isVatValidationLoading$"
+            ></app-vat-validation>
+            <div class="register__form__holder">
+              <button class="btn register__submit" id="formContinue" (click)="validateCompanyDetails()" type="submit">
+                {{ 'form.continue' | cxTranslate }}
+              </button>
+            </div>
+          </ng-template>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="displayNextSteps$ | async">
+    <div class="register__form">
+      <h3 class="register__form--title" id="registration.general.your_details">
+        3. {{ 'registration.general.your_details' | cxTranslate }}
+      </h3>
+      <app-about-you-form
+        [generalRegForm]="generalRegForm"
+        [onControlTouch]="onControlTouch"
+        [stepsList_]="stepsList_"
+        [isEmailExist$]="isEmailExist$"
+        (inputClicked)="onControlTouch($event)"
+      ></app-about-you-form>
+      <app-communication-pref
+        [generalRegForm]="generalRegForm"
+        [onControlTouch]="onControlTouch"
+        [stepsList_]="stepsList_"
+        [activeSiteId]="activeSiteId"
+        [isEmailExist$]="isEmailExist$"
+      ></app-communication-pref>
+    </div>
+  </ng-container>
+</form>

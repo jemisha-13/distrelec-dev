@@ -1,0 +1,20 @@
+<ng-container class="accordion">
+  <div class="accordion__header">
+    <div class="accordion__header__title" [id]="titleId" [innerHTML]="title"></div>
+    <button
+      class="accordion__toggle"
+      [id]="'accordion_' + elementId + '_header_toggleBtn'"
+      (click)="toggleCollapsedState()"
+    >
+      <span *ngIf="collapsed" class="accordion__toggle__openButton">
+        <app-icon [icon]="iconArrowDown" [class]="'d-flex'"></app-icon>
+      </span>
+      <span *ngIf="!collapsed" class="accordion__toggle__closeButton">
+        <app-icon [icon]="iconArrowUp" [class]="'d-flex'"></app-icon>
+      </span>
+    </button>
+  </div>
+  <div *ngIf="!collapsed" class="accordion__content">
+    <ng-content></ng-content>
+  </div>
+</ng-container>

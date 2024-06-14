@@ -1,0 +1,71 @@
+<div class="cart-toolbar__holder">
+  <div class="cart-toolbar__holder__left">
+    <div class="cart-toolbar__empty-cart">
+      <button
+        class="btn cart-toolbar__empty-cart-btn"
+        id="cart-toolbar-empty-button"
+        [disabled]="isRecalculateInProgress_ | async"
+        (click)="emptyCart()"
+        data-aainteraction="empty cart"
+      >
+        {{ 'cart.empty_cart' | cxTranslate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="cart-toolbar__holder__right">
+    <div class="cart-toolbar__print-cart">
+      <a
+        class="cart-toolbar__print-cart--btn"
+        id="cart-toolbar-print-button"
+        [href]="pdfGenerationLink() | async"
+        target="_blank"
+        title="{{ 'toolsitem.print' | cxTranslate }}"
+      >
+        <fa-icon [icon]="faPrint"></fa-icon>
+      </a>
+    </div>
+
+    <div class="cart-toolbar__email-cart" id="cart-toolbar-email-button" title="{{ 'toolsitem.share' | cxTranslate }}">
+      <button class="cart-toolbar__email-cart--btn" (click)="shareViaEmailClick()">
+        <fa-icon [icon]="faEnvelope"></fa-icon>
+      </button>
+    </div>
+
+    <div class="cart-toolbar__download-files" id="cart-toolbar-download-text">
+      {{ 'cart.download' | cxTranslate }}
+      <button
+        class="btn cart-toolbar__download-files--btn"
+        id="cart-toolbar-download-csv-button"
+        (click)="downloadProducts('csv')"
+        data-aainteraction="download cart"
+      >
+        CSV
+      </button>
+      /
+      <button
+        class="btn cart-toolbar__download-files--btn"
+        id="cart-toolbar-download-xls-button"
+        (click)="downloadProducts('xls')"
+        data-aainteraction="download cart"
+      >
+        XLS
+      </button>
+    </div>
+
+    <div
+      *ngIf="userId$ | async as userId"
+      class="cart-toolbar__shopping-list"
+      title="{{ 'toolsitem.save.cart' | cxTranslate }}"
+    >
+      <button
+        class="btn cart-toolbar__shopping-list-btn"
+        id="cart-toolbar-add-shopping-button"
+        (click)="addToShoppingList(userId)"
+        data-aainteraction="add to shopping list"
+      >
+        {{ 'cart.save_shop_list' | cxTranslate }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,128 @@
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+<html>
+	<head>
+		<meta charset="UTF-8">
+	
+		<style type="text/css">
+
+			@font-face {
+			    font-family: myriadProLight;
+			    src: url(MyriadPro-Light.otf);
+			}
+				
+			div {
+				font-size: 16px;
+				font-family: myriadProLight;
+			}
+
+			h2 {
+				color: #ff0c10;
+			}
+					
+			.main-container {
+				width: 50%;
+		    	margin: 0 auto;
+			}
+
+			.product {
+				border: 1px solid #cccccc;
+				border-bottom: none;
+				width: 900px;
+				height: 120px;
+			}
+
+			.product:last-child {
+				border-bottom: 1px solid #cccccc;
+			}	
+
+			.product .image {
+				width: 100px;
+				height: 119px;
+				margin-left: 10px;
+				float: left;
+		    }
+
+			.product .description {
+				float: left;
+			    margin-left: 20px;
+			    margin-top: -5px;
+			    width: 700px;
+		    }
+
+		    .product .description h3 a {
+				color: #ff0c10;
+				text-decoration: none;
+			}
+
+			.product .attributes {
+				float: left;
+			    margin-left: 20px;
+			    width: 450px;
+			}
+
+			th {
+			  	text-align: left;
+			}
+			
+			.artnr {
+				width: 100px;
+			}
+
+			.manufacturer {
+				width: 150px;
+			}
+
+			.typename {
+				width: 200px;
+			}
+
+			.ellipsis {
+				display: inline-block;
+				width: 700px;
+				white-space: nowrap;
+				overflow: hidden !important;
+				text-overflow: ellipsis;
+			}
+		</style>
+	</head>
+	<body style="padding: 0; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+
+		<div class="main-container">
+
+			<h2>New Products</h2>
+
+			<div class="products-container">
+
+				<!-- forEach starts -->
+				#foreach($product in $ctx.products)
+
+					<div class="product">
+						<div class="image">
+							<a href="${product.url}"><img src="${product.productImages[0].landscape_small.url}"></img></a>
+						</div>
+						<div class="description">
+							<h3><a class="ellipsis" title="$!StringEscapeUtils.escapeHtml(${product.name})" href="${product.url}"> $!StringEscapeUtils.escapeHtml(${product.name}) </a></h3>
+						</div>
+						<div class="attributes">
+							<table style="width:100%">
+								<tr>
+							    	<th class="artnr">Art.Nr.</th>
+							    	<th class="manufacturer">Manufacturer</th>		
+							    	<th class="typename">Type</th>
+							  	</tr>
+							  	<tr>
+							    	<td class="artnr">${product.codeErpRelevant}</td>
+							    	<td class="manufacturer">$!StringEscapeUtils.escapeHtml(${product.distManufacturer.name})</td>		
+							    	<td class="typename">$!StringEscapeUtils.escapeHtml(${product.typeName})</td>
+							  	</tr>
+							</table>
+						</div>
+					</div>
+
+				#end
+				<!-- forEach ends -->
+			</div>
+		</div>
+
+	</body>
+</html>

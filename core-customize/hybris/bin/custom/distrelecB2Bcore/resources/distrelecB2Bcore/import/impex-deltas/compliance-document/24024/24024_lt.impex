@@ -1,0 +1,20 @@
+# LT
+$contentCatalog = distrelec_LTContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+$lang = en
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]  ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Privacy/Cookie Settings ; #triggerCookieSettings
+
+$lang = lt
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]         ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Privatumo / slapukų nustatymai ; #triggerCookieSettings
+
+UPDATE DistFooterComponent; UID[unique = true]  ; impressumLinks(uid, $contentCV); $contentCV[unique = true]
+                          ; DistFooterComponent ; comp_0000111E, delivery_terms, Impressum, PrivacyCookieLink, Disclaimer, ADR-Link, ODR-link, QLLink
+
+

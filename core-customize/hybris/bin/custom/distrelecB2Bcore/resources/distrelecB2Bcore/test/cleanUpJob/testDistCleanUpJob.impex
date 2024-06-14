@@ -1,0 +1,36 @@
+$productCatalog=distrelecProductCatalog
+$productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default='Online'])
+$languages=en,de
+
+INSERT_UPDATE Catalog;id[unique=true]
+;$productCatalog
+
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;languages(isoCode);readPrincipals(uid)
+;$productCatalog;Online;true;$languages;employeegroup
+
+INSERT_UPDATE ServicelayerJob; code[unique=true];springId[unique=true]
+;distGenericCleanUpJob;distGenericCleanUpJob;
+
+INSERT_UPDATE Employee;uid[unique=true];name;password;groups(uid);sessionLanguage(isocode);sessionCurrency(isocode)
+;technicalCleanUpUser;Technical User For CleanUp Jobs;tech@proper;;de;EUR
+
+INSERT_UPDATE DistGenericCleanUpCronJob;code[unique=true];job(code);sessionUser(uid);sessionLanguage(isocode);flexibleSearchStatement;maxDaysToKeep;maxItemsToDelete
+;distCUPunchoutOutFilterCleanUpTestCronJob;distGenericCleanUpJob;technicalCleanUpUser;en;select {pk} from {DistCUPunchOutFilter} where {validUntilDate} < ?now and {modifiedTime} < ?nowMinusMaxDaysToKeep;0;1000
+;distB2BUnitCleanUpTestCronJob;distGenericCleanUpJob;technicalCleanUpUser;en;select {pk} from {B2BUnit};0;1
+
+INSERT_UPDATE Product;code[unique=true];approvalstatus(code)[default='approved'];$productCV[unique=true];
+;9301490_sample
+;9301491_sample
+;8500027_sample
+;8500035_sample
+
+
+INSERT_UPDATE B2BUnit;uid[unique=true];salesOrg(code);customerType(code);erpCustomerID
+;b2b_customers;7310;B2B;111222
+;b2c_customers;7310;B2C;333444
+
+INSERT_UPDATE DistCUPunchOutFilter;salesOrg(code)[unique=true];erpCustomerID[unique=true];product(code)[unique=true];validFromDate[dateformat=yyyyMMdd];validUntildate[dateformat=yyyyMMdd];lastModifiedErp[dateformat=yyyyMMddhhmmss]
+;7310;333444;9301490_sample;20000101;20001231;20131106100000
+;7310;333444;9301491_sample;20000101;20001231;20131106100000
+;7310;333444;8500027_sample;20000101;20001231;20131106100000
+;7310;333444;8500035_sample;20000101;99991231;20131106100000

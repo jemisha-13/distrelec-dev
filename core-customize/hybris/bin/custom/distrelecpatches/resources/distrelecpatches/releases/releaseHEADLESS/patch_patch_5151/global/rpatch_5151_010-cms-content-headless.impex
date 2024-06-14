@@ -1,0 +1,64 @@
+$contentCV=distrelec_BEContentCatalog
+$contentCatalogVersion=catalogVersion(catalog(id[default=$contentCV]), version[default='Staged'])
+$defaultContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = Default]), CatalogVersion.version[default = Staged])[default = Default:Staged]
+$internationalContentCatalog = distrelec_IntContentCatalog
+$internationalContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$internationalContentCatalog]),CatalogVersion.version[default=Staged])[default=$internationalContentCatalog:Staged]
+$homepageSiteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$homepage2020SiteResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign_2020/images
+
+# Language
+$lang=en_BE
+
+INSERT_UPDATE SyncJob2LangRel; source(code)[unique = true, path-delimiter='.']; target(isocode)[unique = true]
+           ; "sync distrelec_IntContentCatalog:Staged->Online" ; $lang
+
+                  
+INSERT_UPDATE CMSParagraphComponent;uid[unique=true];content[lang=$lang];$internationalContentCV[unique=true]
+;cmsitem_00070035;"<div id=""page-content"">
+<div class=""row"">
+<div class=""col-12"">
+<div class=""content-banner"">
+<h2>Return or Repair</h2>
+</div>
+</div>
+</div>
+
+<div class=""row"">
+<div class=""col-md-8"">
+<h3>Reliable and quick</h3>
+
+<p>If you wish to return an item to us or arrange for an item to be repaired, there are two different ways in which you can do this:</p>
+
+<ol class=""paragraph-ol"" type=""1"">
+	<li>If you purchased the item from our on-line shop, you can use our convenient on-line process.</li>
+	<li>To return items ordered by phone, fax or e-mail, please contact us first of all on +41 (0)44 944 99 70, e-mail: <a class=""content-link"" href=""mailto:service@distrelec.com"">service@distrelec.com</a> or fax +41 (0)44 944 99 79.</li>
+</ol>
+
+<div class=""content-image d-sm-block d-md-none"" style=""background-image:url('https://www.distrelec.ch/medias/content-page-returns-claims.jpg?context=bWFzdGVyfHJvb3R8MTc4MDYyfGltYWdlL2pwZWd8aDE0Lzk1MjYzODM3Mzg5MTAuanBnfDQ0ZjI5MDY2NjZlNTQ2NzViNTEwZmI0YzZjYjU4MWMwMTE3ZWYxOWRkMjI2MzJlYzVhNmVhYWRmY2U3MDc5Yjg');""></div>
+
+<h3>Using the Staged process</h3>
+
+<ol class=""paragraph-ol"" type=""1"">
+	<li>Log into your customer account and click on ""Order & Returns Manager"".</li>
+	<li>All your orders are listed in the ""Order History"". You can return all delivered items. All orders that have been completed and already dispatched have the status ""Shipped"".</li>
+	<li>The ordered items including quantities are included in the ""Detailed order"" area. Go to the respective order and click on ""Return / Submit complaint about item"". Select the item in question and send us the reasons of the return. Please note: If a return includes several items, you must repeat this process for each item to be returned.</li>
+	<li>Now click on ""Continue"". Once Distrelec receives the completed Staged form, one of our service employees will contact you as soon as possible.</li>
+</ol>
+
+<div class=""skin-layout-return-or-repair md-system"">
+<div class=""md-content__holder"">
+<div class=""data-response-holder"">
+<div class=""data-response-holder__success hidden"">Customer Support will contact you via email to inform you of the next steps.</div>
+
+<div class=""data-response-holder__fail hidden"">Sorry, something went wrong!</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<div class=""col-md-4"">
+<div class=""content-image d-none d-md-block"" style=""background-image:url('https://www.distrelec.ch/medias/content-page-returns-claims.jpg?context=bWFzdGVyfHJvb3R8MTc4MDYyfGltYWdlL2pwZWd8aDE0Lzk1MjYzODM3Mzg5MTAuanBnfDQ0ZjI5MDY2NjZlNTQ2NzViNTEwZmI0YzZjYjU4MWMwMTE3ZWYxOWRkMjI2MzJlYzVhNmVhYWRmY2U3MDc5Yjg');""></div>
+</div>
+</div>
+</div>"

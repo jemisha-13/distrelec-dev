@@ -1,0 +1,105 @@
+<ng-container *ngIf="siteData">
+  <div class="nav" id="sitesettings_menu" (click)="openPanelAndDispatchEvent($event, 'sitesettings-menu')">
+    <div class="nav__country-wrapper">
+      <span class="nav__country-wrapper__icon" [ngClass]="'flag flag--' + activeCountry"></span>
+      <span class="nav__label">{{ activeCountryKey | cxTranslate }}</span>
+    </div>
+    <span class="nav__pipe"></span>
+    <span class="nav__label" [id]="'sitesettings_language_' + this.activeLanguage">
+      {{ activeLanguageFull | async }}
+      <fa-icon class="ml-1" [icon]="faCaretDown"></fa-icon>
+    </span>
+  </div>
+
+  <app-dist-slide-drawer [title]="'form.site_settings' | cxTranslate" direction="RIGHT" uid="sitesettings-menu">
+    <form class="sitesettings" id="siteSettings" (ngSubmit)="submit($event, siteData[activeIndex])">
+      <div class="item">
+        <label class="heading country" id="country_label" for="sitesettings_country_dropdown">
+          {{ 'form.country' | cxTranslate }}
+        </label>
+        <ng-select
+          id="sitesettings_country_dropdown"
+          [(ngModel)]="activeIndex"
+          [searchable]="false"
+          (ngModelChange)="setDefaultLanguageSelection(true)"
+          name="selectModelValue"
+        >
+          <ng-option
+            *rxFor="let item of siteData; let i = index"
+            [id]="i"
+            [class.active]="activeCountry === (item?.country?.entry[0]?.key | uppercase)"
+            [value]="i"
+          >
+            <div class="country-option">
+              <span [ngClass]="'flag flag--' + (item?.country?.entry[0]?.key | uppercase)"></span>
+              <span class="country-name">{{ item?.country?.entry[0]?.value }}</span>
+            </div>
+          </ng-option>
+        </ng-select>
+
+        <p class="infotext">
+          <span class="bold">{{ 'form.important' | cxTranslate }}</span>
+          {{ 'form.changing_country' | cxTranslate }}
+        </p>
+      </div>
+
+      <div class="item">
+        <label class="heading" id="language_label">
+          {{ 'form.language' | cxTranslate }}
+        </label>
+
+        <div *ngFor="let language of siteData[activeIndex]?.languages?.entry" class="dist-label">
+          <app-radio
+            [radioID]="'sitesettings_language_radio_' + language.key"
+            [checked]="checkSelectedLanguage(language.key)"
+            [primaryLabelID]="'sitesettings_language_label_' + language.key"
+            [primaryLabelText]="language.value"
+            [radioValue]="language.key"
+            (change)="languageSelected($event)"
+            size="small"
+            radioName="language-radio"
+          >
+            <span class="flag" [ngClass]="'flag--' + (language.key | uppercase)"></span>
+          </app-radio>
+        </div>
+      </div>
+
+      <div *rxLet="activeChannel$; let activeChannel" class="item channel">
+        <label class="heading" id="channel_label">
+          {{ 'form.channel' | cxTranslate }}
+        </label>
+
+        <ng-container *ngIf="{ value: userId$ | async } as user">
+          <ng-container *ngFor="let channel of siteData[activeIndex]?.channels?.entry">
+            <ng-container
+              *ngIf="(user.value === 'current' && channel.key === activeChannel) || user.value !== 'current'"
+            >
+              <app-radio
+                class="dist-label"
+                [radioId]="'sitesettings_channel_radio_' + channel.key"
+                [checked]="channel.key === activeChannel"
+                [primaryLabelText]="channel.value"
+                [primaryLabelID]="'sitesettings_channel_label_' + channel.key"
+                [radioValue]="channel.key"
+                (change)="user.value !== 'current' && channelSelected(channel.key)"
+                size="small"
+                radioName="channel-radio"
+              ></app-radio>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <div class="item border">
+        <input
+          class="btn mat-button btn"
+          id="sitesettings_button_save"
+          data-label-default="Save"
+          data-label-redirect="Go to"
+          type="submit"
+          value="{{ 'form.update' | cxTranslate }}"
+        />
+      </div>
+    </form>
+  </app-dist-slide-drawer>
+</ng-container>

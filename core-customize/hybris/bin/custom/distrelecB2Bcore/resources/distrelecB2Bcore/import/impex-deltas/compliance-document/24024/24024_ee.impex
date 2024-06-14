@@ -1,0 +1,14 @@
+# EE
+$contentCatalog = distrelec_EEContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+
+$lang = et
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]      ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Privaatsuse/küpsiste seaded ; #triggerCookieSettings
+
+UPDATE DistFooterComponent; UID[unique = true]  ; impressumLinks(uid, $contentCV); $contentCV[unique = true]
+                          ; DistFooterComponent ; footer_legals_ee_agb, footer_legals_ee_impressum, PrivacyCookieLink, footer_legals_ee_datenschutz, footer_legals_ee_disclaimer, ADR-Link, ODR-link, QLLink
+

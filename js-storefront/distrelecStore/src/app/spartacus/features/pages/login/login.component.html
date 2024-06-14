@@ -1,0 +1,157 @@
+<div class="backdrop">
+  <div class="container">
+    <div *ngIf="isErrorMessage_ | async as errorMessage" class="row">
+      <div class="col-12">
+        <div class="error">
+          <div class="inner">
+            <div class="center">
+              <ng-container *ngIf="errorMessage?.country">
+                <p class="text" id="login_global_error_invalid_country">
+                  {{ 'login.wrong_shop_1' | cxTranslate }}
+                  {{ 'countries.' + errorMessage?.country | cxTranslate }}.
+                  <span [innerHtml]="'login.wrong_shop_2' | cxTranslate: { href: errorMessage?.href }"></span>
+                </p>
+              </ng-container>
+              <ng-container *ngIf="!errorMessage?.country">
+                <p class="text" id="login_global_error">
+                  {{ errorMessage | cxTranslate }}
+                </p>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isForgottenPwdSuccess_ | async as isForgottenPwdSuccess" class="row">
+      <div class="col-12">
+        <div class="info-message">
+          <div class="inner">
+            <div class="center">
+              <p class="text" id="password_change_message_text">
+                {{ 'login.forgot_pwd_success_msg' | cxTranslate }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="isPasswordChanged">
+      <div class="row">
+        <div class="col-12">
+          <div class="info-message">
+            <div class="inner">
+              <div class="center">
+                <p class="text" id="passwordResetSuccessMessage" id="password_changed_message_text">
+                  {{ 'account.confirmation.password.updated' | cxTranslate }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="box-wrapper">
+    <h1 class="page-title" id="log_in_page_title">{{ 'newcheckout.loginTitle' | cxTranslate }}</h1>
+    <div class="login-content">
+      <div class="form-box">
+        <form #formDir="ngForm" id="loginForm" [formGroup]="userLoginForm">
+          <div class="row login-form-row">
+            <div class="col-12 login-form-col">
+              <label id="j_username_label" for="j_username">{{ 'login.your-login' | cxTranslate }}</label>
+            </div>
+            <div class="col-12 login-form-col">
+              <input
+                #loginPageEmail
+                class="form-control"
+                id="j_username"
+                [class.error-border]="!userLoginForm.get('email').touched && isErrorBorder"
+                [class.is-invalid]="userLoginForm.get('email').touched && userLoginForm.get('email').errors?.required"
+                formControlName="email"
+                type="text"
+                autocomplete="username"
+              />
+              <div
+                *ngIf="
+                  (userLoginForm.get('email').invalid && userLoginForm.get('email').touched) ||
+                  userLoginForm.get('email').dirty
+                "
+              >
+                <small
+                  *ngIf="userLoginForm.get('email').errors?.email"
+                  class="text-danger"
+                  id="login_error_email_invalid"
+                >
+                  {{ 'validations.enter_valid_field' | cxTranslate }}
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="row login-form-row">
+            <div class="col-12 login-form-col">
+              <label id="j_password_label" for="j_password">{{ 'form.password' | cxTranslate }}</label>
+            </div>
+            <div class="col-12 login-form-col">
+              <input
+                #loginPagePassword
+                class="form-control"
+                id="j_password"
+                [class.error-border]="!userLoginForm.get('password').touched && isErrorBorder"
+                [class.is-invalid]="
+                  userLoginForm.get('password').touched && userLoginForm.get('password').errors?.required
+                "
+                formControlName="password"
+                type="password"
+                autocomplete="current-password"
+              />
+              <div *ngIf="userLoginForm.get('password').touched && userLoginForm.get('password').errors?.required">
+                <small class="text-danger" id="login_error_pwd_required">
+                  {{ 'validations.enter_valid_field' | cxTranslate }}
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="row login-form-row">
+            <div class="remember">
+              <input id="j_remember" formControlName="rememberMe" type="checkbox" />
+              <label class="remember" id="j_remember_label" for="j_remember">
+                {{ 'newcheckout.rememberLogin' | cxTranslate }}
+              </label>
+            </div>
+          </div>
+          <div class="row login-form-row">
+            <div class="col-12 login-form-col captcha-disabled">
+              <button
+                class="mat-button mat-button--red"
+                id="j_login_button"
+                [disabled]="userLoginForm.get('email').invalid || userLoginForm.get('password').invalid"
+                (click)="submitSubscribeClick(subscribeReCaptchaRef)"
+              >
+                {{ 'newcheckout.loginButton' | cxTranslate }}
+                <fa-icon [icon]="faAngleRight"></fa-icon>
+              </button>
+
+              <re-captcha
+                #subscribeReCaptchaRef="reCaptcha"
+                (resolved)="$event && subscribeCaptchaResolvedFallback($event)"
+                size="invisible"
+              ></re-captcha>
+            </div>
+          </div>
+          <div class="row login-form-row">
+            <div class="col-12 login-form-col">
+              <div class="links">
+                <a id="login_forgot_pwd_link" (click)="onForgottenPwd()">
+                  {{ 'login.login_forgot_pwd' | cxTranslate }}
+                </a>
+                <a id="login_go_register_link" (click)="goToAccountLink('/registration')">
+                  {{ 'login.register_title' | cxTranslate }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

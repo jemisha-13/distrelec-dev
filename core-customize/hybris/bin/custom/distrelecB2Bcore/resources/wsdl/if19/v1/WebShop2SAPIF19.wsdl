@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SI_Hybris_IF19_out"
+	targetNamespace="http://www.distrelec.com/hybris/IF19"
+	xmlns:p2="http://www.distrelec.com/hybris"
+	xmlns:p1="http://www.distrelec.com/hybris/IF19"
+	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:documentation />
+	<wsp:UsingPolicy wsdl:required="true" />
+	<wsp:Policy wsu:Id="OP_IF19_RMAGetOrderItems" />
+	<wsp:Policy wsu:Id="OP_IF19_RMACreate" />
+	<wsp:Policy wsu:Id="OP_IF19_RMAGetListForOrder" />
+	<wsdl:types>
+		<xsd:schema
+			targetNamespace="http://www.distrelec.com/hybris"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			xmlns="http://www.distrelec.com/hybris">
+			<xsd:element name="RMAGetOrderItemsRequest"
+				type="RMAGetOrderItemsRequest" />
+			<xsd:element name="RMACreateRequest"
+				type="RMACreateRequest" />
+			<xsd:element name="FaultMessage" type="FaultMessage" />
+			<xsd:element name="RMAGetOrderItemsResponse"
+				type="RMAGetOrderItemsResponse" />
+			<xsd:element name="RMACreateResponse"
+				type="RMACreateResponse" />
+			<xsd:element name="RMAGetListForOrderRequest"
+				type="RMAGetListForOrderRequest" />
+			<xsd:element name="RMAGetListForOrderResponse"
+				type="RMAGetListForOrderResponse" />
+			<xsd:simpleType name="itemNumber">
+				<xsd:annotation>
+					<xsd:documentation>Item Number</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="6" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="FaultName">
+				<xsd:annotation>
+					<xsd:documentation>Fault message name</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="75" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="CustomerId">
+				<xsd:annotation>
+					<xsd:documentation>Customer ID</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="10" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="Id">
+				<xsd:annotation>
+					<xsd:documentation>Connection from work area and message number
+						(for example, “XY(007)”).</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="SalesOrganization">
+				<xsd:annotation>
+					<xsd:documentation>Sales Organization</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="4" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="rmaItemNumber">
+				<xsd:annotation>
+					<xsd:documentation>RMA Item Number</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="6" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="returnReasonDescription">
+				<xsd:annotation>
+					<xsd:documentation>Return Reason Description</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="30" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="Text">
+				<xsd:annotation>
+					<xsd:documentation>Formatted T100 message text (in the language in
+						which the service was executed)</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="rmaNumber">
+				<xsd:annotation>
+					<xsd:documentation>RMA Number</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="10" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="RefundType">
+				<xsd:annotation>
+					<xsd:documentation>Refund Type</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="1" />
+					<xsd:enumeration value="" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="FaultUrl">
+				<xsd:annotation>
+					<xsd:documentation>URL to the long text of this message
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="Severity">
+				<xsd:annotation>
+					<xsd:documentation>URL to the long text of this message
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="1" />
+					<xsd:enumeration value="A">
+						<xsd:annotation>
+							<xsd:documentation>Abend - error</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="E">
+						<xsd:annotation>
+							<xsd:documentation>Error</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="W">
+						<xsd:annotation>
+							<xsd:documentation>Warning</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="OrderId">
+				<xsd:annotation>
+					<xsd:documentation>Order ID</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="10" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="Url">
+				<xsd:annotation>
+					<xsd:documentation>URL to the T100 long text (if available).
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="FaultId">
+				<xsd:annotation>
+					<xsd:documentation>Fault message ID</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="9" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="rmaItemStatus">
+				<xsd:annotation>
+					<xsd:documentation>RMA Item Status</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="returnReasonID">
+				<xsd:annotation>
+					<xsd:documentation>Return Reason ID</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="3" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="FaultText">
+				<xsd:annotation>
+					<xsd:documentation>Fault message text</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="200" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="rmaHeaderStatus">
+				<xsd:annotation>
+					<xsd:documentation>RMA Header Status</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:complexType name="RMAGetOrderItemsRequest">
+				<xsd:sequence>
+					<xsd:element name="salesOrganization"
+						type="SalesOrganization" />
+					<xsd:element name="customerId" type="CustomerId" />
+					<xsd:element name="sessionLanguage" type="xsd:string" />
+					<xsd:element name="orderId" type="OrderId" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMAList2">
+				<xsd:sequence>
+					<xsd:element name="rmaNumber" type="rmaNumber" />
+					<xsd:element name="rmaHeaderStatus"
+						type="rmaHeaderStatus" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMACreateRequest">
+				<xsd:sequence>
+					<xsd:element name="salesOrganization"
+						type="SalesOrganization" />
+					<xsd:element name="customerId" type="CustomerId" />
+					<xsd:element name="sessionLanguage" type="xsd:string" />
+					<xsd:element name="orders" type="RMACreateReqOrder" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="FaultDetail">
+				<xsd:sequence>
+					<xsd:element name="severity" type="Severity" />
+					<xsd:element name="text" type="Text" />
+					<xsd:element name="url" type="Url" />
+					<xsd:element name="id" type="Id" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="FaultMessage">
+				<xsd:sequence>
+					<xsd:element name="faultId" type="FaultId" />
+					<xsd:element name="faultName" type="FaultName" />
+					<xsd:element name="faultText" type="FaultText" />
+					<xsd:element name="faultUrl" type="FaultUrl"
+						minOccurs="0" />
+					<xsd:element name="faultDetail" type="FaultDetail"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="OrdersList">
+				<xsd:sequence>
+					<xsd:element name="order" type="OrdersList2"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMAGetOrderItemsResponse">
+				<xsd:sequence>
+					<xsd:element name="items" type="item" />
+					<xsd:element name="returnReasons"
+						type="ReturnReasonsList" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMACreateReqOrder">
+				<xsd:sequence>
+					<xsd:element name="orderId" type="OrderId" />
+					<xsd:element name="items" type="RMACreateReqItem"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="OrderList">
+				<xsd:sequence>
+					<xsd:element name="orderId" type="OrderId"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="item">
+				<xsd:sequence>
+					<xsd:element name="item" type="ItemList"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMACreateRespItem">
+				<xsd:sequence>
+					<xsd:element name="rmaItemNumber" type="rmaItemNumber" />
+					<xsd:element name="rmaItemStatus" type="rmaItemStatus" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="OrdersList2">
+				<xsd:sequence>
+					<xsd:element name="orderId" type="OrderId" />
+					<xsd:element name="rmas" type="RMAList" minOccurs="0" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ReturnReasonsList">
+				<xsd:sequence>
+					<xsd:element name="returnReason" type="ReturnReasons"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMAList">
+				<xsd:sequence>
+					<xsd:element name="rma" type="RMAList2"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMAList3">
+				<xsd:sequence>
+					<xsd:element name="rmaNumber" type="rmaNumber" />
+					<xsd:element name="rmaItemStatus" type="rmaItemStatus" />
+					<xsd:element name="officeAddress" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMAGetListForOrderRequest">
+				<xsd:sequence>
+					<xsd:element name="salesOrganization"
+						type="SalesOrganization" />
+					<xsd:element name="customerId" type="CustomerId" />
+					<xsd:element name="sessionLanguage" type="xsd:string" />
+					<xsd:element name="orders" type="OrderList" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMACreateResponse">
+				<xsd:sequence>
+					<xsd:element name="rmaOrder" type="RMACreateRespOrder" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMAGetListForOrderResponse">
+				<xsd:sequence>
+					<xsd:element name="orders" type="OrdersList" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ItemList">
+				<xsd:sequence>
+					<xsd:element name="itemNumber" type="itemNumber" />
+					<xsd:element name="notAllowedReturnFlag"
+						type="xsd:boolean" />
+					<xsd:element name="notAllowedReturnDescription"
+						type="xsd:string" />
+					<xsd:element name="remainingQuantity" type="xsd:long" />
+					<xsd:element name="rmas" type="RMAList3" minOccurs="0"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMACreateRespOrder">
+				<xsd:sequence>
+					<xsd:element name="rmaNumber" type="rmaNumber" />
+					<xsd:element name="rmaHeaderStatus"
+						type="rmaHeaderStatus" />
+					<xsd:element name="officeAddress" type="xsd:string" />
+					<xsd:element name="items" type="RMACreateRespItem"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ReturnReasons">
+				<xsd:sequence>
+					<xsd:element name="returnReasonID"
+						type="returnReasonID" />
+					<xsd:element name="returnReasonDescription"
+						type="returnReasonDescription" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RMACreateReqItem">
+				<xsd:sequence>
+					<xsd:element name="itemNumber" type="itemNumber" />
+					<xsd:element name="quantity" type="xsd:long" />
+					<xsd:element name="returnReasonID"
+						type="returnReasonID" />
+					<xsd:element name="refundType" type="RefundType" />
+					<xsd:element name="customerText" type="xsd:string"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="p2.RMAGetOrderItemsRequest">
+		<wsdl:documentation />
+		<wsdl:part name="RMAGetOrderItemsRequest"
+			element="p2:RMAGetOrderItemsRequest" />
+	</wsdl:message>
+	<wsdl:message name="p2.RMAGetOrderItemsResponse">
+		<wsdl:documentation />
+		<wsdl:part name="RMAGetOrderItemsResponse"
+			element="p2:RMAGetOrderItemsResponse" />
+	</wsdl:message>
+	<wsdl:message name="p2.RMACreateRequest">
+		<wsdl:documentation />
+		<wsdl:part name="RMACreateRequest"
+			element="p2:RMACreateRequest" />
+	</wsdl:message>
+	<wsdl:message name="p2.RMACreateResponse">
+		<wsdl:documentation />
+		<wsdl:part name="RMACreateResponse"
+			element="p2:RMACreateResponse" />
+	</wsdl:message>
+	<wsdl:message name="p2.RMAGetListForOrderRequest">
+		<wsdl:documentation />
+		<wsdl:part name="RMAGetListForOrderRequest"
+			element="p2:RMAGetListForOrderRequest" />
+	</wsdl:message>
+	<wsdl:message name="p2.RMAGetListForOrderResponse">
+		<wsdl:documentation />
+		<wsdl:part name="RMAGetListForOrderResponse"
+			element="p2:RMAGetListForOrderResponse" />
+	</wsdl:message>
+	<wsdl:message name="p2.FaultMessage">
+		<wsdl:documentation />
+		<wsdl:part name="FaultMessage" element="p2:FaultMessage" />
+	</wsdl:message>
+	<wsdl:portType name="SI_Hybris_IF19_out">
+		<wsdl:documentation />
+		<wsdl:operation name="IF19_RMAGetOrderItems">
+			<wsdl:documentation />
+			<wsp:Policy>
+				<wsp:PolicyReference
+					URI="#OP_IF19_RMAGetOrderItems" />
+			</wsp:Policy>
+			<wsdl:input message="p1:p2.RMAGetOrderItemsRequest" />
+			<wsdl:output message="p1:p2.RMAGetOrderItemsResponse" />
+			<wsdl:fault name="p2.FaultMessage"
+				message="p1:p2.FaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="IF19_RMACreate">
+			<wsdl:documentation />
+			<wsp:Policy>
+				<wsp:PolicyReference URI="#OP_IF19_RMACreate" />
+			</wsp:Policy>
+			<wsdl:input message="p1:p2.RMACreateRequest" />
+			<wsdl:output message="p1:p2.RMACreateResponse" />
+			<wsdl:fault name="p2.FaultMessage"
+				message="p1:p2.FaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="IF19_RMAGetListForOrder">
+			<wsdl:documentation />
+			<wsp:Policy>
+				<wsp:PolicyReference
+					URI="#OP_IF19_RMAGetListForOrder" />
+			</wsp:Policy>
+			<wsdl:input message="p1:p2.RMAGetListForOrderRequest" />
+			<wsdl:output message="p1:p2.RMAGetListForOrderResponse" />
+			<wsdl:fault name="p2.FaultMessage"
+				message="p1:p2.FaultMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="SI_Hybris_IF19_outBinding"
+		type="p1:SI_Hybris_IF19_out">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http"
+			xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+		<wsdl:operation name="IF19_RMAGetOrderItems">
+			<soap:operation
+				soapAction="http://sap.com/xi/WebService/soap1.1"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			<wsdl:input>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:output>
+			<wsdl:fault name="p2.FaultMessage">
+				<soap:fault use="literal" name="p2.FaultMessage"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="IF19_RMACreate">
+			<soap:operation
+				soapAction="http://sap.com/xi/WebService/soap1.1"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			<wsdl:input>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:output>
+			<wsdl:fault name="p2.FaultMessage">
+				<soap:fault use="literal" name="p2.FaultMessage"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="IF19_RMAGetListForOrder">
+			<soap:operation
+				soapAction="http://sap.com/xi/WebService/soap1.1"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			<wsdl:input>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:output>
+			<wsdl:fault name="p2.FaultMessage">
+				<soap:fault use="literal" name="p2.FaultMessage"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="SI_Hybris_IF19_outService">
+		<wsdl:port name="HTTP_Port"
+			binding="p1:SI_Hybris_IF19_outBinding">
+			<soap:address
+				location="http://piddisap.dat.datwyler.biz:52400/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=WSD&amp;receiverParty=&amp;receiverService=&amp;interface=SI_Hybris_IF19_out&amp;interfaceNamespace=http%3A%2F%2Fwww.distrelec.com%2Fhybris%2FIF19"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+		</wsdl:port>
+		<wsdl:port name="HTTPS_Port"
+			binding="p1:SI_Hybris_IF19_outBinding">
+			<soap:address
+				location="https://piddisap.dat.datwyler.biz:52401/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=WSD&amp;receiverParty=&amp;receiverService=&amp;interface=SI_Hybris_IF19_out&amp;interfaceNamespace=http%3A%2F%2Fwww.distrelec.com%2Fhybris%2FIF19"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

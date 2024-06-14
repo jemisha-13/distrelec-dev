@@ -1,0 +1,400 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10 offset-lg-2">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-6 offset-lg-2">
+      <ng-container *ngIf="userDetails_ | async as userDetail" class="account-information-main">
+        <div class="row mt-4">
+          <div class="col-md-12 col-lg-12 col-sm-12">
+            <h1 id="accountUser_page_title">
+              {{ 'form.my_account_information' | cxTranslate }}
+            </h1>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-md-8">
+            <h2 id="accountUserInformation.yourAccountTitle">{{ 'form.your_account' | cxTranslate }}</h2>
+          </div>
+          <div class="col-md-4">
+            <div class="float-md-right">
+              {{
+                userUpdatedDetails.customerType === 'B2B' || userUpdatedDetails.customerType === 'B2B_KEY_ACCOUNT'
+                  ? ('form.business_customer' | cxTranslate)
+                  : 'ID: ' + userDetail.orgUnit.erpCustomerId
+              }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <hr />
+            <app-action-message
+              id="userChangeId"
+              [type]="responseType"
+              [message]="responseMessage"
+            ></app-action-message>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-8">
+            <h2 id="accountUserInformation.changeName">{{ 'form.change_name' | cxTranslate }}</h2>
+            <br />
+            <br />
+          </div>
+        </div>
+
+        <form [formGroup]="userProfileChangeForm">
+          <div class="form-group row">
+            <label
+              class="col-sm-5 col-form-label"
+              id="accountUserInformation.titleText"
+              for="accountUserInformation.titleSelect"
+            >
+              {{ 'form.title' | cxTranslate }} *
+            </label>
+            <div class="col-sm-6 col-md-7 col-lg-6">
+              <ng-container *ngIf="titleList">
+                <ng-select
+                  class="account-info"
+                  id="accountUserInformation.titleSelect"
+                  [(ngModel)]="userUpdatedDetails.titleCode"
+                  [items]="titleList.titles"
+                  formControlName="title"
+                  bindLabel="name"
+                  bindValue="code"
+                ></ng-select>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label
+              class="col-sm-5 col-form-label"
+              id="accountUserInformation.firstNameText"
+              for="accountUserInformation.firstName"
+            >
+              {{ 'form.first_name' | cxTranslate }} *
+            </label>
+            <div class="col-sm-7 col-lg-6">
+              <input
+                class="form-control"
+                id="accountUserInformation.firstName"
+                [(ngModel)]="userUpdatedDetails.contactAddress.firstName"
+                [class.is-correct]="userProfileChangeForm.get('firstName').valid"
+                [class.is-invalid]="
+                  userProfileChangeForm.get('firstName').errors && userProfileChangeForm.get('firstName').touched
+                "
+                type="text"
+                formControlName="firstName"
+              />
+              <small
+                *ngIf="userProfileChangeForm.get('firstName').errors && userProfileChangeForm.get('firstName').touched"
+                class="error"
+              >
+                {{ 'validations.first_name_required' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label
+              class="col-sm-5 col-form-label"
+              id="accountUserInformation-lastNameText"
+              for="accountUserInformation.lastName"
+            >
+              {{ 'form.last_name' | cxTranslate }} *
+            </label>
+            <div class="col-sm-7 col-lg-6">
+              <input
+                class="form-control"
+                id="accountUserInformation.lastName"
+                [(ngModel)]="userUpdatedDetails.contactAddress.lastName"
+                [class.is-correct]="userProfileChangeForm.get('lastName').valid"
+                [class.is-invalid]="
+                  userProfileChangeForm.get('lastName').errors && userProfileChangeForm.get('lastName').touched
+                "
+                type="text"
+                formControlName="lastName"
+              />
+              <small
+                *ngIf="userProfileChangeForm.get('lastName').errors && userProfileChangeForm.get('lastName').touched"
+                class="error"
+              >
+                {{ 'validations.surname_required' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+
+          <div
+            *ngIf="userUpdatedDetails.customerType === 'B2B' || userUpdatedDetails.customerType === 'B2B_KEY_ACCOUNT'"
+            class="form-group row"
+          >
+            <label
+              class="col-sm-5 col-form-label"
+              id="accountUserInformation-department"
+              for="accountUserInformation.userDepartment"
+            >
+              {{ 'form.department' | cxTranslate }}
+            </label>
+            <div class="col-sm-7 col-lg-6">
+              <ng-container *ngIf="departmentList$ | async as departmentList">
+                <ng-select
+                  class="account-info"
+                  id="accountUserInformation.userDepartment"
+                  [(ngModel)]="userDepartmentCode"
+                  [items]="departmentList.departments"
+                  name="userDepartment"
+                  formControlName="userDepartment"
+                  bindLabel="name"
+                  bindValue="code"
+                ></ng-select>
+              </ng-container>
+            </div>
+          </div>
+
+          <div
+            *ngIf="userUpdatedDetails.customerType === 'B2B' || userUpdatedDetails.customerType === 'B2B_KEY_ACCOUNT'"
+            class="form-group row"
+          >
+            <label
+              class="col-sm-5 col-form-label"
+              id="accountUserInformation-functionText"
+              for="accountUserInformation.functionSelect"
+            >
+              {{ 'form._function' | cxTranslate }}
+            </label>
+            <div class="col-sm-7 col-lg-6">
+              <ng-container *ngIf="functionList$ | async as functionList">
+                <ng-select
+                  class="account-info"
+                  id="accountUserInformation.functionSelect"
+                  [(ngModel)]="userFunctionCode"
+                  [items]="functionList.functions"
+                  formControlName="userFunction"
+                  bindLabel="name"
+                  bindValue="code"
+                ></ng-select>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label
+              class="col-sm-5 col-form-label"
+              id="accountUserInformation-phoneText"
+              for="accountUserInformation.phone"
+            >
+              {{ 'form.phone' | cxTranslate }} **
+            </label>
+            <div class="col-sm-7 col-lg-6">
+              <input
+                class="form-control"
+                id="accountUserInformation.phone"
+                [(ngModel)]="userUpdatedDetails.contactAddress.phone"
+                [class.is-correct]="userProfileChangeForm.get('phone').valid"
+                [class.is-invalid]="
+                  userProfileChangeForm.get('phone').hasError('incorrect') && userProfileChangeForm.get('phone').dirty
+                "
+                (focusout)="validatePhoneNumber('phone')"
+                type="text"
+                formControlName="phone"
+                placeholder="{{ phonePrefix }}"
+              />
+
+              <small
+                *ngIf="
+                  userProfileChangeForm.get('phone').hasError('incorrect') && userProfileChangeForm.get('phone').dirty
+                "
+                class="error"
+              >
+                {{ 'validations.enter_valid_phone' | cxTranslate }}
+              </small>
+              <small
+                *ngIf="
+                  userProfileChangeForm.get('phone').hasError('required') && userProfileChangeForm.get('phone').dirty
+                "
+                class="error"
+              >
+                {{ 'validations.enter_valid_phone_mobile' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label
+              class="col-sm-5 col-form-label"
+              id="accountUserInformation-mobilePhone"
+              for="accountUserInformation.mobilePhone"
+            >
+              {{ 'form.mobile_phone' | cxTranslate }} **
+            </label>
+            <div class="col-sm-7 col-lg-6">
+              <input
+                class="form-control"
+                id="accountUserInformation.mobilePhone"
+                [(ngModel)]="userUpdatedDetails.contactAddress.cellphone"
+                [class.is-correct]="userProfileChangeForm.get('mobilePhone').valid"
+                [class.is-invalid]="
+                  userProfileChangeForm.get('mobilePhone').hasError('incorrect') &&
+                  userProfileChangeForm.get('mobilePhone').dirty
+                "
+                (focusout)="validatePhoneNumber('mobilePhone')"
+                type="text"
+                formControlName="mobilePhone"
+                placeholder="{{ phonePrefix }}"
+              />
+              <small
+                *ngIf="
+                  userProfileChangeForm.get('mobilePhone').hasError('incorrect') &&
+                  userProfileChangeForm.get('mobilePhone').dirty
+                "
+                class="error"
+              >
+                {{ 'validations.enter_valid_phone' | cxTranslate }}
+              </small>
+              <small
+                *ngIf="
+                  userProfileChangeForm.get('mobilePhone').hasError('required') &&
+                  userProfileChangeForm.get('mobilePhone').dirty
+                "
+                class="error"
+              >
+                {{ 'validations.enter_valid_phone_mobile' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-5 col-form-label" id="accountUserInformation-fax" for="accountUserInformation.fax">
+              {{ 'form.fax' | cxTranslate }}
+            </label>
+            <div class="col-sm-7 col-lg-6">
+              <input
+                class="form-control"
+                id="accountUserInformation.fax"
+                [(ngModel)]="userUpdatedDetails.contactAddress.fax"
+                [class.is-correct]="userProfileChangeForm.get('fax').valid"
+                [class.is-invalid]="
+                  userProfileChangeForm.get('fax').hasError('incorrect') && userProfileChangeForm.get('fax').dirty
+                "
+                (focusout)="validatePhoneNumber('fax')"
+                type="text"
+                formControlName="fax"
+                placeholder="{{ phonePrefix }}"
+              />
+
+              <small
+                *ngIf="userProfileChangeForm.get('fax').hasError('incorrect') && userProfileChangeForm.get('fax').dirty"
+                class="error"
+              >
+                {{ 'validations.enter_valid_fax' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-5 col-form-label" id="accountUserInformation-buttonChange" for="buttonChange"></label>
+            <div class="col-sm-7 col-lg-6">
+              <button class="btn btn-secondary btn-distrelec float-right ellipsis" (click)="changeUserInformation()">
+                {{ (updating ? 'form.please_wait' : 'form.change') | cxTranslate }}
+                <div class="float-right mr-2">
+                  <fa-icon *ngIf="!buttonDisabled" [icon]="faAngleRight"></fa-icon>
+                </div>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div
+          *ngIf="
+            (userUpdatedDetails.customerType === 'B2B' || userUpdatedDetails.customerType === 'B2B_KEY_ACCOUNT') &&
+            !findRole('b2badmingroup') &&
+            findRole('b2bcustomergroup')
+          "
+        >
+          <hr />
+          <div class="row">
+            <div class="col-md-8">
+              <h2 id="accountUserInformation-approved-budget-title">
+                {{ 'userdetailform.approvedBudget' | cxTranslate }}
+              </h2>
+              <br />
+              <br />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-5 col-form-label" id="accountUserInformation-perOrder" for="perOrder">
+              {{ 'userdetailform.approvedBudget.perOrder' | cxTranslate }}
+            </label>
+            <div *ngIf="userUpdatedDetails.budget?.orderBudget" class="col-sm-7 col-lg-6">
+              {{ userUpdatedDetails.budget?.currency?.isocode }} {{ userUpdatedDetails.budget?.orderBudget | price }}
+            </div>
+            <div *ngIf="!userUpdatedDetails.budget?.orderBudget" class="col-sm-7 col-lg-6">0.00</div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-5 col-form-label" id="accountUserInformation-yearly" for="yearly">
+              {{ 'userdetailform.approvedBudget.yearly' | cxTranslate }}
+            </label>
+            <div *ngIf="userUpdatedDetails.budget?.budget" class="col-sm-7 col-lg-6">
+              {{ userUpdatedDetails.budget?.currency?.isocode }} {{ userUpdatedDetails.budget?.budget | price }}
+            </div>
+            <div *ngIf="!userUpdatedDetails.budget?.budget" class="col-sm-7 col-lg-6">0.00</div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-5 col-form-label" id="accountUserInformation-residualBudget" for="residualBudget">
+              {{ 'userdetailform.approvedBudget.residualBudget' | cxTranslate }}
+            </label>
+            <div *ngIf="userUpdatedDetails.budget?.yearlyBudget" class="col-sm-7 col-lg-6">
+              {{ userUpdatedDetails.budget?.currency?.isocode }} {{ userUpdatedDetails.budget?.yearlyBudget | price }}
+            </div>
+            <div *ngIf="!userUpdatedDetails.budget?.yearlyBudget" class="col-sm-7 col-lg-6">0.00</div>
+          </div>
+
+          <hr />
+          <div class="row">
+            <div class="col-md-8">
+              <h2 id="accountUserInformation-allowed-permissions">
+                {{ 'userdetailform.allowedPermissions' | cxTranslate }}
+              </h2>
+              <br />
+              <br />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label
+              class="col-sm-5 col-form-label"
+              id="accountUserInformation-allowedPermissions"
+              for="requestQuotations"
+            >
+              {{ 'userdetailform.allowedPermissions.requestQuotations' | cxTranslate }}
+            </label>
+            <div class="col-sm-7 col-lg-6">
+              {{
+                (userUpdatedDetails.requestQuotationPermission ? 'userdetailform.yes' : 'userdetailform.no')
+                  | cxTranslate
+              }}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- User change email / id -->
+      <app-account-user-change-email [userDetails$]="userDetails_"></app-account-user-change-email>
+      <!-- User change password -->
+      <app-account-user-change-password></app-account-user-change-password>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

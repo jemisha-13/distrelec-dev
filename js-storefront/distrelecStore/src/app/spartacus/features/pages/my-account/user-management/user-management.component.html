@@ -1,0 +1,240 @@
+<div *ngIf="{ enableSubUserManagement: enableSubUserManagement$ | async } as wrapper" class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-9">
+      <ng-container *ngIf="!showUserManagementFlag" class="account-information-main">
+        <div class="user-management-wrapper">
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+              <h1 id="userManagement_page_title">
+                {{ 'form.user_management' | cxTranslate }}
+              </h1>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-12"></div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-12">
+              <app-action-message
+                id="userManagement"
+                [type]="responseType"
+                [message]="responseMessage"
+              ></app-action-message>
+            </div>
+          </div>
+          <div class="row mt-exta">
+            <label class="col-md-1 col-sm-12 col-form-label" id="userManagement-name" for="userManagement.name">
+              {{ 'form.name' | cxTranslate }}
+            </label>
+            <div class="col-md-3 col-sm-12">
+              <input class="form-control" id="userManagement.name" [(ngModel)]="searchName" type="text" />
+            </div>
+            <label
+              class="col-md-1 col-sm-12 col-form-label"
+              id="userManagement-status"
+              for="userManagement-userStatusList"
+            >
+              {{ 'form.status' | cxTranslate }}
+            </label>
+            <div class="col-md-3 col-sm-12 mb-2">
+              <ng-select class="account-info" id="userManagement-userStatusList" [(ngModel)]="selectedStatusList">
+                <ng-option *ngFor="let statusItem of userStatusList" [value]="statusItem.code" [id]="statusItem.code">
+                  {{ statusItem.name | cxTranslate }}
+                </ng-option>
+              </ng-select>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 mb-2">
+              <button class="btn btn-secondary btn-distrelec float-right ml-1 mb-2" (click)="onSearchEmployee()">
+                {{ buttonSearchText | cxTranslate }}
+                <div class="float-sm-right mr-2">
+                  <fa-icon [icon]="faAngleRight"></fa-icon>
+                </div>
+              </button>
+            </div>
+            <div class="col-md-2 col-sm-6 col-12">
+              <button class="btn btn-secondary btn-distrelec btn-gray float-right" (click)="resetForm()">
+                {{ buttonResetText | cxTranslate }}
+              </button>
+            </div>
+          </div>
+          <div class="user-management mt-exta" id="searchResults">
+            <hr />
+            <div class="row mb-3 align-items-end">
+              <div class="col-sm-12 col-md-4 mb-2">
+                <label for="userManagement.sortingList">
+                  {{ 'accountorder.userManagement.order.by' | cxTranslate }}
+                </label>
+                <ng-select
+                  class="account-info"
+                  id="userManagement.sortingList"
+                  [(ngModel)]="selectedSorting"
+                  (change)="onSortingSelected($event)"
+                >
+                  <ng-option *ngFor="let sortItem of sortingList" [value]="sortItem.value" [id]="sortItem.value">
+                    {{ sortItem.name | cxTranslate }}
+                  </ng-option>
+                </ng-select>
+              </div>
+              <div class="col-sm-12 col-md-2"></div>
+              <div class="col-sm-12 col-md-2"></div>
+              <div class="col-md-4 col-sm-12">
+                <ng-container *ngIf="enableRegistration$ | async as enableRegistration">
+                  <button
+                    *ngIf="wrapper.enableSubUserManagement"
+                    class="btn btn-secondary btn-distrelec float-right ml-1 mb-2"
+                    id="userManagement-addNewUser"
+                    (click)="showAddNewEmployeeComponent()"
+                  >
+                    <div class="float-left ml-3">
+                      <fa-icon [icon]="faPlus"></fa-icon>
+                    </div>
+                    {{ 'form.add_new_user' | cxTranslate }}
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <hr />
+
+          <div *ngIf="employees_ | async as employeesData; else loadingEmployees">
+            <div *ngIf="employeesData?.length > 0; else noEmployees">
+              <div *ngFor="let Employee of employeesData">
+                <div class="row">
+                  <div class="col-md-10 col-sm-12">
+                    <div class="row mb-2 mt-2">
+                      <div class="col-md-3 col-sm-6 col-6">
+                        <strong class="fs-twelve">
+                          <label id="userManagement-userName">{{ 'form.user_name' | cxTranslate }}</label>
+                        </strong>
+                        <br />
+                        <label id="userManagement.userName">{{ Employee?.name }}</label>
+                      </div>
+
+                      <ng-container *ngIf="wrapper.enableSubUserManagement">
+                        <div class="col-md-3 col-sm-6 col-6">
+                          <strong class="fs-twelve">
+                            <label id="userManagement-budgetApprover">{{ 'form.budget_approver' | cxTranslate }}</label>
+                          </strong>
+                          <br />
+                          <label *ngIf="Employee?.approvers?.length" id="userManagement-approver">
+                            {{ Employee?.approvers[0].name }}
+                          </label>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 col-6">
+                          <span *ngIf="Employee?.budget?.budget">
+                            <strong class="fs-twelve">
+                              <label id="userManagement-yearlyBudget">{{ 'form.yearly_budget' | cxTranslate }}</label>
+                            </strong>
+                            <br />
+                            <label id="userManagement-isoCode">
+                              {{ Employee?.budget?.currency.isocode }} {{ Employee?.budget?.budget | price }}
+                            </label>
+                          </span>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 col-6">
+                          <span *ngIf="Employee?.budget?.yearlyBudget" id="userManagement-yearlyBudget">
+                            <strong class="fs-twelve" id="userManagement-yearlyBudgetStrong">
+                              <label id="userManagement-yearlyBudgetText">
+                                {{ 'form.yearly_budget_status' | cxTranslate }}
+                              </label>
+                            </strong>
+                            <br />
+                            <label
+                              id="userManagement-yearlyBudgetText2"
+                              [ngClass]="
+                                Employee?.budget?.yearlyBudget && Employee?.budget?.yearlyBudget < 0
+                                  ? 'distrelecLink'
+                                  : ''
+                              "
+                            >
+                              {{ Employee?.budget?.currency.isocode }} {{ Employee?.budget?.yearlyBudget | price }}
+                            </label>
+                          </span>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 col-6">
+                          <strong class="fs-twelve">
+                            <label id="userManagement-userStatus">{{ 'form.user_status' | cxTranslate }}</label>
+                          </strong>
+                          <br />
+                          <label
+                            *ngIf="Employee && Employee.doubleOptinActivated && !Employee.loginDisabled"
+                            class="text-success"
+                            id="userManagement-userStatus-active"
+                          >
+                            <fa-icon class="text-success" [icon]="checkIcon"></fa-icon>
+                            {{ 'accountlist.userManagement.userStatus.active' | cxTranslate }}
+                          </label>
+                          <label
+                            *ngIf="Employee && !Employee.doubleOptinActivated && !Employee.loginDisabled"
+                            class="text-secondary"
+                            id="userManagement-userStatus-pending"
+                          >
+                            <fa-icon class="text-danger" [icon]="crossIcon"></fa-icon>
+                            {{ 'accountlist.userManagement.userStatus.pending' | cxTranslate }}
+                          </label>
+                          <label
+                            *ngIf="Employee && !Employee.doubleOptinActivated && Employee.loginDisabled"
+                            class="text-warning"
+                            id="userManagement-userStatus-deactivated"
+                          >
+                            {{ 'accountlist.userManagement.userStatus.deactivated' | cxTranslate }}
+                          </label>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 col-6">
+                          <span *ngIf="Employee?.budget?.orderBudget">
+                            <strong class="fs-twelve">
+                              <label id="userManagement-orderBudget">{{ 'form.order_budget' | cxTranslate }}</label>
+                            </strong>
+                            <br />
+                            <label id="userManagement-orderBudgetPrice">
+                              {{ Employee?.budget?.currency.isocode }} {{ Employee?.budget?.orderBudget | price }}
+                            </label>
+                          </span>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div *ngIf="wrapper.enableSubUserManagement" class="col-md-2 col-sm-12">
+                    <div class="distrelecLink cursor mt-5 view" (click)="editEmployee(Employee)"></div>
+                  </div>
+                </div>
+                <hr />
+              </div>
+            </div>
+            <ng-template #noEmployees>
+              <div class="row mt-2 mb-4">
+                <div class="col-md-12 col-lg-12 col-sm-12">
+                  <h5 class="redFont" id="userManagement-no-user-found">{{ 'form.no_user_found' | cxTranslate }}.</h5>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+          <ng-template #loadingEmployees>
+            <div class="row mt-4">
+              <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+                <img id="userManagement-spinner" src="app/spartacus/assets/media/spinner.gif" />
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

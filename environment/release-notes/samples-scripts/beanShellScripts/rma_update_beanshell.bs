@@ -1,0 +1,43 @@
+import java.util.*;
+import de.hybris.platform.servicelayer.search.*;
+import de.hybris.platform.servicelayer.search.impl.*;
+import de.hybris.platform.b2b.model.*;
+import com.namics.distrelec.erpabstraction.model.*;
+import de.hybris.platform.core.*;
+import de.hybris.platform.jalo.*;
+import de.hybris.platform.jalo.user.*;
+import de.hybris.platform.jalo.flexiblesearch.*;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import de.hybris.platform.servicelayer.model.ModelService;
+
+
+if (!Registry.hasCurrentTenant()) {
+  Registry.activateMasterTenant();
+}
+
+JaloSession.getCurrentSession().setUser(UserManager.getInstance().getUserByLogin("admin"));
+modelService = (ModelService) SpringUtil.getBean("modelService");
+flexibleSearchService = (FlexibleSearchService) SpringUtil.getBean("flexibleSearchService");
+
+query = "SELECT {pk} FROM {MovexReturnRequest} WHERE {salesOrgCode} IS NULL";
+
+rma_requests = flexibleSearchService.search(query).getResult();
+int fails = 0, success = 0;
+
+for (rma : rma_requests) {
+    try {
+        B2BCustomerModel customer = new B2BCustomerModel();
+        customer.setCustomerID(rma.getCustomerId());
+        customer = flexibleSearchService.getModelByExample(customer);
+        rma.setSalesOrgCode(customer.getDefaultB2BUnit().getSalesOrg().getCode());
+        modelService.save(rma);
+        success++;
+    } catch (Exception exp) {
+        fails++;
+        print(" --> " + rma.getCode() + " : " + exp.getMessage());
+    }
+}
+
+print("");
+print("Success: " + success);  
+print("Failure: " + fails);  

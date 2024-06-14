@@ -1,0 +1,77 @@
+<div class="downloads-container">
+  <app-accordion
+    id="pdp_downloads"
+    [uniqueIdentifier]="product.code"
+    [titleId]="'pdp_downloads_title'"
+    [title]="'product.downloads_section.downloads' | cxTranslate"
+  >
+    <div class="downloads-items">
+      <ng-container *ngFor="let download of allDownloads; index as i; last as isLast">
+        <div class="downloads-item" [ngClass]="{ last: isLast }">
+          <div class="datasheet-title" [id]="'pdp_datasheet_title_' + download.code">
+            {{ download.title }}
+          </div>
+          <div class="datasheet-section">
+            <div class="download-element">
+              <ng-container *ngFor="let downloadFile of download.downloads; let downloadIndex = index">
+                <div *ngIf="downloadIndex === 0 || (downloadIndex > 0 && toggleAlternative[i])" class="holder">
+                  <a
+                    class="pdp-pdf-btn"
+                    [id]="'pdp_download_file_' + download.code + '_' + downloadIndex"
+                    [name]="downloadFile.name"
+                    [href]="(mediaDomain$ | async) + downloadFile.downloadUrl"
+                    (click)="dispatchPDFEvent()"
+                    target="_blank"
+                    data-file-type="PDF"
+                    data-aainteraction="file download"
+                  >
+                    <app-icon class="icon-pdf" [icon]="pdf"></app-icon>
+                    <p class="pdf-text" [id]="'pdp_download_file_name_' + download.code + '_' + downloadIndex">
+                      <span>{{ downloadFile.name }}</span>
+                      <br />
+                      <span
+                        class="inline-pdf"
+                        [id]="'pdp_download_file_mime_type_' + download.code + '_' + downloadIndex"
+                      >
+                        ({{ downloadFile.mimeType }}
+                        <ng-container *ngFor="let language of downloadFile.languages">
+                          <span class="lang">{{ language?.name }}</span>
+                        </ng-container>
+                        )
+                      </span>
+                    </p>
+                  </a>
+                </div>
+              </ng-container>
+            </div>
+            <div *ngIf="download.downloads?.length > 1" class="download-element">
+              <div class="show-more show-more-downloads">
+                <div class="show-more__holder">
+                  @if (!toggleAlternative[i]) {
+                    <button
+                      class="btn"
+                      id="pdp_downloads_view_all"
+                      (click)="toggleAlternativeDownloads(i, true)"
+                      type="button"
+                    >
+                      View all
+                    </button>
+                  } @else {
+                    <button
+                      class="btn"
+                      id="pdp_downloads_view_less"
+                      (click)="toggleAlternativeDownloads(i, false)"
+                      type="button"
+                    >
+                      View less
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </app-accordion>
+</div>

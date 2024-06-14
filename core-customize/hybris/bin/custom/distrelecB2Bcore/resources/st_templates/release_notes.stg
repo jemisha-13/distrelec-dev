@@ -1,0 +1,283 @@
+group release_notes;
+
+
+header(releaseInfo) ::= <<
+<html>
+	<head>
+		<title>release $releaseInfo.version$</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<style type="text/css">
+			body {
+  				font-family: Sans-Serif;
+			}
+			
+			h2 {
+  				background-color:Gainsboro ;
+			}
+			
+			h3 {
+  				background-color:Gainsboro ;
+			}
+			
+			table {
+			    display: table;
+			    border-collapse: separate;
+			    border-spacing: 2px;
+			    background-color: Gainsboro ;
+			    
+			}
+			
+			tbody {
+			    display: table-row-group;
+			    vertical-align: middle;
+			    border-color: inherit;
+			}
+			
+			tr {
+			    display: table-row;
+			    vertical-align: top;
+			    border-color: inherit;
+			}
+			
+			th {
+			    display: table-cell;
+			    vertical-align: top;
+			    border: 2px solid white;
+				padding: 2px;
+			}
+			
+			td {
+			    display: table-cell;
+			    vertical-align: top;
+			    border: 2px solid white;
+				padding: 2px;
+				white-space: nowrap;
+			}
+			td.wrap {
+				white-space: normal;
+			}
+			
+            .hidden
+            {
+            	display:none;
+            }
+            </style>
+            <script>
+              function toggle(id)
+              {
+                var elem = document.getElementById(id);
+                if(elem.style.display == 'block')
+                {
+                  elem.style.display='none';
+                }else
+                {
+                  elem.style.display='block';
+                }
+              }
+            </script>
+	</head>
+<body>
+
+>>
+
+footer(releaseInfo) ::= <<
+</body>
+</html>
+>>
+
+
+title(title) ::= <<
+<a name="$title$"></a> 
+<h1>$title$</h1>
+
+>>
+
+toc() ::= <<
+
+<h2>table of contents</h2>
+
+<ul>
+	<li><a href="#description">description</a></li>
+	<li><a href="#delivery">delivery</a></li>
+	<li><a href="#configuration">configuration management</a>
+	<!--
+		<ul>
+			<li><a href="#jiraHasCommit">issues from this release with commits</a></li>
+			<li><a href="#jiraNoCommit">issues from from this release without commits</a></li>
+			<li><a href="#svnNoJira">commits in this release with jira ticket not in this release</a></li>
+			<li><a href="#svnNoJiraInRelease">commits in this release without jira ticket</a></li>
+		</ul>
+		-->	
+	</li>
+	<li><a href="#limitations">limitations</a></li>
+	<li><a href="#installation">installation</a></li>
+	<li><a href="#post installation">post installation</a></li>				
+</ul>
+
+>>
+
+
+title2(title) ::= <<
+<a name="$title$"></a>
+<h2>$title$</h2>
+
+>>
+
+
+
+limitations(jiraLimitationsMap) ::= <<
+
+<h3>known limitation in this release</h3>
+
+<table>
+	<tr>
+		<th>ticket id</th>
+		<th>ticket status</th>
+		<th>ticket title</th>
+		<th>ticket commit</th>
+	</tr>
+ 	$jiraLimitationsMap:jira_item_nosvn()$
+
+</table>
+
+>>
+
+main(keys,map) ::= <<
+
+
+$keys:jira_list(map)$
+
+	
+>>
+
+jira_list(title,jirasMap) ::= <<
+
+
+<a name="configuration"></a>
+
+<h3>$title$ ($length(jirasMap.(title))$)</h3>
+
+<table>
+	<tr>
+		<th>ticket id</th>
+		<th>ticket status / resolution</th>
+		<th>ticket reporter / assignee</th>			
+		<th>ticket title</th>
+		<th>ticket commit</th>
+	</tr>
+ 	$jirasMap.(title):jira_item()$
+
+</table>
+>>
+
+jira_item(jira) ::= <<
+
+<tr>
+	<td><a href="http://jira.distrelec.com/browse/$jira.id$">$jira.id$</a></td>
+	<td>$jira.status$ 
+			$if(jira.bug)$	
+				<br /> $jira.resolution$
+			$endif$
+	</td>
+	<td>
+	$if(jira.bug)$	
+		$jira.reporter$ <br /> $jira.assignee$
+	$endif$
+	</td>
+	<td>$jira.title$</td>
+	<td>
+			$if(jira.hassvn)$
+				<a href="javascript:toggle('$jira.id$')"> commits: $length(jira.svnEntries)$ </a>
+				$if(jira.bug)$	
+					<div id="$jira.id$" class="hidden">
+				$else$
+					<div id="$jira.id$" class="hidden">
+				$endif$
+				<table border=0>
+					<tr>
+						<th>revision id</th>
+						<th>commiter </th>
+						<th>comment</th>
+					</tr>
+					$jira.svnEntries:svn_item(jira)$
+				</table>
+				</div>
+			$else$
+				no commit
+			$endif$
+	</td>
+</tr>
+
+>>
+
+
+jira_item_nosvn(jira) ::= <<
+
+<tr>
+	<td><a href="http://jira.distrelec.com/browse/$jira.id$">$jira.id$</a></td>
+	<td>$jira.status$</td>
+	<td>$jira.title$</td>
+</tr>
+
+>>
+
+
+
+
+svn_items(svn,title) ::= <<
+
+<h3>$title$</h3>
+
+<table>
+	<tr>
+		<th>commit id</th>
+		<th>comitter</th>
+		<th>comment</th>
+		<th>jira</th>
+		
+	</tr>
+ 	$svn:svn_item_jira()$
+
+</table>
+	
+>>
+
+svn_item_jira(svn) ::= <<
+
+	<tr>
+		<td>$svn.id$</td>
+		<td>$svn.comitter$</td>
+		<td class="wrap">$svn.comment$</td>
+		<td><a href="http://jira.distrelec.com/browse/$svn.jiraId$">$svn.jiraId$</a></td>
+
+	</tr>
+	<tr>
+		<td colspan="3">
+			$svn.files:svn_files()$
+		</td>
+	</tr>
+	
+>>
+
+svn_item(svn,jira) ::= <<
+
+	<tr>
+		<td>$svn.id$</td>
+		<td>$svn.comitter$</td>
+		<td>$svn.comment$</td>
+	</tr>
+	$if(jira.bug)$
+		<tr>
+		
+			<td colspan="3">
+				$svn.files:svn_files()$
+			</td>
+		</tr>
+	$endif$
+>>
+
+
+svn_files(file) ::= <<
+	$file$<br>
+>>
+

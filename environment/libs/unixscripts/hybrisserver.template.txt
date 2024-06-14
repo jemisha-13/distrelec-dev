@@ -1,0 +1,42 @@
+#!/bin/sh -e
+# hybris server startup script
+# chkconfig: 345 98 2
+# description: hybris server
+# processname: @SERVICE_PROCESS_NAME@
+
+
+# Define some variables
+# Name of app
+APP=@SERVICE_PROCESS_NAME@
+# Name of the user to run as
+RUN_AS_USER=@SERVICE_RUNAS_USER@
+# Location of application's bin directory
+HYBRIS_SERVER_HOME=@SERVICE_SERVER_PATH@
+# Location of Java JDK
+export JAVA_HOME=@SERVICE_JAVA_HOME@
+
+case "$1" in
+  # Start command
+  start)
+    echo "Starting $APP"
+    /bin/su -m $RUN_AS_USER -c "$HYBRIS_SERVER_HOME/hybrisserver.sh start &> /dev/null"
+    ;;
+  # Stop command
+  stop)
+    echo "Stopping $APP"
+    /bin/su -m $RUN_AS_USER -c "$HYBRIS_SERVER_HOME/hybrisserver.sh stop &> /dev/null"
+    echo "$APP stopped successfully"
+    ;;
+   # Restart command
+   restart)
+        $0 stop
+        sleep 5
+        $0 start
+        ;;
+  *)
+    echo "Usage: @SERVICE_AUTORUN_DIR@/$APP {start|restart|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0

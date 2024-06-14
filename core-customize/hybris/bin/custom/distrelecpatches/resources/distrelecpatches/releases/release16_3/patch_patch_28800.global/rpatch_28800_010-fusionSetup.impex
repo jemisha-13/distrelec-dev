@@ -1,0 +1,387 @@
+$passwordEncoding=md5
+$defaultPassword=3xp0rt2f4ctf1nd3r
+$setPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultPassword']
+
+# Technical user factfinder
+INSERT_UPDATE Employee;UID[unique=true];$setPassword;name;description;groups(uid)
+;techUserFusion;;techUserFusion;technical user for fusion-integration;admingroup
+
+
+INSERT_UPDATE ServicelayerJob; code[unique=true];springId[unique=true]
+;pimWebUseMigrationJob;pimWebUseMigrationJob;
+
+INSERT_UPDATE CronJob;code[unique=true];job(code)[unique=true];active[default=true];sessionUser(uid);sessionLanguage(isocode)
+;pimWebUseMigrationCronJob;pimWebUseMigrationJob;;techUserFusion;en
+
+
+
+#Creates the Solr server configurations
+INSERT_UPDATE SolrServerConfig; name[unique = true]; mode(code); username   ; password  ; indexingUsername; indexingPassword
+                              ; fusionServerConfig ; fusion    ; solrclient ; dummypw ;            ; 
+
+
+# Updates the endpoints for the Solr server configurations
+INSERT_UPDATE SolrEndpointUrl; solrServerConfig(name)[unique = true]; url[unique = true]                                 ; master;
+                             ; fusionServerConfig                   ;dummyurl  ; true;
+
+INSERT_UPDATE SolrIndexConfig ; name[unique=true] ; batchSize ; numberOfThreads;commitMode(code)
+                              ; Default           ; 250       ; 8  ;NEVER
+
+$productCatalog = distrelecProductCatalog
+$catalogVersions = catalogVersions(catalog(id), version);
+$facetSearchConfigName = distSearchConfig
+$facetSearchConfigDescription = Product, Catgory and Manufacturer Fusion Indexes
+$searchIndexNamePrefix = productsCategoriesManufacturer
+$solrIndexedTypeProduct = distproductType
+$solrIndexedTypeProduct = distproductType
+$solrIndexedTypeProductAtomic = distproductTypeAtomic
+$solrIndexedTypeManufacturer = distmanufacturerType
+$solrIndexedTypeCategory = categoryType
+$solrIndexedTypeUnit = unitType
+$solrIndexedTypeClassificationAttribute = classificationAttributeAssignmentType
+
+#$indexBaseSite=distrelec_NO
+$indexCurrencies = 
+
+
+INSERT_UPDATE SolrIndexedType; identifier[unique = true]; type(code); variant;solrIndexedProperties
+                             ; $solrIndexedTypeProduct      ; Product                          ; false               ;
+                             ; $solrIndexedTypeManufacturer     ; DistManufacturer                     ; false  ;
+                             ; $solrIndexedTypeCategory     ; Category                     ; false  ;
+                             ; $solrIndexedTypeUnit;ClassificationAttributeUnit  
+                             ; $solrIndexedTypeClassificationAttribute;ClassAttributeAssignment  
+                             ; $solrIndexedTypeProductAtomic;Product;false  
+
+INSERT_UPDATE SolrFacetSearchConfig; name[unique = true]    ; description                   ; indexNamePrefix        ; languages(isocode); currencies(isocode); solrServerConfig(name); solrSearchConfig(description); solrIndexConfig(name); solrIndexedTypes(identifier); enabledLanguageFallbackMechanism; $catalogVersions
+                                   ; $facetSearchConfigName ; $facetSearchConfigDescription ; $searchIndexNamePrefix ;                   ; $indexCurrencies   ; fusionServerConfig    ; Default                      ; Default              ; $solrIndexedTypeProduct,$solrIndexedTypeManufacturer,$solrIndexedTypeCategory  ; true ; $productCatalog:Online
+                                   ; distSearchConfigAtomic ; $facetSearchConfigDescription ; $searchIndexNamePrefix ;                   ; $indexCurrencies   ; fusionServerConfig    ; Default                      ; Default              ; $solrIndexedTypeProductAtomic  ; true ; $productCatalog:Online
+
+#prodduct setup
+INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]           ; type(code); sortableType(code); currency[default = false]; localized[default = false]; multiValue[default = false]; fieldValueProvider                           ; valueProviderParameter                          ; ftsPhraseQuery[default = false]; ftsPhraseQueryBoost; ftsQuery[default = false]; ftsQueryBoost; ftsFuzzyQuery[default = false]; ftsFuzzyQueryBoost; ftsWildcardQuery[default = false]; ftsWildcardQueryType(code)[default = POSTFIX]; ftsWildcardQueryBoost; ftsWildcardQueryMinTermLength
+                                 ; $solrIndexedTypeProduct                   ; ean                           ; string    ;                   ;                          ;                           ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; description                   ; text      ;                   ;                          ; true                      ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; typeName                      ; string    ;                   ;                          ;                           ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; typeNameNormalized            ; string    ;                   ;                          ;                           ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; productHierarchy              ; string    ;                   ;                          ;                           ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; energyEffiencyLabels          ; string    ;                   ;                          ; true                      ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; alternativesMPN               ; string    ;                   ;                          ;                           ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; normalizedAlternativesMPN     ; string    ;                   ;                          ;                           ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; curatedProductSelection       ; string    ;                   ;                          ;                           ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; sapMPN                        ; string    ;                   ;                          ;                           ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; alternativeAliasMPN           ; string    ;                   ;                          ;                           ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; normalizedAlternativeAliasMPN ; string    ;                   ;                          ;                           ;                            ;                                              ;                                                 ;
+                                 ; $solrIndexedTypeProduct             ; productFamilyName             ; string    ;                   ;                          ; true                      ;                            ;                                              ;                                                 ;
+
+                                 ; $solrIndexedTypeProduct                   ; productNumber                 ; string    ;                   ;                          ;                           ;                            ; springELValueProvider                        ; code                                            ;
+                                 ; $solrIndexedTypeProduct                   ; productNumberElfa             ; string    ;                   ;                          ;                           ;                            ; springELValueProvider                        ; codeElfa
+                                 ; $solrIndexedTypeProduct                   ; productNumberMovex            ; string    ;                   ;                          ;                           ;                            ; springELValueProvider                        ; codeMovex                                       ;
+                                 ; $solrIndexedTypeProduct                   ; title                         ; text      ;                   ;                          ; true                      ;                            ; springELValueProvider                        ; getName(#lang)                                  ;
+                                 ; $solrIndexedTypeProduct                   ; manufacturerName              ; text      ;                   ;                          ;                           ;                            ; springELValueProvider                        ; manufacturer != null ? manufacturer.name : null ;
+                                 ; $solrIndexedTypeProduct                   ; manufacturercode              ; string    ;                   ;                          ;                           ;                            ; springELValueProvider                        ; manufacturer != null ? manufacturer.code : null ;
+                                 ; $solrIndexedTypeProduct                   ; titleShort                    ; text      ;                   ;                          ; true                      ;                            ; springELValueProvider                        ; getNameShort(#lang)                             ;
+                                 ; $solrIndexedTypeProduct                   ; accessory                     ; string    ;                   ;                          ;                           ;                            ; springELValueProvider                        ; getSeoAccessory(#lang)                          ;
+                                 ; $solrIndexedTypeProduct             ; productFamilyCode             ; string    ;                   ;                          ;                           ;                            ; springELValueProvider                        ; pimFamilyCategoryCode                           ;
+
+                                 ; $solrIndexedTypeProduct                   ; country                       ; string    ;                   ;                          ;                           ;                            ; distCountryValueResolver                     ;
+                                 ; $solrIndexedTypeProduct                   ; priceAttributes               ; double    ;                   ;                          ;                           ;                            ; distAllPriceAttributesValueResolver          ;
+                                 ; $solrIndexedTypeProduct                   ; stock                         ; boolean   ;                   ;                          ;                           ;                            ; distTotalInStockForCMSSiteValueResolver      ;
+                                 ; $solrIndexedTypeProduct                   ; visibleInShop                 ; boolean   ;                   ;                          ;                           ;                            ; distShopVisibilityValueResolver              ;
+                                 ; $solrIndexedTypeProduct                   ; visibleInChannels             ; string    ;                   ;                          ;                           ; true                       ; distVisibleInChannelsValueResolver           ;
+                                 ; $solrIndexedTypeProduct                   ; salesUnit                     ; string    ;                   ;                          ; true                      ;                            ; distSalesUnitValueResolver                   ;                                                 ;
+                                 ; $solrIndexedTypeProduct                   ; sapPlantProfile               ; string    ;                   ;                          ;                           ;                            ; distSapPlantProfilesValueResolver            ;
+                                 ; $solrIndexedTypeProduct                   ; pimWebUse                     ; string    ;                   ;                          ; true                      ; true                       ; distPimWebUseIndividualFieldsValueResolver   ;
+                                 ; $solrIndexedTypeProduct                   ; pimWebUseFullTextSearch       ; string    ;                   ;                          ; true                      ; true                       ; distPimWebUseFullTextSearchValueResolver     ;
+                                 ; $solrIndexedTypeProduct                   ; pimWebUseDisplayField         ; string    ;                   ;                          ; true                      ;                            ; distPimWebUseDisplayValueResolver            ;
+                                 ; $solrIndexedTypeProduct                   ; promotionLabel                ; string    ;                   ;                          ;                           ;                            ; distPromotionLabelValueResolver ;
+                                 ; $solrIndexedTypeProduct                   ; productStatus                 ; string    ;                   ;                          ;                           ; true                       ; distProductStatusCodesValueResolver ;
+                                 ; $solrIndexedTypeProduct                   ; productStatusName             ; string    ;                   ;                          ; true                      ; true                       ; distProductStatusNamesValueResolver ;
+                                 ; $solrIndexedTypeProduct                   ; categoryAttributes            ; string    ;                   ;                          ;                           ;                            ; distCategoryAttributeResolver                ;
+                                 ; $solrIndexedTypeProduct                   ; categoryMLAttributes          ; string    ;                   ;                          ; true                      ;                            ; distCategoryMLAttributeResolver              ;
+                                 ; $solrIndexedTypeProduct                   ; categoryCodes                 ; string    ;                   ;                          ;                           ; true                       ; distCategoryCodesValueResolver               ;
+                                 ; $solrIndexedTypeProduct                   ; imageURL                      ; string    ;                   ;                          ;                           ;                            ; distProductImagesValueResolver               ;
+#                                 ; $solrIndexedTypeProduct ; manufacturerImageUrl                     ; string              ;                   ;                    ;                      ;                              ; distProductManufacturerImagesValueResolver ;                           
+                                 ; $solrIndexedTypeProduct                   ; urlResolver                   ; string    ;                   ;                          ; true                      ;                            ; distURLValueResolver                         ;
+                                 ; $solrIndexedTypeProduct                   ; eligibleForReevoo             ; boolean   ;                   ;                          ;                         ;                            ; distProductEligibleForReevooValueResolver                         ;
+                                 ; $solrIndexedTypeProduct                   ; productFamilyUrl              ; string    ;                   ;                          ; true                      ;                            ; distProductFamilyURLValueResolver                         ;
+#                                 ; $solrIndexedTypeProduct                   ; creationTime                   ; string    ;                   ;                          ; false                     ;                            ; springELValueProvider                        ;T(java.time.LocalDateTime).now()
+
+
+
+
+INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; identifier[unique = true]        ; type(code); injectCurrentDate[default = false]; injectCurrentTime[default = false]; injectLastIndexTime[default = false]; query; user(uid); parameterProvider
+                                 ; $solrIndexedTypeProduct                          ; products-fullQuery ; full      ;                   ;                          ;                      ; "
+SELECT distinct {p.pk}
+FROM {Product AS p
+JOIN catalogversion as cv on {p.catalogversion}={cv.pk}
+JOIN catalog as cat on {cv.catalog}={cat.pk}
+JOIN distpricerow as pr on {pr.product}={p.pk} 
+JOIN cmssite as cms on {pr.ug}={cms.userPriceGroup}
+JOIN ArticleApprovalStatus AS aas on {p.approvalStatus} = {aas.pk}
+JOIN DistSalesOrgProduct AS dsop on {dsop.product}={p.pk}
+JOIN DistsalesOrg AS dso on {dsop.salesOrg}={dso.pk} 
+}
+WHERE
+{cv.version} = 'Online' AND
+{cat.id} = 'distrelecProductCatalog' AND
+{dso.pk} = ?salesOrg AND
+{cms.pk} = ?cmsSite AND
+{aas.code} = 'approved' AND 
+{p.pimId} IS NOT NULL AND
+{p.code} IS NOT NULL AND 
+({p.exclude} IS NULL OR {p.exclude} != 1)
+"                          ; anonymous                                    ;
+
+
+INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; identifier[unique = true]        ; type(code); injectCurrentDate[default = false]; injectCurrentTime[default = true]; injectLastIndexTime[default = false]; query; user(uid) ; parameterProvider
+                              ; $solrIndexedTypeProduct     ; products-updateQuery ; update              ;                   ;                    ;                  ; "
+SELECT distinct {p.pk}
+FROM {Product AS p
+JOIN catalogversion as cv on {p.catalogversion}={cv.pk}
+JOIN catalog as cat on {cv.catalog}={cat.pk}
+LEFT JOIN stocklevel as sl on {sl.productcode}={p.code}
+
+JOIN distpricerow as pr on {pr.product}={p.pk} 
+JOIN cmssite as cms on {pr.ug}={cms.userPriceGroup}
+JOIN ArticleApprovalStatus AS aas on {p.approvalStatus} = {aas.pk}
+JOIN DistSalesOrgProduct AS dsop on {dsop.product}={p.pk}
+JOIN DistsalesOrg AS dso on {dsop.salesOrg}={dso.pk}
+LEFT JOIN productCountry as pc on {pc.product}={p.pk}
+LEFT JOIN distManufacturer as man on {p.manufacturer}={man.pk}
+LEFT JOIN category as ca on {primarySuperCategory}={ca.pk}
+LEFT JOIN DistCOPunchOutFilter AS pof on {pof.salesOrg} = {dsop.salesOrg}
+  AND ({pof.product} = {p.pk}) AND	(({pof.validFromDate} >= ?lastIndexTime AND {pof.validFromDate} <= ?currentTime) OR  
+  	({pof.validUntilDate} >= ?lastIndexTime AND {pof.validUntilDate} <= ?currentTime) OR {pof.modifiedtime} > ?lastIndexTime)  
+
+}
+
+WHERE
+{cv.version} = 'Online' AND
+{cat.id} = 'distrelecProductCatalog' AND
+{dso.pk} = ?salesOrg AND
+{cms.pk} = ?cmsSite AND
+{aas.code} = 'approved' AND 
+{p.pimId} IS NOT NULL AND
+{p.code} IS NOT NULL AND 
+ ({p.exclude} IS NULL OR {p.exclude} != 1) AND 	
+(
+	{p.modifiedtime} > ?lastIndexTime OR 
+	{sl.modifiedtime} > ?lastIndexTime AND {sl.inOutStockChange} = 1 OR
+	{pr.modifiedtime} > ?lastIndexTime OR
+	{pof.modifiedtime} > ?lastIndexTime OR
+	{pc.modifiedtime} > ?lastIndexTime OR
+	{dsop.modifiedtime} > ?lastIndexTime OR
+	{man.modifiedtime} > ?lastIndexTime OR
+	{ca.modifiedtime} > ?lastIndexTime OR
+	({pr.startTime} >= ?lastIndexTime AND  {pr.startTime} <= ?currentTime) OR
+	({pr.endTime} >= ?lastIndexTime AND {pr.endtime} <= ?currentTime)
+
+)
+"                            ; anonymous ;
+
+
+INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]           ; type(code); sortableType(code); currency[default = false]; localized[default = false]; multiValue[default = false]; fieldValueProvider                           ; valueProviderParameter                          ; ftsPhraseQuery[default = false]; ftsPhraseQueryBoost; ftsQuery[default = false]; ftsQueryBoost; ftsFuzzyQuery[default = false]; ftsFuzzyQueryBoost; ftsWildcardQuery[default = false]; ftsWildcardQueryType(code)[default = POSTFIX]; ftsWildcardQueryBoost; ftsWildcardQueryMinTermLength
+                                 ; $solrIndexedTypeProductAtomic                   ; priceAttributes               ; double    ;                   ;                          ;                           ;                            ; distAllPriceAttributesValueResolver          ;
+                                 ; $solrIndexedTypeProductAtomic                   ; stock                         ; boolean   ;                   ;                          ;                           ;                            ; distTotalInStockForCMSSiteValueResolver      ;
+#                                 ; $solrIndexedTypeProductAtomic                   ; visibleInShop                 ; boolean   ;                   ;                          ;                           ;                            ; distShopVisibilityValueResolver              ;
+
+
+
+
+#atomic product update
+INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; identifier[unique = true]        ; type(code); injectCurrentDate[default = false]; injectCurrentTime[default = true]; injectLastIndexTime[default = false]; query; user(uid) ; parameterProvider
+                              ; $solrIndexedTypeProductAtomic     ; products-atomicUpdateQuery ; update              ;                   ;                    ;                  ; "
+SELECT distinct {p.pk}
+FROM {Product AS p
+JOIN catalogversion as cv on {p.catalogversion}={cv.pk}
+JOIN catalog as cat on {cv.catalog}={cat.pk}
+LEFT JOIN stocklevel as sl on {sl.productcode}={p.code}
+JOIN distpricerow as pr on {pr.product}={p.pk} 
+JOIN cmssite as cms on {pr.ug}={cms.userPriceGroup}
+JOIN ArticleApprovalStatus AS aas on {p.approvalStatus} = {aas.pk}
+JOIN DistSalesOrgProduct AS dsop on {dsop.product}={p.pk}
+JOIN DistsalesOrg AS dso on {dsop.salesOrg}={dso.pk}
+}
+
+WHERE
+
+{cv.version} = 'Online' AND
+{cat.id} = 'distrelecProductCatalog' AND
+{dso.pk} = ?salesOrg AND
+{cms.pk} = ?cmsSite AND
+{aas.code} = 'approved' AND 
+{p.pimId} IS NOT NULL AND
+{p.code} IS NOT NULL AND 
+ ({p.exclude} IS NULL OR {p.exclude} != 1) AND 	
+(
+	{sl.modifiedtime} > ?lastIndexTime AND {sl.inOutStockChange} = 1 OR
+	{pr.modifiedtime} > ?lastIndexTime OR
+	({pr.startTime} >= ?lastIndexTime AND  {pr.startTime} <= ?currentTime) OR
+	({pr.endTime} >= ?lastIndexTime AND {pr.endtime} <= ?currentTime) 
+)
+"                            ; anonymous ;
+
+#manufacturer setup
+INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]              ; type(code); sortableType(code); currency[default = false]; localized[default = false]; multiValue[default = false]; fieldValueProvider                           ; valueProviderParameter                                       ; ftsPhraseQuery[default = false]; ftsPhraseQueryBoost; ftsQuery[default = false]; ftsQueryBoost; ftsFuzzyQuery[default = false]; ftsFuzzyQueryBoost; ftsWildcardQuery[default = false]; ftsWildcardQueryType(code)[default = POSTFIX]; ftsWildcardQueryBoost; ftsWildcardQueryMinTermLength
+                                 ; $solrIndexedTypeManufacturer ; code                             ; string ; ; ;       ;   ;           ; ; ; ; ; ; ; ; ; ;
+                                 ; $solrIndexedTypeManufacturer ; name                             ; string ; ; ;       ;   ;           ; ; ; ; ; ; ; ; ; ;
+#                                 ; $solrIndexedTypeManufacturer ; nameSeo                          ; string ; ; ;       ;   ;           ; ; ; ; ; ; ; ; ; ;
+                                 ; $solrIndexedTypeManufacturer  ; manufacturerUrl                      ; string              ;                   ;                    ; true                  ;                              ; distManufacturerURLValueResolver ;                                                  
+                                 ; $solrIndexedTypeManufacturer  ; manufacturerImageUrl                      ; string              ;                   ;                    ;                   ;                              ; distManufacturerImageValueResolver ;                                                   
+                                 ; $solrIndexedTypeManufacturer               ; country            ; string    ;                   ;                          ;                           ;                            ; distCountryValueResolver                     ;
+
+
+INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; identifier[unique = true]        ; type(code); injectCurrentDate[default = false]; injectCurrentTime[default = false]; injectLastIndexTime[default = false]; query; user(uid); parameterProvider
+                                 ; $solrIndexedTypeManufacturer ; manufacturer-fullQuery ; full   ; ; ; false ; "
+ SELECT {man.pk} AS pk                                                                                                          
+FROM { DistManufacturer AS man 
+JOIN DistManufacturerCountry as manCoun ON {man.pk}={manCoun.manufacturer}} WHERE {manCoun.visibleonshop}=?visible AND {manCoun.country} = ?country
+" ; anonymous ;
+
+
+INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; identifier[unique = true]        ; type(code); injectCurrentDate[default = false]; injectCurrentTime[default = false]; injectLastIndexTime[default = false]; query; user(uid); parameterProvider
+                                 ; $solrIndexedTypeManufacturer ; manufacturer-updateQuery ; update   ; ; ; false ; "
+ SELECT {man.pk} AS pk                                                                                                          
+FROM { DistManufacturer AS man 
+JOIN DistManufacturerCountry as manCoun ON {man.pk}={manCoun.manufacturer}} WHERE {manCoun.visibleonshop}=?visible AND {manCoun.country} = ?country AND {man.modifiedtime}>=?lastIndexTime
+"                                                                                                                         ; anonymous ;
+
+#category setup
+INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]; type(code); sortableType(code); currency[default = false]; localized[default = false]; multiValue[default = false]; fieldValueProvider           ; valueProviderParameter; ftsPhraseQuery[default = false]; ftsPhraseQueryBoost; ftsQuery[default = false]; ftsQueryBoost; ftsFuzzyQuery[default = false]; ftsFuzzyQueryBoost; ftsWildcardQuery[default = false]; ftsWildcardQueryType(code)[default = POSTFIX]; ftsWildcardQueryBoost; ftsWildcardQueryMinTermLength
+                                 ; $solrIndexedTypeCategory                  ; code               ; string    ;                   ;                          ;                           ;                            ;                              ;                       ;                                ;                    ;                          ;              ;                               ;                   ;                                  ;                                              ;
+                                 ; $solrIndexedTypeCategory                  ; name               ; string    ;                   ;                          ; true                      ;                            ;                              ;                       ;                                ;                    ;                          ;              ;                               ;                   ;                                  ;                                              ;
+                                 ; $solrIndexedTypeCategory                  ; catPathSelectCode  ; string    ;                   ;                          ;                           ;                            ;                              ;                       ;                                ;                    ;                          ;              ;                               ;                   ;                                  ;                                              ;
+                                 ; $solrIndexedTypeCategory                  ; level              ; int       ;                   ;                          ;                           ;                            ;                              ;                       ;                                ;                    ;                          ;              ;                               ;                   ;                                  ;                                              ;
+                                 ; $solrIndexedTypeCategory                  ; categoryURL        ; string    ;                   ;                          ; true                      ;                            ; distCategoryURLValueResolver ;                       ;                                ;                    ;                          ;              ;                               ;                   ;                                  ;                                              ;
+                                 ; $solrIndexedTypeCategory                  ; visibleInShop      ; boolean   ;                   ;                          ;                           ;                            ; distCategoryShopVisibilityValueResolver
+                                 ; $solrIndexedTypeCategory                  ; categoryImage      ; string    ;                   ;                          ;                           ;                            ; distCategoryImageValueResolver
+                                 ; $solrIndexedTypeCategory                  ; superCategories    ; string    ;                   ;                          ;                           ; true                       ; distCategorySuperCategoriesValueResolver
+                                 ; $solrIndexedTypeCategory                  ; country            ; string    ;                   ;                          ;                           ;                            ; distCountryValueResolver                     ;
+
+
+
+INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; identifier[unique = true]; type(code); injectCurrentDate[default = false]; injectCurrentTime[default = false]; injectLastIndexTime[default = false]; query; user(uid) ; parameterProvider
+                              ; $solrIndexedTypeCategory                  ; category-fullQuery       ; full      ;                                   ;                                   ; false                               ; "
+SELECT distinct {category} FROM {CategoryCMSSiteEntry} WHERE {cmsSite} = ?cmsSite
+"    ; anonymous ;
+
+INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; identifier[unique = true]; type(code); injectCurrentDate[default = false]; injectCurrentTime[default = false]; injectLastIndexTime[default = false]; query; user(uid); parameterProvider
+                              ; $solrIndexedTypeCategory                  ; category-updateQuery     ; update    ;                                   ;                                   ; false                               ; "
+SELECT distinct {cat.pk} FROM {CategoryCMSSiteEntry as cat2cms JOIN category as cat on {cat2cms.category}={cat.pk}} WHERE {cmsSite} = ?cmsSite AND {cat.modifiedtime}>=?lastIndexTime
+" ; anonymous ;
+
+
+$fullIndexJob=full-ProdCatMan-Fusion
+$updateIndexJob=update-ProdCatMan-Fusion
+$fullUnitJob=full-Unit-Fusion
+$fullClassificationAttributeJob = full-ClassificationAttributeAssignment-Fusion
+
+
+#INSERT_UPDATE SolrIndexerCronJob; code[unique = true]; job(code); singleExecutable; sessionLanguage(isocode); active; facetSearchConfig(name); indexerOperation(code)
+#; $updateIndexJob ; solrIndexerJob ; false ; en ; true ; $facetSearchConfigName ; update
+
+
+
+
+INSERT_UPDATE ServicelayerJob; code[unique=true];springId[unique=true]
+;distSolrIndexerJob;distSolrIndexerJob;
+
+
+INSERT_UPDATE SolrIndexerCronJob; code[unique = true]; job(code); singleExecutable; sessionLanguage(isocode); active; facetSearchConfig(name); indexerOperation(code);cmsSites(uid);;sessionUser(uid)[default=techUserFusion]
+; $fullIndexJob ; distSolrIndexerJob ; false ; en ; true ; $facetSearchConfigName ; full;distrelec_SE,
+
+
+INSERT_UPDATE Trigger; cronJob(code)[unique=true]; cronExpression
+; full-ProdCatMan-Fusion;  0 0 22 * * ? *
+
+
+INSERT_UPDATE SolrIndexerCronJob; code[unique = true]; job(code); singleExecutable; sessionLanguage(isocode); active; facetSearchConfig(name); indexerOperation(code);cmsSites(uid);sessionUser(uid)[default=techUserFusion]
+;$updateIndexJob ; distSolrIndexerJob ; false ; en ; true ; $facetSearchConfigName ; update;distrelec_SE
+
+#INSERT_UPDATE SolrIndexerCronJob; code[unique = true]; job(code); singleExecutable; sessionLanguage(isocode); active; facetSearchConfig(name); indexerOperation(code);cmsSites(uid);sessionUser(uid)[default=techUserFusion];useAtomicUpdates
+#;updateAtomic-Product-Fusion ; distSolrIndexerJob ; false ; en ; true ; distSearchConfigAtomic ; update;distrelec_SE;;true
+
+
+
+#units setup
+
+
+$productCatalog = distrelecProductCatalog
+$catalogVersions = catalogVersions(catalog(id), version);
+
+INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]              ; type(code); sortableType(code); currency[default = false]; localized[default = false]; multiValue[default = false]; fieldValueProvider                           ; valueProviderParameter                                       ; ftsPhraseQuery[default = false]; ftsPhraseQueryBoost; ftsQuery[default = false]; ftsQueryBoost; ftsFuzzyQuery[default = false]; ftsFuzzyQueryBoost; ftsWildcardQuery[default = false]; ftsWildcardQueryType(code)[default = POSTFIX]; ftsWildcardQueryBoost; ftsWildcardQueryMinTermLength
+; $solrIndexedTypeUnit ; code                               ; string ; ; ;       ;   ;           ; ; ; ; ; ; ; ; ; ;
+; $solrIndexedTypeUnit ; symbol                             ; string ; ; ;false       ;   ;           ; ; ; ; ; ; ; ; ; ;
+; $solrIndexedTypeUnit ; unittype                           ; string ; ; ;       ;   ;           ; ; ; ; ; ; ; ; ; ;
+; $solrIndexedTypeUnit ; conversionfactor                   ; double ; ; ;       ;   ;           ; ; ; ; ; ; ; ; ; ;
+; $solrIndexedTypeUnit ; excludedForFusionFacetConversion   ; boolean ; ; ;       ;   ;           ; ; ; ; ; ; ; ; ; ;
+; $solrIndexedTypeUnit ; baseUnitSymbol                     ; string ; ; ;       ;   ;distBaseUnitSymbolValueResolver           ; ; ; ; ; ; ; ; ; ;
+
+
+#with the query we want to exclude units which are not in a conversion-group and have a duplicate which is in the conversion group
+INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; identifier[unique = true]        ; type(code); injectCurrentDate[default = false]; injectCurrentTime[default = false]; injectLastIndexTime[default = false]; query; user(uid); parameterProvider
+; $solrIndexedTypeUnit ; units-fullQuery ; full   ; ; ; false ; "
+SELECT {pk},{code} FROM {ClassificationAttributeUnit} WHERE ({symbol} not in ({{
+   SELECT {symbol} FROM {classificationattributeunit} GROUP BY {symbol} HAVING COUNT(*) > 1
+  }}) OR {unittype}
+  
+    not in ({{
+    SELECT {unittype} FROM {classificationattributeunit} GROUP BY {unittype} HAVING COUNT(*) = 1
+  }}))  AND ({excludedForUnitConversion} = 0 OR {excludedForUnitConversion} is null)
+" ; anonymous ;
+
+
+
+INSERT_UPDATE SolrFacetSearchConfig; name[unique = true]    ; description                   ; indexNamePrefix        ; languages(isocode); currencies(isocode); solrServerConfig(name); solrSearchConfig(description); solrIndexConfig(name); solrIndexedTypes(identifier); enabledLanguageFallbackMechanism; $catalogVersions
+                                   ; distUnitFacetSearchConfig ; index for units ; units ;                   ;    ; fusionServerConfig    ; Default                      ; Default              ; $solrIndexedTypeUnit  ; true ; $productCatalog:Online
+
+
+INSERT_UPDATE SolrIndexerCronJob; code[unique = true]; job(code); singleExecutable; sessionLanguage(isocode); active; facetSearchConfig(name); indexerOperation(code);cmsSites(uid);sessionUser(uid)[default=techUserFusion]
+; $fullUnitJob ; solrIndexerJob ; false ; en ; true ; distUnitFacetSearchConfig ; full;distrelec_CH
+
+
+#ClassificationAttributeAssignment (pimwebuse-metadata) setup
+
+INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]              ; type(code); sortableType(code); currency[default = false]; localized[default = false]; multiValue[default = false]; fieldValueProvider                           ; valueProviderParameter                                       ; ftsPhraseQuery[default = false]; ftsPhraseQueryBoost; ftsQuery[default = false]; ftsQueryBoost; ftsFuzzyQuery[default = false]; ftsFuzzyQueryBoost; ftsWildcardQuery[default = false]; ftsWildcardQueryType(code)[default = POSTFIX]; ftsWildcardQueryBoost; ftsWildcardQueryMinTermLength
+; $solrIndexedTypeClassificationAttribute ; code                             ; string ; ; ;       ;   ;distClassAttributeAssignmentValueResolver           ; ; ; ; ; ; ; ; ; ;
+; $solrIndexedTypeClassificationAttribute ; name                             ; string ; ; ;true       ;   ;springELValueProvider        ;classificationAttribute.getName(#lang)   ; ; ; ; ; ; ; ; ; ;
+; $solrIndexedTypeClassificationAttribute ; unit                             ; string ; ; ;       ;   ;distClassAttributeAssignmentUnitValueResolver           ;  ; ; ; ; ; ; ; ; ;
+; $solrIndexedTypeClassificationAttribute ; fieldType                        ; string ; ; ;       ;   ;distClassAttributeAssignmentFieldTypeValueResolver           ;  ; ; ; ; ; ; ; ; ;
+
+
+INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; identifier[unique = true]        ; type(code); injectCurrentDate[default = false]; injectCurrentTime[default = false]; injectLastIndexTime[default = false]; query; user(uid); parameterProvider
+; $solrIndexedTypeClassificationAttribute ; classificationAttributeAssignment-fullQuery ; full   ; ; ; false ; "
+select min({caa.pk}) from {
+	ClassAttributeAssignment as caa join
+ 	ClassificationAttribute as ca on {caa.classificationAttribute}={ca.pk} left join
+	ClassificationAttributeUnit as cau on {caa.unit}={cau.pk} left join
+    ClassificationAttributeUnit as cabu on {cau.unitType}={cabu.unitType} AND {cabu.conversionfactor}=1	    
+ } group by {ca.code}
+" ; anonymous ;
+
+                                                                                                                              
+
+INSERT_UPDATE SolrFacetSearchConfig; name[unique = true]    ; description                   ; indexNamePrefix        ; languages(isocode); currencies(isocode); solrServerConfig(name); solrSearchConfig(description); solrIndexConfig(name); solrIndexedTypes(identifier); enabledLanguageFallbackMechanism; $catalogVersions
+                                   ; distClassificationAttributeAssignmentFacetSearchConfig ; index for pimwebuse-meta-data ; classificationAttribute ;sv,en,de,fr,it,cs,da,fi, et,lv,nl,no,pl,ro,sk,hu,lt              ;    ; fusionServerConfig    ; Default                      ; Default              ; $solrIndexedTypeClassificationAttribute  ; true ; $productCatalog:Online
+
+
+INSERT_UPDATE SolrIndexerCronJob; code[unique = true]; job(code); singleExecutable; sessionLanguage(isocode); active; facetSearchConfig(name); indexerOperation(code);cmsSites(uid);sessionUser(uid)[default=techUserFusion]
+; $fullClassificationAttributeJob ; solrIndexerJob ; false ; en ; true ; distClassificationAttributeAssignmentFacetSearchConfig ; full ;
+
+
+
+UPDATE ClassificationAttributeUnit;code[unique=true];excludedForUnitConversion[default=true];excludedForFusionFacetConversion[default=true];
+;unece.units.hrs
+;unece.unit.MON;false
+;unece.unit.DAY;false
+;unece.unit.ANN;false 
+;unece.unit.ANNN
+
+;unece.unit.milOhm
+;uOhm
+;unece.unit.ohm.text
+;unece.unit.GOhm
+;unece.unit.kOhm
+;unit.k
+;unece.unit.MOhm
+;unece.unit.TOhm
+;unece.unit.D83 

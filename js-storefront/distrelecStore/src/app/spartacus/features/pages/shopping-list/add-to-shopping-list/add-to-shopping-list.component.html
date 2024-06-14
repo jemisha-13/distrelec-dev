@@ -1,0 +1,59 @@
+<app-dist-slide-drawer [title]="'metahd.mylists' | cxTranslate" direction="RIGHT" uid="add-to-list-drawer">
+  <h3 class="title">{{ 'plp.facet_buttons_and_headers.shopping_list' | cxTranslate }}</h3>
+
+  <form [formGroup]="addToListForm">
+    <ul *ngIf="shoppingListsAll$ | async as shoppingListsAll">
+      <li *ngFor="let item of shoppingListsAll; let i = index" class="shopping-list-group">
+        <app-checkbox
+          [checkboxID]="'add-to-shopping-list-checkbox-' + i"
+          [checkboxName]="item?.uniqueId"
+          [checkboxValue]="item?.uniqueId"
+          [checked]="addToListForm.get('checkbox-list-' + item?.uniqueId)?.value === item?.uniqueId"
+          (change)="onCheck(item?.uniqueId, $event)"
+          size="small"
+        ></app-checkbox>
+        <label
+          class="list-label"
+          [id]="'add-to-shopping-list-checkbox-' + i"
+          [for]="'add-to-shopping-list-checkbox-' + i"
+        >
+          <app-icon iconName="list-grey" iconType="svg" iconAltText="list icon"></app-icon>
+          {{ item?.name }}
+          <span [id]="'list-product-count' + i">({{ item?.totalUnitCount }})</span>
+        </label>
+      </li>
+    </ul>
+  </form>
+
+  <div class="new-list">
+    <app-dist-text-field
+      class="new-list-input"
+      [fieldId]="isMobile ? 'new-list-input_mobile' : 'new-list-input'"
+      [parentFormGroup]="addToListForm"
+      parentFormControlName="name"
+      labelText="{{ 'shoppingList.newList' | cxTranslate }}"
+      maxLength="40"
+      type="text"
+    ></app-dist-text-field>
+  </div>
+
+  <div class="button-group">
+    <app-dist-button
+      [id]="isMobile ? 'add-to-list-drawer_mobile' : 'add-to-list-save'"
+      [text]="'shoppingList.shoppinglist_metaAction_editList_SaveButton' | cxTranslate"
+      [isDisabled]="isInProgress"
+      (click)="handleSaveRequest()"
+      type="primary"
+      width="w-fill"
+    ></app-dist-button>
+
+    <app-dist-button
+      [id]="isMobile ? 'add-to-list-cancel_mobile' : 'add-to-list-cancel'"
+      [text]="'shoppingList.cancel' | cxTranslate"
+      [isDisabled]="isInProgress"
+      (click)="closePanel()"
+      type="outlined"
+      width="w-fill"
+    ></app-dist-button>
+  </div>
+</app-dist-slide-drawer>

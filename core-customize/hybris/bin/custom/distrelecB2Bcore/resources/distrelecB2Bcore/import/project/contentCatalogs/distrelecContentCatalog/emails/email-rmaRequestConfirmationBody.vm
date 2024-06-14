@@ -1,0 +1,88 @@
+## messageSource=classpath:/distrelecB2Bcore/messages/email-rmaRequestConfirmation_$lang.properties
+#macro(genHtmlLink $url $label)
+<a style="color: #AA1936; text-decoration: underline;" href="$url" target="_blank"><span style="color: #AA1936;">$label</span></a>
+#end
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+#set($siteUID=${ctx.siteUID})
+#set($messages=${ctx.messages})
+
+<html>
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body style="padding: 0; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+		## HEADER include
+		${ctx.header}
+	
+		## MOOD IMAGE
+		<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+			<tr>
+				<td style="border-left: 1px solid #cccccc; border-right: 1px solid #cccccc;">
+					${ctx.cmsSlotContents.MoodImage}
+				</td>
+			</tr>
+			<tr>
+				<td height="5" bgcolor="#AA1936"style="border-right: 1px solid #cccccc; border-left: 1px solid #cccccc;"></td>
+			</tr>
+		</table>
+	
+		## CONTENT
+		<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+			<tr>
+				<td style="border-collapse: collapse; border-right: 1px solid #cccccc; border-left: 1px solid #cccccc; padding: 20px;">
+					## title
+					<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 30px;">${messages.emailSubject}</p>
+					<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.text}</p>
+	
+					<table border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0;">
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.reqCode}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.rmaCode})</p></td>
+						</tr>
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.orderCode}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.orderCode})</p></td>
+						</tr>
+						<tr><td colspan="2">&nbsp;</td></tr>
+						<tr>
+							<td colspan="2"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; font-weight: bold; line-height: 18px;">${messages.returnedProducts}</p></td>
+						</tr>
+						<tr>
+							<td colspan="2" style="padding-left: 10px;">
+								<table border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0;">
+								#foreach( $entry in $ctx.entries )	
+								<tr>
+								<td>
+									<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.productNumber}: $!StringEscapeUtils.escapeHtml(${entry.productNumber})</p>
+									<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.productName}: $!StringEscapeUtils.escapeHtml(${entry.productName})</p>
+									<ul>
+										<li><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.amount}: $!StringEscapeUtils.escapeHtml(${entry.amount})</p></li>
+										<li><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.returnReason}: $!StringEscapeUtils.escapeHtml(${entry.returnReason})</p></li>
+										<li><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.returnPackaging}: $!StringEscapeUtils.escapeHtml(${entry.returnPackaging})</p></li>
+										<li><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.serialNumbers}: $!StringEscapeUtils.escapeHtml(${entry.serialNumbers})</p></li>
+										<li><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.comment}: $!StringEscapeUtils.escapeHtml(${entry.comment})</p></li>
+									</ul>
+								</td>
+								</tr>							
+								#end
+								</table>
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2"><p>&#160;<br/><br/>&#160;</p></td>
+						</tr>
+						#if( $siteUID == "distrelec_AT" )
+						<tr>
+							<td colspan="2"><p style="font-family: Verdana, Arial, sans-serif; font-weight: bold; color: #333333; font-size: 12px; line-height: 18px;">${messages.infoText}</p></td>
+						</tr>
+						#end
+					</table>
+				</td>
+			</tr>
+		</table>
+	
+		## FOOTER include
+		${ctx.footer}
+	</body>
+</html>

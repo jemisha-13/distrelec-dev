@@ -1,0 +1,112 @@
+<div class="specifications-container">
+  <app-accordion
+    id="pdp_product_specifications"
+    [uniqueIdentifier]="productData?.code"
+    [titleId]="'pdp_product_specifications_title'"
+    [title]="'product.specification.title' | cxTranslate"
+  >
+    <div class="validate-holder">
+      <form [formGroup]="productAttributesForm">
+        <div class="validate-checkbox-group">
+          <table>
+            <tbody>
+              <ng-container *ngFor="let feature of features">
+                <tr *ngIf="feature?.name && feature?.featureValues" class="read-more-less_item">
+                  <td class="td1">
+                    <input
+                      class="feature-checkbox"
+                      [id]="feature?.name"
+                      [name]="feature?.name"
+                      [checked]="isCheckedBefore(feature)"
+                      (change)="onCheck(feature, $event)"
+                      type="checkbox"
+                    />
+                    <label class="feature-label" [id]="feature?.name + '_label'" [for]="feature?.name">
+                      {{ feature?.name }}
+                    </label>
+                  </td>
+                  <td class="td2">
+                    <ng-container *ngFor="let featureValue of sortFeatureValues(feature?.featureValues)">
+                      <span
+                        class="feature-value"
+                        [id]="feature?.name + '_value'"
+                        [innerHTML]="featureValue.value"
+                      ></span>
+                      <span>&nbsp;</span>
+                      <span
+                        *ngIf="feature?.featureUnit"
+                        class="feature-unit"
+                        [innerHTML]="feature?.featureUnit?.name"
+                      ></span>
+                      <br />
+                    </ng-container>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+
+          <ng-container *ngIf="showFilteredFeatures">
+            <div class="filtered-table">
+              <table>
+                <tbody>
+                  <ng-container *ngFor="let feature of filteredFeatures">
+                    <tr>
+                      <td class="td1 filtered-td">
+                        <span [innerHTML]="feature?.name + ':'"></span>
+                      </td>
+                      <td class="td2 filtered-td">
+                        <ng-container *ngFor="let featureValue of feature?.featureValues; let isLast = last">
+                          <span class="text-nowrap">
+                            <span class="feature-value" [id]="feature?.name + '_value'">{{ featureValue.value }}</span>
+                            <span *ngIf="feature?.featureUnit" class="feature-unit">
+                              &nbsp;{{ feature?.featureUnit?.name }}
+                            </span>
+                            <span *ngIf="!isLast">,&nbsp;</span>
+                          </span>
+                        </ng-container>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </ng-container>
+        </div>
+
+        <div *ngIf="featuresUncollapsed?.length > readMoreCountVisible">
+          <button
+            class="read-more-less_toggleBtn"
+            [id]="'read-more-less_pdp_product_specifications_toggleBtn'"
+            (click)="toggleCollapsedState()"
+          >
+            <span *ngIf="readMoreCollapsedState" class="read-more-less_toggle_read-more">
+              {{ 'product.read_more' | cxTranslate }}
+            </span>
+            <span *ngIf="!readMoreCollapsedState" class="read-more-less_toggle_read-less">
+              {{ 'product.read_less' | cxTranslate }}
+            </span>
+          </button>
+        </div>
+      </form>
+      <div class="searchsimilar">
+        <p class="text" id="pdp_spec_search_similar">
+          {{ 'product.specification.search_similar' | cxTranslate }}
+        </p>
+        <div class="searchsimilar__button">
+          <a
+            class="btn-search"
+            id="pdp_spec_search_similar_btn"
+            [ngClass]="{ disabled: isDisabledProductSearch }"
+            [routerLink]="productData?.categories[0]?.url"
+            [queryParams]="searchQueryParams"
+            [attr.data-search-url]="productData?.categories[0]?.url"
+          >
+            <fa-icon [icon]="faSearch"></fa-icon>
+            {{ 'product.specification.search_similar_btn' | cxTranslate }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </app-accordion>
+</div>

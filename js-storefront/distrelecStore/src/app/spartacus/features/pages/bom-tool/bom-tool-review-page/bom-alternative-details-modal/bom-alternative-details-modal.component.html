@@ -1,0 +1,282 @@
+<app-modal size="lg">
+  <app-button
+    class="modal__close"
+    [modifiers]="['sm']"
+    (click)="onClose()"
+    buttonId="bom_alternative_details_close_btn"
+    colour="red"
+  >
+    {{ 'backorder.item.modal.close' | cxTranslate }}
+  </app-button>
+  <div class="modal__body">
+    <div class="modal__title" id="bom_alternative_details_title">
+      {{ product.name }}
+    </div>
+    <div class="modal__product-information modalInformation">
+      <p class="modalArticle" id="bom_alternative_details_article_number_label">
+        {{ 'product.articleNumberNew' | cxTranslate }}:
+        <strong class="ArticleResponse" id="bom_alternative_details_article_number">{{ product.code }}</strong>
+      </p>
+
+      <p class="modalMPN" id="bom_alternative_details_type_name_label">
+        {{ 'product.typeNameNew' | cxTranslate }}:
+        <strong class="typeNameResponse" id="bom_alternative_details_type_name">{{ product.typeName }}</strong>
+      </p>
+
+      <p *ngIf="product.distManufacturer" class="modalBrand" id="bom_alternative_details_brand_label">
+        {{ 'text.brand' | cxTranslate }}:
+        <a
+          class="modalManufacturer"
+          id="bom_alternative_details_brand_url"
+          [routerLink]="product.distManufacturer.urlId"
+          [title]="product.distManufacturer.name"
+        >
+          <strong class="distManufacturerResponse">{{ product.distManufacturer.name }}</strong>
+        </a>
+      </p>
+
+      <div *ngIf="product.distManufacturer?.image" class="modal__product-brand">
+        <img
+          class="imageResponseBrand"
+          id="bom_alternative_details_manufacturer_img"
+          [src]="manufacturerBrandLogoUrl"
+        />
+      </div>
+
+      <div class="modal__product-image">
+        <img class="imageResponse" id="bom_alternative_details_product_img" [src]="thumbnailUrl" />
+      </div>
+
+      <div class="modal__illustrate-text" id="bom_alternative_details_illustrative_title">
+        {{ 'product.gallery.image.illustrativeTitle' | cxTranslate }}
+      </div>
+
+      <ng-container *ngFor="let classification of product.classifications">
+        <div *ngIf="classification.features.length" class="modal-content__classifications modal__download">
+          <span
+            class="modal-content__classifications__title modal__download-title"
+            id="bom_alternative_details_specificationTitle"
+          >
+            {{ 'product.tabs.specificationTitle' | cxTranslate }}
+          </span>
+          <div *ngFor="let feature of classification.features; index as i" class="modal-content__classifications__item">
+            <span class="title" [id]="'bom_alternative_details_feature_name_' + i">{{ feature.name }}:</span>
+            <span
+              *ngFor="let featuredValue of feature.featureValues; index as j"
+              class="value"
+              [id]="'bom_alternative_details_feature_value_' + i + '_' + j"
+            >
+              {{ featuredValue.value }}
+              <span *ngIf="feature.featureUnit">{{ feature.featureUnit.name }}</span>
+            </span>
+          </div>
+        </div>
+      </ng-container>
+
+      <div *ngIf="product.downloads?.length" class="modal__download">
+        <span class="modal__download-title" id="bom_alternative_details_download_label">
+          {{ 'product.tabs.download' | cxTranslate }}
+        </span>
+
+        <div *ngFor="let item of product.downloads; index as i" class="downloads-body">
+          <div class="downloads-body__title" [id]="'bom_alternative_details_download_title_' + i">
+            {{ item.title }}
+          </div>
+          <div *ngFor="let downloads of item.downloads; index as j" class="downloads-body__content">
+            <a
+              class="downloadlink"
+              [id]="'bom_alternative_details_downloads_url_' + j"
+              [href]="mediaDomain + downloads.downloadUrl"
+              (click)="dispatchPDFEvent()"
+              target="_blank"
+            >
+              <div class="content-holder">
+                <div class="content-holder__image">
+                  <i class="far fa-file-pdf"></i>
+                </div>
+                <div class="content-holder__content">
+                  <span class="downloadName" [id]="'bom_alternative_details_download_name_' + j">
+                    {{ downloads.name }}
+                  </span>
+                  <div class="downloadwrap">
+                    (
+                    <span class="downloadwrap__type" [id]="'bom_alternative_details_mime_type_' + j">
+                      {{ downloads.mimeType }},
+                    </span>
+                    <div *ngFor="let languages; in: downloads.languages" class="downloadwrap__lang">
+                      {{ languages.name }}
+                    </div>
+                    )
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal__download">
+        <span class="modalDownload__title" id="bom_alternative_details_technical_attributes_title">
+          {{ 'product.tabs.technical.attributes' | cxTranslate }}
+        </span>
+
+        <ng-container *ngIf="product.productInformation.seriesDescriptionBullets.length">
+          <span class="modalDownload__list__title" id="bom_alternative_details_series_description">
+            {{ 'detailtabsproductinformation.series.description' | cxTranslate }}
+          </span>
+          <ul class="modalDownload__lists">
+            <li
+              *ngFor="let item of product.productInformation.seriesDescriptionBullets; index as i"
+              class="modalDownload__lists__item"
+              [id]="'bom_alternative_details_series_description_bullet_' + i"
+            >
+              {{ item }}
+            </li>
+          </ul>
+        </ng-container>
+
+        <ng-container *ngIf="product.productInformation.deliveryNote">
+          <span class="modalDownload__subtitle" id="bom_alternative_details_delivery_note_title">
+            {{ 'detailtabsproductinformation.notes' | cxTranslate }}
+          </span>
+          <span class="modalDownload__list__subTitle" id="bom_alternative_details_delivery_note_subtitle">
+            {{ 'detailtabsproductinformation.notes.delivery' | cxTranslate }}
+          </span>
+          <div class="modalDownload__para">
+            <p class="modalDownload__para__item" id="bom_alternative_details_delivery_note">
+              {{ product.productInformation.deliveryNote }}
+            </p>
+          </div>
+        </ng-container>
+
+        <span class="modalDownload__subtitle" id="bom_alternative_details_family_information_title">
+          {{ 'detailtabsproductinformation.family.information' | cxTranslate }}
+        </span>
+        <ul class="modalDownload__lists">
+          <li
+            *ngFor="let item of product.productInformation.familyDescriptionBullets; index as i"
+            class="modalDownload__lists__item"
+            [id]="'bom_alternative_details_family_information_bullet_' + i"
+          >
+            {{ item }}
+          </li>
+        </ul>
+
+        <ng-container *ngIf="product.productInformation.familyDescription.length">
+          <div
+            *ngFor="let item of product.productInformation.familyDescription; index as i"
+            class="modalDownload__para"
+          >
+            <p class="modalDownload__para__item" [id]="'bom_alternative_details_family_description_' + i">
+              {{ item }}
+            </p>
+          </div>
+        </ng-container>
+
+        <span class="modalDownload__subtitle" id="bom_alternative_details_article_information_title">
+          {{ 'detailtabsproductinformation.article.information' | cxTranslate }}
+        </span>
+
+        <ng-container *ngIf="product.productInformation.articleDescription !== null">
+          <div
+            *ngFor="let test of product.productInformation.articleDescription; index as i"
+            class="modalDownload__para"
+          >
+            <p class="modalDownload__para__item" [id]="'bom_alternative_details_article_description_' + i">
+              {{ test }}
+            </p>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="product.productInformation.paperCatalogPageNumber > 0">
+          <ul class="modalDownload__lists">
+            <li class="modalDownload__lists__paper" id="bom_alternative_details_paper_cat_number_label">
+              {{ 'detailtabsproductinformation.article.paperCatalogPageNumber.label' | cxTranslate }}
+              <strong class="type">2016/17 p.</strong>
+              <strong class="paperCatalogOne">{{ product.productInformation.paperCatalogPageNumber }}</strong>
+            </li>
+          </ul>
+        </ng-container>
+
+        <ng-container *ngIf="product.productInformation.paperCatalogPageNumber_16_17 > 0">
+          <ul class="modalDownload__lists">
+            <li class="modalDownload__lists__paper" id="bom_alternative_details_paper_cat_number_16_17_label">
+              {{ 'detailtabsproductinformation.article.paperCatalogPageNumber.label' | cxTranslate }}
+              <strong class="type">2013/14 p.</strong>
+              <strong class="paperCatalogTwo">{{ product.productInformation.paperCatalogPageNumber_16_17 }}</strong>
+            </li>
+          </ul>
+        </ng-container>
+
+        <span class="modalDownload__subtitle" id="bom_alternative_details_environmental_title">
+          {{ 'detailtabsproductinformation.environmental.information' | cxTranslate }}
+        </span>
+
+        <ng-container *ngIf="product.rohs !== null">
+          <ul class="modalDownload__lists">
+            <li class="modalDownload__lists__paper" id="bom_alternative_details_rohs">
+              {{ 'detailtabsproductinformation.rohs' | cxTranslate }}
+              <strong class="type">{{ product.rohs }}</strong>
+            </li>
+          </ul>
+        </ng-container>
+
+        <ng-container *ngIf="product.formattedSvhcReviewDate">
+          <ul class="modalDownload__lists">
+            <li class="modalDownload__lists__paper" id="bom_alternative_details_svhc_review_date">
+              {{ 'detailtabsproductinformation.svhc.reviewDate' | cxTranslate }}
+              <strong class="type">{{ product.formattedSvhcReviewDate }}</strong>
+            </li>
+          </ul>
+        </ng-container>
+
+        <span class="modalDownload__subtitle" id="bom_alternative_details_addtional_information">
+          {{ 'detailtabsproductinformation.additional.information' | cxTranslate }}
+        </span>
+
+        <ul class="modalDownload__lists">
+          <li *ngIf="product.countryOfOrigin.name !== null" class="modalDownload__lists__paper">
+            <strong id="bom_alternative_details_country_of_origin_label">
+              {{ 'detailtabsproductinformation.country.of.origin' | cxTranslate }}
+            </strong>
+            <span class="type" id="bom_alternative_details_country_of_origin_name">
+              {{ product.countryOfOrigin.name }} ({{ product.countryOfOrigin.isocode }})
+            </span>
+          </li>
+          <li *ngIf="product.distManufacturer.name !== null" class="modalDownload__lists__paper">
+            <strong id="bom_alternative_details_manufacturer_label">
+              {{ 'detailtabsproductinformation.manufacturer' | cxTranslate }}
+            </strong>
+            <span class="type" id="bom_alternative_details_manufacturer_name">{{ product.distManufacturer.name }}</span>
+          </li>
+          <li *ngIf="product.grossWeight !== null" class="modalDownload__lists__paper">
+            <strong id="bom_alternative_details_grossWeight_label">
+              {{ 'detailtabsproductinformation.grossWeight' | cxTranslate }}
+            </strong>
+            <span class="type" id="bom_alternative_details_grossWeight">
+              {{ product.grossWeight }}&nbsp;{{ product.grossWeightUnit }}
+            </span>
+          </li>
+          <li *ngIf="product.dimensions !== null" class="modalDownload__lists__paper">
+            <strong id="bom_alternative_details_dimensions_label">
+              {{ 'detailtabsproductinformation.dimensions' | cxTranslate }}
+            </strong>
+            <span class="type" id="bom_alternative_details_dimensions">{{ product.dimensions }}</span>
+          </li>
+          <li *ngIf="product.customsCode !== null" class="modalDownload__lists__paper">
+            <strong id="bom_alternative_details_customsCode_label">
+              {{ 'detailtabsproductinformation.customsCode' | cxTranslate }}
+            </strong>
+            <span class="type" id="bom_alternative_details_customsCode">{{ product.customsCode }}</span>
+          </li>
+          <li *ngIf="product.unspsc5 !== null" class="modalDownload__lists__paper">
+            <strong id="bom_alternative_details_unspsc5_label">
+              {{ 'detailtabsproductinformation.unspsc5' | cxTranslate }}
+            </strong>
+            <span class="type" id="bom_alternative_details_unspsc5">{{ product.unspsc5 }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</app-modal>

@@ -1,0 +1,56 @@
+$contentMasterCatalog = distrelecContentCatalog
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator
+$stockEmailResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/essential/common/email
+$commonEmailResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/emails
+
+########## Email Page for distrelec_PLContentCatalog ##########
+$contentCatalog=distrelec_PLContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$cmsSiteUID=distrelec_PL
+
+INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;active;frontendTemplateName;subject(code);htmlTemplate(code);restrictedPageTypes(code)
+                               ;;StockNotificationEmailTemplate;Stock Notification Email Template;true;StockNotificationEmail;$cmsSiteUID-Email_Stock_Notification_Subject;$cmsSiteUID-Email_Stock_Notification_Body;EmailPage
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='StockNotificationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+                       ;;StockNotificationEmail;Stock Notification Email;StockNotificationEmailTemplate;true;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailLogo-StockNotificationEmail;Logo Slot for StockNotificationEmail;true
+                         ;;EmailMoodImageSlot-StockNotificationEmail;Mood Image Slot for StockNotificationEmail;true
+
+$lang = en
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang = $lang];contextClass[default = com.namics.distrelec.b2b.facades.process.email.context.DistStockNotificationEmailContext];templateScript[lang = $lang, translator = $translator] ;rendererType(code)[default='velocity']
+                              ;$cmsSiteUID-Email_Header;"Email Header Template";;$commonEmailResource/email-header.vm;
+                              ;$cmsSiteUID-Email_Footer;"Email Footer Template";;$commonEmailResource/email-footer.vm;
+
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang = $lang];contextClass[default = com.namics.distrelec.b2b.facades.process.email.context.DistStockNotificationEmailContext];templateScript[lang = $lang, translator = $translator] ;rendererType(code)[default='velocity']
+                              ;$cmsSiteUID-CMSImageComponent-template;"CMSImageComponent Template";;$commonEmailResource/email-cmsImageComponentTemplate.vm;
+
+
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang = $lang];contextClass[default = com.namics.distrelec.b2b.facades.process.email.context.DistStockNotificationEmailContext];templateScript[lang = $lang, translator = $translator] ;rendererType(code)[default='velocity']
+                              ;$cmsSiteUID-Email_Stock_Notification_Body;Stock Notification Email Template;;$stockEmailResource/email-StockNotificationBody.vm;
+                              ;$cmsSiteUID-Email_Stock_Notification_Subject;Stock Notification Email Subject Template;;$stockEmailResource/email-StockNotificationSubject.vm;
+
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV) ;defaultPage;fromEmail[lang = $lang];fromName[lang = $lang];approvalStatus(code)[default='approved']
+                       ;;StockNotificationEmail;Stock Notification Email;StockNotificationEmailTemplate;true;"info@distrelec.com";"Distrelec Customer";
+
+$lang = pl
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang = $lang];contextClass[default = com.namics.distrelec.b2b.facades.process.email.context.DistStockNotificationEmailContext];templateScript[lang = $lang, translator = $translator] ;rendererType(code)[default='velocity']
+                              ;$cmsSiteUID-Email_Header;"Email Header Template";;$commonEmailResource/email-header.vm;
+                              ;$cmsSiteUID-Email_Footer;"Email Footer Template";;$commonEmailResource/email-footer.vm;
+
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang = $lang];contextClass[default = com.namics.distrelec.b2b.facades.process.email.context.DistStockNotificationEmailContext];templateScript[lang = $lang, translator = $translator] ;rendererType(code)[default='velocity']
+                              ;$cmsSiteUID-CMSImageComponent-template;"CMSImageComponent Template";;$commonEmailResource/email-cmsImageComponentTemplate.vm;
+
+
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang = $lang];contextClass[default = com.namics.distrelec.b2b.facades.process.email.context.DistStockNotificationEmailContext];templateScript[lang = $lang, translator = $translator] ;rendererType(code)[default='velocity']
+                              ;$cmsSiteUID-Email_Stock_Notification_Body;Stock Notification Email Template;;$stockEmailResource/email-StockNotificationBody.vm;
+                              ;$cmsSiteUID-Email_Stock_Notification_Subject;Stock Notification Email Subject Template;;$stockEmailResource/email-StockNotificationSubject.vm;
+
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV) ;defaultPage;fromEmail[lang = $lang];fromName[lang = $lang];approvalStatus(code)[default='approved']
+                       ;;StockNotificationEmail;Stock Notification Email;StockNotificationEmailTemplate;true;"info@distrelec.com";"Distrelec Customer";

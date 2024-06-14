@@ -1,0 +1,130 @@
+<div class="overlay" id="contentPopupMain">
+  <div class="popup-wrapper d-none" id="newsletterVariantNew">
+    <div class="form-container">
+      <div class="image-holder desktop-only"></div>
+      <form class="newsletter-form" [formGroup]="subscribeForm">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 col-sm-12 text-right">
+              <div class="success-popup__close">
+                <button class="btn p-0 float-right" id="contentPopupCloseBtn" (click)="onCloseButton()">
+                  <app-icon [icon]="distCloseIcon" iconAltText="close icon"></app-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p *ngIf="!showSuccess" class="form-container__title" id="subscriberPopupTitle">
+          {{ 'subscribe.popup.want_to_keep_up_to_date' | cxTranslate }}
+        </p>
+        <p *ngIf="showSuccess" class="form-container__success" id="subscriberPopupSuccessTitle">
+          {{ 'subscribe.popup.thankyou' | cxTranslate }}
+        </p>
+        <span *ngIf="!showSuccess" class="form-container__subtitle" id="subscriberPromotionSubline">
+          {{ 'subscribe.popup.promotions_subline' | cxTranslate }}
+        </span>
+        <div class="form-group mt-3">
+          <label class="email-label" id="subscriberEmail" for="email">{{ 'form.email' | cxTranslate }}</label>
+          <div class="subscriber-success-input">
+            <input class="email-field" [class.input-success]="showSuccess" type="email" formControlName="email" />
+            <app-icon
+              *ngIf="showSuccess"
+              class="success-check"
+              [icon]="distSuccessTick"
+              iconAltText="success check"
+            ></app-icon>
+          </div>
+        </div>
+        <div class="form-group mb-2">
+          <button
+            class="btn btn-success subscribe-button"
+            class="btn btn-success btn-block"
+            [class.disabled]="subscribeForm.invalid"
+            (click)="onSubmit()"
+          >
+            {{ 'text.preferences.newsletter.subscribe' | cxTranslate }}
+          </button>
+        </div>
+        <p
+          class="form-container__subtitle-privacy"
+          id="subscriberPrivacyNote"
+          [innerHtml]="'subscribe.popup.privacy_note' | cxTranslate"
+        ></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="newsletter-popup pl-2 pt-2" id="newsletterVariantOld">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 text-right">
+          <div class="success-popup__close float-right">
+            <button class="btn p-0" id="contentPopupCloseBtn" (click)="onCloseButton()">
+              <fa-icon class="fa-times-circle d-inline" [icon]="faTimesCircle"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="newsletter-popup__text">
+      <div class="success-popup__text--title d-flex flex-row align-items-center mb-2">
+        <fa-icon class="fa-envelope d-inline mr-3" [icon]="faEnvelope"></fa-icon>
+        <div class="d-inline font-weight-bold h4" id="subscriberTitle">{{ 'subscribe.popup.title' | cxTranslate }}</div>
+      </div>
+      <div class="newsletter-popup__text--subtitle" id="contentPopupSubtitle">
+        <p class="mb-3">
+          <span class="font-weight-bold d-block" id="subscriberInfoNotice">
+            {{ 'subscribe.popup.info.notice' | cxTranslate }}
+          </span>
+          {{ 'text.preferences.newsletter.disclaimer' | cxTranslate }}
+        </p>
+        <form [formGroup]="subscribeForm">
+          <div class="form-row mb-3 form">
+            <input
+              class="input d-inline mr-2 ml-1"
+              [placeholder]="'text.preferences.newsletter.email' | cxTranslate"
+              type="email"
+              formControlName="email"
+            />
+            <button
+              class="btn btn-success"
+              [class.disabled]="subscribeForm.invalid"
+              [ngClass]="{ disabled: subscribeForm.invalid }"
+              (click)="onSubmit()"
+            >
+              {{ 'text.preferences.newsletter.subscribe' | cxTranslate }}
+            </button>
+            <app-input-tooltip-popup
+              *ngIf="hasError('email', 'required')"
+              [content]="'validations.enter_valid_field' | cxTranslate"
+            ></app-input-tooltip-popup>
+            <app-input-tooltip-popup
+              *ngIf="hasError('email', 'email')"
+              [content]="'validations.email_error_invalid' | cxTranslate"
+            ></app-input-tooltip-popup>
+          </div>
+          <div *ngIf="showSuccess" class="success text-success mb-2" id="subscriberPopupSuccessTitle">
+            {{ 'subscribe.popup.thankyou' | cxTranslate }}
+          </div>
+          <div></div>
+        </form>
+        <p id="subscriberPreferenceData">
+          <span class="font-weight-bold d-block" [innerHtml]="'text.preferences.data' | cxTranslate"></span>
+          <span [innerHtml]="'subscribe.popup.privacy.policy' | cxTranslate"></span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<app-confirm-popup
+  *ngIf="showConfirmModal | async"
+  [buttonText]="'OK'"
+  [noCancelButton]="true"
+  [data]="{
+    title: 'text.preferences.updated.dont.forget' | cxTranslate,
+    content: 'text.preferences.updated.below' | cxTranslate,
+    type: 'info',
+    link: this.subscribeForm.value.email
+  }"
+  (confirmedEvents)="onModalClose()"
+></app-confirm-popup>

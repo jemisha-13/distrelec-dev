@@ -1,0 +1,1165 @@
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec AT site
+#
+$contentATCatalog = distrelec_ATContentCatalog
+$atContentCV = catalogVersion(catalog(id[default=$contentATCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $atContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $atContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $atContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $atContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $atContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $atContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $atContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $atContentCV[unique = true]; contentSlot(uid, $atContentCV); page(uid, $atContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $atContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $atContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $atContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $atContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $atContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $atContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $atContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $atContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $atContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $atContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $atContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $atContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $atContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $atContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $atContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $atContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+
+
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec BE site
+#
+$contentBECatalog = distrelec_BEContentCatalog
+$beContentCV= catalogVersion(catalog(id[default=$contentBECatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $beContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $beContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $beContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $beContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $beContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $beContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $beContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $beContentCV[unique = true]; contentSlot(uid, $beContentCV); page(uid, $beContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $beContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $beContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $beContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $beContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $beContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $beContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $beContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $beContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $beContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $beContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $beContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $beContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $beContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $beContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $beContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $beContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec CH site
+#
+$contentCHCatalog = distrelec_CHContentCatalog
+$chContentCV = catalogVersion(catalog(id[default=$contentCHCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $chContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $chContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $chContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $chContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $chContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $chContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $chContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $chContentCV[unique = true]; contentSlot(uid, $chContentCV); page(uid, $chContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $chContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $chContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $chContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $chContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $chContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $chContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $chContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $chContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $chContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $chContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $chContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $chContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $chContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $chContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $chContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $chContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec CZ site
+#
+$contentCZCatalog = distrelec_CZContentCatalog
+$czContentCV = catalogVersion(catalog(id[default=$contentCZCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $czContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $czContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $czContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $czContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $czContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $czContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $czContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $czContentCV[unique = true]; contentSlot(uid, $czContentCV); page(uid, $czContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $czContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $czContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $czContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $czContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $czContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $czContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $czContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $czContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $czContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $czContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $czContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $czContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $czContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $czContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $czContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $czContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec DE site
+#
+$contentDECatalog = distrelec_DEContentCatalog
+$deContentCV = catalogVersion(catalog(id[default=$contentDECatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $deContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $deContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $deContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $deContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $deContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $deContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $deContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $deContentCV[unique = true]; contentSlot(uid, $deContentCV); page(uid, $deContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $deContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $deContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $deContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $deContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $deContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $deContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $deContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $deContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $deContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $deContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $deContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $deContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $deContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $deContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $deContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $deContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec DK site
+#
+$contentDKCatalog = distrelec_DKContentCatalog
+$dkContentCV = catalogVersion(catalog(id[default=$contentDKCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $dkContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $dkContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $dkContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $dkContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $dkContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $dkContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $dkContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $dkContentCV[unique = true]; contentSlot(uid, $dkContentCV); page(uid, $dkContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $dkContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $dkContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $dkContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $dkContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $dkContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $dkContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $dkContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $dkContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $dkContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $dkContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $dkContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $dkContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $dkContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $dkContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $dkContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $dkContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec EE site
+#
+$contentEECatalog = distrelec_EEContentCatalog
+$eeContentCV = catalogVersion(catalog(id[default=$contentEECatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $eeContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $eeContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $eeContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $eeContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $eeContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $eeContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $eeContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $eeContentCV[unique = true]; contentSlot(uid, $eeContentCV); page(uid, $eeContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $eeContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $eeContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $eeContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $eeContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $eeContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $eeContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $eeContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $eeContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $eeContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $eeContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $eeContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $eeContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $eeContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $eeContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $eeContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $eeContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec EX site
+#
+$contentEXCatalog = distrelec_EXContentCatalog
+$exContentCV = catalogVersion(catalog(id[default=$contentEXCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $exContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $exContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $exContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $exContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $exContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $exContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $exContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $exContentCV[unique = true]; contentSlot(uid, $exContentCV); page(uid, $exContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $exContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $exContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $exContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $exContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $exContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $exContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $exContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $exContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $exContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $exContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $exContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $exContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $exContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $exContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $exContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $exContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec FR site
+#
+$contentFRCatalog = distrelec_FRContentCatalog
+$frContentCV = catalogVersion(catalog(id[default=$contentFRCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $frContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $frContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $frContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $frContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $frContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $frContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $frContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $frContentCV[unique = true]; contentSlot(uid, $frContentCV); page(uid, $frContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $frContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $frContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $frContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $frContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $frContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $frContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $frContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $frContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $frContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $frContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $frContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $frContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $frContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $frContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $frContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $frContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec FI site
+#
+$contentFICatalog = distrelec_FIContentCatalog
+$fiContentCV = catalogVersion(catalog(id[default=$contentFICatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $fiContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $fiContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $fiContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $fiContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $fiContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $fiContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $fiContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $fiContentCV[unique = true]; contentSlot(uid, $fiContentCV); page(uid, $fiContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $fiContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $fiContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $fiContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $fiContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $fiContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $fiContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $fiContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $fiContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $fiContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $fiContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $fiContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $fiContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $fiContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $fiContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $fiContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $fiContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec HU site
+#
+$contentHUCatalog = distrelec_HUContentCatalog
+$huContentCV = catalogVersion(catalog(id[default=$contentHUCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $huContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $huContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $huContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $huContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $huContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $huContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $huContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $huContentCV[unique = true]; contentSlot(uid, $huContentCV); page(uid, $huContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $huContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $huContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $huContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $huContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $huContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $huContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $huContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $huContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $huContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $huContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $huContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $huContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $huContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $huContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $huContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $huContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec IT site
+#
+$contentITCatalog = distrelec_ITContentCatalog
+$itContentCV = catalogVersion(catalog(id[default=$contentITCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $itContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $itContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $itContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $itContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $itContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $itContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $itContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $itContentCV[unique = true]; contentSlot(uid, $itContentCV); page(uid, $itContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $itContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $itContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $itContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $itContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $itContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $itContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $itContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $itContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $itContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $itContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $itContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $itContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $itContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $itContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $itContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $itContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec LV site
+#
+$contentLVCatalog = distrelec_LVContentCatalog
+$lvContentCV = catalogVersion(catalog(id[default=$contentLVCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $lvContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $lvContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $lvContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $lvContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $lvContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $lvContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $lvContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $lvContentCV[unique = true]; contentSlot(uid, $lvContentCV); page(uid, $lvContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $lvContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $lvContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $lvContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $lvContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $lvContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $lvContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $lvContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $lvContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $lvContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $lvContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $lvContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $lvContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $lvContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $lvContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $lvContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $lvContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec LT site
+#
+$contentLTCatalog = distrelec_LTContentCatalog
+$ltContentCV = catalogVersion(catalog(id[default=$contentLTCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $ltContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $ltContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $ltContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $ltContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $ltContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $ltContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $ltContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $ltContentCV[unique = true]; contentSlot(uid, $ltContentCV); page(uid, $ltContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $ltContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $ltContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $ltContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $ltContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $ltContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $ltContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $ltContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $ltContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $ltContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $ltContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $ltContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $ltContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $ltContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $ltContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $ltContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $ltContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec NL site
+#
+$contentNLCatalog = distrelec_NLContentCatalog
+$nlContentCV = catalogVersion(catalog(id[default=$contentNLCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $nlContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $nlContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $nlContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $nlContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $nlContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $nlContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $nlContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $nlContentCV[unique = true]; contentSlot(uid, $nlContentCV); page(uid, $nlContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $nlContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $nlContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $nlContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $nlContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $nlContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $nlContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $nlContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $nlContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $nlContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $nlContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $nlContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $nlContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $nlContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $nlContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $nlContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $nlContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec NO site
+#
+$contentNOCatalog = distrelec_NOContentCatalog
+$noContentCV = catalogVersion(catalog(id[default=$contentNOCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $noContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $noContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $noContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $noContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $noContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $noContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $noContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $noContentCV[unique = true]; contentSlot(uid, $noContentCV); page(uid, $noContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $noContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $noContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $noContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $noContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $noContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $noContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $noContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $noContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $noContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $noContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $noContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $noContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $noContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $noContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $noContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $noContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec PL site
+#
+$contentPLCatalog = distrelec_PLContentCatalog
+$plContentCV = catalogVersion(catalog(id[default=$contentPLCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $plContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $plContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $plContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $plContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $plContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $plContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $plContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $plContentCV[unique = true]; contentSlot(uid, $plContentCV); page(uid, $plContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $plContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $plContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $plContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $plContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $plContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $plContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $plContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $plContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $plContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $plContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $plContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $plContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $plContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $plContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $plContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $plContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec RO site
+#
+$contentROCatalog = distrelec_ROContentCatalog
+$roContentCV = catalogVersion(catalog(id[default=$contentROCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $roContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $roContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $roContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $roContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $roContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $roContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $roContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $roContentCV[unique = true]; contentSlot(uid, $roContentCV); page(uid, $roContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $roContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $roContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $roContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $roContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $roContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $roContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $roContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $roContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $roContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $roContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $roContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $roContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $roContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $roContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $roContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $roContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec SE site
+#
+$contentSECatalog = distrelec_SEContentCatalog
+$seContentCV = catalogVersion(catalog(id[default=$contentSECatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $seContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $seContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $seContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $seContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $seContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $seContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $seContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $seContentCV[unique = true]; contentSlot(uid, $seContentCV); page(uid, $seContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $seContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $seContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $seContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $seContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $seContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $seContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $seContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $seContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $seContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $seContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $seContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $seContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $seContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $seContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $seContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $seContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping
+#
+# Import the core LOGIN, REGISTRATION, CART CMS content for the Distrelec SK site
+#
+$contentSKCatalog = distrelec_SKContentCatalog
+$skContentCV = catalogVersion(catalog(id[default=$contentSKCatalog]), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+
+INSERT_UPDATE CMSFlexComponent; $skContentCV[unique = true]; uid[unique = true]     ; name                             ; flexType
+                              ;                          ; RegistrationComponent  ; Site Registration Component      ; RegistrationComponent
+                              ;                          ; LoginComponent         ; Site Login Component             ; LoginComponent
+                              ;                          ; CartComponent          ; Cart Display Component           ; CartComponent
+                              ;                          ; CheckoutLoginComponent ; Checkout Login Display Component ; CheckoutLoginComponent
+                              ;                          ; ShoppingListComponent  ; ShoppingList Display Component   ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlot; $skContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $skContentCV)
+                         ;                          ; MainSlot-registration          ; Main Content Slot for Customer Login       ; true  ; RegistrationComponent
+                         ;                          ; MainSlot-login                 ; Main Content Slot for Customer Login       ; true  ; LoginComponent
+                         ;                          ; CenterContentSlot-cartPage     ; Center Content Slot for Cart Page          ; true  ; CartComponent
+                         ;                          ; MainSlot-checkoutLogin         ; Main Content Slot for Checkout Login Page  ; true  ; CheckoutLoginComponent
+                         ;                          ; CenterContentSlot-shoppingPage ; Center Content Slot for Shopping list page ; true  ; ShoppingListComponent
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $skContentCV)[unique = true][default = 'RegisterPageTemplate']; validComponentTypes(code)
+                             ; main-register      ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $skContentCV[unique = true]; uid[unique = true]; position[unique = true]; pageTemplate(uid, $skContentCV)[unique = true][default = 'RegisterPageTemplate']; contentSlot(uid, $skContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-register ; main-register          ;                                                                               ; MainSlot-registration                      ; false
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]   ; $skContentCV[unique = true]; contentSlot(uid, $skContentCV); page(uid, $skContentCV)[unique = true]; position
+                                ; MainSlot-registration;                            ; MainSlot-registration         ; checkout-register                     ; MainSlot-registration
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $skContentCV)[unique = true][default = 'LoginPageTemplate']; validComponentTypes(code)
+                             ; main-login         ;                                                                        ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $skContentCV)[unique = true][default = 'CartPageTemplate']; validComponentTypes(code)
+                             ; centercontent-cart ;                                                                       ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $skContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $skContentCV)[unique = true][default = 'CartPageTemplate']; contentSlot(uid, $skContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Cart ; centercontent-cart     ;                                                                           ; CenterContentSlot-cartPage                 ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $skContentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; main-checkoutLogin ;                                                                           ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $skContentCV[unique = true]; uid[unique = true]     ; position[unique = true]; pageTemplate(uid, $skContentCV)[unique = true][default = 'CheckoutPageTemplate']; contentSlot(uid, $skContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-checkoutLogin ; main-checkoutLogin     ;                                                                               ; MainSlot-checkoutLogin                     ; false
+
+INSERT_UPDATE ContentSlotName; name[unique = true]    ; template(uid, $skContentCV)[unique = true][default = 'ShoppingListPageTemplate']; validComponentTypes(code)
+                             ; centercontent-shopping ;                                                                               ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $skContentCV[unique = true]; uid[unique = true]         ; position[unique = true]; pageTemplate(uid, $skContentCV)[unique = true][default = 'ShoppingListPageTemplate']; contentSlot(uid, $skContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; CenterContentSlot-Shopping ; centercontent-shopping ;                                                                                   ; CenterContentSlot-shoppingPage             ; false
+
+UPDATE DistFooterComponent; $skContentCV[unique = true]; uid[unique = true]  ; navigationNode(uid, $skContentCV)
+                          ;                          ; DistFooterComponent ; FooterNavNode
+
+UPDATE ContentPage; $skContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; shopping          ; /shopping

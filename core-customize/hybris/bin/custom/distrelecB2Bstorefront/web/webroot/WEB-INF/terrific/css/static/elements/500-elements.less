@@ -1,0 +1,135 @@
+/*
+ * Basic Elements
+ */
+
+////// Base //////
+* {
+	.box-sizing();
+}
+
+body {
+	#typo > .base();
+	background-color: @c-white;
+}
+
+////// Inline Elements //////
+strong {
+	font-style: normal;
+	font-weight: @font-base-bold;
+}
+
+// Icons
+i {
+	font-style: normal;
+	display: inline-block;
+	vertical-align: middle;
+}
+// Icons disabled
+&[disabled],  &.disabled {
+	i {
+		.disabled();
+	}
+}
+&:disabled {// keep this selector separate (unsupported pseudo class ie8)
+	i {
+		.disabled();
+	}
+}
+
+
+a {
+	text-decoration: none;
+
+	&:link,
+	&:visited {
+		color: @c-link-hover; // Inverse colors compared to the base style link
+	}
+
+	&:focus,
+	&:active,
+	&:hover {
+		color: @c-link;
+	}
+}
+
+img {
+	display: block; //
+}
+
+
+////// Form Elements //////
+
+form{
+	.row{
+		> .gu-4{
+			&:first-child{
+				padding-right: 10px; // padding right on label column in forms
+			}
+		}
+	}
+}
+
+label {
+	cursor: pointer;
+}
+
+button {
+	#btn > .base();
+}
+
+input {
+	#forms > .input-base();
+}
+
+
+textarea,
+select,
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="email"] {
+
+	#forms > .input-field();
+}
+
+textarea {
+	// requested here DISTRELEC-2110
+	// -> added globally, because there is no textarea that needs resizing
+	resize: none;
+}
+
+input[type="checkbox"] {
+	#forms > .checkbox();
+}
+input[type="checkbox"].checkbox-big {
+	#forms > .checkbox-big();
+}
+
+input[type="radio"] {
+	#forms > .radio-button();
+}
+input[type="radio"].radio-big {
+	#forms > .radio-button-big();
+}
+
+////// Block Elements //////
+
+p {
+	margin: 0;
+	padding: 0;
+}
+
+////// State //////
+
+[disabled],
+.disabled {
+	cursor: default;
+}
+:disabled {// keep this selector separate (unsupported pseudo class ie8)
+	cursor: default;
+}
+
+
+small, .small {
+	#typo > .size-x-c(); // same size as form description text, pw indictor etc.
+}

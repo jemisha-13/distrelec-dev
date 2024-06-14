@@ -1,0 +1,40 @@
+<ng-container *ngIf="{ value: isSticky | async } as isSticky">
+  <span [appJsonLd]="schema"></span>
+  <cx-storefront [class.sticky]="isSticky.value"></cx-storefront>
+
+  <ng-template cxOutletRef="cx-header">
+    <ng-container *ngIf="pageTemplate$ | async as pageTemplate">
+      <header
+        id="cx-header"
+        [class.off-screen]="(showStickyHeader | async) === false"
+        [class.warning]="(showStickyHeader | async) === false && (hasWarningMessage$ | async)"
+        [class.sticky]="isSticky.value"
+        [cxFocus]="{ disableMouseFocus: true }"
+        cxSkipLink="cx-header"
+      >
+        <ng-container *ngIf="isCheckout$ | async; else default">
+          <cx-page-layout section="header"></cx-page-layout>
+        </ng-container>
+
+        <ng-template #default>
+          <cx-page-slot *ngIf="pageTemplate.template !== 'ErrorPageTemplate'" position="WarningSlot"></cx-page-slot>
+          <cx-page-layout section="warningHeader"></cx-page-layout>
+
+          <cx-page-layout section="topHeader"></cx-page-layout>
+
+          <cx-page-layout class="logo-layout-desktop" section="logo"></cx-page-layout>
+
+          <div class="bg-white mobile-header-wrapper">
+            <cx-page-layout class="container" section="mobileHeader"></cx-page-layout>
+          </div>
+
+          <cx-page-layout class="container" section="navigation"></cx-page-layout>
+        </ng-template>
+      </header>
+      <cx-page-slot position="breadcrumb"></cx-page-slot>
+      <cx-page-slot *ngIf="pageTemplate.template !== 'ErrorPageTemplate'" position="WarningSlot"></cx-page-slot>
+      <cx-page-slot position="RSIntegrationMessage"></cx-page-slot>
+    </ng-container>
+    <app-global-message aria-atomic="true" aria-live="assertive"></app-global-message>
+  </ng-template>
+</ng-container>

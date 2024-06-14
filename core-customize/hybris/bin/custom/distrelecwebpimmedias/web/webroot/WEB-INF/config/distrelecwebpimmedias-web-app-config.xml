@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <import resource="distrelecwebpimmedias-spring-security-config.xml"/>
+
+    <context:annotation-config/>
+
+    <!-- Spring managed FilterChain for hybris Filter stack -->
+    <bean id="distrelecwebpimmediasPlatformFilterChain" class="de.hybris.platform.servicelayer.web.PlatformFilterChain">
+        <constructor-arg>
+            <list>
+                <ref bean="log4jFilter"/>
+                <ref bean="sessionFilter"/>
+                <ref bean="blobStorageStaticMediaFilter"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="blobStorageStaticMediaFilter" class="com.distrelec.webpimmedias.filters.BlobStorageStaticMediaFilter">
+        <property name="mediaPermissionService" ref="mediaPermissionService"/>
+        <property name="mediaStorageConfigService" ref="mediaStorageConfigService"/>
+        <property name="modelService" ref="modelService"/>
+        <property name="userService" ref="userService"/>
+        <property name="mediaService" ref="mediaService"/>
+        <property name="configurationService" ref="configurationService"/>
+        <property name="addContextPath" value="false"/>
+    </bean>
+
+    <bean id="prodImageLocalDevEnvironmentFilter"
+          class="com.distrelec.webpimmedias.filters.ProdImageLocalDevEnvironmentFilter"/>
+
+</beans>

@@ -1,0 +1,559 @@
+#
+# Import the core ACCOUNT CMS content for the Distrelec AT site
+#
+$contentATCatalog = distrelec_ATContentCatalog
+$atContentCV = catalogVersion(catalog(id[default=$contentATCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $atContentCV[unique = true]; uid[unique = true]        ; name                               ; flexType
+                              ;                     ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                     ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $atContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $atContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $atContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $atContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $atContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $atContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $atContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$atContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$atContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $atContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec BE site
+#
+$contentBECatalog = distrelec_BEContentCatalog
+$beContentCV = catalogVersion(catalog(id[default=$contentBECatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $beContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $beContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $beContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $beContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $beContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $beContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $beContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $beContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$beContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$beContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $beContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec CH site
+#
+$contentCHCatalog = distrelec_CHContentCatalog
+$chContentCV = catalogVersion(catalog(id[default=$contentCHCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $chContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $chContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $chContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $chContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $chContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $chContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $chContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $chContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$chContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$chContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $chContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec CZ site
+#
+$contentCZCatalog = distrelec_CZContentCatalog
+$czContentCV = catalogVersion(catalog(id[default=$contentCZCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $czContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $czContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $czContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $czContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $czContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $czContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $czContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $czContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$czContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$czContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $czContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec DE site
+#
+$contentDECatalog = distrelec_DEContentCatalog
+$deContentCV = catalogVersion(catalog(id[default=$contentDECatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $deContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $deContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $deContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $deContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $deContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $deContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $deContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $deContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$deContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$deContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $deContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec DK site
+#
+$contentDKCatalog = distrelec_DKContentCatalog
+$dkContentCV = catalogVersion(catalog(id[default=$contentDKCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $dkContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $dkContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $dkContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $dkContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $dkContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $dkContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $dkContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $dkContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$dkContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$dkContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $dkContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec EE site
+#
+$contentEECatalog = distrelec_EEContentCatalog
+$eeContentCV = catalogVersion(catalog(id[default=$contentEECatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $eeContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $eeContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $eeContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $eeContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $eeContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $eeContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $eeContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $eeContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$eeContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$eeContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $eeContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec EX site
+#
+$contentEXCatalog = distrelec_EXContentCatalog
+$exContentCV = catalogVersion(catalog(id[default=$contentEXCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $exContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $exContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $exContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $exContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $exContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $exContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $exContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $exContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$exContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$exContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $exContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec FI site
+#
+$contentFICatalog = distrelec_FIContentCatalog
+$fiContentCV = catalogVersion(catalog(id[default=$contentFICatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $fiContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $fiContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $fiContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $fiContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $fiContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $fiContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $fiContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $fiContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$fiContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$fiContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $fiContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec HU site
+#
+$contentHUCatalog = distrelec_HUContentCatalog
+$huContentCV = catalogVersion(catalog(id[default=$contentHUCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $huContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $huContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $huContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $huContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $huContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $huContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $huContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $huContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$huContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$huContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $huContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec IT site
+#
+$contentITCatalog = distrelec_ITContentCatalog
+$itContentCV = catalogVersion(catalog(id[default=$contentITCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $itContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $itContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $itContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $itContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $itContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $itContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $itContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $itContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$itContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$itContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $itContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec LV site
+#
+$contentLVCatalog = distrelec_LVContentCatalog
+$lvContentCV = catalogVersion(catalog(id[default=$contentLVCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $lvContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $lvContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $lvContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $lvContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $lvContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $lvContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $lvContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $lvContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$lvContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$lvContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $lvContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec LT site
+#
+$contentLTCatalog = distrelec_LTContentCatalog
+$ltContentCV = catalogVersion(catalog(id[default=$contentLTCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $ltContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $ltContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $ltContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $ltContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $ltContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $ltContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $ltContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $ltContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$ltContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$ltContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $ltContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec NL site
+#
+$contentNLCatalog = distrelec_NLContentCatalog
+$nlContentCV = catalogVersion(catalog(id[default=$contentNLCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $nlContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $nlContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $nlContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $nlContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $nlContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $nlContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $nlContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $nlContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$nlContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$nlContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $nlContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec NO site
+#
+$contentNOCatalog = distrelec_NOContentCatalog
+$noContentCV = catalogVersion(catalog(id[default=$contentNOCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $noContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $noContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $noContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $noContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $noContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $noContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $noContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $noContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$noContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$noContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $noContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec PL site
+#
+$contentPLCatalog = distrelec_PLContentCatalog
+$plContentCV = catalogVersion(catalog(id[default=$contentPLCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $plContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $plContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $plContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $plContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $plContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $plContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $plContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $plContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$plContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$plContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $plContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec RO site
+#
+$contentROCatalog = distrelec_ROContentCatalog
+$roContentCV = catalogVersion(catalog(id[default=$contentROCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $roContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $roContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $roContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $roContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $roContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $roContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $roContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $roContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$roContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$roContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $roContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec SE site
+#
+$contentSECatalog = distrelec_SEContentCatalog
+$seContentCV = catalogVersion(catalog(id[default=$contentSECatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $seContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $seContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $seContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $seContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $seContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $seContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $seContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $seContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$seContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$seContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $seContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec SK site
+#
+$contentSKCatalog = distrelec_SKContentCatalog
+$skContentCV = catalogVersion(catalog(id[default=$contentSKCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $skContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $skContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $skContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $skContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $skContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $skContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $skContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $skContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$skContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$skContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $skContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center
+
+#
+# Import the core ACCOUNT CMS content for the Distrelec TR site
+#
+$contentTRCatalog = distrelec_TRContentCatalog
+$trContentCV = catalogVersion(catalog(id[default=$contentTRCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $trContentCV[unique = true]; uid[unique = true]               ; name                               ; flexType
+                              ;                            ; AccountAddressesComponent        ; Account Addresses Component        ; AccountAddressesComponent
+                              ;                            ; CommunicationPreferenceComponent ; Communication Preference Component ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlot; $trContentCV[unique = true]; uid[unique = true]                ; name                                           ; active; cmsComponents(uid, $trContentCV)
+                         ;                            ; MainSlot-account-addresses        ; Main Content Slot for Account Addresses        ; true  ; AccountAddressesComponent
+                         ;                            ; MainSlot-communication-preference ; Main Content Slot for Communication Preference ; true  ; CommunicationPreferenceComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]          ; template(uid, $trContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-account-addresses       ;                                                                            ; CMSFlexComponent
+                             ; main-communication-preference;                                                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $trContentCV[unique = true]; uid[unique = true]                ; position[unique = true]       ; pageTemplate(uid, $trContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $trContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-account-addresses        ; main-account-addresses        ;                                                                                ; MainSlot-account-addresses                   ; false
+                                    ;                            ; MainSlot-communication-preference ; main-communication-preference ;                                                                                ; MainSlot-communication-preference            ; false
+
+UPDATE ContentPage; $trContentCV[unique = true]; uid[unique = true]; label
+                  ;                            ; addresses         ; /my-account/addresses
+
+INSERT_UPDATE ContentPage;$trContentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$trContentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $trContentCV)[default='ContentPageModel_function_preview']
+                         ;;preference-center;Account Details Marketing Preference;AccountPageTemplate;/my-account/preference-center

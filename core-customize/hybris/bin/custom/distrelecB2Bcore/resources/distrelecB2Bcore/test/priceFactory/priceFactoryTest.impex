@@ -1,0 +1,116 @@
+#% impex.setLocale(new Locale("de","CH"));
+
+$passwordEncoding = md5
+$defaultPassword = nimda
+$setPassword = @password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultPassword']
+
+# User price group
+INSERT_UPDATE UserPriceGroup; code[unique = true]
+                            ; SalesOrg_UPG_7310_01
+
+# User tax group
+INSERT_UPDATE UserTaxGroup; code[unique = true]
+                          ; SalesOrg_UTG_7310
+
+# Taxes
+INSERT_UPDATE Tax; code[unique = true] ; value
+                 ; TAX_0               ; 0
+                 ; TAX_1_SALESORG_7310 ; 8
+                 ; TAX_2_SALESORG_7310 ; 2.4
+
+# Product tax group
+INSERT_UPDATE ProductTaxGroup; code[unique = true]
+                             ; 0
+                             ; 1
+                             ; 2
+
+# Tax rows
+INSERT_UPDATE TaxRow; ug(code)[unique = true]; pg(code)[unique = true]; tax(code)
+                    ; SalesOrg_UTG_7310      ; 0                      ; TAX_0
+                    ; SalesOrg_UTG_7310      ; 1                      ; TAX_1_SALESORG_7310
+                    ; SalesOrg_UTG_7310      ; 2                      ; TAX_2_SALESORG_7310
+
+INSERT_UPDATE Vendor; code[unique = true]; name
+                    ; default            ; Default Vendor
+
+INSERT_UPDATE Warehouse; code[unique = true]; pickupStreetName; pickupStreetNumber; pickupPostalCode; pickupTown; pickupPhone; pickupOpeningHoursMoFr; pickupOpeningHoursSa; default; vendor(code)[default = default]; stockManagementSystem(code)
+                       ; 7311               ; ???             ; ?                 ; ????            ; ?         ; ????       ; "??:?? - ??:??"       ; "??:?? - ??:??"     ; false  ;                                ; SAP
+
+INSERT_UPDATE DistBrand; code[unique = true]
+                       ; distrelec
+
+INSERT_UPDATE DistMaterialType; code[unique = true]
+                              ; ZCON
+                              ; ZOCC
+
+INSERT_UPDATE Country; isocode[unique = true]; active[default = true]
+                     ; CH                    ;
+
+INSERT_UPDATE DistSalesOrg; code[unique = true]; brand(code); country(isocode); erpSystem(code)
+                          ; 7310               ; distrelec  ; CH              ; SAP
+
+INSERT_UPDATE DistSalesStatus; code[unique = true]; visibleInShop; buyableInShop; newInShop; endOfLifeInShop
+                             ; 50                 ; true         ; true         ; false    ; false
+                             ; 60                 ; true         ; false        ; false    ; true
+
+INSERT_UPDATE DistReplacementReason; code[unique = true]
+                                   ; C
+
+INSERT_UPDATE DistErpPriceConditionType; code[unique = true]; priority
+                                       ; ZN00               ; 1
+                                       ; ZR00               ; 2
+                                       ; PR00               ; 3
+
+# Clean all prices
+INSERT_UPDATE Product; code[unique = true]; europe1prices; catalogVersion(catalog(id), version)[unique = true]
+                     ; 11029907           ;              ; testCatalog:Online
+                     ; 30033729           ;              ; testCatalog:Online
+                     ; 14022002           ;              ; testCatalog:Online
+                     ; 11029908           ;              ; testCatalog:Online
+
+# List Prices
+INSERT_UPDATE Product; code[unique = true]; catalogVersion(catalog(id), version)[unique = true]
+                     ; 11029907           ; testCatalog:Online
+                     ; 30033729           ; testCatalog:Online
+                     ; 14022002           ; testCatalog:Online
+                     ; 11029908           ; testCatalog:Online
+
+
+INSERT_UPDATE Usergroup; uid[unique = true]; groups(uid)   ; locname[lang = en];
+                       ; customergroup     ;
+                       ; b2bgroup          ; customergroup ;
+                       ; b2badmingroup     ; b2bgroup      ;
+                       ; b2bcustomergroup  ; b2bgroup      ;
+                       ; b2bmanagergroup   ; b2bgroup,     ;
+                       ; b2bapprovergroup  ; b2bgroup      ;
+                       ; salesrepgroup     ; b2bgroup      ;
+#;b2beeshopgroup;b2beeshopgroup;
+
+INSERT_UPDATE Title; code[unique = true]; name[lang = de]; name[lang = en]; ;
+                   ; mr                 ; Herr           ; Mr.            ; ;
+                   ; mrs                ; Frau           ; Mrs.           ; ;
+                   ; miss               ; Fräulein       ; Miss           ; ;
+
+INSERT_UPDATE Unit; unitType[unique = true]; code[unique = true]; name[lang = de]; name[lang = en]; conversion;
+                  ; PC                     ; PC                 ; PC             ; PC             ; 1         ;
+
+INSERT_UPDATE B2BUnit; uid[unique = true]; groups(uid); active; approvalProcessCode; customerType(code)
+                     ; testUnit          ;            ; true  ; accApproval        ; B2B
+
+INSERT_UPDATE Address; owner(B2BUnit.uid)[unique = true]; streetname[unique = true]; postalcode[unique = true]; duplicate[unique = true]; town   ; country(isocode); billingAddress; contactAddress; shippingAddress; unloadingAddress; firstname; lastname; email               ; gender(code); phone1           ; title(code); company
+                     ; testUnit                         ; Musterstrasse            ; 8000                     ; false                   ; Zürich ; CH              ; true          ; false         ; true           ; false           ; Hans     ; Muster  ; hans.muster@test.ch ; MALE        ; +41 44 123 45 67 ; mr         ; Test Company
+
+INSERT_UPDATE B2BCustomer; uid[unique = true]  ; $setPassword; Approvers(uid); active; email               ; loginDisabled; name        ; groups(uid)                             ; customerType(code); sessionCurrency(isocode)[default = 'CHF']
+                         ; hans.muster@test.ch ;             ;               ; true  ; hans.muster@test.ch ; false        ; Hans Muster ; testUnit,b2bcustomergroup,b2badmingroup ; B2B
+
+
+# catalogs
+$productCatalog = testCatalog
+$catalogVersion = catalogVersion(catalog(id[default=$productCatalog]), version[default='Online'])
+
+INSERT_UPDATE DistPriceRow; $catalogVersion; priceConditionIdErp[unique = true]; product(code, $catalogVersion)[unique = true]; ug(code)[unique = true]; currency(isocode)[unique = true]; unit(code)[default = PC]; unitFactor[unique = true]; minqtd[unique = true]; price; startTime[dateformat = yyyyMMddhhmmss]; endTime[dateformat = yyyyMMddhhmmss]; erpPriceConditionType(code); net   ; lastModifiedErp[dateformat = yyyyMMddhhmmss]; sequenceId[translator = de.hybris.platform.acceleratorservices.dataimport.batch.converter.SequenceIdTranslator]
+                          ;                ; 0148661674                        ; 11029908                                     ; SalesOrg_UPG_7310_01   ; CHF                             ; PC                      ; 1                        ; 1                    ; 10   ; 20170101000000                        ; 20280101000000                      ; ZR00                       ; false ; 20171124030249                              ; 0148661678 ;
+                          ;                ; 0148661673                        ; 11029908                                     ; SalesOrg_UPG_7310_01   ; CHF                             ; PC                      ; 1                        ; 1                    ; 20   ; 20180101000000                        ; 20280101000000                      ; ZR00                       ; false ; 20171124030249                              ; 0148661679 ;
+                          ;                ; 0148661674                        ; 11029908                                     ; SalesOrg_UPG_7310_01   ; CHF                             ; PC                      ; 1                        ; 1                    ; 10   ; 20180101000000                        ; 20280101000000                      ; PR00                       ; false ; 20171124030249                              ; 0148661680 ;
+                          ;                ; 0148661674                        ; 11029908                                     ; SalesOrg_UPG_7310_01   ; CHF                             ; PC                      ; 1                        ; 10                   ; 18   ; 20180101000000                        ; 20280101000000                      ; PR00                       ; false ; 20171124030249                              ; 0148661681 ;
+                          ;                ; 0148661674                        ; 11029908                                     ; SalesOrg_UPG_7310_01   ; CHF                             ; PC                      ; 1                        ; 25                   ; 15   ; 20180101000000                        ; 20280101000000                      ; PR00                       ; false ; 20171124030249                              ; 0148661682 ;

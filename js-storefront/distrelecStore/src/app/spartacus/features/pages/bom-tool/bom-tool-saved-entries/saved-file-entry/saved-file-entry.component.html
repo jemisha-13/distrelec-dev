@@ -1,0 +1,88 @@
+<div *ngIf="!renaming" class="saved-bom-entries__filename" [id]="'saved_bom_entries_filename_' + index">
+  {{ bomFile }}
+</div>
+
+<div *ngIf="renaming" class="saved-bom-entries__save-item">
+  <input
+    class="form-control saved-bom-entries__item-filename-ipt"
+    [(ngModel)]="inputValue"
+    [id]="'saved_bom_entries_filename_input_' + index"
+    [placeholder]="bomFile"
+    type="text"
+  />
+
+  <app-button
+    [buttonId]="'saved_bom_entries_rename_save_btn_' + index"
+    [modifiers]="['sm']"
+    (click)="fileRenameSave()"
+    colour="green"
+  >
+    {{ 'lightboxshopsettings.save' | cxTranslate }}
+  </app-button>
+  <app-button
+    [buttonId]="'saved_bom_entries_rename_close_btn_' + index"
+    [modifiers]="['sm']"
+    (click)="fileRenameClose()"
+    colour="red"
+  >
+    {{ 'base.close' | cxTranslate }}
+  </app-button>
+</div>
+
+<div class="wrapper-dropdown right">
+  <a
+    class="wrapper-dropdown__top-item"
+    [id]="'saved_bom_entries_wrapper_dropdown_top_item_' + index"
+    [queryParams]="{ fileName: bomFile }"
+    routerLink="/bom-tool/load-file"
+  >
+    {{ 'text.edit' | cxTranslate }}
+  </a>
+
+  <div class="wrapper-dropdown__spacer"></div>
+
+  <button
+    class="wrapper-dropdown__menu"
+    [id]="'saved_bom_entries_wrapper_dropdown_menu_' + index"
+    [class.active]="showMenu"
+    (click)="showMenu = !showMenu"
+  >
+    <fa-icon [icon]="showMenu ? faChevronUp : faChevronDown"></fa-icon>
+  </button>
+
+  <ul *ngIf="showMenu" class="dropdown">
+    <li>
+      <button
+        class="saved-bom-entries__item"
+        [id]="'saved_bom_entries_dropdown_file_rename_' + index"
+        (click)="fileRename()"
+      >
+        {{ 'text.rename' | cxTranslate }}
+      </button>
+    </li>
+    <li>
+      <button
+        class="saved-bom-entries__item"
+        [id]="'saved_bom_entries_dropdown_file_duplicate_' + index"
+        (click)="fileDuplicate()"
+      >
+        {{ 'text.duplicate' | cxTranslate }}
+      </button>
+    </li>
+    <li>
+      <button
+        class="saved-bom-entries__item"
+        [id]="'saved_bom_entries_dropdown_file_delete_' + index"
+        (click)="showFileDeleteModal()"
+      >
+        {{ 'text.delete' | cxTranslate }}
+      </button>
+    </li>
+  </ul>
+</div>
+
+<app-confirm-popup
+  *ngIf="showDeleteConfirmation"
+  [data]="{ title: 'text.delete.bomfile' | cxTranslate, content: 'text.delete.caution' | cxTranslate, type: 'basic' }"
+  (confirmedEvents)="onModalClose($event)"
+></app-confirm-popup>

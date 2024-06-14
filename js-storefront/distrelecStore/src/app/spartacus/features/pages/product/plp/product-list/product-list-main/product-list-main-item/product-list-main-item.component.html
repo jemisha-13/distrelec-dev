@@ -1,0 +1,168 @@
+<span [appJsonLd]="schema"></span>
+<div *ngIf="product.topLabel || product.energyEfficiency || product.isBetterWorld" class="product-labels">
+  <app-better-world-label *ngIf="product.isBetterWorld" [productCode]="product.code"></app-better-world-label>
+
+  <app-label
+    *ngIf="product.topLabel"
+    [text]="product.topLabel.label"
+    [color]="getPromoLabelColor(product.topLabel.code)"
+    size="small"
+  ></app-label>
+
+  <app-energy-efficiency-label
+    *ngIf="product.energyEfficiency"
+    class="energy-efficiency"
+    [id]="product.code + '-energy-efficiency-label' + index"
+    [energyEfficiency]="product.energyEfficiency"
+    [energyEfficiencyLabelImageUrl]="getEnergyEfficiencyLabelImageUrl(product.energyEfficiencyLabelImage)"
+    eelImageSize="small"
+    arrowSize="small"
+  ></app-energy-efficiency-label>
+</div>
+
+<div class="product-list-item">
+  <div class="product-image">
+    <a
+      *ngIf="currentChannel_ | async as channelData"
+      class="image-wrapper"
+      [routerLink]="product.url"
+      [queryParams]="queryParams$ | async"
+      (click)="trackProductClick(product)"
+    >
+      <img
+        class="image"
+        [src]="product.images | ProductImageFallback: channelData.mediaDomain : 'landscape_medium'"
+        [alt]="product.name"
+        loading="lazy"
+        width="120"
+        height="120"
+      />
+    </a>
+  </div>
+
+  <div class="content">
+    <div class="content-top">
+      <a
+        class="name product-name-and-price"
+        [innerHTML]="product.name"
+        [routerLink]="product.url"
+        [queryParams]="queryParams$ | async"
+        (click)="trackProductClick(product)"
+      ></a>
+
+      <app-product-list-availability class="stock" [product]="product"></app-product-list-availability>
+
+      <ng-template #pricingLabel>
+        <p class="product-name-and-price">
+          {{ product.price.currencyIso }}
+          {{ product.price.value | price }}
+        </p>
+      </ng-template>
+
+      <ng-template #vatLabel>
+        <p *ngIf="channel$ | async as channel" class="vat">
+          ({{
+            (channel === 'B2C' ? 'plp.facet_buttons_and_headers.inc_vat' : 'plp.facet_buttons_and_headers.exc_vat')
+              | cxTranslate
+          }})
+        </p>
+      </ng-template>
+
+      <div *ngIf="product.price" class="product-pricing">
+        <ng-container *ngIf="product.price.promoValue">
+          <ng-container *ngTemplateOutlet="pricingLabel"></ng-container>
+          <p class="product-name-and-price old-price">
+            {{ product.price.currencyIso }}
+            {{ product.price.promoValue | price }}
+          </p>
+          <ng-container *ngTemplateOutlet="vatLabel"></ng-container>
+          <p class="price-save">
+            {{ 'plp.facet_buttons_and_headers.save' | cxTranslate }}
+            {{ product.price.saving }}
+            %
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="!product.price.promoValue">
+          <ng-container *ngTemplateOutlet="pricingLabel"></ng-container>
+          <ng-container *ngTemplateOutlet="vatLabel"></ng-container>
+        </ng-container>
+      </div>
+
+      <div class="details">
+        <app-reevoo
+          *ngIf="product.eligibleForReevoo"
+          [isEligible]="true"
+          [productCode]="product.code"
+          reevooType="product-badge-plp"
+        ></app-reevoo>
+
+        <app-product-description-attributes
+          class="attributes"
+          [product]="product"
+          [index]="index"
+        ></app-product-description-attributes>
+      </div>
+    </div>
+
+    <div *ngIf="detailView === true" class="detailed-content">
+      <div class="detailed-attributes">
+        <div *ngFor="let attribute of product.technicalAttributes" class="detail-row">
+          <span class="label">{{ attribute.key }}</span>
+          <span class="value" [innerHTML]="attribute.value"></span>
+        </div>
+      </div>
+
+      <div class="volume-prices">
+        <div *ngFor="let price of product.volumePrices" class="detail-row">
+          <span class="label">{{ price.minQuantity }} +</span>
+          <span class="value">{{ price.value | price }}</span>
+        </div>
+
+        <a
+          *ngIf="showProductFamilyLink"
+          class="product-family-link link"
+          id="product-family-link-{{ index }}"
+          [absoluteRouterLink]="product.productFamilyUrl"
+        >
+          {{ 'plp.facet_buttons_and_headers.view_product_family' | cxTranslate }}
+        </a>
+      </div>
+    </div>
+
+    <button class="details-toggle link-button" (click)="toggleView()">
+      <span *ngIf="!detailView" id="show-details-{{ index }}">
+        {{ 'plp.facet_buttons_and_headers.show_details' | cxTranslate }}
+      </span>
+      <span *ngIf="detailView" id="hide-details-{{ index }}">
+        {{ 'plp.facet_buttons_and_headers.hide_details' | cxTranslate }}
+      </span>
+    </button>
+  </div>
+
+  <div *ngIf="availabilityData$ | async as availabilityData" class="actions">
+    <app-add-to-list
+      [product]="product"
+      [toolbarEvent]="toolbarEvent"
+      [control]="addToCartForm.get('quantity')"
+      compareListId="compare-button-{{ index }}"
+      shoppingListId="shopping-list-button-{{ index }}"
+    ></app-add-to-list>
+
+    <app-add-to-cart
+      [productCode]="product.code.toString()"
+      [salesStatus]="product.salesStatus"
+      [minQuantity]="product?.orderQuantityMinimum"
+      [quantityStep]="product?.orderQuantityStep"
+      [itemListEntity]="getItemListEntity()"
+      [availabilityData]="availabilityData"
+      [control]="addToCartForm.get('quantity')"
+      (addToCart)="sendFactFinderCartEvent($event)"
+      cartButtonId="plp_atc_btn_{{ index }}"
+      minusButtonId="plp_atc_minus_btn_{{ index }}"
+      plusButtonId="plp_atc_plus_btn_{{ index }}"
+      inputId="plp_atc_input_{{ index }}"
+      pageType="plp"
+    ></app-add-to-cart>
+  </div>
+</div>

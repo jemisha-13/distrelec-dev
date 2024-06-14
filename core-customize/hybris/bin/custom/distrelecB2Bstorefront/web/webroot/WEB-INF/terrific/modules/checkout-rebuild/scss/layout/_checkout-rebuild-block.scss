@@ -1,0 +1,135 @@
+.mod-checkout-rebuild-block {
+  padding: ($spacing-unit * 2) 0;
+  margin-bottom: $spacing-unit * 3;
+  background-color: $colour-white;
+
+  @media #{$ipad} {
+    padding: ($spacing-unit * 3) 0;
+  }
+
+  @media #{$ipad-landscape} {
+    padding: $spacing-unit * 5;
+    box-shadow: $cr-block-boxshadow;
+  }
+
+  // We are using this instead of using just "hidden" so we can manipulate easier with JS later
+  &.is-hidden,
+  .is-hidden {
+    display: none;
+  }
+
+  &.is-disabled {
+    cursor: not-allowed;
+
+    .mod-checkout-rebuild-block {
+      &__title {
+        margin-bottom: 0;
+        color: $colour-redesign-light-grey;
+      }
+
+      &__content {
+        display: none;
+      }
+    }
+  }
+
+  &.is-pickup-selected {
+    .o-cr-editable-form__billingAndDelivery {
+      display: none;
+    }
+  }
+
+  &__wrapper {
+    position: relative;
+  }
+
+  &__title {
+    @include font-size(24px);
+    margin: 0 0 ($spacing-unit * 5);
+    font-weight: 500;
+
+    &:not(.is-full) {
+      padding-right: 110px;
+    }
+  }
+
+  &__content {
+
+    &__item {
+      position: relative;
+
+      &:not(:last-child) {
+        padding-bottom: $spacing-unit * 4;
+        border-bottom: 1px solid $ux-light-grey;
+        margin-bottom: $spacing-unit * 5;
+      }
+    }
+  }
+
+  &.skin-checkout-rebuild-block-delivery-options {
+    &.is-loading {
+      .o-cr-radio-item.is-schedule {
+        .o-cr-radio-item__radio {
+          &:disabled ~ .o-cr-radio-item__content {
+            opacity: .5;
+          }
+
+          & ~ .o-cr-radio-item__content {
+            opacity: .3;
+          }
+        }
+      }
+    }
+  }
+
+  &.skin-checkout-rebuild-block-delivery-options,
+  &.skin-checkout-rebuild-block-review-pay-method,
+  &.skin-checkout-rebuild-block-billing-details,
+  &.skin-checkout-rebuild-block-delivery-details {
+    .mod-loading-spinner {
+      position: absolute;
+      top: -1px; // Stretching loader bg because of outline on elements
+      right: -1px; // Stretching loader bg because of outline on elements
+      bottom: -1px; // Stretching loader bg because of outline on elements
+      left: -1px; // Stretching loader bg because of outline on elements
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba($colour-white, .75);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+
+      .ux-loading-spinner {
+        transform: scale(1.8);
+
+        &__item:before {
+          background-color: $ux-grey;
+        }
+      }
+    }
+
+    &.is-loading .mod-loading-spinner {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  .o-codice-posta {
+    input[readonly="readonly"] {
+      &,
+      &:focus,
+      &:hover {
+        color: $colour-black;
+      }
+    }
+
+    .ux-link {
+      &.is-codice-pec {
+        margin-top: -$spacing-unit * 2;
+        margin-bottom: $spacing-unit * 2;
+      }
+    }
+  }
+}

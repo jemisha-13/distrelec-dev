@@ -1,0 +1,145 @@
+<div class="container checkout-login">
+  <div class="row">
+    <div class="col-12">
+      <ng-container *ngIf="isErrorMessage_ | async as errorMessage">
+        <div *ngIf="errorMessage !== 'checkout.login.forgotten_pwd_error'" class="error">
+          <div class="inner">
+            <div class="center">
+              <p class="text" id="login.error_true">
+                <ng-container *ngIf="errorMessage?.country; else notCountryError">
+                  {{ 'login.wrong_shop_1' | cxTranslate }}
+                  {{ 'countries.' + errorMessage?.country | cxTranslate }}.
+                  <span [innerHtml]="'login.wrong_shop_2' | cxTranslate: { href: errorMessage?.href }"></span>
+                </ng-container>
+
+                <ng-template #notCountryError>
+                  {{ errorMessage | cxTranslate }}
+                </ng-template>
+              </p>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="row">
+        <div class="col-12 text-center">
+          <h2 class="checkout-login__title" id="loginCheckoutPageTitle">
+            {{ 'checkout.login.page_title' | cxTranslate }}
+          </h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="checkout-login">
+            <div class="checkout-login__inner">
+              <div class="login__existing">
+                <div class="ch__component">
+                  <!-- LOGIN OR REGISTER -->
+                  <ng-container *ngIf="!resetPwdForm?.get('pwd1')?.value && (showLoginForm_ | async)">
+                    <app-login-form
+                      [checkoutLoginForm]="checkoutLoginForm"
+                      [isErrorMessage_]="isErrorMessage_"
+                      [isCaptchaDisabled_]="isCaptchaDisabled_"
+                      [validateFields]="validateFields"
+                      [triggerCheckbox]="triggerCheckbox"
+                      [isPwdResetSuccess_]="isPwdResetSuccess_"
+                      [showLoginForm_]="showLoginForm_"
+                    ></app-login-form>
+                  </ng-container>
+
+                  <ng-container *ngIf="resetPwdForm?.get('pwd1') && !(showLoginForm_ | async)">
+                    <app-reset-pwd-form
+                      [resetPwdForm]="resetPwdForm"
+                      [isPwdResetSuccess_]="isPwdResetSuccess_"
+                      [showLoginForm_]="showLoginForm_"
+                    ></app-reset-pwd-form>
+                  </ng-container>
+
+                  <!-- FORGOTTEN PWD -->
+                  <ng-container *ngIf="!(showLoginForm_ | async) && !resetPwdForm?.get('pwd1')">
+                    <app-forgotten-pwd-form
+                      [checkoutLoginForm]="checkoutLoginForm"
+                      [isErrorMessage_]="isErrorMessage_"
+                      [isCaptchaDisabled_]="isCaptchaDisabled_"
+                      [validateFields]="validateFields"
+                      [showLoginForm_]="showLoginForm_"
+                    ></app-forgotten-pwd-form>
+                  </ng-container>
+                </div>
+              </div>
+
+              <div class="login__new">
+                <div class="ch__component h-100">
+                  <div class="ch__component__title">
+                    <h2 id="newCustomerTitle">{{ 'checkout.login.reg_title' | cxTranslate }}</h2>
+                    <div *ngIf="enableRegistration">
+                      <p id="newCustomerSubtitle">{{ 'checkout.login.reg_subtitle' | cxTranslate }}</p>
+                      <ul class="ch__component__checklist" id="newCustomerCheckListInfo">
+                        <li>
+                          <fa-icon [icon]="faCheck"></fa-icon>
+                          <span id="checkout.login.reg_checklist_1">
+                            {{ 'checkout.login.reg_checklist_1' | cxTranslate }}
+                          </span>
+                        </li>
+                        <li>
+                          <fa-icon [icon]="faCheck"></fa-icon>
+                          <span id="checkout.login.reg_checklist_2">
+                            {{ 'checkout.login.reg_checklist_2' | cxTranslate }}
+                          </span>
+                        </li>
+                        <li>
+                          <fa-icon [icon]="faCheck"></fa-icon>
+                          <span id="checkout.login.reg_checklist_3">
+                            {{ 'checkout.login.reg_checklist_3' | cxTranslate }}
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div *ngIf="!enableRegistration">
+                      <p id="checkoutRegistrationInfoText">
+                        <span [innerHTML]="'checkout.login.rs_registration_text' | cxTranslate"></span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="ch__component__submit mb-0">
+                    <button
+                      *ngIf="enableRegistration"
+                      class="btn"
+                      id="createAccountButtonNewCustomer"
+                      (click)="onRegisterClick()"
+                    >
+                      {{ 'checkout.login.cta_signin' | cxTranslate }}
+                    </button>
+                    <button
+                      *ngIf="!enableRegistration"
+                      class="btn"
+                      id="learnMoreButton"
+                      [routerLink]="'/rs-registration'"
+                    >
+                      {{ 'checkout.login.rs_registration_link' | cxTranslate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="!resetPwdForm" class="checkout-login__back-button">
+                <a class="ch__back-to-cart" id="returnToCartLinkDesktop" routerLink="/cart">
+                  <fa-icon [icon]="faArrowLeft"></fa-icon>
+                  {{ 'checkout.login.return_to_cart' | cxTranslate }}
+                </a>
+              </div>
+
+              <!-- GUEST CHECKOUT -->
+              <ng-container *ngIf="isGuestEnabled">
+                <app-checkout-guest-form
+                  [isExportShop]="isExportShop"
+                  [checkoutLoginForm]="checkoutLoginForm"
+                ></app-checkout-guest-form>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

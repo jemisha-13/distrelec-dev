@@ -1,0 +1,1291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Validators -->
+    <bean id="minimalAddressValidator" class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="line1"/>
+                    <property name="maxLength" value="255"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="town"/>
+                    <property name="maxLength" value="255"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="postalCode"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.OptionalFieldValidator">
+                    <property name="fieldPath" value="email"/>
+                    <constructor-arg>
+                        <bean class="de.hybris.platform.webservicescommons.validators.EmailValidator">
+                            <property name="fieldPath" value="email"/>
+                        </bean>
+                    </constructor-arg>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="commonAddressValidator" class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <ref bean="minimalAddressValidator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="japaneseAddressValidator" class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <ref bean="minimalAddressValidator"/>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="line2"/>
+                    <property name="maxLength" value="255"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="region.isocode"/>
+                    <property name="maxLength" value="7"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="chineseAddressValidator" class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <ref bean="commonAddressValidator"/>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="region.isocode"/>
+                    <property name="maxLength" value="7"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultAddressValidator" alias="addressValidator"/>
+    <bean id="defaultAddressValidator"
+          class="com.namics.distrelec.occ.core.validator.CountryAwareAddressValidator">
+        <property name="commonAddressValidator" ref="commonAddressValidator"/>
+        <property name="countrySpecificAddressValidators">
+            <map>
+                <entry key="JP" value-ref="japaneseAddressValidator"/>
+                <entry key="CN" value-ref="chineseAddressValidator"/>
+            </map>
+        </property>
+    </bean>
+
+    <alias name="defaultPaymentAddressValidator" alias="paymentAddressValidator"/>
+    <bean id="defaultPaymentAddressValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="billingAddress.firstName"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="billingAddress.lastName"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="billingAddress.line1"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="billingAddress.town"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="billingAddress.postalCode"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="billingAddress.country.isocode"/>
+                    <property name="maxLength" value="2"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultDeliveryAddressValidator" alias="deliveryAddressValidator"/>
+    <bean id="defaultDeliveryAddressValidator"
+          class="com.namics.distrelec.occ.core.validator.DeliveryAddressValidator">
+    </bean>
+
+    <alias name="defaultCartVoucherValidator" alias="cartVoucherValidator"/>
+    <bean id="defaultCartVoucherValidator"
+          class="com.namics.distrelec.occ.core.validator.CartVoucherValidator">
+        <constructor-arg ref="voucherFacade"/>
+    </bean>
+
+    <alias name="defaultPlaceOrderCartValidator" alias="placeOrderCartValidator"/>
+    <bean id="defaultPlaceOrderCartValidator"
+          class="com.namics.distrelec.occ.core.validator.PlaceOrderCartValidator">
+    </bean>
+
+    <bean id="pointOfServiceValidator"
+          class="com.namics.distrelec.occ.core.validator.PointOfServiceValidator">
+        <property name="pointOfServiceService" ref="pointOfServiceService"/>
+    </bean>
+
+    <alias name="defaultReviewDTOValidator" alias="reviewDTOValidator"/>
+    <bean id="defaultReviewDTOValidator" class="com.namics.distrelec.occ.core.validator.ReviewDTOValidator"/>
+
+    <alias name="defaultOrderEntryCreateValidator" alias="orderEntryCreateValidator"/>
+    <bean id="defaultOrderEntryCreateValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="product.code"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="quantity"/>
+                </bean>
+                <ref bean="quantityGreaterThanZeroValidator"/>
+                <ref bean="pointOfServiceInOrderEntryValidator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultAddToCartEntryGroupValidator" alias="addToCartEntryGroupValidator"/>
+    <bean id="defaultAddToCartEntryGroupValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="product.code"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="quantity"/>
+                </bean>
+                <ref bean="quantityGreaterThanZeroValidator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="pointOfServiceInOrderEntryValidator"
+          class="com.namics.distrelec.occ.core.validator.PointOfServiceValidator">
+        <property name="pointOfServiceService" ref="pointOfServiceService"/>
+        <property name="fieldPath" value="deliveryPointOfService.name"/>
+    </bean>
+
+    <bean id="quantityGreaterThanZeroValidator"
+          class="de.hybris.platform.webservicescommons.validators.FieldGreaterThanZeroValidator">
+        <property name="fieldPath" value="quantity"/>
+    </bean>
+
+    <alias name="defaultOrderEntryReplaceValidator" alias="orderEntryReplaceValidator"/>
+    <bean id="defaultOrderEntryReplaceValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="quantity"/>
+                </bean>
+                <ref bean="quantityGreaterThanZeroValidator"/>
+                <ref bean="pointOfServiceInOrderEntryValidator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultOrderEntryUpdateValidator" alias="orderEntryUpdateValidator"/>
+    <bean id="defaultOrderEntryUpdateValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <ref bean="quantityGreaterThanZeroValidator"/>
+                <ref bean="pointOfServiceInOrderEntryValidator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultAddressDTOValidator" alias="addressDTOValidator"/>
+    <bean id="defaultAddressDTOValidator"
+          class="com.namics.distrelec.occ.core.validator.CountryAwareAddressDTOValidator">
+        <property name="commonAddressValidator" ref="commonAddressValidator"/>
+        <property name="countrySpecificAddressValidators">
+            <map>
+                <entry key="JP" value-ref="japaneseAddressValidator"/>
+                <entry key="CN" value-ref="chineseAddressValidator"/>
+            </map>
+        </property>
+    </bean>
+
+    <alias name="defaultPaymentDetailsDTOValidator" alias="paymentDetailsDTOValidator"/>
+    <bean id="defaultPaymentDetailsDTOValidator"
+          class="com.namics.distrelec.occ.core.validator.PaymentDetailsDTOValidator">
+        <property name="paymentAddressValidator" ref="paymentAddressValidator"/>
+    </bean>
+
+    <alias name="defaultGreaterThanZeroValidator" alias="greaterThanZeroValidator"/>
+    <bean id="defaultGreaterThanZeroValidator"
+          class="de.hybris.platform.webservicescommons.validators.FieldGreaterThanZeroValidator"/>
+
+    <alias name="defaultPutUserDTOValidator" alias="putUserDTOValidator"/>
+    <bean id="defaultPutUserDTOValidator" class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="firstName"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="lastName"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultPrincipalListDTOValidator" alias="principalListDTOValidator"/>
+    <bean id="defaultPrincipalListDTOValidator"
+          class="com.namics.distrelec.occ.core.validator.PrincipalListDTOValidator">
+        <property name="canBeEmpty" value="false"/>
+        <property name="userMatchingService" ref="userMatchingService"/>
+    </bean>
+
+    <alias name="defaultUserGroupDTOValidator" alias="userGroupDTOValidator"/>
+    <bean id="defaultUserGroupDTOValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="uid"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.PrincipalListDTOValidator">
+                    <property name="fieldPath" value="members"/>
+                    <property name="userMatchingService" ref="userMatchingService"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+    <alias alias="guestConvertingDTOValidator" name="defaultGuestConvertingDTOValidator"/>
+    <bean id="defaultGuestConvertingDTOValidator" parent="passwordStrengthValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list merge="true">
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldEmptyValidator">
+                    <property name="fieldPath" value="uid"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldEmptyValidator">
+                    <property name="fieldPath" value="titleCode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldEmptyValidator">
+                    <property name="fieldPath" value="firstName"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldEmptyValidator">
+                    <property name="fieldPath" value="lastName"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+    <alias alias="userSignUpDTOValidator" name="defaultUserSignUpDTOValidator"/>
+    <bean id="defaultUserSignUpDTOValidator" parent="passwordStrengthValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list merge="true">
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="uid"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="firstName"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="lastName"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="password"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.EmailValidator">
+                    <property name="fieldPath" value="uid"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="passwordStrengthValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.RegexpValidator">
+                    <property name="errorMessageID" value="field.password.notallowed.chars"/>
+                    <property name="fieldPath" value="password"/>
+                    <property name="regularExpression" value="^.*[a-zA-Z0-9!@#$%^*()_\-+{};:.,]$"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.RegexpValidator">
+                    <property name="errorMessageID" value="field.password.min.one.number"/>
+                    <property name="fieldPath" value="password"/>
+                    <property name="regularExpression" value="(?=(?:.*?[0-9]){1}).*"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.RegexpValidator">
+                    <property name="errorMessageID" value="field.password.min.one.uppercase"/>
+                    <property name="fieldPath" value="password"/>
+                    <property name="regularExpression" value="(?=(?:.*?[A-Z]){1}).*"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.RegexpValidator">
+                    <property name="errorMessageID" value="field.password.min.one.special.char"/>
+                    <property name="fieldPath" value="password"/>
+                    <property name="regularExpression" value="(?=(?:.*?[!@#$%^*()_\-+{};:.,]){1}).*"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.RegexpValidator">
+                    <property name="errorMessageID" value="field.password.min.six.characters"/>
+                    <property name="fieldPath" value="password"/>
+                    <property name="regularExpression" value="^.{6,}$"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultReplaceEmailDTOValidator" alias="replaceEmailDTOValidator"/>
+    <bean id="defaultReplaceEmailDTOValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="newLogin"/>
+                    <property name="maxLength" value="175"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.EmailValidator">
+                    <property name="fieldPath" value="newLogin"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="password"/>
+                    <property name="maxLength" value="255"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.RegexpValidator">
+                    <property name="errorMessageID" value="field.password.min.six.characters"/>
+                    <property name="fieldPath" value="password"/>
+                    <property name="regularExpression" value="^.{6,}$"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultReplacePasswordDTOValidator" alias="replacePasswordDTOValidator"/>
+    <bean id="defaultReplacePasswordDTOValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="currentPassword"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="newPassword"/>
+                    <property name="maxLength" value="255"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.RegexpValidator">
+                    <property name="errorMessageID" value="field.password.min.six.characters"/>
+                    <property name="fieldPath" value="newPassword"/>
+                    <property name="regularExpression" value="^.{6,}$"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="checkNewPassword"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="setInitialPasswordFormValidator"
+          class="com.namics.distrelec.occ.core.validator.SetInitialPasswordFormValidator">
+    </bean>
+    <bean id="updateProfileInfoFormValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="com.namics.distrelec.occ.core.validator.DistAtLeastOneNotBlankValidator">
+                    <property name="fieldnames" value="functionCode,departmentCode"/>
+                    <property name="messageKey" value="field.required"/>
+                    <property name="messageSource" ref="messageSource"/>
+                    <property name="i18nService" ref="i18nService"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="functionCode"/>
+                    <property name="maxLength" value="4"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="departmentCode"/>
+                    <property name="maxLength" value="4"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+    <alias name="defaultUpdateUserDTOValidator" alias="updateUserDTOValidator"/>
+    <bean id="defaultUpdateUserDTOValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="titleCode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="firstName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="lastName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="contactAddress.phone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="address.phoneNumber.invalid"/>
+                    <property name="fieldPath" value="contactAddress.phone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="contactAddress.cellphone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="address.mobileNumber.invalid"/>
+                    <property name="fieldPath" value="contactAddress.cellphone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="contactAddress.fax"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="address.faxNumber.invalid"/>
+                    <property name="fieldPath" value="contactAddress.fax"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistAtLeastOneNotBlankValidator">
+                    <property name="fieldnames" value="contactAddress.phone,contactAddress.cellphone"/>
+                    <property name="messageKey" value="register.onePhone.required"/>
+                    <property name="messageSource" ref="messageSource"/>
+                    <property name="i18nService" ref="i18nService"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultOrderStatusValueValidator" alias="orderStatusValueValidator"/>
+    <bean id="defaultOrderStatusValueValidator"
+          class="de.hybris.platform.webservicescommons.validators.EnumValueValidator">
+        <constructor-arg name="enumClass" value="OrderStatus"/>
+        <property name="enumerationService" ref="enumerationService"/>
+    </bean>
+
+    <!-- Beans for user matching in commerce web services -->
+    <alias name="defaultWsPrincipalListDTOValidator" alias="wsPrincipalListDTOValidator"/>
+    <bean id="defaultWsPrincipalListDTOValidator" parent="defaultPrincipalListDTOValidator">
+        <property name="canBeEmpty" value="false"/>
+        <property name="userMatchingService" ref="wsUserMatchingService"/>
+    </bean>
+
+    <alias name="defaultWsUserGroupDTOValidator" alias="wsUserGroupDTOValidator"/>
+    <bean id="defaultWsUserGroupDTOValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="uid"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.PrincipalListDTOValidator">
+                    <property name="fieldPath" value="members"/>
+                    <property name="userMatchingService" ref="wsUserMatchingService"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultReturnRequestEntryInputListDTOValidator" alias="returnRequestEntryInputListDTOValidator"/>
+    <bean id="defaultReturnRequestEntryInputListDTOValidator"
+          class="com.namics.distrelec.occ.core.validator.ReturnRequestEntryInputListDTOValidator"/>
+
+    <alias name="defaultDistReturnRequestEntryInputListDTOValidator"
+           alias="distReturnRequestEntryInputListDTOValidator"/>
+    <bean id="defaultDistReturnRequestEntryInputListDTOValidator"
+          class="com.namics.distrelec.occ.core.validator.DistReturnRequestEntryInputListDTOValidator"/>
+
+    <alias name="defaultCancellationRequestEntryInputListDTOValidator"
+           alias="cancellationRequestEntryInputListDTOValidator"/>
+    <bean id="defaultCancellationRequestEntryInputListDTOValidator"
+          class="com.namics.distrelec.occ.core.validator.CancellationRequestEntryInputListDTOValidator"/>
+
+    <alias name="defaultDistRegistrationValidator" alias="distRegistrationValidator"/>
+    <bean id="defaultDistRegistrationValidator"
+          class="com.namics.distrelec.occ.core.validator.DistRegistrationValidator"/>
+
+    <alias name="invoiceInputValidator" alias="invoiceInputValidator"/>
+    <bean id="invoiceInputValidator"
+          class="com.namics.distrelec.occ.core.validator.InvoiceInputValidator">
+    </bean>
+
+    <bean id="orderHistoryFormValidator"
+          class="com.namics.distrelec.occ.core.validator.OrderHistoryFormValidator">
+        <property name="messageSource" ref="messageSource"/>
+        <property name="i18NService" ref="i18NService"/>
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+    </bean>
+
+    <bean id="quotationHistoryFormValidator"
+          class="com.namics.distrelec.occ.core.validator.QuotationHistoryFormValidator"/>
+
+    <bean id="addQuotationRequestValidator" class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="quotationId"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="orderApprovalDecisionFormValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="workFlowActionCode"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultBomToolImportDTOValidator" alias="bomToolImportDTOValidator"/>
+    <bean id="defaultBomToolImportDTOValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="fileName"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultOrderReferenceDTOValidator" alias="orderReferenceDTOValidator"/>
+    <bean id="defaultOrderReferenceDTOValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="orderCode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="workflowCode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="orderReference"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="guestUserValidator" class="com.namics.distrelec.occ.core.validator.GuestUserValidator"/>
+
+    <bean id="customerReferenceValidator" class="com.namics.distrelec.occ.core.validator.CustomerReferenceValidator"/>
+
+    <alias name="defaultDistPhoneNumberValidator" alias="distPhoneNumberValidator"/>
+    <bean id="defaultDistPhoneNumberValidator" class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+    </bean>
+
+    <alias name="defaultDistDataFormInputValidator" alias="distDataFormInputValidator"/>
+    <bean id="defaultDistDataFormInputValidator"
+          class="com.namics.distrelec.occ.core.validator.DistDataFormInputValidator"/>
+
+    <alias name="defaultDistAtLeastOneNotBlankValidator" alias="distAtLeastOneNotBlankValidator"/>
+    <bean id="defaultDistAtLeastOneNotBlankValidator"
+          class="com.namics.distrelec.occ.core.validator.DistAtLeastOneNotBlankValidator">
+        <property name="messageSource" ref="messageSource"/>
+        <property name="i18nService" ref="i18nService"/>
+    </bean>
+
+    <bean id="distB2bUserAddressValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="companyName"/>
+                    <property name="maxLength" value="35"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="companyName2"/>
+                    <property name="maxLength" value="35"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="companyName3"/>
+                    <property name="maxLength" value="35"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="line1"/>
+                    <property name="maxLength" value="60"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="line2"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="town"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="postalCode"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistDataFormInputValidator">
+                    <property name="fieldPath" value="postalCode"/>
+                    <property name="patternKey" value="register.postalCode.validationPattern"/>
+                    <property name="messageKey" value="register.postalCode.validationMessage"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="country.isocode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="pobox"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="distB2bShippingAddressValidator" alias="b2bShippingAddressValidator"/>
+    <bean id="distB2bShippingAddressValidator" parent="distB2bUserAddressValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list merge="true">
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="phone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="address.phoneNumber.invalid"/>
+                    <property name="fieldPath" value="phone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="cellphone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="address.mobileNumber.invalid"/>
+                    <property name="fieldPath" value="cellphone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="fax"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="address.faxNumber.invalid"/>
+                    <property name="fieldPath" value="fax"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistAtLeastOneNotBlankValidator">
+                    <property name="fieldnames" value="phone,cellphone"/>
+                    <property name="messageKey" value="register.onePhone.required"/>
+                    <property name="messageSource" ref="messageSource"/>
+                    <property name="i18nService" ref="i18nService"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.BizPostalCodeValidator">
+                    <property name="errorMessageID" value="register.postalCode.validationMessage"/>
+                    <property name="validationPattern" value="register.postalCode.validationPattern"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="distB2bBillingAddressValidator" alias="b2bBillingAddressValidator"/>
+    <bean id="distB2bBillingAddressValidator" parent="distB2bUserAddressValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list merge="true">
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="phone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="phone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="cellphone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="cellphone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="fax"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="fax"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.BizPostalCodeValidator">
+                    <property name="errorMessageID" value="register.postalCode.validationMessage"/>
+                    <property name="validationPattern" value="register.postalCode.validationPattern"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="distRegisterB2BEmployeeValidator" alias="registerB2BEmployeeValidator"/>
+    <bean id="distRegisterB2BEmployeeValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="titleCode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="firstName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="lastName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="email"/>
+                    <property name="maxLength" value="175"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.EmailValidator">
+                    <property name="fieldPath" value="email"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="phoneNumber"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="register.phoneNumber.invalid"/>
+                    <property name="fieldPath" value="phoneNumber"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="mobileNumber"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="register.mobileNumber.invalid"/>
+                    <property name="fieldPath" value="mobileNumber"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="faxNumber"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="register.faxNumber.invalid"/>
+                    <property name="fieldPath" value="faxNumber"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistAtLeastOneNotBlankValidator">
+                    <property name="fieldnames" value="phoneNumber,mobileNumber"/>
+                    <property name="messageKey" value="register.onePhone.required"/>
+                    <property name="messageSource" ref="messageSource"/>
+                    <property name="i18nService" ref="i18nService"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="employeeBudgetValidator"
+          class="com.namics.distrelec.occ.core.validator.EmployeeBudgetValidator">
+    </bean>
+
+    <bean id="userAccountActiveValidator"
+          class="com.namics.distrelec.occ.core.validator.UserAccountActiveValidator"/>
+
+    <alias name="distB2cUserAddressValidator" alias="b2cUserAddressValidator"/>
+    <bean id="distB2cUserAddressValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="titleCode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="firstName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="lastName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="phone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="phone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="cellphone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="cellphone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="fax"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="fax"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="line1"/>
+                    <property name="maxLength" value="60"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="line2"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="town"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="postalCode"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistDataFormInputValidator">
+                    <property name="fieldPath" value="postalCode"/>
+                    <property name="patternKey" value="register.postalCode.validationPattern"/>
+                    <property name="messageKey" value="register.postalCode.validationMessage"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="country.isocode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="additionalAddress"/>
+                    <property name="maxLength" value="35"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="pobox"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.BizPostalCodeValidator">
+                    <property name="errorMessageID" value="register.postalCode.validationMessage"/>
+                    <property name="validationPattern" value="register.postalCode.validationPattern"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="checkoutB2bUserAddressValidator" parent="distB2bUserAddressValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list merge="true">
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="checkoutPhone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="address.phoneNumber.invalid"/>
+                    <property name="fieldPath" value="checkoutPhone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="cellphone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="address.mobileNumber.invalid"/>
+                    <property name="fieldPath" value="cellphone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="fax"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="address.faxNumber.invalid"/>
+                    <property name="fieldPath" value="fax"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.BizPostalCodeValidator">
+                    <property name="errorMessageID" value="register.postalCode.validationMessage"/>
+                    <property name="validationPattern" value="register.postalCode.validationPattern"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="checkoutB2cUserAddressValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="titleCode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="firstName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="lastName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="checkoutPhone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="checkoutPhone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="cellphone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="cellphone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="fax"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="fax"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="line1"/>
+                    <property name="maxLength" value="60"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="line2"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="town"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="postalCode"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistDataFormInputValidator">
+                    <property name="fieldPath" value="postalCode"/>
+                    <property name="patternKey" value="register.postalCode.validationPattern"/>
+                    <property name="messageKey" value="register.postalCode.validationMessage"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="country.isocode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="additionalAddress"/>
+                    <property name="maxLength" value="35"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="pobox"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.BizPostalCodeValidator">
+                    <property name="errorMessageID" value="register.postalCode.validationMessage"/>
+                    <property name="validationPattern" value="register.postalCode.validationPattern"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="distB2eUserAddressValidator" alias="b2eUserAddressValidator"/>
+    <bean id="distB2eUserAddressValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="titleCode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="firstName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="lastName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="checkoutPhone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="checkoutPhone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="line1"/>
+                    <property name="maxLength" value="60"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="line2"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="town"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="postalCode"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistDataFormInputValidator">
+                    <property name="fieldPath" value="postalCode"/>
+                    <property name="patternKey" value="register.postalCode.validationPattern"/>
+                    <property name="messageKey" value="register.postalCode.validationMessage"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="country.isocode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="additionalAddress"/>
+                    <property name="maxLength" value="35"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="pobox"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="email"/>
+                    <property name="maxLength" value="175"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.EmailValidator">
+                    <property name="fieldPath" value="email"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.BizPostalCodeValidator">
+                    <property name="errorMessageID" value="register.postalCode.validationMessage"/>
+                    <property name="validationPattern" value="register.postalCode.validationPattern"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="distGuestUserAddressValidator" alias="guestUserAddressValidator"/>
+    <bean id="distGuestUserAddressValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="titleCode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="firstName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="lastName"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="checkoutPhone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="checkoutPhone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="cellphone"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="cellphone"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="fax"/>
+                    <property name="maxLength" value="30"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistPhoneNumberValidator">
+                    <property name="errorMessageID" value="form.phone.error.for.country"/>
+                    <property name="fieldPath" value="fax"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="line1"/>
+                    <property name="maxLength" value="60"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="line2"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="town"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="postalCode"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.DistDataFormInputValidator">
+                    <property name="fieldPath" value="postalCode"/>
+                    <property name="patternKey" value="register.postalCode.validationPattern"/>
+                    <property name="messageKey" value="register.postalCode.validationMessage"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="country.isocode"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="additionalAddress"/>
+                    <property name="maxLength" value="35"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="pobox"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.BizPostalCodeValidator">
+                    <property name="errorMessageID" value="register.postalCode.validationMessage"/>
+                    <property name="validationPattern" value="register.postalCode.validationPattern"/>
+                </bean>
+                <bean class="com.namics.distrelec.occ.core.validator.CodiceFiscaleValidator">
+                    <property name="errorMessageID" value="register.codiceFiscale.invalid"/>
+                    <property name="fieldPath" value="codiceFiscale"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="addressChangeFormValidator"
+          class="com.namics.distrelec.occ.core.validator.AddressChangeFormValidator"/>
+
+    <bean id="offlineAddressFormValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="companyName"/>
+                    <property name="maxLength" value="35"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="firstName"/>
+                    <property name="maxLength" value="35"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="lastName"/>
+                    <property name="maxLength" value="35"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="street"/>
+                    <property name="maxLength" value="60"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="number"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="pobox"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="zip"/>
+                    <property name="maxLength" value="10"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldTooLongValidator">
+                    <property name="fieldPath" value="place"/>
+                    <property name="maxLength" value="40"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyOrTooLongValidator">
+                    <property name="fieldPath" value="country"/>
+                    <property name="maxLength" value="3"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultCodiceVatFormWsDTOValidator" alias="codiceVatFormWsDTOValidator"/>
+    <bean id="defaultCodiceVatFormWsDTOValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="com.namics.distrelec.occ.core.validator.DistAtLeastOneNotBlankValidator">
+                    <property name="fieldnames" value="vat4,legalEmail"/>
+                    <property name="messageKey" value="vat.reg.error"/>
+                    <property name="messageSource" ref="messageSource"/>
+                    <property name="i18nService" ref="i18nService"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.RegexpValidator">
+                    <property name="errorMessageID" value="vat.reg.codice.cig.error"/>
+                    <property name="fieldPath" value="codiceCIG"/>
+                    <property name="regularExpression" value="^$|.{10}"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.RegexpValidator">
+                    <property name="errorMessageID" value="vat.reg.codice.cig.error"/>
+                    <property name="fieldPath" value="codiceCUP"/>
+                    <property name="regularExpression" value="^$|.{15}"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultCustomerErrorFeedbackDTOValidator" alias="customerErrorFeedbackDTOValidator"/>
+    <bean id="defaultCustomerErrorFeedbackDTOValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="errorReason"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="errorDescription"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="customerName"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="productId"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.EmailValidator">
+                    <property name="fieldPath" value="customerEmailId"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultPasswordUpdateDTOValidator" alias="passwordUpdateDTOValidator"/>
+    <bean id="defaultPasswordUpdateDTOValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.RegexpValidator">
+                    <property name="fieldPath" value="password"/>
+                    <property name="regularExpression" value="^\S{6,255}$"/>
+                    <property name="errorMessageID" value="password.size.invalid"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="distGuestRMACreateRequestFormWsDTOValidator"
+          class="de.hybris.platform.webservicescommons.validators.CompositeValidator">
+        <property name="validators">
+            <list>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="customerName"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="orderNumber"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="articleNumber"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="quantity"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.RegexpValidator">
+                    <property name="fieldPath" value="articleNumber"/>
+                    <property name="regularExpression" value="^\S{8,255}$"/>
+                    <property name="errorMessageID" value="articleNumber.size.invalid"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="returnReason"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.FieldNotEmptyValidator">
+                    <property name="fieldPath" value="emailAddress"/>
+                </bean>
+                <bean class="de.hybris.platform.webservicescommons.validators.EmailValidator">
+                    <property name="fieldPath" value="emailAddress"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+</beans>

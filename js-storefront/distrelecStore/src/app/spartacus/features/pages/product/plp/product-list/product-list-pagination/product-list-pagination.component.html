@@ -1,0 +1,82 @@
+<ng-container *ngIf="isPlpActive$ | async">
+  <div
+    *ngIf="paginationModel$ | async as pagination"
+    class="container pagination d-lg-flex"
+    id="{{ type }}-plp-pagination"
+    [class.d-none]="type === 'top'"
+    [class.bottom-pagination]="type === 'bottom'"
+  >
+    <div>
+      <app-pagination-label *ngIf="pagination?.totalResults" [paginationResults]="pagination"></app-pagination-label>
+    </div>
+
+    <ng-container *ngIf="pagination as p">
+      <ul class="pagination--list">
+        <!--back button-->
+        <li
+          *ngIf="p.totalPages > 1"
+          class="pagination--list--item arrow"
+          [class.isHovered]="p.currentPage > 1"
+          (mouseenter)="backHoverState = true"
+          (mouseleave)="backHoverState = false"
+          (click)="p.currentPage > 1 && setCurrentPage(p.currentPage - 1)"
+        >
+          <button
+            id="{{ type }}-pagination-back-button"
+            [class.isHovered]="backHoverState && p.currentPage > 1"
+            (click)="p.currentPage > 1 && setCurrentPage(p.currentPage - 1)"
+          >
+            <app-icon class="icon" [class.isHovered]="backHoverState && p.currentPage > 1" [icon]="arrow"></app-icon>
+          </button>
+        </li>
+
+        <ng-container *ngIf="paginationContent$ | async as paginationContent">
+          <ng-container *ngFor="let value of paginationContent; let i = index">
+            <ng-container *ngTemplateOutlet="content; context: { $implicit: { value, i } }"></ng-container>
+          </ng-container>
+        </ng-container>
+
+        <!--forward button-->
+        <li
+          *ngIf="p.totalPages > 1"
+          class="pagination--list--item arrow"
+          [class.isHovered]="p.currentPage < p.totalPages"
+          (mouseenter)="forwardHoverState = true"
+          (mouseleave)="forwardHoverState = false"
+        >
+          <button
+            id="{{ type }}-pagination-next-button"
+            [class.isHovered]="forwardHoverState && p.currentPage !== p.totalPages"
+            (click)="p.currentPage < p.totalPages && setCurrentPage(p.currentPage + 1)"
+          >
+            <app-icon
+              class="rotate-270"
+              [class.isHovered]="forwardHoverState && p.currentPage < p.totalPages"
+              [icon]="arrow"
+            ></app-icon>
+          </button>
+        </li>
+      </ul>
+
+      <ng-template #content let-item>
+        <li
+          class="pagination--list--item page"
+          [class.isHovered]="item.value !== '...' && item.value !== p.currentPage"
+          [class.isSelected]="item.value === p.currentPage"
+        >
+          <button
+            [id]="
+              item.value !== '...'
+                ? type + '-pagination-page-' + item.value + '-button'
+                : type + '-pagination-page-' + getEllipseType(item.i) + '-ellipse'
+            "
+            [class.isHovered]="item.value !== '...' && item.value !== p.currentPage"
+            (click)="item.value !== '...' && setCurrentPage(item.value)"
+          >
+            {{ item.value }}
+          </button>
+        </li>
+      </ng-template>
+    </ng-container>
+  </div>
+</ng-container>

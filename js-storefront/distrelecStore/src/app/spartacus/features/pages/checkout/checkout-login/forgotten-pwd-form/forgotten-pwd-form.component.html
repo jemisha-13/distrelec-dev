@@ -1,0 +1,103 @@
+<!-- FORGOTTEN PWD  SUCCESS -->
+<ng-container *ngIf="isForgottenPwdSuccess_ | async">
+  <div class="ch__component__title">
+    <h2 id="resetPassword_forgottenPasswordSuccess">
+      {{ 'checkout.login.reset_pwd_title' | cxTranslate }}
+    </h2>
+  </div>
+  <div class="ch__component__successMessage">
+    <div class="col-12 ch__component__successMessage__text" id="checkout.login.reset_pwd_help_text">
+      {{ 'checkout.login.reset_pwd_help_text' | cxTranslate }}
+    </div>
+    <div class="ch__component__successMessage__instructions" id="checkout.login.reset_info_title">
+      {{ 'checkout.login.reset_info_title' | cxTranslate }}
+    </div>
+    <div class="ch__component__successMessage__instructions--list">
+      <ol>
+        <li id="checkout.login.reset_info_line_1">
+          {{ 'checkout.login.reset_info_line_1' | cxTranslate }}
+        </li>
+        <li id="checkout.login.reset_info_line_2">
+          {{ 'checkout.login.reset_info_line_2' | cxTranslate }}
+        </li>
+        <li id="checkout.login.reset_info_line_3">
+          {{ 'checkout.login.reset_info_line_3' | cxTranslate }}
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 ch__component__back-to-login">
+      <button class="btn" id="login.back_to_login" (click)="returnToLogin()">
+        {{ 'login.back_to_login' | cxTranslate }}
+      </button>
+    </div>
+  </div>
+</ng-container>
+
+<!-- FORGOTTEN PWD FORM -->
+<form *ngIf="!(isForgottenPwdSuccess_ | async)" id="loginForm" [formGroup]="checkoutLoginForm">
+  <div class="ch__component__title">
+    <h2 id="checkout.login.reset_pwd_title">{{ 'checkout.login.reset_pwd_title' | cxTranslate }}</h2>
+    <p id="checkout.login.reset_pwd_subtitle">
+      {{ 'checkout.login.reset_pwd_subtitle' | cxTranslate }}
+    </p>
+  </div>
+  <div *ngIf="checkoutService.isTokenExpired" class="ch__component__error-message" id="checkoutInvalidResetPwdToken">
+    {{ 'login.token_expired' | cxTranslate }}
+  </div>
+  <div class="row ch__component__form-group">
+    <div class="col-12 ch__component__label">
+      <label id="form.email">
+        {{ 'form.email' | cxTranslate }}
+      </label>
+    </div>
+    <div class="col-12 ch__component__field">
+      <input
+        class="login__body--form-input"
+        id="forgotPwdEmailInput"
+        [class.is-invalid]="
+          checkoutLoginForm.get('forgotPwdEmail').touched && checkoutLoginForm.get('forgotPwdEmail').errors
+        "
+        [class.is-invalid]="isErrorMessage_ | async"
+        autocomplete="email"
+        type="email"
+        formControlName="forgotPwdEmail"
+      />
+      <div *ngIf="checkoutLoginForm.get('forgotPwdEmail').touched && checkoutLoginForm.get('forgotPwdEmail').errors">
+        <small class="text-danger" id="validations.email_valid_example">
+          {{ 'validations.email_valid_example' | cxTranslate }}
+        </small>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 ch__component__submit">
+      <button
+        *ngIf="!(isCaptchaDisabled_ | async)"
+        class="btn forgot-pwd-button"
+        id="continueToCheckoutButtonReturningCustomer"
+        (click)="captchaRef.execute()"
+      >
+        {{ 'login.send' | cxTranslate }}
+      </button>
+      <button
+        *ngIf="isCaptchaDisabled_ | async"
+        class="btn forgot-pwd-button"
+        id="continueToCheckoutButtonReturningCustomer"
+        (click)="submitForgotPwd()"
+      >
+        {{ 'login.send' | cxTranslate }}
+      </button>
+      <re-captcha #captchaRef="reCaptcha" (resolved)="$event && submitForgotPwd($event)" size="invisible"></re-captcha>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 ch__component__back-to-login">
+      <button class="btn" id="login.back_to_login" (click)="returnToLogin()">
+        {{ 'login.back_to_login' | cxTranslate }}
+      </button>
+    </div>
+  </div>
+  <form id="loginForm" [formGroup]="checkoutLoginForm"></form>
+</form>

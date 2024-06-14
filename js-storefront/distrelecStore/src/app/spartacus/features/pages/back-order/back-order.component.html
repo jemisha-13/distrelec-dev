@@ -1,0 +1,86 @@
+<div class="back-order-holder">
+  <div class="container">
+    <div class="row">
+      <div *ngIf="errorMessage_ | async as errorMessage" class="col-10 offset-xl-1">
+        <div class="error">
+          <div class="inner">
+            <div class="center">
+              <p class="text" class="cart-holder__error" id="cart.voucher_error">
+                {{ errorMessage | cxTranslate }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="successMessage_ | async as successMessage" class="col-10 offset-xl-1">
+        <div class="success">
+          <div class="inner">
+            <div class="center">
+              <p class="text" class="cart-holder__success" id="cart.voucher_success">
+                {{ successMessage | cxTranslate }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="backOrderEntries$ | async as backOrderEntries; else loadingSpinner">
+        <div class="col-12">
+          <div class="back-order-holder__title" id="backorder-page-title">
+            <h1 id="backorder-page-title-text">
+              {{ 'backorder.page.title' | cxTranslate }}
+            </h1>
+            <p
+              id="backorder-page-backorder-description"
+              [innerHtml]="'backorder.itemTotal' | cxTranslate: { orderEntries: backOrderEntries.orderEntries?.length }"
+            ></p>
+          </div>
+        </div>
+        <div class="col-12 col-lg-9">
+          <div class="back-order-holder__content" id="backorder-content-holder">
+            <!-- back order item component -->
+            <ng-container *ngIf="backOrderEntries.orderEntries?.length > 0">
+              <ng-container *ngFor="let entry of backOrderEntries.orderEntries">
+                <app-back-order-item
+                  [entry]="entry"
+                  [entryNumber]="entry?.entryNumber"
+                  (sendEventToParent)="updateReplacementEntries($event)"
+                ></app-back-order-item>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+        <div
+          class="back-order-holder__side col-lg-3"
+          id="back-order-side"
+          [ngClass]="{ emailSubmitted: emailSubmitted }"
+        >
+          <!-- back order save component -->
+          <app-back-order-save
+            [entries]="backOrderEntries.orderEntries"
+            (saveSelected)="handleSave($event)"
+            (emailSubmitted)="handleEmailSubmitted($event)"
+          ></app-back-order-save>
+        </div>
+      </ng-container>
+
+      <ng-template #loadingSpinner>
+        <div class="col-12 col-lg-9">
+          <div class="back-order-holder__content">
+            <app-component-loading-spinner></app-component-loading-spinner>
+            <div class="col-12">
+              <div class="back-order-holder__title" id="backorder-page-title-loading">
+                <h1 id="backorder-page-loading-title-text">
+                  {{ 'backorder.page.title' | cxTranslate }}
+                </h1>
+                <p
+                  id="backorder-page-loading-backorder-description"
+                  [innerHtml]="'backorder.itemTotal' | cxTranslate: { orderEntries: '0' }"
+                ></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

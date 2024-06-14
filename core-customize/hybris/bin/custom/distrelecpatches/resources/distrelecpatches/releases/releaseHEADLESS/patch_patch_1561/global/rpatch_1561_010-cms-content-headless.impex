@@ -1,0 +1,24 @@
+
+##################
+### FR Catalog ###
+##################
+$contentCatalog = distrelec_FRContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+$defaultContentCV = catalogVersion(catalog(id[default='Default']), version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecpatches/releases/release16_3/patch_patch_25177/global/images
+
+INSERT_UPDATE Media; code[unique = true]                   ; $contentCV[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = image/png]; altText
+; footer-logo-cartes-bancaires                             ;                                 ; $siteResource/footer-logo-cartes-bancaires.png                              ;                          ; Cartes Bancaires
+; checkout-footer-logo-cartes-bancaires                    ;                                 ; $siteResource/checkout-footer-logo-cartes-bancaires.png                     ;                          ; Cartes Bancaires
+
+INSERT_UPDATE DistPaymentMethodComponent; uid[unique = true]               ; $contentCV[unique = true]; icon(code, $contentCV)
+; FooterCartesBancariesPaymentComponent   ;                   ; footer-logo-cartes-bancaires
+
+
+INSERT_UPDATE DistPaymentMethodComponent; uid[unique = true]                       ; $contentCV[unique = true]; icon(code, $defaultContentCV)   ; name
+; CheckoutFooterCartesBancairesComponent ;                          ; checkout-footer-logo-cartes-bancaires ; Checkout Footer Cartes Bancaires Payment Component
+; FooterCartesBancariesPaymentComponent         ;                          ;  footer-logo-cartes-bancaires          ; Footer Cartes Bancaries Payment Component
+
+INSERT_UPDATE DistFooterComponent; uid[unique = true]              ; name                      ; $contentCV[unique = true]; paymentMethods(uid, $contentCV)[mode=replace]
+; DistFooterComponentCheckout     ; Checkout Footer Component ;                          ; CheckoutFooterMastercardPaymentComponent, CheckoutFooterVisaPaymentComponent,CheckoutFooterCartesBancairesComponent
+; DistFooterComponent             ; Footer Component          ;                          ; FooterMastercardPaymentComponent,FooterVisaPaymentComponent,FooterCartesBancariesPaymentComponent

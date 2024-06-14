@@ -1,0 +1,51 @@
+<div class="accessory__card" [id]="accessoryType + '-' + 'accessories-card-' + index">
+  <div class="accessory__card-img">
+    <a
+      class="accessory__card-link"
+      [routerLink]="product.url"
+      [queryParams]="{ itemList: itemListEntity }"
+      (click)="trackProductClick(product, index)"
+    >
+      <img
+        [src]="findImage('medium', product.images)"
+        [title]="product.name"
+        [alt]="product.name"
+        width="306"
+        height="190"
+      />
+    </a>
+  </div>
+  <span class="accessory__card-title" [innerHtml]="product.name"></span>
+  <app-dist-single-price
+    [price]="price"
+    [currency]="product.price?.currencyIso"
+    [currentChannel]="currentChannel"
+    [componentId]="accessoryType + '_' + 'pdp_accessories_' + index"
+    [priceLabel]="currentChannel.channel === 'B2B' ? excVatText : incVatText"
+    toDecimalPlaces="4"
+  ></app-dist-single-price>
+  <div class="accessory__cta">
+    <ng-container *ngIf="availability$ | async as availabilityData">
+      <app-numeric-stepper
+        [ids]="ids"
+        [productCode]="product.code"
+        [minimumQuantity]="product.orderQuantityMinimum"
+        [quantityStep]="product.orderQuantityStep"
+        [control]="addToCartForm.get('quantity')"
+        [availabilityData]="availabilityData"
+        [salesStatus]="product.salesStatus"
+      ></app-numeric-stepper>
+
+      <app-atc-button
+        [id]="accessoryType + '_' + 'accessories_atc_button_' + index"
+        [productCode]="product.code"
+        [availabilityData]="availabilityData"
+        [salesStatus]="product.salesStatus"
+        [minimumQuantity]="product.orderQuantityMinimum"
+        [quantityStep]="product.orderQuantityStep"
+        [control]="addToCartForm.get('quantity')"
+        [shouldOpenFlyout]="true"
+      ></app-atc-button>
+    </ng-container>
+  </div>
+</div>

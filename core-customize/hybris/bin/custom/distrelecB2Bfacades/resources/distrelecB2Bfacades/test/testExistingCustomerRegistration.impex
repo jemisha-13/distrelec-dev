@@ -1,0 +1,67 @@
+$catalog-id=testCatalog
+$catalogVersion=catalogVersion(catalog(id[default=$catalog-id]),version[default='Online'])
+$languages=en
+
+$passwordEncoding=md5
+$defaultPassword=12341234
+$setPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultPassword']
+
+# general
+INSERT_UPDATE Language;isocode[unique=true];active[default=true]
+;en;
+;de;
+
+#INSERT_UPDATE Currency;isocode[unique=true];active[default=true]
+#;CHF;
+#;EUR;
+
+
+# Currencies (ISO 4217)
+INSERT_UPDATE Currency;isocode[unique=true];conversion;digits;symbol;roundCommercial;active[default=true];
+;CHF;1;2;CHF;true;
+;EUR;1;2;€;false;
+
+INSERT_UPDATE Country;isocode[unique=true];name[lang=de];name[lang=en];active;
+;DE;Germany;Germany;true;
+
+INSERT_UPDATE PromotionGroup;Identifier[unique=true];
+;default;
+
+INSERT_UPDATE DistBrand;code[unique=true]
+;distrelec
+
+INSERT_UPDATE UserPriceGroup;code[unique=true]
+;SalesOrg_UPG_7350_01
+
+INSERT_UPDATE UserTaxGroup;code[unique=true]
+;SalesOrg_UTG_7350
+
+INSERT_UPDATE Vendor;code[unique=true];name[lang=en]
+;default;Default Vendor
+
+
+INSERT_UPDATE DistSalesOrg;code[unique=true];brand(code);country(isocode);erpSystem(code)
+;7350;distrelec;DE;SAP  ;
+
+INSERT_UPDATE CMSSite;uid[unique=true];country(isocode);defaultCurrency(isocode);registrationCurrencies(isocode);salesOrg(code);userPriceGroup(code);userTaxGroup(code);
+;distrelec_DE;DE;EUR;EUR;7350;SalesOrg_UPG_7350_01;SalesOrg_UTG_7350;
+
+# customer
+INSERT_UPDATE UserGroup;uid[unique=true];groups(uid);
+;customergroup;
+;b2cgroup;
+;b2bgroup;
+;b2badmingroup;
+;b2bapprovergroup;
+;ociCustomerGroup;
+;aribaCustomerGroup;
+;eProcurementGroup;
+
+# Titles
+INSERT_UPDATE Title;code[unique=true];sapCode
+;mr;Mr.;
+
+INSERT_UPDATE B2BUnit;uid[unique=true];erpCustomerID;salesOrg(code);customerType(code)
+;customer1;erpCustomerId1;7350;B2B
+;customer2;erpCustomerId2;7350;B2B
+;customer3;erpCustomerId3;7350;B2B

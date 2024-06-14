@@ -1,0 +1,180 @@
+@import 'global-utilities';
+
+:host {
+  display: inline-block;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0;
+  padding: 0;
+
+  @include tabletPlus {
+    display: flex;
+    width: auto;
+    border: none;
+    margin: 0;
+  }
+
+  .popover-origin {
+    text-align: center;
+  }
+
+  .menuitem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $colour-dark-grey;
+    cursor: pointer;
+    text-align: center;
+    height: $size-mobile-nav-height;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    @include tabletDown {
+      height: auto;
+      color: $colour-white;
+    }
+
+    .icon-cart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: $colour-dark-grey;
+
+      @include tablet {
+        color: $colour-white;
+      }
+
+      .icon-wrap {
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+    }
+
+    .label-cart {
+      color: $colour-dark-grey;
+      min-width: 30px;
+
+      @include tabletDown {
+        @include sr-only;
+      }
+
+      @include tabletPlus {
+        @include typography-text-xs();
+        color: $colour-white;
+        display: table-header-group;
+        font-weight: $font-weight-normal;
+        width: max-content;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  .cart-contents {
+    width: 100%;
+    display: contents;
+
+    .cart-count {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 380px;
+
+      .cart-title {
+        @include typography-display-sm;
+        color: $colour-dist-grey;
+        font-weight: $font-weight-semiBold;
+        text-transform: uppercase;
+      }
+
+      .cart-item-count {
+        @include typography-text-md;
+        color: $colour-dist-grey;
+        font-weight: $font-weight-normal;
+      }
+    }
+
+    .cart-items {
+      border-bottom: 1px solid $ux-light-grey;
+      margin-bottom: ($spacing-unit * 3 + 1);
+      padding-top: ($spacing-unit * 3);
+      max-height: 90%;
+
+      .cart-item {
+        color: $colour-dark-grey;
+        display: flex;
+        margin-bottom: ($spacing-unit * 3 + 1);
+
+        .product-wrapper {
+          display: flex;
+          flex: 0 0 100%;
+          align-items: center;
+
+          .product-info {
+            margin-left: ($spacing-unit * 3 + 1);
+
+            .product-name {
+              @include typography-display-sm;
+              font-weight: $font-weight-semiBold;
+              color: $colour-dark-grey;
+              margin-bottom: ($spacing-unit - 1);
+              word-break: break-word;
+            }
+
+            .qty {
+              @include typography-text-sm;
+            }
+          }
+
+          .product-image {
+            border: 1px solid $ux-light-grey;
+            height: auto;
+            min-width: 140px;
+            object-fit: scale-down;
+          }
+        }
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+
+    .empty-cart-title {
+      @include typography-display-xl;
+      display: flex;
+      font-weight: $font-weight-normal;
+      margin-top: ($spacing-unit * 7 + 1);
+    }
+  }
+
+  .cart-total-count {
+    background-color: $ux-red;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 16px;
+    height: 16px;
+    align-items: center;
+    @include font-size(12px);
+    @include line-height(12px);
+    color: $colour-white;
+    font-weight: $font-weight-medium;
+
+    @include tabletPlus {
+      @include font-size(14px);
+      @include line-height(14px);
+      height: 20px;
+      right: -8px;
+      top: -8px;
+      width: 20px;
+    }
+  }
+}

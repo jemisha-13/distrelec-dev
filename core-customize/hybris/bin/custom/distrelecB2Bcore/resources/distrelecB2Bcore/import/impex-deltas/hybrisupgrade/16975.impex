@@ -1,0 +1,113 @@
+$contentCatalog=distrelec_IntContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+UPDATE PageTemplate;uid[unique=true]                              ;$contentCV[unique=true];name
+                   ;Brand1Template                                ;                       ;International Brand1 Template
+                   ;CMS3PageTemplate                              ;                       ;International CMS3Page Template
+                   ;CatalogPlusProductDetailsPageTemplate         ;                       ;International Catalog Plus Product Details Page Template
+                   ;CategoryPageTemplate                          ;                       ;International Category Page Template
+                   ;ContentPageFullWidthWithoutNavigationTemplate ;                       ;International Content Page Full Width Without Navigation Template
+                   ;ContentPageWithNavigationTemplate             ;                       ;International Content Page With Navigation Template
+                   ;ContentPageWithoutNavigationTemplate          ;                       ;International Content Page Without Navigation Template
+                   ;HomePage2018Template                          ;                       ;International Home Page 2018 Template
+                   ;JobDetailPageTemplate                         ;                       ;International Job Detail Page Template
+                   ;ManufacturerStoreDetailPageTemplate           ;                       ;International Manufacturer Store Detail Page Template
+                   ;NewsDetailPageTemplate                        ;                       ;International News Detail Page Template
+                   ;ProductDetailsPageTemplate                    ;                       ;International Product Details Page Template
+                   ;ProductFinderPageTemplate                     ;                       ;International Product Finder Page Template
+                   ;ProductFinderResultPageTemplate               ;                       ;International Product Finder Result Page Template
+                   ;ProductListPageTemplate                       ;                       ;International Product List Page Template
+                   ;ResponsiveContentPageWithNavigation           ;                       ;International Responsive Content Page With Navigation Template
+                   ;ResponsiveContentPageWithoutNavigation        ;                       ;International Responsive Content Page Without Navigation Template
+                   ;StorePageTemplate                             ;                       ;International Store Page Template
+
+# Add missing page templates
+
+$distHome=SimpleBannerComponent,CMSParagraphComponent, DistCarpetComponent, DistExtCarpetComponent, DistLinkedImageComponent, DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent, DistCategoryCarouselComponent, DistManufacturerCarouselComponent, DistProductFFCampaignCarouselComponent, DistExtHeroRotatingTeaserComponent,DistWarningComponent, DistrelecManufacturerLinecardComponent, DistrelecCategoryGridComponent, DistProductBoxComponent, DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent, DistProductCookieCarouselComponent, DistProductReferencesCarouselComponent, DistProductCarouselComponent, DistCategoryCarouselComponent,DistManufacturerCarouselComponent, DistHeroRotatingTeaserComponent, DistCarpetComponent, DistExtCarpetComponent, DistHeadlineComponent,DistIframeComponent, DistWarningComponent, DistContentTeaserComponent, DistLeadTextComponent, DistLinkedImageComponent,DistLinkedImageTextComponent, DistProductFFCampaignCarouselComponent, DistExtHeroRotatingTeaserComponent, DistrelecManufacturerLinecardComponent, DistrelecCategoryGridComponent,DistProductBoxComponent, DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent, DistCategoryCarouselComponent, DistManufacturerCarouselComponent, DistHeroRotatingTeaserComponent, DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent, DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true]               ;name                                        ;frontendTemplateName          ;restrictedPageTypes(code);active[default=true]
+                          ;                       ;HomePageTemplate               ;International Home Page Template            ;layout/homePage               ;ContentPage
+                          ;                       ;SearchFeedbackSentPageTemplate ;International Search Feedback Page Template ;search/searchFeedbackSentPage ;ContentPage              ;
+
+# Home Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true][default='HomePageTemplate'];validComponentTypes(code)
+                             ;Logo             ;                                                                  ;$distLogoContent
+                             ;ServiceNav       ;                                                                  ;$distServiceNavContent
+                             ;MainNav          ;                                                                  ;$distMainNavContent
+                             ;TitleContent     ;                                                                  ;$distHeadlineComponent
+                             ;HeroContent      ;                                                                  ;DistHeroRotatingTeaserComponent,DistExtHeroRotatingTeaserComponent
+                             ;Content          ;                                                                  ;$distHome
+                             ;Swyn             ;                                                                  ;$distSwynContent
+                             ;FooterLinks      ;                                                                  ;$distFooterLinksContent
+                             ;CertLabels       ;                                                                  ;$distCertLabelsContent
+                             ;Impressum        ;                                                                  ;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]      ;$contentCV[unique=true];pageTemplate(uid, $contentCV);position;contentSlot(uid, $contentCV)
+                                    ;Logo-HomePageTemplate ;                       ;HomePageTemplate             ;Logo    ;InternationalLogoContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]         ;$contentCV[unique=true];pageTemplate(uid, $contentCV);position;contentSlot(uid, $contentCV)
+                                    ;MainNav-HomePageTemplate ;                       ;HomePageTemplate             ;MainNav ;InternationaMainNavContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]        ;$contentCV[unique=true];pageTemplate(uid, $contentCV);position    ;contentSlot(uid, $contentCV)
+                                    ;Footer-HomePageTemplate ;                       ;HomePageTemplate             ;FooterLinks ;InternationaFooterContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                    ;$contentCV[unique=true];pageTemplate(uid, $contentCV)  ;position;contentSlot(uid, $contentCV)
+                                    ;Logo-SearchFeedbackSentPageTemplate ;                       ;SearchFeedbackSentPageTemplate ;Logo    ;InternationalLogoContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                       ;$contentCV[unique=true];pageTemplate(uid, $contentCV)  ;position;contentSlot(uid, $contentCV)
+                                    ;MainNav-SearchFeedbackSentPageTemplate ;                       ;SearchFeedbackSentPageTemplate ;MainNav ;InternationaMainNavContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                      ;$contentCV[unique=true];pageTemplate(uid, $contentCV)  ;position    ;contentSlot(uid, $contentCV)
+                                    ;Footer-SearchFeedbackSentPageTemplate ;                       ;SearchFeedbackSentPageTemplate ;FooterLinks ;InternationaFooterContentSlot
+
+$distHome=SimpleBannerComponent,CMSParagraphComponent, DistCarpetComponent, DistExtCarpetComponent, DistLinkedImageComponent, DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent, DistCategoryCarouselComponent, DistManufacturerCarouselComponent, DistProductFFCampaignCarouselComponent, DistExtHeroRotatingTeaserComponent,DistWarningComponent, DistrelecManufacturerLinecardComponent, DistrelecCategoryGridComponent, DistProductBoxComponent, DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent, DistProductCookieCarouselComponent, DistProductReferencesCarouselComponent, DistProductCarouselComponent, DistCategoryCarouselComponent,DistManufacturerCarouselComponent, DistHeroRotatingTeaserComponent, DistCarpetComponent, DistExtCarpetComponent, DistHeadlineComponent,DistIframeComponent, DistWarningComponent, DistContentTeaserComponent, DistLeadTextComponent, DistLinkedImageComponent,DistLinkedImageTextComponent, DistProductFFCampaignCarouselComponent, DistExtHeroRotatingTeaserComponent, DistrelecManufacturerLinecardComponent, DistrelecCategoryGridComponent,DistProductBoxComponent, DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent, DistCategoryCarouselComponent, DistManufacturerCarouselComponent, DistHeroRotatingTeaserComponent, DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent, DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true]                          ;name                                                         ;frontendTemplateName                ;restrictedPageTypes(code);active[default=true]
+                          ;                       ;TabedContentPageWithoutNavigationTemplate ;International Tabed Content Page Without Navigation Template ;layout/contentPageWithoutNavigation ;ContentPage
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+                             ;Logo             ;                                                                                           ;$distLogoContent
+                             ;ServiceNav       ;                                                                                           ;$distServiceNavContent
+                             ;MainNav          ;                                                                                           ;$distMainNavContent
+                             ;Content          ;                                                                                           ;$distContent
+                             ;Swyn             ;                                                                                           ;$distSwynContent
+                             ;FooterLinks      ;                                                                                           ;$distFooterLinksContent
+                             ;CertLabels       ;                                                                                           ;$distCertLabelsContent
+                             ;Impressum        ;                                                                                           ;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                               ;$contentCV[unique=true];pageTemplate(uid, $contentCV)             ;position;contentSlot(uid, $contentCV)
+                                    ;Logo-TabedContentPageWithoutNavigationTemplate ;                       ;TabedContentPageWithoutNavigationTemplate ;Logo    ;InternationalLogoContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)             ;position;contentSlot(uid, $contentCV)
+                                    ;MainNav-TabedContentPageWithoutNavigationTemplate ;                       ;TabedContentPageWithoutNavigationTemplate ;MainNav ;InternationaMainNavContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                 ;$contentCV[unique=true];pageTemplate(uid, $contentCV)             ;position    ;contentSlot(uid, $contentCV)
+                                    ;Footer-TabedContentPageWithoutNavigationTemplate ;                       ;TabedContentPageWithoutNavigationTemplate ;FooterLinks ;InternationaFooterContentSlot

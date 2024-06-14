@@ -1,0 +1,291 @@
+<form class="order-summary-form" [formGroup]="billingForm">
+  <div class="order-summary">
+    <div class="ch__component">
+      <div class="ch__component__title">
+        <h2 id="checkout.order_summary">
+          {{ 'checkout.order_summary' | cxTranslate }}
+        </h2>
+      </div>
+
+      <div class="ch__component__order-detail">
+        <span id="checkout.items">
+          {{
+            (products.length > 1 ? 'checkout.items' : 'checkout.item')
+              | cxTranslate
+                : {
+                    numberOfItems: products.length
+                  }
+          }}
+        </span>
+        <button class="btn" id="checkout.edit_cart" (click)="redirectToCart()">
+          <a class="link">{{ 'checkout.edit_cart' | cxTranslate }}</a>
+        </button>
+      </div>
+
+      <!-- ORDER ITEM -->
+      <div
+        *ngIf="
+          billingForm.value.payment !== 'CardPayment' ||
+          (billingForm.value.payment === 'CardPayment' && billingForm.value.paymentCardType)
+        "
+        class="ch__component__orders"
+        [class.long-layout]="products.length > 1"
+      >
+        <div class="ch__component__orders__inner">
+          <ng-container *ngFor="let entry of products">
+            <div *ngIf="entry.quotationId" class="ch__component__orders__quote">
+              <h2 [id]="'quote_title_' + entry.product.code">
+                {{ 'form.quote_title' | cxTranslate }}
+              </h2>
+              <ul>
+                <li [id]="'quote_number_' + entry.product.code">
+                  <strong [id]="'quote_number_' + entry.product.code + '_label'">
+                    {{ 'form.quote_number' | cxTranslate }}
+                  </strong>
+                  <span [id]="'quote_number_' + entry.product.code + '_id'">{{ entry.quotationId }}</span>
+                </li>
+                <li [id]="'quote_includes_' + entry.product.code">
+                  {{ 'form.quote_includes' | cxTranslate }}
+                </li>
+              </ul>
+            </div>
+
+            <div class="ch__component__orders__holder is-product">
+              <div class="ch__component__orders__item" [class.is-bom-item]="entry.bom">
+                <div class="ch__component__orders__item__holder">
+                  <div class="ch__component__orders__item--thumb">
+                    <img
+                      [src]="entry.product.images | ProductImageFallback"
+                      [alt]="entry.product.name ?? 'no-image'"
+                      [title]="entry.product.name ? (entry.product.name | stripHTMLTags) : 'product-image'"
+                      width="70"
+                    />
+                  </div>
+
+                  <div class="ch__component__orders__item--details">
+                    <div *ngIf="entry.product.name" class="ch__component__orders__item--title">
+                      <span
+                        [innerHTML]="entry.product.name"
+                        [id]="'product-name_' + entry.product.codeErpRelevant"
+                        [title]="entry.product.name ? (entry.product.name | stripHTMLTags) : 'product-name'"
+                      ></span>
+                    </div>
+
+                    <ul class="ch__component__orders__item-attr-list">
+                      <li class="ch__component__orders__item-attr-list-item">
+                        <strong [id]="'checkout.artNrLabel_' + entry.product.codeErpRelevant">
+                          {{ 'checkout.artNr' | cxTranslate }}
+                        </strong>
+                        <span [id]="'checkout.artNr_' + entry.product.codeErpRelevant">
+                          {{ entry.product.codeErpRelevant | articleNumber }}
+                        </span>
+                      </li>
+
+                      <li class="ch__component__orders__item-attr-list-item is-half">
+                        <strong [id]="'checkout.qty_' + entry.product.codeErpRelevant">
+                          {{ 'checkout.qty' | cxTranslate }}
+                        </strong>
+                        <span [id]="'checkout.qtyLabel_' + entry.product.codeErpRelevant">{{ entry.quantity }}</span>
+                      </li>
+
+                      <li class="ch__component__orders__item-attr-list-item is-half">
+                        <strong [id]="'basePrice_' + entry.product.codeErpRelevant">
+                          {{ entry.basePrice.currencyIso }}
+                        </strong>
+                        <span [id]="'basePriceLabel_' + entry.product.codeErpRelevant">
+                          {{ entry.basePrice.value | price }}
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div
+                  class="ch__component__orders__item--details is-availability-msg"
+                  [id]="'delivery-info_' + entry.product.codeErpRelevant"
+                >
+                  <ng-container *ngIf="entry.availabilities?.length > 0; else noAvailabilities">
+                    {{ 'checkout.availability_delivery_msg' | cxTranslate }}&nbsp;
+                    <ng-container *ngFor="let availability of entry.availabilities; last as isLast">
+                      <ng-container *ngIf="isLast; else notLast">
+                        <strong [id]="'delivery-info_' + entry.product.codeErpRelevant + '_date'">
+                          {{ availability.estimatedDate | cxDate: 'EEEE' }}&nbsp;{{
+                            availability.estimatedDate | cxDate: 'd'
+                          }},&nbsp;{{ availability.estimatedDate | cxDate: 'LLLL' }}&nbsp;{{
+                            availability.estimatedDate | cxDate: 'YYYY'
+                          }}
+                        </strong>
+                        .
+                      </ng-container>
+                      <ng-template #notLast>
+                        <strong [id]="'delivery-info_' + entry.product.codeErpRelevant + '_date'">
+                          {{ availability.estimatedDate | cxDate: 'EEEE' }}&nbsp;{{
+                            availability.estimatedDate | cxDate: 'd'
+                          }},&nbsp;{{ availability.estimatedDate | cxDate: 'LLLL' }}&nbsp;{{
+                            availability.estimatedDate | cxDate: 'YYYY'
+                          }}
+                        </strong>
+                        &nbsp;{{ 'checkout.availability_delivery_and' | cxTranslate }}&nbsp;
+                      </ng-template>
+                    </ng-container>
+                  </ng-container>
+
+                  <ng-template #noAvailabilities>
+                    {{ 'checkout.availability_noStockDate' | cxTranslate }}
+                  </ng-template>
+                </div>
+
+                <div *ngIf="entry.bom" class="ch__component__orders__item-bom">
+                  <div class="ch__component__orders__item-bom__title">
+                    <strong id="checkout.bom">{{ 'checkout.bom' | cxTranslate }}</strong>
+                    <br />
+                    {{ 'checkout.bundle_includes' | cxTranslate }}
+                  </div>
+
+                  <ul class="ch__component__orders__item-bom__item-list">
+                    <li *ngFor="let subEntry of entry.subOrderEntryData">
+                      <div class="ch__component__orders__item">
+                        <div class="ch__component__orders__item__holder">
+                          <div class="ch__component__orders__item--thumb">
+                            <a
+                              [routerLink]="subEntry.product.url"
+                              [title]="subEntry.product.name ? (subEntry.product.name | stripHTMLTags) : 'product-link'"
+                            >
+                              <img
+                                id="productImageOrdeSumm"
+                                [src]="subEntry.product.images ? subEntry.product.images[0]?.url : ''"
+                                [alt]="subEntry.product.name ?? 'no-image'"
+                                width="70"
+                              />
+                            </a>
+                          </div>
+
+                          <div class="ch__component__orders__item--details">
+                            <div *ngIf="subEntry.product.name" class="ch__component__orders__item--title">
+                              <a
+                                class="ch__component__orders__item--title-link"
+                                [routerLink]="subEntry.product.url"
+                                [title]="
+                                  subEntry.product.name ? (subEntry.product.name | stripHTMLTags) : 'product-link'
+                                "
+                              >
+                                <span
+                                  [id]="'product-name_' + subEntry.product.codeErpRelevant"
+                                  [innerHTML]="subEntry.product.name"
+                                ></span>
+                              </a>
+                            </div>
+
+                            <ul class="ch__component__orders__item-attr-list">
+                              <li class="ch__component__orders__item-attr-list-item">
+                                <strong [id]="'checkout.artNrLabel_' + subEntry.product.codeErpRelevant">
+                                  {{ 'checkout.artNr' | cxTranslate }}
+                                </strong>
+                                <span [id]="'checkout.artNr_' + subEntry.product.codeErpRelevant">
+                                  {{ subEntry.product.codeErpRelevant | articleNumber }}
+                                </span>
+                              </li>
+
+                              <li class="ch__component__orders__item-attr-list-item is-half">
+                                <strong [id]="'checkout.qty_' + subEntry.product.codeErpRelevant">
+                                  {{ 'checkout.qty' | cxTranslate }}
+                                </strong>
+                                <span [id]="'checkout.qtyLabel_' + subEntry.product.codeErpRelevant">
+                                  {{ entry.quantity }}
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div *ngIf="cartData_ | async as cartData" class="ch__component__pricing">
+        <div class="ch__component__pricing--details">
+          <span id="cart.subtotal">{{ 'checkout.subtotal' | cxTranslate }}</span>
+
+          <span class="is-value" id="cartSubtotalPricing">
+            <span id="cartSubtotalPricing_currency">{{ cartData?.subTotal?.currencyIso }}</span>
+            <span id="cartSubtotalPricing_value">{{ cartData?.subTotal?.value | price }}</span>
+          </span>
+        </div>
+
+        <div class="ch__component__pricing--details">
+          <span id="cart.shipping">{{ 'checkout.summary.delivery' | cxTranslate }}</span>
+
+          <span class="is-value">
+            <ng-container *ngIf="cartData?.deliveryCost?.value === 0" id="cart.free">
+              {{ 'checkout.price_free' | cxTranslate }}
+            </ng-container>
+
+            <ng-container *ngIf="cartData?.deliveryCost?.value > 0" id="cartDeliveryCost">
+              <span id="cartDeliveryCost_currency">{{ cartData?.deliveryCost?.currencyIso }}</span>
+              <span id="cartDeliveryCost_value">{{ cartData?.deliveryCost?.value | price }}</span>
+            </ng-container>
+          </span>
+        </div>
+
+        <div class="ch__component__pricing--details">
+          <span id="cart.tax_title">{{ 'cart.tax_title' | cxTranslate }}</span>
+
+          <span class="is-value" id="cartTotalTax">
+            <span id="cartTotalTax_currency">{{ cartData?.totalTax?.currencyIso }}</span>
+            <span id="cartTotalTax_value">{{ cartData?.totalTax?.value | price }}</span>
+          </span>
+        </div>
+
+        <div *ngIf="cartData.erpVoucherInfoData" class="ch__component__pricing--details">
+          <span id="cart.voucher_title">{{ 'cart.voucher_title' | cxTranslate }}</span>
+
+          <span class="is-value" id="cartVoucherInfo">
+            <span id="cartVoucherInfo_currency">{{ cartData?.erpVoucherInfoData?.fixedValue.currencyIso }}</span>
+            <span id="cartVoucherInfo_value">-&nbsp;{{ cartData?.erpVoucherInfoData?.fixedValue.value | price }}</span>
+          </span>
+        </div>
+
+        <div class="ch__component__pricing--total">
+          <span id="cart.total">{{ 'cart.total' | cxTranslate }}</span>
+
+          <span class="is-value" id="cartTotalPriceWithTax">
+            <span id="cartTotalPriceWithTax_currency">{{ cartData?.totalPrice?.currencyIso }}</span>
+            <span id="cartTotalPriceWithTax_value">{{ cartData?.totalPrice?.value | price }}</span>
+          </span>
+        </div>
+
+        <div *ngIf="isSummaryLoading_ | async" class="ch__component__pricing--loader">
+          <app-component-loading-spinner
+            id="app-component-loading-spinner-ordersummary"
+          ></app-component-loading-spinner>
+          <strong id="checkout.refreshing_prices">{{ 'checkout.refreshing_prices' | cxTranslate }}</strong>
+        </div>
+
+        <ng-container *ngIf="isBillingFormSaved_ | async as isBillingFormSaved">
+          <ng-container *ngIf="isDetailsFormSaved_ | async as isDetailsFormSaved">
+            <div
+              *ngIf="!billingForm.value.payment && !billingForm.value.paymentCardType"
+              class="ch__component__submit review-pay"
+            >
+              <button
+                class="btn"
+                id="checkoutContinueToPayment"
+                [disabled]="!isContinueButtonEnabled(billingForm)"
+                (click)="redirectToPaymentPage()"
+              >
+                <span id="checkout.delivery.continue_review_pay">
+                  {{ 'checkout.delivery.continue_review_pay' | cxTranslate }}
+                </span>
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</form>

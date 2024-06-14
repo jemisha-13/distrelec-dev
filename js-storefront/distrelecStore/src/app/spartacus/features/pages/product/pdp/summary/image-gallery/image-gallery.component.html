@@ -1,0 +1,24 @@
+@if (breakpoint$ | async; as breakpoint) {
+  <div class="image-gallery-carousel">
+    @for (video of productVideos; track $index) {
+      <a class="item video" [id]="'video_link_' + $index" [class.active-click]="video.youtubeUrl === _selectedMedia()">
+        <div class="video-icon" (click)="switchMedia(video.youtubeUrl)">
+          <app-video-holder></app-video-holder>
+        </div>
+      </a>
+    }
+
+    @for (image of getImages(breakpoint); track $index) {
+      <a class="item image" [id]="'image_link_' + $index">
+        <img
+          [class.active-click]="image.landscape.url === _selectedMedia()"
+          [ngSrc]="image?.small.url"
+          [alt]="'product.image.missing' | cxTranslate"
+          (click)="switchMedia(image.landscape.url)"
+          width="53"
+          height="70"
+        />
+      </a>
+    }
+  </div>
+}

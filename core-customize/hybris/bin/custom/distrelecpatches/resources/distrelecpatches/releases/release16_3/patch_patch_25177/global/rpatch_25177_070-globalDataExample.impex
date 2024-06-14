@@ -1,0 +1,22 @@
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecpatches/releases/release16_3/patch_patch_25177/global/images
+$defaultContentCV = catalogVersion(catalog(id[default='Default']), version[default='Staged'])
+
+INSERT_UPDATE Media; code[unique = true]                   ; $defaultContentCV[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = image/png]; altText
+                   ; checkout-footer-logo-cartes-bancaires ;                                 ; $siteResource/checkout-footer-logo-cartes-bancaires.png                     ;                          ; Cartes Bancaires
+                   ; footer-logo-cartes-bancaires          ;                                 ; $siteResource/footer-logo-cartes-bancaires.png                              ;                          ; Cartes Bancaires
+
+##################
+### FR Catalog ###
+##################
+$contentCatalog = distrelec_FRContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+INSERT_UPDATE DistPaymentMethodComponent; uid[unique = true]                            ; $contentCV[unique = true]; icon(code, $defaultContentCV)         ; name
+                                        ; CheckoutFooterCartesBancariesPaymentComponent ;                          ; checkout-footer-logo-cartes-bancaires ; Checkout Footer Cartes Bancaries Payment Component
+                                        ; FooterCartesBancariesPaymentComponent         ;                          ; footer-logo-cartes-bancaires          ; Footer Cartes Bancaries Payment Component
+
+UPDATE DistFooterComponent; uid[unique = true]          ; name                      ; $contentCV[unique = true]; paymentMethods(uid, $contentCV)
+                          ; DistFooterComponentCheckout ; Checkout Footer Component ;                          ; CheckoutFooterCartesBancariesPaymentComponent, CheckoutFooterMastercardPaymentComponent, CheckoutFooterVisaPaymentComponent
+
+UPDATE DistFooterComponent; uid[unique = true]  ; $contentCV[unique = true]; paymentMethods(uid, $contentCV)
+                          ; DistFooterComponent ;                          ; FooterCartesBancariesPaymentComponent, FooterMastercardPaymentComponent, FooterVisaPaymentComponent

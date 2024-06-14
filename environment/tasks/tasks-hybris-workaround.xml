@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Hybris Workaround tasks
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-hybris-workaround" basedir=".">
+
+	<!--
+		=================================
+		macro: revertpom
+		(rhusi)
+		ATTENTION: DO NOT TRY TO REWRITE THIS TASK USING THE SVN REVERT COMMAND!!! IT WILL NOT WORK!!!
+		If you still try it, then tell me the solution if you find one! :-)
+		=================================
+		-->
+		<macrodef name="revertpom" description="Reverts all the deleted pom.xml files. Hybris delets in the clean target all pom.xml.">
+			<sequential>
+				
+				<echo message="Revert pom.xml for extensionlist..." />
+				<for list="${extensionlist}" param="extension">
+					<sequential>
+						<trycatch>
+							<try>
+								<echo message="Revert pom.xml of extension '@{extension}'. (Hybris removes pom.xml-files in ant's clean, but we need them, so we do a revert)"/>
+								<svnSetting id="svn.settings" javahl="false" svnkit="false" username="${svn.repository.username}" password="${svn.repository.password}" />
+								<svn refid="svn.settings">
+									<export srcUrl="${svn.repository.url}/${mandant.version}/hybris/bin/custom/@{extension}/pom.xml" destPath="${hybris.extensions.home}/@{extension}" force="true" />
+								</svn>
+							</try>
+							<catch>
+								<echo message="There is no pom.xml for the extension @{extension}. Skip." />
+							</catch>
+						</trycatch>
+					</sequential>
+				</for>
+				
+				<echo message="Revert pom.xml for second extensionlist..." />
+				<for list="${second.extensionlist}" param="extension">
+					<sequential>
+						<trycatch>
+							<try>
+								<echo message="Revert pom.xml of extension '@{extension}'. (Hybris removes pom.xml-files in ant's clean, but we need them, so we do a revert)"/>
+								<svnSetting id="second.svn.settings" javahl="false" svnkit="false" username="${second.svn.repository.username}" password="${second.svn.repository.password}" />
+								<svn refid="second.svn.settings">
+									<export srcUrl="${second.svn.repository.url}/extensions/@{extension}/${second.mandant.version}/pom.xml" destPath="${second.hybris.extensions.home}/@{extension}" force="true" />
+								</svn>
+							</try>
+							<catch>
+								<echo message="There is no pom.xml for the extension @{extension}. Skip." />
+							</catch>
+						</trycatch>
+					</sequential>
+				</for>
+			</sequential>
+		</macrodef>
+
+
+</project>
+

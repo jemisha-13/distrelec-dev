@@ -1,0 +1,61 @@
+$contentMasterCatalog=distrelecContentCatalog
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$emailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/emails
+$cmsSiteUID=distrelec_CH
+$lang=en
+
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];rendererType(code)[default='velocity']
+ ;$cmsSiteUID-Email_Admin_Order_Pending_Approval_Body;E-Mail Admin order pending approval;$emailResource/email-adminOrderPendingApprovalBody.vm;
+ ;$cmsSiteUID-Email_Admin_Order_Pending_Approval_Subject;E-Mail Admin Subject order pending approval;$emailResource/email-adminOrderPendingApprovalSubject.vm;
+
+# Email page Template
+INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;active;frontendTemplateName;subject(code);htmlTemplate(code);restrictedPageTypes(code)
+;;AdminOrderPendingApprovalEmailTemplate;Admin Order Pending Approval Email Template;true;AdminOrderPendingApprovalEmail;$cmsSiteUID-Email_Admin_Order_Pending_Approval_Subject;$cmsSiteUID-Email_Admin_Order_Pending_Approval_Body;EmailPage
+
+UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AdminOrderPendingApprovalEmailTemplate;$jarResourceCms/structure-view/structure_adminOrderPendingApprovalEmailTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AdminOrderPendingApprovalEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+;AdvantageImage;;BannerComponent,CMSImageComponent
+;SocialImageFacebook;;BannerComponent,CMSImageComponent
+;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+;SocialImageTwitter;;BannerComponent,CMSImageComponent
+;FooterImage1;;BannerComponent,CMSImageComponent
+;FooterImage2;;BannerComponent,CMSImageComponent
+;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AdminOrderPendingApprovalEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AdminOrderPendingApproval;Logo;;EmailLogoSlot;true
+;;SocialImageFacebook-AdminOrderPendingApproval;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+;;SocialImageGooglePlus-AdminOrderPendingApproval;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+;;SocialImageTwitter-AdminOrderPendingApproval;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+;;AdvantageImage-AdminOrderPendingApproval;AdvantageImage;;EmailAdvantageImageSlot;true
+;;FooterImage1-AdminOrderPendingApproval;FooterImage1;;EmailFooterImage1Slot;true
+;;FooterImage2-AdminOrderPendingApproval;FooterImage2;;EmailFooterImage2Slot;true
+;;FooterImage3-AdminOrderPendingApproval;FooterImage3;;EmailFooterImage3Slot;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-AdminOrderPendingApprovalEmail;Mood Image Slot for AdminOrderPendingApprovalEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-AdminOrderPendingApprovalEmail;MoodImage;AdminOrderPendingApprovalEmail;EmailMoodImageSlot-AdminOrderPendingApprovalEmail
+
+INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)[default='velocity']
+;$cmsSiteUID-Email_Admin_Order_Pending_Approval_Body;com.namics.distrelec.b2b.facades.process.email.context.OrderPendingAdminApprovalEmailContext
+;$cmsSiteUID-Email_Admin_Order_Pending_Approval_Subject;com.namics.distrelec.b2b.facades.process.email.context.OrderPendingAdminApprovalEmailContext
+
+UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];previewImage(code, $contentCV)
+;;AdminOrderPendingApprovalEmail;EmailPageModel_preview
+
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;AdminOrderPendingApprovalEmail;Admin Order Pending Approval Email;AdminOrderPendingApprovalEmailTemplate;true
+
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang];masterTemplate(uid,$contentCV)
+ ;;AdminOrderPendingApprovalEmail;customerservices@distrelec.com;"Distrelec Customerservice";AdminOrderPendingApprovalEmailTemplate
+
+

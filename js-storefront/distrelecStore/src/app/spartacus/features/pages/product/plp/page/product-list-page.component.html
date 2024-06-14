@@ -1,0 +1,18 @@
+<ng-template
+  *ngIf="templateName$ | async as templateName"
+  [cxPageTemplateStyle]="templateName"
+  [cxOutlet]="templateName"
+  [cxOutletContext]="{
+    templateName$: templateName$,
+    slots$: slots$
+  }"
+>
+  <div class="container showing-results-labels">
+    <cx-page-slot [class.d-none]="isLoading || isEmpty" position="ProductListTitle"></cx-page-slot>
+    <cx-page-slot [class.d-none]="isLoading || isEmpty" position="ProductListPagination"></cx-page-slot>
+  </div>
+  <cx-page-slot [class.d-none]="isLoading || isEmpty" position="ProductListFilters"></cx-page-slot>
+  <cx-page-slot [class.d-none]="isEmpty" position="ProductListMain"></cx-page-slot>
+
+  <app-product-list-empty *ngIf="isEmpty && !isLoading" class="white-background w-100"></app-product-list-empty>
+</ng-template>

@@ -1,0 +1,24 @@
+################################################################
+## Impex File to create Reevoo Purchaser Feed cronjobs                     ##
+################################################################
+INSERT_UPDATE DistReevooPurchaserFeedCronJob;code[unique=true];mediaPrefix;exportDirectory;sessionLanguage(isocode);job(code)[default='reevooPurchaserFeedJob'];sessionUser(uid)[default='technicalExportUser'];;sites(uid);sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING'];nodeID[default=0]
+;distReevooPurchaserFeedExportJob_PL;DIS-PL_Purchaser;TEST;en;;;;distrelec_PL
+
+UPDATE DistReevooPurchaserFeedCronJob;code[unique=true];supportedLanguages(isocode)
+;distReevooPurchaserFeedExportJob_PL;"en,en_PL,pl"
+
+################################################################
+## Create a composite entry for each site cronjob
+################################################################
+INSERT_UPDATE CompositeEntry;code[unique=true];executableCronJob(code)
+;distReevooPurchaserFeedExportJob_PL_Entry;distReevooPurchaserFeedExportJob_PL
+
+
+###############################################################
+## Create a composite cronjob to run all the site cronjobs
+################################################################
+INSERT_UPDATE CompositeCronJob;code[unique=true];compositeEntries(code)[mode=append];
+;distReevooPurchaserFeedExportExportCronJob;distReevooPurchaserFeedExportJob_PL_Entry
+
+UPDATE DistReevooPurchaserFeedCronJob;code[unique=true];reevooExportDirectoryMap[map-delimiter = |]
+;distReevooPurchaserFeedExportJob_PL;en->TEST/English | en_PL->TEST/English | pl->TEST/POLISH

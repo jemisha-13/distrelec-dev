@@ -1,0 +1,189 @@
+<div class="tabs-holder" [formGroup]="cartForm">
+  <div class="tabs-holder__header">
+    <div
+      class="tabs-holder__header__item selected"
+      id="cart.tab_quick_order"
+      [class.selected]="selectedTab === 1"
+      (click)="selectedTab = 1"
+      data-tab-id="1"
+    >
+      {{ 'cart.tab_quick_order' | cxTranslate }}
+    </div>
+
+    <div
+      class="tabs-holder__header__item"
+      id="cart.tab_shop_list"
+      [class.selected]="selectedTab === 2"
+      (click)="selectedTab = 2"
+      data-tab-id="2"
+    >
+      {{ 'cart.tab_shop_list' | cxTranslate }}
+    </div>
+
+    <div
+      class="tabs-holder__header__item"
+      id="cart.tab_bom_tool"
+      [class.selected]="selectedTab === 3"
+      (click)="selectedTab = 3"
+      data-tab-id="3"
+    >
+      {{ 'cart.tab_bom_tool' | cxTranslate }}
+    </div>
+  </div>
+
+  <div *ngIf="selectedTab === 1" class="tabs-holder__content">
+    <div class="tabs-holder__content__item">
+      <div class="holder">
+        <div class="holder__relative">
+          <input
+            class="holder__input"
+            id="directOrder"
+            [placeholder]="'cart.quick_order_placeholder' | cxTranslate"
+            [ngClass]="{ empty: displayPopup }"
+            (input)="onSearch($event)"
+            (focus)="hidePopup()"
+            type="text"
+            formControlName="orderInput"
+          />
+
+          <ng-container *ngIf="displayPopup">
+            <div class="empty-popover">
+              <div class="arrow"></div>
+
+              <div class="content">
+                {{ 'cart.product.not_found' | cxTranslate }}
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="suggestionResults$ | async">
+            <ul class="direct-prods" [class.d-none]="!isSearchListVisible">
+              <ng-container *ngFor="let result of searchResults; let i = index">
+                <li
+                  *ngIf="result.image"
+                  class="direct-prod"
+                  [data-name]="result.TypeName"
+                  [data-code-erp-relevant]="result.articleNr"
+                  [data-price]="
+                    currentChannel.channel === 'B2B'
+                      ? result?.price[1]?.price?.quantityPrice
+                      : result?.price[0]?.price?.quantityPrice
+                  "
+                  [title]="result.name | stripHTMLTags"
+                  data-min="1"
+                >
+                  <div class="direct-prod__content">
+                    <div class="direct-prod-image">
+                      <div class="image-wrap" [id]="'cart-search-image' + i">
+                        <img [src]="result?.image" />
+                      </div>
+
+                      <app-energy-efficiency-label
+                        [id]="i.toString(10)"
+                        [energyEfficiency]="getEnergyEfficiencyRating(result.energyEfficiency)"
+                        [energyEfficiencyLabelImageUrl]="
+                          getEnergyEfficiencyLabelImageUrl(result.energyEfficiencyLabelImageUrl)
+                        "
+                        [arrowSize]="'small'"
+                      ></app-energy-efficiency-label>
+                    </div>
+
+                    <div class="direct-prod-info" [id]="'cart-search-title' + i">
+                      <h3 class="ellipsis" [title]="result?.name | stripHTMLTags" [innerHTML]="result?.name"></h3>
+                    </div>
+
+                    <div class="direct-prod-art">
+                      <p>
+                        <strong id="homepage.artNr">{{ 'homepage.artNr' | cxTranslate }}</strong>
+                        {{ result?.articleNr | articleNumber }}
+                      </p>
+                    </div>
+
+                    <div class="direct-prod-price" [id]="'cart-search-price' + i">
+                      {{ result?.priceData?.price }}
+                    </div>
+
+                    <div class="direct-prod-currency" [id]="'cart-search-currency' + i">
+                      <p>
+                        {{ result.itemMin }}
+                        {{ 'cart.directorder.pieces' | cxTranslate }}
+                      </p>
+                      <sub>{{ result?.priceData?.currency }}</sub>
+                    </div>
+                  </div>
+
+                  <div class="direct-prod__btn" [id]="'cart-search-select-button' + i">
+                    <button class="btn mat-button mat-button--action-green" (click)="selectProduct(result)">
+                      {{ 'form.select' | cxTranslate }}
+                    </button>
+                  </div>
+                </li>
+              </ng-container>
+            </ul>
+          </ng-container>
+        </div>
+        <app-numeric-stepper
+          [ids]="numericStepperID"
+          [control]="this.addToCartForm.get('quantity')"
+          [minimumQuantity]="product?.itemMin ? +product?.itemMin : 1"
+          [quantityStep]="product?.itemStep ? +product?.itemStep : 1"
+          [productCode]="product?.code"
+          [isCart]="true"
+        ></app-numeric-stepper>
+
+        <ng-container *ngIf="{ isAddToCartDisabled: isAddToCartDisabled$ | async } as wrapper">
+          <div class="add-to-cart__button" [class.isDisabled]="wrapper.isAddToCartDisabled">
+            <button
+              class="btn cart-button"
+              id="quickSearch-add-to-cart"
+              [disabled]="(isRecalculateInProgress_ | async) || wrapper.isAddToCartDisabled"
+              (click)="onAddToCart()"
+            >
+              <span id="form.add_to_cart">
+                {{ 'form.add_to_cart' | cxTranslate }}
+              </span>
+            </button>
+            <div *ngIf="wrapper.isAddToCartDisabled" class="add-to-cart__button-disabled-tooltip">
+              <app-tooltip size="sm" position="bottom" textAlign="center" tooltipID="quick_search_add_to_cart_tooltip">
+                {{ 'product.product_info.add_to_cart_disabled' | cxTranslate }}
+              </app-tooltip>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="userId$ | async as userId">
+    <div *ngIf="selectedTab === 2 || selectedTab === 3" class="tabs-holder__content">
+      <div class="tabs-holder__content__item">
+        <a
+          *ngIf="selectedTab === 2"
+          class="mat-button mat-button--action-red"
+          id="cart.select_shop_list"
+          [class.disabled]="userId === 'anonymous'"
+          routerLink="/shopping"
+        >
+          {{ 'cart.select_shop_list' | cxTranslate }}
+        </a>
+
+        <a
+          *ngIf="selectedTab === 3"
+          class="mat-button mat-button--action-red"
+          id="cart.upload_csv_xls"
+          [class.disabled]="userId === 'anonymous'"
+          routerLink="/bom-tool"
+        >
+          {{ 'cart.upload_csv_xls' | cxTranslate }}
+        </a>
+
+        <p *ngIf="userId === 'anonymous'" id="cart-tabs-login-link">
+          {{ 'login.must_login_action' | cxTranslate }}
+          <a (click)="redirectToLogin()">
+            {{ 'login.login_account' | cxTranslate }}
+          </a>
+        </p>
+      </div>
+    </div>
+  </ng-container>
+</div>

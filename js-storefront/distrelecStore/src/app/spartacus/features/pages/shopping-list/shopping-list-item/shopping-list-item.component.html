@@ -1,0 +1,120 @@
+<div class="row shopping-list-row">
+  <div class="col-1 shopping-list-row__form-checkbox">
+    <input
+      #selectedProduct
+      class="js-select-product"
+      [id]="'shoppingList_select_product_' + itemIndex"
+      [disabled]="addToCartForm.get('quantity')?.disabled || isMaximumQuantityReached()"
+      [attr.data-product-id]="item.product?.code"
+      (change)="onSelected($event, item)"
+      type="checkbox"
+    />
+  </div>
+  <div class="col-3 col-md-2 shopping-list-row__image-container">
+    <ng-container *ngIf="item?.product?.activePromotionLabels[0]">
+      <div class="product-label-wrap">
+        <div class="top-label">
+          <span
+            class="top-label-name"
+            [class.new-label]="item?.product?.activePromotionLabels[0].nameEN === 'New'"
+            [class]="
+              item?.product?.activePromotionLabels[0].code === 'noMover'
+                ? 'bundle'
+                : item?.product?.activePromotionLabels[0].code
+            "
+          >
+            {{ item?.product?.activePromotionLabels[0].label }}
+          </span>
+        </div>
+      </div>
+    </ng-container>
+    <div *ngFor="let image of item?.product?.images" class="img-holder">
+      <ng-container *ngIf="image?.format === 'portrait_small' && image?.imageType === 'PRIMARY'">
+        <picture class="item-image">
+          <source [srcset]="useWebpImg('portrait_small_webp', item?.product?.images, image)" />
+          <img [alt]="item?.product?.name" [id]="'shoppingList_product_image_' + i" [src]="image?.url" />
+        </picture>
+      </ng-container>
+    </div>
+    <div *ngIf="item?.product?.energyEfficiency">
+      <app-energy-efficiency-label
+        [id]="item?.product?.code + '-energy-efficiency-label'"
+        [energyEfficiency]="item?.product?.energyEfficiency"
+        [energyEfficiencyLabelImageUrl]="getEnergyEfficiencyLabelImageUrl(item?.product?.energyEfficiencyLabelImage)"
+      ></app-energy-efficiency-label>
+    </div>
+  </div>
+  <div class="col-7 col-md-9 pull-right">
+    <div class="shopping-list-row__top-header">
+      <div class="list-attribs">
+        <h3
+          class="shopping-list-row__title"
+          [innerHTML]="item?.product?.name"
+          [id]="'shoppingList_product_title_' + itemIndex"
+        ></h3>
+        <div class="productlist-container">
+          <div class="productlist-container__data">
+            <span class="label" [id]="'shoppingList_product_article_num' + itemIndex">
+              {{ 'homepage.artNr' | cxTranslate }}
+            </span>
+            <span class="value" [id]="'js-product-code-' + item?.product?.code">
+              {{ item?.product?.code | articleNumber }}
+            </span>
+          </div>
+          <div class="productlist-container__data">
+            <span class="label" [id]="'shoppingList_product_mpn' + itemIndex">
+              {{ 'shoppingList.manPartNum' | cxTranslate }}
+            </span>
+            <span class="value" [id]="'shoppingList_product_type_name' + itemIndex">
+              {{ item?.product?.typeName }}
+            </span>
+          </div>
+          <div class="productlist-container__data">
+            <span class="label" [id]="'shoppingList_product_packing_unit' + itemIndex">
+              {{ 'shoppingList.packingUnit' | cxTranslate }}
+            </span>
+            <span class="value" [id]="'shoppingList_product_sales_unit' + itemIndex">
+              {{ item?.product?.salesUnit }}
+            </span>
+          </div>
+        </div>
+        <div class="cart-wrap">
+          <a
+            class="remove-link"
+            [id]="'shoppingList_product_remove' + itemIndex"
+            (click)="remove(listId, item?.product?.code)"
+          >
+            {{ 'shoppingList.remove' | cxTranslate }}
+          </a>
+
+          <ng-container *ngIf="availability$ | async as availabilityData">
+            <app-numeric-stepper
+              [ids]="ids"
+              [minimumQuantity]="item?.product?.orderQuantityMinimum"
+              [quantityStep]="item?.product?.orderQuantityStep"
+              [productCode]="item?.product?.code"
+              [control]="addToCartForm.get('quantity')"
+              [availabilityData]="availabilityData"
+              [salesStatus]="item?.product?.salesStatus"
+              [isCart]="false"
+              [inputDelay]="1000"
+            ></app-numeric-stepper>
+          </ng-container>
+        </div>
+      </div>
+      <app-shopping-list-pricing
+        [productCode]="item?.product?.code"
+        [productQty]="addToCartForm.get('quantity')?.value"
+        [prices]="prices"
+        [salesUnit]="item?.product?.salesUnit"
+        [indexingPos]="itemIndex"
+      ></app-shopping-list-pricing>
+    </div>
+  </div>
+  <ng-container *ngIf="isItemRemoved">
+    <div class="spinner-wrapper">
+      <app-component-loading-spinner></app-component-loading-spinner>
+    </div>
+    <div class="spinner-backdrop"></div>
+  </ng-container>
+</div>

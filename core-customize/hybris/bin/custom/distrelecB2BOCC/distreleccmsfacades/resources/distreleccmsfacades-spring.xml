@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="distrelecCmsFacadesSystemSetup" class="com.namics.distrelec.cms.setup.DistrelecCmsFacadesSystemSetup">
+        <!-- constructor arg injection example -->
+        <constructor-arg ref="distrelecCmsFacadesService"/>
+    </bean>
+
+    <bean id="distrelecCmsFacadesService"
+          class="com.namics.distrelec.cms.service.impl.DefaultDistrelecCmsFacadesService">
+        <!-- setter injection example -->
+        <property name="modelService" ref="modelService"/>
+        <property name="mediaService" ref="mediaService"/>
+        <property name="flexibleSearchService" ref="flexibleSearchService"/>
+    </bean>
+
+    <alias name="extendedMediaPopulator" alias="basicMediaModelPopulator"/>
+    <bean id="extendedMediaPopulator" class="com.namics.distrelec.cms.populators.DistrelecMediaPopulator"
+          parent="defaultCmsBasicMediaModelPopulator">
+        <property name="baseSiteService" ref="baseSiteService"/>
+        <property name="siteBaseUrlResolutionService" ref="siteBaseUrlResolutionService"/>
+    </bean>
+
+    <alias name="distrelecContentSlotModelToDataRenderingPopulator" alias="cmsSlotModelToDataRenderingPopulator"/>
+    <bean id="distrelecContentSlotModelToDataRenderingPopulator"
+          class="com.namics.distrelec.cms.populators.DistrelecContentSlotModelToDataRenderingPopulator"
+          parent="defaultSlotModelToDataRenderingPopulator">
+        <property name="cmsComponentContainerRegistry" ref="cmsComponentContainerRegistry"/>
+    </bean>
+
+    <alias name="distrelecCMSNavigationNodeModelToDataRenderingPopulator"
+           alias="cmsNavigationNodeModelToDataRenderingPopulator"/>
+    <bean id="distrelecCMSNavigationNodeModelToDataRenderingPopulator"
+          class="com.namics.distrelec.cms.populators.DistrelecNavigationNodeModelToDataRenderingPopulator">
+        <property name="cmsNavigationNodeModelToDataRenderingPopulator"
+                  ref="defaultCMSNavigationNodeModelToDataRenderingPopulator"/>
+    </bean>
+
+    <alias name="distPageRenderingService" alias="cmsPageRenderingService"/>
+    <bean id="distPageRenderingService" class="com.namics.distrelec.cms.rendering.DistPageRenderingService">
+        <property name="defaultPageRenderingService" ref="defaultPageRenderingService"/>
+    </bean>
+
+</beans>

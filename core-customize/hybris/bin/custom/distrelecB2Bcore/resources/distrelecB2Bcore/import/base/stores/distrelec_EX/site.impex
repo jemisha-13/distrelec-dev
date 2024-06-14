@@ -1,0 +1,47 @@
+#
+# Import the CMS Site configuration for the Distrelec EX store
+#
+$productCatalog=distrelecProductCatalog
+$contentCatalog=distrelec_EXContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$defaultLanguage=en
+$storeUidB2C=distrelec_EX_b2c
+$storeUidB2B=distrelec_EX_b2b
+$siteUid=distrelec_EX
+$siteUrlBrand=distrelec
+$siteUrlCountry=biz
+$siteUrlPattern=$siteUrlBrand-$siteUrlCountry
+$salesOrgCode=7801
+$countryCode=EX
+$defaultCurrency=EUR
+$currencies=EUR,USD
+
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+# Load the storefront context root config param
+$storefrontContextRoot=$config-b2bStorefrontContextRoot
+
+# CMS Site
+INSERT_UPDATE CMSSite;uid[unique=true];country(isocode);defaultCurrency(isocode);registrationCurrencies(isocode);salesOrg(code);userPriceGroup(code);userTaxGroup(code);theme(code);channel(code);stores(uid);contentCatalogs(id);defaultCatalog(id);defaultLanguage(isoCode);urlPatterns;active;previewURL;startingPage(uid,$contentCV);shippingOptionsEditable;paymentOptionsEditable;redirect404
+;$siteUid;$countryCode;$defaultCurrency;$currencies;$salesOrgCode;SalesOrg_UPG_7801_01;SalesOrg_UTG_7801;green;B2B;$storeUidB2C,$storeUidB2B;$contentCatalog;$productCatalog;$defaultLanguage;(?i)^https?://[^/]+(/[^?]*)?\?(.*\&)?(site=$siteUrlPattern)(|\&.*)$,(?i)^https?://$siteUrlPattern\.[^/]+(|/.*|\?.*)$,https?://dev\.hybris\.$siteUrlBrand\.[^/]+(|/.*|\?.*)$,https?://.*\.$siteUrlBrand\.$siteUrlCountry.*,https?://prod\.$siteUrlPattern\.$siteUrlBrand\.[^/]+(|/.*|\?.*)$,https?://dev\.$siteUrlPattern\.$siteUrlBrand\.[^/]+(|/.*|\?.*)$;true;$storefrontContextRoot/?site=$siteUrlPattern;;true;true;/
+
+
+# Set url patterns
+UPDATE CMSSite;uid[unique=true];productUrlPattern
+;$siteUid;"/{language}/{product-name}-{manufacturer-name}-{product-type}/p/{product-code}"
+
+UPDATE CMSSite;uid[unique=true];catalogPlusProductUrlPattern
+;$siteUid;"/{language}/{product-name}-{manufacturer-name}-{product-type}-{supplierAID}/p/serviceplus/{product-code}"
+
+
+UPDATE CMSSite;uid[unique=true];categoryUrlPattern
+;$siteUid;"/{language}/{category-path}/c/{category-code}"
+
+UPDATE CMSSite;uid[unique=true];contentUrlPattern
+;$siteUid;"/{language}/{page-title}/cms/{page-label}"
+
+
+# Set pickup locations
+UPDATE CMSSite;uid[unique=true];pickupWarehouses(code);exclusiveFastWarehouses(code);exclusiveSlowWarehouses(code);externalFastWarehouses(code);externalSlowWarehouses(code);fastWarehouses(code);slowWarehouses(code)
+;$siteUid;"";"";"";"EF71";"ES71";"7371";""

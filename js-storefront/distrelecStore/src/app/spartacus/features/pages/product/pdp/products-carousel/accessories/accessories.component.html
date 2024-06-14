@@ -1,0 +1,51 @@
+<ng-container *ngIf="availableAccessories$ | async as availableAccessories">
+  <div
+    *ngIf="availableAccessories.length !== 0"
+    class="container accessories"
+    [id]="'pdp_' + accessoryType + '_accessories'"
+    [class.d-none]="isLoading$ | async"
+    [class.no-view-button]="availableAccessories.length <= 4"
+  >
+    <h3 class="header-title" [id]="'pdp_' + accessoryType + '_accessories_title'">
+      {{ title }}
+    </h3>
+
+    <div class="row accessories-row">
+      <div
+        *ngFor="let product of availableAccessories | slice: 0 : showTotal; let index = index"
+        class="col mw-50 accessories-item"
+        [class.d-none-ipad]="
+          !collapsed && (isLessThanDesktop$ | async) && index >= 3 && availableAccessories.length >= 4
+        "
+      >
+        <app-accessories-card-holder
+          [product]="product"
+          [index]="index"
+          [itemListEntity]="itemListEntity"
+          [accessoryType]="accessoryType"
+        ></app-accessories-card-holder>
+      </div>
+    </div>
+
+    <ng-container
+      *ngIf="availableAccessories.length > 4 || ((isLessThanDesktop$ | async) && availableAccessories.length === 4)"
+    >
+      <div class="view-button" [class.hideIfMobile]="availableAccessories.length === 4">
+        <app-dist-button
+          [buttonId]="'pdp_' + accessoryType + '_accessories_view_button'"
+          (click)="onViewAllOrLess(availableAccessories.length)"
+          type="outlined"
+          size="large"
+          width="w-fill"
+        >
+          <ng-container *ngIf="!collapsed">
+            <span>{{ 'product.accessories.view_all' | cxTranslate }}</span>
+          </ng-container>
+          <ng-container *ngIf="collapsed">
+            <span>{{ 'product.accessories.view_less' | cxTranslate }}</span>
+          </ng-container>
+        </app-dist-button>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>

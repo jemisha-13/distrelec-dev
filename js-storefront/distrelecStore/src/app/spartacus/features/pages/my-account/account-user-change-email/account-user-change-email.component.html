@@ -1,0 +1,98 @@
+<ng-container *ngIf="userDetails$ | async as userDetail" class="account-information-main">
+  <div class="row">
+    <div class="col-lg-12">
+      <hr />
+    </div>
+    <div class="col-lg-12">
+      <h2 id="accountInformation_change_email">
+        {{ 'form.change_email_or_login' | cxTranslate }}
+        <br />
+        <br />
+      </h2>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label
+      class="col-sm-5 col-form-label text-eplipsis"
+      id="accountUserChangeEmail-firstName"
+      for="accountUserChangeEmail-contactAddress"
+    >
+      {{ 'form.email_address_or_login' | cxTranslate }}
+    </label>
+    <div class="col-sm-7 col-lg-6">
+      <label class="col-form-label text-eplipsis" id="accountUserChangeEmail-contactAddress">
+        {{ userDetail.contactAddress.email }}
+      </label>
+    </div>
+  </div>
+
+  <form [formGroup]="userEmailChangeForm" name="userEmailLoginChange">
+    <app-action-message id="userChangeId" [type]="responseType" [message]="responseMessage"></app-action-message>
+    <div class="form-group row">
+      <label
+        class="col-sm-5 col-form-label text-eplipsis"
+        id="accountUserChangeEmail-emailOrLogin"
+        for="accountUserChangeEmail.emailOrLogin"
+      >
+        {{ 'form.new_email_or_login' | cxTranslate }} *
+      </label>
+      <div class="col-sm-7 col-lg-6">
+        <input
+          class="form-control"
+          id="accountUserChangeEmail.emailOrLogin"
+          [(ngModel)]="userNewEmail"
+          [class.is-correct]="userEmailChangeForm.get('email').valid"
+          [class.is-invalid]="userEmailChangeForm.get('email').errors && userEmailChangeForm.get('email').touched"
+          type="text"
+          formControlName="email"
+        />
+        <small
+          *ngIf="userEmailChangeForm.get('email').errors && userEmailChangeForm.get('email').touched"
+          class="error"
+        >
+          {{ 'validations.email_error_invalid' | cxTranslate }}
+        </small>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-5 col-form-label" id="accountUserChangeEmail-password" for="accountUserChangeEmail.password">
+        {{ 'form.password' | cxTranslate }} *
+      </label>
+      <div class="col-sm-7 col-lg-6">
+        <input
+          class="form-control"
+          id="accountUserChangeEmail.password"
+          [(ngModel)]="password"
+          [class.is-correct]="userEmailChangeForm.get('password').valid"
+          [class.is-invalid]="userEmailChangeForm.get('password').errors && userEmailChangeForm.get('password').touched"
+          type="password"
+          formControlName="password"
+        />
+        <small
+          *ngIf="userEmailChangeForm.get('password').errors && userEmailChangeForm.get('password').touched"
+          class="error"
+        >
+          {{ 'validations.enter_pwd' | cxTranslate }}
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-5 col-form-label" id="accountUserChangeEmail-button" for="buttonChange"></label>
+      <div class="col-sm-7 col-lg-6">
+        <button
+          class="btn btn-secondary btn-distrelec float-right ellipsis"
+          [disabled]="buttonDisabled"
+          [class.disabled-button]="!userEmailChangeForm.valid"
+          (click)="changeUserEmail()"
+        >
+          {{ (updating ? 'form.please_wait' : 'form.change') | cxTranslate }}
+          <div class="float-right mr-2">
+            <fa-icon *ngIf="!buttonDisabled" [icon]="faAngleRight"></fa-icon>
+          </div>
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-container>

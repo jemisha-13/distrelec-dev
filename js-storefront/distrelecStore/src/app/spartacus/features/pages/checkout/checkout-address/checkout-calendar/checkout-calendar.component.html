@@ -1,0 +1,59 @@
+<ng-container *ngIf="calendarObject_ | async as calendarObject">
+  <div class="checkout-calendar">
+    <div class="calendar__header">
+      <span class="calendar__header--month">
+        {{ calendarObject.date | date: 'MMMM' }} {{ calendarObject.date | date: 'YYYY' }}
+      </span>
+      <span class="calendar__header--selector">
+        <button class="btn" [disabled]="isPreviousMonthDisabled" (click)="updateMonth(-1)">
+          <fa-icon [icon]="faAngleLeft"></fa-icon>
+        </button>
+        <button class="btn" [disabled]="isNextMonthDisabled" (click)="updateMonth(1)">
+          <fa-icon [icon]="faAngleRight"></fa-icon>
+        </button>
+      </span>
+    </div>
+    <div class="calendar__body">
+      <div class="calendar__body--day-names">
+        <div class="holder larger-container">
+          <div class="row">
+            <span class="col" id="Monday">M</span>
+            <span class="col" id="Tuesday">T</span>
+            <span class="col" id="Wednesday">W</span>
+            <span class="col" id="Thursday">T</span>
+            <span class="col" id="Friday">F</span>
+            <span class="col" id="Saturday">S</span>
+            <span class="col" id="Sunday">S</span>
+            <div class="w-100"></div>
+          </div>
+        </div>
+      </div>
+      <div class="calendar__body__days">
+        <div class="holder">
+          <div class="row">
+            <ng-container *ngFor="let date of calendarObject.days; let i = index">
+              <ng-container *ngIf="date">
+                <div class="col">
+                  <button
+                    class="btn"
+                    [ngClass]="date.attribute"
+                    [disabled]="date.attribute === 'past' || date.attribute === 'today'"
+                    [id]="date.date | date: 'd'"
+                    (click)="onCalendarDateClick(date.date)"
+                  >
+                    {{ date.date | date: 'd' }}
+                  </button>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!date">
+                <div class="col">
+                  <button class="btn"></button>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

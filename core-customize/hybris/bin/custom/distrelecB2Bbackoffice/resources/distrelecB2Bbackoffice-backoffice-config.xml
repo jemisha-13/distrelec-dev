@@ -1,0 +1,1068 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2018 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+<config xmlns="http://www.hybris.com/cockpit/config">
+
+    <context merge-by="module" component="explorer-tree">
+        <explorer-tree xmlns="http://www.hybris.com/cockpitng/config/explorertree">
+            <navigation-node id="hmc_treenode_user">
+                <type-node id="hmc_typenode_Consent" code="Consent" merge-mode="remove"/>
+                <type-node id="hmc_typenode_ConsentTemplate" code="ConsentTemplate" merge-mode="remove"/>
+            </navigation-node>
+            <navigation-node id="hmc_treenode_order">
+                <type-node id="hmc_typenode_quote" code="Quote" merge-mode="remove"/>
+                <type-node id="hmc_typenode_quoteentry" code="QuoteEntry" merge-mode="remove"/>
+            </navigation-node>
+            <navigation-node id="hmc_treenode_marketing">
+                <navigation-node id="hmc_treenode_orderstatistics">
+                    <type-node id="hmc_typenode_customerorderoverview" code="CustomerOrderOverview" position="0"/>
+                </navigation-node>
+            </navigation-node>
+        </explorer-tree>
+    </context>
+    <context merge-by="type" parent="AbstractOrder" type="Order" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.properties" merge-mode="remove"/>
+            <tab name="hmc.positions_and_prices">
+                <section name="hmc.positions">
+                    <attribute qualifier="entries" merge-mode="remove"/>
+                    <attribute qualifier="entryGroups" merge-mode="remove"/>
+                </section>
+            </tab>
+            <tab name="hmc.administration">
+                <section name="hmc.properties" position="1">
+                    <panel colspan="2" name="panel.orderProcess">
+                        <attribute qualifier="orderProcess"
+                                   editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor">
+                            <editor-parameter>
+                                <name>listConfigContext</name>
+                                <value>inlineshortcut-Order-orderProcess</value>
+                            </editor-parameter>
+                        </attribute>
+                    </panel>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type"
+             type="OrderProcess"
+             component="inlineshortcut-Order-orderProcess">
+        <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+            <column qualifier="code" width="150px"/>
+            <column qualifier="order" width="200px"/>
+            <column qualifier="processDefinitionName" width="150px"/>
+            <column qualifier="processState" width="150px"/>
+            <column qualifier="state" width="150px"/>
+            <column qualifier="endMessage" width="200px"/>
+        </list-view>
+    </context>
+    <context merge-by="type"
+             type="AbstractDistPaymentMode"
+             parent="StandardPaymentMode"
+             component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.paymentmodecosts" merge-mode="remove"/>
+        </editorArea>
+    </context>
+    <context merge-by="type"
+             type="DistDeliveryMode"
+             parent="AbstractDistDeliveryMode"
+             component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.properties">
+                <section name="hmc.properties">
+                    <attribute qualifier="name" merge-mode="remove"/>
+                    <attribute qualifier="description" merge-mode="remove"/>
+                    <attribute qualifier="active" merge-mode="remove"/>
+                    <attribute qualifier="supportedPaymentModes" merge-mode="remove"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type"
+             type="CMSItem"
+             parent="GenericItem"
+             component="advanced-search">
+        <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch">
+            <field-list>
+                <field name="uid" selected="true" position="0"/>
+                <field name="name" selected="true" position="1"/>
+                <field name="catalogVersion" selected="true" position="2"/>
+            </field-list>
+        </advanced-search>
+    </context>
+    <context merge-by="type"
+             type="CMSItem"
+             parent="GenericItem"
+             component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <essentials>
+                <essentialSection name="hmc.essential">
+                    <attribute qualifier="uid"/>
+                    <attribute qualifier="name"/>
+                    <attribute qualifier="catalogVersion"/>
+                </essentialSection>
+            </essentials>
+        </editorArea>
+    </context>
+    <context merge-by="type"
+             type="SapReturnRequest"
+             parent="GenericItem"
+             component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.properties">
+                <section name="hmc.common" columns="1">
+                    <panel colspan="2" name="panel.sapReturnRequestEntries">
+                        <attribute qualifier="sapReturnRequestEntries"
+                                   editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor">
+                            <editor-parameter>
+                                <name>listConfigContext</name>
+                                <value>referencecollectioneditor-SapReturnRequest-sapReturnRequestEntries</value>
+                            </editor-parameter>
+                        </attribute>
+                    </panel>
+                    <attribute qualifier="sapReturnRequestEntries" merge-mode="remove"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type"
+             type="SapReturnRequestEntry"
+             component="referencecollectioneditor-SapReturnRequest-sapReturnRequestEntries">
+        <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+            <column qualifier="sapReturnRequest"/>
+            <column qualifier="articleNumber" width="150px"/>
+            <column qualifier="quantity" width="150px"/>
+            <column qualifier="reason" width="250px"/>
+        </list-view>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="UserGroup" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="uid"/>
+            <sort-field name="uid" asc="true"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="UserGroup" type="B2BUnit" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="name"/>
+            <field name="erpCustomerID"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="Catalog" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="id"/>
+            <field name="name"/>
+            <sort-field name="id" asc="true"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="CatalogVersion" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="catalog"/>
+            <field name="version"/>
+            <sort-field name="version" asc="true"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="CockpitItemTemplate" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="code"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="Country" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="isoCode"/>
+            <field name="name"/>
+            <sort-field name="isoCode" asc="true"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="Currency" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="isoCode"/>
+            <field name="name"/>
+            <sort-field name="isoCode" asc="true"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="DistCodelist" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="code"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="DistManufacturer" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="code"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="Language" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="isoCode"/>
+            <field name="name"/>
+            <sort-field name="isoCode" asc="true"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="Product" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="name" merge-mode="remove"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="BaseStore" component="base">
+        <base xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <labels>
+                <label>uid+' - '+name</label>
+            </labels>
+        </base>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="BaseStore" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="uid"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="AbstractOrderEntry" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="product"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="BaseSite" type="CMSSite" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.tab.wcms.cockpit.properties">
+                <section name="hmc.section.wcms.cockpit.preview.information">
+                    <attribute qualifier="defaultPreviewManufacturer"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type" parent="UserGroup" type="Company" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.tab.groups">
+                <section name="hmc.section.groups" columns="2">
+                    <panel name="panel.members">
+                        <attribute qualifier="groups"/>
+                        <attribute qualifier="members"
+                                   editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor">
+                            <editor-parameter>
+                                <name>listConfigContext</name>
+                                <value>referencecollectioneditor-Company-members</value>
+                            </editor-parameter>
+                        </attribute>
+                    </panel>
+                    <attribute qualifier="groups" merge-mode="remove"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type" type="Principal" component="referencecollectioneditor-Company-members">
+        <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+            <column qualifier="uid" width="300px"/>
+        </list-view>
+    </context>
+    <context merge-by="type" type="B2BUnit" parent="GenericItem" component="advanced-search">
+        <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch">
+            <field-list>
+                <field selected="true" name="uid" operator="contains" position="0"/>
+                <field selected="true" name="name" operator="contains" position="1"/>
+                <field name="organizationalNumber" merge-mode="REMOVE"/>
+            </field-list>
+        </advanced-search>
+    </context>
+    <context type="DistB2BBudget" parent="Item" component="create-wizard">
+        <flow id="DistB2BBudgetWizzard" title="create.title(ctx.TYPE_CODE)"
+              xmlns="http://www.hybris.com/cockpitng/config/wizard-config">
+            <prepare id="itemPrepare">
+                <initialize property="newObject" type="ctx.TYPE_CODE"/>
+            </prepare>
+            <step id="step1" label="flow.allmanadatory">
+                <content id="step1.content">
+                    <property-list enable-non-declared-includes="true" include-non-declared-mandatory="true"
+                                   include-non-declared-unique="true" include-non-declared-writable-on-creation="true"
+                                   root="newObject">
+                        <property qualifier="code"/>
+                        <property qualifier="name"/>
+                        <property qualifier="orderBudget"/>
+                        <property qualifier="originalYearlyBudget"/>
+                        <property qualifier="yearlyBudget"/>
+                    </property-list>
+                </content>
+                <navigation id="step1.navigation">
+                    <cancel/>
+                    <done>
+                        <save property="newObject"/>
+                    </done>
+                </navigation>
+            </step>
+        </flow>
+    </context>
+    <context merge-by="type" parent="Customer" type="B2BCustomer" component="advanced-search">
+        <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch">
+            <field-list>
+                <field name="uid" operator="contains" selected="true"/>
+                <field name="name" operator="contains" selected="true"/>
+                <field name="customerType" selected="false"/>
+            </field-list>
+        </advanced-search>
+    </context>
+    <context merge-by="type" parent="User" type="B2BCustomer" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="name"/>
+            <field name="customerID"/>
+            <field name="erpContactID"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="AbstractOrder" type="Order" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="erpOrderCode"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" parent="AbstractOrder" type="Order" component="listview">
+        <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+            <column qualifier="erpOrderCode" width="150px"/>
+        </list-view>
+    </context>
+    <context merge-by="module" type="B2BCustomer" component="editorareaactions">
+        <actions xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <group qualifier="common">
+                <label>actiongroup.common</label>
+                <action action-id="de.hybris.platform.b2bcommerce.backoffice.actions.disableb2bcustomeraction"
+                        property="currentObject" merge-mode="remove"/>
+                <action action-id="de.hybris.platform.b2bcommerce.backoffice.actions.enableb2bcustomeraction"
+                        property="currentObject" merge-mode="remove"/>
+                <action action-id="com.namics.distrelec.b2b.backoffice.actions.enabledistb2bcustomeraction"
+                        property="currentObject"/>
+                <action action-id="com.namics.distrelec.b2b.backoffice.actions.disabledistb2bcustomeraction"
+                        property="currentObject"/>
+            </group>
+        </actions>
+    </context>
+    <context merge-by="module" type="B2BUnit" component="editorareaactions">
+        <y:actions xmlns:y="http://www.hybris.com/cockpit/config/hybris">
+            <y:group qualifier="common">
+                <y:label>actiongroup.common</y:label>
+                <y:action action-id="de.hybris.platform.b2bcommerce.backoffice.actions.disableb2bunitaction"
+                          property="currentObject"  merge-mode="remove"/>
+                <y:action action-id="de.hybris.platform.b2bcommerce.backoffice.actions.enableb2bunitaction"
+                          property="currentObject" merge-mode="remove"/>
+                <y:action action-id="com.namics.distrelec.b2b.backoffice.actions.enabledistb2bunitaction"
+                        property="currentObject"/>
+                <y:action action-id="com.namics.distrelec.b2b.backoffice.actions.disabledistb2bunitaction"
+                        property="currentObject"/>
+                <y:action action-id="de.hybris.platform.b2bcommerce.backoffice.actions.generatereportingsetaction"
+                          property="currentObject"/>
+            </y:group>
+        </y:actions>
+    </context>
+    <context merge-by="module" type="CMSSite" component="editorareaactions">
+        <actions xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <group qualifier="common">
+                <label>actiongroup.common</label>
+                <action action-id="com.namics.distrelec.b2b.backoffice.actions.activatemaintenanceaction"
+                        property="currentObject"/>
+                <action action-id="com.namics.distrelec.b2b.backoffice.actions.deactivatemaintenanceaction"
+                        property="currentObject"/>
+            </group>
+        </actions>
+    </context>
+    <context type="CMSSite" component="listviewactions">
+        <actions xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <group qualifier="common">
+                <action action-id="com.namics.distrelec.b2b.backoffice.actions.activatemaintenanceaction" property="selectedObjects"/>
+                <action action-id="com.namics.distrelec.b2b.backoffice.actions.deactivatemaintenanceaction" property="selectedObjects"/>
+            </group>
+        </actions>
+    </context>
+    <context merge-by="type" type="B2BCustomer" parent="Customer" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.orders">
+                <section name="hmc.section.orders">
+                    <panel name="panel.orders">
+                        <attribute qualifier="orders"
+                                   editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor">
+                            <editor-parameter>
+                                <name>listConfigContext</name>
+                                <value>referencecollectioneditor-B2BCustomer-orders</value>
+                            </editor-parameter>
+                        </attribute>
+                        <attribute qualifier="carts"
+                                   editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor">
+                            <editor-parameter>
+                                <name>listConfigContext</name>
+                                <value>referencecollectioneditor-B2BCustomer-carts</value>
+                            </editor-parameter>
+                        </attribute>
+                    </panel>
+                    <attribute qualifier="orders" merge-mode="remove"/>
+                    <attribute qualifier="carts" merge-mode="remove"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type"
+             type="Order"
+             component="referencecollectioneditor-B2BCustomer-orders">
+        <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+            <column qualifier="code"/>
+            <column qualifier="date"/>
+            <column qualifier="totalPrice"/>
+            <column qualifier="currency"/>
+        </list-view>
+    </context>
+    <context merge-by="type"
+             type="Cart">
+        <context component="referencecollectioneditor-B2BCustomer-carts">
+            <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+                <column qualifier="code"/>
+                <column qualifier="date"/>
+                <column qualifier="totalPrice"/>
+                <column qualifier="currency"/>
+            </list-view>
+        </context>
+
+        <context component="advanced-search">
+            <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch" disable-simple-search="true">
+                <field-list>
+                    <field selected="true" name="code" operator="contains"/>
+                    <field selected="true" name="date" operator="greater"/>
+                    <field selected="true" name="user" operator="equals"/>
+                    <field selected="true" name="site" operator="equals"/>
+                    <field selected="true" name="store" operator="equals"/>
+                    <field selected="true" name="erpOrderCode" operator="startsWith"/>
+                </field-list>
+            </advanced-search>
+        </context>
+    </context>
+    <context merge-by="type" type="B2BUnit" parent="GenericItem" component="collection-browser">
+        <collection-browser xmlns="http://www.hybris.com/cockpitng/config/collectionbrowser">
+            <available-molds default-mold="tree-view">
+                <mold spring-bean="listViewCollectionBrowserMoldStrategy"/>
+                <mold spring-bean="treeViewCollectionBrowserMoldStrategy"/>
+            </available-molds>
+        </collection-browser>
+    </context>
+    <context merge-by="type"
+             type="B2BCustomer"
+             parent="GenericItem"
+             component="collection-browser-tree"
+             tree-context="B2BUnit.members">
+        <tree-collection-nodes xmlns="http://www.hybris.com/cockpitng/component/treeCollection">
+        </tree-collection-nodes>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="ProductTaxGroup" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.properties">
+                <section name="hmc.properties">
+                    <attribute qualifier="code"
+                               editor="com.namics.distrelec.b2b.backoffice.editors.taxrowsfindereditor.TaxRowsFinderEditor"
+                               label="hmc.text.taxgroup.usesearchtogettaxrows"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="UserTaxGroup" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.properties">
+                <section name="hmc.properties">
+                    <attribute qualifier="code"
+                               editor="com.namics.distrelec.b2b.backoffice.editors.taxrowsfindereditor.TaxRowsFinderEditor"
+                               label="hmc.text.taxgroup.usesearchtogettaxrows"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="Product" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.tab.product.prices">
+                <section name="hmc.section.product.pricesdiscounts">
+                    <panel name="panel.europe1Discounts" merge-mode="remove"/>
+                </section>
+                <section name="hmc.section.product.discounts">
+                    <panel colspan="2" name="panel.europe1Discounts">
+                        <attribute qualifier="europe1Discounts"
+                                   editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor">
+                            <editor-parameter>
+                                <name>listConfigContext</name>
+                                <value>referencecollectioneditor-Product-europe1Discounts</value>
+                            </editor-parameter>
+                            <editor-parameter>
+                                <name>inlineEditing</name>
+                                <value>true</value>
+                            </editor-parameter>
+                        </attribute>
+                    </panel>
+                </section>
+            </tab>
+            <tab name="hmc.tab.product.futurestock" position="34">
+                <section name="hmc.section.product.futurestock">
+                    <attribute editor="com.namics.distrelec.b2b.backoffice.editors.FutureStockFinderEditor"
+                               qualifier="futureStocks" label="hmc.text.product.usesearchtogetfuturestock"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="Company" component="tree-view-base">
+        <base xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <labels>
+                <label>uid+' - '+name+' - '+erpCustomerID</label>
+            </labels>
+        </base>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="Product" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.tab.product.futurestock" position="34">
+                <section name="hmc.section.product.futurestock">
+                    <attribute editor="com.namics.distrelec.b2b.backoffice.editors.FutureStockFinderEditor"
+                               qualifier="futureStocks" label="hmc.text.product.usesearchtogetfuturestock"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type"
+             type="B2BUnit"
+             parent="Company"
+             component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <essentials>
+                <essentialSection name="hmc.essential">
+                    <attribute qualifier="shippingAddress">
+                        <editor-parameter>
+                            <name>referenceSearchConditionGroupOperator</name>
+                            <value>and</value>
+                        </editor-parameter>
+                        <editor-parameter>
+                            <name>availableValuesProvider</name>
+                            <value>companyAddressValueProvider</value>
+                        </editor-parameter>
+                        <editor-parameter>
+                            <name>referenceSearchCondition_owner</name>
+                            <value>{parentObject}</value>
+                        </editor-parameter>
+                        <editor-parameter>
+                            <name>referenceSearchCondition_shippingAddress</name>
+                            <value>true</value>
+                        </editor-parameter>
+                    </attribute>
+                    <attribute qualifier="billingAddress">
+                        <editor-parameter>
+                            <name>referenceSearchConditionGroupOperator</name>
+                            <value>and</value>
+                        </editor-parameter>
+                        <editor-parameter>
+                            <name>availableValuesProvider</name>
+                            <value>companyAddressValueProvider</value>
+                        </editor-parameter>
+                        <editor-parameter>
+                            <name>referenceSearchCondition_owner</name>
+                            <value>{parentObject}</value>
+                        </editor-parameter>
+                        <editor-parameter>
+                            <name>referenceSearchCondition_billingAddress</name>
+                            <value>true</value>
+                        </editor-parameter>
+                    </attribute>
+                </essentialSection>
+            </essentials>
+        </editorArea>
+    </context>
+    <context merge-by="type"
+             type="Customer"
+             parent="User"
+             component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <essentials>
+                <essentialSection name="hmc.essential" merge-mode="replace">
+                    <attribute qualifier="uid"/>
+                    <attribute qualifier="name"/>
+                    <attribute qualifier="customerID"/>
+                    <attribute qualifier="originalUid"/>
+                    <attribute qualifier="erpContactID"/>
+                    <attribute qualifier="doubleOptInActivated"/>
+                    <attribute qualifier="contactAddress">
+                        <editor-parameter>
+                            <name>referenceSearchConditionGroupOperator</name>
+                            <value>and</value>
+                        </editor-parameter>
+                        <editor-parameter>
+                            <name>availableValuesProvider</name>
+                            <value>customerAddressValueProvider</value>
+                        </editor-parameter>
+                        <editor-parameter>
+                            <name>referenceSearchCondition_owner</name>
+                            <value>{parentObject}</value>
+                        </editor-parameter>
+                        <editor-parameter>
+                            <name>referenceSearchCondition_contactAddress</name>
+                            <value>true</value>
+                        </editor-parameter>
+                    </attribute>
+                </essentialSection>
+            </essentials>
+        </editorArea>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="Customer" component="tree-view-base">
+        <base xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <labels>
+                <label>name + ' [' + uid + '] ' + ' - ' + erpContactID</label>
+            </labels>
+        </base>
+    </context>
+    <context merge-by="type"
+             type="AbstractPage"
+             parent="CMSItem"
+             component="advanced-search">
+        <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch" disable-simple-search="true">
+            <field-list>
+                <field selected="true" name="uid" operator="contains"/>
+                <field selected="true" name="name" operator="contains"/>
+                <field selected="true" name="catalogVersion" operator="equals"/>
+                <field selected="true" name="pageTemplate" operator="equals"/>
+            </field-list>
+        </advanced-search>
+    </context>
+    <context merge-by="type"
+             type="Employee"
+             parent="User"
+             component="advanced-search">
+        <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch" disable-simple-search="true">
+            <field-list>
+                <field selected="true" name="uid" operator="startsWith"/>
+                <field selected="true" name="name" operator="startsWith"/>
+            </field-list>
+        </advanced-search>
+    </context>
+    <context merge-by="type"
+             type="AbstractRestriction"
+             parent="CMSItem"
+             component="advanced-search">
+        <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch" disable-simple-search="true">
+            <field-list>
+                <field selected="true" name="uid" operator="contains"/>
+                <field selected="true" name="name" operator="contains"/>
+                <field selected="true" name="catalogVersion" operator="equals"/>
+            </field-list>
+        </advanced-search>
+    </context>
+    <context merge-by="type"
+             type="ContentSlot"
+             parent="CMSItem"
+             component="advanced-search">
+        <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch" disable-simple-search="true">
+            <field-list>
+                <field selected="true" name="uid" operator="contains"/>
+                <field selected="true" name="name" operator="contains"/>
+                <field selected="true" name="catalogVersion" operator="equals"/>
+                <field selected="true" name="active"/>
+            </field-list>
+        </advanced-search>
+    </context>
+    <context merge-by="type"
+             type="AbstractCMSComponent"
+             parent="CMSItem"
+             component="advanced-search">
+        <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch" disable-simple-search="true">
+            <field-list>
+                <field selected="true" name="uid" operator="contains"/>
+                <field selected="true" name="name" operator="contains"/>
+                <field selected="true" name="catalogVersion" operator="equals"/>
+                <field selected="true" name="visible"/>
+            </field-list>
+        </advanced-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="ClassAttributeAssignment" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <essentials>
+                <essentialSection name="hmc.essential" merge-mode="replace">
+                    <attribute qualifier="classificationClass"/>
+                    <attribute qualifier="classificationAttribute"/>
+                    <attribute qualifier="externalID"/>
+                    <attribute qualifier="attributeType"/>
+                </essentialSection>
+            </essentials>
+            <tab name="hmc.common">
+                <section name="hmc.section.attribute.featureproperties" position="0">
+                    <attribute qualifier="unit"/>
+                    <attribute qualifier="formatDefinition"/>
+                    <attribute qualifier="mandatory"/>
+                    <attribute qualifier="localized"/>
+                    <attribute qualifier="multiValued"/>
+                    <attribute qualifier="range"/>
+                </section>
+                <section name="hmc.section.attribute.visibility" position="1">
+                    <attribute qualifier="visibility"/>
+                    <attribute qualifier="searchable"/>
+                    <attribute qualifier="position"/>
+                    <attribute qualifier="listable"/>
+                    <attribute qualifier="comparable"/>
+                </section>
+                <section name="hmc.section.attribute.pim" position="2">
+                    <attribute qualifier="pimCalculated"/>
+                </section>
+            </tab>
+            <tab name="hmc.tab.classattributeassignment.featurevalues">
+                <section name="hmc.section.attribute.featurevalues">
+                    <attribute qualifier="attributeValues"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context type="Item" component="listviewactions">
+        <actions xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <group qualifier="common">
+                <action action-id="com.hybris.cockpitng.action.clone" property="selectedObjects"/>
+            </group>
+        </actions>
+    </context>
+    <context merge-by="type" parent="User" type="Customer" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.customerprices" merge-mode="remove"/>
+        </editorArea>
+    </context>
+    <context type="OCICustomerConfig" component="create-wizard">
+        <wz:flow xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config" id="OCICustomerConfigWizard"
+                 title="create.ocicustomerconfig.title">
+            <wz:prepare id="configPrepare">
+                <wz:initialize property="newConfig" type="OCICustomerConfig"/>
+            </wz:prepare>
+            <wz:step id="step1" label="create.ocicustomerconfig.properties.label"
+                     sublabel="create.ocicustomerconfig.properties.sublabel">
+                <wz:content>
+                    <wz:property-list root="newConfig">
+                        <wz:property qualifier="company"/>
+                        <wz:property qualifier="restrictCatalogs"/>
+                        <wz:property qualifier="allowedCategories">
+                            <wz:editor-parameter>
+                                <wz:name>referenceSearchCondition_level</wz:name>
+                                <wz:value>1</wz:value>
+                            </wz:editor-parameter>
+                        </wz:property>
+                        <wz:property qualifier="fieldConfigs"/>
+                        <wz:property qualifier="orderFormEncoding"/>
+                        <wz:property qualifier="leadTime"/>
+                        <wz:property qualifier="unit"/>
+                        <wz:property qualifier="vendor"/>
+                        <wz:property qualifier="useLongDesc"/>
+                        <wz:property qualifier="useShipping"/>
+                        <wz:property qualifier="shippingConfig"/>
+                        <wz:property qualifier="encodeHTML"/>
+                        <wz:property qualifier="disableMegaFlyOut"/>
+                        <wz:property qualifier="openInNewWindow"/>
+                        <wz:property qualifier="defaultRedirectURL"/>
+                        <wz:property qualifier="customFooter"/>
+                    </wz:property-list>
+                </wz:content>
+                <wz:navigation id="step1.navigation">
+                    <wz:cancel/>
+                    <wz:done>
+                        <wz:save property="newConfig"/>
+                    </wz:done>
+                </wz:navigation>
+            </wz:step>
+        </wz:flow>
+    </context>
+    <context type="AribaCustomerConfig" component="create-wizard">
+        <wz:flow xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config" id="AribaCustomerConfigWizard"
+                 title="create.aribacustomerconfig.title">
+            <wz:prepare id="configPrepare">
+                <wz:initialize property="newConfig" type="AribaCustomerConfig"/>
+            </wz:prepare>
+            <wz:step id="step1" label="create.aribacustomerconfig.properties.label"
+                     sublabel="create.aribacustomerconfig.properties.sublabel">
+                <wz:content>
+                    <wz:property-list root="newConfig">
+                        <wz:property qualifier="company"/>
+                        <wz:property qualifier="restrictCatalogs"/>
+                        <wz:property qualifier="allowedCategories">
+                            <wz:editor-parameter>
+                                <wz:name>referenceSearchCondition_level</wz:name>
+                                <wz:value>1</wz:value>
+                            </wz:editor-parameter>
+                        </wz:property>
+                        <wz:property qualifier="fieldConfigs"/>
+                        <wz:property qualifier="useBasketFromCustomer"/>
+                        <wz:property qualifier="customFooter"/>
+                        <wz:property qualifier="openInNewWindow"/>
+                        <wz:property qualifier="unit"/>
+                    </wz:property-list>
+                </wz:content>
+                <wz:navigation id="step1.navigation">
+                    <wz:cancel/>
+                    <wz:done>
+                        <wz:save property="newConfig"/>
+                    </wz:done>
+                </wz:navigation>
+            </wz:step>
+        </wz:flow>
+    </context>
+    <context merge-by="type" type="Category" parent="GenericItem" component="collection-browser">
+        <collection-browser xmlns="http://www.hybris.com/cockpitng/config/collectionbrowser">
+            <available-molds default-mold="tree-view">
+                <mold spring-bean="listViewCollectionBrowserMoldStrategy"/>
+                <mold spring-bean="treeViewCollectionBrowserMoldStrategy"/>
+                <mold spring-bean="gridViewCollectionBrowserMoldStrategy"/>
+            </available-molds>
+        </collection-browser>
+    </context>
+    <context merge-by="type" type="ClassificationClass" parent="GenericItem" component="collection-browser-tree"
+             tree-context="_root_">
+        <tree-collection-nodes xmlns="http://www.hybris.com/cockpitng/component/treeCollection">
+            <node attribute="declaredClassificationAttributes"/>
+            <node attribute="categories"/>
+        </tree-collection-nodes>
+    </context>
+    <context merge-by="type" type="Category" parent="GenericItem" component="collection-browser-tree"
+             tree-context="_root_">
+        <tree-collection-nodes xmlns="http://www.hybris.com/cockpitng/component/treeCollection">
+            <node attribute="categories"/>
+            <node attribute="products"/>
+        </tree-collection-nodes>
+    </context>
+    <context merge-by="type" type="StockLevel" parent="GenericItem" component="listview">
+        <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+            <column qualifier="productCode" width="250px"/>
+        </list-view>
+    </context>
+    <context merge-by="type" parent="CMSRelation" type="ContentSlotForPage" component="advanced-search">
+        <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch">
+            <field-list>
+                <field name="uid" selected="true" position="0"/>
+                <field name="catalogVersion" selected="true" position="1"/>
+            </field-list>
+        </advanced-search>
+    </context>
+    <context merge-by="type" parent="CMSRelation" type="ContentSlotForTemplate" component="advanced-search">
+        <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch">
+            <field-list>
+                <field name="uid" selected="true" position="0"/>
+                <field name="catalogVersion" selected="true" position="1"/>
+            </field-list>
+        </advanced-search>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="CMSRelation" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <essentials>
+                <essentialSection name="hmc.essential">
+                    <attribute qualifier="uid"/>
+                    <attribute qualifier="catalogVersion"/>
+                </essentialSection>
+            </essentials>
+        </editorArea>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="Warehouse" component="simple-search">
+        <simple-search xmlns="http://www.hybris.com/cockpitng/config/simplesearch">
+            <field name="name"/>
+        </simple-search>
+    </context>
+    <context merge-by="type" type="Warehouse" parent="GenericItem" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.tab.warehouse.common">
+                <section name="hmc.section.warehouse.stocks" merge-mode="remove"/>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type" type="PrincipalGroup" component="referencecollectioneditor-B2BCustomer-groups">
+        <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+            <column qualifier="locName" merge-mode="remove"/>
+            <column qualifier="backofficeName" width="150px"/>
+        </list-view>
+    </context>
+    <context type="DistPriceRow" component="base">
+        <base xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <labels beanId="distPriceRowLabelProvider"/>
+        </base>
+    </context>
+    <context type="DistSalesOrgProduct" component="base">
+        <base xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <labels>
+                <label>salesOrg.code+' - '+salesOrg.nameErp</label>
+            </labels>
+        </base>
+    </context>
+    <context merge-by="type" type="ClassificationClass" parent="Category" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.tab.category.extendedattributes">
+                <section name="hmc.section.classificationattributes">
+                    <panel name="hmc.panel.classificationattributes">
+                        <attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor"
+                                   qualifier="declaredClassificationAttributeAssignments">
+                            <editor-parameter>
+                                <name>listConfigContext</name>
+                                <value>referenceListView</value>
+                            </editor-parameter>
+                            <editor-parameter>
+                                <name>configurableFlowConfigCtx</name>
+                                <value>create-wizard-no-save</value>
+                            </editor-parameter>
+                        </attribute>
+                    </panel>
+                    <attribute qualifier="declaredClassificationAttributeAssignments" merge-mode="remove"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="ClassAttributeAssignment" component="base">
+        <base xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <labels>
+                <label>
+                    @labelService.getObjectLabel(classificationAttribute) +
+                    (unit != null ? '('+ @labelService.getObjectLabel(unit)+')' : '' )
+                </label>
+                <shortLabel>@labelService.getShortObjectLabel(classificationAttribute)</shortLabel>
+            </labels>
+        </base>
+    </context>
+    <context merge-by="type" type="CMSLinkComponent" parent="Item" component="create-wizard">
+        <flow xmlns="http://www.hybris.com/cockpitng/config/wizard-config" id="CMSItemWizard"
+              title="create.title(ctx.TYPE_CODE)">
+            <step id="step1" label="flow.allmanadatory">
+                <content id="step1.content">
+                    <property-list enable-non-declared-includes="true" include-non-declared-mandatory="true"
+                                   include-non-declared-unique="true" include-non-declared-writable-on-creation="true"
+                                   root="newObject">
+                        <property qualifier="name"/>
+                    </property-list>
+                </content>
+            </step>
+        </flow>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="B2BPermission" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.tab.b2bcostcenter.hierarchy">
+                <section name="hmc.section.b2bpermission.hierarchy.descendants">
+                    <panel name="hmc.section.b2bpermission.hierarchy.descendants">
+                        <attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor"
+                                   qualifier="Customers">
+                            <editor-parameter>
+                                <name>listConfigContext</name>
+                                <value>referenceListViewCustomers</value>
+                            </editor-parameter>
+                        </attribute>
+                    </panel>
+                    <attribute qualifier="Customers" merge-mode="remove"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type" parent="Customer" type="B2BCustomer" component="referenceListViewCustomers">
+        <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+            <column qualifier="type" merge-mode="remove"/>
+            <column qualifier="erpContactID" width="200px"/>
+            <column qualifier="customerType" width="100px"/>
+            <column qualifier="doubleOptInActivated" width="100px"/>
+        </list-view>
+    </context>
+    <context merge-by="type" type="User" parent="Principal" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.password">
+                <section name="hmc.password">
+                    <attribute qualifier="encodedPassword" editor="com.hybris.cockpitng.editor.defaulttext"/>
+                    <attribute qualifier="backOfficeLoginDisabled"/>
+                    <attribute qualifier="hmcLoginDisabled">
+                        <editor-parameter>
+                            <name>trueLabel</name>
+                            <value>hmc.user.hmcLoginDisabled.true</value>
+                        </editor-parameter>
+                        <editor-parameter>
+                            <name>falseLabel</name>
+                            <value>hmc.user.hmcLoginDisabled.false</value>
+                        </editor-parameter>
+                    </attribute>
+                    <attribute qualifier="deactivationDate"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type"
+             type="Country"
+             parent="GenericItem"
+             component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.properties">
+                <section name="hmc.properties">
+                    <panel colspan="2" name="" rowspan="1">
+                        <attribute qualifier="countrySpecificProductAttributes"
+                                   editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor">
+                            <editor-parameter>
+                                <name>listConfigContext</name>
+                                <value>referencecollectioneditor-Country-countrySpecificProductAttributes</value>
+                            </editor-parameter>
+                        </attribute>
+                    </panel>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+    <context merge-by="type"
+             type="ProductCountry"
+             component="referencecollectioneditor-Country-countrySpecificProductAttributes">
+        <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+            <column qualifier="country"/>
+            <column qualifier="product"/>
+        </list-view>
+    </context>
+    <context type="Item" component="listviewactions" merge-by="type">
+        <actions xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <group qualifier="common">
+                <action action-id="com.hybris.cockpitng.listview.action.export.csv" property="exportColumnsAndData"
+                        merge-mode="remove"/>
+                <action action-id="com.namics.distrelec.b2b.backoffice.actions.export.csv" property="exportColumnsAndData"/>
+            </group>
+        </actions>
+    </context>
+    <context type="Company" component="listviewactions" merge-by="type">
+        <actions xmlns="http://www.hybris.com/cockpit/config/hybris">
+            <group qualifier="common">
+                <action action-id="com.hybris.cockpitng.action.create" property="pageable.typeCode" merge-mode="remove"/>
+            </group>
+        </actions>
+    </context>
+    <context merge-by="type" parent="GenericItem" type="ProductReference" component="editor-area">
+        <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+            <tab name="hmc.common">
+                <section name="hmc.section.referencetype">
+                    <attribute qualifier="replacementReason"/>
+                </section>
+            </tab>
+        </editorArea>
+    </context>
+
+    <context type="Media" component="create-wizard" merge-by="type">
+        <wz:flow xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config" id="MediaWizard" title="create.title(ctx.TYPE_CODE)">
+            <wz:step id="step2" label="media.content.label" sublabel="media.content.sublabel">
+                <wz:content id="step2.content" merge-mode="replace">
+                    <wz:property qualifier="mediaContent" position="10"
+                                 type="com.hybris.cockpitng.editor.defaultfileupload.FileUploadResult" editor="com.distrelec.cockpitng.editor.distdndfileupload"/>
+                </wz:content>
+            </wz:step>
+        </wz:flow>
+    </context>
+
+    <context type="ProductReference" component="create-wizard">
+    <wz:flow xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config" id="ProductReferenceWizard" title="create.title(ctx.TYPE_CODE)">
+    <wz:prepare id="productReferencePrepare">
+        <wz:initialize property="newObject" type="ctx.TYPE_CODE"/>
+        <wz:assign property="newObject.source" value="ctx.parentObject"/>
+        <wz:assign property="newObject.preselected" value="false"/>
+        <wz:assign property="newObject.active" value="true"/>
+    </wz:prepare>
+    <wz:step id="step1" label="flow.allmanadatory">
+        <wz:content id="step1.content">
+            <wz:property-list root="newObject">
+                <wz:property qualifier="source" />
+                <wz:property qualifier="target" />
+                <wz:property qualifier="referenceType" />
+                <wz:property qualifier="preselected" />
+                <wz:property qualifier="active" />
+            </wz:property-list>
+        </wz:content>
+        <wz:navigation id="step1.navigation">
+            <wz:cancel/>
+            <wz:done visible="newObject.source !=null and newObject.target !=null">
+                <wz:save property="newObject"/>
+            </wz:done>
+        </wz:navigation>
+    </wz:step>
+    </wz:flow>
+    </context>
+</config>

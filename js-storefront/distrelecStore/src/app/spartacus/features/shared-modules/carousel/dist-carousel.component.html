@@ -1,0 +1,23 @@
+<ng-container *ngIf="items && items.length > 0">
+  <div class="carousel-panel">
+    <button *ngIf="canScrollPrev" class="previous" (click)="scrollItems('prev')">
+      <app-icon [icon]="arrow" iconType="svg" size="xl"></app-icon>
+    </button>
+
+    <div class="slides single-row">
+      <app-dist-scroll-bar scrollAxis="x">
+        <div #scrollContainer class="slide">
+          <ng-container *ngFor="let product of items; let i = index">
+            <div #item *ngIf="product" class="item">
+              <ng-container *ngTemplateOutlet="template; context: { item: product }"></ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </app-dist-scroll-bar>
+    </div>
+
+    <button *ngIf="canScrollNext" class="next" (click)="scrollItems('next')">
+      <app-icon class="rotate-180" [icon]="arrow" iconType="svg" size="xl"></app-icon>
+    </button>
+  </div>
+</ng-container>

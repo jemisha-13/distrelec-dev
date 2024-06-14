@@ -1,0 +1,104 @@
+<section class="flyout">
+  <section class="flyout-body">
+    <div class="bd">
+      <form #formDir="ngForm" [formGroup]="headerLoginForm" (ngSubmit)="onSubmit()">
+        <h3 class="bd-title" id="login_title">{{ 'login.login' | cxTranslate }}</h3>
+        <div class="row bd-row email">
+          <app-dist-text-field
+            [parentFormGroup]="headerLoginForm"
+            [isInvalidState]="
+              headerLoginForm.get('email').touched &&
+              headerLoginForm.get('email').value &&
+              headerLoginForm.get('email').invalid
+            "
+            [isValidState]="headerLoginForm.get('email').touched && headerLoginForm.get('email').valid"
+            fieldId="metahd-account-login"
+            labelText="{{ 'form.email_placeholder' | cxTranslate }}"
+            autoComplete="username"
+            parentFormControlName="email"
+          ></app-dist-text-field>
+          <div
+            *rxIf="
+              (headerLoginForm.get('email').touched && headerLoginForm.get('email').invalid) ||
+              headerLoginForm.get('email').dirty
+            "
+          >
+            <small
+              *rxIf="headerLoginForm.get('email').errors?.email"
+              class="text-danger"
+              id="header_login_email_invalid"
+            >
+              {{ 'validations.email_error_invalid' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+        <div class="row bd-row">
+          <app-dist-text-field
+            [parentFormGroup]="headerLoginForm"
+            [isInvalidState]="
+              headerLoginForm.get('password').touched && headerLoginForm.get('password').errors?.required
+            "
+            [isSecure]="true"
+            fieldId="metahd-account-password"
+            labelText="{{ 'login.password' | cxTranslate }}"
+            autoComplete="current-password"
+            parentFormControlName="password"
+          ></app-dist-text-field>
+
+          <div *rxIf="headerLoginForm.get('password').touched && headerLoginForm.get('password').errors?.required">
+            <small class="text-danger" id="header_login_pwd_required">
+              {{ 'validations.pwd_error_required' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+        <div class="actions-holder">
+          <div class="actions-holder__remember">
+            <app-checkbox
+              [primaryLabel]="'metahd.account.rememberLogin' | cxTranslate"
+              [checked]="headerLoginForm.value.rememberMe"
+              (change)="headerLoginForm.get('rememberMe').setValue($event.target.checked)"
+              primaryLabelForAttribute="rememberMe"
+              size="small"
+              checkboxID="metahd-account-remember"
+              checkboxName="rememberMe"
+            ></app-checkbox>
+          </div>
+          <a class="forgetpass" id="forgot_password_link" routerLink="/login/pw/request">
+            {{ 'metahd.account.forgot-password' | cxTranslate }}
+          </a>
+        </div>
+        <div class="signin_btn">
+          <app-dist-button
+            id="login_submit_btn"
+            [isDisabled]="
+              headerLoginForm.get('email').invalid ||
+              headerLoginForm.get('email').value === '' ||
+              headerLoginForm.get('password').invalid ||
+              headerLoginForm.get('password').value === ''
+            "
+            [text]="'login.login' | cxTranslate"
+            (click)="onSubmit()"
+            type="primary"
+            width="w-fill"
+          ></app-dist-button>
+        </div>
+      </form>
+    </div>
+    <div class="fd">
+      <div class="fd-new">
+        <h3 class="fd-title" id="no_account_title">
+          {{ 'form.no_account' | cxTranslate }}
+        </h3>
+        <app-dist-button
+          id="register_new_customer_btn"
+          [text]="'login.register_new_customer' | cxTranslate"
+          [queryParams]="{ registerFrom: 'header-green-button' }"
+          (click)="onRegistrationClicked()"
+          type="outlined"
+          width="w-fill"
+          routerLink="/registration"
+        ></app-dist-button>
+      </div>
+    </div>
+  </section>
+</section>

@@ -1,0 +1,145 @@
+
+$contentMasterCatalog=distrelecContentCatalog
+$contentCatalog=distrelec_ITContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$picture=media(code, $contentCV);
+$siteResource=jar:com.namics.distrelec.b2b.initialdata.constants.Namb2bacceleratorInitialDataConstants&/distrelecB2Binitialdata/import/project/contentCatalogs/$contentMasterCatalog
+
+# Language
+$lang=it
+
+#E-Procurement
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;eprocurementHomepage;E-Procurement Homepage
+
+
+# Site Logo Component
+UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang];localizedUrlLink[lang=$lang]
+;;LogoComponent;/images/theme/distrelec_logo.png;"/"
+
+
+# Site Certification Logos Component
+UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang];localizedUrlLink[lang=$lang]
+;;CertLabelTuvComponent;/images/certlabels/logo-tuv.png;"/"
+;;CertLabelEhiComponent;/images/certlabels/logo-ehi.png;"/"
+;;CertLabelTrustedShopsComponent;/images/certlabels/logo-trustedshops.png;"/"
+
+
+# CMS Link Components
+UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];localizedUrl[lang=$lang];linkName[lang=$lang]
+;;ImportToolPageLink;"/import-tool";List import
+;;ImpressumPageLink;;Impressum
+;;DisclaimerPageLink;;Disclaimer
+;;FacebookLink;"https://www.facebook.com/DistrelecSwitzerland";Facebook
+;;TwitterLink;"https://twitter.com/distrelec";Twitter
+;;GoogleLink;"https://plus.google.com/111961224551489786574";Google+
+
+
+# CMS Headline Component
+UPDATE DistHeadlineComponent;$contentCV[unique=true];uid[unique=true];headline[lang=$lang]
+;;OrderConfirmationHeadlineComponent;Grazie per aver ordinato da Distrelec !
+;;OrderConfirmationPickupHeadlineComponent;Grazie per aver ordinato da Distrelec !
+;;OrderConfirmationApprovalHeadlineComponent;Il tuo ordine è stato inoltrato al vostro amministratore !
+
+
+# CMS ProductReferences Components
+UPDATE DistProductReferencesCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang] 
+;;ConsistentWithProductReferencesComponent;Coerente con;
+
+UPDATE DistProductFFCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;RecommendationProductFFComponent;Prodotti consigliati ;
+;;AlsoBoughtProductFFComponent;Le persone che hanno acquistato questi prodotti , hanno comprato anche; 
+
+
+# CMS Navigation Nodes
+UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;SiteRootNode;SiteRoot
+;;MainNavNode;Main Navigation
+;;FooterNavNode;Footer Navigation
+##
+;;SupportAndServicesNavNode;Support und Services 
+;;SupportNavNode;Hotline
+;;TechnicalSupportNavNode;Technischer Support
+;;CalibrationServiceNavNode;Kalibrations Service
+;;FaqNavNode;FAQ
+##
+;;InfoCenterNavNode;Infozenter
+;;AboutUsNavNode;Über uns
+;;SeminarsNavNode;Seminare
+;;NewsNavNode;Aktuelles
+;;LegalsNavNode;AGB
+;;ImprintNavNode;Impressum
+;;PressNavNode;Presse
+;;CatalogOrderNavNode;Katalog Bestellen
+##
+;;ManufacturerStoresNavNode;Hersteller Shops
+;;CiscoNavNode;Cisco
+;;SonyNavNode;Sony
+;;AgilentNavNode;Agilent
+;;FlukeNavNode;Fluke
+;;AspNavNode;ASP
+;;AmprobeNavNode;Amprobe
+;;BrotherNavNode;Brother
+;;PanasonicNavNode;Panasonic
+;;KingstonNavNode;Kingston
+;;DevoloNavNode;Devolo
+##
+;;ToolsNavNode;Tools
+;;ListImportToolsNavNode;Listen Import Tools
+;;DirectOrderNavNode;Direktbestellung
+;;IPhoneNavNode;IPhone
+;;DistrelecMobileAppsNavNode;Distrelec Mobile Apps
+
+
+######  Distrelec Cart Page ######
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;EmptyCartParagraphComponent;<h2>Il tuo carrello è vuoto</h2><p>Suggerimenti:</p><ul><li>Sfoglia i nostri prodotti selezionando una categoria sopra</li></ul>;
+
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;PaymentInfoParagraphComponent;<h2>Effettua il pagamento.</h2><p>Informazioni:</p><ul><li>Pagamento facile</li></ul>;
+
+
+###### Distrelec MyAccount Page ######
+UPDATE DistLeadTextComponent;$contentCV[unique=true];uid[unique=true];leadTitle[lang=$lang];leadText[lang=$lang]
+;;CompanyInformationLeadTextComponent;Firmendaten;Um Ihre Firmendaten zu ändern kontaktieren Sie bitte den <a href="/it/Contatti/cms/kontakt">Distrelec Support</a>;
+
+
+# Dist Product Carousel Components
+UPDATE DistProductCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;TopProductsComponent;Prodotti Piu Venduti
+;;NewProductsComponent;Prodotti Nuovi
+
+# Checkout Payment Unknown Error Paragraph
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;CheckoutPaymentUnknownErrorParagraphComponent;"Un Errore Sconosciuto Si E' Verificato Durante Il Pagamento. Per Favore Contattare Il Nostro Helpdesk"
+
+
+############################################################################################
+# Webtrekk Opt-Out Information Page
+############################################################################################
+
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+# Load the webtrekk redirect url config param
+$optOutRedirectPath=/cms/optOutSuccess
+$optOutRedirectUrl=$config-website.distrelec_IT.http$optOutRedirectPath
+
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;OptOutInformationText;"<a href=""http://optout.webtrekk.net/optout.php?r=$optOutRedirectUrl"">Webtrekk Opt-Out Link</a>"
+
+############################################################################################
+# Webtrekk Opt-Out Cookie Notice
+############################################################################################
+
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
+;;CookieNoticeMoreInfoLink;"Mehr Informationen"
+
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];localizedUrl[lang=$lang]
+;;link_00003BN3;/manufacturer/te-connectivity/man_tycoelectronics
+;;link_00003BN6;/manufacturer/fluke/man_flu
+;;link_00003BN5;/manufacturer/weller/man_wel
+;;link_00003BN7;/manufacturer/phoenix-contact/man_pho
+;;link_00003BN4;/manufacturer/epcos/man_epc
+;;link_00003BN8;/manufacturer/vishay/man_vishay
+;;link_00003BN2;/manufacturer/mean-well/man_meanwell

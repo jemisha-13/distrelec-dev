@@ -1,0 +1,43 @@
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+<html>
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body style="padding: 0; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+		<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+			<tr>
+				<td style="border-collapse: collapse; border-right: 1px solid #cccccc; border: 1px solid #cccccc; padding: 20px;">
+					<table border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0;">
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">Customer Nr.: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.unit.erpCustomerId})</p></td>
+						</tr>
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">Contact ID: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.contactId})</p></td>
+						</tr>
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">Contact Name:</p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.firstName}) $!StringEscapeUtils.escapeHtml(${ctx.customer.lastName})</p></td>
+						</tr>
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">Contact Email:</p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.email})</p></td>
+						</tr>
+						
+						#if( $ctx.hasAdmin )
+						<tr><td colspan="2" >&nbsp;</td></tr>
+						<tr>
+							<td colspan="2" >
+								<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 14px; font-weight: bold; line-height: 18px;">
+								Note: There is already at least one active admin user available for this customer in hybris. You can approach them for further information if needed.
+								</p>
+							</td>
+						</tr>
+						#end
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

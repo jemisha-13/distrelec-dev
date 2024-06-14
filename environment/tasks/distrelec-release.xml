@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!-- ====================================================================== project: Namics Hybris Extensions topic: Configuration date: 13.09.2011 author: jweiss 
+	====================================================================== -->
+
+
+<project name="distrelec-hybris-tasks-release" basedir=".">
+
+	<!-- ================================= macro: generateReleaseNotes ================================= -->
+	<macrodef name="generateReleaseNotes" description="Generate Release Notes">
+		<sequential>
+			<echo message="Generate Release Notes" />
+			<input message="Release? example: v1.0.0 or v1.0-rc1" addproperty="releaseToGenereate" />
+			<java fork="true" classname="com.namics.distrelec.b2b.core.util.releasenotes.ReleaseNotesGenerator">
+				<arg value="${releaseToGenereate}" />
+				<classpath>
+					<pathelement path="${basedir}" />
+					<pathelement path="${hybris.home}/bin/custom/distrelecB2Bcore/classes" />
+					<pathelement path="${hybris.home}/bin/custom/distrelecB2Bcore/resources" />
+					
+					<fileset dir="${hybris.home}/bin/custom/distrelecB2Bcore/lib">
+						<include name="*.jar" />
+					</fileset>
+					
+					<fileset dir="${hybris.home}/bin/platform/ext/core/lib">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+			</java>
+		</sequential>
+	</macrodef>
+</project>

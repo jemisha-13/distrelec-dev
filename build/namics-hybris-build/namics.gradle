@@ -1,0 +1,747 @@
+import java.nio.file.Files
+
+//DownloadPlugin dependency
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+	   classpath 'de.undercouch:gradle-download-task:2.0.0'
+    }
+}
+
+
+//--------------------------------------------
+//Custom Classes
+//--------------------------------------------
+
+
+class Destination {
+    def source
+    def target
+
+    public Destination(String source, String target) {
+        this.source = source
+        this.target = target
+    }
+
+}
+
+
+class Environment {
+    def name
+    def configuration = new Properties()
+    def dependencies = []
+    def envPath
+
+    public Environment(File envFolder, File configFile) {
+        this.name = envFolder.name
+        this.envPath = envFolder.absolutePath
+        configFile.withInputStream { stream -> configuration.load(stream) }
+    }
+}
+
+class DistProperties extends Properties {
+    @Override
+    Set<Map.Entry<Object, Object>> entrySet() {
+        Set<Map.Entry<Object, Object>> sortedSet = new TreeSet<Map.Entry<Object, Object>>(new Comparator<Map.Entry<Object, Object>>() {
+            @Override
+            public int compare(Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) {
+                return o1.getKey().toString().compareTo(o2.getKey().toString());
+            }
+        });
+        sortedSet.addAll(super.entrySet());
+        return sortedSet;
+    }
+
+    @Override
+    public void store(Writer writer, String comments) throws IOException
+    {
+        store0((writer instanceof BufferedWriter)?(BufferedWriter)writer
+                : new BufferedWriter(writer),
+                comments,
+                false);
+    }
+
+    private void store0(BufferedWriter bw, String comments, boolean escUnicode)
+            throws IOException
+    {
+        if (comments != null) {
+            writeComments(bw, comments);
+        }
+        synchronized (this) {
+            for (Map.Entry<Object, Object> e : entrySet()) {
+                String key = (String)e.getKey();
+                String val = (String)e.getValue();
+                key = saveConvert(key, true, escUnicode);
+                /* No need to escape embedded and trailing spaces for value, hence
+                 * pass false to flag.
+                 */
+                val = saveConvert(val, false, escUnicode);
+                bw.write(key + "=" + val);
+                bw.newLine();
+            }
+        }
+        bw.flush();
+    }
+
+    /*
+ * Converts unicodes to encoded &#92;uxxxx and escapes
+ * special characters with a preceding slash
+ */
+    private String saveConvert(String theString,
+                               boolean escapeSpace,
+                               boolean escapeUnicode) {
+        int len = theString.length();
+        int bufLen = len * 2;
+        if (bufLen < 0) {
+            bufLen = Integer.MAX_VALUE;
+        }
+        StringBuilder outBuffer = new StringBuilder(bufLen);
+
+        for(int x=0; x<len; x++) {
+            char aChar = theString.charAt(x);
+            // Handle common case first, selecting largest block that
+            // avoids the specials below
+            if ((aChar > 61) && (aChar < 127)) {
+                if (aChar == '\\') {
+                    outBuffer.append('\\'); outBuffer.append('\\');
+                    continue;
+                }
+                outBuffer.append(aChar);
+                continue;
+            }
+            switch(aChar) {
+                case ' ':
+                    if (x == 0 || escapeSpace)
+                        outBuffer.append('\\');
+                    outBuffer.append(' ');
+                    break;
+                case '\t':outBuffer.append('\\'); outBuffer.append('t');
+                    break;
+                case '\n':outBuffer.append('\\'); outBuffer.append('n');
+                    break;
+                case '\r':outBuffer.append('\\'); outBuffer.append('r');
+                    break;
+                case '\f':outBuffer.append('\\'); outBuffer.append('f');
+                    break;
+                case '=': // Fall through
+                case ':': // Fall through
+                case '#': // Fall through
+                case '!':
+                    outBuffer.append('\\'); outBuffer.append(aChar);
+                    break;
+                default:
+                    if (((aChar < 0x0020) || (aChar > 0x007e)) & escapeUnicode ) {
+                        outBuffer.append('\\');
+                        outBuffer.append('u');
+                        outBuffer.append(toHex((aChar >> 12) & 0xF));
+                        outBuffer.append(toHex((aChar >>  8) & 0xF));
+                        outBuffer.append(toHex((aChar >>  4) & 0xF));
+                        outBuffer.append(toHex( aChar        & 0xF));
+                    } else {
+                        outBuffer.append(aChar);
+                    }
+            }
+        }
+        return outBuffer.toString();
+    }
+
+    private static void writeComments(BufferedWriter bw, String comments)
+            throws IOException {
+        bw.write("#");
+        int len = comments.length();
+        int current = 0;
+        int last = 0;
+        char[] uu = new char[6];
+        uu[0] = '\\';
+        uu[1] = 'u';
+        while (current < len) {
+            char c = comments.charAt(current);
+            if (c > '\u00ff' || c == '\n' || c == '\r') {
+                if (last != current)
+                    bw.write(comments.substring(last, current));
+                if (c > '\u00ff') {
+                    uu[2] = toHex((c >> 12) & 0xf);
+                    uu[3] = toHex((c >>  8) & 0xf);
+                    uu[4] = toHex((c >>  4) & 0xf);
+                    uu[5] = toHex( c        & 0xf);
+                    bw.write(new String(uu));
+                } else {
+                    bw.newLine();
+                    if (c == '\r' &&
+                            current != len - 1 &&
+                            comments.charAt(current + 1) == '\n') {
+                        current++;
+                    }
+                    if (current == len - 1 ||
+                            (comments.charAt(current + 1) != '#' &&
+                                    comments.charAt(current + 1) != '!'))
+                        bw.write("#");
+                }
+                last = current + 1;
+            }
+            current++;
+        }
+        if (last != current)
+            bw.write(comments.substring(last, current));
+        bw.newLine();
+    }
+}
+
+//--------------------------------------------
+//Configuration
+//--------------------------------------------
+
+
+task configure_env {
+
+    description 'configure project from environment'
+    group 'NAMICS configure'
+
+    doLast {
+
+        def env_list = getEnvironments(env, true)
+        configure_copy(env_list)
+        configure_merge(env_list)
+
+    }
+}
+
+def configure_copy(def env_list) {
+
+    //settings
+    //
+    //include empty directories
+    def inclEmptyDirs = false
+
+    //check hybris/config dir exists
+    def cfgDir = new File(project.env_config_dir)
+    if (cfgDir.exists() != true) {
+        println "\033[31m hybris/config dir not exists"
+        println "\033[32m creating dir... \033[37m"
+        cfgDir.mkdirs()
+    }
+    
+    copy_customize_folders(inclEmptyDirs)
+
+    //get out destination dirs
+    def destinations = resolveCopyDestinations()
+    destinations = destinations.sort { it.key }
+
+    env_list.each {
+        env ->
+
+            destinations.each {
+                key, dest ->
+
+                    def destDir = new File(env.envPath  + File.separator + dest.source)
+
+                    println "- " + env.name + "; copy destination key=" + key + " source=" + dest.source + " target=" + dest.target
+
+                    if (destDir.exists()) {
+                        copy {
+                            println("\033[37m Start copying files from " + env.envPath + File.separator + dest.source + " ...")
+                            println("\033[37m into" + File.separator + dest.target + " ...")
+                            from(env.envPath + File.separator + dest.source) {
+                                exclude '**/*.svn'
+                                exclude '*.properties'
+                            }
+                            // Copy junit props
+                            from(env.envPath + File.separator + dest.source) {
+                                include '**/*junit*.properties'
+                                duplicatesStrategy DuplicatesStrategy.INCLUDE
+                            }
+                            into '.' + File.separator + dest.target
+                            includeEmptyDirs = inclEmptyDirs
+                            eachFile { println " " + it.file }
+                        }
+                    } else {
+                        println "\033[33m note: " + env.envPath + File.separator + dest.source + " not exists \033[37m"
+                    }
+            }
+    }
+
+}
+
+def copy_customize_folders(def inclEmptyDirs) {
+    def repoCustomizeDir = file(project.repo_customize_dir)
+    def hybrisCustomizeDir = file(project.hybris_customize_dir)
+
+    if (repoCustomizeDir.exists()) {
+        Map<Path, FileTime> preservedTimestamps = new HashMap<>();
+        copy {
+            println("\033[37m Start copying files from " + repoCustomizeDir + " ...")
+            println("\033[37m into" + hybrisCustomizeDir + " ...")
+            from(repoCustomizeDir) {
+                exclude '**/*.svn'
+                exclude '*.properties'
+            }
+            // Copy junit props
+            from(repoCustomizeDir) {
+                include '**/*junit*.properties'
+            }
+            into hybrisCustomizeDir
+            includeEmptyDirs = inclEmptyDirs
+            eachFile { FileCopyDetails details ->
+                def target = new File(hybrisCustomizeDir, details.path)
+                if(target.exists()) {
+                    preservedTimestamps.put(target.toPath(), FileTime.fromMillis(details.lastModified))
+                }
+                println details.file.toString() + " - " + target
+            }
+        }
+
+        // last modified timestamps must be preserved
+        preservedTimestamps.each { path, fileTime ->
+            Files.setLastModifiedTime(path, fileTime)
+        }
+    } else {
+        println "\033[33m note: " + repoCustomizeDir + " does not exist \033[37m"
+    }
+}
+
+/**
+ * This function should be used for local development environment.
+ */
+def configure_merge(def env_list) {
+
+
+    def configuration = new Properties()
+
+    //----MERGE LOCAL PROPERTIES FILES
+    println("\033[37m Start merging local.properties from env dir...")
+    println "namics order:"
+
+    env_list.each { env ->
+        println "- " + env.name
+        println(env.envPath + File.separator + project.env_config_file)
+        ///ide2go/victorinox_v0_8_5/src/environment/env-development
+        def cfgFile = new File(env.envPath + File.separator + project.env_config_file)
+        if (cfgFile.exists()) {
+            cfgFile.withInputStream { stream ->
+                def envConfiguration = new Properties()
+                envConfiguration.load(stream)
+                configuration.putAll(envConfiguration)
+            }
+        } else {
+            println " --> warning: " + env.name + " has no " + project.env_config_file
+        }
+        configuration.putAll(env.configuration)
+    }
+
+    def cfg_file = new File(project.hybris_config_file)
+
+    store(configuration, cfg_file)
+}
+
+
+/**
+ * This function is used during the build of the deployment unit for Hybris Cloud Project.
+ */
+ def configure_deployment_merge(def env_list, def env_config_dir, def mergeAdmApp, def cfgFileName) {
+
+
+    def configuration_app = new Properties()
+    def configuration_adm = new Properties()
+
+    //----MERGE LOCAL PROPERTIES FILES
+    println("\033[37m Start merging customer.app.properties and customer.adm.properties from env dir...")
+    println "namics order:"
+
+    env_list.each { env ->
+        println "   - " + env.name
+        println("     -- " + env.envPath + File.separator + project.env_hybris_app_config_file)
+        println("     -- " + env.envPath + File.separator + project.env_hybris_adm_config_file)
+        ///ide2go/victorinox_v0_8_5/src/environment/env-development
+
+
+        // common config
+        def cfgCommonFile = new File(env.envPath + File.separator + project.env_hybris_common_config_file)
+        if (cfgCommonFile.exists()) {
+            println "       -- loading common config for both Admin and App nodes"
+            cfgCommonFile.withInputStream { stream ->
+                def envConfiguration = new Properties()
+                envConfiguration.load(stream)
+                configuration_app.putAll(envConfiguration)
+                configuration_adm.putAll(envConfiguration)
+            }
+        }
+
+        // App nodes
+        def cfgAppFile = new File(env.envPath + File.separator + project.env_hybris_app_config_file)
+        if (cfgAppFile.exists()) {
+            cfgAppFile.withInputStream { stream ->
+                def envConfiguration = new Properties()
+                envConfiguration.load(stream)
+                configuration_app.putAll(envConfiguration)
+            }
+        } else {
+            println " --> warning: " + env.name + " has no " + project.env_hybris_app_config_file
+        }
+
+        // Admin nodes
+        def cfgAdmFile = new File(env.envPath + File.separator + project.env_hybris_adm_config_file)
+        if (cfgAdmFile.exists()) {
+            cfgAdmFile.withInputStream { stream ->
+                def envConfiguration = new Properties()
+                envConfiguration.load(stream)
+                configuration_adm.putAll(envConfiguration)
+            }
+        } else {
+            println " --> warning: " + env.name + " has no " + project.env_hybris_adm_config_file
+        }
+
+        configuration_app.putAll(env.configuration)
+        configuration_adm.putAll(env.configuration)
+    }
+
+     if (mergeAdmApp) {
+         Properties mergedConfig = new Properties(configuration_adm)
+         mergedConfig.putAll(configuration_app)
+         def cfgFile = file(env_config_dir + File.separator + cfgFileName)
+         store(mergedConfig, cfgFile)
+     } else {
+         def cfgApp_file = new File(env_config_dir + "/" + project.hybris_app_config_file_name)
+         def cfgAdm_file = new File(env_config_dir + "/" + project.hybris_adm_config_file_name)
+
+         store(configuration_app, cfgApp_file)
+         store(configuration_adm, cfgAdm_file)
+     }
+}
+
+def store(Properties properties, File outputFile) {
+    // ensure we can write to the file
+    if(!outputFile.getParentFile().exists()) {
+        mkdir outputFile.getParentFile()
+    }
+
+    new DistProperties(properties).store(outputFile.newWriter(), outputFile.name)
+}
+//-----------------------------------------
+//Environment
+//-----------------------------------------
+
+task list_environment {
+
+    description 'List all environments'
+    group 'NAMICS environment'
+
+    doLast {
+        println "list environments:"
+        def environments = resolveEnvironments()
+
+
+
+        environments.each
+                {
+                    key, env ->
+                        println "- " + env.name
+                        assert environments.get(key)
+
+                        env.dependencies.each
+                                {
+                                    dep ->
+                                        println "-- " + dep.name
+                                }
+                }
+    }
+
+}
+
+
+task create_environment {
+    description 'creates a basis environment structure'
+    group 'NAMICS environment'
+
+
+
+    doLast {
+        def environmentPath = "environment"
+
+
+        def developmentDir = environmentPath + "/" + "development"
+        def integrationDir = environmentPath + "/" + "integration"
+        def productionDir = environmentPath + "/" + "production"
+
+        def environmentArray = [developmentDir, integrationDir, productionDir]
+
+
+        createBasisEnvironment(environmentArray)
+
+    }
+
+
+}
+
+task create_dev_environment {
+
+    description 'creates a basic developer structure'
+    group 'NAMICS environment'
+
+    doLast{
+        try{
+            assert "$env"
+
+            def console = System.console()
+
+            // convert input string to groovy string
+            def environmentKey = String.valueOf("$env".chars)
+
+            def environmentDevelopersPath = "environment/developers"
+
+            def developerDir = environmentDevelopersPath + "/" + "env-" +environmentKey
+            def hybrisDir = developerDir+"/hybris"
+            def configDir = developerDir+"/hybris"+"/config"
+
+            def environmentArray = [developerDir,hybrisDir,configDir]
+
+            def overwrite='n'
+
+            environmentArray.each {
+                def createDir = (new File(it)).mkdirs()
+            }
+
+            if(file(developerDir+'/environment.properties').exists()){
+                println "environment.properties in "+developerDir+" already exists"
+                if(console){
+                    overwrite = console.readLine('\033[33m > Would you like to overwrite? y/n \033[37m')
+                    if(overwrite=='y'){
+                    writeFile(developerDir, "environment.properties","depends=env-development")
+                    }
+                }
+                else{
+                    logger.error "\033[33m Cannot get console"
+                }
+            }
+            else{
+                writeFile(developerDir, "environment.properties","depends=env-development")
+            }
+            if(file(configDir+'/local.properties').exists()){
+                println "local.properties in "+configDir+" already exists"
+                if(console){
+                    overwrite = console.readLine('\033[33m > Would you like to overwrite? y/n \033[37m')
+                    if(overwrite=='y'){
+                    writeFile(configDir, "local.properties","")
+                    }
+                }
+                else{
+                    logger.error "\033[33m Cannot get console"
+                }
+            }
+            else{
+                writeFile(configDir, "local.properties","")
+            }
+        }
+        catch(Exception e){
+            println("\033[31m"+ e.getMessage())
+            if(e.getMessage().contains("Could not find property 'env'")){
+                println "Please set environment property"
+                println "usage[create_dev_environment -Penv=myname]\033[37m"
+            }
+        }
+
+    }
+
+}
+
+def writeFile(dir, file, content) {
+    try {
+
+        def lineEnd = System.getProperty("line.separator");
+        def fw = new FileWriter(dir + "/" + file)
+
+        fw.write(content)
+        fw.write(lineEnd)
+        fw.flush()
+        fw.close()
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+def getEnvironments(def envName, boolean mergeCommon) {
+    assert envName
+
+    // convert input string to groovy string
+    // def environment = "$env" gives the same chars but different bytes (maybe an encoding problem)
+    def environmentKey = String.valueOf(envName.chars)
+
+    println "configure:[" + environmentKey + "]"
+
+    def environments = resolveEnvironments(mergeCommon)
+
+    if (environments.containsKey(environmentKey)) {
+
+        def environment = environments.get(environmentKey)
+
+        def env_list = []
+
+        // add dependencies
+        env_list.addAll(environment.dependencies.reverse())
+        // add environment itself
+        env_list.add(environment)
+
+        env_list
+    } else {
+        println "\033[31m environment not known, usage[configure -Penv=env-development]\033[37m"
+    }
+}
+
+
+Map<String, Environment> resolveEnvironments(boolean mergeCommon) {
+    // lookup environments
+    Map<String, Environment> environments = [:]
+
+    file("environment").eachFileRecurse
+            {
+                if (it.name.equals("environment.properties")) {
+                    def env = new Environment(it.parentFile, it)
+
+                    environments.put(it.parentFile.name, env)
+                }
+            }
+
+    // resolve dependencies
+    environments.each {
+        key, env ->
+
+            // recursive resolve dependencies
+            resolveDependencies env, env, environments, mergeCommon
+
+    }
+
+    environments
+}
+
+Map<String, Destination> resolveCopyDestinations() {
+
+    Map<String, Destination> destinations = [:]
+
+    def prefix = "configure_copy_dest"
+
+    project.properties.properties.each {
+
+        properties ->
+
+            if (properties.properties.key.contains(prefix)) {
+
+                def resultListDestination = properties.properties.value.toString().tokenize(';')
+
+
+                // evaluate the source and target to be able to use properties like "System.properties.'java.home'"
+                String srcString = "ret = " + resultListDestination.get(0)
+                String dstString = "ret = " + resultListDestination.get(1)
+                def shell = new GroovyShell();
+                def source = shell.evaluate(srcString)
+                def target = shell.evaluate(dstString)
+
+                def destination = new Destination(source, target)
+
+                try {
+                    def resultListKey = properties.properties.key.toString().tokenize('_')
+                    def key = resultListKey.get(3)
+                    destinations.put(key, destination)
+                }
+                catch (IndexOutOfBoundsException e) {
+                    println("\033[31m" + e.getMessage())
+                    println "Please set name like 'configure.copy.dest.name' for copy destination\033[37m"
+                }
+
+
+            }
+    }
+
+    destinations
+
+}
+
+def resolveDependencies(def env_root, def env_current, def environments, def mergeCommon) {
+
+    // get dependencies from current env
+    def cfg_depends = env_current.configuration.getProperty("depends")
+
+    if (cfg_depends) {
+        def depends = cfg_depends.split(',')
+
+        depends.each
+                {
+                    dep ->
+                        if (!environments.containsKey(dep)) {
+                            throw new RuntimeException("dependency [" + dep + "] not found");
+                        }
+
+                        if (mergeCommon || "env-hc-common" != dep) {
+                            def env_dep = environments.get(dep)
+
+                            // add dependency to root env
+                            env_root.dependencies.add(env_dep)
+
+                            // recursive call
+                            resolveDependencies env_root, env_dep, environments, mergeCommon
+                        }
+                }
+    }
+}
+
+
+def createBasisEnvironment(environmentArray) {
+    environmentArray.each {
+        def createDir = (new File(it)).mkdirs()
+    }
+}
+
+
+
+//-----------------------------------------
+//Software Repository and Hybris location
+//-----------------------------------------
+
+import de.undercouch.gradle.tasks.download.Download
+
+import java.nio.file.Path
+import java.nio.file.attribute.FileTime
+
+task hybris_download(type: Download) {
+
+    description 'Download hybris files version: ' + hybris_version
+    group 'NAMICS download'
+
+    src hybris_download_url + hybris_version
+    dest new File('./vendor/', hybris_version)
+    onlyIfNewer true
+    username 'distrelec'
+    password 'd1str313c!'
+
+}
+
+task hybris_download_and_unzip(dependsOn: hybris_download) {
+
+    description 'Download and unzip hybris files'
+    group 'NAMICS download'
+
+    doLast{
+        hybris_unzip()
+    }
+}
+
+def hybris_unzip() {
+    copy {
+        from zipTree(hybris_download.dest)
+        into '.'
+    }
+}
+
+
+// export functions
+ext{
+    getEnvironments = this.&getEnvironments
+    configure_copy = this.&configure_copy
+    configure_merge = this.&configure_merge
+    configure_deployment_merge = this.&configure_deployment_merge
+
+}

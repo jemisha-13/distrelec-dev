@@ -1,0 +1,33 @@
+<ng-container *ngIf="productReferences$ | async as productReferences">
+  <app-accessories
+    [productReferences]="productReferences"
+    [productCode]="productCode"
+    [title]="'product.eol.alternative' | cxTranslate"
+    accessoryType="alternatives"
+  ></app-accessories>
+  <app-accessories
+    [productReferences]="productReferences"
+    [productCode]="productCode"
+    [title]="'product.accessories.must_have' | cxTranslate"
+    accessoryType="mandatory"
+  ></app-accessories>
+  <app-accessories
+    [productReferences]="productReferences"
+    [productCode]="productCode"
+    [title]="'product.accessories.optional' | cxTranslate"
+    accessoryType="optional"
+  ></app-accessories>
+  <app-accessories
+    [productReferences]="productReferences"
+    [productCode]="productCode"
+    [title]="'product.accessories.compatible' | cxTranslate"
+    accessoryType="compatible"
+  ></app-accessories>
+</ng-container>
+<div *ngIf="productCode && reevooEligible" class="container">
+  <div class="row">
+    <div class="col-12" id="reevoo_tabbed" [class.d-none]="isPDPLoading_ | async">
+      <app-reevoo [isEligible]="reevooEligible" [productCode]="productCode" reevooType="product-reviews"></app-reevoo>
+    </div>
+  </div>
+</div>

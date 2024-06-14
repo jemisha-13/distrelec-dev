@@ -1,0 +1,948 @@
+<!DOCTYPE html><!--[if IE 7]><html class="ie7"><![endif]--><!--[if IE 8]><html class="ie8"><![endif]--><!--[if IE 9]><html class="ie9"><![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="">
+<!--<![endif]--><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>PaySSL</title>
+<script id="clientEventHandlersJS" language="JavaScript">
+
+                    function SSLForm_onsubmit() {
+
+                    var formHasSomeErrors = false;
+
+                    var checkCC = /\D.+/;
+
+                    // JavaScript Check
+
+                    document.SSLForm.JS.value = "true";
+
+                    // Remove Error Classes
+
+                    document.SSLForm.CCBrand.className =
+                    document.SSLForm.CCBrand.className.replace(/(?:^|\s)error(?!\S)/g, '');
+                    document.SSLForm.CCnr.className = document.SSLForm.CCnr.className.replace(/(?:^|\s)error(?!\S)/g,
+                    '');
+                    document.SSLForm.KKMonth.className =
+                    document.SSLForm.KKMonth.className.replace(/(?:^|\s)error(?!\S)/g, '');
+                    document.SSLForm.KKYear.className =
+                    document.SSLForm.KKYear.className.replace(/(?:^|\s)error(?!\S)/g, '');
+                    document.SSLForm.cccvc.className = document.SSLForm.cccvc.className.replace(/(?:^|\s)error(?!\S)/g,
+                    '');
+
+                    document.getElementsByName("CCBrand-error-field")[0].style.display = "none";
+                    document.getElementsByName("CCnr")[0].className = "";
+                    document.getElementsByName("CCnr-error-field")[0].style.display = "none";
+                    document.getElementsByName("creditcardholder")[0].className = "";
+                    document.getElementsByName("CCHolder-error-field")[0].style.display = "none";
+
+                    $('.selectboxit.kkmonth').removeClass('error');
+                    $('.selectboxit.kkyear').removeClass('error');
+
+                    document.getElementsByName("KKMonth-error-field")[0].style.display = "none";
+                    document.getElementsByName("KKYear-error-field")[0].style.display = "none";
+                    document.getElementsByName("cccvc")[0].className = "";
+                    document.getElementsByName("cccvc-error-field")[0].style.display = "none";
+
+
+                    // Remove white space from CCnr: DISTRELEC-7767
+
+                    document.SSLForm.CCnr.value = document.SSLForm.CCnr.value.replace(/ /g, '');
+
+                    $('.selectboxit.ccbrand').removeClass('error');
+                    $('.selectboxit.kkmonth').removeClass('error');
+                    $('.selectboxit.kkyear').removeClass('error');
+
+                    if (document.SSLForm.CCBrand.selectedIndex == 0) {
+                    $('.selectboxit.ccbrand').addClass('error');
+                    document.getElementsByName("CCBrand-error-field")[0].style.display = "block";
+
+                    formHasSomeErrors = true;
+                    }
+
+                    if (document.SSLForm.CCnr.value == "") {
+                    document.SSLForm.CCnr.focus();
+                    document.SSLForm.CCnr.className += " error";
+                    document.getElementsByName("CCnr-error-field")[0].style.display = "block";
+
+                    formHasSomeErrors = true;
+                    }
+
+                    if (document.SSLForm.CCnr.value.length < 13) {
+                    document.SSLForm.CCnr.focus();
+                    document.SSLForm.CCnr.className += " error";
+                    document.getElementsByName("CCnr-error-field")[0].style.display = "block";
+
+                    formHasSomeErrors = true;
+                    }
+
+                    if (document.SSLForm.CCnr.value.length > 19) {
+                    document.SSLForm.CCnr.focus();
+                    document.SSLForm.CCnr.className += " error";
+                    document.getElementsByName("CCnr-error-field")[0].style.display = "block";
+
+                    formHasSomeErrors = true;
+                    }
+
+                    // Credit card number validation
+
+                    if (document.SSLForm.CCBrand.selectedIndex != 0) {
+
+                    if (!isValidCreditCard(document.SSLForm.CCBrand.value, document.SSLForm.CCnr.value)) {
+                    document.SSLForm.CCnr.focus();
+                    document.SSLForm.CCnr.className += " error";
+                    document.getElementsByName("CCnr-error-field")[0].style.display = "block";
+
+                    formHasSomeErrors = true;
+                    }
+
+                    }
+
+                    if (document.SSLForm.creditcardholder.value == "") {
+                    document.SSLForm.creditcardholder.focus();
+                    document.SSLForm.creditcardholder.className += " error";
+                    document.getElementsByName("CCHolder-error-field")[0].style.display = "block";
+
+                    formHasSomeErrors = true;
+                    }
+
+                    if (document.SSLForm.KKMonth.selectedIndex == 0) {
+                    $('.selectboxit.kkmonth').addClass('error');
+                    document.getElementsByName("KKMonth-error-field")[0].style.display = "block";
+
+                    formHasSomeErrors = true;
+                    }
+
+                    if (document.SSLForm.KKYear.selectedIndex == 0) {
+                    $('.selectboxit.kkyear').addClass('error');
+                    document.getElementsByName("KKYear-error-field")[0].style.display = "block";
+
+                    formHasSomeErrors = true;
+                    }
+
+                    if (document.SSLForm.cccvc.value.length < 3) {
+                    document.SSLForm.cccvc.focus();
+                    document.SSLForm.cccvc.className += " error";
+                    document.getElementsByName("cccvc-error-field")[0].style.display = "block";
+
+                    formHasSomeErrors = true;
+                    }
+
+                    if (!formHasSomeErrors) {
+                    hiddensubmit1();
+                    showpayStatus();
+                    return true;
+                    } else {
+                    return false;
+                    }
+
+                    }
+
+                    function showpayStatus() {
+
+                    if (document.getElementById) {
+                    document.getElementById("payStatus").style.visibility = "visible";
+                    }
+
+                    }
+
+                    function firstField() {
+                    document.SSLForm.creditcardholder.focus();
+
+                    // JavaScriptCheck
+                    document.SSLForm.JS.value = "true";
+                    }
+
+                    function openWin() {
+                    window.open("", "kpn", "width=500,height=470,resizable,screenX=0,screenY=0");
+                    }
+
+                    function openCT() {
+                    window.open("", "Impressum", "width=390,height=450,resizable,screenX=0,screenY=0");
+                    }
+
+                    function hiddensubmit1() {
+
+                    if (document.getElementById) {
+                    document.getElementById("submit1").style.visibility = "hidden";
+                    }
+
+                    }
+
+
+                    // Hide prefilled labels and show empty form fields
+
+                    function releaseclr() {
+                    document.SSLForm.creditcardholder.value = "";
+                    document.SSLForm.creditcardholder.disabled = false;
+                    document.getElementById("creditcardholder_label").style.display = "none";
+                    document.getElementById("creditcardholder_field").style.display = "";
+                    document.SSLForm.CCBrand.selectedIndex = 0;
+
+                    $(document.SSLForm.CCBrand).data("selectBox-selectBoxIt").refresh();
+
+                    document.getElementById("CCBrand_label").style.display = "none";
+                    document.getElementById("CCBrand_field").style.display = "";
+                    document.SSLForm.CCnr.value = "";
+                    document.getElementById("CCnr_label").style.display = "none";
+                    document.getElementById("CCnr_field").style.display = "";
+                    document.SSLForm.KKMonth.selectedIndex = 0;
+
+                    $(document.SSLForm.KKMonth).data("selectBox-selectBoxIt").refresh();
+
+                    document.SSLForm.KKYear.selectedIndex = 0;
+
+                    $(document.SSLForm.KKYear).data("selectBox-selectBoxIt").refresh();
+
+                    document.getElementById("KKMonthYear_label").style.display = "none";
+                    document.getElementById("KKMonthYear_field").style.display = "";
+
+                    document.getElementById("creditcardholder_real_label").style.display = "";
+
+                    document.SSLForm.cccvc.value = "";
+                    document.SSLForm.cccvc.style.borderColor = "";
+                    document.getElementById("chgbut").style.display = "none";
+                    }
+
+                    function isValidCreditCard(type, ccnum) {
+
+                    if (type == "VISA") {
+                    // Visa: length 16, prefix 4, dashes optional.
+                    var re = /^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/;
+                    } else if (type == "MasterCard") {
+                    // Mastercard: length 16, prefix 51-55, dashes optional.
+                    var re = /^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/;
+                    } else if (type == "Disc") {
+                    // Discover: length 16, prefix 6011, dashes optional.
+                    var re = /^6011-?\d{4}-?\d{4}-?\d{4}$/;
+                    } else if (type == "AmEx") {
+                    // American Express: length 15, prefix 34 or 37.
+                    var re = /^3[4,7]\d{13}$/;
+                    } else if (type == "Diners") {
+                    // Diners: length 14, prefix 30, 36, or 38.
+                    var re = /^3[0,6,8]\d{12}$/;
+                    }
+
+                    // Fix Saved Card Error: DISTRELEC-11950
+                    
+
+                    if (isAlias == true) {
+                    if (!re.test(ccnum)) {
+                    return true;
+                    }
+                    } else {
+                    if (re.test(ccnum)) {
+                    return true;
+                    }
+                    }
+
+                    // Remove all dashes for the checksum checks to eliminate negative numbers
+                    ccnum = ccnum.split("-").join("");
+
+                    // Checksum ("Mod 10")
+                    // Add even digits in even length strings or odd digits in odd length strings.
+
+                    var checksum = 0;
+
+                    for (var i = (2 - (ccnum.length % 2)); i < ccnum.length + 1; i += 2) {
+                    checksum += parseInt(ccnum.charAt(i - 1));
+                    }
+
+                    // Analyze odd digits in even length strings or even digits in odd length strings.
+
+                    for (var i = (ccnum.length % 2) + 1; i < ccnum.length; i += 2) {
+                    var digit = parseInt(ccnum.charAt(i - 1)) * 2;
+
+                    if (digit < 10) {
+                    checksum += digit;
+                    } else {
+                    checksum += (digit - 9);
+                    }
+                    }
+
+                    if ((checksum % 10) == 0) {
+                    return true;
+                    } else {
+                    return false;
+                    }
+
+                    }
+
+                </script><script type="text/javascript" src="Templates/imagespg_50702/jquery.1.9.1.js"></script><script type="text/javascript" src="Templates/imagespg_50702/jquery-ui-1.10.3.custom.js"></script><script type="text/javascript" src="Templates/imagespg_50702/jquery.selectBoxIt.js"></script><script type="text/javascript">
+
+                    $(document).ready(function () {
+
+                    var $selects = $('select'),
+                    isIE7 = $('html').hasClass('ie7')
+                    ;
+
+                    if(! isIE7) {
+                    $selects.selectBoxIt({
+                    autoWidth: true
+                    });
+                    }
+
+                    });
+
+                </script><style type="text/css">
+
+                    * {
+                    -webkit-box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    box-sizing: border-box;
+                    }
+
+                    .selectboxit-container {
+                    position: relative;
+                    display: inline-block;
+                    vertical-align: top;
+                    -webkit-touch-callout: none;
+                    -webkit-user-select: none;
+                    -khtml-user-select: none;
+                    -moz-user-select: -moz-none;
+                    ms-user-select: none;
+                    -o-user-select: none;
+                    user-select: none;
+                    outline: none;
+                    white-space: nowrap;
+                    }
+                    .selectboxit-container + .field-msg {
+                    margin-top: 10px;
+                    }
+                    .selectboxit-container .selectboxit {
+                    font-size: 16px;
+                    line-height: 18px;
+                    vertical-align: middle;
+                    display: inline-block;
+                    width: 300px;
+                    color: #000000;
+                    background-color: #ffffff;
+                    border: 1px solid #cccccc;
+                    cursor: pointer;
+                    }
+                    .selectboxit-container .selectboxit .selectboxit-option-icon-container {
+                    margin-top: -2px;
+                    }
+                    .selectboxit-container .selectboxit .selectboxit-text {
+                    display: block;
+                    float: left;
+                    height: 34px;
+                    line-height: 34px;
+                    padding-left: 10px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    }
+                    .selectboxit-container .selectboxit .selectboxit-arrow-container {
+                    display: block;
+                    position: absolute;
+                    right: 0;
+                    height: 34px;
+                    width: 34px;
+                    line-height: 30px;
+                    border-left: 1px solid #cccccc;
+                    border-right: 1px solid #cccccc;
+                    background-color: #eeeeee;
+                    }
+                    .selectboxit-container .selectboxit .selectboxit-arrow-container .selectboxit-arrow {
+                    background-image: url('Templates/imagespg_50702/s-arrow-down-big-black.png');
+                    width: 12px;
+                    height: 8px;
+                    position: absolute;
+                    margin: 0 auto;
+                    top: 44%;
+                    right: 0;
+                    left: 0;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-open .selectboxit-arrow-container {
+                    pointer-events: none;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-hover .selectboxit-text,
+                    .selectboxit-container .selectboxit.selectboxit-open .selectboxit-text,
+                    .selectboxit-container .selectboxit:focus .selectboxit-text {
+                    color: #009fb4;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-hover .selectboxit-arrow-container,
+                    .selectboxit-container .selectboxit.selectboxit-open .selectboxit-arrow-container,
+                    .selectboxit-container .selectboxit:focus .selectboxit-arrow-container {
+                    background-color: #009fb4;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-hover .selectboxit-arrow-container
+                    .selectboxit-arrow,
+                    .selectboxit-container .selectboxit.selectboxit-open .selectboxit-arrow-container
+                    .selectboxit-arrow,
+                    .selectboxit-container .selectboxit:focus .selectboxit-arrow-container .selectboxit-arrow {
+                    background-image: url('Templates/imagespg_50702/s-arrow-down-big-black.png');
+                    background-repeat: no-repeat;
+                    width: 12px;
+                    height: 8px;
+                    }
+                    .selectboxit-container .selectboxit:focus {
+                    outline: 0;
+                    }
+                    .selectboxit-container .selectboxit.error {
+                    border: 2px solid #f9d0cd;
+                    outline: 0 none;
+                    }
+                    .selectboxit-container .selectboxit.error .selectboxit-text {
+                    height: 32px;
+                    line-height: 32px;
+                    }
+                    .selectboxit-container .selectboxit.error .selectboxit-arrow-container {
+                    border-top: 0;
+                    border-right: 0;
+                    border-bottom: 0;
+                    right: 2px;
+                    height: 32px;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-disabled {
+                    cursor: default;
+                    opacity: 0.4;
+                    filter: alpha(opacity=40);
+                    }
+                    .lt-ie10 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-pretext,
+                    .lt-ie10 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-text,
+                    .lt-ie10 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-arrow-container {
+                    opacity: 0.4;
+                    filter: alpha(opacity=40);
+                    }
+                    .lt-ie9 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-pretext,
+                    .lt-ie9 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-text,
+                    .lt-ie9 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-arrow-container {
+                    filter: none;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-disabled.selectboxit-hover .selectboxit-pretext,
+                    .selectboxit-container .selectboxit.selectboxit-disabled:focus .selectboxit-pretext,
+                    .selectboxit-container .selectboxit.selectboxit-disabled.selectboxit-hover .selectboxit-text,
+                    .selectboxit-container .selectboxit.selectboxit-disabled:focus .selectboxit-text {
+                    color: #333333;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-disabled.selectboxit-hover
+                    .selectboxit-arrow-container,
+                    .selectboxit-container .selectboxit.selectboxit-disabled:focus .selectboxit-arrow-container {
+                    background-color: #eeeeee;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-disabled.selectboxit-hover
+                    .selectboxit-arrow-container .selectboxit-arrow,
+                    .selectboxit-container .selectboxit.selectboxit-disabled:focus .selectboxit-arrow-container
+                    .selectboxit-arrow {
+                    background-image: url('Templates/imagespg_50702/s-arrow-down-big-black.png');
+                    background-repeat: no-repeat;
+                    width: 12px;
+                    height: 8px;
+                    }
+                    .selectboxit-container .selectboxit-options {
+                    display: none;
+                    position: absolute;
+                    min-width: 100%;
+                    *width: 100%;
+                    padding: 0;
+                    margin: 0;
+                    list-style: none;
+                    cursor: pointer;
+                    z-index: 1370;
+                    text-align: left;
+                    border: 1px solid #cccccc;
+                    max-height: 400px;
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                    }
+                    .selectboxit-container .selectboxit-options .selectboxit-option {
+                    font-size: 16px;
+                    line-height: 18px;
+                    vertical-align: middle;
+                    display: inline-block;
+                    display: block;
+                    margin: 0;
+                    background-color: #ffffff;
+                    border-top: 1px solid #cccccc;
+                    height: 34px;
+                    line-height: 34px;
+                    padding-left: 2px;
+                    }
+                    .selectboxit-container .selectboxit-options .selectboxit-option:first-child {
+                    border-top: none;
+                    }
+                    .selectboxit-container .selectboxit-options .selectboxit-option .selectboxit-option-anchor {
+                    font-weight: 400;
+                    font-size: 13px;
+                    line-height: 18px;
+                    padding-left: 8px;
+                    color: #000000;
+                    text-decoration: none;
+                    }
+                    .selectboxit-container .selectboxit-options .selectboxit-focus .selectboxit-option-anchor {
+                    color: #009fb4;
+                    }
+                    .selectboxit-container .selectboxit-options .selectboxit-selected {
+                    background-color: #eeeeee;
+                    }
+                    .selectboxit-container .selectboxit-options .selectboxit-selected .selectboxit-option-anchor {
+                    color: #de1417;
+                    }
+                    .selectboxit-container .selectboxit-option-icon-container {
+                    float: left;
+                    height: 34px;
+                    line-height: 34px;
+                    }
+                    .selectboxit-container .selectboxit-option-icon {
+                    margin-top: -2px;
+                    margin-left: -17px;
+                    margin: 0;
+                    padding: 0;
+                    vertical-align: middle;
+                    }
+                </style>
+<style type="text/css">
+
+                    /**
+                    * The following rules are based on the elements styling from the Distrelec Website
+                    */
+
+
+                    /**
+                    * Layout
+                    */
+
+                    body {
+                    margin: 0;
+                    padding: 0;
+                    color: #333333;
+                    font-family: Helvetica,Arial,sans-serif !important;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 20px;
+                    }
+
+                    table, td {
+                    margin:0;
+                    padding:0
+                    padding-bottom: 2px;
+                    font-family: Helvetica,Arial,sans-serif;
+                    }
+
+
+                    /**
+                    * Form Fields
+                    */
+
+                    textarea, select, input[type="text"], input[type="number"], input[type="password"],
+                    input[type="email"] {
+                    font-family: Helvetica,Arial,sans-serif;
+                    border: 1px solid #CCCCCC;
+                    display: inline-block;
+                    font-size: 16px;
+                    line-height: 20px;
+                    padding: 6px 8px;
+                    vertical-align: middle;
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                    }
+
+                    .selectboxit {
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                    }
+
+                    textarea:focus, select:focus, input[type="text"]:focus, input[type="number"]:focus,
+                    input[type="password"]:focus, input[type="email"]:focus {
+                    background-color: #F6F6F6;
+                    border-width: 2px;
+                    outline: 0 none;
+                    padding: 5px 7px;
+                    }
+
+                    input[type="text"] {
+                    width: 300px;
+                    }
+
+
+                    /**
+                    * Widths for the selectboxit selects
+                    */
+
+                    .ccbrand {
+                    width: 300px !important;
+                    }
+
+                    .kkmonth,
+                    .kkyear {
+                    width: 100px !important;
+                    }
+
+                    /**
+                    * Validation Error
+                    */
+                    textarea.error,
+                    select.error,
+                    input[type="text"].error,
+                    input[type="number"].error,
+                    input[type="password"].error,
+                    input[type="email"].error {
+                    border: 2px solid #F9D0CD !important;
+                    padding: 5px 7px !important; // compensate for the additional border-width
+                    outline:0 !important;
+                    }
+
+
+                    /**
+                    * Submit Button
+                    */
+
+                    input[type=submit] {
+                    width: 300px;
+                    margin-bottom: 40px;
+                    }
+
+                    input[type=submit],
+                    input[type=button] {
+                    font-family: Helvetica,Arial,sans-serif;
+                    background-color: #DE1417;
+                    border: 1px solid #DE1417;
+                    color: #FFFFFF;
+                    display: inline-block;
+                    font-size: 16px;
+                    height: 41px;
+                    line-height: 19px;
+                    position: relative;
+                    text-align: center;
+                    text-decoration: none !important;
+                    cursor: pointer;
+                    text-transform: none;
+                    padding: 8px 7px;
+                    width: 620px;
+                    }
+
+                    input[type=submit]:hover,
+                    input[type=button]:hover {
+                    background-color: #FFFFFF;
+                    border-color: #CCCCCC;
+                    color: #DE1417;
+                    }
+
+                    input[type=submit]:active,
+                    input[type=button]:active {
+                    background-color: #F9D0CD;
+                    border-color: #F9D0CD;
+                    color: #DE1417;
+                    }
+
+                    input[type=button] {
+                    background-color: transparent;
+                    border: none;
+                    color: #009fb4;
+                    text-decoration: underline !important;
+                    width: auto !important;
+                    }
+
+                    input[type=button]:hover {
+                    background-color: #FFFFFF;
+                    border-color: #CCCCCC;
+                    color: #393E41;
+                    }
+
+                    input[type=button]:active {
+                    background-color: #CDECF0;
+                    border-color: #CDECF0;
+                    color: #393E41;
+                    }
+
+                    /*
+                    * jQuery SelectBoxIt
+                    *
+                    * used for custom Dropdown Styling
+                    */
+                    .selectboxit-container {
+                    position: relative;
+                    display: inline-block;
+                    vertical-align: top;
+                    -webkit-touch-callout: none;
+                    -webkit-user-select: none;
+                    -khtml-user-select: none;
+                    -moz-user-select: -moz-none;
+                    ms-user-select: none;
+                    -o-user-select: none;
+                    user-select: none;
+                    outline: none;
+                    white-space: nowrap;
+                    }
+                    .selectboxit-container + .field-msg {
+                    margin-top: 10px;
+                    }
+                    .selectboxit-container .selectboxit {
+                    font-size: 16px;
+                    line-height: 18px;
+                    vertical-align: middle;
+                    display: inline-block;
+                    width: 300px;
+                    color: #000000;
+                    background-color: #ffffff;
+                    border: 1px solid #cccccc;
+                    cursor: pointer;
+                    }
+                    .selectboxit-container .selectboxit .selectboxit-option-icon-container {
+                    margin-top: -2px;
+                    }
+                    .selectboxit-container .selectboxit .selectboxit-text {
+                    display: block;
+                    float: left;
+                    height: 34px;
+                    line-height: 34px;
+                    padding-left: 10px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    }
+                    .selectboxit-container .selectboxit .selectboxit-arrow-container {
+                    display: block;
+                    position: absolute;
+                    right: 0;
+                    height: 34px;
+                    width: 34px;
+                    line-height: 30px;
+                    border-left: 1px solid #cccccc;
+                    border-right: 1px solid #cccccc;
+                    background-color: #eeeeee;
+                    }
+                    .selectboxit-container .selectboxit .selectboxit-arrow-container .selectboxit-arrow {
+                    background-image: url('Templates/imagespg_50702/s-arrow-down-big-black.png');
+                    background-repeat: no-repeat;
+                    width: 100%;
+                    background-position: top center;
+                    height: 8px;
+                    position: absolute;
+                    margin: 0 auto;
+                    top: 44%;
+                    right: 0;
+                    left: 0;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-open .selectboxit-arrow-container {
+                    pointer-events: none;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-hover .selectboxit-text,
+                    .selectboxit-container .selectboxit.selectboxit-open .selectboxit-text,
+                    .selectboxit-container .selectboxit:focus .selectboxit-text {
+                    color: #009fb4;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-hover .selectboxit-arrow-container,
+                    .selectboxit-container .selectboxit.selectboxit-open .selectboxit-arrow-container,
+                    .selectboxit-container .selectboxit:focus .selectboxit-arrow-container {
+                    background-color: #009fb4;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-hover .selectboxit-arrow-container
+                    .selectboxit-arrow,
+                    .selectboxit-container .selectboxit.selectboxit-open .selectboxit-arrow-container
+                    .selectboxit-arrow,
+                    .selectboxit-container .selectboxit:focus .selectboxit-arrow-container .selectboxit-arrow {
+                    background-image: url('Templates/imagespg_50702/s-arrow-down-big-white.png');
+                    background-repeat: no-repeat;
+                    width: 100%;
+                    background-position: top center;
+                    height: 7px;
+                    }
+                    .selectboxit-container .selectboxit:focus {
+                    outline: 0;
+                    }
+                    .selectboxit-container .selectboxit.error {
+                    border: 2px solid #f9d0cd;
+                    outline: 0 none;
+                    }
+                    .selectboxit-container .selectboxit.error .selectboxit-text {
+                    height: 32px;
+                    line-height: 32px;
+                    }
+                    .selectboxit-container .selectboxit.error .selectboxit-arrow-container {
+                    border-top: 0;
+                    border-right: 0;
+                    border-bottom: 0;
+                    right: 2px;
+                    height: 32px;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-disabled {
+                    cursor: default;
+                    opacity: 0.4;
+                    filter: alpha(opacity=40);
+                    }
+                    .lt-ie10 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-pretext,
+                    .lt-ie10 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-text,
+                    .lt-ie10 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-arrow-container {
+                    opacity: 0.4;
+                    filter: alpha(opacity=40);
+                    }
+                    .lt-ie9 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-pretext,
+                    .lt-ie9 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-text,
+                    .lt-ie9 .selectboxit-container .selectboxit.selectboxit-disabled .selectboxit-arrow-container {
+                    filter: none;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-disabled.selectboxit-hover .selectboxit-pretext,
+                    .selectboxit-container .selectboxit.selectboxit-disabled:focus .selectboxit-pretext,
+                    .selectboxit-container .selectboxit.selectboxit-disabled.selectboxit-hover .selectboxit-text,
+                    .selectboxit-container .selectboxit.selectboxit-disabled:focus .selectboxit-text {
+                    color: #333333;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-disabled.selectboxit-hover
+                    .selectboxit-arrow-container,
+                    .selectboxit-container .selectboxit.selectboxit-disabled:focus .selectboxit-arrow-container {
+                    background-color: #eeeeee;
+                    }
+                    .selectboxit-container .selectboxit.selectboxit-disabled.selectboxit-hover
+                    .selectboxit-arrow-container .selectboxit-arrow,
+                    .selectboxit-container .selectboxit.selectboxit-disabled:focus .selectboxit-arrow-container
+                    .selectboxit-arrow {
+                    background-image: url('Templates/imagespg_50702/s-arrow-down-big-black.png');
+                    background-repeat: no-repeat;
+                    width: 100%;
+                    background-position: top center;
+                    height: 8px;
+                    }
+                    .selectboxit-container .selectboxit-options {
+                    display: none;
+                    position: absolute;
+                    min-width: 0;
+                    max-width: 300px;
+                    width: 100%;
+                    padding: 0;
+                    margin: 0;
+                    margin-top: -6px;
+                    list-style: none;
+                    z-index: 1370;
+                    text-align: left;
+                    border: 1px solid #cccccc;
+                    max-height: 400px;
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                    }
+                    .field + .selectboxit-container .selectboxit-options {
+                    margin-top: -10px;
+                    }
+                    .selectboxit-container .selectboxit-options .selectboxit-option {
+                    font-size: 16px;
+                    line-height: 18px;
+                    vertical-align: middle;
+                    display: inline-block;
+                    display: block;
+                    margin: 0;
+                    background-color: #ffffff;
+                    border-top: 1px solid #cccccc;
+                    height: 34px;
+                    line-height: 34px;
+                    padding-left: 2px;
+                    cursor: pointer;
+                    }
+                    .selectboxit-container .selectboxit-options .selectboxit-option:first-child {
+                    border-top: none;
+                    }
+                    .selectboxit-container .selectboxit-options .selectboxit-option .selectboxit-option-anchor {
+                    font-weight: 400;
+                    font-size: 13px;
+                    line-height: 18px;
+                    padding-left: 8px;
+                    color: #000000;
+                    text-decoration: none;
+                    }
+
+                    .selectboxit-container .selectboxit-options .selectboxit-option.placeholder
+                    .selectboxit-option-anchor {
+                    color: #a4a4a4;
+                    cursor: default;
+                    }
+
+                    .selectboxit-container .selectboxit-options .selectboxit-focus .selectboxit-option-anchor {
+                    color: #009fb4;
+                    }
+                    .selectboxit-container .selectboxit-options .selectboxit-selected {
+                    background-color: #eeeeee;
+                    }
+                    .selectboxit-container .selectboxit-options .selectboxit-selected .selectboxit-option-anchor {
+                    color: #de1417;
+                    }
+
+                    .selectboxit-container .selectboxit-options .selectboxit-disabled .selectboxit-option-anchor {
+                    color: #a4a4a4;
+                    }
+
+                    .selectboxit-container .selectboxit-option-icon-container {
+                    float: left;
+                    height: 34px;
+                    line-height: 34px;
+                    }
+                    .selectboxit-container .selectboxit-option-icon {
+                    margin-top: -2px;
+                    margin-left: -17px;
+                    margin: 0;
+                    padding: 0;
+                    vertical-align: middle;
+                    }
+
+                </style>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#003366" vlink="#003366" alink="#003366" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="padding-left:10px;"><form name="SSLForm" id="SSLForm" action="https://spg.evopayments.eu/pay/payinterim.aspx" method="POST" language="JavaScript" onsubmit="return SSLForm_onsubmit();" autocomplete="off">
+<input type="hidden" name="MerchantID" value=""><input type="hidden" name="Len" value=""><input type="hidden" name="Data" value=""><input type="hidden" name="Counter" value=""><input type="hidden" name="Template" value="pg_50702"><input type="hidden" name="language" value=""><input type="hidden" name="Sprache" value=""><input type="hidden" name="Background" value=""><input type="hidden" name="BGImage" value=""><input type="hidden" name="BGColor" value=""><input type="hidden" name="FFace" value=""><input type="hidden" name="FSize" value=""><input type="hidden" name="FColor" value=""><input type="hidden" name="twidth" value=""><input type="hidden" name="theight" value=""><input type="hidden" name="JS" value="false"><input type="hidden" name="notify" value=""><table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr><td><table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr>
+<td align="left" height="46" style="width:320px;"></td>
+<td align="left" id="CCBrand_label"></td>
+<td align="left" id="CCBrand_field">
+<select class="ccbrand" name="CCBrand" size="1"><option class="placeholder" value="0"></option></select><div name="CCBrand-error-field" style="display:none"><span style="color:red"></span></div>
+</td>
+</tr>
+<tr>
+<td align="left" height="46"></td>
+<td align="left" id="CCnr_label">
+                                            *************</td>
+<td align="left" id="CCnr_field">
+<input type="text" name="CCnr" maxlength="19" size="20" placeholder=""><div name="CCnr-error-field" style="display:none"><span style="color:red"></span></div>
+</td>
+</tr>
+<tr>
+<td align="left" height="46" id="creditcardholder_real_label"></td>
+<td align="left" id="creditcardholder_label"></td>
+<td align="left" id="creditcardholder_field">
+<input type="text" name="creditcardholder" maxLength="50" size="20" placeholder=""><div name="CCHolder-error-field" style="display:none"><span style="color:red"></span></div>
+</td>
+</tr>
+<tr>
+<td align="left" height="46"></td>
+<td align="left" id="KKMonthYear_label">/</td>
+<td align="left" id="KKMonthYear_field">
+<select class="kkmonth" name="KKMonth" size="1"><option class="placeholder" value="*"></option>
+<option value="01">01</option>
+<option value="02">02</option>
+<option value="03">03</option>
+<option value="04">04</option>
+<option value="05">05</option>
+<option value="06">06</option>
+<option value="07">07</option>
+<option value="08">08</option>
+<option value="09">09</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option></select><span style="color:white; width:10px; display:inline-block;">-</span><select class="kkyear" name="KKYear" size="1"><option class="placeholder" value="*"></option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option>
+<option value="NaN">NaN</option></select><div name="KKMonth-error-field" style="display:none"><span style="color:red"></span></div>
+<div name="KKYear-error-field" style="display:none"><span style="color:red"></span></div>
+</td>
+</tr>
+<tr>
+<td align="left" height="46"></td>
+<td align="left">
+<input type="password" name="cccvc" maxLength="4" size="5" placeholder=""><div name="cccvc-error-field" style="display:none"><span style="color:red"></span></div>
+</td>
+</tr>
+</table></td></tr>
+<tr><td><table width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td><table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr><td id="payStatus" style="visibility:hidden" colspan="3" align="left"><font size="-1" color="" face="Arial"><br><br></font></td></tr>
+<tr><td align="left" colspan="2" valign="top"><input type="submit" id="submit1" style="visibility:visible" name="submit1" value=""></td></tr>
+</table></td></tr></table></td></tr>
+</table>
+</form></body>
+</html>

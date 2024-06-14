@@ -1,0 +1,46 @@
+<div *ngIf="displayFeedBackCampaigns$ | async as feedbackCampaigns" class="feedback-campaign container">
+  <div *ngFor="let feedbackCampaign of feedbackCampaigns">
+    <div *ngIf="feedbackCampaign.pushedProducts && isBrowser">
+      <dist-carousel [items]="feedbackCampaign.pushedProducts" [template]="carouselItemTemplate"></dist-carousel>
+      <ng-template #carouselItemTemplate let-item="item">
+        <app-product-card
+          [productCode]="item.code"
+          [priceData]="item"
+          [customDescription]="''"
+          [brandLogo]="'false'"
+          [topDisplay]="'true'"
+          [labelDisplay]="'true'"
+          [snippet]="'false'"
+          [isTitle]="'true'"
+          [isImage]="'true'"
+          [isArticle]="'false'"
+          [buttonType]="'add_to_cart'"
+          [isPrice]="'true'"
+          [productData]="item"
+          [addToCartText]="'product.product_info.add_to_cart_btn' | cxTranslate"
+          [excVatText]="'product.exc_vat' | cxTranslate"
+          [incVatText]="'product.inc_vat' | cxTranslate"
+          [artNrText]="'homepage.artNr' | cxTranslate"
+          [mpnText]="'homepage.mpn' | cxTranslate"
+          [copiedText]="'product.product_intro.copied_text' | cxTranslate"
+          [channelData]="currentChannel$ | async"
+          [hasCampaign]="true"
+          orientation="portrait"
+        ></app-product-card>
+      </ng-template>
+    </div>
+    <div *ngIf="feedbackCampaign.feedbackTexts.entry">
+      <div *ngFor="let feedbackText of feedbackCampaign.feedbackTexts.entry">
+        <app-feedback-campaign-text [feedbackText]="feedbackText"></app-feedback-campaign-text>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="banner$ | async as banner">
+  <div *ngIf="banner.noRelevantResultsBanner" class="container">
+    <div class="col-12 relevancy-banner">
+      {{ 'form.search_not_relevant' | cxTranslate: { searchTerm: banner.searchTerm } }}
+    </div>
+  </div>
+</ng-container>

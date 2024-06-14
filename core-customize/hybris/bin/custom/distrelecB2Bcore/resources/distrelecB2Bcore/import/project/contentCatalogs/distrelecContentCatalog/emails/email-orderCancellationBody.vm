@@ -1,0 +1,78 @@
+## messageSource=classpath:/distrelecB2Bcore/messages/email-orderCancellation_$lang.properties
+## messageSource=classpath:/distrelecB2Bcore/messages/email-orderCancellation_$site_$lang.properties
+## messageSource=classpath:/distrelecB2Bcore/messages/$site/email-footer_$lang.properties
+
+#macro(genHtmlLink $url $label)
+<a style="color: #AA1936; text-decoration: underline;" href="$url" target="_blank"><span style="color: #AA1936;">$label</span></a>
+#end
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+<html>
+<head>
+    <style type="text/css">
+        p {
+            font-size: 14px;
+            color: #333333;
+            -ms-text-size-adjust: 100% !important;
+            -webkit-font-smoothing: antialiased !important;
+            line-height: 24px;
+        }
+
+    </style>
+
+</head>
+<body style="padding: 0; margin: 0; font-family: Montserrat, sans-serif; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+    ## HEADER include
+    ${ctx.header}
+
+    ## MOOD IMAGE
+<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+    <tr>
+        <td style="border-left: 1px solid #cccccc; border-right: 1px solid #cccccc;">
+            ${ctx.cmsSlotContents.MoodImage}
+        </td>
+    </tr>
+    <tr>
+        <td height="5" bgcolor="#AA1936"style="border-right: 1px solid #cccccc; border-left: 1px solid #cccccc;"></td>
+    </tr>
+</table>
+
+    ## CONTENT
+<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+
+    <tr>
+        <td style="border-right: 1px solid #cccccc; border-left: 1px solid #cccccc; padding: 20px;">
+            ## title
+            <p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 30px;">${ctx.messages.emailHeader}</p>
+            <br>
+            <p style="color: #333333; text-decoration: none;"> ${ctx.messages.salutation}</p>
+            <p style="color: #333333; text-decoration: none;"> ${ctx.messages.line1}</p>
+            <p style="padding-bottom: 15px; color: #333333; text-decoration: none;">
+            <b>${ctx.messages.details}</b><br>
+            <b>${ctx.messages.orderNumber}: </b>${ctx.orderNumber}<br>
+            <b>${ctx.messages.articleNumber}:</b>
+                #if(!${ctx.articleNumbers.isEmpty()})
+                    #foreach($articleNumber in $ctx.articleNumbers)
+                        $articleNumber#if($foreach.hasNext),#end
+                    #end
+                #end
+                <br>
+            <b>${ctx.messages.productName}:</b>
+                #if(!${ctx.productNames.isEmpty()})
+                #foreach($productName in $ctx.productNames)
+                    $productName#if($foreach.hasNext),#end
+                #end
+            #end
+            </p>
+            <p style="color: #333333; text-decoration: none;">${ctx.messages.line2}</p>
+            <p style="color: #333333; text-decoration: none;">${ctx.messages.line3}</p>
+            <p style="color: #333333; text-decoration: none;">${ctx.messages.apologies}</p>
+            <p style="color: #333333; text-decoration: none;">${ctx.messages.regards}</p>
+            <p style="color: #333333; text-decoration: none;">${ctx.messages.signature}</p>
+        </td>
+    </tr>
+</table>
+
+    ## FOOTER include
+    ${ctx.footer}
+</body>
+</html>

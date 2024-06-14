@@ -1,0 +1,21 @@
+# PL
+$contentCatalog = distrelec_PLContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+
+$lang = pl
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]               ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Ustawienia prywatności/plików cookie ; #triggerCookieSettings
+
+$lang = en
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]  ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Privacy/Cookie Settings ; #triggerCookieSettings
+
+
+UPDATE DistFooterComponent; UID[unique = true]  ; impressumLinks(uid, $contentCV); $contentCV[unique = true]
+                          ; DistFooterComponent ; footer_legals_pl_agb, footer_legals_pl_impressum, PrivacyCookieLink, footer_legals_pl_datenschutz, footer_legals_pl_disclaimer, ADR-Link, ODR-link, QLLink
+

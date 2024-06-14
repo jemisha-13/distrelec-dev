@@ -1,0 +1,39 @@
+<h2 class="card-item__title" id="checkout.confirmation.request_invoice.title">
+  {{ 'checkout.confirmation.request_invoice_title' | cxTranslate }}
+</h2>
+
+<p class="card-item__txt" id="checkout.confirmation.request_invoice.info">
+  {{ 'checkout.confirmation.request_invoice_info' | cxTranslate }}
+</p>
+
+<div class="mt-3">
+  <app-dist-button
+    [class.is-clicked]="order.invoicePaymentModeRequested"
+    (click)="!order.invoicePaymentModeRequested && handleRequestToPayWithInvoice()"
+    buttonId="checkout.confirmation.request_invoice.submit"
+    width="w-fixed"
+    type="primary"
+  >
+    <ng-container
+      *ngIf="order.invoicePaymentModeRequested; else invoicePaymentModeNotRequested"
+      id="checkout.confirmation.request_invoice"
+    >
+      {{ 'checkout.confirmation.request_invoice_title_just_requested' | cxTranslate }}&nbsp;
+      <span class="is-tick-icon ml-2">
+        <app-icon class="icon-white" [icon]="successTick" iconType="svg" width="14"></app-icon>
+      </span>
+    </ng-container>
+
+    <ng-template #invoicePaymentModeNotRequested id="checkout.confirmation.invoice.requested">
+      {{ 'checkout.confirmation.request_invoice_submit' | cxTranslate }}
+    </ng-template>
+  </app-dist-button>
+</div>
+
+<p
+  *ngIf="order.invoicePaymentModeRequested"
+  class="card-item__txt mt-2"
+  id="checkout.confirmation.request_invoice_requested.info"
+>
+  {{ 'checkout.confirmation.request_invoice_info_just_requested' | cxTranslate }}
+</p>

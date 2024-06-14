@@ -1,0 +1,192 @@
+<form [formGroup]="cartForm">
+  <div class="o-cart" id="cart-total" [formGroup]="cartForm">
+    <div class="container">
+      <div *ngIf="isVoucherError_ | async" class="o-cart__error" id="cart-voucher-invalid-error">
+        {{ 'cart.voucher_invalid' | cxTranslate }}
+      </div>
+
+      <div *ngIf="isVoucherSuccess_ | async" class="o-cart__success" id="cart-voucher-success">
+        {{ 'cart.voucher_success' | cxTranslate }}
+      </div>
+
+      <div *ngIf="cartData_ | async as cartData" class="row">
+        <div class="col-lg-9">
+          <div *ngIf="!cartData.entries?.length" class="o-cart__head">
+            <h1 class="o-cart__head__title is-empty-cart" id="cart_empty_title">
+              {{ 'cart.cart_empty_title' | cxTranslate }}
+            </h1>
+
+            <div class="o-cart__head__subtitle" id="cart_empty_subtitle">
+              <p class="is-desktop-msg">
+                {{ 'cart.cart_empty_subtitle' | cxTranslate }}
+              </p>
+
+              <div class="is-mobile-msg text-center">
+                <button class="btn btn--continue-shopping" id="cart-mobile-shop-button" (click)="onContinueShopping()">
+                  {{ 'cart.continue_shopping' | cxTranslate }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="cartData.entries?.length" class="o-cart__head">
+            <h1 class="o-cart__head__title" id="cart_title">{{ 'cart.cart_title' | cxTranslate }}</h1>
+
+            <p class="o-cart__head__subtitle" id="cart_title_subtitle">
+              {{ 'cart.cart_title_subtitle' | cxTranslate: { items: cartData.entries?.length } }}
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-9">
+          <app-cart-search
+            *ngIf="currentChannel_ | async as currentChannel"
+            [currentChannel]="currentChannel"
+            [cartForm]="cartForm"
+            [isLoading_]="isLoading_"
+          ></app-cart-search>
+
+          <div *ngIf="showCartMessage_ | async" class="o-cart__low-stock-msg message" id="cart-message">
+            {{
+              'basket.phaseout.quantity.reducedNumberOfItemsAdded.lowStock'
+                | cxTranslate: { productCode: (lowStockProdNo_ | async) }
+            }}
+          </div>
+
+          <div *ngIf="isDangerousProduct(cartData)" class="o-cart__dangerous-msg message" id="dangerous-products-msg">
+            <div class="bold" id="cart.dangerousgoods.warning.message_1">
+              {{ 'cart.dangerousgoods.warning.message_1' | cxTranslate }}
+            </div>
+            <ul id="list-of-dangerous-products">
+              <ng-container *ngFor="let entry of cartData.entries">
+                <li
+                  *ngIf="entry.product.transportGroupData.dangerous"
+                  [id]="'dangerous-product-code-' + entry.product.code"
+                >
+                  - {{ entry.product.code }}: {{ entry.product.name }}
+                </li>
+              </ng-container>
+            </ul>
+            <div id="cart.dangerousgoods.warning.message_2">
+              {{ 'cart.dangerousgoods.warning.message_2' | cxTranslate }}
+            </div>
+          </div>
+
+          <div *ngIf="cartData.entries?.length > 0 || (isLoading_ | async)" class="o-cart-list">
+            <div class="o-cart-list__head">
+              <div class="cell cell-availability">
+                <p id="product.product">
+                  {{ 'product.product' | cxTranslate }}
+                </p>
+              </div>
+
+              <div class="cell cell-numeric">
+                <p class="ellipsis" id="cart.availability" title="Availability">
+                  {{ 'cart.availability' | cxTranslate }}
+                </p>
+              </div>
+
+              <div class="cell cell-price">
+                <p class="ellipsis" id="cart.price" title="Price">
+                  {{ 'cart.price' | cxTranslate }}
+                </p>
+              </div>
+
+              <div class="cell cell-price">
+                <p class="ellipsis" id="cart.subtotal" title="Subtotal">
+                  {{ 'cart.subtotal' | cxTranslate }}
+                </p>
+              </div>
+            </div>
+
+            <ng-container *ngIf="allEntries">
+              <ul class="o-cart-list__list" id="cart-list">
+                <ng-container *ngFor="let entry of allEntries; let i = index">
+                  <ng-container [ngSwitch]="entry?.type">
+                    <ng-container *ngSwitchCase="'quotation'">
+                      <app-cart-quotation-list
+                        [quotationId]="entry.id"
+                        [cartData]="cartData"
+                        [items]="entry.entries"
+                        (removeClicked)="this.removeQuotation(entry.id)"
+                        (focusRefInput)="onFocusRefInput($event)"
+                      ></app-cart-quotation-list>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      <li class="o-cart-list__item">
+                        <app-cart-product
+                          [cartData]="cartData"
+                          [cartItem]="entry"
+                          [isContinueDisabled_]="isContinueDisabled_"
+                          [recalculateCartAction$]="recalculateCartAction$"
+                          [isLoading_]="isLoading_"
+                          [quantityChangeable]="true"
+                          [removable]="true"
+                          [referenceEditable]="true"
+                          [groupedEntry]="false"
+                          [isVoucherSuccess]="isVoucherSuccess_"
+                          (focusRefInput)="onFocusRefInput($event)"
+                        ></app-cart-product>
+                      </li>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ul>
+
+              <app-cart-toolbar
+                [cartForm]="cartForm"
+                [cartData]="cartData"
+                [isVoucherSuccess]="isVoucherSuccess_"
+              ></app-cart-toolbar>
+
+              <ng-container *ngIf="currentChannel_ | async as currentChannel">
+                <app-cart-recommender
+                  [currentChannel]="currentChannel"
+                  [cartEntries]="cartData.entries"
+                ></app-cart-recommender>
+              </ng-container>
+            </ng-container>
+
+            <div
+              *ngIf="
+                ((isLoading_ | async) && !cartData.entries) || ((isLoading_ | async) && cartData.entries?.length === 0)
+              "
+              class="o-cart-list__loader"
+            >
+              <app-component-loading-spinner></app-component-loading-spinner>
+            </div>
+          </div>
+        </div>
+
+        <aside class="col-lg-3">
+          <div class="o-cart__sidebar" id="cart-total-holder" [class.sticky]="cartData.entries?.length > 0">
+            <ng-container *ngIf="cartData.entries?.length > 0; else isEmptyCart">
+              <app-cart-total
+                [cartForm]="cartForm"
+                [isVoucherError_]="isVoucherError_"
+                [isVoucherSuccess_]="isVoucherSuccess_"
+                [extraStickyHeight_]="extraStickyHeight_"
+                [isLoading]="recalculateInProgress"
+                [isContinueDisabled_]="isContinueDisabled_"
+                (triggerRecalculate)="triggerRecalculate($event)"
+              ></app-cart-total>
+            </ng-container>
+
+            <ng-template #isEmptyCart>
+              <div class="mat-button mat-button--action-blue" id="proceed_checkout-button" [class.disabled]="true">
+                {{ 'cart.proceed_checkout' | cxTranslate }}
+              </div>
+
+              <app-component-loading-spinner *ngIf="isCartLoading_ | async"></app-component-loading-spinner>
+            </ng-template>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</form>
+
+<app-skeleton-loader
+  [isSkeletonLoading]="(areProductsLoading_ | async) && (areProductAvailabilitiesLoading_ | async)"
+  pageName="cart"
+></app-skeleton-loader>

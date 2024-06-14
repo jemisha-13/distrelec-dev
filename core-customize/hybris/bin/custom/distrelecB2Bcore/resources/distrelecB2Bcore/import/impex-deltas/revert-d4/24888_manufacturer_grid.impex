@@ -1,0 +1,71 @@
+# Update the banner for Manufacturer Grid on the Manufacturer's Page for D4.
+$country=FR
+
+# Constants
+$mode = Staged
+
+# FR Catalog
+$contentCatalog = distrelec_FRContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = $mode])[default = $contentCatalog:$mode]
+
+# International Catalog
+$internationalContentCatalog = distrelec_IntContentCatalog
+$internationalContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $internationalContentCatalog]), CatalogVersion.version[default = $mode])[default = $internationalContentCatalog:$mode]
+
+# Hide old Manufacturer Grid component
+UPDATE CMSParagraphComponent; uid[unique = true]; $contentCV[unique = true];visible
+                            ;Manufacturer-grid;;false
+
+# Create the new Title Component as like Production D4
+INSERT_UPDATE CMSParagraphComponent; uid[unique = true]; $internationalContentCV[unique = true];visible;&componentRef;content[lang = fr_FR]
+                                   ;cmsitem_00029108;;true;cmsitem_00029108;"<style type=""text/css"">html {scroll-behavior: smooth;}</style><h1>Nos meilleurs fabricants</h1>"
+
+# Provide a reference for the slot below
+INSERT_UPDATE CMSParagraphComponent;uid[unique = true]; $contentCV[unique = true];visible;&componentRef;content[lang = fr_FR]
+                                   ;comp_000046HX;;true;comp_000046HX;"<table border=""0"" cellspacing=""1"" cellpadding=""1"" width=""200""><tbody><tr><td><br />&nbsp;</td> <td>&nbsp;</td></tr></tbody></table>"
+
+
+# Use this component as like Production FR.
+INSERT_UPDATE CMSParagraphComponent;uid[unique = true]; $internationalContentCV[unique = true];visible[default = true];&componentRef;content[lang = fr_FR]
+                                   ;cmsitem_00008884;;;cmsitem_00008884;"&nbsp;
+ <table border=""0"" cellpadding=""20"" cellspacing=""0"" height=""199"" width=""960"">
+ <tbody id=""webmerch_manu-grid"">
+  <tr>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_rnp?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-rnd-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/medias/rnd-components-cmyk-small.jpg?context=bWFzdGVyfHJvb3R8NTg3OTk0fGltYWdlL2pwZWd8aGViL2hmNS85MTk1NDQwNDA2NTU4LmpwZ3xkZjczNDdkODcyMzA0MWVlNzE4MTRlMzBmYTA5YzA5ZDFkMDRkN2E3MmI3M2VmYjExODg1ZGNhNjY4NjdiNjgx"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_wel?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-weller-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt=""Weller"" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/weller_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_ebm?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-ebm-papst-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/ebmpapst_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_bel?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-harting-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/belden_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_pho?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-phoenix-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/lo/go/phoenix_contact_logo.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_eaton?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-eaton-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_e/ps/eaton-68405.jpg"" width=""120"" /></a></td>
+  </tr>
+  <tr>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_tpp?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-traco-power-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/tracopower_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_mox?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-varta-microbattery-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_e/ps/moxa_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/3m/man_mmm?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-3m-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/lo/go/3M_Logo.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/omron/man_omr?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-omron-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/omron_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_knx?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-knipex-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/schlegel-vibrationsgeschutzt-IMG3261.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_flu?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-fluke-brand-logo-overview.gl.-""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/fluke_logo_cmyk.jpg"" width=""120"" /></a></td>
+  </tr>
+  <tr>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_wih?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-wiha-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/lo/go/wiha_Logo.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/hellermanntyton/man_hlm?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-hellermanntyton-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/hellermann_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/vishay/man_vishay?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-vishay-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/vishay_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/arduino/man_aio""><img alt="""" border=""0"" src=""/medias/arduino-manupage.jpg?context=bWFzdGVyfHJvb3R8MjgwOXxpbWFnZS9qcGVnfGgzZi9oYjQvOTQ0Mzk1NDcyMDc5OC5qcGd8OTZjMTU1OWM4MDI2MTNjOTE4MmE2YWE0NjJmNjdlNTQ3MTIxOWJiZDNhZDEyMTJhYTZiZTM3NWM4MzY4NzAzMg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_mch?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-microchip-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/microchip_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/kemet/man_kem?wt_mc=gl.ons.zht-mdf-1603-kemet-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/cm/yk/kemet_logo_cmyk.jpg"" width=""120"" /></a></td>
+  </tr>
+  <tr>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_tek?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-tektronix-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/tektronix_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_aml?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-amphenol-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/amphenol_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_keysight?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-keysight-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/10/98/keysight_logo.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_pkt""><img alt="""" border=""0"" src=""https://www.distrelec.ch/Web/WebShopImages/manufacturer_logo/cm/yk/peaktech_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_sie?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-siemens-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_e/ps/siemens_logo_cmyk.jpg"" width=""120"" /></a></td>
+   <td align=""center"" valign=""middle""><a href=""/manufacturer/man_tycoelectronics?wt_mc=gl.ons.zbtn-1626-manufacturer-stores-linecard-te-connectivity-brand-logo-overview.gl.-&amp;utm_source=webmerch&amp;utm_medium=ht&amp;utm_campaign=manufacturer-stores-linecard""><img alt="""" border=""0"" src=""/Web/WebShopImages/manufacturer_logo/_t/if/tyco_electronics_logo_cmyk.jpg"" width=""120"" /></a></td>
+  </tr>
+ </tbody>
+</table>
+"
+
+# Add components to the content slot to match Production.
+INSERT_UPDATE ContentSlot;uid[unique = true];$contentCV[unique = true];cmsComponents(&componentRef)
+                         ;cs_00001DDS;;comp_000046HX,cmsitem_00029108, cmsitem_00008884

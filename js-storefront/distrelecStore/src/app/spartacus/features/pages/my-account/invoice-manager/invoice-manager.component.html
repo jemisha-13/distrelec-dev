@@ -1,0 +1,467 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-9">
+      <ng-container class="account-information-main">
+        <div class="invoice-manager-wrapper">
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+              <h1 id="invoiceManger-pageTitle">
+                {{ 'form.invoice_manager' | cxTranslate }}
+              </h1>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-12"></div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-12">
+              <app-action-message
+                id="userChangeId"
+                [type]="responseType"
+                [message]="responseMessage"
+              ></app-action-message>
+            </div>
+          </div>
+
+          <div class="notForPrint">
+            <div class="row mt-extra">
+              <label
+                class="col-md-2 col-sm-12 col-form-label"
+                id="invoiceManger-orderNumber"
+                for="invoiceManger.orderNumber"
+              >
+                {{ 'form.order_number' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input class="form-control" id="invoiceManger.orderNumber" [(ngModel)]="orderNumber" type="text" />
+              </div>
+
+              <label
+                class="col-md-2 col-sm-12 col-form-label"
+                id="invoiceManger-invoiceNumber"
+                for="invoiceManger.invoiceNumber"
+              >
+                {{ 'form.invoice_number' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input class="form-control" id="invoiceManger.invoiceNumber" [(ngModel)]="invoiceNumber" type="text" />
+              </div>
+            </div>
+            <div class="row mt-2">
+              <label
+                class="col-md-2 col-sm-12 col-form-label"
+                id="invoiceManger-articleNumber"
+                for="invoiceManger.articleNumber"
+              >
+                {{ 'form.article_number' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input class="form-control" id="invoiceManger.articleNumber" [(ngModel)]="articleNumber" type="text" />
+              </div>
+
+              <label
+                class="col-md-2 col-sm-12 col-form-label"
+                id="invoiceManger-invoiceDate"
+                for="invoiceManger.invoiceMaxDate"
+              >
+                {{ 'form.invoice_date' | cxTranslate }}
+              </label>
+              <div class="col-md-2 col-sm-12 mb-2">
+                <div class="input-group">
+                  <input
+                    #dp1
+                    #d1="ngbDatepicker"
+                    class="form-control dp"
+                    [(ngModel)]="invoiceMaxDate"
+                    [placeholder]="'listfilter.from' | cxTranslate"
+                    [maxDate]="invoiceMinDate"
+                    (ngModelChange)="invoiceFromDate($event)"
+                    name="dp1"
+                    ngbDatepicker
+                  />
+                  <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d1.toggle()" type="button">
+                    <fa-icon [icon]="faCalendar"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <div class="input-group">
+                  <input
+                    #dp2
+                    #d2="ngbDatepicker"
+                    class="form-control dp"
+                    [(ngModel)]="invoiceMinDate"
+                    [placeholder]="'listfilter.to' | cxTranslate"
+                    [minDate]="invoiceMaxDate"
+                    (ngModelChange)="invoiceToDate($event)"
+                    name="dp2"
+                    ngbDatepicker
+                  />
+                  <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d2.toggle()" type="button">
+                    <fa-icon [icon]="faCalendar"></fa-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <label
+                class="col-md-2 col-sm-12 col-form-label"
+                id="invoiceManger-dueDate"
+                for="invoiceManger.dueMaxDate"
+              >
+                {{ 'form.due_date' | cxTranslate }}
+              </label>
+              <div class="col-md-2 col-sm-12 mb-2">
+                <div class="input-group">
+                  <input
+                    #dp3
+                    #d3="ngbDatepicker"
+                    class="form-control dp"
+                    [(ngModel)]="dueMaxDate"
+                    [placeholder]="'listfilter.from' | cxTranslate"
+                    [maxDate]="dueMinDate"
+                    (ngModelChange)="dueFromDate($event)"
+                    name="dp3"
+                    ngbDatepicker
+                  />
+                  <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d3.toggle()" type="button">
+                    <fa-icon [icon]="faCalendar"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <div class="input-group">
+                  <input
+                    #dp4
+                    #d4="ngbDatepicker"
+                    class="form-control dp"
+                    [(ngModel)]="dueMinDate"
+                    [placeholder]="'listfilter.to' | cxTranslate"
+                    [minDate]="dueMaxDate"
+                    (ngModelChange)="dueToDate($event)"
+                    name="dp4"
+                    ngbDatepicker
+                  />
+                  <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d4.toggle()" type="button">
+                    <fa-icon [icon]="faCalendar"></fa-icon>
+                  </button>
+                </div>
+              </div>
+
+              <label
+                class="col-md-2 col-sm-12 col-form-label"
+                id="invoiceManger-invoiceTotal"
+                for="invoiceManger.invoiceTotal"
+              >
+                {{ 'form.invoice_total' | cxTranslate }}
+              </label>
+              <div class="col-md-2 col-sm-12 mb-2">
+                <input
+                  class="form-control d-inline-block"
+                  id="invoiceManger.invoiceTotal"
+                  [(ngModel)]="invoiceTotalFrom"
+                  [placeholder]="'listfilter.from' | cxTranslate"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <input
+                  class="form-control d-inline-block"
+                  id="invoiceManger.invoiceTotalTo"
+                  [(ngModel)]="invoiceTotalTo"
+                  [placeholder]="'listfilter.to' | cxTranslate"
+                  type="text"
+                />
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <label
+                *ngIf="userType === 'B2B' || userType === 'B2B_KEY_ACCOUNT'"
+                class="col-md-2 col-sm-12 col-form-label"
+                id="invoiceManger-orderBy"
+                for="invoiceManger.orderBy"
+              >
+                {{ 'form.ordered_by' | cxTranslate }}
+              </label>
+              <div *ngIf="userType === 'B2B' || userType === 'B2B_KEY_ACCOUNT'" class="col-md-4 col-sm-12">
+                <ng-select
+                  class="account-info"
+                  id="invoiceManger.orderBy"
+                  [(ngModel)]="selectedOrderdBy"
+                  [items]="orderByList"
+                  bindLabel="name"
+                  bindValue="contactId"
+                ></ng-select>
+              </div>
+
+              <label class="col-md-2 col-sm-12 col-form-label" id="invoiceManger-status" for="invoiceManger.status">
+                {{ 'form.sort_status' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <ng-select class="account-info" id="invoiceManger.status" [(ngModel)]="status">
+                  <ng-option *ngFor="let statusItem of statusList" [value]="statusItem.value" [id]="statusItem.value">
+                    {{ statusItem.name | cxTranslate }}
+                  </ng-option>
+                </ng-select>
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-md-8"></div>
+              <div class="col-md-2 col-sm-6">
+                <button class="btn btn-secondary btn-distrelec btn-gray float-right mb-2" (click)="resetForm()">
+                  {{ buttonResetText | cxTranslate }}
+                </button>
+              </div>
+              <div class="col-md-2 col-sm-6">
+                <button class="btn btn-secondary btn-distrelec float-right ml-1 mb-2" (click)="search(1)">
+                  {{ buttonSearchText | cxTranslate }}
+                  <div class="float-sm-right mr-2">
+                    <fa-icon [icon]="faAngleRight"></fa-icon>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="myInvoices" id="searchResults">
+            <div class="row mb-3 mt-4">
+              <div class="col-sm-12 col-md-12">
+                <h2 id="invoiceManger-myInvoices" id="myInvoices">
+                  {{ 'accountlist.invoiceHistoryList.title' | cxTranslate }}
+                </h2>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-12 col-md-4">
+                <label for="invoiceManger-sortingList">{{ 'form.order_by' | cxTranslate }}</label>
+                <ng-select
+                  class="account-info"
+                  id="invoiceManger-sortingList"
+                  [(ngModel)]="selectedInvoiceSorting"
+                  (change)="onSortingInvoices()"
+                >
+                  <ng-option *ngFor="let sortItem of sortingList" [value]="sortItem.value" [id]="sortItem.value">
+                    {{ sortItem.name | cxTranslate }}
+                  </ng-option>
+                </ng-select>
+              </div>
+              <div class="col-sm-12 col-md-8 mt-2">
+                <img
+                  class="float-md-right cursor"
+                  (click)="printInvoices()"
+                  src="app/spartacus/assets/media/general/print.svg"
+                />
+              </div>
+            </div>
+
+            <div *ngIf="invoices; else loadingInvoices">
+              <div *ngIf="invoices?.length > 0; else noInvoices">
+                <div *ngFor="let invoice of invoices">
+                  <div class="row">
+                    <div class="col-md-10 col-sm-12">
+                      <div class="row mb-2 mt-2">
+                        <div class="col-md-3 col-sm-6 col-6">
+                          <strong class="fs-twelve">
+                            <label id="invoiceManger-invoiceNumber-text">
+                              {{ 'accountlist.invoiceHistoryList.invoiceNr' | cxTranslate }}
+                            </label>
+                          </strong>
+                          <br />
+                          <label id="invoiceManger-invoiceNumber-value">{{ invoice?.invoiceNumber }}</label>
+                          <br />
+                          <strong class="fs-twelve">
+                            <label id="invoiceManger-invoiceContact-text">
+                              {{ 'accountlist.invoiceHistoryList.contactName' | cxTranslate }}
+                            </label>
+                          </strong>
+                          <br />
+                          <label id="invoiceManger-invoiceContact-value">
+                            {{ invoice?.relatedOrders[0]?.contactName }}
+                          </label>
+                          <br />
+                          <strong class="fs-twelve">
+                            <label id="invoiceManger-orderNr-text">
+                              {{ 'accountlist.invoiceHistoryList.orderNr' | cxTranslate }}
+                            </label>
+                          </strong>
+                          <br />
+                          <label id="invoiceManger-orderNr-value">{{ invoice?.relatedOrders[0]?.orderNumber }}</label>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 col-6">
+                          <strong class="fs-twelve">
+                            <label id="invoiceManger-invoiceDate-text">
+                              {{ 'accountlist.invoiceHistoryList.invoiceDate' | cxTranslate }}
+                            </label>
+                          </strong>
+                          <br />
+                          <label id="invoiceManger-invoiceDate-value">
+                            {{ invoice?.invoiceDate | date: dateFormat }}
+                          </label>
+                          <br />
+                          <span *ngIf="invoice?.invoiceStatus === 'PAID'">
+                            <strong class="fs-twelve">
+                              <label id="invoiceManger-invoiceStatus-text">
+                                {{ 'accountlist.invoiceHistoryList.invoiceStatus' | cxTranslate }}
+                              </label>
+                            </strong>
+                            <br />
+                            <label id="invoiceManger-invoiceStatus-value">{{ invoice?.invoiceStatus }}</label>
+                          </span>
+                          <span *ngIf="invoice?.invoiceStatus !== 'PAID'">
+                            <strong class="fs-twelve">
+                              <label id="invoiceManger-dueDate-text">
+                                {{ 'accountlist.invoiceHistoryList.DueDate' | cxTranslate }}
+                              </label>
+                            </strong>
+                            <br />
+                            <label id="invoiceManger-dueDate-value">
+                              {{ invoice?.invoiceDueDate | date: dateFormat }}
+                            </label>
+                          </span>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 col-12">
+                          <strong class="fs-twelve">
+                            <label id="invoiceManger-invoiceAmount-text">
+                              {{ 'accountlist.invoiceHistoryList.invoiceAmount' | cxTranslate }}
+                            </label>
+                          </strong>
+                          <br />
+                          <div class="col-md-12 col-sm-12 col-12 pl-0">
+                            <div class="col-md-4 col-sm-4 col-4 d-inline-block pl-0">
+                              <label id="invoiceManger-subTotal-text">
+                                {{ 'accountlist.invoiceHistoryList.invoiceSubTotal' | cxTranslate }}
+                              </label>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-4 d-inline-block pl-4">
+                              <label id="invoiceManger-invoiceTotalWithoutTaxes-text">
+                                {{ invoice?.invoiceTotalWithoutTaxes | price }}
+                              </label>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-4 d-inline-block pl-4">
+                              <label id="invoiceManger-invoiceCurrency-text">{{ invoice?.currency }}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-12 col-sm-12 col-12 pl-0">
+                            <div class="col-md-4 col-sm-4 col-4 d-inline-block pl-0">
+                              <label id="invoiceManger-invoicetax-text">
+                                {{ 'accountlist.invoiceHistoryList.invoiceTax' | cxTranslate }}
+                              </label>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-4 d-inline-block pl-4">
+                              <label id="invoiceManger-invoiceTaxes-text">{{ invoice?.invoiceTaxes | price }}</label>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-4 d-inline-block pl-4">
+                              <label id="invoiceManger-invoiceCurrency-text2">{{ invoice?.currency }}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-12 col-sm-12 col-12 pl-0">
+                            <div class="col-md-4 col-sm-4 col-4 d-inline-block pl-0">
+                              <strong>
+                                <label id="invoiceManger-total-text">
+                                  {{ 'accountlist.invoiceHistoryList.invoiceTotal' | cxTranslate }}
+                                </label>
+                              </strong>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-4 d-inline-block pl-4">
+                              <strong>
+                                <label id="invoiceManger-invoiceTotal-text">{{ invoice?.invoiceTotal | price }}</label>
+                              </strong>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-4 d-inline-block pl-4">
+                              <strong>
+                                <label id="invoiceManger-invoiceCurrency-text2">{{ invoice?.currency }}</label>
+                              </strong>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12 align-self-center d-flex">
+                      <a
+                        *ngIf="invoice?.invoiceDocumentURL"
+                        class="distrelecLink cursor"
+                        id="invoiceManger-viewPrintInvoice-text"
+                        [href]="invoice?.invoiceDocumentURL"
+                        target="_blank"
+                      >
+                        {{ 'accountlist.invoiceHistoryList.viewPrintInvoice' | cxTranslate }}
+                      </a>
+                    </div>
+                  </div>
+                  <hr />
+                </div>
+              </div>
+              <ng-template #noInvoices>
+                <div class="row mt-2 mb-4">
+                  <div class="col-md-12 col-lg-12 col-sm-12">
+                    <h5 class="redFont">{{ 'form.no_invoices' | cxTranslate }}</h5>
+                  </div>
+                </div>
+              </ng-template>
+              <div
+                *ngIf="invoices && invoices.length > 0 && pagination && pagination.totalResults > 0"
+                class="row mb-3"
+              >
+                <label
+                  class="col-sm-12 col-md-2 col-form-label"
+                  id="invoiceManger-invoicePP-text"
+                  for="invoiceManger-invoicePP-select"
+                >
+                  {{ 'product.list.show.perPage' | cxTranslate }}
+                </label>
+                <div class="col-sm-12 col-md-2 mb-3">
+                  <ng-select
+                    class="account-info"
+                    id="invoiceManger-invoicePP-select"
+                    [(ngModel)]="invoicesPerPage"
+                    [items]="pageSize"
+                    (change)="onPageSizeSelect()"
+                    bindLabel="label"
+                    bindValue="label"
+                  ></ng-select>
+                </div>
+                <div class="col-sm-10 col-md-8">
+                  <ngb-pagination
+                    class="float-right"
+                    [(page)]="selectedPaginationPage"
+                    [rotate]="true"
+                    [boundaryLinks]="false"
+                    [maxSize]="'4'"
+                    [collectionSize]="pagination.totalResults"
+                    [pageSize]="invoicesPerPage"
+                    [directionLinks]="directionLinks"
+                    (click)="onPagination()"
+                  ></ngb-pagination>
+                </div>
+              </div>
+            </div>
+            <ng-template #loadingInvoices>
+              <div class="row mt-4">
+                <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+                  <img src="app/spartacus/assets/media/spinner.gif" />
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

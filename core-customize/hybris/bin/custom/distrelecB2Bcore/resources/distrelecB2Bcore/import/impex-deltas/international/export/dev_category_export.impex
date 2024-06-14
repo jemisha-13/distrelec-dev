@@ -1,0 +1,9 @@
+# LOCAL DEV ONLY
+
+$catalog=distrelec_BEContentCatalog
+$version=Staged
+
+# ---- Extension: catalog ---- Type: Category ----
+"#% impex.setTargetFile( ""Category.csv"" );"
+insert_update Category;&Item;catalog(id)[allownull=true];catalogVersion(catalog(id),version)[unique=true,allownull=true];categoryEmpty;code[unique=true,allownull=true];data_sheet(catalogVersion(catalog(id),version),code);description[lang=fr];detail(catalogVersion(catalog(id),version),code);level;logo(catalogVersion(catalog(id),version),code);modifiedtime[dateformat=dd.MM.yyyy hh:mm:ss];nameSeo[lang=fr];name[lang=fr];normal(catalogVersion(catalog(id),version),code);order;others(catalogVersion(catalog(id),version),code);picture(catalogVersion(catalog(id),version),code);pimCategoryType(code);pimSortingNumber;primaryImage(catalogVersion(catalog(id),version),qualifier);promotionText[lang=fr];stockLevelThreshold;thumbnail(catalogVersion(catalog(id),version),code);thumbnails(catalogVersion(catalog(id),version),code);wtAreaCode
+"#% impex.exportItems(""SELECT {cat.pk} FROM {CMSNavigationEntry! AS com JOIN CatalogVersion AS cv ON {com.catalogVersion}={cv.pk} JOIN Catalog AS c ON {cv.catalog}={c.pk} JOIN Category AS cat ON {com.item}={cat.pk}} WHERE {c.id}='$catalog' AND {cv.version}='$version'"", Collections.EMPTY_MAP, Collections.singletonList( Item.class ), true, true, -1, -1 );"

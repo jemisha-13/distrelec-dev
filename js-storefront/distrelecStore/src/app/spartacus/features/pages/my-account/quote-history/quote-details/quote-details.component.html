@@ -1,0 +1,410 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-9">
+      <ng-container class="account-information-main">
+        <div class="quote-details-wrapper">
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-12">
+              <h1 id="quoteDetails_page_title">{{ 'form.quotation_details' | cxTranslate }}</h1>
+            </div>
+          </div>
+          <div class="row notForPrint">
+            <div class="col-md-12">
+              <app-action-message
+                id="quoteDetails"
+                [type]="responseType"
+                [message]="responseMessage"
+              ></app-action-message>
+            </div>
+          </div>
+          <div *ngIf="loadedQuoteDetails; else loadingQuoteDetails">
+            <div class="row notForPrint">
+              <div class="col-md-2 col-sm-12 mt-3">
+                <button class="btn btn-secondary btn-distrelec btn-gray float-left d-flex" (click)="goBack()">
+                  <div class="float-sm-left ml-2">
+                    <fa-icon [icon]="faAngleLeft"></fa-icon>
+                  </div>
+                  <label class="ml-2 cursor" id="quoteDetails-back">{{ 'form.back' | cxTranslate }}</label>
+                </button>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-md-12 col-lg-12 col-sm-12 col-12">
+                <h2 class="redFont" id="quoteDetails-quoteReview">{{ 'form.quote_overview' | cxTranslate }}</h2>
+              </div>
+            </div>
+            <!-- Quotation general details -->
+            <div class="row border-top border-bottom p-3 mt-1">
+              <div class="col-md-2 col-sm-12">
+                <label class="label-bold" id="quoteDetails-expiryDate">{{ 'form.expiry_date' | cxTranslate }}</label>
+                <br />
+                <label id="quoteDetails-quotationExpiryDate">
+                  {{ quoteDetails?.quotationExpiryDate | date: dateFormat }}
+                </label>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <label class="label-bold" id="quoteDetails-quoteId">{{ 'form.quote_id' | cxTranslate }}</label>
+                <br />
+                <label id="quoteDetails-quoteId-val">{{ quoteDetails?.quotationId }}</label>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <label class="label-bold" id="quoteDetails-requestedBy">{{ 'form.requested_by' | cxTranslate }}</label>
+                <br />
+                <label id="quoteDetails-requestedByValue">{{ quoteDetails?.customerName }}</label>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <label class="label-bold" id="quoteDetails-quoteRef">{{ 'form.quote_reference' | cxTranslate }}</label>
+                <br />
+                <label class="text-red" id="quoteDetails-quotePoNumber">{{ quoteDetails?.poNumber }}</label>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <label class="label-bold" id="quoteDetails-statusText">{{ 'form.status' | cxTranslate }}</label>
+                <br />
+                <label id="quoteDetails-statusValue" [ngClass]="getStatusColor(quoteDetails?.status?.code)">
+                  {{ quoteDetails?.status?.name }}
+                </label>
+              </div>
+
+              <div class="col-md-2 col-sm-12 cursor text-center">
+                <a
+                  *ngIf="quoteDetails?.quotationDocURL"
+                  class="ml-5 float-md-left fs-small cursor notForPrint"
+                  [href]="quoteDetails.quotationDocURL"
+                  target="_blank"
+                >
+                  <img class="cursor" src="app/spartacus/assets/media/download.png" />
+                </a>
+                <div *ngIf="quoteDetails?.resubmitted && quoteDetails?.status?.code === '04'">
+                  <label class="label-bold" id="quoteDetails-resubmitted">{{ 'form.resubmitted' | cxTranslate }}</label>
+                  <br />
+                  <label *ngIf="quoteDetails?.childQuote" id="quoteDetails-newquoteRef">
+                    {{ 'form.new_quote_ref' | cxTranslate }}:
+                    <span
+                      class="cursor text-primary"
+                      id="quoteDetails-childQuote"
+                      (click)="getQuoteDetails(quoteDetails.childQuote)"
+                    >
+                      {{ quoteDetails?.childQuote }}
+                    </span>
+                  </label>
+                  <br />
+                </div>
+                <img
+                  *ngIf="loadingResubmit"
+                  class="min-width"
+                  id="quoteDetails-spinner"
+                  src="app/spartacus/assets/media/spinner.gif"
+                />
+                <label
+                  *ngIf="
+                    !loadingResubmit &&
+                    !resubmitted &&
+                    quoteDetails &&
+                    !quoteDetails.resubmitted &&
+                    quoteDetails.status?.code === '04'
+                  "
+                  class="distrelecLink cursor"
+                  id="quoteDetails-quoteId"
+                  (click)="resubmitQuote(quoteDetails?.quotationId)"
+                >
+                  {{ 'form.resubmit' | cxTranslate }}
+                  <br />
+                </label>
+
+                <ng-container *ngIf="isAddToCartEnabled$ | async">
+                  <label
+                    *ngIf="quoteDetails?.purchasable && addToCartEnabled"
+                    class="ml-1 float-md-right mt-1 fs-small cursor notForPrint"
+                    id="quoteDetails-addToCart"
+                  >
+                    <img
+                      *ngIf="loadingAddToCart"
+                      class="min-width"
+                      id="quoteDetails-loadingCartText"
+                      src="app/spartacus/assets/media/spinner.gif"
+                    />
+                    <img
+                      *ngIf="!loadingAddToCart"
+                      class="cursor"
+                      id="quoteDetails-loadingCartText2"
+                      (click)="addToCart(quoteDetails.quotationId)"
+                      src="app/spartacus/assets/media/general/reorder.svg"
+                    />
+                  </label>
+                </ng-container>
+              </div>
+            </div>
+            <div *ngIf="(isMobileBreakpoint$ | async) === false" class="row mt-4 mb-0">
+              <div class="col-sm-2 col-md-5"><label class="label-bold"></label></div>
+              <div class="col-sm-2 col-md-2">
+                <label class="label-bold float-right" id="quoteDetails-availability">
+                  {{ 'form.availability' | cxTranslate }}
+                </label>
+              </div>
+              <div class="col-sm-2 col-md-1">
+                <label class="label-bold" id="quoteDetails-quantity">{{ 'form.quantity' | cxTranslate }}&nbsp;*</label>
+              </div>
+              <div class="col-sm-2 col-md-2">
+                <label class="label-bold" id="quoteDetails-singlePrice">
+                  {{ 'form.my_single_price' | cxTranslate }}
+                </label>
+              </div>
+              <div class="col-sm-2 col-md-2">
+                <label class="label-bold float float-right" id="quoteDetails-subTotal">
+                  {{ 'form.subtotal' | cxTranslate }}
+                </label>
+              </div>
+            </div>
+            <br />
+            <div *ngFor="let entry of quoteDetails?.quotationEntries; let i = index">
+              <div class="row border-top mt-0 mb-0 quotationEntry" [id]="entry.itemNumber">
+                <div class="col-sm-12 col-md-7">
+                  <div class="row mt-3 mb-3">
+                    <div class="col-md-2 col-sm-12">
+                      <div class="cell">
+                        <div class="wrap-image">
+                          <img
+                            class="img-thumbnail"
+                            id="quoteDetails-img-product"
+                            src="{{
+                              entry?.product?.images &&
+                              entry?.product?.images.length > 0 &&
+                              entry?.product?.images[0].url
+                                ? entry?.product?.images[0].url
+                                : '/app/spartacus/assets/media/img/missing_portrait_small.png'
+                            }}"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="col-md-12">
+                        <strong class="redFont">
+                          <a
+                            class="editLink"
+                            id="quoteDetails-productNameAnchor"
+                            [routerLink]="entry?.product?.url"
+                            target="_blank"
+                          >
+                            {{ entry?.product?.name }}
+                          </a>
+                        </strong>
+                      </div>
+                      <div class="col-sm-4 col-md-4 d-md-inline-block mt-3">
+                        <strong class="fs-small" id="quoteDetails-artNumber">
+                          {{ 'form.article_nr' | cxTranslate }}
+                        </strong>
+                        <br />
+                        <label class="fs-small" id="quoteDetails-productCode">
+                          {{ entry?.product?.code | articleNumber: entry?.product?.code }}
+                        </label>
+                      </div>
+                      <span *ngIf="entry?.product?.typeName || entry?.product?.distManufacturer?.name">
+                        <div class="col-sm-4 col-md-4 d-md-inline-block mt-3">
+                          <strong class="fs-small" id="quoteDetails-MPN">{{ 'form.part_number' | cxTranslate }}</strong>
+                          <br />
+                          <label class="fs-small" id="quoteDetails-pro-typename">{{ entry?.product?.typeName }}</label>
+                        </div>
+                        <div class="col-sm-4 col-md-4 d-md-inline-block mt-3">
+                          <strong class="fs-small" id="quoteDetails-manufacturer">
+                            {{ 'form.manufacturer' | cxTranslate }}
+                          </strong>
+                          <br />
+                          <label class="fs-e-small" id="quoteDetails-distManufacturer">
+                            {{ entry?.product?.distManufacturer?.name }}
+                          </label>
+                        </div>
+                      </span>
+                      <span *ngIf="entry?.manufacturerPartNumber || entry?.manufacturerType">
+                        <div class="col-sm-3 col-md-3 d-md-inline-block mt-3">
+                          <strong class="fs-small" id="quoteDetails-MPN-text">{{ 'form.mpn' | cxTranslate }}</strong>
+                          <br />
+                          <label class="fs-small" id="quoteDetails-manufacturerPartNumber">
+                            {{ entry?.manufacturerPartNumber }}
+                          </label>
+                        </div>
+                        <div class="col-sm-6 col-md-6 d-md-inline-block mt-3">
+                          <strong class="fs-small" id="quoteDetails-manufacturer-text">
+                            {{ 'form.manufacturer' | cxTranslate }}
+                          </strong>
+                          <br />
+                          <label class="fs-e-small" id="quoteDetails-manufacturerType">
+                            {{entry?.manufacturerType}
+                          </label>
+                        </div>
+                      </span>
+
+                      <div class="col-md-12">
+                        <strong class="fs-small" id="quoteDetails-yourRef">
+                          {{ 'form.your_reference' | cxTranslate }}
+                        </strong>
+                        <br />
+                        <label class="fs-e-small" id="quoteDetails-customerReference">
+                          {{ entry?.customerReference }}
+                        </label>
+                      </div>
+                      <div *ngIf="entry?.itemNote" class="col-md-12">
+                        <strong class="fs-small" id="quoteDetails-note">
+                          {{ 'lightboxrejectorder.note' | cxTranslate }}
+                        </strong>
+                        <br />
+                        <label class="fs-e-small" id="quoteDetails-itemNote">{{ entry?.itemNote }}</label>
+                      </div>
+                    </div>
+                    <div class="col-md-2 text-center">--</div>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-1 bordr border-right notForPrint text-center">
+                  <span *ngIf="isEditAllowed(quoteDetails?.purchasable, entry?.quantityModificationType)">
+                    <label *ngIf="quantityValidaitonErrorState[i]" class="bottom-arrow" id="quantityValidaiton-{{ i }}">
+                      {{
+                        'validation.error.min.order.quantity'
+                          | cxTranslate: { '0': entry?.product?.code, '1': entry?.minQuantity }
+                      }}
+                    </label>
+                    <input
+                      *ngIf="entry?.quantityModificationType === 'DECREASE'"
+                      class="form-control mt-3"
+                      id="quoteDetails.quantity.decrease"
+                      [(ngModel)]="entry.quantity"
+                      [min]="entry?.minQuantity"
+                      [max]="entry?.maxQuantity"
+                      (input)="showTooltip($event, i, entry?.minQuantity)"
+                      type="number"
+                    />
+                    <input
+                      *ngIf="entry?.quantityModificationType !== 'DECREASE'"
+                      class="form-control mt-3"
+                      id="quoteDetails.quantity"
+                      [(ngModel)]="entry.quantity"
+                      [min]="entry?.minQuantity"
+                      (input)="showTooltip($event, i, entry?.minQuantity)"
+                      type="number"
+                    />
+                  </span>
+                  <div *ngIf="!isEditAllowed(quoteDetails?.purchasable, entry?.quantityModificationType)" class="mt-3">
+                    {{ entry?.quantity }}
+                  </div>
+                  <br />
+                  <a
+                    *ngIf="isRemovable(quoteDetails?.purchasable, entry)"
+                    class="distrelecLink cursor fs-small"
+                    id="quoteDetails-removeButton"
+                    (click)="removeEntry(entry.itemNumber)"
+                  >
+                    {{ 'form.remove' | cxTranslate }}
+                  </a>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <label class="fs-small mt-3" id="quoteDetails-PriceValue">
+                    {{ entry?.price?.currencyIso }} {{ entry?.price?.value | price }}
+                  </label>
+                </div>
+                <div class="col-sm-12 col-md-2 border-right float-right">
+                  <label class="mt-3 fs-small float-right" id="quoteDetails-subTotalValue">
+                    {{ entry?.subtotal?.currencyIso }} {{ entry?.subtotal?.value | price }}
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row border-bottom border-top">
+              <div class="col-md-1 notForPrint cursor p-3">
+                <img
+                  id="quoteDetails-printOrdersImg"
+                  (click)="printOrders()"
+                  src="app/spartacus/assets/media/general/print.svg"
+                />
+              </div>
+              <div class="col-md-7">
+                <label class="p-3" id="quoteDetails-changeNote">* {{ 'form.qty_changes_note' | cxTranslate }}</label>
+              </div>
+              <div class="col-md-4 border-right border-left p-3">
+                <strong>
+                  <label class="float-left" id="quoteDetails.subTotal">
+                    <strong>{{ 'form.subtotal' | cxTranslate }}</strong>
+                  </label>
+                  <label class="float-right" id="quoteDetails.subTotalValue">
+                    {{ quoteDetails?.subtotal2?.currencyIso }} {{ quoteDetails?.subtotal2?.value | price }}
+                  </label>
+                </strong>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4 border-right border-left p-3">
+                <label class="float-left" id="quoteDetails-tax">{{ 'form.tax' | cxTranslate }}</label>
+                <label *ngIf="quoteDetails?.tax" class="float-right" id="quoteDetails-taxCurrency">
+                  {{ quoteDetails?.tax?.currencyIso }} {{ quoteDetails?.tax?.value | price }}
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4 border-right border-left redFont border-top border-bottom p-3 bg-gray">
+                <strong>
+                  <label
+                    class="float-left"
+                    id="quoteDetails-totalPayable"
+                    [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                  >
+                    <strong>
+                      {{ 'form.total_payable' | cxTranslate }}
+                    </strong>
+                  </label>
+                  <label class="float-right" id="quoteDetails-totalPayablePrice">
+                    {{ quoteDetails?.total?.currencyIso }} {{ quoteDetails?.total?.value | price }}
+                  </label>
+                </strong>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="col-md-10"></div>
+
+              <ng-container *ngIf="isAddToCartEnabled$ | async">
+                <div class="col-md-2 pr-0 notForPrint">
+                  <img
+                    *ngIf="loadingAddToCart"
+                    class="min-width"
+                    id="quoteDetails-imgAddToCart"
+                    src="app/spartacus/assets/media/spinner.gif"
+                  />
+                  <button
+                    *ngIf="!loadingAddToCart && quoteDetails?.purchasable"
+                    class="float-right btn btn-secondary btn-distrelec mt-2 mb-2"
+                    [disabled]="!addToCartEnabled"
+                    [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                    (click)="addToCart(quoteDetails.quotationId)"
+                  >
+                    {{ 'form.quotation_add_to_cart' | cxTranslate }}
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <ng-template #loadingQuoteDetails>
+            <div class="row mt-4">
+              <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+                <img id="quoteDetails-spinnerGif" src="app/spartacus/assets/media/spinner.gif" />
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<html>
+<style type="text/css">
+tr {outline: thin solid black;}
+td{outline: thin solid black;}
+</style>
+ <span>Hi everyone,</span>
+ <br>
+ <br>
+
+ #if ($ctx.data.size() > 0))
+	 <span>Please find details of missing PayPal, CreditCard and iDeal orders below:</span><br>
+	 <br>
+ 	<br>
+	<table style="border:1px solid black">
+	 <tbody>
+	 <tr>
+	    <th id="Cart_NR">Cart NR</th>
+	    <th id="uid">User UID</th> 
+	    <th id="shopUid">Shop UID</th>
+	    <th id="payment_type">Payment Type</th>
+	    <th id="date">Date</th>
+	  </tr>
+	#foreach( $missingOrder in $ctx.data)
+	    <tr>
+	        <td headers="Cart NR">
+	             ${missingOrder.getCode()}
+	        </td>
+	        <td headers="User UID">
+	             ${missingOrder.getUserId()}
+	        </td>
+	        <td headers="Shop UID">
+	             ${missingOrder.getShopId()}
+	        </td>
+	        <td headers="Payment Type">
+	             ${missingOrder.getPaymentType()}
+	        </td>	
+	        <td headers="Shop UID">
+	             ${missingOrder.getModifiedTime()}
+	        </td>		 
+	    </tr>
+	#end
+	</tbody>
+	</table>
+ #else
+ 	<span>There is no missing for PayPal, Credit Card and iDeal orders for reported date.</span><br>
+ #end
+<br>
+<br>
+<span><p>Kind Regards,<br> The Development Team</p></span>
+<h3>&copy; Datwyler</h3>
+</html>

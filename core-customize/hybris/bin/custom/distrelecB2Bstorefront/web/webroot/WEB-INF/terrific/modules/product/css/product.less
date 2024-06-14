@@ -1,0 +1,278 @@
+.mod-product {
+
+	@productListRowSpaceLeft: 106px;
+	@productListRowSpaceRight: 10px;
+	@productListRowHeaderHeight: 35px;
+	@productListRowHeight: 29px;
+	@_list-height: 125px;
+
+	position: relative;
+	.box-sizing();
+	border-bottom: 1px solid @c-border;
+	border-left: 1px solid @c-border;
+
+	// Hover
+	&:hover {
+		.ico {
+			visibility: visible;
+		}
+
+		.main{
+			background-color: @c-greyC;
+			cursor: pointer;
+			.image-container{
+				background-color: white;
+			}
+			
+		}
+
+		.title {
+			color: @c-red;
+		}
+	}
+
+	.lt-ie8 & {
+		.cf();
+		font-size: 0;
+		line-height: 0;
+	}
+
+	.main{
+		height: @_list-height;
+	}
+	
+	.title {
+		display: block;
+		#typo > .size-m();
+		height: @productListRowHeaderHeight;
+		line-height: -1+@productListRowHeaderHeight;
+		margin: 0 0 0 @productListRowSpaceLeft;
+		border-bottom: 1px solid #ebebeb;
+		color: @c-red;
+		span{
+			display: inline-block;
+			width: 680px;
+		}
+		.lt-ie8 & {
+			float: left;
+			margin: 0;
+			width: 525px;
+		}
+
+	}
+
+	.image-container {
+		position: absolute;
+		width: @productListRowSpaceLeft;
+		height: 125px;
+		color: @c-white;
+		top: 0;
+		display: table;
+
+		.lt-ie8 & {
+			float: left;
+			display: block;
+			position: relative;
+		}
+
+		.image-wrapper{
+			display: table-cell;
+			width: 100%;
+			height: 100%;
+			vertical-align: middle;
+			text-align: center;
+			line-height: 0;
+			font-size: 0;
+
+			.lt-ie9 &{
+				width: 106px;
+			}
+
+			.lt-ie8 & {
+				display: block;
+			}
+		}
+
+		img {
+			display: inline;
+			height: 110px;
+			.lt-ie9 &{
+				width: 82px; // IE8 needs width to be set, because in case image is not found, otherwise it gets to big
+			}
+		}
+	}
+
+	.productlabel-wrap {
+		position: absolute;
+		top: 0;
+		right: 0;
+		left: 0;
+		display: table;
+		width: 106px;
+	}
+
+	// Product Attributes
+	.list-attribs {
+		margin: 0 0 0 @productListRowSpaceLeft;
+
+		.lt-ie8 & {
+			margin: 0;
+			display: block;
+			float: left;
+		}
+
+		.table {
+			display: table;
+			margin: 0;
+			padding: 0;
+			width: 100%;
+
+			.lt-ie8 & {
+				.cf();
+			}
+
+			.table-row {
+				display: table-row;
+
+				&.last {
+					.table-cell{
+						border-bottom: 0;
+					}
+				}
+
+				.table-cell {
+					display: table-cell;
+					height: @productListRowHeight;
+					line-height: @productListRowHeight;
+					border-bottom: 1px solid #ebebeb;
+					white-space: nowrap;
+					vertical-align: middle;
+					width: auto;
+					font-size: 12px;
+					line-height: 12px;
+					font-weight: @font-base-bold;
+					width: 375px;
+
+					.label {
+						float: left;
+						padding: 4px 5px 0;
+					}
+					.value {
+						float: left;
+						font-size: 13px;
+						line-height: 18px; // sic!
+						.ellipsis();
+						max-width: 40px;
+						font-weight: 500;
+					}
+
+					&.first {
+						width: 284px;
+						.value {
+							display: inline-block;
+							.ellipsis();
+							max-width: 200px;
+						}
+					}
+					&.last {
+						width: 113px;
+					}
+
+					.lt-ie8 & {
+						float: left;
+						height: 28px;
+					}
+					
+					.availabilityCatPlus{
+						margin-left: 5px;
+						
+						.availabilityCatPlusText{
+							font-weight: 300;
+						}
+					}
+
+				}
+			}
+		}
+		.product-family {
+			margin-left: 20px;
+
+			// Default
+			i {
+				margin-left: 7px;
+				margin-top: -2px;
+				.s-arrow-right-small-blue();
+			}
+			// Hover
+			&:hover {
+				color: #AA1936;
+
+				i {
+					.s-arrow-right-small-lightblue();
+				}
+			}
+		}
+	}
+
+	// Availability ****************************************************************************************************
+	.available-text {}
+
+	.available-bar {
+		height: 20px;
+		#obj > .available-bar();
+		&.small {
+			.green, .lgreen, .orange, .white, .yellow {
+				margin-top: 7px;
+			}
+		}
+		.time {
+			#typo > .size-xs();
+			font-weight: @font-base-bold;
+			padding: 4px 0 0 5px;
+		}
+	}
+
+	.load-in-process, .load-in-process.label {
+		display: none;
+	}
+	.load-complete {
+		display: inline-block;
+	}
+
+	.loading {
+		.load-in-process {
+			display: table-cell;
+		}
+		.load-complete {
+			display: none;
+		}
+	}
+
+	// Product Tools Items *********************************************************************************************
+	.ctrls {
+		position: absolute;
+		right: @productListRowSpaceRight;
+		top: 2px;
+	}
+
+	.ico {
+		visibility: hidden;
+		&.active {
+			visibility: visible;
+		}
+
+		&.ico-cart {
+			visibility: visible;
+		}
+	}
+
+	.energy-label-popover {
+		margin-left: 105px;
+		margin-top: -120px;
+	}
+
+}
+
+.skin-product-hidden {
+	display: none;
+}

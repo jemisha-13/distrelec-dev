@@ -1,0 +1,83 @@
+<div class="category-nav-wrapper">
+  <button class="btn category-nav-wrapper__icon" (click)="openPanel($event)">
+    <app-icon iconName="hamburger" iconType="svg" [iconAltText]="'product.category_header' | cxTranslate" width="24" height="24"></app-icon>
+  </button>
+  <a
+    class="category-nav-wrapper__btn"
+    id="category_nav_products_link"
+    (click)="openPanel($event)"
+    title="Products"
+    data-aainteraction="navigation"
+    data-location="top nav"
+    data-parent-link="main top navigation"
+    data-link-value="products"
+  >
+    {{ 'product.category_header' | cxTranslate | uppercase }}
+    <fa-icon [icon]="faAngleDown"></fa-icon>
+  </a>
+  <app-dist-slide-drawer
+    #flyout
+    [direction]="(isMobileBreakpoint$ | async) ? 'RIGHT' : 'LEFT'"
+    [title]="'product.category_header' | cxTranslate"
+    [secondTitle]="secondPanelTitle"
+    [enableSecondPanel]="true"
+    uid="products-flyout"
+  >
+    <ul class="list"  [id]="mainCategoryId">
+      <ng-container *ngIf="(isTablet$ | async) === false; else mobileList">
+        <li
+          *ngFor="let item of navData_ | async; let i = index"
+          class="list__row first no-touch"
+          (mouseover)="openSecondLevel($event, i)"
+          (mouseout)="handleMouseOut()"
+          (click)="handleClick($event, i)"
+        >
+          <a class="list__row__label" [routerLink]="item?.url">{{ item.title }}</a>
+          <fa-icon
+            *ngIf="item?.children?.[0]?.children.length"
+            class="list__row__icon"
+            [icon]="faChevronRight"
+            (click)="openSecondLevel($event, i)"
+          ></fa-icon>
+        </li>
+        <!--TODO: @CLEANUP: the li here is used in a few flyouts, we should really look at extracting this into a seperate component-->
+      </ng-container>
+
+      <ng-template #mobileList>
+        <li *ngFor="let item of navData_ | async; let i = index" class="list__row first touch">
+          <a class="list__row__label" [routerLink]="item?.url" (click)="handleClick($event, i)">
+            {{ item.title }}
+          </a>
+          <fa-icon
+            *ngIf="item?.children?.[0]?.children.length"
+            class="list__row__icon"
+            [icon]="faChevronRight"
+            (click)="openSecondLevel($event, i)"
+          ></fa-icon>
+        </li>
+      </ng-template>
+    </ul>
+
+    <ng-container *ngIf="navData_ | async as navData" secondPanel>
+      <ng-container *ngIf="navData[selectedChildIndex] && haveChildrenData">
+        <app-dist-scroll-bar scrollAxis="y">
+          <ul class="list" id="main-category-level-2">
+            <li
+              *ngFor="let item of navData[selectedChildIndex].children[0].children; let i = index"
+              class="list__row"
+              [ngClass]="(isTablet$ | async) ? 'touch' : 'no-touch'"
+            >
+              <a
+                class="list__row__label"
+                [routerLink]="item?.entries[0]?.localizedUrl"
+                (click)="handleSecondPanelClick($event, i)"
+              >
+                {{ item.localizedTitle }}
+              </a>
+            </li>
+          </ul>
+        </app-dist-scroll-bar>
+      </ng-container>
+    </ng-container>
+  </app-dist-slide-drawer>
+</div>

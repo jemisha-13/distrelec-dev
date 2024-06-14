@@ -1,0 +1,318 @@
+// ----------------------------------------------------------------------------
+// Cleanup manufacturers of a given list.
+// During the PIM import we check which manufacturers are not in the XML anymore but still 
+// existing in hybris and list them in the pim_import.log
+// This script uses that list and deletes those manufacturers that are not liked by any product.
+// As a next step... This job could also be performed during a PIM import.
+// ----------------------------------------------------------------------------
+
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import java.util.HashMap;
+import org.apache.log4j.Logger;
+
+LOG = Logger.getLogger("BeanShell");
+modelService = SpringUtil.getBean("modelService");
+flexibleSearchService = SpringUtil.getBean("flexibleSearchService");
+
+manufacturerQuery = "SELECT {pk} FROM {DistManufacturer} WHERE {code} = ?manufacturerCode";
+productQuery = "SELECT {pk} FROM {Product} WHERE {manufacturer} = ?manufacturerPk";
+indent = "      ";
+
+
+// ----------------------------------------------------------------------------
+deleteExistingReferences = false;
+// ----------------------------------------------------------------------------
+
+
+
+manufacturersToDelete = new ArrayList();
+// ----------------------------------------------------------------------------
+manufacturersToDelete.add("man_aavid");
+manufacturersToDelete.add("man_accuride");
+manufacturersToDelete.add("man_acer");
+manufacturersToDelete.add("man_adobe");
+manufacturersToDelete.add("man_advantech");
+manufacturersToDelete.add("man_alphaelettronica");
+manufacturersToDelete.add("man_amazon");
+manufacturersToDelete.add("man_amprobe");
+manufacturersToDelete.add("man_apple");
+manufacturersToDelete.add("man_asrock");
+manufacturersToDelete.add("man_avermedia");
+manufacturersToDelete.add("man_avid");
+manufacturersToDelete.add("man_avocent");
+manufacturersToDelete.add("man_bandridge");
+manufacturersToDelete.add("man_basicxl");
+manufacturersToDelete.add("man_beha");
+manufacturersToDelete.add("man_bitechnologies");
+manufacturersToDelete.add("man_blackberry");
+manufacturersToDelete.add("man_bopla");
+manufacturersToDelete.add("man_bosch");
+manufacturersToDelete.add("man_brady");
+manufacturersToDelete.add("man_brother");
+manufacturersToDelete.add("man_bushnell");
+manufacturersToDelete.add("man_carlogavazzi");
+manufacturersToDelete.add("man_center");
+manufacturersToDelete.add("man_chemtronics");
+manufacturersToDelete.add("man_chieftec");
+manufacturersToDelete.add("man_ciscosmb");
+manufacturersToDelete.add("man_cleantrade");
+manufacturersToDelete.add("man_clicktronic");
+manufacturersToDelete.add("man_corel");
+manufacturersToDelete.add("man_corsair");
+manufacturersToDelete.add("man_crckontaktchemie");
+manufacturersToDelete.add("man_crouzet");
+manufacturersToDelete.add("man_crucial");
+manufacturersToDelete.add("man_databecker");
+manufacturersToDelete.add("man_dataflex");
+manufacturersToDelete.add("man_datalogic");
+manufacturersToDelete.add("man_dell");
+manufacturersToDelete.add("man_denver");
+manufacturersToDelete.add("man_devolo");
+manufacturersToDelete.add("man_digittrade");
+manufacturersToDelete.add("man_diotec");
+manufacturersToDelete.add("man_disk2go");
+manufacturersToDelete.add("man_dremel");
+manufacturersToDelete.add("man_duracell");
+manufacturersToDelete.add("man_dymo");
+manufacturersToDelete.add("man_edac");
+manufacturersToDelete.add("man_eizo");
+manufacturersToDelete.add("man_elbro");
+manufacturersToDelete.add("man_electrolube");
+manufacturersToDelete.add("man_elma");
+manufacturersToDelete.add("man_elnec");
+manufacturersToDelete.add("man_elotouchsystems");
+manufacturersToDelete.add("man_emico");
+manufacturersToDelete.add("man_epcos");
+manufacturersToDelete.add("man_epson");
+manufacturersToDelete.add("man_eq-3");
+manufacturersToDelete.add("man_erni");
+manufacturersToDelete.add("man_exsys");
+manufacturersToDelete.add("man_fairchild");
+manufacturersToDelete.add("man_fantec");
+manufacturersToDelete.add("man_fellowes");
+manufacturersToDelete.add("man_finder");
+manufacturersToDelete.add("man_fischerelektronik");
+manufacturersToDelete.add("man_flir");
+manufacturersToDelete.add("man_flukenetworks");
+manufacturersToDelete.add("man_franklin");
+manufacturersToDelete.add("man_fujitsu");
+manufacturersToDelete.add("man_garmin");
+manufacturersToDelete.add("man_gear4");
+manufacturersToDelete.add("man_gigaset");
+manufacturersToDelete.add("man_globalsat");
+manufacturersToDelete.add("man_goobay");
+manufacturersToDelete.add("man_gopro");
+manufacturersToDelete.add("man_gpbatteries");
+manufacturersToDelete.add("man_greenclean");
+manufacturersToDelete.add("man_gwinstek");
+manufacturersToDelete.add("man_haier");
+manufacturersToDelete.add("man_hameg");
+manufacturersToDelete.add("man_hanna");
+manufacturersToDelete.add("man_hellermann");
+manufacturersToDelete.add("man_hioki");
+manufacturersToDelete.add("man_hirschmann");
+manufacturersToDelete.add("man_hitachi");
+manufacturersToDelete.add("man_htc");
+manufacturersToDelete.add("man_iiyama");
+manufacturersToDelete.add("man_imation");
+manufacturersToDelete.add("man_infocus");
+manufacturersToDelete.add("man_inova");
+manufacturersToDelete.add("man_intel");
+manufacturersToDelete.add("man_ior");
+manufacturersToDelete.add("man_irox");
+manufacturersToDelete.add("man_ixys");
+manufacturersToDelete.add("man_kaiser");
+manufacturersToDelete.add("man_kanthal");
+manufacturersToDelete.add("man_kaspersky");
+manufacturersToDelete.add("man_kensington");
+manufacturersToDelete.add("man_kingbright");
+manufacturersToDelete.add("man_koe");
+manufacturersToDelete.add("man_kontaktchemie");
+manufacturersToDelete.add("man_kosmos");
+manufacturersToDelete.add("man_kyoceracons");
+manufacturersToDelete.add("man_lacie");
+manufacturersToDelete.add("man_laird");
+manufacturersToDelete.add("man_lapp");
+manufacturersToDelete.add("man_lasercomponents");
+manufacturersToDelete.add("man_laserliner");
+manufacturersToDelete.add("man_lattice");
+manufacturersToDelete.add("man_ledino");
+manufacturersToDelete.add("man_ledon");
+manufacturersToDelete.add("man_legrand");
+manufacturersToDelete.add("man_lenovo");
+manufacturersToDelete.add("man_lexmark");
+manufacturersToDelete.add("man_lgelectronics");
+manufacturersToDelete.add("man_linksys");
+manufacturersToDelete.add("man_littelfuse");
+manufacturersToDelete.add("man_logitech");
+manufacturersToDelete.add("man_lostnfound");
+manufacturersToDelete.add("man_lufft");
+manufacturersToDelete.add("man_lumileds");
+manufacturersToDelete.add("man_lutron");
+manufacturersToDelete.add("man_m-audio");
+manufacturersToDelete.add("man_marking");
+manufacturersToDelete.add("man_marmitek");
+manufacturersToDelete.add("man_marquardt");
+manufacturersToDelete.add("man_mastech");
+manufacturersToDelete.add("man_maxxtro");
+manufacturersToDelete.add("man_meilhaus");
+manufacturersToDelete.add("man_mentor");
+manufacturersToDelete.add("man_metcal");
+manufacturersToDelete.add("man_microchip");
+manufacturersToDelete.add("man_micronel");
+manufacturersToDelete.add("man_microsoft");
+manufacturersToDelete.add("man_molex");
+manufacturersToDelete.add("man_murata");
+manufacturersToDelete.add("man_nero");
+manufacturersToDelete.add("man_netgear");
+manufacturersToDelete.add("man_nicholson");
+manufacturersToDelete.add("man_nikon");
+manufacturersToDelete.add("man_nokia");
+manufacturersToDelete.add("man_nova");
+manufacturersToDelete.add("man_ocztechnology");
+manufacturersToDelete.add("man_olloclip");
+manufacturersToDelete.add("man_olympus");
+manufacturersToDelete.add("man_omron");
+manufacturersToDelete.add("man_option");
+manufacturersToDelete.add("man_osram");
+manufacturersToDelete.add("man_otterbox");
+manufacturersToDelete.add("man_packardbell");
+manufacturersToDelete.add("man_panasonic");
+manufacturersToDelete.add("man_pancontrol");
+manufacturersToDelete.add("man_parallax");
+manufacturersToDelete.add("man_parrot");
+manufacturersToDelete.add("man_pctvsystems");
+manufacturersToDelete.add("man_pentax");
+manufacturersToDelete.add("man_pfannenberg");
+manufacturersToDelete.add("man_philips");
+manufacturersToDelete.add("man_phoenix");
+manufacturersToDelete.add("man_piher");
+manufacturersToDelete.add("man_plantronics");
+manufacturersToDelete.add("man_plextor");
+manufacturersToDelete.add("man_powertraveller");
+manufacturersToDelete.add("man_prestigio");
+manufacturersToDelete.add("man_profigold");
+manufacturersToDelete.add("man_profit");
+manufacturersToDelete.add("man_pure");
+manufacturersToDelete.add("man_qnap");
+manufacturersToDelete.add("man_radiall");
+manufacturersToDelete.add("man_ralec");
+manufacturersToDelete.add("man_recom");
+manufacturersToDelete.add("man_renata");
+manufacturersToDelete.add("man_revo");
+manufacturersToDelete.add("man_richco");
+manufacturersToDelete.add("man_ritel");
+manufacturersToDelete.add("man_rosenberger");
+manufacturersToDelete.add("man_rotronic");
+manufacturersToDelete.add("man_rovingnetworks");
+manufacturersToDelete.add("man_roxtec");
+manufacturersToDelete.add("man_samsung");
+manufacturersToDelete.add("man_samwha");
+manufacturersToDelete.add("man_sandisk");
+manufacturersToDelete.add("man_sanyo");
+manufacturersToDelete.add("man_schroff");
+manufacturersToDelete.add("man_schurter");
+manufacturersToDelete.add("man_seagate");
+manufacturersToDelete.add("man_sedlbauer");
+manufacturersToDelete.add("man_selectron");
+manufacturersToDelete.add("man_semikron");
+manufacturersToDelete.add("man_sharp");
+manufacturersToDelete.add("man_siemens");
+manufacturersToDelete.add("man_sievi");
+manufacturersToDelete.add("man_sloan");
+manufacturersToDelete.add("man_socket");
+manufacturersToDelete.add("man_sonim");
+manufacturersToDelete.add("man_sony");
+manufacturersToDelete.add("man_spectra");
+manufacturersToDelete.add("man_stannol");
+manufacturersToDelete.add("man_steffen");
+manufacturersToDelete.add("man_superflower");
+manufacturersToDelete.add("man_symantec");
+manufacturersToDelete.add("man_synology");
+manufacturersToDelete.add("man_tadiranbatteries");
+manufacturersToDelete.add("man_targus");
+manufacturersToDelete.add("man_techspray");
+manufacturersToDelete.add("man_teko");
+manufacturersToDelete.add("man_tektronix");
+manufacturersToDelete.add("man_telic");
+manufacturersToDelete.add("man_terra");
+manufacturersToDelete.add("man_tesa");
+manufacturersToDelete.add("man_testo");
+manufacturersToDelete.add("man_tomtom");
+manufacturersToDelete.add("man_tplink");
+manufacturersToDelete.add("man_transcend");
+manufacturersToDelete.add("man_trendnet");
+manufacturersToDelete.add("man_tricklestar");
+manufacturersToDelete.add("man_twix");
+manufacturersToDelete.add("man_valueline");
+manufacturersToDelete.add("man_velleman");
+manufacturersToDelete.add("man_verbatim");
+manufacturersToDelete.add("man_viewsonic");
+manufacturersToDelete.add("man_vitrohm");
+manufacturersToDelete.add("man_vivitek");
+manufacturersToDelete.add("man_vogels");
+manufacturersToDelete.add("man_wacom");
+manufacturersToDelete.add("man_waeco");
+manufacturersToDelete.add("man_walterschrickel");
+manufacturersToDelete.add("man_weicon");
+manufacturersToDelete.add("man_weller");
+manufacturersToDelete.add("man_wenger");
+manufacturersToDelete.add("man_westerndigital");
+manufacturersToDelete.add("man_wisi");
+manufacturersToDelete.add("man_wuerthelektronik");
+manufacturersToDelete.add("man_xeltek");
+manufacturersToDelete.add("man_yuasa");
+manufacturersToDelete.add("man_zotac");
+manufacturersToDelete.add("man_zueblin");
+manufacturersToDelete.add("man_zyxel");
+// ----------------------------------------------------------------------------
+// ...add all manufacturer codes to be cleaned...
+
+
+
+
+
+print("Logging information is written to CONSOLE");
+LOG.info("===Start cleanup of manufacturers===");
+LOG.info("About to delete [" + manufacturersToDelete.size() + "] manufacturers...");
+
+int i = 0;
+for (manufacturerCode : manufacturersToDelete) {
+	i++;
+
+	paramsManufacturer = new HashMap();
+	paramsManufacturer.put("manufacturerCode", manufacturerCode);
+
+	manufacturerResult = flexibleSearchService.search(manufacturerQuery, paramsManufacturer);
+
+	if (manufacturerResult.getResult().isEmpty()) {
+		LOG.error(i + ": Manufacturer [" + manufacturerCode + "] does not exist.");
+	} else {
+		manufacturer = manufacturerResult.getResult().get(0);
+	
+		paramsProduct = new HashMap();
+		paramsProduct.put("manufacturerPk", manufacturer.getPk());
+	
+		productResult = flexibleSearchService.search(productQuery, paramsProduct);
+		remainingProducts = productResult.getResult();
+		
+		LOG.info(i + ": About to delete manufacturer [" + manufacturerCode + "].");
+		if (!remainingProducts.isEmpty() && deleteExistingReferences) {
+			for (product : remainingProducts) {
+				product.setManufacturer(null);
+				modelService.save(product);
+				LOG.info(indent + "Manufacturer [" + manufacturerCode + "] reference in product [" + product.getCode() + "] removed.");
+			}
+		}
+
+		productResult = flexibleSearchService.search(productQuery, paramsProduct);
+		remainingProducts = productResult.getResult();
+
+		if (!remainingProducts.isEmpty()) {
+			LOG.info(indent + "Do not delete manufacturer [" + manufacturerCode + "]. Manufacturer is still referenced in [" + remainingProducts.size() + "] product(s).");
+		} else {
+			modelService.remove(manufacturer);
+		}
+	}
+}
+LOG.info("===End cleanup of manufacturers===");

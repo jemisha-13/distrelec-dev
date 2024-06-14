@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- Orika : DataMapper -->
+    <alias alias="dataMapper" name="defaultDataMapper"/>
+    <bean id="defaultDataMapper" class="de.hybris.platform.webservicescommons.mapping.impl.DefaultDataMapper">
+        <property name="fieldSetBuilder" ref="fieldSetBuilder"/>
+    </bean>
+
+    <!-- Orika : Filters -->
+    <bean class="de.hybris.platform.webservicescommons.mapping.filters.GeneralFieldFilter">
+        <property name="fieldSelectionStrategy" ref="fieldSelectionStrategy"/>
+    </bean>
+
+    <!-- Orika : Mappers -->
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.AddressValidationDataMapper"
+          parent="abstractCustomMapper"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.SpellingSuggestionMapper"
+          parent="abstractCustomMapper"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.CCPaymentInfoDataMapper"
+          parent="abstractCustomMapper"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.ImageUrlMapper"
+          parent="abstractCustomMapper"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.StockDataMapper"
+          parent="abstractCustomMapper"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.CategoryDataMapper"
+          parent="abstractCustomMapper">
+        <property name="headlessURLResolver" ref="headlessURLResolver"/>
+    </bean>
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.ProductDataMapper"
+          parent="abstractCustomMapper">
+        <property name="headlessURLResolver" ref="headlessURLResolver"/>
+    </bean>
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.DistManufacturerDataMapper"
+          parent="abstractCustomMapper">
+        <property name="headlessURLResolver" ref="headlessURLResolver"/>
+    </bean>
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.ProductFamilyDataMapper"
+          parent="abstractCustomMapper">
+        <property name="headlessURLResolver" ref="headlessURLResolver"/>
+    </bean>
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.NavigationEntryDataMapper"
+          parent="abstractCustomMapper">
+        <property name="headlessURLResolver" ref="headlessURLResolver"/>
+    </bean>
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.RegisterDataMapper"
+          parent="abstractCustomMapper"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.mappers.CheckoutAddressDataMapper"
+          parent="abstractCustomMapper"/>
+
+    <!-- Orika : Converters -->
+    <bean class="com.namics.distrelec.occ.core.mapping.converters.StockLevelStatusConverter"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.converters.OrderStatusConverter"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.converters.ConsignmentStatusConverter"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.converters.DeliveryStatusConverter"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.converters.StatusSummaryConverter"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.converters.ProductReferenceTypeEnumConverter"/>
+    <bean class="com.namics.distrelec.occ.core.mapping.converters.VoucherConverter">
+        <property name="dataMapper" ref="dataMapper"/>
+        <property name="voucherFacade" ref="voucherFacade"/>
+    </bean>
+    <bean class="com.namics.distrelec.occ.core.mapping.converters.VolumePricesMapConverter">
+        <property name="dataMapper" ref="dataMapper"/>
+    </bean>
+    <bean class="com.namics.distrelec.occ.core.mapping.converters.DistDateConverter"/>
+
+    <!-- Field Mappings : User -->
+
+    <bean id="userFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.user.data.CustomerData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="defaultShippingAddress" value="defaultAddress"/>
+                <entry key="unit" value="orgUnit"/>
+            </map>
+        </property>
+    </bean>
+
+    <util:map id="baseSiteFieldMappingMap" map-class="java.util.HashMap">
+        <entry key="dataIsolationEnabled" value="isolated" />
+    </util:map>
+    <bean id="baseSiteFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.basesite.data.BaseSiteData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.basesite.BaseSiteWsDTO"/>
+        <property name="fieldMapping" ref="baseSiteFieldMappingMap" />
+    </bean>
+
+    <!-- Field Mappings : Catalog -->
+
+    <bean id="catalogVersionFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.catalog.data.CatalogVersionData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.catalog.CatalogVersionWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="categoriesHierarchyData" value="categories"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- Field Mappings : Cart -->
+
+    <bean id="cartDataFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.order.data.CartData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.order.CartWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="rootGroups" value="entryGroups"/>
+                <entry key="reqDeliveryDateHeaderLevel" value="scheduledDeliveryDate"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="entryGroupDataFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.order.EntryGroupData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.order.EntryGroupWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="groupNumber" value="entryGroupNumber"/>
+                <entry key="children" value="entryGroups"/>
+                <entry key="orderEntries" value="entries"/>
+                <entry key="groupType" value="type"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="cartModificationListFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.order.data.CartModificationDataList"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.order.CartModificationListWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="cartModificationList" value="cartModifications"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="paymentDetailsListFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.order.data.CCPaymentInfoDatas"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.order.PaymentDetailsListWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="paymentInfos" value="payments"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- Field Mappings : Product -->
+
+    <bean id="promotionResultFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.product.data.PromotionResultData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.product.PromotionResultWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="promotionData" value="promotion"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="productSearchPageFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.hybris.ffsearch.data.facet.FactFinderProductSearchPageData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.ProductSearchPageWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="results" value="products"/>
+                <entry key="otherFacets" value="facets"/>
+                <entry key="feedbackCampaigns" value="feedbackCampaigns"/>
+                <entry key="breadcrumbs" value="categoryBreadcrumbs"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="productCategorySearchPageFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.hybris.ffsearch.data.facet.FactFinderProductSearchPageData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.ProductCategorySearchPageWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="results" value="products"/>
+                <entry key="otherFacets" value="facets"/>
+                <entry key="feedbackCampaigns" value="feedbackCampaigns"/>
+                <entry key="breadcrumbs" value="categoryBreadcrumbs"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="categoryBreadcrumbFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.hybris.ffsearch.breadcrumb.Breadcrumb"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO"/>
+    </bean>
+
+    <bean id="ffFacetFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.hybris.ffsearch.data.facet.FactFinderFacetData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.FacetWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="isViable" value="visible"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="gitInfoFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.occ.core.basesite.data.DistGitInfoData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.core.storesession.ws.dto.DistGitInfoWsDTO"/>
+    </bean>
+
+    <!-- Field Mappings : Stores -->
+
+    <bean id="storeFinderSearchPageFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commerceservices.storefinder.data.StoreFinderSearchPageData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.store.StoreFinderSearchPageWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="results" value="stores"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="storeFinderStockSearchPageFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.storefinder.data.StoreFinderStockSearchPageData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.store.StoreFinderStockSearchPageWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="results" value="stores"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="pointOfServiceStockFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.storelocator.data.PointOfServiceStockData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.store.PointOfServiceStockWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="stockData" value="stockInfo"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- Field Mappings : Search -->
+
+    <bean id="paginationFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commerceservices.search.pagedata.PaginationData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.search.pagedata.PaginationWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="totalNumberOfResults" value="totalResults"/>
+                <entry key="numberOfPages" value="totalPages"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- Field Mappings : Consents -->
+    <bean id="consentTemplateFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.consent.data.ConsentTemplateData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.consent.ConsentTemplateWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="consentData" value="currentConsent"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- Field Mappings : OrderEntry -->
+
+    <bean id="orderEntryFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.order.data.OrderEntryData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.order.OrderEntryWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="cancellableQty" value="cancellableQuantity"/>
+                <entry key="returnableQty" value="returnableQuantity"/>
+                <entry key="statusSummaryMap" value="statusSummaryList"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- Field Mappings : ReturnRequest -->
+
+    <bean id="returnRequestFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.ordermanagementfacades.returns.data.ReturnRequestData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.order.ReturnRequestWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="total" value="totalPrice"/>
+                <entry key="subtotal" value="subTotal"/>
+            </map>
+        </property>
+    </bean>
+
+
+    <bean id="productRelatedDataFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.core.message.queue.model.CIValue"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.core.topcategories.ws.dto.CIValueWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="uid" value="uid"/>
+                <entry key="name" value="name"/>
+                <entry key="url" value="url"/>
+                <entry key="order" value="order"/>
+                <entry key="count" value="count"/>
+            </map>
+        </property>
+    </bean>
+
+
+    <!-- Field Mappings : DistrelecSiteSettingsDataList -->
+    <bean id="distrelecSiteSettingsDataListFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.occ.core.basesite.data.DistrelecSiteSettingsDataList"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.basesite.DistrelecSiteSettingsDataListWsDTO"/>
+    </bean>
+
+    <!-- Field Mappings : DistCategoryIndexData -->
+    <bean id="distCategoryIndexFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.product.data.DistCategoryIndexData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.topcategories.ws.dto.DistCategoryIndexWsDTO"/>
+    </bean>
+
+    <!-- Field Mappings : DistCategoryIndexDataList -->
+    <bean id="distCategoryIndexListFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.product.data.DistCategoryIndexDataList"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.core.topcategories.ws.dto.DistCategoryIndexListWsDTO"/>
+    </bean>
+
+    <!-- Field Mappings : NewsletterSubscribeResponse -->
+    <bean id="newsletterSubscribeResponseFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.occ.core.v2.response.NewsletterSubscribeResponse"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.core.v2.response.ws.dto.NewsletterSubscribeResponseWsDTO"/>
+    </bean>
+
+    <bean id="distAllSitesResponseFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.basesites.seo.DistAllSitesResponse"/>
+        <property name="destClass" value="com.namics.distrelec.occ.basesites.seo.ws.dto.BaseSiteLinksWsDTO"/>
+    </bean>
+
+    <bean id="distLinkFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.basesites.seo.DistLink"/>
+        <property name="destClass" value="com.namics.distrelec.occ.basesites.seo.ws.dto.DistLinkWsDTO"/>
+    </bean>
+
+
+    <bean id="distPromotionLabelMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.product.data.DistPromotionLabelData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.product.DistPromotionLabelWsDTO"/>
+    </bean>
+
+    <bean id="distProductReferenceMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.product.data.ProductReferenceData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.product.ProductReferenceWsDTO"/>
+    </bean>
+
+    <bean id="distProductCarouselMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.product.carousel.data.ProductCarouselData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.basesite.ProductCarouselWsDTO"/>
+    </bean>
+
+    <bean id="distManufacturerMenuResponseMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.manufacturer.data.DistManufacturerMenuResponseData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.core.basesite.data.DistManufacturerMenuResponseWSDTO"/>
+    </bean>
+
+    <bean id="distManufacturerMenuDataMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.manufacturer.data.DistManufacturerMenuData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.basesite.data.DistManufacturerMenuWSDTO"/>
+    </bean>
+
+    <bean id="distMiniManufacturerDataMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.manufacturer.data.DistMiniManufacturerData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.basesite.data.DistMiniManufacturerWSDTO"/>
+    </bean>
+
+    <bean id="distManufacturerMenuResponseDataMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.manufacturer.data.DistManufacturerMenuResponseData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.core.basesite.data.DistManufacturerMenuResponseWSDTO"/>
+    </bean>
+
+    <bean id="distPriceDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="destClass" value="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+    </bean>
+
+    <bean id="distProductAvailabilityListDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.product.data.ProductAvailabilityListData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.product.ProductAvailabilityListWsDTO"/>
+    </bean>
+
+    <bean id="distProductAccessibilityListDataMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.product.data.ProductAccessibilityListData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.product.ProductAccessibilityListWsDTO"/>
+    </bean>
+
+    <bean id="distProductAvailabilityDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.product.data.ProductAvailabilityData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.product.ProductAvailabilityWsDTO"/>
+    </bean>
+
+    <bean id="distPickupStockLevelDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.product.data.PickupStockLevelData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.product.PickupStockLevelWsDTO"/>
+    </bean>
+
+    <bean id="distStockLevelDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.core.service.product.model.StockLevelData"/>
+        <property name="destClass" value="de.hybris.platform.commercewebservicescommons.dto.product.StockLevelWsDTO"/>
+    </bean>
+
+    <bean id="distProductEnhancementDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.product.data.ProductEnhancementData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.product.ws.dto.ProductEnhancementWsDTO"/>
+    </bean>
+
+    <bean id="distProductEnhancementListDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.product.data.ProductEnhancementListData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.product.ws.dto.ProductEnhancementListWsDTO"/>
+    </bean>
+
+    <bean id="distLanguageDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.storesession.data.LanguageData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.storesession.LanguageWsDTO"/>
+    </bean>
+
+    <!-- Field Mappings : NavigationNodeData -->
+
+    <bean id="disContentPageNavigationDataMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.occ.cms.data.ContentPageNavigationData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.cms.ws.dto.ContentPageNavigationWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="navRootNodes" value="navRootNodes"/>
+                <entry key="pageRootNavNode" value="pageRootNavNode"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="distShoppingListEntryDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.wishlist.data.NamicsWishlistEntryData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.cms.ws.dto.ShoppingListEntryWsDTO"/>
+    </bean>
+
+    <bean id="distShoppingListDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.wishlist.data.NamicsWishlistData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.cms.ws.dto.ShoppingListWsDTO"/>
+    </bean>
+
+    <bean id="distUserDashboardContentDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.user.data.UserDashboardContentData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.user.ws.dto.UserDashboardContentWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="openOrdersCount" value="openOrdersCount"/>
+                <entry key="newInvoicesCount" value="newInvoicesCount"/>
+                <entry key="appReqCount" value="appReqCount"/>
+                <entry key="quoteCount" value="quoteCount"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="distConsentStatusDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.user.data.DistConsentStatus"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.user.ws.dto.DistConsentStatusWsDTO"/>
+    </bean>
+
+    <bean id="obsolescenceCategoryDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.user.data.ObsolescenceCategoryData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.user.ws.dto.ObsolescenceCategoryWsDTO"/>
+    </bean>
+
+    <bean id="distMarketingConsentDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.user.data.DistMarketingConsentData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.user.ws.dto.DistMarketingConsentWsDTO"/>
+    </bean>
+
+    <bean id="bomToolImportEntryDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.core.bomtool.data.BomToolImportEntryData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.bomtool.ws.dto.BomToolImportEntryWsDTO"/>
+    </bean>
+
+    <bean id="bomToolImportDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.core.bomtool.data.BomToolImportData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.bomtool.ws.dto.BomToolImportWsDTO"/>
+    </bean>
+
+    <bean id="importToolMatchingDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.importtool.data.ImportToolMatchingData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.importtool.ws.dto.ImportToolMatchingWsDTO"/>
+    </bean>
+
+    <bean id="bomToolSearchResultDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.bomtool.BomToolSearchResultData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.bomtool.ws.dto.BomToolSearchResultWsDTO"/>
+    </bean>
+
+    <bean id="regionDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.user.data.RegionData"/>
+        <property name="destClass" value="de.hybris.platform.commercewebservicescommons.dto.user.RegionWsDTO"/>
+    </bean>
+
+    <bean id="unitFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.b2bcommercefacades.company.data.B2BUnitData"/>
+        <property name="destClass" value="de.hybris.platform.b2bwebservicescommons.dto.company.B2BUnitWsDTO"/>
+    </bean>
+
+    <bean id="baseSiteDataFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.basesite.data.BaseSiteData"/>
+        <property name="destClass" value="de.hybris.platform.commercewebservicescommons.dto.basesite.BaseSiteWsDTO"/>
+    </bean>
+
+    <bean id="baseSiteMutableDataFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.basesite.data.BaseSiteData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.dto.basesite.BaseSiteMutableWsDTO"/>
+    </bean>
+
+    <bean id="searchExperienceDataFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.search.data.SearchExperienceDTO"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.search.ws.dto.SearchExperienceWsDTO"/>
+    </bean>
+
+    <bean id="distAvailabilityDataFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.order.data.DistAvailabilityData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.order.ws.dto.DistAvailabilityWsDTO"/>
+    </bean>
+
+    <!-- Field Mappings : TitleData -->
+
+    <bean id="disTitleDataMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.user.data.TitleData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.user.TitleWsDTO"/>
+    </bean>
+
+    <!-- Field Mappings : DistDepartmentData -->
+
+    <bean id="disDepartmentDataMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.user.data.DistDepartmentData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.b2b.facades.dto.user.DistDepartmentWsDTO"/>
+    </bean>
+    <!-- Field Mappings : DistFunctionData -->
+
+    <bean id="disFunctionDataMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.user.data.DistFunctionData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.b2b.facades.dto.user.DistFunctionWsDTO"/>
+    </bean>
+
+    <!-- Field Mappings : DistErpVoucherInfoData -->
+    <bean id="distErpVoucherInfoDataMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.order.data.DistErpVoucherInfoData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.order.DistErpVoucherInfoWsDTO"/>
+    </bean>
+
+    <!-- Field Mappings : B2BOrderApprovalData copied over from b2boccaddon-->
+    <bean id="b2BOrderApprovalFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.b2bacceleratorfacades.order.data.B2BOrderApprovalData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.b2bwebservicescommons.dto.order.OrderApprovalWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="workflowActionModelCode" value="code"/>
+                <entry key="b2bOrderData" value="order"/>
+                <entry key="orderHistoryEntriesData" value="customerOrderApprovalRecords"/>
+                <entry key="merchantApprovalHistoryEntriesData" value="merchantOrderApprovalRecords"/>
+                <entry key="b2bOrderData.triggerData" value="trigger"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="quotationHistoryDataMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.order.quotation.data.QuotationHistoryData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.order.QuotationHistoryWsDTO"/>
+    </bean>
+
+    <bean id="quotationEntryMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.order.quotation.data.QuotationEntry"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.order.ws.dto.QuotationEntryWsDTO"/>
+    </bean>
+
+    <bean id="quotationDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.order.quotation.data.QuotationData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.order.QuotationHistoryWsDTO"/>
+    </bean>
+
+    <bean id="quoteStatusDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.order.quotation.data.QuoteStatusData"/>
+        <property name="destClass" value="de.hybris.platform.commercewebservicescommons.dto.order.QuoteStatusWsDTO"/>
+    </bean>
+
+    <bean id="budgetResultFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.b2bcommercefacades.company.data.B2BBudgetData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.b2bwebservicescommons.dto.mycompany.BudgetWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="originalYearlyBudget" value="budget"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="distUserProfileFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.customer.data.DistUserProfileData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.b2b.facades.customer.ws.dto.DistUserProfileWsDTO"/>
+    </bean>
+
+    <bean id="costCenterFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.b2bwebservicescommons.dto.company.B2BCostCenterWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="b2bBudgetData" value="assignedBudgets"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="featureFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.commercefacades.product.data.FeatureData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.product.FeatureWsDTO"/>
+    </bean>
+
+    <bean id="productInformationDataFieldMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.product.data.ProductInformationData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.commercewebservicescommons.dto.product.ProductInformationWsDTO"/>
+    </bean>
+
+    <bean id="distMetaDataFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.seo.data.MetaData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.core.seo.ws.dto.MetaWsDTO"/>
+    </bean>
+
+    <bean id="distHostedOrderPageFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.acceleratorservices.hostedorderpage.data.HostedOrderPageData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.core.cart.ws.dto.HostedOrderPageWsDTO"/>
+    </bean>
+
+    <bean id="distPossibleDeliveryDatesFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.order.data.PossibleDeliveryDatesData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.core.cart.ws.dto.PossibleDeliveryDatesWsDTO"/>
+    </bean>
+    <bean id="warehouseDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.order.warehouse.data.WarehouseData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.cart.ws.dto.WarehouseWsDTO"/>
+    </bean>
+
+    <bean id="distDiscountDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.facades.order.data.DistDiscountData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.order.ws.dto.DistDiscountWsDTO"/>
+    </bean>
+
+    <bean id="distHandlingUnitItemMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.order.data.DistHandlingUnitItem"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.order.ws.dto.DistHandlingUnitItemWsDTO"/>
+    </bean>
+
+    <bean id="distHandlingUnitMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.order.data.DistHandlingUnit"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.order.ws.dto.DistHandlingUnitWsDTO"/>
+    </bean>
+
+    <bean id="distDeliveryDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.order.data.DistDeliveryData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.order.ws.dto.DistDeliveryWsDTO"/>
+    </bean>
+
+    <bean id="distOrderDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.order.data.OrderData"/>
+        <property name="destClass" value="de.hybris.platform.commercewebservicescommons.dto.order.OrderWsDTO"/>
+    </bean>
+
+    <bean id="distReturnReasonDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.order.data.DistMainReasonData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.order.ws.dto.DistMainReasonWsDTO"/>
+    </bean>
+
+    <bean id="distReturnSubReasonDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.order.data.DistSubReasonData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.order.ws.dto.DistSubReasonWsDTO"/>
+    </bean>
+
+    <bean id="distRMAEntryDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.order.data.DistRMAEntryData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.order.ws.dto.DistRMAEntryWsDTO"/>
+    </bean>
+
+    <bean id="distRMADataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="de.hybris.platform.commercefacades.order.data.RMAData"/>
+        <property name="destClass" value="com.namics.distrelec.occ.core.order.ws.dto.RMAWsDTO"/>
+    </bean>
+
+    <bean id="customerErrorFeedbackDataMapper" parent="fieldMapper">
+        <property name="sourceClass" value="com.namics.distrelec.b2b.core.bomtool.data.BomToolImportData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.core.customererrorfeedback.ws.dto.CustomerErrorFeedbackWsDTO"/>
+    </bean>
+    
+    <bean id="mediaDataFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="de.hybris.platform.cmsfacades.data.MediaData"/>
+        <property name="destClass"
+                  value="de.hybris.platform.cmsoccaddon.data.MediaWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="height" value="height"/>
+                <entry key="width" value="width"/>
+            </map>
+        </property>
+    </bean>
+    
+    <bean id="bloomreachFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="com.namics.distrelec.b2b.facades.bloomreach.data.DistBloomreachConsentData"/>
+        <property name="destClass"
+                  value="com.namics.distrelec.occ.core.user.ws.dto.DistMarketingConsentWsDTO"/>
+        <property name="fieldMapping">
+            <map>
+                <entry key="paperConsent" value="postConsent"/>
+                <entry key="smsMarketingConsent" value="smsConsent"/>
+                <entry key="npsConsent" value="customerSurveysConsent"/>
+                <entry key="personalisedRecommendationsConsent" value="personalisedRecommendationConsent"/>
+                <entry key="salesAndClearanceConsent" value="saleAndClearanceConsent"/>
+                <entry key="newBrandsConsent" value="newsLetterConsent"/>
+                <entry key="contentNewsConsent" value="knowHowConsent"/>
+            </map>
+        </property>
+    </bean>
+
+</beans>

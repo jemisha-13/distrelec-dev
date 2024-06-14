@@ -1,0 +1,99 @@
+#
+# Import Customers, User Groups and BackOffice Users
+#
+
+$passwordEncoding=md5
+
+$defaultVivochaPassword=hZZ4kyy8
+
+$setVivochaPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultVivochaPassword']
+
+# Create technical User Groups (no hmc Login, no members)
+INSERT_UPDATE UserGroup;uid[unique=true];groups(uid)[mode=replace];locname[lang=de];locname[lang=en];description;hmcLoginDisabled[default=true]
+;noaccessgroup;employeegroup;No Access Gruppe;No Access Group;
+;technicalusergroup;webservicegroup;Technische User Gruppe;Technical User Group;
+;distDefaultGroup;noaccessgroup,cockpitgroup;Default Gruppe;Default Group;
+
+# Create BackOffice User Groups
+INSERT_UPDATE UserGroup;uid[unique=true];locname[lang=de];locname[lang=en];groups(uid)[mode=replace];hmcLoginDisabled[default=false]
+;distContentManagerGroup;Content Manager Group;Content Manager Group;distDefaultGroup
+;distCallCenterHeadUserGroup;Callcenter User Group;Callcenter User Group;distDefaultGroup
+;distCallcenterUserGroup;Callcenter User Group;Callcenter User Group;distCallCenterHeadUserGroup
+;distCallcenterUserGroup_SAP;Callcenter User Group;Callcenter User Group;distCallcenterUserGroup
+;distCallcenterUserGroup_AT;Callcenter User Group for AT;Callcenter User Group for AT;distCallcenterUserGroup
+;distCallcenterUserGroup_CH;Callcenter User Group for CH;Callcenter User Group for CH;distCallcenterUserGroup
+;distCallcenterUserGroup_IT;Callcenter User Group for IT;Callcenter User Group for IT;distCallcenterUserGroup
+;distCallcenterUserGroup_CZ;Callcenter User Group for CZ;Callcenter User Group for CZ;distCallcenterUserGroup_AT
+;distCallcenterUserGroup_HU;Callcenter User Group for HU;Callcenter User Group for HU;distCallcenterUserGroup_AT
+;distCallcenterUserGroup_RO;Callcenter User Group for RO;Callcenter User Group for RO;distCallcenterUserGroup_AT
+;distCallcenterUserGroup_SK;Callcenter User Group for SK;Callcenter User Group for SK;distCallcenterUserGroup_AT
+;distCallcenterUserGroup_DE;Callcenter User Group for DE;Callcenter User Group for DE;distCallcenterUserGroup_SAP
+;distCallcenterUserGroup_LT;Callcenter User Group for LT;Callcenter User Group for LT;distCallcenterUserGroup_SAP
+;distCallcenterUserGroup_NL;Callcenter User Group for NL;Callcenter User Group for NL;distCallcenterUserGroup_SAP
+;distCallcenterUserGroup_PL;Callcenter User Group for PL;Callcenter User Group for PL;distCallcenterUserGroup_SAP
+;distCallcenterUserGroup_EE;Callcenter User Group for EE;Callcenter User Group for EE;distCallcenterUserGroup_SAP
+;distCallcenterUserGroup_DK;Callcenter User Group for DK;Callcenter User Group for DK;distCallcenterUserGroup_SAP
+;distCallcenterUserGroup_LV;Callcenter User Group for LV;Callcenter User Group for LV;distCallcenterUserGroup_SAP
+;distCallcenterUserGroup_EXP;Callcenter User Group for EXP;Callcenter User Group for EXP;distCallcenterUserGroup_SAP
+;distCallcenterUserGroup_SE;Callcenter User Group for SE;Callcenter User Group for SE;distCallcenterUserGroup_SAP
+;distCallcenterUserGroup_NO;Callcenter User Group for NO;Callcenter User Group for NO;distCallcenterUserGroup_SAP
+;distCallcenterUserGroup_FI;Callcenter User Group for FI;Callcenter User Group for FI;distCallcenterUserGroup_SAP
+;distCallcenterUserGroup_BE;Callcenter User Group for BE;Callcenter User Group for BE;distCallcenterUserGroup_SAP
+#;distCallcenterUserGroup_TR;Callcenter User Group for TR;Callcenter User Group for TR;distCallcenterUserGroup_SAP
+;distKeyUsersGroup;Distrelec Key Users Group;Distrelec Key Users Group;distDefaultGroup
+;distKeyAccountAgentGroup;Key Account Agent Group;Key Account Agent Group;distCallcenterUserGroup
+;distCustomerIntegrationGroup;Customer Integration Group;Customer Integration Group;distDefaultGroup
+;distWebShopSupportGroup;Webshop Support Group;Webshop Support Group;distDefaultGroup
+;distSeminarsManagerGroup;Web Seminars Manager Group;Web Seminars Manager Group;distDefaultGroup
+;distOnlineSurveysManagerGroup;Online Surveys Manager Group;Online Surveys Manager Group;distDefaultGroup
+;distTrackingManagerGroup;Tracking Manager Group;Tracking Manager Group;distDefaultGroup;true
+;distTrackingManagerAdminGroup;Tracking Manager Group;Tracking Manager Group;distTrackingManagerGroup
+;distVivochaGroup;Vivocha Group;Vivocha Group;noaccessgroup,webservicegroup;true
+;distAdminGroup;Administration Group;Administration Group;distDefaultGroup
+
+# HMC Configuration is imported with bean namb2cacceleratorcore-spring.xml#hmcConfigurationImport
+UPDATE UserGroup;UID[unique=true];locName[lang=de];locName[lang=en];locName[lang=fr];locName[lang=it]
+;distCallcenterUserGroup;"Distrelec Customer Service User";"Distrelec Customer Service User";"Distrelec Customer Service User";"Distrelec Customer Service User"
+;distContentManagerGroup;"Distrelec Content Manager";"Distrelec Content Manager";"Distrelec Content Manager";"Distrelec Content Manager"
+;distKeyUsersGroup;"Distrelec Key User Group";"Distrelec Key User Group";"Distrelec Key User Group";"Distrelec Key User Group"
+;distAdminGroup;"Distrelec Administrator";"Distrelec Administrator";"Distrelec Administrator";"Distrelec Administrator"
+;distKeyAccountAgentGroup;"Distrelec Key Account Agent";"Distrelec Key Account Agent";"Distrelec Key Account Agent";"Distrelec Key Account Agent"
+;distCustomerIntegrationGroup;"Distrelec Customer Integration";"Distrelec Customer Integration";"Distrelec Customer Integration";"Distrelec Customer Integration"
+;distWebShopSupportGroup;"Distrelec Webshop Support";"Distrelec Webshop Support";"Distrelec Webshop Support";"Distrelec Webshop Support";
+;distSeminarsManagerGroup;"Distrelec Seminars Manager";"Distrelec Seminars Manager";"Distrelec Seminars Manager";"Distrelec Seminars Manager";
+;distOnlineSurveysManagerGroup;"Distrelec Surveys Manager";"Distrelec Surveys Manager";"Distrelec Surveys Manager";"Distrelec Surveys Manager";
+;distTrackingManagerGroup;"Distrelec Tracking Manager";"Distrelec Tracking Manager";"Distrelec Tracking Manager";"Distrelec Tracking Manager";
+;distTrackingManagerAdminGroup;"Distrelec Tracking Admin Manager";"Distrelec Tracking Admin Manager";"Distrelec Tracking Admin Manager";"Distrelec Tracking Admin Manager";
+
+# Create technical users
+INSERT_UPDATE Employee;uid[unique=true];name;password;groups(uid);sessionLanguage(isocode);sessionCurrency(isocode)
+;technicalCleanUpUser;Technical User For CleanUp Jobs;tech@proper;technicalusergroup;de;CHF
+;technicalSyncUser;Technical User For Catalog Synchronization;tech@sync;technicalusergroup;de;CHF
+;technicalImpexImportUser;Technical User For Batch Impex Import;tech@impex;technicalusergroup;de;CHF
+;technicalPIMImportUser;Technical User For PIM Import;tech@pim;technicalusergroup;de;CHF
+;technicalExportUser;Technical User For Export Jobs;tech@export;technicalusergroup;de;CHF
+;technicalSanityCheckUser;Technical User For GenericSanityCheck Jobs;tech@check;technicalusergroup;de;CHF
+
+# Create technical users for Vivocha
+INSERT_UPDATE Employee;uid[unique=true];name;$setVivochaPassword;groups(uid);sessionLanguage(isocode);sessionCurrency(isocode)
+;technicalUserVivocha;Technical User For Vivocha;;distVivochaGroup;de;CHF
+
+# Admin
+UPDATE Employee;UID[unique=true];sessionLanguage(isocode);sessionCurrency(isocode)
+;admin;en;CHF
+
+# E-Procurement User Groups
+INSERT_UPDATE UserGroup;uid[unique=true];name;groups(uid)[mode=replace];hmcLoginDisabled[default=true]
+;eProcurementGroup;E-Procurement Group;webservicegroup
+;ociCustomerGroup;Oci Customer Group;eProcurementGroup
+;aribaCustomerGroup;Ariba Customer Group;eProcurementGroup
+;cxmlCustomerGroup;CXML Customer Group;eProcurementGroup
+;b2beeshopgroup;B2B Employee Shop Group;b2bcustomergroup,b2badmingroup
+
+UPDATE UserGroup;UID[unique=true];locName[lang=de];locName[lang=en];locName[lang=fr];locName[lang=it]
+;eProcurementGroup;"E-Procurement Group";"E-Procurement Group";"E-Procurement Group";"E-Procurement Group"
+;ociCustomerGroup;"Oci Customer Group";"Oci Customer Group";"Oci Customer Group";"Oci Customer Group"
+;aribaCustomerGroup;"Ariba Customer Group";"Ariba Customer Group";"Ariba Customer Group";"Ariba Customer Group"
+;cxmlCustomerGroup;"CXML Customer Group";"CXML Customer Group";"CXML Customer Group";"CXML Customer Group"
+;b2beeshopgroup;"B2B Employee Shop Group";"B2B Employee Shop Group";"B2B Employee Shop Group";"B2B Employee Shop Group"
+

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:cxf-beans="http://cxf.apache.org/configuration/beans"
+	xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+		http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+		http://cxf.apache.org/configuration/beans http://cxf.apache.org/schemas/configuration/cxf-beans.xsd
+        http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+
+	<jaxws:client id="core.sapPiWebserviceClientIF19"
+		serviceClass="com.distrelec.webservice.if19.v1.SIHybrisIF19Out" 
+		address="${core.sapPi.webservice.address}/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=${core.sapPi.webservice.senderService}&amp;receiverParty=&amp;receiverService=&amp;interface=SI_Hybris_IF19_out&amp;interfaceNamespace=http%3A%2F%2Fwww.distrelec.com%2Fhybris%2FIF19"
+		username="${core.sapPi.webservice.username}"
+		password="${core.sapPi.webservice.password}">
+		<jaxws:properties>
+			<entry key="schema-validation-enabled" value="${core.sapPi.webservice.enableSchemaValidation}" />
+		</jaxws:properties>
+		
+		<jaxws:inInterceptors>
+			<ref bean="logInbound"/>
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<ref bean="logOutbound"/>
+		</jaxws:outInterceptors>	
+	</jaxws:client>
+
+
+	
+</beans>

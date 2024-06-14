@@ -1,0 +1,69 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<style>
+		table {
+			border: none;
+		}
+		th {
+			border-collapse: collapse;
+			border:thin solid #AAA;
+			font-size: 12px;
+			padding: 5px;
+		}
+		td {
+			border-collapse: collapse;
+			font-size: 12px;
+			border:thin solid #AAA;
+			vertical-align: top;
+			padding: 10px;
+		}
+	</style>
+</head>
+<body style="padding: 5px; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+
+<table border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0;">
+	<tr>
+		<th><p style="margin: 0; padding: 10px 0;">Art.Nr.</p></th>
+		<th><p style="margin: 0; padding: 10px 0;">Product Name</p></th>
+		<th align="center"><p style="margin: 0; padding: 10px 0;">Manufacturer</p></th>
+	</tr>
+	
+	#foreach( $product in $ctx.products )	
+	<tr>
+		<td><p style="margin: 0; font-size: 12px;">$product.catPlusSupplierAID</p></td>
+		<td><p style="margin: 0; font-size: 12px;">$product.name</p></td>
+		<td><p style="margin: 0; font-size: 12px;">	$product.manufacturer </p></td>
+	</tr>	
+	#end
+		
+</table>
+<br/>
+<br/>
+
+Quantity: ${ctx.quantity} <br/>
+<br/>
+<strong>Customer Contact Details:</strong> 
+<div style="padding: 10px; padding-left:20px;">
+Name: #if( $ctx.customer.name ) ${ctx.customer.name} #else - #end <br/>
+Customer Nr.: #if( $ctx.customer.unit.erpCustomerId ) ${ctx.customer.unit.erpCustomerId} #else - #end <br/>
+#if ( $ctx.customer.contactAddress.companyName )
+Company Name: ${ctx.customer.contactAddress.companyName}
+	#if( $ctx.customer.contactAddress.companyName2 ) 
+		<br/>Company Name 2: ${ctx.customer.contactAddress.companyName2}
+	#end
+<br/>
+#end
+
+Street: ${ctx.customer.contactAddress.line1} &nbsp; #if( $ctx.customer.contactAddress.line2 ) ${ctx.customer.contactAddress.line2} #end<br/>
+ZipCode: #if( $ctx.customer.contactAddress.postalCode ) ${ctx.customer.contactAddress.postalCode} #else - #end <br/>
+City: #if( $ctx.customer.contactAddress.town ) ${ctx.customer.contactAddress.town} #else - #end <br/>
+Country: #if ( $ctx.customer.contactAddress.country.name ) ${ctx.customer.contactAddress.country.name} #else - #end<br/>
+Phone: #if( $ctx.customer.contactAddress.phone ) ${ctx.customer.contactAddress.phone} #else - #end <br/>
+Email: #if( $ctx.customer.contactAddress.email ) ${ctx.customer.contactAddress.email} #else - #end <br/>
+</div>
+<br/>
+Customer Comment: #if( $ctx.comment ) ${ctx.comment} #else - #end
+
+</body>
+</html>

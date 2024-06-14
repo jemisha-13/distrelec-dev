@@ -1,0 +1,564 @@
+import java.lang.*;
+import java.util.*;
+import com.namics.distrelec.b2b.core.model.*;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import de.hybris.platform.b2b.model.*;
+import de.hybris.platform.core.*;
+import de.hybris.platform.core.model.security.*;
+import de.hybris.platform.core.model.user.*;
+import de.hybris.platform.jalo.*;
+import de.hybris.platform.jalo.user.*;
+import de.hybris.platform.jalo.flexiblesearch.*;
+import de.hybris.platform.servicelayer.exceptions.*;
+import de.hybris.platform.servicelayer.model.ModelService;
+import de.hybris.platform.servicelayer.search.*;
+import de.hybris.platform.servicelayer.search.impl.*;
+import de.hybris.platform.servicelayer.user.UserService;
+import de.hybris.platform.tx.Transaction;
+import org.apache.log4j.Logger;
+
+LOG = Logger.getLogger("BeanShell");
+
+LOG.info("===Start===");
+
+simulate = false;
+String indent = "---";
+String PERM_BUD_EXCEEDED_PREFIX = "B2BBudgetExceededPermissionFor";
+String PERM_REQ_QUOTATION_PREFIX = "RequestQuotationPermission_";
+
+// Initialisation of the environment
+if (!Registry.hasCurrentTenant()) {
+	Registry.activateMasterTenant();
+}
+
+JaloSession.getCurrentSession().setUser(UserManager.getInstance().getUserByLogin("admin"));
+modelService = SpringUtil.getBean("modelService", ModelService.class);
+flexibleSearchService = SpringUtil.getBean("flexibleSearchService", FlexibleSearchService.class);
+userService = SpringUtil.getBean("userService", UserService.class);
+
+Map subusers = new HashMap();
+    subusers.put("973951", "590386");
+    subusers.put("958047", "522749");
+    subusers.put("990870", "926647");
+    subusers.put("937550", "279247");
+    subusers.put("938640", "337110");
+    subusers.put("938642", "337110");
+    subusers.put("942505", "513034");
+    subusers.put("989146", "661851");
+    subusers.put("989149", "661851");
+    subusers.put("944540", "554146");
+    subusers.put("958131", "337835");
+    subusers.put("947469", "660266");
+    subusers.put("962424", "559919");
+    subusers.put("979943", "157203");
+    subusers.put("972631", "972596");
+    subusers.put("972645", "916796");
+    subusers.put("941347", "652903");
+    subusers.put("944261", "813828");
+    subusers.put("944638", "689425");
+    subusers.put("974750", "974733");
+    subusers.put("916786", "279247");
+    subusers.put("943916", "817620");
+    subusers.put("938975", "337110");
+    subusers.put("939863", "692569");
+    subusers.put("955912", "183517");
+    subusers.put("984384", "613913");
+    subusers.put("956139", "41830");
+    subusers.put("974751", "974733");
+    subusers.put("956100", "11");
+    subusers.put("951748", "47223");
+    subusers.put("992199", "17772");
+    subusers.put("992280", "885272");
+    subusers.put("992619", "842525");
+    subusers.put("956137", "41830");
+    subusers.put("956367", "2867");
+    subusers.put("956608", "739100");
+    subusers.put("957795", "901615");
+    subusers.put("960387", "960366");
+    subusers.put("995123", "32801");
+    subusers.put("956145", "41830");
+    subusers.put("956158", "41830");
+    subusers.put("978920", "624104");
+    subusers.put("963886", "41830");
+    subusers.put("968007", "19395");
+    subusers.put("989690", "68591");
+    subusers.put("980229", "207810");
+    subusers.put("978352", "43148");
+    subusers.put("965483", "567061");
+    subusers.put("985955", "494934");
+    subusers.put("991675", "566437");
+    subusers.put("955910", "183517");
+    subusers.put("953074", "953033");
+    subusers.put("984592", "195938");
+    subusers.put("937725", "226195");
+    subusers.put("962423", "559919");
+    subusers.put("991783", "891007");
+    subusers.put("939675", "34349");
+    subusers.put("940767", "337110");
+    subusers.put("967479", "276911");
+    subusers.put("956144", "41830");
+    subusers.put("958371", "330831");
+    subusers.put("988813", "197152");
+    subusers.put("944548", "303733");
+    subusers.put("990871", "926647");
+    subusers.put("949842", "562672");
+    subusers.put("974299", "884423");
+    subusers.put("974742", "974733");
+    subusers.put("947078", "368595");
+    subusers.put("940324", "53766");
+    subusers.put("974753", "974733");
+    subusers.put("937449", "925293");
+    subusers.put("957116", "533193");
+    subusers.put("960405", "959217");
+    subusers.put("942399", "765215");
+    subusers.put("942110", "477894");
+    subusers.put("944273", "272631");
+    subusers.put("990273", "472346");
+    subusers.put("989136", "661851");
+    subusers.put("989145", "661851");
+    subusers.put("942069", "595233");
+    subusers.put("983073", "895730");
+    subusers.put("974748", "974733");
+    subusers.put("989798", "343401");
+    subusers.put("977374", "967521");
+    subusers.put("989993", "683483");
+    subusers.put("960930", "13833");
+    subusers.put("961310", "730842");
+    subusers.put("974527", "580008");
+    subusers.put("978849", "534234");
+    subusers.put("963867", "84948");
+    subusers.put("978922", "624104");
+    subusers.put("967588", "606144");
+    subusers.put("947808", "363079");
+    subusers.put("955781", "731462");
+    subusers.put("979868", "2485");
+    subusers.put("948507", "571205");
+    subusers.put("949855", "791600");
+    subusers.put("960384", "960366");
+    subusers.put("961852", "431439");
+    subusers.put("956130", "41830");
+    subusers.put("956147", "41830");
+    subusers.put("956156", "41830");
+    subusers.put("939631", "70276");
+    subusers.put("945813", "626407");
+    subusers.put("970553", "842520");
+    subusers.put("969280", "895041");
+    subusers.put("938068", "87898");
+    subusers.put("939629", "70276");
+    subusers.put("949843", "80998");
+    subusers.put("940737", "216628");
+    subusers.put("945713", "21896");
+    subusers.put("950885", "946570");
+    subusers.put("986572", "68591");
+    subusers.put("956135", "41830");
+    subusers.put("949528", "645599");
+    subusers.put("972021", "831162");
+    subusers.put("973647", "367258");
+    subusers.put("974749", "518437");
+    subusers.put("963292", "407864");
+    subusers.put("989469", "459777");
+    subusers.put("989707", "313825");
+    subusers.put("957115", "533193");
+    subusers.put("1003070", "824169");
+    subusers.put("998414", "383792");
+    subusers.put("1005534", "284768");
+    subusers.put("994723", "201902");
+    subusers.put("1002953", "911702");
+    subusers.put("1003231", "172308");
+    subusers.put("1003232", "172308");
+    subusers.put("994428", "7615");
+    subusers.put("1005524", "936264");
+    subusers.put("1002782", "52763");
+    subusers.put("1003124", "567515");
+    subusers.put("1003956", "282688");
+    subusers.put("1004061", "273495");
+    subusers.put("997124", "191621");
+    subusers.put("996129", "861548");
+    subusers.put("999800", "319862");
+    subusers.put("992201", "17772");
+    subusers.put("998519", "356642");
+    subusers.put("992445", "80338");
+    subusers.put("1004863", "41830");
+    subusers.put("1004948", "860670");
+    subusers.put("996191", "159030");
+    subusers.put("992197", "17772");
+    subusers.put("1004861", "41830");
+    subusers.put("996189", "159030");
+    subusers.put("999906", "557354");
+    subusers.put("996661", "41830");
+    
+FlexibleSearchQuery fsq = new FlexibleSearchQuery("select {pk} from {B2BCustomer} where {iShopContactID}=?ishopId");
+
+String query = "SELECT " +
+"    {b2bu.pk} " +
+"FROM " +
+"    {user AS u}, " +
+"    {PrincipalGroupRelation AS pgr}, " +
+"    {B2BUnit AS b2bu} " +
+"WHERE " +
+"    {u.pk}={pgr.source} AND " +
+"    {pgr.target}={b2bu.pk} AND " +
+"    {b2bu.customerType} IN ({{SELECT {pk} FROM {CustomerType} WHERE {code}='B2B'}}) AND " +
+"    {b2bu.iShopCustomerID} IS NOT NULL " +
+// "    AND {b2bu.uid}='f921191d-5fd0-4b91-82b1-fc90d91ad336' " +
+"GROUP BY {b2bu.pk} " +
+"HAVING count(*) > 1";
+
+List units = flexibleSearchService.search(query).getResult();
+
+UserGroupModel b2bAdminGroup = userService.getUserGroupForUID("b2badmingroup");
+int adminCounter = 0;
+int i = 0;
+
+for (B2BUnitModel unit : units) {
+
+	i++;
+	LOG.info("About to check B2BUnit uid [" + unit.getUid() + "], iShopCustomerID [" + unit.getIShopCustomerID() + "] (" + i + "/" + units.size() + ")");
+    
+    if (!simulate) {
+    	final Transaction transaction = Transaction.current();
+    	try {
+	    	transaction.begin();
+	    
+			List subusersList = new ArrayList();
+
+	    	if (unit.getErpCustomerID() != null && unit.getMovexCustomerID() != null && !unit.getErpCustomerID().equals(unit.getMovexCustomerID())) {
+				throw new IllegalStateException("[" + unit.getUid() + "] has different id's for ErpCustomerID [" + unit.getErpCustomerID() + "] and MovexCustomerID [" + unit.getMovexCustomerID() + "]. Please cleanup manually!");
+		    }
+		
+		    String ishopCustomerID = unit.getIShopCustomerID();
+		    String movexID = unit.getErpCustomerID() != null ? unit.getErpCustomerID() : unit.getMovexCustomerID();
+		    unit.getMovexCustomer().setCustomerId(movexID);
+		    modelService.save(unit.getMovexCustomer());
+		    
+		    // Set erpCustomerID if not already set
+		    if (unit.getErpCustomerID() == null) {
+				unit.setErpCustomerID(movexID);
+		    }
+		    
+		    // Set MovexCustommerID to null
+		    unit.setMovexCustomerID(null);
+		    
+		    modelService.save(unit);
+		
+			List membersToCheck = new ArrayList(unit.getMembers());
+			
+			LOG.info(indent + "###### Situation before cleanup - Start ######");
+			LOG.info(indent + "Number of customers: " + membersToCheck.size());
+			for (PrincipalModel p : membersToCheck) {
+				if (p instanceof B2BCustomerModel) {
+		            B2BCustomerModel customer = (B2BCustomerModel) p;
+		            LOG.info(indent + indent + "Customer: uid [" + customer.getUid() + "], iShopContactID [" + customer.getIShopContactID() + "]");
+		        }
+			}
+			
+			LOG.info(indent + "Number of addresses: " + unit.getAddresses().size());
+			for (AddressModel address : unit.getAddresses()) {
+				LOG.info(indent + indent + "Address: PK [" + address.getPk() + "], remarks [" + address.getRemarks() + "], First/Last Name [" + address.getFirstname() + " " + address.getLastname() + "]");			
+			}
+			
+			LOG.info(indent + "Number of approvers: " + unit.getApprovers().size());
+			for (PrincipalModel p : unit.getApprovers()) {
+				if (p instanceof B2BCustomerModel) {
+		            B2BCustomerModel customer = (B2BCustomerModel) p;
+		            LOG.info(indent + indent + "Approver: uid [" + customer.getUid() + "], iShopContactID [" + customer.getIShopContactID() + "]");
+		        }
+			}		
+			LOG.info(indent + "###### Situation before cleanup - End ######");
+			
+		    for (PrincipalModel p : membersToCheck) {
+		        if (p instanceof B2BCustomerModel) {
+		            B2BCustomerModel customer = (B2BCustomerModel) p;
+		            if (!customer.getIShopContactID().equals(ishopCustomerID)) {
+		                if (subusers.containsKey(customer.getIShopContactID())) {
+		                    if (!subusers.get(customer.getIShopContactID()).equals(ishopCustomerID)) {
+		                    	LOG.warn(indent + "B2BCustomer [" + customer.getUid() + "] is a sub-user and attached to wrong B2BUnit [" + unit.getUid() + "]. Will be merged later (see below).");
+		                        subusersList.add(customer);
+		                    } else {
+		                    	LOG.info(indent + "B2BCustomer [" + customer.getUid() + "] is a sub-user and located at the correct B2BUnit.");
+		                    }
+		                } else {
+			            	LOG.warn(indent + "B2BCustomer [" + customer.getUid() + "] is attached to wrong B2BUnit [" + unit.getUid() + "]. About to create a new B2BUnit and attach B2BCustomer there.");
+		                    B2BUnitModel newB2BUnit = modelService.create(B2BUnitModel.class);
+		                    newB2BUnit.setUid(UUID.randomUUID().toString());
+		                    newB2BUnit.setActive(Boolean.TRUE);
+		                    newB2BUnit.setErpCustomerID(movexID);
+		                    newB2BUnit.setMovexCustomer(unit.getMovexCustomer());
+		                    newB2BUnit.setCustomerType(unit.getCustomerType());
+		                    newB2BUnit.setSalesOrg(unit.getSalesOrg());
+		                    newB2BUnit.setIShopCustomerID(customer.getIShopContactID());
+		                    newB2BUnit.setAddresses(new ArrayList());
+		
+		                    // Cleanup permissions
+					        for (permission : unit.getPermissions()) {
+					        	modelService.remove(permission);
+					        }
+	
+	                        // Create permissions
+	                        B2BBudgetExceededPermissionModel budgetExceededPerm = null;
+	                        B2BBudgetExceededPermissionModel budgetExceededPermTemplate = new B2BBudgetExceededPermissionModel();
+	                        budgetExceededPermTemplate.setCode(PERM_BUD_EXCEEDED_PREFIX + customer.getCustomerID());
+	                        try {
+		                        budgetExceededPerm = flexibleSearchService.getModelByExample(budgetExceededPermTemplate);
+	                        } catch(ModelNotFoundException mnfe) {
+		                        budgetExceededPerm = modelService.create(B2BBudgetExceededPermissionModel.class);
+		                        budgetExceededPerm.setCode(PERM_BUD_EXCEEDED_PREFIX + customer.getCustomerID());
+							}
+	                        budgetExceededPerm.setUnit(newB2BUnit);
+	                        budgetExceededPerm.setCustomers(Collections.singletonList(customer));
+	                        budgetExceededPerm.setActive(Boolean.TRUE);
+	                        modelService.save(budgetExceededPerm);
+	                    	LOG.info(indent + "B2BBudgetExceededPermission for B2BCustomer [" + customer.getUid() + "] in B2BUnit [" + newB2BUnit.getUid() + "] created.");
+	                        
+	                        
+	                        DistB2BRequestQuotationPermissionModel requestQuotationPerm = null;
+	                        DistB2BRequestQuotationPermissionModel requestQuotationPermTemplate = new DistB2BRequestQuotationPermissionModel();
+	                        requestQuotationPermTemplate.setCode(PERM_REQ_QUOTATION_PREFIX + customer.getCustomerID());
+	                        try {
+	                        	requestQuotationPerm = flexibleSearchService.getModelByExample(requestQuotationPermTemplate);
+	                        } catch(ModelNotFoundException mnfe) {
+	                        	requestQuotationPerm = modelService.create(DistB2BRequestQuotationPermissionModel.class);
+		                        requestQuotationPerm.setCode(PERM_REQ_QUOTATION_PREFIX + customer.getCustomerID());
+	                        }
+	                        requestQuotationPerm.setUnit(newB2BUnit);
+	                        requestQuotationPerm.setCustomers(Collections.singletonList(customer));
+	                        requestQuotationPerm.setActive(Boolean.TRUE);
+	                        modelService.save(requestQuotationPerm);
+	                    	LOG.info(indent + "DistB2BRequestQuotationPermission for B2BCustomer [" + customer.getUid() + "] in B2BUnit [" + newB2BUnit.getUid() + "] created.");
+	                        
+	                        // Set approver
+	                        newB2BUnit.setApprovers(Collections.singleton(customer));
+	                        LOG.info(indent + "Set B2BCustomer [" + customer.getUid() + "] as approver for B2BUnit [" + newB2BUnit.getUid() + "].");
+		                    
+		                    modelService.save(newB2BUnit);
+		                   	LOG.info(indent + "B2BUnit [" + newB2BUnit.getUid() + "] created.");
+		                   	
+		                   	// Set default b2b unit
+		                    customer.setDefaultB2BUnit(newB2BUnit);
+		                    
+		                    // Set groups for the new customer and remove the old unit from the list of its groups
+		                    newGroups = new HashSet();
+		                    for (group : customer.getGroups()) {
+		                    	if (!(group instanceof B2BUnitModel)) {
+		                    		newGroups.add(group);
+		                    	}
+		                    }
+		                    newGroups.add(newB2BUnit);
+		                    customer.setGroups(newGroups);
+		                    modelService.save(customer);
+		                    
+		                    int j = 0;
+							List addressesToRemove = new ArrayList();
+		                    for (AddressModel addr : unit.getAddresses()) {
+		                    	j++;
+		                        if (Boolean.TRUE.equals(addr.getShippingAddress()) && addr.getRemarks() != null && addr.getRemarks().startsWith(customer.getIShopContactID() + "#")) {
+		                            AddressModel shippingAddress = modelService.clone(addr);
+		                            shippingAddress.setOwner(newB2BUnit);
+		                            modelService.save(shippingAddress);
+		                            addressesToRemove.add(addr);
+				                   	LOG.info(indent + "Address [" + addr.getPk() + "] " + j + " of " + unit.getAddresses().size() + " with remarks [" + addr.getRemarks() + "]: set new owner to [" + newB2BUnit.getUid() + "]");
+		                        } else {
+		                        	if(addr.getRemarks() != null) {
+		                        		LOG.info(indent + "Address [" + addr.getPk() + "] " + j + " of " + unit.getAddresses().size() + " with remarks [" + addr.getRemarks() + "]: no change required");
+		                        	} else {
+		                        		LOG.warn(indent + "Address [" + addr.getPk() + "] " + j + " of " + unit.getAddresses().size() + " with creation date [" + addr.getCreationtime() + "] and country [" + addr.getCountry().getIsocode() + "] has no remarks. Please check manually!");
+		                        	}
+		                        }
+		                    }
+		                    
+		                    if(!addressesToRemove.isEmpty()) {
+		                    	modelService.removeAll(addressesToRemove);	
+		                    }
+		                    
+		                    // Set the billing address for the new unit
+		                    AddressModel billingAddressForNewB2BUnit = null;
+		                    for(AddressModel address : newB2BUnit.getAddresses()) {
+		                    	if((customer.getIShopContactID() + "#").equals(address.getRemarks())) {
+		                    		billingAddressForNewB2BUnit = address;
+		                    		LOG.info(indent + "Originally migrated billing address from B2BCustomer [" + customer.getUid() + "] found and used as new billing/shipping address for the new B2BUnit [" + newB2BUnit.getUid() + "].");
+		                    		break;
+		                    	}
+		                    }
+		                    
+		                    if(billingAddressForNewB2BUnit == null) {
+		                    	LOG.warn(indent + "Original billing address can not be found for B2BCustomer [" + customer.getUid() + "]. Fallback: Using its contact address! Attention: We lose the company name!");
+		                    	billingAddressForNewB2BUnit = modelService.clone(customer.getContactAddress());
+			                    billingAddressForNewB2BUnit.setOwner(newB2BUnit);
+			                    LOG.info(indent + "Contact address of B2BCustomer [" + customer.getUid() + "] cloned to be used as new billing/shipping address for the new B2BUnit [" + newB2BUnit.getUid() + "].");
+		                    } 
+		                    
+		                    billingAddressForNewB2BUnit.setBillingAddress(Boolean.TRUE);
+			                billingAddressForNewB2BUnit.setShippingAddress(Boolean.TRUE);
+			                billingAddressForNewB2BUnit.setContactAddress(Boolean.FALSE);
+			                modelService.save(billingAddressForNewB2BUnit);
+			                newB2BUnit.setBillingAddress(billingAddressForNewB2BUnit);
+			                newB2BUnit.setShippingAddress(billingAddressForNewB2BUnit);
+		                   	
+		                   	// Set company name given by the billing address
+		                   	newB2BUnit.setName(billingAddressForNewB2BUnit.getCompany());
+	                        newB2BUnit.setLocName(billingAddressForNewB2BUnit.getCompany());
+		                   	
+							newB2BUnit.setDescription("CreatedByMigrationCleanupScript");
+		                    
+		                    modelService.save(newB2BUnit);
+		                    LOG.info(indent + "The new B2BUnit [" + newB2BUnit.getUid() + "] [" + newB2BUnit.getName() + "] has been saved.");
+		                    modelService.refresh(unit);
+		                }
+		            }
+		        } else {
+		        	throw new IllegalStateException("Member with uid [" + p.getUid() + "] of B2BUnit [" + unit.getUid() + "] is not of type B2BCustomer");
+		        }
+		    }
+	
+			// Cleanup old unit
+			adminCounter = 0;
+			B2BCustomerModel b2bAdminUser = null;
+			for (member : unit.getMembers()) {
+				if (userService.isMemberOfGroup(member, b2bAdminGroup)) {
+					adminCounter++;
+					b2bAdminUser = member;
+				}
+			}
+			
+			if (adminCounter != 1) {
+				throw new IllegalStateException("B2BUnit [" + unit.getUid() + "] has wrong number of admin users [" + adminCounter + "]. Please cleanup manually!");
+			} else {
+				// Re-create permissions for old B2BUnit
+                B2BBudgetExceededPermissionModel budgetExceededPerm = null;
+                B2BBudgetExceededPermissionModel budgetExceededPermTemplate = new B2BBudgetExceededPermissionModel();
+                budgetExceededPermTemplate.setCode(PERM_BUD_EXCEEDED_PREFIX + b2bAdminUser.getCustomerID());
+                try {
+                    budgetExceededPerm = flexibleSearchService.getModelByExample(budgetExceededPermTemplate);
+                } catch(ModelNotFoundException mnfe) {
+                    budgetExceededPerm = modelService.create(B2BBudgetExceededPermissionModel.class);
+                    budgetExceededPerm.setCode(PERM_BUD_EXCEEDED_PREFIX + b2bAdminUser.getCustomerID());
+				}
+		        budgetExceededPerm.setUnit(unit);
+		        budgetExceededPerm.setCustomers(Collections.singletonList(b2bAdminUser));
+		        budgetExceededPerm.setActive(Boolean.TRUE);
+		        modelService.save(budgetExceededPerm);
+		    	LOG.info(indent + "B2BBudgetExceededPermission for B2BCustomer [" + b2bAdminUser.getUid() + "] in B2BUnit [" + unit.getUid() + "] created.");
+		        
+                DistB2BRequestQuotationPermissionModel requestQuotationPerm = null;
+                DistB2BRequestQuotationPermissionModel requestQuotationPermTemplate = new DistB2BRequestQuotationPermissionModel();
+                requestQuotationPermTemplate.setCode(PERM_REQ_QUOTATION_PREFIX + b2bAdminUser.getCustomerID());
+                try {
+                	requestQuotationPerm = flexibleSearchService.getModelByExample(requestQuotationPermTemplate);
+                } catch(ModelNotFoundException mnfe) {
+                	requestQuotationPerm = modelService.create(DistB2BRequestQuotationPermissionModel.class);
+                    requestQuotationPerm.setCode(PERM_REQ_QUOTATION_PREFIX + b2bAdminUser.getCustomerID());
+                }
+		        requestQuotationPerm.setUnit(unit);
+		        requestQuotationPerm.setCustomers(Collections.singletonList(b2bAdminUser));
+		        requestQuotationPerm.setActive(Boolean.TRUE);
+		        modelService.save(requestQuotationPerm);
+		    	LOG.info(indent + "DistB2BRequestQuotationPermission for B2BCustomer [" + b2bAdminUser.getUid() + "] in B2BUnit [" + unit.getUid() + "] created.");
+		    	
+		    	// Mark admin user as an approver of the this unit
+		    	unit.setApprovers(Collections.singleton(b2bAdminUser));
+		        LOG.info(indent + "Set B2BCustomer [" + b2bAdminUser.getUid() + "] as approver for B2BUnit [" + unit.getUid() + "].");
+		        
+		        // Set default billing/shipping address for the old unit
+		        boolean defaultBillingAddressFound = false;
+	            for(AddressModel address : unit.getAddresses()) {
+	            	if((b2bAdminUser.getIShopContactID() + "#").equals(address.getRemarks())) {
+	            		unit.setBillingAddress(address);
+		                unit.setShippingAddress(address);
+		                LOG.info(indent + "Set default billing/shipping address [" + address.getPk() + "] for old B2BUnit [" + unit.getUid() + "].");
+		                defaultBillingAddressFound = true;
+	            		break;
+	            	}
+	            }
+	            
+	            if(!defaultBillingAddressFound) {
+	            	LOG.warn(indent + "No default billing/shipping address for old B2BUnit [" + unit.getUid() + "] found. Try to use the first address marked as billing address!");
+	            	for(AddressModel address : unit.getAddresses()) {
+	            		if(address.getBillingAddress().booleanValue()) {
+	            			unit.setBillingAddress(address);
+			                unit.setShippingAddress(address);
+			                LOG.info(indent + "Set default billing/shipping address for old B2BUnit [" + unit.getUid() + "] by using the first address marked as billing address!");
+			                defaultBillingAddressFound = true;
+		            		break;
+	            		}
+	            	}
+	            	
+	            	if(!defaultBillingAddressFound) {
+	            		throw new IllegalStateException("No default billing/shipping address for old B2BUnit [" + unit.getUid() + "] found. Please cleanup manually!");
+	            	}
+	            }
+	            
+	            unit.setDescription("ModifiedByMigrationCleanupScript");
+			}
+			
+		    modelService.save(unit);
+		    
+		    // Process sub-users
+		    for (B2BCustomerModel sub_user : subusersList) {
+				LOG.info(indent + "About to process sub-user uid [" + sub_user.getUid() + "], iShopContactID [" + sub_user.getIShopContactID() + "]");
+			    String adminIShopContactID = subusers.get(sub_user.getIShopContactID());
+			    if (adminIShopContactID == null) {
+			        throw new IllegalStateException("No admin user found in sub-user list for sub-user with uid [" + sub_user.getUid() + "], iShopContactID [" + sub_user.getIShopContactID() + "]. Please cleanup manually!");
+			    }
+			    
+			    fsq.addQueryParameter("ishopId", adminIShopContactID);
+			    List admins = flexibleSearchService.search(fsq).getResult();
+			    if (admins.isEmpty()) {
+			   		throw new IllegalStateException("No admin user found with iShopContactID [" + adminIShopContactID + "] for sub-user with uid [" + sub_user.getUid() + "], iShopContactID [" + sub_user.getIShopContactID() + "]. Please cleanup manually!");
+			   	} else if(admins.size() > 1) {
+			   		throw new IllegalStateException("Found " + admins.size() + " admin users with iShopContactID [" + adminIShopContactID + "] for sub-user with uid [" + sub_user.getUid() + "], iShopContactID [" + sub_user.getIShopContactID() + "]. Please cleanup manually!");
+			   	} else {
+			        B2BUnitModel old_unit = sub_user.getDefaultB2BUnit();
+			        B2BUnitModel new_unit = admins.get(0).getDefaultB2BUnit();
+			        // Switch the sub-user defaultB2BUnit to the admin unit
+			        sub_user.setDefaultB2BUnit(new_unit);
+			        
+			        // Set groups for the new customer and remove the old unit from the list of its groups
+		            newGroups = new HashSet();
+		            for (group : sub_user.getGroups()) {
+		            	if (!(group instanceof B2BUnitModel)) {
+		            		newGroups.add(group);
+		            	}
+		            }
+		            newGroups.add(new_unit);
+		            sub_user.setGroups(newGroups);
+			        modelService.save(sub_user);
+			        
+			        int j = 0;
+					List addressesToRemove = new ArrayList();
+		            for (AddressModel addr : old_unit.getAddresses()) {
+		            	j++;
+		                if (Boolean.TRUE.equals(addr.getShippingAddress()) && addr.getRemarks() != null && addr.getRemarks().startsWith(sub_user.getIShopContactID() + "#")) {
+		                    AddressModel shippingAddress = modelService.clone(addr);
+		                    shippingAddress.setOwner(new_unit);
+		                    modelService.save(shippingAddress);
+		                    addressesToRemove.add(addr);
+		                   	LOG.info(indent + "Address [" + addr.getPk() + "] " + j + " of " + old_unit.getAddresses().size() + " with remarks [" + addr.getRemarks() + "]: set new owner to [" + new_unit.getUid() + "]");
+		                } else {
+		                	if(addr.getRemarks() != null) {
+		                		LOG.info(indent + "Address [" + addr.getPk() + "] " + j + " of " + old_unit.getAddresses().size() + " with remarks [" + addr.getRemarks() + "]: no change required");
+		                	} else {
+		                		LOG.warn(indent + "Address [" + addr.getPk() + "] " + j + " of " + old_unit.getAddresses().size() + " with creation date [" + addr.getCreationtime() + "] and country [" + addr.getCountry().getIsocode() + "] has no remarks. Please check manually!");
+		                	}
+		                }
+		            }
+		            
+		            if(!addressesToRemove.isEmpty()) {
+		            	modelService.removeAll(addressesToRemove);
+		            }
+		            
+			        modelService.save(new_unit);
+			        modelService.refresh(old_unit); // Necessary because addresses might have been deleted for the old unit
+			    }
+			} // end sub-user
+			
+			// Commit
+			transaction.commit();
+		} catch(Exception e) {
+			LOG.error(indent + "Can not cleanup unit with uid [" + unit.getUid() + "]! Please cleanup manually! Error-Detail: " + e.getMessage(), e);
+			transaction.rollback();
+		}
+	} // end simulate
+	
+}  // end unit
+
+LOG.info("===End===");

@@ -1,0 +1,136 @@
+ï»¿
+$contentMasterCatalog=distrelecContentCatalog
+$contentCatalog=distrelec_LVContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$picture=media(code, $contentCV);
+$siteResource=jar:com.namics.distrelec.b2b.initialdata.constants.Namb2bacceleratorInitialDataConstants&/distrelecB2Binitialdata/import/project/contentCatalogs/$contentMasterCatalog
+
+# Language
+$lang=lv
+
+#E-Procurement
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;eprocurementHomepage;E-iepirkumu lapa
+
+
+# Site Logo Component
+UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang];localizedUrlLink[lang=$lang]
+;;LogoComponent;/images/theme/distrelec_logo.png;"/"
+
+
+# Site Certification Logos Component
+UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang];localizedUrlLink[lang=$lang]
+;;CertLabelTuvComponent;/images/certlabels/logo-tuv.png;"/"
+;;CertLabelEhiComponent;/images/certlabels/logo-ehi.png;"/"
+;;CertLabelTrustedShopsComponent;/images/certlabels/logo-trustedshops.png;"/"
+
+
+# CMS Link Components
+UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];localizedUrl[lang=$lang];linkName[lang=$lang]
+;;ImportToolPageLink;"/import-tool";Saraksts imports
+;;ImpressumPageLink;;AutortiesÄ«bas
+;;DisclaimerPageLink;;Disclaimer
+;;FacebookLink;"https://www.facebook.com/DistrelecSwitzerland";Facebook
+;;TwitterLink;"https://twitter.com/distrelec";Twitter
+;;GoogleLink;"https://plus.google.com/111961224551489786574";Google+
+
+
+# CMS Headline Component
+UPDATE DistHeadlineComponent;$contentCV[unique=true];uid[unique=true];headline[lang=$lang]
+;;OrderConfirmationHeadlineComponent;Paldies par pirkumu Elfa Distrelec!
+;;OrderConfirmationPickupHeadlineComponent;Paldies par pirkumu Elfa Distrelec!
+;;OrderConfirmationApprovalHeadlineComponent;(lv)Your order has been forwarded to your administrator for approval!
+
+
+# CMS ProductReferences Components
+UPDATE DistProductReferencesCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang] 
+;;ConsistentWithProductReferencesComponent;Saskaņā ar;
+
+UPDATE DistProductFFCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;RecommendationProductFFComponent;SaistÄ«tie produkti
+;;AlsoBoughtProductFFComponent;CilvÄ“ki kuri iegÄ�dÄ�jÄ�s Å¡o preci izvÄ“lÄ�s arÄ«;
+
+
+# CMS Navigation Nodes
+UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;SiteRootNode;SÄ�kumlapa
+;;MainNavNode;GalvenÄ� izvÄ“lne
+;;FooterNavNode;KÄ�jenes izvÄ“lne
+##
+;;SupportAndServicesNavNode;Atbalsts un serviss 
+;;SupportNavNode;Atbalsts
+;;TechnicalSupportNavNode;Tehniskais atbalsts 
+;;CalibrationServiceNavNode;Calibration Service
+;;FaqNavNode;BieÅ¾Ä�k uzdotie jautajumi
+##
+;;InfoCenterNavNode;InformÄ�cijas centrs
+;;AboutUsNavNode;Par mums 
+;;SeminarsNavNode;SeminÄ�ri
+;;NewsNavNode;ZiÅ†as
+;;LegalsNavNode;JuridiskÄ� informÄ�cija
+;;ImprintNavNode;ZÄ«mogs
+;;PressNavNode;InformÄ�cija presei
+;;CatalogOrderNavNode;PasÅ«tÄ«t katalogu 
+##
+;;ManufacturerStoresNavNode;RaÅ¾otÄ�ju veikali 
+;;CiscoNavNode;Cisco
+;;SonyNavNode;Sony
+;;AgilentNavNode;Agilent
+;;FlukeNavNode;Fluke
+;;AspNavNode;ASP
+;;AmprobeNavNode;Amprobe
+;;BrotherNavNode;Brother
+;;PanasonicNavNode;Panasonic
+;;KingstonNavNode;Kingston
+;;DevoloNavNode;Devolo
+##
+;;ToolsNavNode;RÄ«ki
+;;ListImportToolsNavNode;ImportÄ“Å¡anas rÄ«ku saraksts
+;;DirectOrderNavNode;TieÅ¡Ä� pasÅ«tÄ«Å¡ana 
+;;IPhoneNavNode;IPhone
+;;DistrelecMobileAppsNavNode;Distrelec Mobile Apps
+
+
+######  Distrelec Cart Page ######
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;EmptyCartParagraphComponent;"<h2>JÅ«su iepirkuma grozs ir tukÅ¡s </h2><p>Ieteikumi</p><ul><li>PÄ�rlÅ«kojiet produktus izvÄ“loties kategoriju</li></ul>";
+
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;PaymentInfoParagraphComponent;<h2>MaksÄ�t ar DeuCS</h2><p>InformÄ�cija:</p><ul><li>vienkÄ�rÅ¡i maksÄ�jumi</li></ul>;
+
+
+###### Distrelec MyAccount Page ######
+UPDATE DistLeadTextComponent;$contentCV[unique=true];uid[unique=true];leadTitle[lang=$lang];leadText[lang=$lang]
+;;CompanyInformationLeadTextComponent;UÅ†Ä“muma rekvizÄ«ti;Lai nomainÄ«tu uzÅ†Ä“muma pamata datus, lÅ«dzu sazinieties ar <a href="/lv/Contact/cms/contact"> Elfa Distrelec atbalstu</a>;
+
+
+# Dist Product Carousel Components
+UPDATE DistProductCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;TopProductsComponent;Top preces
+;;NewProductsComponent;Jauni produkti
+
+# Checkout Payment Unknown Error Paragraph
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;CheckoutPaymentUnknownErrorParagraphComponent;Ir radusies kÄ¼Å«da veicot apmaksu. LÅ«dzu sazinieties ar Elfa Distrelec.
+
+
+############################################################################################
+# Webtrekk Opt-Out Information Page
+############################################################################################
+
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+# Load the webtrekk redirect url config param
+$optOutRedirectPath=/cms/optOutSuccess
+$optOutRedirectUrl=$config-website.distrelec_LV.http$optOutRedirectPath
+
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;OptOutInformationText;"<a href=""http://optout.webtrekk.net/optout.php?r=$optOutRedirectUrl"">(lv)Webtrekk Opt-Out Link</a>"
+
+############################################################################################
+# Webtrekk Opt-Out Cookie Notice
+############################################################################################
+
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
+;;CookieNoticeMoreInfoLink;"VairÄ�k informÄ�cijas"

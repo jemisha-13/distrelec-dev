@@ -1,0 +1,53 @@
+<div *rxLet="userId$; let userId" class="home-quickorder" id="quick_order_container">
+  <h2 class="heading">{{ 'homepage.quickOrder' | cxTranslate }}</h2>
+  <ul class="quickorder-list">
+    <li class="item">
+      <a
+        class="item-link"
+        id="quick_order_art_nr"
+        [innerHtml]="'homepage.quickOrder_artNr' | cxTranslate"
+        routerLink="/"
+        title="Article Number"
+      ></a>
+    </li>
+    <li class="item">
+      <a class="item-link" id="quick_order_bom_tool" routerLink="/bom-tool" title="BOM Tool">
+        {{ 'homepage.bom_tool' | cxTranslate }}
+      </a>
+    </li>
+    <li class="item">
+      <a class="item-link" id="quick_order_shopping_list" (click)="displayLoginModule(userId)">
+        {{ 'homepage.shopping_list' | cxTranslate }}
+      </a>
+    </li>
+  </ul>
+
+  <div class="fieldWrapper">
+    <div
+      *rxFor="let item of [].constructor(rowLength); let i = index"
+      class="row quickorder-field"
+      [id]="'quick_order_field_wrapper_' + i"
+    >
+      <app-quick-order-row
+        class="quickorder-row"
+        [signal]="triggerSignal_"
+        [rowNumber]="i"
+        [submittedEmptyOrder]="emptyOrderData"
+        (data)="addQuickOrderEntry($event)"
+      ></app-quick-order-row>
+    </div>
+  </div>
+
+  <div class="rows-wrapper" [class.d-none]="rowLength >= 10">
+    <button class="rows-wrapper--more" id="quick_order_add_more_rows" (click)="addRow()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+      {{ 'homepage.more_rows' | cxTranslate }}
+    </button>
+  </div>
+
+  <div *rxIf="rowLength" class="rows-wrapper">
+    <button class="rows-wrapper--btn" id="quick_order_add_to_cart" (click)="addToCart(userId)">
+      {{ 'homepage.add_to_cart' | cxTranslate }}
+    </button>
+  </div>
+</div>

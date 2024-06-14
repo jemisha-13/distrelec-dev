@@ -1,0 +1,427 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-9">
+      <ng-container *ngIf="!showQuotationDetailsFlag" class="account-information-main">
+        <div class="quote-history-wrapper">
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+              <h1 id="quoteHistory_page_title">
+                {{ 'form.quote_history' | cxTranslate }}
+              </h1>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-12"></div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-12">
+              <app-action-message
+                id="userChangeId"
+                [type]="responseType"
+                [message]="responseMessage"
+              ></app-action-message>
+            </div>
+          </div>
+          <div class="notForPrint">
+            <div class="row mt-exta">
+              <label
+                class="col-md-2 col-sm-12 col-form-label"
+                id="quoteHistory-quoteNumber"
+                for="quoteHistory.quoteNumber"
+              >
+                {{ 'form.quote_number' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input
+                  class="form-control"
+                  id="quoteHistory.quoteNumber"
+                  [(ngModel)]="qoutationHistoryRequestModel.quotationId"
+                  type="text"
+                />
+              </div>
+
+              <label
+                class="col-md-2 col-sm-12 col-form-label"
+                id="quoteHistory-articleNumber"
+                for="quoteHistory.requestModal"
+              >
+                {{ 'form.article_number' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input
+                  class="form-control"
+                  id="quoteHistory.requestModal"
+                  [(ngModel)]="qoutationHistoryRequestModel.articleNumber"
+                  type="text"
+                />
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <label
+                class="col-md-2 col-sm-12 col-form-label"
+                id="quoteHistory-requestDate"
+                for="quoteHistory-fromDate"
+              >
+                {{ 'form.request_date' | cxTranslate }}
+              </label>
+              <div class="col-md-2 col-sm-12 mb-2">
+                <ngbd-datepicker-popup
+                  id="quoteHistory-fromDate"
+                  [customMaxDate]="maxDate"
+                  [customPlaceHolder]="'listfilter.from' | cxTranslate"
+                  [resetDate]="clearEvent.asObservable()"
+                  (dateSelected)="fromDate($event)"
+                ></ngbd-datepicker-popup>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <ngbd-datepicker-popup
+                  id="quoteHistory-minDateSelect"
+                  [customMinDate]="minDate"
+                  [customPlaceHolder]="'listfilter.to' | cxTranslate"
+                  [resetDate]="clearEvent.asObservable()"
+                  (dateSelected)="toDate($event)"
+                ></ngbd-datepicker-popup>
+              </div>
+              <label
+                class="col-md-2 col-sm-12 col-form-label"
+                id="quoteHistory-expiryDateSelect"
+                for="quoteHistory-maxDateSelect"
+              >
+                {{ 'form.expiry_date' | cxTranslate }}
+              </label>
+              <div class="col-md-2 col-sm-12 mb-2">
+                <ngbd-datepicker-popup
+                  id="quoteHistory-maxDateSelect"
+                  [customMaxDate]="maxExpiryDate"
+                  [customPlaceHolder]="'listfilter.from' | cxTranslate"
+                  [resetDate]="clearEvent.asObservable()"
+                  (dateSelected)="expiryFromDate($event)"
+                ></ngbd-datepicker-popup>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <ngbd-datepicker-popup
+                  id="quoteHistory-expiryToDateSelect"
+                  [customMinDate]="minExpiryDate"
+                  [customPlaceHolder]="'listfilter.to' | cxTranslate"
+                  [resetDate]="clearEvent.asObservable()"
+                  (dateSelected)="expiryToDate($event)"
+                ></ngbd-datepicker-popup>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <label class="col-md-2 col-sm-12 col-form-label" id="quoteHistory.totalPrice" for="quoteHistory.minTotal">
+                {{ 'form.total_price' | cxTranslate }}
+              </label>
+              <div class="col-md-2 col-sm-12 mb-2">
+                <input
+                  class="form-control"
+                  id="quoteHistory.minTotal"
+                  [(ngModel)]="qoutationHistoryRequestModel.minTotal"
+                  [placeholder]="'listfilter.from' | cxTranslate"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <input
+                  class="form-control d-inline-block"
+                  id="quoteHistory-maxTotal"
+                  [(ngModel)]="qoutationHistoryRequestModel.maxTotal"
+                  [placeholder]="'listfilter.to' | cxTranslate"
+                  type="text"
+                />
+              </div>
+              <label
+                *ngIf="(userType === 'B2B' || userType === 'B2B_KEY_ACCOUNT') && orderByList?.length > 1"
+                class="col-md-2 col-sm-12 col-form-label"
+                id="quoteHistory-requestBy"
+                for="quoteHistory-orderByListSelect"
+              >
+                {{ 'form.requested_by' | cxTranslate }}
+              </label>
+              <div
+                *ngIf="(userType === 'B2B' || userType === 'B2B_KEY_ACCOUNT') && orderByList?.length > 1"
+                class="col-md-4 col-sm-12"
+              >
+                <ng-select
+                  class="account-info"
+                  id="orderHistory-orderByList"
+                  [(ngModel)]="qoutationHistoryRequestModel.contactId"
+                  [items]="orderByList"
+                  bindLabel="name"
+                  bindValue="contactId"
+                ></ng-select>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <label class="col-md-2 col-sm-12 col-form-label" id="quoteHistory.status" for="quoteHistory-statusList2">
+                {{ 'form.status' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <ng-select
+                  class="account-info"
+                  id="quoteHistory-statusList2"
+                  [(ngModel)]="qoutationHistoryRequestModel.status"
+                >
+                  <ng-option id="0" value="ALL" selected>
+                    {{ 'listfilter.quotationStatus.ALL' | cxTranslate }}
+                  </ng-option>
+                  <ng-option *ngFor="let statusItem of statusList" [value]="statusItem.code" [id]="statusItem.code">
+                    {{ statusItem.name }}
+                  </ng-option>
+                </ng-select>
+              </div>
+
+              <div class="col-md-2">
+                <!-- empty div-->
+              </div>
+              <div class="col-md-2 col-sm-12" [ngClass]="(isMobileBreakpoint$ | async) ? 'mt-3' : ''">
+                <button
+                  class="btn btn-secondary btn-distrelec btn-gray float-right"
+                  id="quoteHistory-resetButton"
+                  (click)="resetForm()"
+                >
+                  {{ buttonResetText | cxTranslate }}
+                </button>
+              </div>
+              <div class="col-md-2 col-sm-12" [ngClass]="(isMobileBreakpoint$ | async) ? ' mt-3' : ''">
+                <button
+                  class="btn btn-secondary btn-distrelec float-right ml-1 mb-2"
+                  id="quoteHistory-searchButton"
+                  (click)="search(1)"
+                >
+                  {{ buttonSearchText | cxTranslate }}
+                  <div class="float-sm-right mr-2 d-inline-block">
+                    <fa-icon [icon]="faAngleRight"></fa-icon>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!--my quotes div-->
+          <div class="myOrders" id="searchResults">
+            <div class="row mb-3 mt-4">
+              <div class="col-sm-12 col-md-12">
+                <h2 id="myOrders" id="quoteHistory-myQuotes">{{ 'form.my_quotes' | cxTranslate }}</h2>
+              </div>
+            </div>
+            <div class="row mb-3 notForPrint align-items-end">
+              <div class="col-sm-12 col-md-4">
+                <label id="quoteHistory-selectedSortingListLabel" for="quoteHistory-SelectedSortingList">
+                  {{ 'accountorder.history.order.by' | cxTranslate }}
+                </label>
+                <ng-select
+                  class="account-info"
+                  id="quoteHistory-SelectedSortingList"
+                  [(ngModel)]="selectedSorting"
+                  (change)="onSortingHistory()"
+                >
+                  <ng-option *ngFor="let sortItem of sortingList" [value]="sortItem.value" [id]="sortItem.value">
+                    {{ sortItem.name | cxTranslate }}
+                  </ng-option>
+                </ng-select>
+              </div>
+              <div class="col-sm-12 col-md-8 mt-2">
+                <img
+                  class="float-md-right cursor"
+                  (click)="print()"
+                  src="app/spartacus/assets/media/general/print.svg"
+                />
+              </div>
+            </div>
+
+            <div *ngIf="quotations_ | async as quotations; else loadingQuotations">
+              <div *ngIf="quotations?.length > 0; else noQuotes">
+                <div *ngFor="let quote of quotations">
+                  <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                      <div class="row mb-2 mt-2">
+                        <div class="col-md-3 col-sm-6 col-6">
+                          <strong class="fs-twelve">
+                            <label id="quoteHistory-quoteNumber">{{ 'form.quote_number' | cxTranslate }}</label>
+                          </strong>
+                          <br />
+                          <label id="quoteHistory-quoteNumberValue">{{ quote?.quotationId }}</label>
+                          <br />
+                          <strong class="fs-twelve">
+                            <label id="quoteHistory-quoteStatus">{{ 'form.quote_status' | cxTranslate }}</label>
+                          </strong>
+                          <br />
+                          <label id="quoteHistory-quoteStatus" [ngClass]="getStatusColor(quote?.status?.code)">
+                            {{ quote?.status?.name }}
+                          </label>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 col-6">
+                          <strong class="fs-twelve">
+                            <label id="quoteHistory-quoteTotal">{{ 'form.quote_total' | cxTranslate }}</label>
+                          </strong>
+                          <br />
+                          <label id="quoteHistory-quoteTotalCurrency">
+                            {{ quote?.total?.currencyIso }}&nbsp;{{ quote?.total?.value | price }}
+                          </label>
+                          <br />
+                          <strong class="fs-twelve">
+                            <label id="quoteHistory-expiryDate">{{ 'form.expiry_date' | cxTranslate }}</label>
+                          </strong>
+                          <br />
+                          <label id="quoteHistory-quoteExpiryDate">
+                            {{ quote?.quotationExpiryDate | date: dateFormat }}
+                          </label>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 col-6">
+                          <strong class="fs-twelve">
+                            <label id="quoteHistory-quoteReference">{{ 'form.quote_reference' | cxTranslate }}</label>
+                          </strong>
+                          <br />
+                          <label id="quoteHistory-quotePoNumber">{{ quote?.poNumber }}</label>
+                          <br />
+                          <strong class="fs-twelve">
+                            <label id="quoteHistory-quoteRequestedBy">{{ 'form.requested_by' | cxTranslate }}</label>
+                          </strong>
+                          <br />
+                          <label id="quoteHistory-quoteCustomerName">{{ quote?.customerName }}</label>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12">
+                          <div
+                            class="view cusor"
+                            id="quoteHistory-viewCursor"
+                            (click)="showQuoteDetails(quote?.quotationId)"
+                          ></div>
+                          <br />
+                          <a
+                            *ngIf="quote?.quotationDocURL"
+                            class="distrelecLink cursor"
+                            id="quoteHistory-quoteUrl"
+                            [href]="quote?.quotationDocURL"
+                            target="_blank"
+                          >
+                            <img
+                              class="cursor"
+                              id="quoteHistory-quoteDownload"
+                              src="app/spartacus/assets/media/download.png"
+                            />
+                            <br />
+                          </a>
+
+                          <ng-container *ngIf="isAddToCartEnabled$ | async">
+                            <label
+                              *ngIf="!processQuotationStates[quote?.quotationId] && quote?.purchasable"
+                              class="distrelecLink cursor"
+                              [id]="'cartButton-' + quote?.quotationId"
+                              (click)="addToCart(quote?.quotationId)"
+                            >
+                              <div class="addToCart"></div>
+                              <br />
+                            </label>
+                          </ng-container>
+
+                          <img
+                            *ngIf="loadingQuoteStates[quote?.quotationId] || processQuotationStates[quote?.quotationId]"
+                            class="min-width"
+                            [id]="'loading-' + quote?.quotationId"
+                            src="app/spartacus/assets/media/spinner.gif"
+                          />
+                          <label
+                            *ngIf="
+                              !loadingQuoteStates[quote?.quotationId] &&
+                              quote &&
+                              !quote.resubmitted &&
+                              quote.status?.code === '04'
+                            "
+                            class="distrelecLink cursor"
+                            [id]="'resubmit-' + quote?.quotationId"
+                            [class.d-none]="loadingQuoteStates[quote?.quotationId]"
+                            (click)="resubmitQuote(quote?.quotationId)"
+                          >
+                            {{ 'form.resubmit' | cxTranslate }}
+                            <br />
+                          </label>
+                          <div *ngIf="quote && quote.resubmitted && quote.status?.code === '04'">
+                            <label class="text-success">{{ 'form.resubmitted' | cxTranslate }}</label>
+                            <br />
+                            <label *ngIf="quote?.childQuote" class="text-primary">
+                              {{ 'form.new_quote_ref' | cxTranslate }}:
+                              <span class="cursor" (click)="showQuoteDetails(quote?.childQuote)">
+                                {{ quote?.childQuote }}
+                              </span>
+                            </label>
+                            <br />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12"></div>
+                  </div>
+                  <hr />
+                </div>
+              </div>
+              <ng-template #noQuotes>
+                <div class="row mt-2 mb-4">
+                  <div class="col-md-12 col-lg-12 col-sm-12">
+                    <h5 class="redFont" id="quoteHistory-notRequestedYet">
+                      {{ 'form.not_requested_quote_yet' | cxTranslate }}
+                    </h5>
+                  </div>
+                </div>
+              </ng-template>
+              <div
+                *ngIf="quotations && quotations.length > 0 && pagination && pagination.totalResults > 0"
+                class="row mb-3 notForPrint"
+              >
+                <label class="col-sm-12 col-md-2 col-form-label" id="quoteHistory-orderPerPage" for="ordersPerPage">
+                  {{ 'form.quote_pp' | cxTranslate }}
+                </label>
+                <div class="col-sm-12 col-md-2 mb-3">
+                  <ng-select
+                    class="account-info"
+                    id="quoteHistory-orderPerPageSelect"
+                    [(ngModel)]="ordersPerPage"
+                    [items]="pageSize"
+                    (change)="onPageSizeSelect()"
+                    bindLabel="label"
+                    bindValue="label"
+                  ></ng-select>
+                </div>
+                <div class="col-sm-10 col-md-8">
+                  <ngb-pagination
+                    class="float-right"
+                    [(page)]="selectedPaginationPage"
+                    [rotate]="true"
+                    [boundaryLinks]="true"
+                    [maxSize]="'4'"
+                    [collectionSize]="pagination.totalResults"
+                    [pageSize]="ordersPerPage"
+                    [directionLinks]="false"
+                    (click)="onPagination()"
+                  ></ngb-pagination>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #loadingQuotations>
+            <div *ngIf="quotationsEnabled$ | async" class="row mt-4">
+              <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+                <img id="quoteHistory-spinnerLoadingQuotation" src="app/spartacus/assets/media/spinner.gif" />
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

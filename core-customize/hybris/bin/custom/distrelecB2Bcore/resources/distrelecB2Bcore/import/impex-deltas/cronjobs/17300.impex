@@ -1,0 +1,21 @@
+$lang=en
+#Cleanup CronJobs
+INSERT_UPDATE DistGenericCleanUpCronJob;code[unique=true];job(code)[unique=true];active[default=true];sessionUser(uid);sessionLanguage(isocode)[default=$lang];logToDatabase;logToFile;flexibleSearchStatement;maxDaysToKeep;maxItemsToDelete
+                                       ;clearOldStockNotificationRecordsCronJob;distGenericCleanUpJob;;technicalCleanUpUser;;false;true;SELECT {pk} FROM {DistStockNotification} WHERE {modifiedTime} < ?nowMinusMaxDaysToKeep;60;
+
+
+INSERT_UPDATE CompositeEntry ;code[unique=true]                             ;executableCronJob(code)
+                             ;clearOldStockNotificationRecordsCronJobEntry  ;clearOldStockNotificationRecordsCronJob
+                             ;StockNotificationEmailCronJobEntry            ;StockNotificationEmailCronJob
+
+
+INSERT_UPDATE CompositeCronJob  ;code[unique=true]                  ;job(code)              ;compositeEntries(code)                                                             ;sessionLanguage(isocode)[default=$lang]
+                                ;stockNotificationEmailCompositeJob ;compositeJobPerformable;clearOldStockNotificationRecordsCronJobEntry, StockNotificationEmailCronJobEntry   ;
+
+
+REMOVE Trigger  ;code[unique=true]
+                ;StockNotificationEmailCronJobTrigger
+
+INSERT_UPDATE Trigger;code[unique=true]                     ;cronjob(code)[unique = true]; cronExpression
+                     ;productStockImportCronJobTrigger      ;productStockImportCronJob; 0 0 5 ? * MON-FRI *
+                     ;StockNotificationEmailCronJobTrigger  ;stockNotificationEmailCompositeJob; 0 0 7 ? * MON-FRI *

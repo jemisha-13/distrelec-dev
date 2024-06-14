@@ -1,0 +1,241 @@
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+
+
+
+# Definition of Sanity CronJobs
+INSERT_UPDATE DistGenericSanityCheckCronJob;code[unique=true];type(code);queryLanguage(isocode)[default='en'];baseQuery;checkQuery;threshold;errorMessage;job(code)[unique=true][default=distGenericSanityCheckJob];sessionUser(uid)[default=technicalSanityCheckUser];sessionLanguage(isocode)[default='en'];logToDatabase[default=true];logToFile[default=false];emailAddress[default=$config-sanityCheckCronjob.notification.emailaddress];sendEmail[default=true];emailNotificationTemplate(code)[default=Email_DistSanityCheckNotificationTemplate];active[default=$config-sanity.check.cronjob.active]
+;distSanityCheckCodeCronJob;AbsolutSanityCheck;;;"
+SELECT 
+	COUNT(*) 
+FROM 
+	({{
+		SELECT 
+			COUNT(*) AS c
+		FROM 
+			{product} 
+		GROUP BY 
+			{code} 
+		HAVING COUNT(*) > 1
+	}}) AS result
+";0;There are multiple products with the same NewSAP article number (Product.code).
+
+
+;distSanityCheckCodeMovexCronJob;AbsolutSanityCheck;;;"
+SELECT 
+	COUNT(*) 
+FROM 
+	({{
+		SELECT 
+			COUNT(*) AS c
+		FROM
+			{product}
+		WHERE
+			{codeMovex} IS NOT NULL AND
+			{pk} IN
+				({{
+					SELECT
+						{product}
+					FROM
+						{DistSalesOrgProduct AS dsop
+						JOIN DistSalesStatus AS dss ON {dss.pk}={dsop.salesStatus}}
+					WHERE {dss.visibleInShop}= 1
+				}})
+		GROUP BY
+			{codeMovex}
+		HAVING count(*) > 1
+	}}) AS result
+";0;There are multiple products with the same Movex article number.;;;;;;;;;false
+
+
+;distSanityCheckPimIdCronJob;AbsolutSanityCheck;;;"
+SELECT 
+	COUNT(*) 
+FROM 
+	({{
+		SELECT
+			COUNT(*) as 'count',
+			{pimId}
+		FROM
+			{Product}
+		WHERE
+			{pimId} IS NOT NULL
+		GROUP BY
+			{pimId}
+		HAVING
+			COUNT(*) > 1
+	}}) AS result
+";0;There are multiple products with the same PIM-ID (Product.pimId).;
+
+
+;distSanityCheckPrice7310M01CronJob;AbsolutSanityCheck;;;"
+SELECT 
+	COUNT(*) 
+FROM 
+	({{
+		SELECT 
+			COUNT(*) AS c,
+			{upg.code} AS upg_code,
+			{p.code} AS p_code,
+			{c.isocode} AS isocode,
+			{dpr.minqtd},
+			{dpr.specialPrice}
+		FROM
+			{DistPriceRow AS dpr JOIN UserPriceGroup AS upg ON {upg.pk}={dpr.ug}
+			JOIN Product AS p ON {p.pk}={dpr.product}
+			JOIN Currency AS c ON {c.pk}={dpr.currency}
+			JOIN CatalogVersion as cv ON {cv.pk}={dpr.catalogVersion}
+			JOIN Catalog as cat ON {cat.pk}={cv:catalog}}
+		WHERE
+			{upg.code} = 'SalesOrg_UPG_7310_M01' AND
+			{cat.id}='distrelecProductCatalog' AND
+			{cv.version}='Online' AND
+			GETDATE() BETWEEN {dpr.startTime} AND {dpr.endTime}
+		GROUP BY
+			{upg.code},
+			{p.code},
+			{c.isocode},
+			{dpr.minqtd},
+			{dpr.specialPrice}
+		HAVING COUNT(*) > 1
+	}}) AS result
+
+";0;Price list 7310_M01 (CH) contains ambiguous data. There are products with multiple price information for the same country/pricelist/scale/currency/point in time.;
+
+;distSanityCheckPrice7320M01CronJob;AbsolutSanityCheck;;;"
+SELECT
+	COUNT(*)
+FROM
+	({{
+		SELECT
+			COUNT(*) AS c,
+			{upg.code} AS upg_code,
+			{p.code} AS p_code,
+			{c.isocode} AS isocode,
+			{dpr.minqtd},
+			{dpr.specialPrice}
+		FROM
+			{DistPriceRow AS dpr JOIN UserPriceGroup AS upg ON {upg.pk}={dpr.ug}
+			JOIN Product AS p ON {p.pk}={dpr.product}
+			JOIN Currency AS c ON {c.pk}={dpr.currency}
+			JOIN CatalogVersion as cv ON {cv.pk}={dpr.catalogVersion}
+			JOIN Catalog as cat ON {cat.pk}={cv:catalog}}
+		WHERE
+			{upg.code} = 'SalesOrg_UPG_7320_M01' AND
+			{cat.id}='distrelecProductCatalog' AND
+			{cv.version}='Online' AND
+			GETDATE() BETWEEN {dpr.startTime} AND {dpr.endTime}
+		GROUP BY
+			{upg.code},
+			{p.code},
+			{c.isocode},
+			{dpr.minqtd},
+			{dpr.specialPrice}
+		HAVING COUNT(*) > 1
+	}}) as result
+";0;Price list 7320_M01 (AT) contains ambiguous data. There are products with multiple price information for the same country/pricelist/scale/currency/point in time.;
+
+;distSanityCheckPrice7320M10CronJob;AbsolutSanityCheck;;;"
+SELECT
+	COUNT(*)
+FROM
+	({{
+		SELECT
+			COUNT(*) as c,
+			{upg.code} AS upg_code,
+			{p.code} AS p_code,
+			{c.isocode} AS isocode,
+			{dpr.minqtd},
+			{dpr.specialPrice}
+		FROM
+			{DistPriceRow AS dpr JOIN UserPriceGroup AS upg ON {upg.pk}={dpr.ug}
+			JOIN Product AS p ON {p.pk}={dpr.product}
+			JOIN Currency AS c ON {c.pk}={dpr.currency}
+			JOIN CatalogVersion as cv ON {cv.pk}={dpr.catalogVersion}
+			JOIN Catalog as cat ON {cat.pk}={cv:catalog}}
+		WHERE
+			{upg.code} = 'SalesOrg_UPG_7320_M10' AND
+			{cat.id}='distrelecProductCatalog' AND
+			{cv.version}='Online' AND
+			GETDATE() BETWEEN {dpr.startTime} AND {dpr.endTime}
+		GROUP BY
+			{upg.code},
+			{p.code},
+			{c.isocode},
+			{dpr.minqtd},
+			{dpr.specialPrice}
+		HAVING COUNT(*) > 1
+	}}) AS result
+";0;Price list 7320_M10 (eastern countries) contains ambiguous data. There are products with multiple price information for the same country/pricelist/scale/currency/point in time.;
+
+;distSanityCheckPrice7330M01CronJob;AbsolutSanityCheck;;;"
+SELECT
+	COUNT(*)
+FROM
+	({{
+		SELECT
+			COUNT(*) as c,
+			{upg.code} AS upg_code,
+			{p.code} AS p_code,
+			{c.isocode} AS isocode,
+			{dpr.minqtd},
+			{dpr.specialPrice}
+		FROM
+			{DistPriceRow AS dpr JOIN UserPriceGroup AS upg ON {upg.pk}={dpr.ug}
+			JOIN Product AS p ON {p.pk}={dpr.product}
+			JOIN Currency AS c ON {c.pk}={dpr.currency}
+			JOIN CatalogVersion as cv ON {cv.pk}={dpr.catalogVersion}
+			JOIN Catalog as cat ON {cat.pk}={cv:catalog}}
+		WHERE
+			{upg.code} = 'SalesOrg_UPG_7330_M01' AND
+			{cat.id}='distrelecProductCatalog' AND
+			{cv.version}='Online' AND
+			GETDATE() BETWEEN {dpr.startTime} AND {dpr.endTime}
+		GROUP BY
+			{upg.code},
+			{p.code},
+			{c.isocode},
+			{dpr.minqtd},
+			{dpr.specialPrice}
+		HAVING COUNT(*) > 1
+	}}) as result
+";0;Price list 7330_M01 (IT) contains ambiguous data. There are products with multiple price information for the same country/pricelist/scale/currency/point in time.;
+
+
+;distSanityCheckPictureCronJob;PercentageSanityCheck;;"
+SELECT 
+  COUNT(*) 
+FROM 
+  {product} where {catalogVersion} = ({{SELECT 
+  PK
+FROM 
+  {catalogVersion}  where {version} = 'Online' and {catalog} = ({{SELECT 
+  PK
+FROM 
+  {catalog} where p_ID = 'distrelecProductCatalog'}})}})
+";"
+SELECT
+  COUNT(*)
+FROM
+  {product} where {catalogVersion} = ({{SELECT
+  PK
+FROM
+  {catalogVersion}  where {primaryImage} is NULL and {version} = 'Online' and {catalog} = ({{SELECT
+  PK
+FROM
+  {catalog} where p_ID = 'distrelecProductCatalog'}})}})
+";10;More than 10% of all products have no picture assigned.;;;;;;$config-sanityCheckPictureCronJob.notification.emailaddress
+
+
+
+#Triggers
+INSERT_UPDATE Trigger;code[unique=true];cronJob(code);second;minute;hour;day;month;year;relative;active;maxAcceptableDelay;weekInterval;daysOfWeek(code)
+;distSanityCheckCodeCronJobTrigger         ;distSanityCheckCodeCronJob         ;0;1;5;-1;-1;-1;false;$config-sanity.check.cronjob.active;-1;;;
+;distSanityCheckCodeMovexCronJobTrigger    ;distSanityCheckCodeMovexCronJob    ;0;2;5;-1;-1;-1;false;false;-1;;;
+;distSanityCheckPimIdCronJobTrigger        ;distSanityCheckPimIdCronJob        ;0;3;5;-1;-1;-1;false;$config-sanity.check.cronjob.active;-1;;;
+;distSanityCheckPrice7310M01CronJobTrigger ;distSanityCheckPrice7310M01CronJob ;0;11;5;-1;-1;-1;false;$config-sanity.check.cronjob.active;-1;;;
+;distSanityCheckPrice7320M01CronJobTrigger ;distSanityCheckPrice7320M01CronJob ;0;12;5;-1;-1;-1;false;$config-sanity.check.cronjob.active;-1;;;
+;distSanityCheckPrice7320M10CronJobTrigger ;distSanityCheckPrice7320M10CronJob ;0;13;5;-1;-1;-1;false;$config-sanity.check.cronjob.active;-1;;;
+;distSanityCheckPrice7330M01CronJobTrigger ;distSanityCheckPrice7330M01CronJob ;0;14;5;-1;-1;-1;false;$config-sanity.check.cronjob.active;-1;;;
+;distSanityCheckPictureCronJobTrigger      ;distSanityCheckPictureCronJob      ;0;20;5;-1;-1;-1;false;$config-sanity.check.cronjob.active;-1;;;

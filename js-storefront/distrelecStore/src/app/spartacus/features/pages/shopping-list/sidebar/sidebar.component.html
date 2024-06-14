@@ -1,0 +1,78 @@
+<div class="sidebar-shopping-list">
+  <ul *ngIf="listData$ | async as listData" class="box checkbox-group">
+    <li *ngFor="let item of listData.list; let i = index">
+      <span
+        class="edit-name-list d-none"
+        [id]="'shoppinglist_item_edit_' + i"
+        [attr.data-id]="'js-edit-name-list-' + item.uniqueId"
+      >
+        <button class="btn btn-primary" [id]="'shoppingList_item_save_btn_' + i" (click)="save(item, i)">
+          {{ 'shoppingList.shoppinglist_metaAction_editList_SaveButton' | cxTranslate }}
+        </button>
+        <div class="input-wrapper">
+          <input
+            class="input-field"
+            [value]="item.name"
+            [id]="'shoppingList_item_input_name_' + i"
+            [attr.data-id]="'js-type-input-' + item.uniqueId"
+            type="text"
+          />
+        </div>
+      </span>
+      <div
+        class="shopping-list-wrap"
+        [id]="'shoppingList_wrap_' + i"
+        [attr.data-id]="'js-shopping-list-wrap-' + item.uniqueId"
+      >
+        <a
+          class="shopping-list"
+          [id]="'shoppingList_item_link_' + i"
+          [ngClass]="isActive(item.uniqueId) ? 'active' : ''"
+          (click)="onChangeList(item.uniqueId)"
+        >
+          <fa-icon [icon]="faFileAlt"></fa-icon>
+          <span class="list-name" [id]="'shoppingList_item_name_' + i" [attr.data-list-id]="item.uniqueId">
+            {{ item.name !== 'Shopping List' ? item.name : ('shoppingList.shoppinglist_list_title' | cxTranslate) }}
+          </span>
+          <span class="list-item-count" [id]="'shoppingList_item_count_' + i">{{ item.totalUnitCount }}</span>
+        </a>
+        <nav class="ctrls">
+          <fa-icon
+            class="edit"
+            [id]="'shoppingList_edit_list_btn_' + i"
+            [title]="'shoppingList.shoppinglist_metaAction_editList' | cxTranslate"
+            [icon]="faEdit"
+            (click)="editList(item.uniqueId)"
+          ></fa-icon>
+          <fa-icon
+            class="delete"
+            [id]="'shoppingList_delete_list_btn_' + i"
+            [title]="'shoppingList.shoppinglist_metaAction_deleteList' | cxTranslate"
+            [icon]="faTrash"
+            (click)="showDeleteModal(item.uniqueId)"
+          ></fa-icon>
+        </nav>
+      </div>
+    </li>
+    <li class="add-new-list">
+      <form [formGroup]="shoppingListForm">
+        <button class="btn btn-primary add-new-list-button" id="shoppingList_add_new_list_btn" (click)="addNewList()">
+          {{ 'shoppingList.shoppinglist_metaAction_addNewListButton' | cxTranslate }}
+        </button>
+        <div class="input-wrapper">
+          <input
+            id="shoppingList_add_new_list_input"
+            [placeholder]="'shoppingList.nameNewList' | cxTranslate"
+            formControlName="name"
+            maxlength="255"
+            type="text"
+          />
+          <p *ngIf="name.touched && name.invalid" class="error">
+            <fa-icon [icon]="faWarning"></fa-icon>
+            This field is required.
+          </p>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>

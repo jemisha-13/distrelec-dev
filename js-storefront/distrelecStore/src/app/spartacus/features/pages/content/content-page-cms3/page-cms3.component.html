@@ -1,0 +1,74 @@
+<div class="container cms3container content-page">
+  <div class="row">
+    <div class="col-md-8 left-content">
+      <ng-container *ngFor="let item of cms3Components">
+        <ng-container *ngIf="item?.typeCode === 'DesignBannerImgRight' || item?.typeCode === 'DesignBannerImgLeft'">
+          <div class="banner-component--box">
+            <div
+              class="col-md-7 bannner-content"
+              [ngClass]="item?.typeCode === 'DesignBannerImgRight' ? 'left' : 'right'"
+            >
+              <div class="banner-description" [innerHTML]="item?.longtext | parseHtml: item?.longtext"></div>
+              <a class="banner-cta" [routerLink]="item?.buttonTextURL">
+                {{ item?.buttonText }}
+                <fa-icon [icon]="faAngleRight"></fa-icon>
+              </a>
+            </div>
+            <div class="bannner-img-wrapper col-md-5">
+              <div class="banner-img" [style]="item?.backgroundImage"></div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="item?.typeCode === 'DesignText'">
+          <div class="banner-component">
+            <div class="banner-description" [innerHTML]="item?.content | parseHtml: item?.content"></div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="item?.typeCode === 'DesignSpacer'">
+          <div class="banner-componet--spacer"></div>
+        </ng-container>
+
+        <ng-container *ngIf="item?.typeCode === 'DesignImgVidTextCol2'">
+          <div class="row">
+            <div class="col-6">
+              <img [src]="item?.image1?.url" />
+              <div class="banner-description" [innerHTML]="item?.text1 | parseHtml: item?.text1"></div>
+            </div>
+            <div class="col-6">
+              <img [src]="item?.image2?.url" />
+              <div class="banner-description" [innerHTML]="item?.text2 | parseHtml: item?.text2"></div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="item?.typeCode === 'DesignTextCol2'">
+          <div class="row">
+            <div class="col-6">
+              <div class="banner-description" [innerHTML]="item?.text1 | parseHtml: item?.text1"></div>
+            </div>
+            <div class="col-6">
+              <div class="banner-description" [innerHTML]="item?.text2 | parseHtml: item?.text2"></div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+    <div class="col-md-4 right-content">
+      <ng-container *ngIf="pageComponents$ | async as pageComponents">
+        <div class="banner-content">
+          <ng-container *ngFor="let item of pageComponents">
+            <ng-container *ngIf="item?.content">
+              <div
+                class="banner-description"
+                [ngClass]="last ? 'last-item' : ''"
+                [innerHTML]="item?.content | parseHtml: item?.content"
+              ></div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

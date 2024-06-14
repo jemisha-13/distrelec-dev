@@ -1,0 +1,15 @@
+INSERT_UPDATE DynamicConstraint;id[unique=true]              ;active[default=true];type(code);target                                                ;language(code[default=BEANSHELL]);message[lang=en]                                             ;expression;
+                               ;PrincipalUidUniqueConstraint ;                    ;Principal ;de.hybris.platform.core.model.security.PrincipalModel ;                                 ;"ID must be unique for employees, customers and user groups" ;"
+searchService=ctx.getBean(""flexibleSearchService"");
+paramMap=new HashMap();
+paramMap.put(""uid"", ref.uid);
+searchResult=searchService.search(""SELECT {pk} FROM {Principal} WHERE {uid}=?uid"", paramMap);
+
+if(searchResult.getCount()==1){
+    if(searchResult.getResult().get(0).pk.equals(ref.pk)){
+        return true;
+    }
+}
+
+return searchResult.getCount()==0;
+"

@@ -1,0 +1,151 @@
+$catalogId = testCatalog
+$catalogVersion = catalogVersion(catalog(id[default=$catalogId]), version[default='Online'])
+$languages = en
+
+$passwordEncoding = md5
+$defaultPassword = 12341234
+$setPassword = @password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultPassword']
+
+# catalog
+INSERT_UPDATE Catalog; id[unique = true]
+                     ; $catalogId
+
+INSERT_UPDATE CatalogVersion; catalog(id)[unique = true]; version[unique = true]; active; languages(isoCode);
+                            ; $catalogId                ; Online                ; true  ; $languages
+
+INSERT_UPDATE Unit; unitType[unique = true]; code[unique = true]; name[lang = en]; conversion;
+                  ; pieces                 ; pieces             ; pieces         ; 1         ;
+
+INSERT_UPDATE Language; isocode[unique = true]; active[default = true]
+                      ; en                    ;
+
+INSERT_UPDATE Currency; isocode[unique = true]; active[default = true]
+                      ; CHF                   ;
+
+INSERT_UPDATE Country; isocode[unique = true]; name[lang = en]; active;
+                     ; CH                    ; Schweiz        ; true  ;
+
+INSERT_UPDATE PromotionGroup; Identifier[unique = true];
+                            ; default                  ;
+
+INSERT_UPDATE DistBrand; code[unique = true]
+                       ; distrelec
+
+INSERT_UPDATE UserPriceGroup; code[unique = true]
+                            ; SalesOrg_UPG_7310_M01
+
+INSERT_UPDATE UserTaxGroup; code[unique = true]
+                          ; SalesOrg_UTG_7310
+
+INSERT_UPDATE Vendor; code[unique = true]; name[lang = en]
+                    ; default            ; Default Vendor
+
+INSERT_UPDATE Warehouse; code[unique = true]; name[lang = en]             ; pickupName[lang = en]                     ; default; vendor(code)[default = default]; stockManagementSystem(code)
+                       ; 7311               ; Distrelec NewCo Switzerland ; Abholschalter Distrelec NewCo Switzerland ; false  ;                                ; SAP
+
+INSERT_UPDATE DistSalesOrg; code[unique = true]; brand(code); country(isocode); erpSystem(code);
+                          ; 7310               ; distrelec  ; CH              ; SAP
+
+INSERT_UPDATE CMSSite; uid[unique = true]; country(isocode); defaultCurrency(isocode); registrationCurrencies(isocode); salesOrg(code); userPriceGroup(code)  ; userTaxGroup(code); pickupWarehouses(code); channel(code)
+                     ; distrelec_CH      ; CH              ; CHF                     ; CHF                            ; 7310          ; SalesOrg_UPG_7310_M01 ; SalesOrg_UTG_7310 ;                       ; B2B
+
+INSERT_UPDATE BaseStore; uid[unique = true]; channel(code); cmsSites(uid); backorderAllowed
+                       ; distrelec_CH_B2B  ; B2B          ; distrelec_CH ; true
+
+# customer
+INSERT_UPDATE UserGroup; uid[unique = true] ; groups(uid);
+                       ; customergroup      ;
+                       ; b2cgroup           ;
+                       ; b2bgroup           ;
+                       ; ociCustomerGroup   ;
+                       ; cxmlCustomerGroup  ;
+                       ; aribaCustomerGroup ;
+                       ; eProcurementGroup  ;
+                       ; b2beeshopgroup     ;
+
+INSERT_UPDATE B2BUnit; uid[unique = true]; salesOrg(code); customerType(code)
+                     ; b2cUserUnit       ; 7310          ; B2C
+                     ; ociUserUnit       ; 7310          ; OCI
+                     ; cxmlUserUnit      ; 7310          ; CXML
+                     ; aribaUserUnit     ; 7310          ; ARIBA
+
+INSERT_UPDATE Address; &addrID           ; owner(B2BUnit.uid)[unique = true]; streetname   ; streetnumber; postalcode; town   ; country(isocode); phone1       ; firstname; lastname   ; billingAddress; shippingAddress
+                     ; b2cUserUnitAddr01 ; b2cUserUnit                      ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; true          ; true
+
+UPDATE B2BUnit; uid[unique = true]; billingAddress(&addrID)
+              ; b2cUserUnit       ; b2cUserUnitAddr01
+
+INSERT_UPDATE B2BCustomer; uid[unique = true]; email              ; name      ; groups(uid)                      ; defaultB2BUnit(uid); budget(code); defaultPaymentInfo(code); erpContactID
+                         ; b2cuser           ; b2cUser@test.com   ; b2cUser   ; b2cUserUnit,b2cgroup             ; b2cUserUnit        ;             ;                         ; b2cuser1
+                         ; ociuser           ; ociUser@test.com   ; ociUser   ; ociUserUnit,ociCustomerGroup     ; ociUserUnit        ;             ;                         ; ociuser1
+                         ; cxmluser          ; cxmlUser@test.com  ; cxmlUser  ; cxmlUserUnit,cxmlCustomerGroup   ; cxmlUserUnit       ;             ;                         ; cxmluser1
+                         ; aribauser         ; aribaUser@test.com ; aribaUser ; aribaUserUnit,aribaCustomerGroup ; aribaUserUnit      ;             ;                         ; aribauser1
+
+INSERT_UPDATE Address; &addrID         ; owner(B2BCustomer.uid)[unique = true]; streetname   ; streetnumber; postalcode; town   ; country(isocode); phone1       ; firstname; lastname   ; dateOfBirth[dateformat = yyyy-MM-dd]
+                     ; b2cUserAddr01   ; b2cuser                              ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+                     ; ociUserAddr01   ; ociuser                              ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+                     ; cxmlUserAddr01  ; cxmluser                             ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+                     ; aribaUserAddr01 ; aribauser                            ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+
+# Set erpCustomerId and this will create a MovexCustomer and attach it to the B2BUnit.
+# A B2BUnit must always have a customer including address information before an erpCustomerId is being set.
+UPDATE B2BUnit; uid[unique = true]; erpCustomerID
+              ; b2cUserUnit       ; b2c_customer
+              ; aribaUserUnit     ; 0001835962
+
+UPDATE B2BCustomer; uid[unique = true]; $setPassword
+                  ; aribauser         ;
+                  ; cxmluser          ;
+                  ; ociuser           ;
+
+# E-Procurement Customer Config
+INSERT_UPDATE OCICustomerConfig; company(uid)[unique = true]; orderFormEncoding; leadTime; unit; vendor ; matGroup; useLongDesc[default = false]; useShipping[default = false]; restrictCatalogs[default = false]; &customerConfig
+                               ; ociUserUnit                ; utf-8            ; 42      ; BLA ; Namics ; Unknown ;                             ;                             ;                                  ; customConfig001
+
+
+INSERT_UPDATE DistFieldConfig; customerConfig(&customerConfig)[unique = true]; domain[unique = true] ; parameter[unique = true]; dynamic[default = false]
+                             ; customConfig001                               ; NEW_ITEM-CUSTOM_PARAM ; super sach              ;
+
+INSERT_UPDATE AribaCustomerConfig; company(uid)[unique = true]; useBasketFromCustomer; restrictCatalogs[default = false]
+                                 ; aribaUserUnit              ; false                ;
+
+# Product
+$testCategory0Id = testCategory0
+$testProduct0Id = 14233524
+
+$supercategories = supercategories(code, catalogversion(catalog(id[default=$catalogId]), version[default='Online']))
+
+INSERT_UPDATE DistErpPriceConditionType; code[unique = true]; priority
+                                       ; ZN00               ; 1 ;
+                                       ; ZR00               ; 2 ;
+                                       ; PR00               ; 3 ;
+
+INSERT_UPDATE Category; code[unique = true]; $catalogVersion; name[lang = en]  ; $supercategories
+                      ; $testCategory0Id   ;                ; $testCategory0Id ;
+
+INSERT_UPDATE Product; code[unique = true]; $catalogVersion; name[lang = en]    ; unit(code); approvalStatus(code); owner(Principal.uid); startLineNumber; $supercategories
+                     ; $testProduct0Id    ;                ; $testProduct0Id-en ; pieces    ; approved            ; admin               ; 0              ; $testCategory0Id
+
+# DistSalesStatus
+INSERT_UPDATE DistSalesStatus; code[unique = true]; visibleInShop; buyableInShop; newInShop; endOfLifeInShop
+                             ; 30                 ; true         ; true         ; false    ; false
+
+INSERT_UPDATE Tax; code[unique = true] ; value
+                 ; TAX_0               ; 0
+                 ; TAX_1_SALESORG_7310 ; 8
+                 ; TAX_2_SALESORG_7310 ; 2.4
+
+
+INSERT_UPDATE ProductTaxGroup; code[unique = true]
+                             ; 0
+                             ; 1
+                             ; 2
+                             ; 3
+
+INSERT_UPDATE TaxRow; ug(code)[unique = true]; pg(code)[unique = true]; tax(code)
+                    ; SalesOrg_UTG_7310      ; 0                      ; TAX_0
+                    ; SalesOrg_UTG_7310      ; 1                      ; TAX_1_SALESORG_7310
+                    ; SalesOrg_UTG_7310      ; 2                      ; TAX_2_SALESORG_7310
+
+INSERT_UPDATE DistSalesOrgProduct; salesorg(code)[unique = true]; product(code)[unique = true]; salesStatus(code); productTaxGroup(code); orderQuantityMinimum
+                                 ; 7310                         ; $testProduct0Id             ; 30               ; 1                    ; 1

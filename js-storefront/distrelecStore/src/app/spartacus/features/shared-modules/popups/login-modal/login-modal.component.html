@@ -1,0 +1,91 @@
+<div class="login">
+  <div class="login__head">
+    <p class="login__head--title">
+      {{ 'login.modal_title' | cxTranslate }}
+    </p>
+    <button class="btn login__head--btn" (click)="hideModal()">
+      <fa-icon [icon]="faTimes"></fa-icon>
+    </button>
+  </div>
+  <form #formDir="ngForm" [formGroup]="userLoginForm">
+    <div class="login__body">
+      <div class="form-group login__body--form">
+        <div class="label_and_input">
+          <label class="label_and_input__label">{{ 'form.email_placeholder' | cxTranslate }}</label>
+          <div class="label_and_input__input">
+            <input
+              class="form-control login__body--form-input"
+              [placeholder]="'form.email_placeholder' | cxTranslate"
+              [class.is-invalid]="userLoginForm.get('email').touched && userLoginForm.get('email').invalid"
+              type="email"
+              formControlName="email"
+            />
+            <div
+              *ngIf="
+                (userLoginForm.get('email').touched && userLoginForm.get('email').invalid) ||
+                userLoginForm.get('email').dirty
+              "
+            >
+              <small *ngIf="userLoginForm.get('email').errors?.required" class="text-danger">
+                {{ 'validations.email_error_invalid' | cxTranslate }}
+              </small>
+              <small *ngIf="userLoginForm.get('email').errors?.email" class="text-danger">
+                {{ 'validations.email_error_invalid' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="label_and_input">
+          <label class="label_and_input__label">{{ 'login.password' | cxTranslate }}</label>
+          <div class="label_and_input__input">
+            <input
+              class="form-control login__body--form-input"
+              [placeholder]="'login.password' | cxTranslate"
+              [class.is-invalid]="
+                userLoginForm.get('password').touched && userLoginForm.get('password').errors?.required
+              "
+              type="password"
+              formControlName="password"
+            />
+            <div *ngIf="userLoginForm.get('password').touched && userLoginForm.get('password').errors?.required">
+              <small class="text-danger">{{ 'validations.pwd_error_required' | cxTranslate }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="login__remember_me">
+        <input type="checkbox" formControlName="rememberMe" />
+        <label class="remember_me">{{ 'login.checkout_remember_me' | cxTranslate }}</label>
+      </div>
+      <re-captcha #captchaRef="reCaptcha" (resolved)="$event && onSubmit()" size="invisible"></re-captcha>
+      <div class="login__ft">
+        <div class="login__ft--links">
+          <a (click)="hideModal()" routerLink="/registration">
+            {{ 'form.register_now' | cxTranslate }}
+          </a>
+          <a (click)="hideModal()" routerLink="/login/pw/request">
+            {{ 'login.forgot_pwd' | cxTranslate }}
+          </a>
+        </div>
+        <div class="login__ft--submit">
+          <button
+            *ngIf="!(isCaptchaDisabled_ | async)"
+            class="btn login__ft--submit-btn"
+            [disabled]="userLoginForm.get('email').invalid || userLoginForm.get('password').invalid"
+            (click)="captchaRef.execute()"
+          >
+            {{ 'login.login' | cxTranslate }}
+          </button>
+          <button
+            *ngIf="isCaptchaDisabled_ | async"
+            class="btn login__ft--submit-btn disabled-captcha"
+            [disabled]="userLoginForm.get('email').invalid || userLoginForm.get('password').invalid"
+            (click)="onSubmit()"
+          >
+            {{ 'login.login' | cxTranslate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

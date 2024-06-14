@@ -1,0 +1,32 @@
+$contentMasterCatalog=distrelecContentCatalog
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator
+$stockEmailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/essential/common/email
+$commonEmailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/emails
+
+########## Email Page for distrelec_CHContentCatalog ##########
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$cmsSiteUID=distrelec_CH
+
+INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true]                 ;name                                 ;active;frontendTemplateName     ;subject(code)                                   ;htmlTemplate(code)                           ;restrictedPageTypes(code)
+                               ;                       ;MissingOrdersReportEmailTemplate ;Missing Orders Report Email Template ;true  ;MissingOrdersReportEmail ;$cmsSiteUID-Email_Missing_Orders_Report_Subject ;$cmsSiteUID-Email_Missing_Orders_Report_Body ;EmailPage
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true][default='MissingOrdersReportEmailTemplate'];validComponentTypes(code)
+                             ;Logo             ;                                                                                  ;BannerComponent,CMSImageComponent
+                             ;MoodImage        ;                                                                                  ;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true]         ;name                        ;masterTemplate(uid, $contentCV)  ;defaultPage;approvalStatus(code)[default='approved']
+                       ;                       ;MissingOrdersReportEmail ;Missing Orders Report Email ;MissingOrdersReportEmailTemplate ;true       ;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true]                            ;name                                         ;active
+                         ;                       ;EmailLogo-MissingOrdersReportEmail          ;Logo Slot for MissingOrdersReportEmail       ;true
+                         ;                       ;EmailMoodImageSlot-MissingOrdersReportEmail ;Mood Image Slot for MissingOrdersReportEmail ;true
+
+$lang=en                                                                                                             ;$commonEmailResource/email-cmsImageComponentTemplate.vm ;
+INSERT_UPDATE RendererTemplate;code[unique=true]                               ;description[lang=$lang]                      ;contextClass[default=com.namics.distrelec.b2b.facades.process.email.context.DistMissingOrdersReportEmailContext];templateScript[lang=$lang, translator=$translator]      ;rendererType(code)[default='velocity']
+                              ;$cmsSiteUID-Email_Missing_Orders_Report_Body    ;Missing Orders Report Email Template         ;                                                                                                                ;$stockEmailResource/email-MissingOrdersReportBody.vm    ;
+                              ;$cmsSiteUID-Email_Missing_Orders_Report_Subject ;Missing Orders Report Email Subject Template ;                                                                                                                ;$stockEmailResource/email-MissingOrdersReportSubject.vm ;
+
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true]         ;name                        ;masterTemplate(uid, $contentCV)  ;defaultPage;fromEmail[lang=$lang];fromName[lang=$lang];approvalStatus(code)[default='approved']
+                       ;                       ;MissingOrdersReportEmail ;Missing Orders Report Email ;MissingOrdersReportEmailTemplate ;true       ;"info@distrelec.com" ;"Distrelec"         ;

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions 
+date:		07.02.2012
+author:		jweiss
+======================================================================
+
+In case of changing this file add the following release note:
+run update-initial-build-script.bat required (ant:setupDeploymentScript).
+-->
+
+<!--
+	Die Targets in diesem File sind in einem separaten File, damit man das Environment 
+	komplett löschen und neu aus dem Subversion ziehen kann, ohne dass man laufende Scripts 
+	löscht. Dies ist bei einem Deployment nötig, weil man z.B. das environment eines Tags 
+	durch das Environement eines anderen Tags ersetzt, und somit die gesamte Working copy 
+	löscht bzw. ersetzt.
+-->
+	
+<project name="namics-hybris-build-server" basedir="." default="verify">
+	<property name="project.home" location="../" />
+	<import file="properties-config.xml" />
+	
+	<path id="antcontrib.classpath">
+		<fileset dir="${project.home}/${initscript.folder.name}/libs/ant-contrib">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	<!-- load the ant-contrib task (foreach) -->
+	<typedef resource="net/sf/antcontrib/antlib.xml" classpathref="antcontrib.classpath" />
+	
+	<path id="svn.classpath">
+		<fileset dir="${project.home}/${initscript.folder.name}/libs/svnant">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	<!-- load the svn task -->
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svn.classpath" />
+	
+	<path id="yainput.classpath">
+		<fileset dir="${project.home}/${initscript.folder.name}/libs/yainput">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<!-- load the yainput tasks (yet another input) for password input -->
+	<taskdef name="yainput" classname="com.shivprasad.anttask.YetAnotherInputTask" classpathref="yainput.classpath" />
+
+
+	<!--
+	=================================
+	macro: detectDeploymentRelease
+	=================================
+	-->
+	<macrodef name="detectDeploymentRelease" description="Set the deployment release to the property 'releasePath'. This may be a given release tag in the property 'releaseToInstall' or otherwise 'trunk' by default.">
+		<sequential>
+			<condition property="releaseToInstall" value="${mandant.version}">
+				<not>
+					<isset property="releaseToInstall" />
+				</not>
+			</condition>
+			<condition property="releasePath" value="tags/${releaseToInstall}" else="trunk">
+				<not>
+					<equals arg1="${releaseToInstall}" arg2="trunk" casesensitive="false" />
+				</not>
+			</condition>
+			<echo message="Detected release '${releaseToInstall}' for path '${releasePath}'." />
+		</sequential>
+	</macrodef>
+	
+	<!--
+	=================================
+	macro: cleanDeploymentFolder
+	=================================
+	-->
+	<macrodef name="cleanDeploymentFolder" description="Clean up deployment folder. Delete everything except 'apache-ant*' and 'init' folders and batch files.">
+		<sequential>
+			<echo message="Delete everything in ${project.home} except 'apache-ant*' and 'init' folders and batch files." />
+			<if>
+				<equals arg1="${skip.download}" arg2="true" />
+				<then>
+					<svnSetting id="svn.settings" javahl="false" svnkit="false" username="${svn.repository.username}" password="${svn.repository.password}" />
+					<svn refid="svn.settings">
+						<info target="${project.home}" />
+					</svn>
+					<if>
+						<equals arg1="${svn.repository.url}/${releasePath}" arg2="${svn.info.url}" />
+						<then>
+							<delete includeemptydirs="true">
+								<fileset dir="${project.home}" defaultexcludes="false">
+									<exclude name="apache-ant*/**/*" />
+									<exclude name="${initscript.folder.name}/**/*" />
+									<exclude name=".svn/**/*" />
+									<exclude name="hybris/**/*" />
+									<exclude name="environment/**/*" />
+									<exclude name="vendor/**/*" />
+									<exclude name="*.bat" />
+									<exclude name="*.sh" />
+								</fileset>
+							</delete>
+						</then>
+						<else>
+							<delete includeemptydirs="true">
+								<fileset dir="${project.home}" defaultexcludes="false">
+									<exclude name="apache-ant*/**/*" />
+									<exclude name="${initscript.folder.name}/**/*" />
+									<exclude name="vendor/**/*" />
+									<exclude name="*.bat" />
+									<exclude name="*.sh" />
+								</fileset>
+							</delete>
+						</else>
+					</if>
+				</then>
+				<else>
+					<svnSetting id="svn.settings" javahl="false" svnkit="false" username="${svn.repository.username}" password="${svn.repository.password}" />
+					<svn refid="svn.settings">
+						<info target="${project.home}" />
+					</svn>
+					<if>
+						<equals arg1="${svn.repository.url}/${releasePath}" arg2="${svn.info.url}" />
+						<then>
+							<delete includeemptydirs="true">
+								<fileset dir="${project.home}" defaultexcludes="false">
+									<exclude name="apache-ant*/**/*" />
+									<exclude name="${initscript.folder.name}/**/*" />
+									<exclude name=".svn/**/*" />
+									<exclude name="hybris/**/*" />
+									<exclude name="environment/**/*" />
+									<exclude name="*.bat" />
+									<exclude name="*.sh" />
+								</fileset>
+							</delete>
+						</then>
+						<else>
+							<delete includeemptydirs="true">
+								<fileset dir="${project.home}" defaultexcludes="false">
+									<exclude name="apache-ant*/**/*" />
+									<exclude name="${initscript.folder.name}/**/*" />
+									<exclude name="*.bat" />
+									<exclude name="*.sh" />
+								</fileset>
+							</delete>
+						</else>
+					</if>
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	target: replaceEnvironmentFolder
+	=================================
+	-->
+	<target name="replaceEnvironmentFolder" description="Updates the environment folder with a new release version." >
+		<fail message="Attribute 'releasePath' was not set. You have to set a relase, like: v1.0.0 or v1.0-rc1 or trunk. Do that with -DreleaseToInstall=..." unless="releasePath" />
+		<delete dir="${project.home}/environment" />
+		<echo message="Checkout environment release ${releasePath}" />
+		<svnSetting id="svn.settings" javahl="false" svnkit="false" username="${svn.repository.username}" password="${svn.repository.password}" />
+		<svn refid="svn.settings">
+			<checkout url="${svn.repository.url}/${releasePath}/environment" destPath="${project.home}/environment" />
+		</svn>		
+	</target>
+
+
+	<!--
+	=================================
+	target: replaceDeploymentFolder
+	=================================
+	-->
+	<target name="replaceDeploymentFolder" description="Updates the deployment folder with a new release version." >
+		<fail message="Attribute 'releasePath' was not set. You have to set a relase, like: v1.0.0 or v1.0-rc1 or trunk. Do that with -DreleaseToInstall=..." unless="releasePath"/>
+		<antcall target="cleanDeploymentFolder" />
+		<echo message="Checkout release ${releasePath}" />
+		<svnSetting id="svn.settings" javahl="false" svnkit="false" username="${svn.repository.username}" password="${svn.repository.password}" />
+		<svn refid="svn.settings">
+			<checkout url="${svn.repository.url}/${releasePath}" destPath="${project.home}" />
+		</svn>		
+	</target>
+
+
+	<!--
+	=================================
+	target: cleanDeploymentFolder
+	=================================
+	-->
+	<target name="cleanDeploymentFolder" description="Clean up deployment folder. Delete everything except 'apache-ant*' and 'init' folders and batch files.">
+		<cleanDeploymentFolder />
+	</target>
+	
+
+	<!--
+	=================================
+	target: createDeploymentUnit (client part)
+	=================================
+	-->
+	<target name="createDeploymentUnit" description="Create a hybris production release with promting for user input, if not set by parameters.">
+		<input message="Release? example: v1.0.0 or v1.0-rc1" addproperty="releaseToInstall" />
+		<fail message="Attribute 'releaseToInstall' was not set. Release example: v1.0.0 or v1.0-rc1" unless="releaseToInstall"/>
+		<input message="On which environment you would like to deploy? example env-d, env-q, env-hp-q, env-hp-p" addproperty="deployment.environment" />
+		<detectDeploymentRelease />
+		<antcall target="replaceDeploymentFolder" />
+		
+		<echo message="Create deployment unit from '${releasePath}' (${releaseToInstall})..." />		
+		<!-- createDeploymentUnit -->
+		<ant antfile="${project.home}/environment/build.xml" dir="${project.home}/environment" target="createDeploymentUnit" inheritrefs="false" inheritall="false">
+			<property name="releaseToInstall" value="${releaseToInstall}" />
+			<property name="mandant.version" value="${releasePath}" />
+			<property name="deployment.environment" value="${deployment.environment}" />
+	
+		</ant>
+	</target>	
+	
+
+	<!--
+	=================================
+	target: installRelease (server part)
+	=================================
+	-->
+	<target name="installRelease" description="Install a hybris production release."  depends="installDeploymentUnit" />
+					
+					
+	<!--
+	=================================
+	target: installDeploymentUnit (server part)
+	=================================
+	-->
+	<target name="installDeploymentUnit" description="Install a hybris production release with promting for user input, if not set by parameters.">
+		<input message="Release? example: v1.0.0 or v1.0-rc1" addproperty="releaseToInstall" />
+		<fail message="Attribute 'releaseToInstall' was not set. Release example: v1.0.0 or v1.0-rc1" unless="releaseToInstall"/>
+		<detectDeploymentRelease />
+		<antcall target="replaceEnvironmentFolder" />
+		<echo message="Install hybris from '${releasePath}' (${releaseToInstall})..." />
+		<ant antfile="${project.home}/environment/build.xml" dir="${project.home}/environment" target="updateScriptsFromEnvironment" inheritall="false">
+			<property name="releaseToInstall" value="${releaseToInstall}" />
+			<property name="mandant.version" value="${releasePath}" />
+		</ant>
+		<ant antfile="${project.home}/environment/build.xml" dir="${project.home}/environment" target="installDeploymentUnit" inheritall="false">
+			<property name="releaseToInstall" value="${releaseToInstall}" />
+			<property name="mandant.version" value="${releasePath}" />
+			<property name="hybris.home" value="${hybrisserver.home}" />
+		</ant>
+	</target>
+</project>

@@ -1,0 +1,318 @@
+INSERT_UPDATE ServicelayerJob;code[unique=true]  ;springId[unique=true]
+                             ;distSolrIndexerJob ;distSolrIndexerJob
+
+##############################################################################
+## FULL index composite cronjob to run all cronjobs for all sites
+##############################################################################
+$fullIndexJob=full-ProdCatMan-Fusion
+$facetSearchConfigName=distSearchConfig
+
+INSERT_UPDATE SolrIndexerCronJob;code[unique=true]          ;job(code)          ;singleExecutable;sessionLanguage(isocode);active[default=false];facetSearchConfig(name);indexerOperation(code);cmsSites(uid);sessionUser(uid)[default=techUserFusion]
+                                ;$fullIndexJob-distrelec_AT ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_AT ;
+                                ;$fullIndexJob-distrelec_BE ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_BE ;
+                                ;$fullIndexJob-distrelec_CH ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_CH ;
+                                ;$fullIndexJob-distrelec_CZ ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_CZ ;
+                                ;$fullIndexJob-distrelec_DE ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_DE ;
+                                ;$fullIndexJob-distrelec_DK ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_DK ;
+                                ;$fullIndexJob-distrelec_EE ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_EE ;
+                                ;$fullIndexJob-distrelec_EX ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_EX ;
+                                ;$fullIndexJob-distrelec_FI ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_FI ;
+                                ;$fullIndexJob-distrelec_FR ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_FR ;
+                                ;$fullIndexJob-distrelec_HU ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_HU ;
+                                ;$fullIndexJob-distrelec_IT ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_IT ;
+                                ;$fullIndexJob-distrelec_LT ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_LT ;
+                                ;$fullIndexJob-distrelec_LV ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_LV ;
+                                ;$fullIndexJob-distrelec_NL ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_NL ;
+                                ;$fullIndexJob-distrelec_NO ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_NO ;
+                                ;$fullIndexJob-distrelec_PL ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_PL ;
+                                ;$fullIndexJob-distrelec_RO ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_RO ;
+                                ;$fullIndexJob-distrelec_SE ;distSolrIndexerJob ;false           ;en                      ;true                 ;$facetSearchConfigName ;full                  ;distrelec_SE ;
+                                ;$fullIndexJob-distrelec_SK ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;full                  ;distrelec_SK ;
+
+INSERT_UPDATE CompositeCronJob;code[unique=true];;compositeEntries(code);job(code)[default='compositeJobPerformable'];sessionUser(uid)[default='techUserFusion'];sessionLanguage(isocode)[default='en'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING']
+                              ;$fullIndexJob    ;
+
+INSERT_UPDATE CompositeEntry;code[unique=true]                ;executableCronJob(code)
+                            ;$fullIndexJob-distrelec_AT_Entry ;$fullIndexJob-distrelec_AT
+                            ;$fullIndexJob-distrelec_BE_Entry ;$fullIndexJob-distrelec_BE
+                            ;$fullIndexJob-distrelec_CH_Entry ;$fullIndexJob-distrelec_CH
+                            ;$fullIndexJob-distrelec_CZ_Entry ;$fullIndexJob-distrelec_CZ
+                            ;$fullIndexJob-distrelec_DE_Entry ;$fullIndexJob-distrelec_DE
+                            ;$fullIndexJob-distrelec_DK_Entry ;$fullIndexJob-distrelec_DK
+                            ;$fullIndexJob-distrelec_EE_Entry ;$fullIndexJob-distrelec_EE
+                            ;$fullIndexJob-distrelec_EX_Entry ;$fullIndexJob-distrelec_EX
+                            ;$fullIndexJob-distrelec_FI_Entry ;$fullIndexJob-distrelec_FI
+                            ;$fullIndexJob-distrelec_FR_Entry ;$fullIndexJob-distrelec_FR
+                            ;$fullIndexJob-distrelec_HU_Entry ;$fullIndexJob-distrelec_HU
+                            ;$fullIndexJob-distrelec_IT_Entry ;$fullIndexJob-distrelec_IT
+                            ;$fullIndexJob-distrelec_LT_Entry ;$fullIndexJob-distrelec_LT
+                            ;$fullIndexJob-distrelec_LV_Entry ;$fullIndexJob-distrelec_LV
+                            ;$fullIndexJob-distrelec_NL_Entry ;$fullIndexJob-distrelec_NL
+                            ;$fullIndexJob-distrelec_NO_Entry ;$fullIndexJob-distrelec_NO
+                            ;$fullIndexJob-distrelec_PL_Entry ;$fullIndexJob-distrelec_PL
+                            ;$fullIndexJob-distrelec_RO_Entry ;$fullIndexJob-distrelec_RO
+                            ;$fullIndexJob-distrelec_SE_Entry ;$fullIndexJob-distrelec_SE
+                            ;$fullIndexJob-distrelec_SK_Entry ;$fullIndexJob-distrelec_SK
+
+UPDATE CompositeCronJob;code[unique=true];compositeEntries(code)[mode=append]
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_AT_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_BE_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_CH_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_CZ_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_DE_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_DK_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_EE_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_EX_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_FI_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_FR_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_HU_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_IT_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_LT_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_LV_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_NL_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_NO_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_PL_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_RO_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_SE_Entry
+                       ;$fullIndexJob    ;$fullIndexJob-distrelec_SK_Entry
+
+# every night at 1 AM -> expression is 23 since +2 hours is added on environment
+INSERT_UPDATE Trigger;code[unique=true]    ;cronJob(code) ;cronExpression ;active
+                     ;$fullIndexJobTrigger ;$fullIndexJob ;0 0 23 * * ? * ;false
+
+##############################################################################
+## UPDATE DELTA index composite cronjob to run all cronjobs for all sites
+##############################################################################
+$updateIndexJob=update-ProdCatMan-Fusion
+$facetSearchConfigName=distSearchConfig
+
+INSERT_UPDATE SolrIndexerCronJob;code[unique=true]            ;job(code)          ;singleExecutable;sessionLanguage(isocode);active[default=false];facetSearchConfig(name);indexerOperation(code);cmsSites(uid);sessionUser(uid)[default=techUserFusion]
+                                ;$updateIndexJob-distrelec_AT ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_AT ;
+                                ;$updateIndexJob-distrelec_BE ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_BE ;
+                                ;$updateIndexJob-distrelec_CH ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_CH ;
+                                ;$updateIndexJob-distrelec_CZ ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_CZ ;
+                                ;$updateIndexJob-distrelec_DE ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_DE ;
+                                ;$updateIndexJob-distrelec_DK ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_DK ;
+                                ;$updateIndexJob-distrelec_EE ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_EE ;
+                                ;$updateIndexJob-distrelec_EX ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_EX ;
+                                ;$updateIndexJob-distrelec_FI ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_FI ;
+                                ;$updateIndexJob-distrelec_FR ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_FR ;
+                                ;$updateIndexJob-distrelec_HU ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_HU ;
+                                ;$updateIndexJob-distrelec_IT ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_IT ;
+                                ;$updateIndexJob-distrelec_LT ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_LT ;
+                                ;$updateIndexJob-distrelec_LV ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_LV ;
+                                ;$updateIndexJob-distrelec_NL ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_NL ;
+                                ;$updateIndexJob-distrelec_NO ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_NO ;
+                                ;$updateIndexJob-distrelec_PL ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_PL ;
+                                ;$updateIndexJob-distrelec_RO ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_RO ;
+                                ;$updateIndexJob-distrelec_SE ;distSolrIndexerJob ;false           ;en                      ;true                 ;$facetSearchConfigName ;update                ;distrelec_SE ;
+                                ;$updateIndexJob-distrelec_SK ;distSolrIndexerJob ;false           ;en                      ;                     ;$facetSearchConfigName ;update                ;distrelec_SK ;
+
+INSERT_UPDATE CompositeCronJob;code[unique=true];compositeEntries(code);job(code)[default='compositeJobPerformable'];sessionUser(uid)[default='techUserFusion'];sessionLanguage(isocode)[default='en'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING']
+                              ;$updateIndexJob  ;
+
+INSERT_UPDATE CompositeEntry;code[unique=true]                  ;executableCronJob(code)
+                            ;$updateIndexJob-distrelec_AT_Entry ;$updateIndexJob-distrelec_AT
+                            ;$updateIndexJob-distrelec_BE_Entry ;$updateIndexJob-distrelec_BE
+                            ;$updateIndexJob-distrelec_CH_Entry ;$updateIndexJob-distrelec_CH
+                            ;$updateIndexJob-distrelec_CZ_Entry ;$updateIndexJob-distrelec_CZ
+                            ;$updateIndexJob-distrelec_DE_Entry ;$updateIndexJob-distrelec_DE
+                            ;$updateIndexJob-distrelec_DK_Entry ;$updateIndexJob-distrelec_DK
+                            ;$updateIndexJob-distrelec_EE_Entry ;$updateIndexJob-distrelec_EE
+                            ;$updateIndexJob-distrelec_EX_Entry ;$updateIndexJob-distrelec_EX
+                            ;$updateIndexJob-distrelec_FI_Entry ;$updateIndexJob-distrelec_FI
+                            ;$updateIndexJob-distrelec_FR_Entry ;$updateIndexJob-distrelec_FR
+                            ;$updateIndexJob-distrelec_HU_Entry ;$updateIndexJob-distrelec_HU
+                            ;$updateIndexJob-distrelec_IT_Entry ;$updateIndexJob-distrelec_IT
+                            ;$updateIndexJob-distrelec_LT_Entry ;$updateIndexJob-distrelec_LT
+                            ;$updateIndexJob-distrelec_LV_Entry ;$updateIndexJob-distrelec_LV
+                            ;$updateIndexJob-distrelec_NL_Entry ;$updateIndexJob-distrelec_NL
+                            ;$updateIndexJob-distrelec_NO_Entry ;$updateIndexJob-distrelec_NO
+                            ;$updateIndexJob-distrelec_PL_Entry ;$updateIndexJob-distrelec_PL
+                            ;$updateIndexJob-distrelec_RO_Entry ;$updateIndexJob-distrelec_RO
+                            ;$updateIndexJob-distrelec_SE_Entry ;$updateIndexJob-distrelec_SE
+                            ;$updateIndexJob-distrelec_SK_Entry ;$updateIndexJob-distrelec_SK
+
+UPDATE CompositeCronJob;code[unique=true];compositeEntries(code)[mode=append]
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_AT_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_BE_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_CH_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_CZ_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_DE_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_DK_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_EE_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_EX_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_FI_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_FR_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_HU_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_IT_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_LT_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_LV_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_NL_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_NO_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_PL_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_RO_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_SE_Entry
+                       ;$updateIndexJob  ;$updateIndexJob-distrelec_SK_Entry
+
+# every night at 1 AM -> expression is 23 since +2 hours is added on environment
+INSERT_UPDATE Trigger;code[unique=true]      ;cronJob(code)   ;cronExpression   ;active
+                     ;$updateIndexJobTrigger ;$updateIndexJob ;0 0 22/3 * * ? * ;false
+
+##############################################################################
+## FULL EOL index composite cronjob to run all cronjobs for all sites
+##############################################################################
+$fullEOLIndexJob=full-Product-EOL-Fusion
+$eolFacetSearchConfigName=distSearchConfigEOL
+
+INSERT_UPDATE SolrIndexerCronJob;code[unique=true]             ;job(code)          ;singleExecutable;sessionLanguage(isocode);active[default=false];facetSearchConfig(name)   ;indexerOperation(code);cmsSites(uid);sessionUser(uid)[default=techUserFusion]
+                                ;$fullEOLIndexJob-distrelec_AT ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_AT ;
+                                ;$fullEOLIndexJob-distrelec_BE ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_BE ;
+                                ;$fullEOLIndexJob-distrelec_CH ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_CH ;
+                                ;$fullEOLIndexJob-distrelec_CZ ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_CZ ;
+                                ;$fullEOLIndexJob-distrelec_DE ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_DE ;
+                                ;$fullEOLIndexJob-distrelec_DK ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_DK ;
+                                ;$fullEOLIndexJob-distrelec_EE ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_EE ;
+                                ;$fullEOLIndexJob-distrelec_EX ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_EX ;
+                                ;$fullEOLIndexJob-distrelec_FI ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_FI ;
+                                ;$fullEOLIndexJob-distrelec_FR ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_FR ;
+                                ;$fullEOLIndexJob-distrelec_HU ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_HU ;
+                                ;$fullEOLIndexJob-distrelec_IT ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_IT ;
+                                ;$fullEOLIndexJob-distrelec_LT ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_LT ;
+                                ;$fullEOLIndexJob-distrelec_LV ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_LV ;
+                                ;$fullEOLIndexJob-distrelec_NL ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_NL ;
+                                ;$fullEOLIndexJob-distrelec_NO ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_NO ;
+                                ;$fullEOLIndexJob-distrelec_PL ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_PL ;
+                                ;$fullEOLIndexJob-distrelec_RO ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_RO ;
+                                ;$fullEOLIndexJob-distrelec_SE ;distSolrIndexerJob ;false           ;en                      ;true                 ;$eolFacetSearchConfigName ;full                  ;distrelec_SE ;
+                                ;$fullEOLIndexJob-distrelec_SK ;distSolrIndexerJob ;false           ;en                      ;                     ;$eolFacetSearchConfigName ;full                  ;distrelec_SK ;
+
+INSERT_UPDATE CompositeCronJob;code[unique=true];compositeEntries(code);job(code)[default='compositeJobPerformable'];sessionUser(uid)[default='techUserFusion'];sessionLanguage(isocode)[default='en'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING']
+                              ;$fullEOLIndexJob ;
+
+INSERT_UPDATE CompositeEntry;code[unique=true]                   ;executableCronJob(code);
+                            ;$fullEOLIndexJob-distrelec_AT_Entry ;$fullEOLIndexJob-distrelec_AT
+                            ;$fullEOLIndexJob-distrelec_BE_Entry ;$fullEOLIndexJob-distrelec_BE
+                            ;$fullEOLIndexJob-distrelec_CH_Entry ;$fullEOLIndexJob-distrelec_CH
+                            ;$fullEOLIndexJob-distrelec_CZ_Entry ;$fullEOLIndexJob-distrelec_CZ
+                            ;$fullEOLIndexJob-distrelec_DE_Entry ;$fullEOLIndexJob-distrelec_DE
+                            ;$fullEOLIndexJob-distrelec_DK_Entry ;$fullEOLIndexJob-distrelec_DK
+                            ;$fullEOLIndexJob-distrelec_EE_Entry ;$fullEOLIndexJob-distrelec_EE
+                            ;$fullEOLIndexJob-distrelec_EX_Entry ;$fullEOLIndexJob-distrelec_EX
+                            ;$fullEOLIndexJob-distrelec_FI_Entry ;$fullEOLIndexJob-distrelec_FI
+                            ;$fullEOLIndexJob-distrelec_FR_Entry ;$fullEOLIndexJob-distrelec_FR
+                            ;$fullEOLIndexJob-distrelec_HU_Entry ;$fullEOLIndexJob-distrelec_HU
+                            ;$fullEOLIndexJob-distrelec_IT_Entry ;$fullEOLIndexJob-distrelec_IT
+                            ;$fullEOLIndexJob-distrelec_LT_Entry ;$fullEOLIndexJob-distrelec_LT
+                            ;$fullEOLIndexJob-distrelec_LV_Entry ;$fullEOLIndexJob-distrelec_LV
+                            ;$fullEOLIndexJob-distrelec_NL_Entry ;$fullEOLIndexJob-distrelec_NL
+                            ;$fullEOLIndexJob-distrelec_NO_Entry ;$fullEOLIndexJob-distrelec_NO
+                            ;$fullEOLIndexJob-distrelec_PL_Entry ;$fullEOLIndexJob-distrelec_PL
+                            ;$fullEOLIndexJob-distrelec_RO_Entry ;$fullEOLIndexJob-distrelec_RO
+                            ;$fullEOLIndexJob-distrelec_SE_Entry ;$fullEOLIndexJob-distrelec_SE
+                            ;$fullEOLIndexJob-distrelec_SK_Entry ;$fullEOLIndexJob-distrelec_SK
+
+UPDATE CompositeCronJob;code[unique=true];compositeEntries(code)[mode=append]
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_AT_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_BE_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_CH_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_CZ_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_DE_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_DK_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_EE_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_EX_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_FI_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_FR_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_HU_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_IT_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_LT_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_LV_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_NL_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_NO_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_PL_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_RO_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_SE_Entry
+                       ;$fullEOLIndexJob ;$fullEOLIndexJob-distrelec_SK_Entry
+
+# every night at 1 AM -> expression is 23 since +2 hours is added on environment
+INSERT_UPDATE Trigger;code[unique=true]       ;cronJob(code)    ;cronExpression ;active
+                     ;$fullEOLIndexJobTrigger ;$fullEOLIndexJob ;0 0 23 * * ? * ;false
+
+#######################################################################################
+## UPDATE Atomic index composite cronjob to run all cronjobs for all sites
+##############################################################################
+$updateAtomicIndexJob=update-Product-Atomic-Fusion
+$atomicFacetSearchConfigName=distSearchConfigAtomic
+
+INSERT_UPDATE SolrIndexerCronJob;code[unique=true]                  ;job(code)          ;singleExecutable;sessionLanguage(isocode);active[default=false];facetSearchConfig(name)      ;indexerOperation(code);cmsSites(uid);sessionUser(uid)[default=techUserFusion];useAtomicUpdates
+                                ;$updateAtomicIndexJob-distrelec_AT ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_AT ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_BE ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_BE ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_CH ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_CH ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_CZ ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_CZ ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_DE ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_DE ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_DK ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_DK ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_EE ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_EE ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_EX ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_EX ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_FI ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_FI ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_FR ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_FR ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_HU ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_HU ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_IT ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_IT ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_LT ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_LT ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_LV ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_LV ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_NL ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_NL ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_NO ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_NO ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_PL ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_PL ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_RO ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_RO ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_SE ;distSolrIndexerJob ;false           ;en                      ;true                 ;$atomicFacetSearchConfigName ;update                ;distrelec_SE ;                                        ;true
+                                ;$updateAtomicIndexJob-distrelec_SK ;distSolrIndexerJob ;false           ;en                      ;                     ;$atomicFacetSearchConfigName ;update                ;distrelec_SK ;                                        ;true
+
+INSERT_UPDATE CompositeCronJob;code[unique=true]     ;compositeEntries(code);job(code)[default='compositeJobPerformable'];sessionUser(uid)[default='techUserFusion'];sessionLanguage(isocode)[default='en'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING']
+                              ;$updateAtomicIndexJob ;
+
+INSERT_UPDATE CompositeEntry;code[unique=true]                        ;executableCronJob(code)
+                            ;$updateAtomicIndexJob-distrelec_AT_Entry ;$updateAtomicIndexJob-distrelec_AT
+                            ;$updateAtomicIndexJob-distrelec_BE_Entry ;$updateAtomicIndexJob-distrelec_BE
+                            ;$updateAtomicIndexJob-distrelec_CH_Entry ;$updateAtomicIndexJob-distrelec_CH
+                            ;$updateAtomicIndexJob-distrelec_CZ_Entry ;$updateAtomicIndexJob-distrelec_CZ
+                            ;$updateAtomicIndexJob-distrelec_DE_Entry ;$updateAtomicIndexJob-distrelec_DE
+                            ;$updateAtomicIndexJob-distrelec_DK_Entry ;$updateAtomicIndexJob-distrelec_DK
+                            ;$updateAtomicIndexJob-distrelec_EE_Entry ;$updateAtomicIndexJob-distrelec_EE
+                            ;$updateAtomicIndexJob-distrelec_EX_Entry ;$updateAtomicIndexJob-distrelec_EX
+                            ;$updateAtomicIndexJob-distrelec_FI_Entry ;$updateAtomicIndexJob-distrelec_FI
+                            ;$updateAtomicIndexJob-distrelec_FR_Entry ;$updateAtomicIndexJob-distrelec_FR
+                            ;$updateAtomicIndexJob-distrelec_HU_Entry ;$updateAtomicIndexJob-distrelec_HU
+                            ;$updateAtomicIndexJob-distrelec_IT_Entry ;$updateAtomicIndexJob-distrelec_IT
+                            ;$updateAtomicIndexJob-distrelec_LT_Entry ;$updateAtomicIndexJob-distrelec_LT
+                            ;$updateAtomicIndexJob-distrelec_LV_Entry ;$updateAtomicIndexJob-distrelec_LV
+                            ;$updateAtomicIndexJob-distrelec_NL_Entry ;$updateAtomicIndexJob-distrelec_NL
+                            ;$updateAtomicIndexJob-distrelec_NO_Entry ;$updateAtomicIndexJob-distrelec_NO
+                            ;$updateAtomicIndexJob-distrelec_PL_Entry ;$updateAtomicIndexJob-distrelec_PL
+                            ;$updateAtomicIndexJob-distrelec_RO_Entry ;$updateAtomicIndexJob-distrelec_RO
+                            ;$updateAtomicIndexJob-distrelec_SE_Entry ;$updateAtomicIndexJob-distrelec_SE
+                            ;$updateAtomicIndexJob-distrelec_SK_Entry ;$updateAtomicIndexJob-distrelec_SK
+
+UPDATE CompositeCronJob;code[unique=true]     ;compositeEntries(code)[mode=append]
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_AT_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_BE_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_CH_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_CZ_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_DE_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_DK_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_EE_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_EX_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_FI_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_FR_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_HU_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_IT_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_LT_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_LV_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_NL_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_NO_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_PL_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_RO_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_SE_Entry
+                       ;$updateAtomicIndexJob ;$updateAtomicIndexJob-distrelec_SK_Entry
+
+# every 10th minutes of the hour
+INSERT_UPDATE Trigger;code[unique=true]            ;cronJob(code)         ;cronExpression   ;active
+                     ;$updateAtomicIndexJobTrigger ;$updateAtomicIndexJob ;0 0/10 * * * ? * ;false

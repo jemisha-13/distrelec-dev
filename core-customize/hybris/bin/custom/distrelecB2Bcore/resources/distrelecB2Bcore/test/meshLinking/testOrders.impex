@@ -1,0 +1,63 @@
+$catalog-id=distrelecProductCatalog
+$catalog-version=Online
+
+$classificationCatalog-id=DistrelecClassification
+$classificationCatalog-version=1.0
+
+$catalogVersion=catalogversion(catalog(id[default=$catalog-id]),version[default=$catalog-version])[unique=true,default=$catalog-id:$catalog-version]
+$defaultCatalog=defaultCatalog(id[default=$catalog-id])
+
+INSERT_UPDATE Currency;isocode[unique=true]
+;CHF
+
+INSERT_UPDATE BaseStore;uid[unique=true]; channel(code)
+;distrelec_CH_b2c;B2C
+;distrelec_AT_b2c;B2C
+
+INSERT_UPDATE UserPriceGroup;code[unique=true]
+;priceGroup
+
+INSERT_UPDATE UserTaxGroup;code[unique=true]
+;taxGroup
+
+INSERT_UPDATE CMSSite;uid[unique=true];userPriceGroup(code);userTaxGroup(code);salesOrg(code);$defaultCatalog
+;distrelec_CH;priceGroup;taxGroup;7310
+;distrelec_AT;priceGroup;taxGroup;7800
+
+INSERT_UPDATE Order;code[unique=true];site(uid)[default='distrelec_CH'];store(uid)[default='distrelec_CH_b2c'];user(uid)[default='anonymous'];date[dateformat=dd.MM.yyyy HH:mm, default=01.01.2000 08:00];currency(isocode)[default='CHF'];
+;001;
+;002;
+;003;distrelec_AT;distrelec_AT_b2c;
+
+INSERT_UPDATE Unit;code[unique=true];unitType
+;pieces;pieces
+
+$product=product(code,$catalogVersion)[unique=true,default=$catalog-id:$catalog-version]
+INSERT_UPDATE OrderEntry;$product;order(code)[unique=true];quantity[default=1];calculated[default=true];unit(code)[default='pieces'];entryNumber;
+;P1_1_1___1;001;
+;P1_1_1___2;001;
+;P1_1_1___2;002;
+;P1_1_1___3;001;
+;P1_1_1___4;003;
+;P1_1_1___5;001;
+;P1_1_1___7;001;
+;P1_1_2___1;001;
+;P1_1_2___2;001;
+;P1_1_2___2;002;
+;P1_1_2___3;001;
+;P1_1_2___4;003;
+;P1_1_2___5;001;
+;P1_1_2___7;001;
+;P1_2_1___1;001;
+;P1_2_1___2;001;
+;P1_2_1___2;002;
+;P1_2_1___3;001;
+;P1_2_1___4;003;
+;P1_2_1___5;001;
+;P1_2_1___7;001;
+
+
+
+
+
+

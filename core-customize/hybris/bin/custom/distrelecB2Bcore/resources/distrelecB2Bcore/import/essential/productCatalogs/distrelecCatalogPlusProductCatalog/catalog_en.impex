@@ -1,0 +1,17 @@
+# 
+# Import the Product Catalog and Classification Catalog
+#
+# Localization en
+#
+
+$lang=en
+
+$productCatalog=distrelecCatalogPlusProductCatalog
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Online'])[unique=true,default=$productCatalog:Online]
+$siteResource=http:/Web/WebShopImages/catplus
+
+UPDATE Catalog;id[unique=true];name[lang=$lang]
+;$productCatalog;"Distrelec Catalog Plus Product Catalog";
+
+INSERT_UPDATE Media;$catalogVersion[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true];folder(qualifier)[default='images'];;
+;;catplus_logo;image/png;catplus-logo.gif;$siteResource/catplus-logo.gif;;;

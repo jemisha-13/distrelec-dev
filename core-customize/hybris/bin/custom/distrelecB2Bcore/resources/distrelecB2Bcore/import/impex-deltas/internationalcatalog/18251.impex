@@ -1,0 +1,28 @@
+$languages=de, de_AT, de_DE, de_CH, fr, fr_BE, fr_CH, nl, nl_BE, nl_NL, en, en_CH, en_DE, en_DK, en_EX, en_NL, en_NO, en_PL, en_SE, cs, da, et, fi, sv, sv_FI, sv_SE, hu, it, lt, lv, no, pl, ro, sk
+
+INSERT_UPDATE Language;isocode[unique=true];active[default=true];name[lang=en]         ;name[lang=de];fallbackLanguages(isocode)
+                      ;de_AT               ;                    ;German (Austria)      ;             ;de,en
+                      ;de_DE               ;                    ;German (Germany)      ;             ;de,en
+                      ;de_CH               ;                    ;German (Switzerland)  ;             ;de,en
+                      ;en_CH               ;                    ;English (Switzerland) ;             ;en
+                      ;en_DE               ;                    ;English (Germany)     ;             ;en
+                      ;en_DK               ;                    ;English (Denmark)     ;             ;en
+                      ;en_EX               ;                    ;English (Export)      ;             ;en
+                      ;en_NL               ;                    ;English (Netherlands) ;             ;en
+                      ;en_NO               ;                    ;English (Norway)      ;             ;en
+                      ;en_PL               ;                    ;English (Poland)      ;             ;en
+                      ;en_SE               ;                    ;English (Sweden)      ;             ;en
+                      ;fr_BE               ;                    ;French (Belgium)      ;             ;fr,en
+                      ;fr_CH               ;                    ;French (Switzerland)  ;             ;fr,en
+                      ;nl_BE               ;                    ;Dutch (Belgium)       ;             ;nl,en
+                      ;nl_NL               ;                    ;Dutch (Nertherlands)  ;             ;nl,en
+                      ;sv_FI               ;                    ;Swedish (Finland)     ;             ;sv,en
+                      ;sv_SE               ;                    ;Swedish (Sweden)      ;             ;sv,en
+
+UPDATE CatalogVersion;catalog(id)[unique=true]    ;version[unique=true];languages(isocode)
+                     ;distrelec_IntContentCatalog ;Staged              ;$languages
+                     ;distrelec_IntContentCatalog ;Online              ;$languages
+#
+UPDATE BaseStore;uid[unique=true]          ;languages(isocode)
+                ;internationalB2BBaseStore ;$languages
+                ;internationalB2CBaseStore ;$languages

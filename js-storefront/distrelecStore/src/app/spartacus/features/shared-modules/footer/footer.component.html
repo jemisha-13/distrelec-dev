@@ -1,0 +1,153 @@
+<ng-container *ngIf="pageTemplate$ | async">
+  <ng-container *ngIf="isCheckoutPage; else notCheckoutFooter">
+    <app-checkout-footer [componentData]="componentData$"></app-checkout-footer>
+  </ng-container>
+
+  <ng-template #notCheckoutFooter>
+    <div class="main-footer" id="footer">
+      <ng-container *ngIf="isNewsletterDisplayed">
+        <app-newsletter></app-newsletter>
+      </ng-container>
+      <div class="main-footer__main-content p-relative">
+        <div class="container">
+          <div class="mobile-site-settings" (window:resize)="onResize()">
+            <ng-container *ngIf="isMobile">
+              <app-site-settings></app-site-settings>
+            </ng-container>
+          </div>
+          <div *ngIf="footerNav$ | async as footerNav" class="row main-footer__nav-row" id="main-footer__nav-row">
+            <ng-container *ngFor="let item of footerNav[0]; let i = index">
+              <div class="nav-footer-section col-md-4 col-lg" id="nav-footer-section">
+                <div class="nav-title" id="footer-nav-title-{{ i }}">{{ item.title }}</div>
+                <ul class="nav-list">
+                  <li *ngFor="let subItem of item.children; let j = index" class="nav-list-item">
+                    <a
+                      [id]="'main_footer_link_' + i + '_' + j"
+                      [externalRouterLink]="subItem?.url || subItem?.localizedUrl"
+                      [title]="subItem?.title"
+                      (click)="dispatchInteractionEvent(item?.title, subItem?.title)"
+                    >
+                      {{ subItem?.title }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </ng-container>
+          </div>
+
+          <div *ngIf="getComponentsBySlotId() | async as slots" class="container">
+            <div class="row">
+              <div class="footer-wrapper footer-wrapper__images social col-md">
+                <ng-container *ngFor="let component$ of slots.get('socialMedias'); let i = index">
+                  <ng-container *ngIf="component$ | async as component">
+                    <a
+                      class="col-4 footer-icon social mb-2 mb-md-0"
+                      [externalRouterLink]="component?.localizedUrl"
+                      [id]="'footer-icon-social_' + component?.iconKey"
+                      (click)="dispatchInteractionEvent('Social Icons', component.iconKey)"
+                    >
+                      <div class="media-wrapper" [ngClass]="['media-wrapper-' + i,component?.iconKey]">
+                        <app-icon class="media-icon" [icon]="icon(component?.iconKey)"></app-icon>
+                      </div>
+                    </a>
+                  </ng-container>
+                </ng-container>
+              </div>
+
+              <div class="footer-wrapper footer-wrapper__images trademark col-md">
+                <ng-container *ngFor="let component$ of slots.get('trademarks'); let i = index">
+                  <div *ngIf="component$ | async as component" class="col-4 footer-icon">
+                    <ng-container *ngIf="component?.icon?.code === 'footer-logo-geotrust-def'">
+                      <img [alt]="component?.icon?.code" [ngSrc]="component?.icon?.url" width="76" height="50" />
+                    </ng-container>
+                    <ng-container *ngIf="component?.icon?.code === 'footer-logo-iso9001-def'">
+                      <img [alt]="component?.icon?.code" [ngSrc]="component?.icon?.url" width="101" height="50" />
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+
+              <div class="footer-wrapper footer-wrapper__images payment col-md">
+                <ng-container *ngFor="let component$ of slots.get('paymentMethods'); let i = index">
+                  <div *ngIf="component$ | async as component" class="col-4 footer-icon">
+                    <ng-container *ngIf="component?.icon?.code?.includes('mastercard')">
+                      <img
+                        id="mastercard-icon"
+                        [alt]="component?.icon?.code"
+                        [ngSrc]="component?.icon?.url"
+                        width="64"
+                        height="50"
+                      />
+                    </ng-container>
+                    <ng-container *ngIf="component?.icon?.code?.includes('visa')">
+                      <img
+                        id="visa-icon"
+                        [alt]="component?.icon?.code"
+                        [ngSrc]="component?.icon?.url"
+                        width="93"
+                        height="30"
+                      />
+                    </ng-container>
+                    <ng-container *ngIf="component?.icon?.code?.includes('cartes-bancaires')">
+                      <img
+                        id="cartes-bancaires-icon"
+                        [alt]="component?.icon?.code"
+                        [ngSrc]="component?.icon?.url"
+                        width="93"
+                        height="30"
+                      />
+                    </ng-container>
+                    <ng-container *ngIf="component?.icon?.code?.includes('amex')">
+                      <img
+                        id="amex-icon"
+                        [alt]="component?.icon?.code"
+                        [ngSrc]="component?.icon?.url"
+                        width="64"
+                        height="50"
+                      />
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+
+              <div class="footer-wrapper footer-wrapper__links">
+                <div class="footer-links">
+                  <span *ngFor="let component$ of slots.get('impressumLinks'); let i = index" class="footer-link">
+                    <ng-container *ngIf="component$ | async as component">
+                      <app-footer-link
+                        [component]="component"
+                        [id]="'link-in-wrapper-footer-wrapper-' + i"
+                      ></app-footer-link>
+                    </ng-container>
+                  </span>
+                </div>
+                <div class="copyright">
+                  <span class="text" id="copyright-footer">
+                    &copy; {{ fullYear }} {{ 'footer.reserved' | cxTranslate }}
+                  </span>
+                  <span class="text">
+                    {{ 'footer.page_generated' | cxTranslate: { date: yearMonth, time: currentTime } }}
+                  </span>
+                </div>
+                <div class="countries">
+                  <ng-container *ngFor="let component$ of slots.get('countryLinks'); let i = index">
+                    <div *ngIf="component$ | async as component" class="item">
+                      <a
+                        class="item-link"
+                        [externalRouterLink]="component?.url"
+                        [id]="'link-in-wrapper-footer-country-' + i"
+                        (click)="dispatchInteractionEvent('Countries', component?.linkName)"
+                      >
+                        {{ component?.linkName }}
+                      </a>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>

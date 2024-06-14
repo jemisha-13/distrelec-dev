@@ -1,0 +1,173 @@
+import java.util.*;
+import de.hybris.platform.servicelayer.search.*;
+import de.hybris.platform.servicelayer.search.impl.*;
+import de.hybris.platform.b2b.model.*;
+import de.hybris.platform.core.*;
+import de.hybris.platform.jalo.*;
+import de.hybris.platform.jalo.user.*;
+import de.hybris.platform.jalo.flexiblesearch.*;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import de.hybris.platform.servicelayer.model.ModelService;
+import java.util.Locale;
+import de.hybris.platform.core.model.c2l.LanguageModel;
+import de.hybris.platform.servicelayer.i18n.*;
+
+  
+if (!Registry.hasCurrentTenant()) {
+    Registry.activateMasterTenant();
+}
+
+JaloSession.getCurrentSession().setUser(UserManager.getInstance().getUserByLogin("admin"));
+modelService = (ModelService) SpringUtil.getBean("modelService");
+flexibleSearchService = (FlexibleSearchService) SpringUtil.getBean("flexibleSearchService");
+commonI18NService = (CommonI18NService) SpringUtil.getBean("commonI18NService");
+
+
+synchronized replaceOslashSmall(String lang)
+{
+	
+	language = commonI18NService.getLanguage(lang);
+	locale = commonI18NService.getLocaleForLanguage(language);
+	
+	print("lang: " + language + " locale: " + locale);
+
+	query = "select {p.pk} from {Product as p} where {p.pimWebUse[" + lang + "]} like '%ø%'";
+	print(query);
+	
+	products = flexibleSearchService.search(query).getResult();
+	
+	for (product : products) {
+		product.setPimWebUse(product.getPimWebUse(locale).replace("ø", "&oslash;"), locale);
+		modelService.save(product);
+   }
+
+}
+
+synchronized replaceOslashCapital(String lang)
+{
+	
+	language = commonI18NService.getLanguage(lang);
+	locale = commonI18NService.getLocaleForLanguage(language);
+	
+	print("lang: " + language + " locale: " + locale);
+
+	query = "select {p.pk} from {Product as p} where {p.pimWebUse[" + lang + "]} like '%Ø%'";
+	print(query);
+	
+	products = flexibleSearchService.search(query).getResult();
+	
+	for (product : products) {
+		product.setPimWebUse(product.getPimWebUse(locale).replace("Ø", "&Oslash;"), locale);
+		modelService.save(product);
+   }
+
+}
+
+synchronized replacePlusMinusFor(String lang)
+{
+	
+	language = commonI18NService.getLanguage(lang);
+	locale = commonI18NService.getLocaleForLanguage(language);
+	
+	print("lang: " + language + " locale: " + locale);
+
+	query = "select {p.pk} from {Product as p} where {p.pimWebUse[" + lang + "]} like '%&#177;%'";
+	print(query);
+	
+	products = flexibleSearchService.search(query).getResult();
+	
+	for (product : products) {
+		product.setPimWebUse(product.getPimWebUse(locale).replace("&#177;", "±"), locale);
+		modelService.save(product);
+   }
+
+}
+
+synchronized replacePlusMinusWithHtml(String lang)
+{
+	
+	language = commonI18NService.getLanguage(lang);
+	locale = commonI18NService.getLocaleForLanguage(language);
+	
+	print("lang: " + language + " locale: " + locale);
+
+	query = "select {p.pk} from {Product as p} where {p.pimWebUse[" + lang + "]} like '%±%'";
+	print(query);
+	
+	products = flexibleSearchService.search(query).getResult();
+	
+	for (product : products) {
+		product.setPimWebUse(product.getPimWebUse(locale).replace("±", "&plusmn;"), locale);
+		modelService.save(product);
+   }
+
+}
+
+synchronized replaceGreaterOrEqual(String lang)
+{
+	
+	language = commonI18NService.getLanguage(lang);
+	locale = commonI18NService.getLocaleForLanguage(language);
+	
+	print("lang: " + language + " locale: " + locale);
+
+	query = "select {p.pk} from {Product as p} where {p.pimWebUse[" + lang + "]} like '%≥%'";
+	print(query);
+	
+	products = flexibleSearchService.search(query).getResult();
+	
+	for (product : products) {
+		product.setPimWebUse(product.getPimWebUse(locale).replace("≥", "&ge;"), locale);
+		modelService.save(product);
+   }
+
+}
+
+synchronized replaceLessOrEqual(String lang)
+{
+	
+	language = commonI18NService.getLanguage(lang);
+	locale = commonI18NService.getLocaleForLanguage(language);
+	
+	print("lang: " + language + " locale: " + locale);
+
+	query = "select {p.pk} from {Product as p} where {p.pimWebUse[" + lang + "]} like '%≤%'";
+	print(query);
+	
+	products = flexibleSearchService.search(query).getResult();
+	
+	for (product : products) {
+		product.setPimWebUse(product.getPimWebUse(locale).replace("≤", "&le;"), locale);
+		modelService.save(product);
+   }
+
+}
+
+synchronized replace(String lang)
+{
+	replaceOslashSmall(lang);
+	replaceOslashCapital(lang);
+	replacePlusMinusFor(lang);
+	replacePlusMinusWithHtml(lang);
+	replaceGreaterOrEqual(lang);
+	replaceLessOrEqual(lang);
+}
+
+	replace("de");
+	replace("en");
+	replace("fr");
+	replace("da");
+	replace("et");
+	replace("fi");
+	replace("fr");
+	replace("hu");
+	replace("it");
+	replace("lt");
+	replace("lv");
+	replace("nl");
+	replace("no");
+	replace("pl");
+	replace("ro");
+	replace("sk");
+	replace("sv");
+	replace("cs");

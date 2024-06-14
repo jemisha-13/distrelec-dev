@@ -1,0 +1,856 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+
+    <div class="col-sm-12 col-md-8 col-lg-9">
+      <ng-container class="account-information-main">
+        <div class="order-approval-detail-wrapper">
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-12">
+              <h1 id="orderApprovalDetailsaccountInformation_page_title">
+                {{ 'accountlist.orderHistoryList.orderDetail' | cxTranslate }}
+              </h1>
+            </div>
+          </div>
+          <div class="row mt-1 notForPrint">
+            <div class="col-md-12">
+              <app-action-message
+                id="orderDetails"
+                [type]="responseType"
+                [message]="responseMessage"
+              ></app-action-message>
+              <button
+                *ngIf="!orderDetails"
+                class="btn btn-secondary btn-gray back-button"
+                id="myAccount-orderApproval-backButton"
+                (click)="goBack()"
+              >
+                {{ 'form.back' | cxTranslate }}
+              </button>
+            </div>
+          </div>
+          <div *ngIf="loadedOrderDetails; else loadingOrderDetails">
+            <div class="row mt-5 notForPrint">
+              <div class="col-md-1 col-sm-12 mt-3">
+                <button
+                  class="btn btn-secondary btn-gray back-button"
+                  id="myAccount-orderApproval-goBackButton"
+                  (click)="goBack()"
+                >
+                  {{ 'form.back' | cxTranslate }}
+                </button>
+              </div>
+              <div class="col-sm-12 col-md-7 mt-3 cursor">
+                <img class="mr-2" (click)="printOrders()" src="app/spartacus/assets/media/general/print.svg" />
+                <img *ngIf="loadingExport" class="min-width" src="app/spartacus/assets/media/spinner.gif" />
+                <img
+                  *ngIf="!loadingExport"
+                  class="mr-2"
+                  [ngbTooltip]="downloadLinks"
+                  src="app/spartacus/assets/media/general/download.svg"
+                  tooltipClass="distrelec-tooltip-class"
+                  triggers="click:blur"
+                />
+                <img (click)="addToShoppingList()" src="app/spartacus/assets/media/general/add-to-list.svg" />
+                <label class="ml-1 cursor fs-small" (click)="addToShoppingList()">
+                  {{ 'toolsitem.add.list' | cxTranslate }}
+                </label>
+                <ng-template #downloadLinks class="cursor">
+                  <span
+                    class="text-underline"
+                    id="orderApprovalDetails-downloadxlsx"
+                    (click)="download(orderDetails?.code, 'xlsx')"
+                  >
+                    {{ 'toolsitem.save.as' | cxTranslate }} xlsx
+                  </span>
+                  <br />
+                  <span
+                    class="text-underline"
+                    id="orderApprovalDetails-downloadcsv"
+                    (click)="download(orderDetails?.code, 'csv')"
+                  >
+                    {{ 'toolsitem.save.as' | cxTranslate }} csv
+                  </span>
+                </ng-template>
+              </div>
+              <div class="col-md-4 col-sm-4 mt-3">
+                <div class="d-flex justify-content-end">
+                  <app-atc-button
+                    [id]="'orderApprovalDetails-reorder'"
+                    [shouldOpenFlyout]="true"
+                    [translationKey]="'toolsitem.reorder'"
+                    [getBulkItems]="orderEntries.bind(this)"
+                    [pageTrackingType]="itemListEntity.ORDER_APPROVAL"
+                  ></app-atc-button>
+                </div>
+              </div>
+            </div>
+            <br />
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12">
+                <h3 id="orderApprovalDetails-orderApprovalInformation">
+                  {{ 'approvalbar.orderApprovalInformation' | cxTranslate }}
+                </h3>
+                <hr />
+              </div>
+
+              <div class="col-md-12 col-sm-12">
+                <div class="row mb-2 mt-2">
+                  <div class="col-md-3 col-sm-6 col-6">
+                    <strong class="fs-twelve">
+                      <label id="orderApprovalDetails-requestedBy">{{ 'approvalbar.requestedBy' | cxTranslate }}</label>
+                    </strong>
+                    <br />
+                    <label id="orderApprovalDetails-firstName">{{ orderDetails?.b2bCustomerData?.name }}</label>
+                  </div>
+
+                  <div class="col-md-3 col-sm-6 col-6">
+                    <strong class="fs-twelve">
+                      <label id="orderApprovalDetails-requestedOn-text">
+                        {{ 'approvalbar.requestedOn' | cxTranslate }}
+                      </label>
+                    </strong>
+                    <br />
+                    <label id="orderApprovalDetails-requestedOn-value">
+                      {{ orderDetails.created | date: 'yyyy-MM-dd, HH:mm' : 'UTC' }}
+                    </label>
+                  </div>
+
+                  <div class="col-md-3 col-sm-6 col-6">
+                    <strong class="fs-twelve">
+                      <label id="orderApprovalDetails-approver-text">{{ 'approvalbar.approver' | cxTranslate }}</label>
+                    </strong>
+                    <br />
+                    <label id="orderApprovalDetails-approver-value">
+                      {{ orderDetails?.b2bCustomerData?.approvers[0].name }}
+                    </label>
+                  </div>
+
+                  <div class="col-md-3 col-sm-6 col-6">
+                    <strong class="fs-twelve">
+                      <label id="orderApprovalDetails-status-text">{{ 'approvalbar.status' | cxTranslate }}</label>
+                    </strong>
+                    <br />
+                    <ng-container
+                      *ngIf="orderDetails?.status === orderStatus.PENDING_APPROVAL"
+                      id="orderApprovalDetails-status-select"
+                    >
+                      <fa-icon [icon]="faPending" ngClass="distrelecAlert"></fa-icon>
+                      <label class="ml-2">{{ 'orderOverviewBox.state.PENDING' | cxTranslate }}</label>
+                    </ng-container>
+
+                    <ng-container *ngIf="orderDetails?.status === orderStatus.REJECTED">
+                      <fa-icon class="distrelecAlert" [icon]="orderCancelledIcon"></fa-icon>
+                      <label class="ml-2" id="orderApprovalDetails-status-rejected">
+                        {{ 'approvalbar.status.rejected' | cxTranslate }}
+                      </label>
+                    </ng-container>
+
+                    <ng-container *ngIf="orderDetails?.status === orderStatus.APPROVED">
+                      <fa-icon [icon]="checkIcon"></fa-icon>
+                      <label class="ml-2" id="orderApprovalDetails-status-approved">
+                        {{ 'checkoutorderbudgetapprovalbar.status.APPROVED' | cxTranslate }}
+                      </label>
+                    </ng-container>
+                  </div>
+
+                  <div class="col-md-3 col-sm-6 col-6">
+                    <strong class="fs-twelve">
+                      <label id="orderApprovalDetails-orderValue-text">
+                        {{ 'approvalbar.orderValue' | cxTranslate }}
+                      </label>
+                    </strong>
+                    <br />
+                    <label id="orderApprovalDetails-orderValue-value">
+                      {{ orderDetails?.totalPrice?.currencyIso }} {{ orderDetails?.totalPrice?.value | price }}
+                    </label>
+                  </div>
+
+                  <div
+                    *ngIf="orderDetails?.b2bCustomerData?.budget?.exceededYearlyBudget > 0"
+                    class="col-md-3 col-sm-6 col-6"
+                  >
+                    <strong class="fs-twelve">
+                      <label id="orderApprovalDetails-yearlyBudget-text">
+                        {{ 'approvalbar.yearlyBudget' | cxTranslate }}
+                      </label>
+                    </strong>
+                    <br />
+                    <label id="orderApprovalDetails-yearlyBudget-value">
+                      {{ orderDetails?.b2bCustomerData?.budget?.currency.isocode }}
+                      {{ orderDetails?.b2bCustomerData?.budget?.budget | price }}
+                    </label>
+                  </div>
+
+                  <div
+                    *ngIf="orderDetails?.b2bCustomerData?.budget?.exceededOrderBudget > 0"
+                    class="col-md-3 col-sm-6 col-6"
+                  >
+                    <strong class="fs-twelve">
+                      <label id="orderApprovalDetails-orderBudget">{{ 'approvalbar.orderBudget' | cxTranslate }}</label>
+                    </strong>
+                    <br />
+                    <label id="orderApprovalDetails-currencyIso">
+                      {{ orderDetails?.b2bCustomerData?.budget?.currency.isocode }}
+                      {{ orderDetails?.b2bCustomerData?.budget?.orderBudget | price }}
+                    </label>
+                  </div>
+
+                  <div class="col-md-3 col-sm-6 col-6">
+                    <strong class="fs-twelve">
+                      <label id="orderApprovalDetails-yearlyBudgetUsedBeforeOrder">
+                        {{ 'approvalbar.yearlyBudgetUsedBeforeOrder' | cxTranslate }}
+                      </label>
+                    </strong>
+                    <br />
+                    <label
+                      id="orderApprovalDetails-yearlyBudgetUsedBeforeOrder-value"
+                      [ngClass]="
+                        orderDetails?.b2bCustomerData?.budget?.yearlyBudgetUsedToDate >
+                        orderDetails?.b2bCustomerData?.budget?.budget
+                          ? 'distrelecAlert'
+                          : ''
+                      "
+                    >
+                      {{ orderDetails?.b2bCustomerData?.budget?.currency.isocode }}
+                      {{ orderDetails?.b2bCustomerData?.budget?.yearlyBudgetUsedToDate | price }}
+                    </label>
+                  </div>
+
+                  <div
+                    *ngIf="orderDetails?.b2bCustomerData?.budget?.exceededYearlyBudget > 0"
+                    class="col-md-3 col-sm-6 col-6"
+                  >
+                    <strong class="fs-twelve">
+                      <label id="orderApprovalDetails-orderExceedsYearlyBy-text">
+                        {{ 'approvalbar.orderExceedsYearlyBudgetBy' | cxTranslate }}
+                      </label>
+                    </strong>
+                    <br />
+                    <label class="distrelecAlert" id="orderApprovalDetails-orderExceedsYearlyBy-value">
+                      {{ orderDetails?.b2bCustomerData?.budget?.currency.isocode }}
+                      {{ orderDetails?.b2bCustomerData?.budget?.exceededYearlyBudget | price }}
+                    </label>
+                  </div>
+
+                  <div
+                    *ngIf="orderDetails?.b2bCustomerData?.budget?.exceededOrderBudget > 0"
+                    class="col-md-3 col-sm-6 col-6"
+                  >
+                    <strong class="fs-twelve">
+                      <label id="orderApprovalDetails-orderExceedsOrderBudgetby-text">
+                        {{ 'approvalbar.orderExceedsOrderBudgetBy' | cxTranslate }}
+                      </label>
+                    </strong>
+                    <br />
+                    <label class="distrelecAlert" id="orderApprovalDetails-orderExceedsOrderBudgetby-value">
+                      {{ orderDetails?.b2bCustomerData?.budget?.currency.isocode }}
+                      {{ orderDetails?.b2bCustomerData?.budget?.exceededOrderBudget | price }}
+                    </label>
+                  </div>
+
+                  <div
+                    *ngIf="!hasRole('b2badmingroup') && hasRole('b2bcustomergroup') && approvalData?.approvalComments"
+                    class="col-md-3 col-sm-6 col-6"
+                  >
+                    <strong class="fs-twelve">
+                      <label id="orderApprovalDetails-rejectedOn-text">
+                        {{ 'approvalbar.rejectedOn' | cxTranslate }}
+                      </label>
+                    </strong>
+                    <br />
+                    <label id="orderApprovalDetails-rejectedOn-value">
+                      {{ approvalData?.decisionDate | date: 'dd.MM.yy, HH:mm' : 'UTC' }}
+                    </label>
+                  </div>
+                  <div
+                    *ngIf="!hasRole('b2badmingroup') && hasRole('b2bcustomergroup')"
+                    class="col-md-3 col-sm-6 col-6 cursor"
+                  >
+                    <br />
+                    <div
+                      class="mr-2 tooltipDiv"
+                      [ngbTooltip]="rejectReason"
+                      tooltipClass="distrelec-tooltip-class"
+                      triggers="hover:blur"
+                    ></div>
+                    <ng-template #rejectReason>
+                      {{ approvalData?.approvalComments }}
+                    </ng-template>
+                  </div>
+                </div>
+
+                <div
+                  *ngIf="
+                    (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT') &&
+                    hasRole('b2badmingroup')
+                  "
+                  class="row mb-2 mt-2"
+                >
+                  <div class="col-md-8 col-sm-12">
+                    <strong>
+                      <label>{{ 'approvalbar.pleaseNote' | cxTranslate }}</label>
+                    </strong>
+                    <p id="orderApprovalDetails-pleaseNote-notice">
+                      {{ 'approvalbar.pleaseNote.notice' | cxTranslate }}
+                    </p>
+                  </div>
+
+                  <div class="col-md-4 col-sm-12">
+                    <button
+                      class="pl-1 btn btn-secondary btn-gray btn-reject btn-distrelec w-100 notForPrint text-left"
+                      (click)="openRejectModal()"
+                      (SaveRejectionNote)="saveApprovalRejectionNote($event)"
+                    >
+                      {{ 'approvalbar.button.reject' | cxTranslate }}
+                    </button>
+                    <br />
+                    <ng-container *ngIf="isAddToCartEnabled$ | async">
+                      <a
+                        class="col-md-12 btn btn-secondary btn-distrelec notForPrint mt-3"
+                        id="orderApprovalDetails-approver-buttonAnchor"
+                        (click)="scrollToElement(lastSection)"
+                      >
+                        <label
+                          class="text-truncate col-md-9 pl-0 ml-1 mr-0 pr-0 float-left"
+                          id="orderApprovalDetails-approverButton"
+                        >
+                          {{ 'approvalbar.button.approveAndSubmit' | cxTranslate }}
+                        </label>
+                        <fa-icon class="col-md-2 pl-0 ml-0" [icon]="faArrowCircleDown"></fa-icon>
+                      </a>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="desktop-only" />
+            <div class="desktop-only">
+              <div class="row mt-4">
+                <div class="col-sm-2 col-md-7"></div>
+                <div class="col-sm-2 col-md-1">
+                  <label class="label-bold" id="orderApprovalDetails-listQuantity">
+                    {{ 'form.quantity' | cxTranslate }}
+                  </label>
+                </div>
+                <div class="col-sm-2 col-md-2">
+                  <label class="label-bold float-md-right" id="orderApprovalDetails-mySinglePrice">
+                    {{ 'form.my_single_price' | cxTranslate }}
+                  </label>
+                </div>
+                <div class="col-sm-2 col-md-2">
+                  <label class="label-bold float-md-right" id="orderApprovalDetails-invoiceSubTotal">
+                    {{ 'form.subtotal' | cxTranslate }}
+                  </label>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div *ngFor="let entry of orderDetails.entries">
+              <div class="row mt-2">
+                <div class="col-sm-12 col-md-6">
+                  <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                      <div class="cell">
+                        <div class="wrap-image">
+                          <img
+                            class="img-thumbnail"
+                            id="orderApprovalDetails-imgThumbnail"
+                            src="{{
+                              entry?.product?.images &&
+                              entry?.product?.images.length > 0 &&
+                              entry?.product?.images[0].url
+                                ? entry?.product?.images[0].url
+                                : '/app/spartacus/assets/media/img/missing_portrait_small.png'
+                            }}"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div class="col-md-12">
+                        <strong class="redFont" id="orderApprovalDetails-redFont">
+                          <a
+                            class="editLink"
+                            id="orderApprovalDetails-productNameAnchor"
+                            [routerLink]="entry?.product?.url"
+                          >
+                            {{ entry?.product?.name }}
+                          </a>
+                        </strong>
+                      </div>
+                      <div class="col-sm-4 d-md-inline-block mt-3">
+                        <strong class="fs-small" id="orderApprovalDetails-artNumber">
+                          {{ 'form.art_nr' | cxTranslate }}
+                        </strong>
+                        <br />
+                        <label class="fs-small" id="orderApprovalDetails-elfaArticleNumber">
+                          {{ entry?.product?.codeErpRelevant }}
+                        </label>
+                      </div>
+                      <span *ngIf="entry?.product?.typeName || entry?.product?.distManufacturer?.name">
+                        <div class="col-sm-4 d-md-inline-block mt-3">
+                          <strong class="fs-small" id="orderApprovalDetails-typeName-text">
+                            {{ 'form.mpn' | cxTranslate }}
+                          </strong>
+                          <br />
+                          <label class="fs-small" id="orderApprovalDetails-typeName-value">
+                            {{ entry?.product?.typeName }}
+                          </label>
+                        </div>
+                        <div class="col-sm-4 d-md-inline-block mt-3">
+                          <strong class="fs-small" id="orderApprovalDetails-listManufacturer">
+                            {{ 'form.manufacturer' | cxTranslate }}
+                          </strong>
+                          <br />
+                          <label class="fs-e-small" id="orderApprovalDetails-distManufacturer">
+                            {{ entry?.product?.distManufacturer?.name }}
+                          </label>
+                        </div>
+                      </span>
+                      <div class="col-md-12">
+                        <strong class="fs-small" id="orderApprovalDetails-listReference">
+                          {{ 'form.your_reference' | cxTranslate }}
+                        </strong>
+                        <br />
+                        <label class="fs-e-small" id="orderApprovalDetails-customerReference">
+                          {{ entry?.customerReference }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-1">
+                  <label class="fs-small" id="orderApprovalDetails-deliveryDate">
+                    {{ entry?.deliveryDate | date: 'MMM dd' }}
+
+                    {{ entry?.deliveryDate | date: 'yyyy' }}
+                  </label>
+                </div>
+                <div class="col-sm-12 col-md-1">
+                  <label class="fs-small" id="orderApprovalDetails-quantity">{{ entry?.quantity }}</label>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <label class="fs-small float-md-right" id="orderApprovalDetails-currencyIso-text">
+                    {{ entry?.basePrice?.currencyIso }}
+                    {{ entry?.basePrice?.value | price }}
+                  </label>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <label class="fs-small float-md-right" id="orderApprovalDetails-currencyIso-value">
+                    {{ entry?.totalPrice?.currencyIso }} {{ entry?.totalPrice?.value | price }}
+                  </label>
+                </div>
+              </div>
+              <hr class="desktop-only" />
+            </div>
+
+            <!--entry loop ends here-->
+            <div class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4"></div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-8">
+                <div class="row">
+                  <div class="col-md-8">
+                    <h3 id="orderApprovalDetails-order-ref-purchase">{{ 'form.order_ref_purchase' | cxTranslate }}</h3>
+                  </div>
+
+                  <div class="col-md-2">
+                    <a
+                      class="distrelecLink"
+                      id="orderApprovalDetails-editButton"
+                      (click)="showEditOrderReferenceField = !showEditOrderReferenceField"
+                    >
+                      {{ 'form.edit' | cxTranslate }}
+                    </a>
+                  </div>
+                </div>
+                <div *ngIf="showEditOrderReferenceField" class="row">
+                  <div class="col-md-6">
+                    <input class="form-control" id="order-reference" [(ngModel)]="orderReferenceNumber" [type]="text" />
+                  </div>
+                  <div class="col-md-6">
+                    <button id="orderApproval-btnSave" (click)="updateOrderReferenceNumber()">
+                      {{ 'form.save' | cxTranslate }}
+                    </button>
+                  </div>
+                </div>
+                <div *ngIf="!showEditOrderReferenceField && orderReferenceNumber" class="row">
+                  <div class="col-md-6">
+                    <label id="orderapproval.order-reference-number">{{ orderReferenceNumber }}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="pricing">
+                  <div class="">
+                    <div class="pricing-heading">
+                      <label class="float-left" id="orderApprovalDetails-invoiceSubTotal">
+                        <strong>{{ 'form.subtotal' | cxTranslate }}</strong>
+                      </label>
+                    </div>
+                    <div class="pricing-value">
+                      <label class="float-right" id="orderApprovalDetails-invoiceSubTotal-value">
+                        <strong>
+                          {{ orderDetails?.subTotal?.currencyIso }} {{ orderDetails?.subTotal?.value | price }}
+                        </strong>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="orderDetails?.deliveryMode" class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <div class="pricing">
+                  <div class="pricing-line">
+                    <div class="pricing-heading">
+                      <label
+                        class="float-left"
+                        id="orderApprovalDetails-deliveryCost"
+                        [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                      >
+                        {{ 'form.shipping' | cxTranslate }}
+                      </label>
+                    </div>
+                    <div class="pricing-value">
+                      <label class="float-right" id="orderApprovalDetails-deliveryCost-value">
+                        {{ orderDetails?.deliveryCost?.currencyIso }}
+                        {{ orderDetails?.deliveryCost?.value | price }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="orderDetails?.paymentMode && orderDetails?.paymentCost?.value > 0" class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <div class="pricing">
+                  <div class="pricing-line">
+                    <div class="pricing-heading">
+                      <label
+                        class="float-left"
+                        id="orderApprovalDetails-paymentCost"
+                        [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                      >
+                        {{ orderDetails?.paymentMode?.name }}
+                      </label>
+                    </div>
+                    <div class="pricing-value">
+                      <label class="float-right" id="orderApprovalDetails-paymentCost-value">
+                        {{ orderDetails?.paymentCost?.currencyIso }}
+                        {{ orderDetails?.paymentCost?.value | price }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <div class="pricing">
+                  <div class="pricing-line">
+                    <div class="pricing-heading">
+                      <label
+                        class="float-left"
+                        id="orderApprovalDetails-pricecalbox"
+                        [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                      >
+                        {{ 'form.tax' | cxTranslate }}
+                      </label>
+                    </div>
+                    <div class="pricing-value">
+                      <label class="float-right" id="orderApprovalDetails-totalTaxCurrencyIso">
+                        {{ orderDetails?.totalTax?.currencyIso }} {{ orderDetails?.totalTax?.value | price }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <div class="pricing">
+                  <div class="pricing-line">
+                    <div class="pricing-heading">
+                      <label
+                        class="float-left"
+                        id="orderApprovalDetails-totalPayable-text"
+                        [ngClass]="(isMobileBreakpoint$ | async) ? 'ml-2' : ''"
+                      >
+                        <strong class="redFont">{{ 'form.total_payable' | cxTranslate }}</strong>
+                      </label>
+                    </div>
+                    <div class="pricing-value">
+                      <label class="float-right" id="orderApprovalDetails-totalPayableValue">
+                        <strong class="redFont">
+                          {{ orderDetails?.totalPrice?.currencyIso }} {{ orderDetails?.totalPrice?.value | price }}
+                        </strong>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div #lastSection class="row mt-4 mb-4 border-top">
+            <div class="col-md-2 mt-3">
+              <h3 id="orderApprovalDetails-billingAddress">{{ 'form.billing_address' | cxTranslate }}</h3>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-billingAddressLine1">
+                {{ orderDetails?.billingAddress?.line1 }}
+              </label>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-billingAddressLine2">
+                {{ orderDetails?.billingAddress?.line2 }}
+              </label>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-billingAddressTown">
+                {{ orderDetails?.billingAddress?.town }}
+              </label>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-billingAddressPostalCode">
+                {{ orderDetails?.billingAddress?.postalCode }}
+              </label>
+              <br />
+            </div>
+            <div *ngIf="orderDetails && orderDetails.pickupLocation" class="col-md-2 mt-3">
+              <h3 id="orderApprovalDetails-pickupLocation">{{ 'form.pickup_location' | cxTranslate }}</h3>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-pickupLocationName">
+                <strong>{{ orderDetails.pickupLocation.name }}</strong>
+              </label>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-pickupLocationStreet">
+                {{ 'checkout.address.street' | cxTranslate }} {{ orderDetails.pickupLocation.streetName }}
+                {{ orderDetails.pickupLocation.streetNumber }}
+              </label>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-pickupLocationTown">
+                {{ 'checkout.address.city' | cxTranslate }} {{ orderDetails.pickupLocation.town }}
+              </label>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-pickupLocationPostalCode">
+                {{ 'address.postcode' | cxTranslate }} {{ orderDetails.pickupLocation.postalCode }}
+              </label>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-pickupLocationPhone">
+                {{ 'checkout.address.phone' | cxTranslate }} {{ orderDetails.pickupLocation.phone }}
+              </label>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-pickupLocationOpeningsHourMoFr">
+                {{ 'address.shipping.opening.hours' | cxTranslate }}: {{ 'checkout.address.mo2fr' | cxTranslate }}
+                {{ orderDetails.pickupLocation.openingsHourMoFr }}
+              </label>
+              <br />
+              <span *ngIf="orderDetails.openingsHourSa">
+                <label class="mb-0" id="orderApprovalDetails-pickupLocationOpeningsHourSa">
+                  {{ 'checkout.address.saturday' | cxTranslate }} {{ orderDetails.pickupLocation.openingsHourSa }}
+                </label>
+                <br />
+              </span>
+            </div>
+            <div *ngIf="orderDetails && !orderDetails.pickupLocation" class="col-md-2 mt-3">
+              <h3 id="orderApprovalDetails-deliveryAddress">{{ 'form.delivery_address' | cxTranslate }}</h3>
+              <br />
+              <span *ngIf="orderDetails?.customerType === 'B2C'" id="spn-orderApprovalDetails-deliveryAddressFullName">
+                <label class="mb-0" id="orderApprovalDetails-deliveryAddressFullName">
+                  {{ orderDetails?.deliveryAddress?.title }} {{ orderDetails?.deliveryAddress?.firstName }}
+                  {{ orderDetails?.deliveryAddress?.lastName }}
+                </label>
+              </span>
+              <span
+                *ngIf="orderDetails?.deliveryAddress?.companyName && orderDetails?.customerType === 'B2B'"
+                id="spn-orderApprovalDetails-deliveryAddressCompanyName"
+              >
+                <label class="mb-0" id="orderApprovalDetails-deliveryAddressCompanyName">
+                  {{ orderDetails?.deliveryAddress?.companyName }}
+                </label>
+                <br />
+              </span>
+              <span
+                *ngIf="orderDetails?.deliveryAddress?.companyName2 && orderDetails?.customerType === 'B2B'"
+                id="spn-orderApprovalDetails-deliveryAddressCompanyName2"
+              >
+                <label class="mb-0" id="orderApprovalDetails-deliveryAddressCompanyName2">
+                  {{ orderDetails?.deliveryAddress?.companyName2 }}
+                </label>
+                <br />
+              </span>
+              <span *ngIf="orderDetails?.deliveryAddress?.line1" id="spn-orderApprovalDetails-deliveryAddressLine1">
+                <label class="mb-0" id="orderApprovalDetails-deliveryAddressLine1">
+                  {{ orderDetails?.deliveryAddress?.line1 }} {{ orderDetails?.deliveryAddress?.line2 }}
+                </label>
+                <br />
+              </span>
+              <span
+                *ngIf="orderDetails?.deliveryAddress?.postalCode"
+                id="spn-orderApprovalDetails-deliveryAddressPostalCode"
+              >
+                <label class="mb-0" id="orderApprovalDetails-deliveryAddressPostalCode">
+                  {{ orderDetails?.deliveryAddress?.postalCode }} {{ orderDetails?.deliveryAddress?.town }}
+                </label>
+                <br />
+              </span>
+              <span
+                *ngIf="orderDetails?.deliveryAddress?.country?.name"
+                id="spn-orderApprovalDetails-deliveryAddressCountry"
+              >
+                <label class="mb-0" id="orderApprovalDetails-deliveryAddressCountry">
+                  {{ orderDetails?.deliveryAddress?.country?.name }}
+                </label>
+                <br />
+              </span>
+            </div>
+
+            <div class="col-md-2 mt-3">
+              <h3 id="orderApprovalDetails-shippingMethod">
+                {{ 'checkoutordersummaryinfobox.shippingMethod.title' | cxTranslate }}
+              </h3>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-deliveryMode">{{ orderDetails?.deliveryMode?.name }}</label>
+              <br />
+              <label
+                *ngIf="
+                  orderDetails?.deliveryCost &&
+                  (!orderDetails.deliveryCost.value || orderDetails.deliveryCost.value === 0)
+                "
+                class="mb-0"
+                id="orderApprovalDetails-basketPageFree"
+              >
+                {{ 'checkoutdeliveryoptionslist.placeholder' | cxTranslate }}
+              </label>
+              <label
+                *ngIf="orderDetails?.deliveryCost?.value > 0"
+                class="mb-0"
+                id="orderApprovalDetails-currencyIsoAndValue"
+              >
+                {{ orderDetails?.deliveryCost?.currencyIso }}
+                {{ orderDetails?.deliveryCost?.value | price }}
+              </label>
+            </div>
+
+            <div class="col-md-2 mt-3">
+              <h3 id="orderApprovalDetails-paymentMethod">
+                {{ 'checkoutordersummaryinfobox.paymentMethod.title' | cxTranslate }}
+              </h3>
+              <br />
+              <label class="mb-0" id="orderApprovalDetails-paymentMethodMode">
+                {{ orderDetails?.paymentMode?.name }}
+              </label>
+              <br />
+              <label
+                *ngIf="
+                  orderDetails?.paymentCost && (!orderDetails.paymentCost.value || orderDetails.paymentCost.value === 0)
+                "
+                class="mb-0"
+                id="orderApprovalDetails-paymentCostFormatted"
+              >
+                {{ 'checkoutpaymentoptionslist.placeholder' | cxTranslate }}
+              </label>
+              <label
+                *ngIf="orderDetails?.paymentCost?.value > 0"
+                class="mb-0"
+                id="orderApprovalDetails-paymentCostFormattedValues"
+              >
+                {{ orderDetails?.paymentCost?.currencyIso }}
+                {{ orderDetails?.paymentCost?.value | price }}
+              </label>
+              <br />
+              <label
+                *ngIf="
+                  orderDetails?.paymentMode?.paymentCost &&
+                  (!orderDetails.paymentMode.paymentCost.value || orderDetails.paymentMode.paymentCost.value === 0)
+                "
+                class="mb-0"
+                id="orderApprovalDetails-paymentPercentageFormatted"
+              >
+                &nbsp;
+              </label>
+              <label
+                *ngIf="orderDetails?.paymentMode?.paymentCost?.value > 0"
+                class="mb-0"
+                id="orderApprovalDetails-paymentPercentageFormattedValues"
+              >
+                {{ orderDetails?.paymentMode?.paymentCost?.value | price }}
+                {{ 'checkoutordersummaryinfobox.paymentMethod.percentage' | cxTranslate }}
+              </label>
+            </div>
+            <div
+              #termsAndConditions
+              *ngIf="
+                (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT') &&
+                  hasRole('b2badmingroup') &&
+                  isAddToCartEnabled$ | async
+              "
+              class="col-md-4"
+            >
+              <div class="row mt-3 border bg-light">
+                <strong class="ml-2">
+                  <label id="orderApprovalDetails-termsAndConditions">
+                    {{ 'cart.pricecalcbox.termsAndCond' | cxTranslate }}
+                  </label>
+                </strong>
+                <div class="col-md-10">
+                  <label id="orderApprovalDetails-termsAndConditions-value" for="chk-termsandConditions">
+                    <input
+                      class="feature-checkbox mr-2"
+                      id="chk-termsandConditions"
+                      [(ngModel)]="termsAndConditionCheck"
+                      type="checkbox"
+                    />
+                    <span [innerHtml]="'cart.pricecalcbox.acceptTerms' | cxTranslate"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="row mt-4">
+                <div class="col-md-12 pl-0 pr-0">
+                  <button
+                    class="btn btn-secondary btn-approval btn-distrelec notForPrint text-truncate"
+                    id="btn-approveAndSubmit"
+                    [disabled]="!termsAndConditionCheck ? 'disabled' : null"
+                    (click)="approveAndSubmit()"
+                  >
+                    <fa-icon class="float-left col-md-2 col-2" [icon]="faShoppingCart"></fa-icon>
+                    {{ 'approvalbar.button.approveAndSubmit' | cxTranslate }}
+                    <fa-icon class="float-right col-md-2 col-2" [icon]="faArrowCircleRight"></fa-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #loadingOrderDetails>
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+              <img src="app/spartacus/assets/media/spinner.gif" />
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

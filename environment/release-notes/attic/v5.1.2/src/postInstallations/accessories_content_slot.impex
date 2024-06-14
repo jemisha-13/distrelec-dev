@@ -1,0 +1,15 @@
+
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(uid,$contentCV)
+;;AccessoriesSlot;Cart Page Accessories Slot;true;CertLabelEhiComponent
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ProductDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;AccessoriesSlot-ProductDetailsPageTemplate;Accessories;;AccessoriesSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CartPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;AccessoriesSlot-CartPageTemplate;Accessories;;AccessoriesSlot;false

@@ -1,0 +1,139 @@
+<form [formGroup]="resetPwdForm">
+  <div class="ch__component__title">
+    <h2 id="checkout.login.reset_pwd_title">{{ 'checkout.login.reset_pwd_title' | cxTranslate }}</h2>
+    <p id="checkout.login.reset_pwd_subtitle">
+      {{ 'login.reset_pwd_text' | cxTranslate }}
+    </p>
+  </div>
+  <div class="row ch__component__form-group">
+    <div class="col-12 ch__component__label">
+      <label id="login.password">
+        {{ 'login.password' | cxTranslate }}
+      </label>
+    </div>
+    <div class="col-12 ch__component__field">
+      <div class="d-flex">
+        <input
+          class="login__body--form-input"
+          id="checkoutResetPwd1"
+          [type]="isPasswordVisible ? 'text' : 'password'"
+          [class.is-invalid]="resetPwdForm.get('pwd1').value && resetPwdForm.get('pwd1').errors"
+          [placeholder]="'login.password' | cxTranslate"
+          [type]="isPasswordVisible ? 'text' : 'password'"
+          autocomplete="password"
+          formControlName="pwd1"
+          minlength="6"
+        />
+        <button
+          *ngIf="!isPasswordVisible"
+          class="btn pwd-icon-btn"
+          id="seeConfirmPwdBtn"
+          [class.left]="
+            resetPwdForm.get('pwd1').touched ||
+            resetPwdForm.get('pwd1').valid ||
+            this.resetPwdForm.get('pwd1').value !== this.resetPwdForm.get('pwd2').value
+          "
+          (click)="isPasswordVisible = !isPasswordVisible"
+          tabindex="-1"
+        >
+          <fa-icon id="faEyeSlashConfirmPwd" [icon]="faEye"></fa-icon>
+        </button>
+        <button
+          *ngIf="isPasswordVisible"
+          class="btn pwd-icon-btn"
+          [class.left]="
+            resetPwdForm.get('pwd1').touched ||
+            resetPwdForm.get('pwd1').valid ||
+            this.resetPwdForm.get('pwd1').value !== this.resetPwdForm.get('pwd2').value
+          "
+          (click)="isPasswordVisible = !isPasswordVisible"
+          tabindex="-1"
+        >
+          <fa-icon id="faEyeConfirmPwd" [icon]="faEyeSlash"></fa-icon>
+        </button>
+      </div>
+      <div>
+        <small
+          id="validationsMinPwd6"
+          [class.text-danger]="resetPwdForm.get('pwd1').value && resetPwdForm.get('pwd1').errors"
+        >
+          {{ 'validations.pwd_error_required' | cxTranslate }}
+        </small>
+      </div>
+    </div>
+  </div>
+  <div class="row ch__component__form-group">
+    <div class="col-12 ch__component__label">
+      <label class="register__form__holder--title" id="form.confirm_pwd">{{ 'form.confirm_pwd' | cxTranslate }}</label>
+    </div>
+    <div class="col-12 ch__component__field">
+      <div class="d-flex">
+        <input
+          class="login__body--form-input"
+          id="checkoutResetPwd2"
+          [type]="isConfrmPasswordVisible ? 'text' : 'password'"
+          [placeholder]="'login.password' | cxTranslate"
+          [class.is-invalid]="resetPwdForm.get('pwd2').value && resetPwdForm.get('pwd2').errors"
+          autocomplete="password"
+          formControlName="pwd2"
+        />
+        <button
+          *ngIf="!isConfrmPasswordVisible"
+          class="btn pwd-icon-btn"
+          id="seeConfirmPwdBtn"
+          [class.left]="
+            resetPwdForm.get('pwd2').touched ||
+            resetPwdForm.get('pwd2').valid ||
+            this.resetPwdForm.get('pwd2').value !== this.resetPwdForm.get('pwd1').value
+          "
+          (click)="isConfrmPasswordVisible = !isConfrmPasswordVisible"
+          tabindex="-1"
+        >
+          <fa-icon id="faEyeSlashConfirmPwd" [icon]="faEye"></fa-icon>
+        </button>
+        <button
+          *ngIf="isConfrmPasswordVisible"
+          class="btn pwd-icon-btn"
+          [class.left]="
+            resetPwdForm.get('pwd2').touched ||
+            resetPwdForm.get('pwd2').valid ||
+            this.resetPwdForm.get('pwd2').value !== this.resetPwdForm.get('pwd1').value
+          "
+          (click)="isConfrmPasswordVisible = !isConfrmPasswordVisible"
+          tabindex="-1"
+        >
+          <fa-icon id="faEyeConfirmPwd" [icon]="faEyeSlash"></fa-icon>
+        </button>
+      </div>
+      <div *ngIf="resetPwdForm.get('pwd2').value && resetPwdForm.get('pwd2').errors">
+        <small class="text-danger" id="validations.enter_pwd">{{ 'validations.enter_pwd' | cxTranslate }}</small>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 ch__component__submit">
+      <button
+        *ngIf="!(isCaptchaDisabled_ | async)"
+        class="btn forgot-pwd-button"
+        id="continueToCheckoutButtonReturningCustomer"
+        (click)="captchaRef.execute()"
+      >
+        {{ 'checkout.login.reset_pwd_title' | cxTranslate }}
+      </button>
+      <button
+        *ngIf="isCaptchaDisabled_ | async"
+        class="btn forgot-pwd-button"
+        id="continueToCheckoutButtonReturningCustomer"
+        (click)="resetPwd()"
+      >
+        {{ 'checkout.login.reset_pwd_title' | cxTranslate }}
+      </button>
+      <re-captcha #captchaRef="reCaptcha" (resolved)="$event && resetPwd($event)" size="invisible"></re-captcha>
+    </div>
+    <div class="col-12 ch__component__back-to-login">
+      <button class="btn" id="login.back_to_login" (click)="backToLogin()">
+        {{ 'login.back_to_login' | cxTranslate }}
+      </button>
+    </div>
+  </div>
+</form>

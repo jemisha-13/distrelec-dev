@@ -1,0 +1,8 @@
+# Cleanup CronJobs
+INSERT_UPDATE DistGenericCleanUpCronJob;code[unique=true];job(code)[unique=true];active[default=true];sessionUser(uid);logToDatabase;logToFile;flexibleSearchStatement;maxDaysToKeep;sessionLanguage(isoCode)[default=en];nodeID
+;distCleanUpQuoteCountCronJob;distGenericCleanUpJob;;technicalCleanUpUser;false;true;SELECT {pk} FROM {DistB2BQuoteLimit} WHERE modifiedTS < ?now AND modifiedTS < ?nowMinusMaxDaysToKeep;1;;0
+
+
+INSERT_UPDATE Trigger;code[unique=true];cronjob(code)[unique = true]	; cronExpression
+                     ;distCleanUpQuoteCountCronJobTrigger;distCleanUpQuoteCountCronJob;0 5 0 ? * * *
+

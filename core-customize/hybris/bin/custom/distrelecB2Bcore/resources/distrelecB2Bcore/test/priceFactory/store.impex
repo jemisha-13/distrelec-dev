@@ -1,0 +1,30 @@
+# 
+# Create the Distrelec CH BaseStore
+#
+
+$productCatalog = testCatalog
+
+$storeUidB2C = distrelec_CH_b2c
+$storeUidB2B = distrelec_CH_b2b
+$languages = en, de, fr
+$defaultLanguage = de
+$deliveryCountries = CH
+$defaultCurrency = CHF
+
+INSERT_UPDATE Currency; isocode[unique = true]
+                      ; CHF
+
+INSERT_UPDATE Country; isocode[unique = true]
+                     ; CH
+
+INSERT_UPDATE Catalog; id[unique = true]; name[lang = en] ; defaultCatalog
+                     ; $productCatalog  ; $productCatalog ; true ;
+
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;languages(isocode)
+                            ;$productCatalog;Staged;false;$languages
+                            ;$productCatalog;Online;true;$languages
+
+# Base Store
+INSERT_UPDATE BaseStore; uid[unique = true]; catalogs(id)    ; net   ; channel(code); storelocatorDistanceUnit(code); defaultCurrency(isocode); languages(isocode); defaultLanguage(isocode); deliveryCountries(isocode)
+                       ; $storeUidB2C      ; $productCatalog ; false ; B2C          ; km                            ; $defaultCurrency        ; $languages        ; $defaultLanguage        ; $deliveryCountries
+                       ; $storeUidB2B      ; $productCatalog ; true  ; B2B          ; km                            ; $defaultCurrency        ; $languages        ; $defaultLanguage        ; $deliveryCountries

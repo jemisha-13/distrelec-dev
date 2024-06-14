@@ -1,0 +1,22 @@
+# Create the Script
+INSERT_UPDATE Script; code[unique = true]; content                                                                                               ; active[unique = true, default = true]
+                    ; taxChScript        ; "import de.hybris.platform.commerceservices.setup.SetupImpexService
+                                            import de.hybris.platform.commerceservices.setup.SetupSyncJobService
+                                            SetupImpexService impexService = spring.getBean('defaultSetupImpexService')
+                                            impexService.importImpexFile('/distrelecpatches/releases/releaser2_4/patch_patch_32548/global/32548-tax-ch.impex', true)
+                                            return 'FINISHED'" ;
+
+
+
+
+# Create the Scripting Job
+INSERT_UPDATE ScriptingJob; code[unique = true]; scriptURI
+                          ; taxChScriptingJob  ; model://taxChScript
+
+# Create the CronJob
+INSERT_UPDATE CronJob; code[unique = true]; job(code)         ; active; sessionLanguage(isocode)
+                     ; taxChCronJob       ; taxChScriptingJob ; true  ; en
+
+# Set the Trigger for the CronJob
+INSERT_UPDATE Trigger; cronJob(code)[unique = true]; cronExpression       ; relative ; active
+                     ; taxChCronJob                ; 0 30 23 31 12 ? 2023 ; false    ; true

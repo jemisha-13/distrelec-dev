@@ -1,0 +1,73 @@
+<div class="gallery-preview">
+  <div class="gallery-preview__backdrop" (click)="onClosePreview()">
+    <div class="gallery-preview__lightbox">
+      <div class="content" (click)="$event.stopPropagation()">
+
+        @if (showCount) {
+          <span class="count">{{ currentIndex + 1 }} / {{ data.length }}</span>
+        }
+
+        <button class="close-btn" (click)="onClosePreview()">
+          <fa-icon class="times-icon" [icon]="faTimes"></fa-icon>
+        </button>
+
+        @if (controls && data.length > 1) {
+          <button class="btn-lightbox-carousel btn-prev" (click)="prevImage()">
+            <fa-icon class="fa-arrow" [icon]="faAngleLeft"></fa-icon>
+          </button>
+
+          <button class="btn-lightbox-carousel btn-next" (click)="nextImage()">
+            <fa-icon class="fa-arrow" [icon]="faAngleRight"></fa-icon>
+          </button>
+        }
+
+        @if (data[currentIndex].type === 'image') {
+          <div class="image">
+            <img
+              id="current-lightbox-image"
+              [class.enlarged-image]="isZoomed"
+              [src]="data[currentIndex].source"
+              (click)="this.isZoomed = !this.isZoomed"
+            />
+          </div>
+        }
+
+        @if (data[currentIndex].type === 'video') {
+          <div>
+            <iframe
+              class="video-frame"
+              [src]="data[currentIndex].safeResourceUrl"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          </div>
+        }
+
+        @if (breakpoint$ | async; as breakpoint) {
+          <div class="image-gallery">
+            @for (d of getDisplayedItems(breakpoint); track $index) {
+              @if (d.type === 'image') {
+                <img
+                  [class.selected]="data[currentIndex].source === d.source"
+                  [src]="d.source"
+                  (click)="onPreview(d.source)"
+                />
+              }
+              @if (d.type === 'video') {
+                <a class="item video" [id]="'video_link_' + $index">
+                  <div
+                    class="video-icon"
+                    [class.selected]="data[currentIndex].source === d.source"
+                    (click)="onPreview(d.source)"
+                  >
+                    <app-video-holder></app-video-holder>
+                  </div>
+                </a>
+              }
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

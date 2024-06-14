@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="commerceWebServicesFilterChainV2" class="de.hybris.platform.servicelayer.web.PlatformFilterChain">
+        <constructor-arg>
+            <ref bean="commerceWebServicesFilterChainListV2"/>
+        </constructor-arg>
+    </bean>
+
+    <alias name="defaultCommerceWebServicesFilterChainListV2" alias="commerceWebServicesFilterChainListV2"/>
+    <util:list id="defaultCommerceWebServicesFilterChainListV2">
+        <!-- filter that catches and resolves exceptions thrown from other filters -->
+        <ref bean="exceptionTranslationFilter"/>
+
+        <!-- generic platform filters -->
+        <ref bean="occCorsFilter"/>
+        <ref bean="log4jFilter"/>
+        <ref bean="restSessionFilterV2"/>
+
+        <!-- occ v2 WebAppMediaFilter -->
+        <ref bean="polyglotPersistenceCallbackFilter"/>
+        <ref bean="commerceWebServicesV2WebAppMediaFilter"/>
+
+        <!-- commerceWebservices filters -->
+        <ref bean="baseSiteMatchingFilter"/>
+        <ref bean="countryMatchingFilter"/>
+
+        <!-- Security -->
+        <ref bean="springSecurityFilterChain"/>
+        <ref bean="userMatchingFilter"/>
+
+        <!-- Anonymous Consents -->
+        <ref bean="commerceWebServicesConsentFilterV2"/>
+
+        <!-- Matching filters -->
+        <ref bean="channelMatchingFilter"/>
+        <ref bean="commerceWebServicesEurope1AttributesFilterV2"/>
+        <ref bean="commerceWebServicesSessionLanguageFilterV2"/>
+        <ref bean="commerceWebServicesSessionCurrencyFilterV2"/>
+        <ref bean="cartMatchingFilter"/>
+
+        <!-- Environment filters -->
+        <ref bean="runtimeEnvironmentFilter" />
+    </util:list>
+
+    <alias alias="exceptionTranslationFilter" name="defaultExceptionTranslationFilter"/>
+    <bean id="defaultExceptionTranslationFilter"
+          class="de.hybris.platform.webservicescommons.filter.ExceptionTranslationFilter">
+        <property name="restHandlerExceptionResolver" ref="restHandlerExceptionResolverV2"/>
+    </bean>
+
+    <alias alias="userMatchingFilter" name="defaultUserMatchingFilter"/>
+    <bean id="defaultUserMatchingFilter" class="com.namics.distrelec.occ.core.v2.filter.UserMatchingFilter">
+        <property name="regexp" value="^/[^/]+/(?:users|orgUsers)/([^/]+)"/>
+        <property name="userService" ref="userService"/>
+        <property name="sessionService" ref="sessionService"/>
+        <property name="userMatchingService" ref="wsUserMatchingService"/>
+    </bean>
+
+    <alias alias="restSessionFilterV2" name="defaultRestSessionFilterV2"/>
+    <bean id="defaultRestSessionFilterV2" class="de.hybris.platform.webservicescommons.filter.RestSessionFilter">
+        <property name="sessionService" ref="sessionService"/>
+    </bean>
+
+    <bean id="commerceWebServicesEurope1AttributesFilterV2"
+          class="com.namics.distrelec.occ.core.filter.Europe1AttributesFilter">
+        <property name="baseStoreService" ref="baseStoreService"/>
+        <property name="sessionService" ref="sessionService"/>
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+        <property name="userService" ref="userService"/>
+    </bean>
+
+    <bean id="commerceWebServicesSessionCurrencyFilterV2"
+          class="com.namics.distrelec.occ.core.filter.SessionCurrencyFilter">
+        <property name="contextInformationLoader" ref="wsContextInformationLoaderV2"/>
+    </bean>
+
+    <bean id="commerceWebServicesSessionLanguageFilterV2"
+          class="com.namics.distrelec.occ.core.filter.SessionLanguageFilter">
+        <property name="contextInformationLoader" ref="wsContextInformationLoaderV2"/>
+    </bean>
+
+    <alias alias="cartMatchingFilter" name="defaultCartMatchingFilter"/>
+    <bean id="defaultCartMatchingFilter" class="com.namics.distrelec.occ.core.v2.filter.CartMatchingFilter">
+        <property name="regexp" value="^/[^/]+/(?:users|orgUsers)/[^/]+/carts/([^/]+)"/>
+        <property name="cartLoaderStrategy" ref="cartLoaderStrategy"/>
+        <property name="cartRefreshedByDefault" value="${distrelecB2BOCC.cart.refreshed.by.default}"/>
+        <property name="userService" ref="userService"/>
+        <property name="sessionService" ref="sessionService"/>
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+        <property name="cartService" ref="cartService" />
+    </bean>
+
+    <alias alias="baseSiteMatchingFilter" name="defaultBaseSiteMatchingFilter"/>
+    <bean id="defaultBaseSiteMatchingFilter" class="com.namics.distrelec.occ.core.v2.filter.BaseSiteMatchingFilter">
+        <property name="regexp" value="^/(?!(swagger)|(.*api-docs)|(csrf)|(webjars)|(basesites))([^/]+)"/>
+        <property name="baseSiteService" ref="baseSiteService"/>
+        <property name="namicsStoreSessionFacade" ref="namicsStoreSessionFacade"/>
+    </bean>
+
+    <alias alias="countryMatchingFilter" name="defaultCountryMatchingFilter"/>
+    <bean id="defaultCountryMatchingFilter" class="com.namics.distrelec.occ.core.v2.filter.CountryMatchingFilter">
+        <property name="regexp" value="^/(?!(swagger)|(.*api-docs)|(csrf)|(webjars)|(basesites))([^/]+)"/>
+        <property name="storeSessionFacade" ref="namicsStoreSessionFacade"/>
+    </bean>
+
+    <alias alias="channelMatchingFilter" name="defaultChannelMatchingFilter"/>
+    <bean id="defaultChannelMatchingFilter" class="com.namics.distrelec.occ.core.v2.filter.ChannelMatchingFilter"/>
+
+    <bean id="commerceWebServicesConsentFilterV2" class="com.namics.distrelec.occ.core.filter.ConsentFilter">
+        <property name="userFacade" ref="userFacade"/>
+        <property name="baseSiteService" ref="baseSiteService"/>
+        <property name="anonymousConsentFacade" ref="anonymousConsentFacade"/>
+        <property name="customerConsentDataStrategy" ref="customerConsentDataStrategy"/>
+    </bean>
+
+    <bean id="guestRoleFilterV2" class="com.namics.distrelec.occ.core.auth.GuestRoleFilter">
+        <property name="authenticationEventPublisher">
+            <bean class="org.springframework.security.authentication.DefaultAuthenticationEventPublisher"/>
+        </property>
+        <property name="userFacade" ref="userFacade"/>
+        <property name="cartService" ref="cartService"/>
+        <property name="guestRole" value="ROLE_GUEST"/>
+    </bean>
+
+    <bean id="commerceWebServicesV2WebAppMediaFilter" class="de.hybris.platform.servicelayer.web.WebAppMediaFilter">
+        <property name="mediaPermissionService" ref="mediaPermissionService"/>
+        <property name="modelService" ref="modelService"/>
+        <property name="userService" ref="userService"/>
+        <property name="mediaService" ref="mediaService"/>
+    </bean>
+
+    <alias name="defaultWsContextInformationLoaderV2" alias="wsContextInformationLoaderV2"/>
+    <bean id="defaultWsContextInformationLoaderV2"
+          class="com.namics.distrelec.occ.core.context.impl.DefaultContextInformationLoader">
+        <property name="baseStoreService" ref="baseStoreService"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+        <property name="commerceCommonI18NService" ref="commerceCommonI18NService"/>
+        <property name="calculationService" ref="calculationService"/>
+        <property name="cartService" ref="cartService"/>
+    </bean>
+
+    <util:set id="baseFilterResourceExceptionsV2">
+        <value>logoutsuccessful</value>
+        <value>oauth</value>
+        <value>customers/current/logout</value>
+    </util:set>
+
+    <alias name="defaultRuntimeEnvironmentFilter" alias="runtimeEnvironmentFilter"/>
+    <bean class="com.namics.distrelec.occ.core.v2.filter.RuntimeEnvironmentFilter" id="defaultRuntimeEnvironmentFilter"/>
+</beans>

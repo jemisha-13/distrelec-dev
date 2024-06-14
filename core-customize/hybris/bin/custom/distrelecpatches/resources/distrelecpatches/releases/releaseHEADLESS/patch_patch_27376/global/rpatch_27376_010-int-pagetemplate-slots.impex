@@ -1,0 +1,15 @@
+$contentCatalog=distrelec_IntContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent;$contentCV[unique=true];uid[unique=true]     ;name                   ;flexType
+                              ;                       ;HeaderLoginComponent ;Header Login Component ;HeaderLoginComponent
+                              ;                       ;MiniCartComponent    ;Mini Cart Component    ;MiniCartComponent
+                              ;                       ;SearchBoxComponent   ;Search Box Component   ;SearchBoxComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true]  ;active;cmsComponents(uid, $contentCV)
+                         ;                       ;HeaderWrapperSlot ;true  ;LogoComponent,InternationalCategoryMainNavContainer,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true]                                              ;position[unique=true];pageTemplate(uid, $contentCV)[unique=true]      ;contentSlot(uid, $contentCV)[unique=true];allowOverwrite
+                                    ;                       ;HeaderWrapper-ResponsiveContentPageWithNavigation             ;HeaderWrapper        ;ResponsiveContentPageWithNavigation             ;HeaderWrapperSlot                        ;false
+                                    ;                       ;HeaderWrapper-ResponsiveContentPageWithoutNavigation          ;HeaderWrapper        ;ResponsiveContentPageWithoutNavigation          ;HeaderWrapperSlot                        ;false
+                                    ;                       ;HeaderWrapper-ResponsiveContentPageFullWidthWithoutNavigation ;HeaderWrapper        ;ResponsiveContentPageFullWidthWithoutNavigation ;HeaderWrapperSlot                        ;false

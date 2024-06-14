@@ -1,0 +1,127 @@
+@import 'global-utilities';
+
+.success-popup {
+  width: 416px;
+  @include center-fluid();
+
+  align-items: center;
+  background-color: $colour-white;
+  border-radius: 8px;
+  border: 1px solid $ux-light-grey;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: fixed;
+  z-index: $zindex-modal;
+  overflow-y: auto;
+
+  @include tabletPlusDown {
+    width: 336px;
+  }
+
+  @include mobilePlusDown {
+    width: 320px;
+  }
+
+  &__wrapper {
+    padding: ($spacing-unit * 8) ($spacing-unit * 4);
+    width: 100%;
+  }
+
+  &__button {
+    background-color: $ux-green;
+    height: 40px;
+    border-radius: 4px;
+    border: none;
+    margin: ($spacing-unit * 4) 0;
+    cursor: pointer;
+
+    &--content {
+      @include typography-ui-sm();
+      font-weight: $font-weight-semiBold;
+      color: $colour-white;
+      padding: 0 ($spacing-unit * 3 + 1);
+      display: flex;
+    }
+  }
+
+  &__TandC {
+    @include typography-ui-sm();
+    font-weight: $font-weight-medium;
+    color: $link-blue;
+    border-bottom: 1px solid $link-blue;
+    display: inline-block;
+    padding: ($spacing-unit - 1) 0;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &__text {
+    color: $colour-success-text;
+    text-align: center;
+
+    &--title {
+      @include typography-display-xl();
+      @include line-height(28.8px);
+      font-weight: $font-weight-semiBold;
+      color: $ux-text-default;
+      letter-spacing: -0.24px;
+      margin-bottom: ($spacing-unit + 3);
+
+      @include mobilePlusDown {
+        @include typography-display-lg();
+        letter-spacing: -0.2px;
+      }
+    }
+
+    &--subtitle {
+      @include typography-ui-sm();
+      @include line-height(21px);
+      color: $ux-text-default;
+    }
+  }
+
+  &__close {
+    margin-bottom: ($spacing-unit * 4);
+    padding: 0;
+    cursor: pointer;
+
+    & {
+      .icon-close {
+        color: $colour-dist-grey;
+      }
+    }
+
+    .btn {
+      @include font-size(14px);
+      @include line-height(14px);
+      border: 1px solid $colour-popup-button-border;
+      box-sizing: border-box;
+      border-radius: 2px;
+      color: $colour-dark-grey;
+      font-weight: $font-weight-semiBold;
+      height: 40px;
+      width: auto;
+    }
+  }
+
+  &__button-order {
+    border: none;
+    background-color: transparent;
+  }
+}
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: fixed; /* Stay in place */
+  z-index: $zindex-modal-backdrop; /* Sit on top */
+  z-index: 9999; /* Sit on top */
+  left: 0;
+  top: 0;
+  background-color: rgba($colour-black, 0.8);
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}

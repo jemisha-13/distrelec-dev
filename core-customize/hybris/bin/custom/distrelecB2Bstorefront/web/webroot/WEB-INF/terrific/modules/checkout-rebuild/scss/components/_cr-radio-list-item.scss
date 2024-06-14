@@ -1,0 +1,603 @@
+$scope-cc-padding: $spacing-unit + 3;
+
+.o-cr-radio-list {
+  margin-top: $spacing-unit * 5;
+
+  &.is-address-list {
+    .o-cr-radio-list__item {
+      &.is-edit-form {
+        display: none;
+      }
+    }
+
+    .o-cr-radio-item {
+      &__info {
+        align-items: center;
+
+        &-text {
+          @include line-height(22px);
+        }
+      }
+
+      &__radio-icon {
+        margin-top: 0;
+      }
+
+      &__status-icon {
+        i.fa {
+          @include font-size(22px);
+        }
+      }
+
+      &__content {
+        &__main {
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  &.is-payment-method-list {
+    > .o-cr-radio-list__item > .o-cr-radio-item {
+      > .o-cr-radio-item__content {
+        padding: 8px 12px;
+
+        @media #{$ipad-landscape} {
+          padding: 8px 24px;
+        }
+
+        > .o-cr-radio-item__content__main {
+          flex-wrap: wrap;
+          min-height: 40px;
+          padding-top: 0;
+
+          > .o-cr-radio-item__info {
+            margin-top: 5px;
+            margin-bottom: 5px;
+
+            @media #{$ipad-landscape} {
+              margin-top: 0;
+              margin-bottom: 0;
+            }
+          }
+        }
+
+        > .o-cr-radio-item__content__special {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .o-cr-radio-item__radio:checked ~ .o-cr-radio-item__content {
+      .o-cr-radio-item__logo img {
+        margin-bottom: 5px;
+
+        @media #{$ipad-landscape} {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .o-cr-radio-item {
+      &__content__special {
+        margin-top: $spacing-unit * 3 + 1;
+        margin-left: -$scope-cc-padding; // Due to padding of 8px, we are stretching it for same amount
+        margin-right: -$scope-cc-padding; // Due to padding of 8px, we are stretching it for same amount
+      }
+
+      &__logo {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+        img {
+          height: 40px;
+
+          &:not(:last-child) {
+            margin-right: $spacing-unit;
+          }
+        }
+
+        .material-icons-round {
+          @include font-size(22px);
+        }
+      }
+    }
+  }
+
+  &__item {
+    margin-top: $spacing-unit * 3;
+
+    &.is-default-address {
+      .o-cr-radio-item__cta {
+        button.is-set-default {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+    }
+
+    &.hide-edit {
+      .ux-btn.is-cancel-btn {
+        display: none;
+      }
+    }
+  }
+}
+
+.o-cr-radio-item {
+  position: relative;
+
+  &.is-schedule {
+    .o-cr-radio-item {
+      &__content {
+        background-color: transparent;
+        border-color: transparent;
+      }
+
+      &__radio-label {
+        &:hover ~ .o-cr-radio-item__content {
+          border-color: transparent;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+  // Credit card
+  &__cc {
+    padding: $scope-cc-padding;
+    margin-bottom: $spacing-unit;
+
+    &.is-expired {
+      .o-cr-radio-item {
+        &__content {
+          background-color: $colour-white;
+          cursor: not-allowed;
+        }
+
+        &__cc__info {
+          opacity: .5;
+        }
+      }
+    }
+
+    &.is-default-address {
+      button.ux-link.is-set-default {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    &.is-add-new-card {
+      .o-cr-radio-item__content {
+        &,
+        .o-cr-radio-item__cc__content > * {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .o-cr-radio-item__cc__content {
+          @include font-size(14px);
+          height: auto;
+          text-align: center;
+          font-weight: 500;
+
+          .material-icons-round {
+            &.credit_card {
+              @include font-size(22px);
+              margin-bottom: $spacing-unit * 2;
+            }
+
+            &.add_circle_outline {
+              @include font-size(16px);
+            }
+          }
+        }
+      }
+    }
+
+    &,
+    &__content {
+      position: relative;
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+
+      &,
+      .ux-link {
+        @include font-size(12px);
+      }
+    }
+
+    &__expired-label {
+      @include font-size(14px);
+      position: absolute;
+      top: 0;
+      left: 8px;
+      z-index: 1;
+      padding: 5px 8px;
+      border: 1px solid $ux-banner-danger-border;
+      border-radius: 4px;
+      background-color: $ux-banner-danger-bg;
+      color: $ux-banner-danger-color;
+      pointer-events: none;
+    }
+
+    &__cta,
+    &__logo {
+      text-align: right;
+    }
+
+    &__logo {
+      img {
+        display: inline-block;
+        height: 48px;
+        border-radius: 6px;
+        background-color: $colour-white;
+      }
+    }
+
+    &__info {
+      font-weight: 500;
+    }
+
+    &__cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      button.ux-link {
+        position: relative;
+        z-index: 4;
+        height: auto;
+        padding: $spacing-unit $spacing-unit 0;
+        opacity: 1;
+        transition: opacity .3s ease;
+      }
+    }
+
+    .o-cr-radio-item {
+      &__content {
+        display: flex;
+        flex-direction: column;
+        height: 150px;
+        padding: $spacing-unit * 3;
+      }
+    }
+  }
+
+  &__radio-label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+
+    &:before {
+      content: normal !important; // Overriding default radio styles
+    }
+
+    &:hover ~ .o-cr-radio-item__content {
+      border-color: $ux-grey;
+      background-color: $colour-white;
+      box-shadow: 0 2px 5px rgba($colour-black, .1);
+
+      &.is-error {
+        border-color: $colour-dist-red;
+      }
+
+      .material-icons-round {
+        &.is-radio-unchecked {
+          &-hover {
+            color: rgba($colour-dist-marigold, 1);
+          }
+        }
+      }
+    }
+  }
+
+  &__radio {
+    &:disabled ~ {
+      .o-cr-radio-item {
+        &__radio-label {
+          cursor: not-allowed;
+
+          &:hover ~ .o-cr-radio-item__content {
+            .material-icons-round {
+              &.is-radio-unchecked {
+                &-hover {
+                  color: rgba($colour-dist-marigold, 0);
+                }
+              }
+            }
+          }
+        }
+
+        &__content {
+          opacity: .3;
+        }
+      }
+    }
+
+    &:checked ~ {
+      .o-cr-radio-item {
+        &__radio-label {
+          pointer-events: none;
+        }
+
+        &__content {
+          border: 1px solid $ux-green;
+          background-color: $colour-white;
+          box-shadow: 0 2px 5px rgba($colour-black, .2);
+
+          &:before {
+            border: 2px solid $ux-green;
+          }
+
+          .o-cr-radio-item {
+            &__content__special {
+              display: block;
+
+              &.is-hidden-on-page-load {
+                display: none;
+              }
+            }
+
+            &__info-text {
+              color: $colour-black;
+
+              .o-cr-radio-item__content__special {
+                margin-bottom: 0;
+              }
+            }
+
+            &__radio-icon {
+              .material-icons-round {
+                &.is-radio-checked {
+                  display: block;
+                }
+
+                &.is-clickable {
+                  cursor: pointer;
+                }
+
+                &.is-radio-unchecked {
+                  display: none;
+
+                  &-hover {
+                    z-index: -1;
+                    color: rgba($colour-dist-marigold, 0);
+                  }
+                }
+              }
+            }
+
+            &__cc {
+              .o-cr-radio-item__radio:checked ~ {
+                .o-cr-radio-item__content {
+                  border: 1px solid $colour-black;
+
+                  &:before {
+                    border: 2px solid $colour-black;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__content {
+    @include font-size(14px);
+    @include line-height(18px);
+    position: relative;
+    padding: 8px 12px;
+    border: 1px solid $ux-light-grey;
+    background-color: $cr-delivery-option-default-bg;
+    box-shadow: 0 2px 5px rgba($colour-black, 0);
+    transition: border-color .3s ease, background-color .3s ease, box-shadow .3s ease;
+
+    @media #{$ipad-landscape} {
+      padding: 8px 24px;
+    }
+
+    &,
+    &:before {
+      border-radius: 8px;
+    }
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      bottom: -1px;
+      left: -1px;
+      border: 2px solid transparent;
+      pointer-events: none;
+      transition: border-color .3s ease;
+    }
+
+    &__main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: $spacing-unit - 2;
+    }
+
+    &__special {
+      display: none;
+      margin-top: $spacing-unit * 4;
+      margin-bottom: 16px;
+
+      .ux-banner {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-shrink: 1;
+
+    > * {
+      padding-right: $spacing-unit * 2;
+    }
+
+    &,
+    &-text {
+      flex-grow: 1;
+    }
+
+    &-text {
+      @include line-height(20px);
+      color: $colour-dark-grey;
+
+      &,
+      button {
+        font-weight: 500;
+      }
+
+      small {
+        @include font-size(12px);
+        @include line-height(16px);
+
+        button {
+          height: auto;
+          text-decoration: underline !important;
+        }
+      }
+    }
+  }
+
+  &__error-text {
+    @include font-size(12px);
+    padding-left: $spacing-unit * 6;
+    margin-top: $spacing-unit;
+    color: $colour-dist-red;
+    font-weight: 500;
+  }
+
+  &__radio-icon {
+    @include font-size(10px);
+    position: relative;
+    margin-top: -2px; // Alignment fix since we are using 2 icons set one next to each other
+    color: $colour-dark-grey;
+
+    .material-icons-round {
+      @include font-size(24px);
+
+      &.is-radio-unchecked {
+        &-hover {
+          @include font-size(30px);
+          position: absolute;
+          top: -3px;
+          left: -3px;
+          color: rgba($colour-dist-marigold, 0);
+          transition: color .3s ease;
+        }
+      }
+
+      &.is-radio-checked {
+        display: none;
+      }
+    }
+  }
+
+  &__status-icon {
+    @include font-size(22px);
+    display: none;
+    color: $colour-dark-grey;
+
+    @media #{$mobile-landscape} {
+      display: block;
+    }
+
+    i.fa {
+      @include font-size(18px);
+    }
+
+    .material-icons-round {
+      &.date_range {
+        transform: translateY(-1px); // Fix vertical alignment for calendar icon
+      }
+    }
+  }
+
+  &__price {
+    color: $colour-black;
+  }
+
+  &__cta {
+    position: relative;
+    z-index: 4;
+    flex-grow: 1;
+    flex-shrink: 0;
+    text-align: right;
+
+    button.ux-link {
+      height: 26px;
+
+      + button.ux-link {
+        margin-left: $spacing-unit * 2;
+      }
+
+      &.is-set-default {
+        opacity: 1;
+        pointer-events: auto;
+        transition: opacity .3s ease;
+      }
+    }
+  }
+}
+
+.o-cr-radio-item-remove {
+  margin-top: $spacing-unit * 3;
+
+  &__ctas {
+    white-space: nowrap;
+  }
+
+  .ux-banner {
+    &__icon {
+      @include font-size(18px);
+    }
+
+    &,
+    &__text {
+      align-items: flex-start;
+    }
+
+    &__text {
+      display: flex;
+      flex-grow: 1;
+      justify-content: space-between;
+      padding-right: 0;
+      font-weight: 400;
+
+      button.ux-link,
+      strong {
+        font-weight: 500;
+      }
+
+      button.ux-link {
+        height: auto;
+        margin-left: $spacing-unit * 2;
+        color: inherit;
+
+        i {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+INSERT_UPDATE ServicelayerJob	; code[unique=true]				;springId[unique=true]
+                                 ;distOrderExportJob	;distOrderExportJob
+
+INSERT_UPDATE DistOrderExportCronJob;code[unique=true];job(code)[unique=true];mediaPrefix;mediaCatalogVersion(catalog(id),version)[default='Default:Staged'];logToDatabase[default=true];logToFile[default=false];sessionLanguage(isocode)[default = 'en']	;active[default=true];nodeID[default=0];flexibleSearchQuery
+;distOrderExportCronJob;distOrderExportJob;export.orders;;;;;;;"SELECT {o.code},{o.modifiedTime},{o.Date},{o.ErpOrderCode},{c.isocode},{o.netSubTotal},{o.netDeliveryCost},{o.totalPrice}, {o.totalTax} FROM  {Order as o join Currency as c on {o.currency}={c.pk}} WHERE {o.Date} >= ?orderExportStartDate AND {o.Date} <= ?orderExportEndDate"
+
+INSERT_UPDATE DistFlexibleSearchParameter;name[unique=true];expression;distOrderExportCronJob(code)[default='distOrderExportCronJob'];dynamic[default=true]
+;orderExportStartDate; T(java.util.Date).from(T(java.time.LocalDate).now().minusDays(1).atStartOfDay().atZone(T(java.time.ZoneId).systemDefault()).toInstant());;
+;orderExportEndDate; T(java.util.Date).from(T(java.time.LocalDate).now().atStartOfDay().atZone(T(java.time.ZoneId).systemDefault()).toInstant());;
+
+INSERT_UPDATE Trigger;code;cronjob(code)[unique=true];cronExpression
+                     ;distOrderExportCronJobTrigger;distOrderExportCronJob; 0 30 0 * * ? *

@@ -1,0 +1,306 @@
+/*
+ *	jQuery SelectBoxIt
+ *
+ *	used for custom Dropdown Styling
+ */
+
+@fieldHeight: 34px;
+
+.selectboxit-container {
+
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+
+	// Prevents text selection
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: -moz-none;
+	ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	outline: none;
+	white-space: nowrap;
+
+	+ .field-msg {
+		margin-top: 10px; // error messages after the selecboxit dropdown
+	}
+
+	/////////////////////////////////////////////
+	//
+	// Select Field
+	//
+
+	.selectboxit {
+
+		#forms > .input-base();
+		width: 300px;
+		color: @c-black;
+		background-color: @c-white;
+		border: 1px solid @c-grey80;
+		cursor: pointer;
+
+		&.selectboxit-meta{
+			#typo > .size-c-b();
+		}
+
+		//
+		// Default State
+
+		.selectboxit-option-icon-container {
+			margin-top: -2px;
+		}
+
+		.selectboxit-text {
+			display: block;
+			float: left;
+			height: @fieldHeight;
+			line-height: @fieldHeight;
+			padding-left: 10px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.selectboxit-arrow-container {
+			display: block;
+			position: absolute;
+			right: 0;
+			height: @fieldHeight;
+			width: @fieldHeight;
+			line-height: 30px;
+			border-left: 1px solid @c-grey80;
+			border-right: 1px solid @c-grey80;
+			background-color: @c-greyB;
+
+			.selectboxit-arrow {
+				.s-arrow-down-big-black();
+				position: absolute;
+				margin: 0 auto;
+				top: 44%;
+				right: 0;
+				left: 0;
+			}
+		}
+
+		//
+		// Prevent Reoponening of dropdown when clicking on arrow when dropdown is open
+		&.selectboxit-open {
+			.selectboxit-arrow-container {
+				pointer-events: none;
+			}
+		}
+
+		//
+		// Hover & Open & Focus State
+
+		&.selectboxit-hover,
+		&.selectboxit-open,
+		&:focus {
+
+			.selectboxit-text {
+				color: @c-red;
+			}
+
+			.selectboxit-arrow-container {
+
+				background-color: @c-red;
+
+				.selectboxit-arrow {
+					.s-arrow-down-white();
+				}
+			}
+		}
+
+		//
+		// Focus State
+		&:focus {
+			outline: 0;
+		}
+
+		//
+		// Error State
+
+		&.error {
+			border: 2px solid @c-redC;
+			outline: 0 none;
+
+			.selectboxit-text {
+				height: @fieldHeight - 2; // compensate for the bigger border
+				line-height: @fieldHeight - 2;
+			}
+
+		  	.selectboxit-arrow-container {
+				border-top: 0;
+				border-right: 0;
+				border-bottom: 0;
+			  	right: 2px;
+			  	height: 32px;
+			}
+		}
+
+		//
+		// Disbaled State
+
+		// Disabled Mouse Interaction
+		&.selectboxit-disabled {
+			cursor: default;
+			opacity: 0.4;
+			filter: alpha(opacity=40);
+
+			.lt-ie10 & {
+				.selectboxit-pretext, .selectboxit-text, .selectboxit-arrow-container {
+					opacity: 0.4;
+					filter: alpha(opacity=40);
+				}
+			}
+
+			.lt-ie9 & {
+				.selectboxit-pretext,
+				.selectboxit-text,
+				.selectboxit-arrow-container {
+					filter: none;
+				}
+			}
+
+			// Disable hover and focus states for disabled dropdown
+			&.selectboxit-hover,
+			&:focus {
+
+				.selectboxit-pretext, .selectboxit-text {
+					color: @c-grey20;
+				}
+
+				.selectboxit-arrow-container {
+
+					background-color: @c-greyB;
+
+					.selectboxit-arrow {
+						.s-arrow-down-big-black();
+					}
+				}
+			}
+		}
+	}
+
+	/////////////////////////////////////////////
+	//
+	// Options Dropdown
+	//
+
+	.selectboxit-options {
+		display: none;
+		position: absolute;
+		min-width: 100%;
+		*width: 100%;
+		padding: 0;
+		margin: 0;
+		margin-top: -1px; // Removes double border, assuming options open to the bottom
+		list-style: none;
+		z-index: 1300;
+		text-align: left;
+		border: 1px solid @c-grey80;
+		max-height: 400px; // Limit Visible items and show scrollbar
+		overflow-x: hidden;
+		overflow-y: auto;
+
+		.field + & {
+
+			// compensate for the .base .field margin bottom
+			// Removes double border, assuming options open to the bottom
+			margin-top: -11px;
+			max-height: 320px !important;
+		}
+
+		// Each Option
+		.selectboxit-option {
+
+			#forms > .input-base();
+			display: block;
+			margin: 0; // overwrite .base margin
+			background-color: @c-white;
+			border-top: 1px solid @c-grey80;
+			height: @fieldHeight;
+			line-height: @fieldHeight;
+			padding-left: 2px;
+			cursor: pointer;
+
+			&:first-child{
+				border-top: none;
+			}
+
+			.selectboxit-option-anchor {
+				font-weight: @font-base-reg;
+				#typo > .size-s(); // Design Review. Options are smaller then the Dropdown Current Entry.
+				padding-left: 8px;
+				color: @c-black;
+				text-decoration: none;
+			}
+
+			//
+			// Placeholder (Selectable, but visually disabled)
+			// - used i.e. for the payment terminal dropdowns
+			&.placeholder .selectboxit-option-anchor {
+				color: @c-greyD;
+				cursor: default;
+			}
+		}
+
+		// Option Selected
+		.selectboxit-selected {
+			background-color: @c-greyB;
+
+			.selectboxit-option-anchor {
+				color: @c-red;
+			}
+		}
+
+		//
+		// Disabled Option
+		// - use .placeholder (see above) if you need a "disabled" style which is
+		//	 visible as the first option
+		.selectboxit-disabled .selectboxit-option-anchor {
+			color: @c-greyD;
+		}
+
+
+
+	}
+
+	/////////////////////////////////////////////
+	//
+	// Select Field AND Options Styles
+	//
+
+	.selectboxit-option-icon-container {
+		float: left;
+		height: @fieldHeight;
+		line-height: @fieldHeight;
+	}
+
+	.selectboxit-option-icon {
+		margin-top: -2px;
+		margin-left: -17px;
+
+		margin: 0;
+		padding: 0;
+		vertical-align: middle;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ws611.webservice.adapters.factfinder.de" xmlns:ns2="http://suggest.ws611.webservice.factfinder.de" xmlns:ns1="http://ws611.webservice.factfinder.de" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:tns="http://ws611.webservice.adapters.factfinder.de" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws611.webservice.adapters.factfinder.de">
+<xsd:complexType name="string2stringMap">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="entry">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="0" name="key" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="0" name="value" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="logInformation">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="tns:string2stringMap"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="logInformationResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" type="xsd:boolean"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="logMultipleInformation">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns2:ArrayOfTrackingEvent"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="logMultipleInformationResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" type="xsd:boolean"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws611.webservice.factfinder.de">
+<xsd:complexType name="AuthenticationToken">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="timestamp" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="username" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://suggest.ws611.webservice.factfinder.de">
+<xsd:complexType name="ArrayOfTrackingEvent">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="TrackingEvent" nillable="true" type="ns2:TrackingEvent"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="TrackingEvent">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="parameters" nillable="true" type="tns:string2stringMap"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="logInformationResponse">
+    <wsdl:part name="parameters" element="tns:logInformationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="logMultipleInformationRequest">
+    <wsdl:part name="parameters" element="tns:logMultipleInformation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="logMultipleInformationResponse">
+    <wsdl:part name="parameters" element="tns:logMultipleInformationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="logInformationRequest">
+    <wsdl:part name="parameters" element="tns:logInformation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="TrackingPortType">
+    <wsdl:operation name="logInformation">
+      <wsdl:input name="logInformationRequest" message="tns:logInformationRequest">
+    </wsdl:input>
+      <wsdl:output name="logInformationResponse" message="tns:logInformationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="logMultipleInformation">
+      <wsdl:input name="logMultipleInformationRequest" message="tns:logMultipleInformationRequest">
+    </wsdl:input>
+      <wsdl:output name="logMultipleInformationResponse" message="tns:logMultipleInformationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TrackingHttpBinding" type="tns:TrackingPortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="logInformation">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="logInformationRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="logInformationResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="logMultipleInformation">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="logMultipleInformationRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="logMultipleInformationResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Tracking">
+    <wsdl:port name="TrackingHttpPort" binding="tns:TrackingHttpBinding">
+      <wsdlsoap:address location="http://10.191.20.145:8080/FACT-Finder/webservice/ws611/Tracking"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

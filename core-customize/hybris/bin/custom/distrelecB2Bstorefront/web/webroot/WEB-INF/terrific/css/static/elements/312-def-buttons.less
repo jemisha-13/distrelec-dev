@@ -1,0 +1,165 @@
+//
+// Element Objects: Buttons
+//
+
+//
+// Defaults
+@_default-btn-height: 41px;
+@_default-btn-min-width: 98px;
+
+// The following defaults == secondary button
+@_default-btn-default-bg: @c-grey80;
+@_default-btn-default-text: @c-black;
+@_default-btn-default-border: @c-grey80;
+
+@_default-btn-hover-bg: @c-white;
+@_default-btn-hover-text: #AA1936;
+@_default-btn-hover-border: @c-grey80;
+
+@_default-btn-active-bg: #AA1936F;
+@_default-btn-active-text: #AA1936;
+@_default-btn-active-border: #AA1936F;
+
+@_default-btn-disabled-bg: @c-greyB;
+@_default-btn-disabled-text: @c-grey32;
+@_default-btn-disabled-border: @c-greyB;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//
+// Button Base Mixins
+
+#btn() {
+
+	//
+	// Base Classes
+
+	// For every button and icon. Enables Icons etc.
+	.base() {
+		display: inline-block;
+		position: relative;
+		height: @_default-btn-height;
+		text-align: left;
+		background-color: transparent;
+		text-decoration: none !important; // if button is placed inside a .base
+
+		// Icons
+		i {
+			display: inline-block;
+			margin-top: 4px; // Review: KR:
+		}
+	}
+
+	// For primary and secondary buttons
+	.base-primary-secondary-buttons() {
+
+		#btn > .base();
+		#typo > .size-x-c() !important; // use !important for when btn is inside a .base
+		font-weight: @font-base-reg !important; // use !important for when btn is inside a .base
+
+		padding: 10px 10px 10px 10px; // Review: KR:
+		border: 1px solid;
+		text-align: center; // Review: KR:
+
+		// Icons
+		i {
+			float: left;
+			margin-right: 12px;
+		}
+	}
+
+
+	//
+	// Default button states (params: text, bg, border)
+
+	.state-default(@text: @_default-btn-default-text, @bg: @_default-btn-default-bg, @border: @_default-btn-default-border) {
+		&, &:link, &:visited {
+			#btn > .state-properities(@text, @bg, @border);
+		}
+	}
+
+	.state-hover(@text: @_default-btn-hover-text, @bg: @_default-btn-hover-bg, @border: @_default-btn-hover-border) {
+		&:hover {
+			#btn > .state-properities(@text, @bg, @border);
+		}
+	}
+
+	.state-focus(@text: @_default-btn-hover-text, @bg: @_default-btn-hover-bg, @border: @_default-btn-hover-border) {
+		&:focus {
+			#btn > .state-properities(@text, @bg, @border);
+		}
+	}
+
+	.state-active(@text: @_default-btn-active-text, @bg: @_default-btn-active-bg, @border: @_default-btn-active-bg) {
+		&:active {
+			#btn > .state-properities(@text, @bg, @border);
+		}
+	}
+
+	.state-disabled(@text: @_default-btn-disabled-text, @bg: @_default-btn-disabled-bg, @border: @_default-btn-disabled-bg) {
+		&[disabled], &.disabled {
+			#btn > .state-properities(@text, @bg, @border);
+		}
+		&:disabled {// keep this selector separate (unsupported pseudo class ie8)
+			#btn > .state-properities(@text, @bg, @border);
+		}
+	}
+
+	.state-properities(@text, @bg, @border) {
+		color: @text;
+		background-color: @bg;
+		border-color: @border;
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//
+// BUTTON with or without Icon
+//
+//   Markup samples:
+//      <a class="btn" href="#"><span class="vh">My Button</span></a>
+
+.btn {
+	outline: none;
+	#btn > .base();
+}
+
+//
+// PRIMARY Link AND Button (call to action)
+//
+//   Markup samples:
+//      <a class="btn-primary" href="#">Primary Link</a>
+//      <button class="btn-primary">Primary Button</button>
+
+.btn-primary {
+	// Base
+	#btn > .base-primary-secondary-buttons();
+
+	// States
+	#btn > .state-default(@c-white, @c-red, @c-red);
+	#btn > .state-hover(@c-red, @c-white, @c-grey80);
+	#btn > .state-focus(@c-red, @c-white, @c-grey80);
+	#btn > .state-active(@c-red, @c-redC, @c-redC);
+	#btn > .state-disabled();
+}
+
+////
+// SECONDARY Link AND Button
+//
+//   Markup samples:
+//      <a class="btn-secondary" href="#">Secondary Link</a>
+//      <button class="btn-secondary">Secondary Button</button>
+
+.btn-secondary {
+	// Base
+	#btn > .base-primary-secondary-buttons();
+
+	// States
+	#btn > .state-default();
+	#btn > .state-hover();
+	#btn > .state-focus();
+	#btn > .state-active();
+	#btn > .state-disabled();
+}

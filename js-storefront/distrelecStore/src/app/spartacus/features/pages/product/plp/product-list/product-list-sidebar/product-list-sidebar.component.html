@@ -1,0 +1,44 @@
+<ng-container *ngIf="isVisible$ | async">
+  <div class="side-filters-container d-none d-lg-flex flex-column">
+    <app-dist-scroll-bar
+      [class.sticky-header]="showStickyHeader$ | async"
+      [class.header-warnings]="headerWarningsActive$ | async"
+      scrollAxis="y"
+    >
+      <div
+        *ngIf="categories$ | async as categories"
+        class="sticky-sidebar"
+        [class.sticky-header]="showStickyHeader$ | async"
+      >
+        <div *ngIf="categories.length > 0 && pageType !== 'ProductFamilyPageTemplate'" class="box category-side-filter">
+          <span
+            class="filter-category-label"
+            id="filter-by-category-text"
+            (click)="isCategoriesVisible = !isCategoriesVisible"
+          >
+            {{ 'plp.facet_buttons_and_headers.filter_by_category' | cxTranslate }}
+            <app-icon class="icon-arrow" [icon]="isCategoriesVisible ? arrowUp : arrowDown"></app-icon>
+          </span>
+          <div *ngIf="isCategoriesVisible" class="category-link-group">
+            <a *ngFor="let category of categories" class="category-link link-hover" [absoluteRouterLink]="category.url">
+              {{ category.displayName }} ({{ category.count }})
+            </a>
+          </div>
+        </div>
+
+        <div class="box facet-group-filter">
+          <div class="grouped">
+            <app-product-list-filters-chips
+              class="d-none d-lg-block"
+              [filters$]="filters$"
+              mode="sidebar"
+            ></app-product-list-filters-chips>
+            <app-product-list-filters-selected></app-product-list-filters-selected>
+          </div>
+
+          <app-sidebar-filter-list></app-sidebar-filter-list>
+        </div>
+      </div>
+    </app-dist-scroll-bar>
+  </div>
+</ng-container>

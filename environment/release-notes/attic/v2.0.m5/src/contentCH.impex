@@ -1,0 +1,28 @@
+#
+# Import the core CMS content for the Distrelec CH site
+#
+
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+# Preview Image for use in the CMS Cockpit for special ContentPages
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true]
+;;ContentPageModel_function_preview;text/gif;ContentPageModel_function_preview.gif;$jarResourceCms/preview-images/ContentPageModel_function_preview.gif
+
+# Functional Content Pages
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $contentCV)[default='ContentPageModel_function_preview']
+;;invoice-history;Order Manager Invoice History Page;AccountPageTemplate;invoce-history
+;;cxmlPage;CXML Page;ContentPageWithNavigationTemplate;cxml
+
+$lang=en
+# Content Pages
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;invoice-history;Invoice History;
+
+$lang=de
+# Content Pages
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;invoice-history;Rechnungs-Historie;
+;;import-tool-upload;Stücklisten-Import Upload;
+;;import-tool-review;Stücklisten-Import Überprüfung;

@@ -1,0 +1,14 @@
+$contentCatalog = distrelec_IntContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]          ; name                           ; flexType
+                              ;                          ; QualityAndLegalComponent    ; Quality And Legal Component    ; QualityAndLegalComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true] ; name                      ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; QualityAndLegalSlot; Quality And Legal Slot    ; true  ; QualityAndLegalComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]    ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; QualityAndLegalSlot   ;                          ; QualityAndLegalSlot         ; environmentalDocumentationDownloadPage; QualityAndLegalSlot
+
+UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]                     ; label
+                  ;                          ; environmentalDocumentationDownloadPage ; environmental-documentation-download

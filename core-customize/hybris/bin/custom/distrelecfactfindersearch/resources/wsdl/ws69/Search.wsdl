@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ws69.webservice.adapters.factfinder.de" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://suggest.ws69.webservice.factfinder.de" xmlns:ns6="http://config.ws69.webservice.factfinder.de" xmlns:ns7="http://singleword.search.ws69.webservice.factfinder.de" xmlns:ns2="http://search.ws69.webservice.factfinder.de" xmlns:ns1="http://campaign.ws69.webservice.factfinder.de" xmlns:ns4="http://tracking.ws69.webservice.factfinder.de" xmlns:ns3="http://ws69.webservice.factfinder.de" xmlns:tns="http://ws69.webservice.adapters.factfinder.de" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://search.ws69.webservice.factfinder.de">
+<xsd:complexType name="Params">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="advisorStatus" nillable="true" type="ns1:AdvisorCampaignStatusHolder"/>
+<xsd:element minOccurs="0" name="articleNumber" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="channel" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="detailCustomParameters" nillable="true" type="ns2:ArrayOfCustomParameter"/>
+<xsd:element minOccurs="0" name="filters" nillable="true" type="ns2:ArrayOfFilter"/>
+<xsd:element minOccurs="0" name="followSearch" type="xsd:int"/>
+<xsd:element minOccurs="0" name="noArticleNumberSearch" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="page" type="xsd:int"/>
+<xsd:element minOccurs="0" name="query" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="resultsPerPage" type="xsd:int"/>
+<xsd:element minOccurs="0" name="searchField" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="seoPath" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="sortsList" nillable="true" type="ns2:ArrayOfSortItem"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfCustomParameter">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="CustomParameter" nillable="true" type="ns2:CustomParameter"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="CustomParameter">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="cacheIgnored" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="values" nillable="true" type="tns:ArrayOfString"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfSortItem">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="SortItem" nillable="true" type="ns2:SortItem"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="SortItem">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="description" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="order" nillable="true" type="ns2:SortMethods"/>
+<xsd:element minOccurs="0" name="refKey" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="relevanceSortItem" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="searchParams" nillable="true" type="ns2:Params"/>
+<xsd:element minOccurs="0" name="selected" type="xsd:boolean"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:simpleType name="SortMethods">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="asc"/>
+<xsd:enumeration value="desc"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="ArrayOfFilter">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Filter" nillable="true" type="ns2:Filter"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Filter">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="substring" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="valueList" nillable="true" type="ns2:ArrayOfFilterValue"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfFilterValue">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="FilterValue" nillable="true" type="ns2:FilterValue"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="FilterValue">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="exclude" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="type" nillable="true" type="ns2:FilterValueType"/>
+<xsd:element minOccurs="0" name="value" nillable="true" type="xsd:string"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:simpleType name="FilterValueType">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="or"/>
+<xsd:enumeration value="and"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="SearchControlParams">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="disableCache" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="generateAdvisorTree" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="idsOnly" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="useAsn" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="useCampaigns" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="useFoundWords" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="useKeywords" type="xsd:boolean"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="Result">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="appliedPreprocessorEntries" nillable="true" type="ns6:ArrayOfPreprocessorEntry"/>
+<xsd:element minOccurs="0" name="breadCrumbTrailItems" nillable="true" type="ns2:ArrayOfBreadCrumbTrailItem"/>
+<xsd:element minOccurs="0" name="campaigns" nillable="true" type="ns1:ArrayOfCampaign"/>
+<xsd:element minOccurs="0" name="filters" nillable="true" type="ns2:ArrayOfFilter"/>
+<xsd:element minOccurs="0" name="groups" nillable="true" type="ns2:ArrayOfGroup"/>
+<xsd:element minOccurs="0" name="paging" nillable="true" type="ns2:Paging"/>
+<xsd:element minOccurs="0" name="records" nillable="true" type="ns2:ArrayOfSearchRecord"/>
+<xsd:element minOccurs="0" name="refKey" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="resultArticleNumberStatus" nillable="true" type="ns2:SearchResultArticleNumberStatus"/>
+<xsd:element minOccurs="0" name="resultCount" type="xsd:int"/>
+<xsd:element minOccurs="0" name="resultStatus" nillable="true" type="ns2:SearchResultStatus"/>
+<xsd:element minOccurs="0" name="resultsPerPageList" nillable="true" type="ns2:ArrayOfResultsPerPageOptionWithSearchParams"/>
+<xsd:element minOccurs="0" name="searchControlParams" nillable="true" type="ns2:SearchControlParams"/>
+<xsd:element minOccurs="0" name="searchParams" nillable="true" type="ns2:Params"/>
+<xsd:element minOccurs="0" name="searchTime" type="xsd:long"/>
+<xsd:element minOccurs="0" name="simiFirstRecord" type="xsd:int"/>
+<xsd:element minOccurs="0" name="simiLastRecord" type="xsd:int"/>
+<xsd:element minOccurs="0" name="singleWordResults" nillable="true" type="ns7:ArrayOfSingleWordSearchResult"/>
+<xsd:element minOccurs="0" name="sortsList" nillable="true" type="ns2:ArrayOfSortItem"/>
+<xsd:element minOccurs="0" name="timedOut" type="xsd:boolean"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:simpleType name="SearchResultStatus">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="resultsFound"/>
+<xsd:enumeration value="nothingFound"/>
+<xsd:enumeration value="errorOccured"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="ArrayOfGroup">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Group" nillable="true" type="ns2:Group"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Group">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="detailedLinks" type="xsd:int"/>
+<xsd:element minOccurs="0" name="elements" nillable="true" type="ns2:ArrayOfGroupElement"/>
+<xsd:element minOccurs="0" name="filterStyle" nillable="true" type="ns2:FilterStyle"/>
+<xsd:element minOccurs="0" name="groupOrder" type="xsd:int"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="refKey" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="selectedElements" nillable="true" type="ns2:ArrayOfGroupElement"/>
+<xsd:element minOccurs="0" name="showPreviewImages" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="type" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="unit" nillable="true" type="xsd:string"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfGroupElement">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="GroupElement" nillable="true" type="ns2:GroupElement"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="GroupElement">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="active" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="associatedFieldName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="clusterLevel" type="xsd:int"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="previewImageURL" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="recordCount" type="xsd:int"/>
+<xsd:element minOccurs="0" name="refKey" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="searchParams" nillable="true" type="ns2:Params"/>
+<xsd:element minOccurs="0" name="selected" type="xsd:boolean"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:simpleType name="FilterStyle">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="DEFAULT"/>
+<xsd:enumeration value="SLIDER"/>
+<xsd:enumeration value="MULTISELECT"/>
+<xsd:enumeration value="TREE"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="ArrayOfSearchRecord">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="SearchRecord" nillable="true" type="ns2:SearchRecord"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="SearchRecord">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="foundWords" nillable="true" type="tns:ArrayOfString"/>
+<xsd:element minOccurs="0" name="id" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="keywords" nillable="true" type="tns:ArrayOfString"/>
+<xsd:element minOccurs="0" name="position" type="xsd:int"/>
+<xsd:element minOccurs="0" name="record" nillable="true" type="tns:string2stringMap"/>
+<xsd:element minOccurs="0" name="refKey" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="searchSimilarity" type="xsd:float"/>
+<xsd:element minOccurs="0" name="seoPath" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="simiMalusAdd" type="xsd:short"/>
+<xsd:element minOccurs="0" name="simiMalusMul" type="xsd:float"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:simpleType name="SearchResultArticleNumberStatus">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="noArticleNumberSearch"/>
+<xsd:enumeration value="nothingFound"/>
+<xsd:enumeration value="resultsFound"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="Paging">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="currentPage" type="xsd:int"/>
+<xsd:element minOccurs="0" name="firstLink" nillable="true" type="ns2:PageLink"/>
+<xsd:element minOccurs="0" name="lastLink" nillable="true" type="ns2:PageLink"/>
+<xsd:element minOccurs="0" name="nextLink" nillable="true" type="ns2:PageLink"/>
+<xsd:element minOccurs="0" name="pageCount" type="xsd:int"/>
+<xsd:element minOccurs="0" name="pageLinks" nillable="true" type="ns2:ArrayOfPageLink"/>
+<xsd:element minOccurs="0" name="pagingConf" nillable="true" type="ns6:Paging"/>
+<xsd:element minOccurs="0" name="previousLink" nillable="true" type="ns2:PageLink"/>
+<xsd:element minOccurs="0" name="resultsPerPage" type="xsd:int"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="PageLink">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="caption" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="currentPage" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="number" type="xsd:int"/>
+<xsd:element minOccurs="0" name="searchParams" nillable="true" type="ns2:Params"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfPageLink">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="PageLink" nillable="true" type="ns2:PageLink"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfResultsPerPageOptionWithSearchParams">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="ResultsPerPageOptionWithSearchParams" nillable="true" type="ns2:ResultsPerPageOptionWithSearchParams"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ResultsPerPageOptionWithSearchParams">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="default" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="searchParams" nillable="true" type="ns2:Params"/>
+<xsd:element minOccurs="0" name="selected" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="value" type="xsd:int"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfBreadCrumbTrailItem">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="BreadCrumbTrailItem" nillable="true" type="ns2:BreadCrumbTrailItem"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="BreadCrumbTrailItem">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="associatedFieldName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="refKey" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="searchParams" nillable="true" type="ns2:Params"/>
+<xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="type" nillable="true" type="ns2:BreadCrumbTrailItemType"/>
+<xsd:element minOccurs="0" name="value" nillable="true" type="xsd:string"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:simpleType name="BreadCrumbTrailItemType">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="search"/>
+<xsd:enumeration value="filter"/>
+<xsd:enumeration value="advisor"/>
+<xsd:enumeration value="unspecified"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="SliderGroupElement">
+<xsd:complexContent>
+<xsd:extension base="ns2:GroupElement">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="absoluteMaxValue" type="xsd:double"/>
+<xsd:element minOccurs="0" name="absoluteMinValue" type="xsd:double"/>
+<xsd:element minOccurs="0" name="selectedMaxValue" type="xsd:double"/>
+<xsd:element minOccurs="0" name="selectedMinValue" type="xsd:double"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:extension>
+</xsd:complexContent>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws69.webservice.adapters.factfinder.de">
+<xsd:complexType name="ArrayOfString">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="getSuggestions1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="ns2:Params"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns2:SearchControlParams"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="ns3:AuthenticationToken"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in3" nillable="true" type="ns4:UserInformation"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:complexType name="string2stringMap">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="entry">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="0" name="key" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="0" name="value" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="getSuggestions1Response">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns5:ArrayOfResultSuggestion"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getSuggestions">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="ns2:Params"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns2:SearchControlParams"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="ns3:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getSuggestionsResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns5:ArrayOfResultSuggestion"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getResult1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="ns2:Params"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns2:SearchControlParams"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="ns3:AuthenticationToken"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in3" nillable="true" type="ns4:UserInformation"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getResult1Response">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:Result"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getResult">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="ns2:Params"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns2:SearchControlParams"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="ns3:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getResultResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:Result"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://campaign.ws69.webservice.factfinder.de">
+<xsd:complexType name="AdvisorCampaignStatusHolder">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="answerPath" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="campaignId" nillable="true" type="xsd:string"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfCampaign">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Campaign" nillable="true" type="ns1:Campaign"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Campaign">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="activeQuestions" nillable="true" type="ns1:ArrayOfQuestion"/>
+<xsd:element minOccurs="0" name="advisorTree" nillable="true" type="ns1:ArrayOfQuestion"/>
+<xsd:element minOccurs="0" name="category" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="feedbackTexts" nillable="true" type="ns1:ArrayOfFeedbackText"/>
+<xsd:element minOccurs="0" name="flavour" nillable="true" type="ns1:CampaignFlavour"/>
+<xsd:element minOccurs="0" name="id" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="pushedProductsRecords" nillable="true" type="ns3:ArrayOfRecord"/>
+<xsd:element minOccurs="0" name="refKey" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="target" nillable="true" type="ns1:Target"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:simpleType name="CampaignFlavour">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="ADVISOR"/>
+<xsd:enumeration value="REDIRECT"/>
+<xsd:enumeration value="FEEDBACK"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="ArrayOfQuestion">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Question" nillable="true" type="ns1:Question"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Question">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="answers" nillable="true" type="ns1:ArrayOfAnswer"/>
+<xsd:element minOccurs="0" name="id" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="visible" type="xsd:boolean"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfAnswer">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Answer" nillable="true" type="ns1:Answer"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Answer">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="id" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="params" nillable="true" type="ns2:Params"/>
+<xsd:element minOccurs="0" name="questions" nillable="true" type="ns1:ArrayOfQuestion"/>
+<xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="Target">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="destination" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfFeedbackText">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="FeedbackText" nillable="true" type="ns1:FeedbackText"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="FeedbackText">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="html" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="id" type="xsd:int"/>
+<xsd:element minOccurs="0" name="label" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="text" nillable="true" type="xsd:string"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws69.webservice.factfinder.de">
+<xsd:complexType name="AuthenticationToken">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="timestamp" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="username" nillable="true" type="xsd:string"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfRecord">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Record" nillable="true" type="ns3:Record"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Record">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="id" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="record" nillable="true" type="tns:string2stringMap"/>
+<xsd:element minOccurs="0" name="refKey" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="simiMalusAdd" type="xsd:short"/>
+<xsd:element minOccurs="0" name="simiMalusMul" type="xsd:float"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://tracking.ws69.webservice.factfinder.de">
+<xsd:complexType name="UserInformation">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="cookieID" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="sessionID" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="site" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="userID" nillable="true" type="xsd:string"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://suggest.ws69.webservice.factfinder.de">
+<xsd:complexType name="ArrayOfResultSuggestion">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="ResultSuggestion" nillable="true" type="ns5:ResultSuggestion"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ResultSuggestion">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="attributes" nillable="true" type="tns:string2stringMap"/>
+<xsd:element minOccurs="0" name="hitCount" type="xsd:int"/>
+<xsd:element minOccurs="0" name="image" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="priority" type="xsd:int"/>
+<xsd:element minOccurs="0" name="refKey" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="searchParams" nillable="true" type="ns2:Params"/>
+<xsd:element minOccurs="0" name="type" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://config.ws69.webservice.factfinder.de">
+<xsd:complexType name="Paging">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="defaultResultsPerPage" type="xsd:int"/>
+<xsd:element minOccurs="0" name="linkCount" type="xsd:int"/>
+<xsd:element minOccurs="0" name="nextCaption" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="previousCaption" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="resultsPerPage" nillable="true" type="ns6:ArrayOfResultsPerPageOption"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfResultsPerPageOption">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="ResultsPerPageOption" nillable="true" type="ns6:ResultsPerPageOption"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ResultsPerPageOption">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="default" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="selected" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="value" type="xsd:int"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfPreprocessorEntry">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="PreprocessorEntry" nillable="true" type="ns6:PreprocessorEntry"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="PreprocessorEntry">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="from" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="group" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="sort" type="xsd:int"/>
+<xsd:element minOccurs="0" name="to" nillable="true" type="xsd:string"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://singleword.search.ws69.webservice.factfinder.de">
+<xsd:complexType name="ArrayOfSingleWordSearchResult">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="SingleWordSearchResult" nillable="true" type="ns7:SingleWordSearchResult"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="SingleWordSearchResult">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="previewRecords" nillable="true" type="ns2:ArrayOfSearchRecord"/>
+<xsd:element minOccurs="0" name="recordCount" type="xsd:int"/>
+<xsd:element minOccurs="0" name="searchParams" nillable="true" type="ns2:Params"/>
+<xsd:element minOccurs="0" name="word" nillable="true" type="xsd:string"/>
+<xsd:any maxOccurs="unbounded" minOccurs="0"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getResultRequest">
+    <wsdl:part name="parameters" element="tns:getResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSuggestionsRequest">
+    <wsdl:part name="parameters" element="tns:getSuggestions">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResult1Response">
+    <wsdl:part name="parameters" element="tns:getResult1Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResultResponse">
+    <wsdl:part name="parameters" element="tns:getResultResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResult1Request">
+    <wsdl:part name="parameters" element="tns:getResult1">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSuggestions1Response">
+    <wsdl:part name="parameters" element="tns:getSuggestions1Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSuggestions1Request">
+    <wsdl:part name="parameters" element="tns:getSuggestions1">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSuggestionsResponse">
+    <wsdl:part name="parameters" element="tns:getSuggestionsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="SearchPortType">
+    <wsdl:operation name="getSuggestions1">
+      <wsdl:input name="getSuggestions1Request" message="tns:getSuggestions1Request">
+    </wsdl:input>
+      <wsdl:output name="getSuggestions1Response" message="tns:getSuggestions1Response">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSuggestions">
+      <wsdl:input name="getSuggestionsRequest" message="tns:getSuggestionsRequest">
+    </wsdl:input>
+      <wsdl:output name="getSuggestionsResponse" message="tns:getSuggestionsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResult1">
+      <wsdl:input name="getResult1Request" message="tns:getResult1Request">
+    </wsdl:input>
+      <wsdl:output name="getResult1Response" message="tns:getResult1Response">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResult">
+      <wsdl:input name="getResultRequest" message="tns:getResultRequest">
+    </wsdl:input>
+      <wsdl:output name="getResultResponse" message="tns:getResultResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SearchHttpBinding" type="tns:SearchPortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getSuggestions1">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getSuggestions1Request">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getSuggestions1Response">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSuggestions">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getSuggestionsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getSuggestionsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResult1">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getResult1Request">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getResult1Response">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResult">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getResultRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getResultResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Search">
+    <wsdl:port name="SearchHttpPort" binding="tns:SearchHttpBinding">
+      <wsdlsoap:address location="http://search.dev.distrelec.com/FACT-Finder-hybris/webservice/ws69/Search"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

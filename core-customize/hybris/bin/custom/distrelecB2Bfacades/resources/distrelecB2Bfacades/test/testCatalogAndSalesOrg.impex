@@ -1,0 +1,115 @@
+$catalogId=testCatalog
+$catalogVersion=catalogVersion(catalog(id[default=$catalogId]),version[default='Online'])
+$languages=en
+
+$passwordEncoding=md5
+$defaultPassword=12341234
+$setPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultPassword']
+
+# general
+INSERT_UPDATE Language;isocode[unique=true];active[default=true]
+;en;
+;de;
+
+INSERT_UPDATE Currency;isocode[unique=true];active[default=true]
+;CHF;
+;EUR;
+
+INSERT_UPDATE Country;isocode[unique=true];name[lang=de];name[lang=en];active;
+;CH;Switzerland;Switzerland;true;
+;DE;Deutschland;Germany;true;
+;US;Vereinigte Staaten von Amerika;United States of America;true;
+
+#Germany
+INSERT_UPDATE Region;isocode[unique=true];name[lang='de'];;country(isocode)[default='DE'];
+;01;Schleswig-Holstein 
+;02;Hamburg 
+;03;Niedersachsen 
+;04;Bremen 
+;05;Nordrhein-Westfalen
+;06;Hessen 
+;07;Rheinland-Pfalz
+;08;Baden-Württemberg 
+;09;Bayern 
+;10;Saarland 
+;11;Berlin 
+;12;Brandenburg 
+;13;Mecklenburg-Vorpommern 
+;14;Sachsen 
+;15;Sachsen-Anhalt 
+;16;Thüringen 
+
+INSERT_UPDATE PromotionGroup;Identifier[unique=true];
+;default;
+
+INSERT_UPDATE DistBrand;code[unique=true]
+;distrelec
+
+INSERT_UPDATE UserPriceGroup;code[unique=true]
+;SalesOrg_UPG_7310_M01
+;SalesOrg_UPG_7350_01;
+
+INSERT_UPDATE UserTaxGroup;code[unique=true]
+;SalesOrg_UTG_7310
+;SalesOrg_UTG_7350
+
+INSERT_UPDATE Vendor;code[unique=true];name[lang=en]
+;default;Default Vendor
+
+INSERT_UPDATE Warehouse;code[unique=true];name[lang=en];pickupName[lang=en];default;vendor(code)[default=default];stockManagementSystem(code)
+;7311;Distrelec NewCo Switzerland;Abholschalter Distrelec NewCo Switzerland;false;;SAP
+
+INSERT_UPDATE DistSalesOrg;code[unique=true];brand(code);country(isocode);erpSystem(code)
+# DistSalesOrg
+INSERT_UPDATE DistSalesOrg;code[unique=true];brand(code);country(isocode);erpSystem(code);nameErp[lang=en];adminManagingSubUsers;invoiceVisibleToAll;orderVisibibleToAll;offlineRegistrationAllowed;registeringNewContactToExistingCustomerAllowed
+;7310;distrelec;CH;SAP  ;Distrelec CH;true;false;false;true;true
+;7350;distrelec;DE;SAP  ;Distrelec DE;true;false;false;true;true
+
+INSERT_UPDATE CMSSite;uid[unique=true];country(isocode);defaultCurrency(isocode);registrationCurrencies(isocode);salesOrg(code);userPriceGroup(code);userTaxGroup(code);fastWarehouses(code);slowWarehouses(code);pickupWarehouses(code)
+;distrelec_CH;CH;CHF;CHF;7310;SalesOrg_UPG_7310_M01;SalesOrg_UTG_7310;7311;;
+;distrelec_DE;DE;EUR;EUR;7350;SalesOrg_UPG_7350_01;SalesOrg_UTG_7350;7311;;
+
+# customer
+INSERT_UPDATE UserGroup;uid[unique=true];groups(uid);
+;customergroup;
+;b2cgroup;
+;b2bgroup;
+;b2badmingroup;
+;b2bapprovergroup;
+;ociCustomerGroup;
+;cxmlCustomerGroup;
+;aribaCustomerGroup;
+;eProcurementGroup;
+;b2beeshopgroup;
+
+INSERT_UPDATE Title;code[unique=true];sapCode;active
+;mr;Mr.;true
+;ms;Ms.;true
+;mr_and_ms;Mr. and Mrs.;false
+
+INSERT_UPDATE DistDepartment;code[unique=true];erpSystem(code);name[lang=en];nameErp[lang=en];nameErp[lang=de]
+;0014;SAP;"Field service/repairs/facility management";"Field service/repairs/facility management";"Wartung/ Reparatur/ Facility-Management"
+;0015;SAP;"Electronics manufacturing (EMS)";"Electronics manufacturing (EMS)";"Elektronikfertigung (EMS)"
+;0016;SAP;"Contract Manufacturing (CEM)";"Contract Manufacturing (CEM)";"Auftragsfertigung (CEM)"
+;0017;SAP;"Original equipment manufacturer (OEM)";"Original equipment manufacturer (OEM)";"Fertigung/Erstausrüster (OEM)"
+;0018;SAP;"Other maintenance";"Other maintenance";"Instandhaltung für Produktion/Anlagenbetrieb"
+;0019;SAP;"EDE/product design";"EDE/product design";"Elektronikentwicklung/ Produktdesign"
+;0020;SAP;"Resale/Wholesale";"Resale/Wholesale";"Wiederverkauf/ Großhandel"
+;0021;SAP;"Education (incl. research)";"Education (incl. research)";"Ausbildung / Bildung (einschließlich Forschung)"
+;0022;SAP;"Government (incl. research)";"Government (incl. research)";"öffentliche Auftraggeber / staatliche Forschungseinrichtungen"
+;0023;SAP;"(Other) Research";"(Other) Research";"(Andere) Forschungs- und Entwicklungseinrichtungen"
+
+
+INSERT_UPDATE DistFunction;code[unique=true];erpSystem(code);name[lang=en];nameErp[lang=en];nameErp[lang=de]
+;20;SAP;"Maintenance/service technician";"Maintenance/service technician";"Instandhaltungs-/Servicetechniker/in"
+;21;SAP;"Industrial design engineer";"Industrial design engineer";"Ingenieur/in (Industriedesign)"
+;22;SAP;"Electronic design engineer";"Electronic design engineer";"Ingenieur/in (Elektronikentwicklung)"
+;23;SAP;"Electrician";"Electrician";"Elektriker/in / Industrieelektriker/in"
+;24;SAP;"Buyer (operative)";"Buyer (operative)";"Einkäufer/in"
+;25;SAP;"Purchasing manager (strategic)";"Purchasing manager (strategic)";"Einkaufsleiter/in"
+;26;SAP;"General manager";"General manager";"Geschäftsleiter/in"
+;27;SAP;"Department manager";"Department manager";"Abteilungsleiter/in"
+;28;SAP;"Professor/researcher/educator";"Professor/researcher/educator";"Professor/in/ betrieblicher Ausbilder/in / Forscher/in"
+;29;SAP;"Student";"Student";"Student/in"
+;30;SAP;"Hobbyist";"Hobbyist";"Privatkunde"
+

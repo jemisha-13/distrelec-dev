@@ -1,0 +1,136 @@
+
+$contentMasterCatalog=distrelecContentCatalog
+$contentCatalog=distrelec_LTContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$picture=media(code, $contentCV);
+$siteResource=jar:com.namics.distrelec.b2b.initialdata.constants.Namb2bacceleratorInitialDataConstants&/distrelecB2Binitialdata/import/project/contentCatalogs/$contentMasterCatalog
+
+# Language
+$lang=lt
+
+#E-Procurement
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;eprocurementHomepage;(lt)E-Procurement Homepage
+
+
+# Site Logo Component
+UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang];localizedUrlLink[lang=$lang]
+;;LogoComponent;/images/theme/elfa_distrelec_logo.png;"/"
+
+
+# Site Certification Logos Component
+UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang];localizedUrlLink[lang=$lang]
+;;CertLabelTuvComponent;/images/certlabels/logo-tuv.png;"/"
+;;CertLabelEhiComponent;/images/certlabels/logo-ehi.png;"/"
+;;CertLabelTrustedShopsComponent;/images/certlabels/logo-trustedshops.png;"/"
+
+
+# CMS Link Components
+UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];localizedUrl[lang=$lang];linkName[lang=$lang]
+;;ImportToolPageLink;"/import-tool";(lt)List import
+;;ImpressumPageLink;;(lt)Impressum
+;;DisclaimerPageLink;;(lt)Disclaimer
+;;FacebookLink;"https://www.facebook.com/DistrelecSwitzerland";Facebook
+;;TwitterLink;"https://twitter.com/distrelec";Twitter
+;;GoogleLink;"https://plus.google.com/111961224551489786574";Google+
+
+
+# CMS Headline Component
+UPDATE DistHeadlineComponent;$contentCV[unique=true];uid[unique=true];headline[lang=$lang]
+;;OrderConfirmationHeadlineComponent;Dėkojame, kad perkate iš Elfa Distrelec!
+;;OrderConfirmationPickupHeadlineComponent;Dėkojame, kad perkate iš Elfa Distrelec!
+;;OrderConfirmationApprovalHeadlineComponent;Dėkojame, kad perkate iš Elfa Distrelec!
+
+
+# CMS ProductReferences Components
+UPDATE DistProductReferencesCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang] 
+;;ConsistentWithProductReferencesComponent;Suderinama su;
+
+UPDATE DistProductFFCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;RecommendationProductFFComponent;(lt)Recommended Products;
+;;AlsoBoughtProductFFComponent;(lt)People who bought this product also bought;
+
+
+# CMS Navigation Nodes
+UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;SiteRootNode;(lt)SiteRoot
+;;MainNavNode;(lt)Main Navigation
+;;FooterNavNode;(lt)Footer Navigation
+##
+;;SupportAndServicesNavNode;(lt)Support and Services 
+;;SupportNavNode;(lt)Support
+;;TechnicalSupportNavNode;(lt)Technical Support
+;;CalibrationServiceNavNode;(lt)Calibration Service
+;;FaqNavNode;(lt)FAQ
+##
+;;InfoCenterNavNode;(lt)Info Center
+;;AboutUsNavNode;(lt)About us
+;;SeminarsNavNode;(lt)Seminars
+;;NewsNavNode;(lt)News
+;;LegalsNavNode;(lt)Legals
+;;ImprintNavNode;(lt)Imprint
+;;PressNavNode;(lt)Press
+;;CatalogOrderNavNode;(lt)Order Catalog
+##
+;;ManufacturerStoresNavNode;(lt)Manufacture Stores
+;;CiscoNavNode;Cisco
+;;SonyNavNode;Sony
+;;AgilentNavNode;Agilent
+;;FlukeNavNode;Fluke
+;;AspNavNode;ASP
+;;AmprobeNavNode;Amprobe
+;;BrotherNavNode;Brother
+;;PanasonicNavNode;Panasonic
+;;KingstonNavNode;Kingston
+;;DevoloNavNode;Devolo
+##
+;;ToolsNavNode;(lt)Tools
+;;ListImportToolsNavNode;(lt)List Import Tools
+;;DirectOrderNavNode;(lt)Direct Order
+;;IPhoneNavNode;(lt)IPhone
+;;DistrelecMobileAppsNavNode;(lt)Distrelec Mobile Apps
+
+
+######  Distrelec Cart Page ######
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;EmptyCartParagraphComponent;"<h2>(lt)Your shopping cart is empty</h2><p>Suggestions</p><ul><li>Browse our products by selecting a category above</li></ul>";
+
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;PaymentInfoParagraphComponent;<h2>(lt)Pay with DeuCS</h2><p>Infos:</p><ul><li>easy payment</li></ul>;
+
+
+###### Distrelec MyAccount Page ######
+UPDATE DistLeadTextComponent;$contentCV[unique=true];uid[unique=true];leadTitle[lang=$lang];leadText[lang=$lang]
+;;CompanyInformationLeadTextComponent;(lt)Company Data;(lt)To change your basic company data, please contact the <a href="/lt/Kontaktai/cms/contact">Distrelec Support</a>;
+
+
+# Dist Product Carousel Components
+UPDATE DistProductCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;TopProductsComponent;(lt)Top Products
+;;NewProductsComponent;(lt)New Products
+
+# Checkout Payment Unknown Error Paragraph
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;CheckoutPaymentUnknownErrorParagraphComponent;(lt)An unknown error occured on payment. Please contact the Distrelec help line.
+
+
+############################################################################################
+# Webtrekk Opt-Out Information Page
+############################################################################################
+
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+# Load the webtrekk redirect url config param
+$optOutRedirectPath=/cms/optOutSuccess
+$optOutRedirectUrl=$config-website.distrelec_LT.http$optOutRedirectPath
+
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;OptOutInformationText;"<a href=""http://optout.webtrekk.net/optout.php?r=$optOutRedirectUrl"">(lt)Webtrekk Opt-Out Link</a>"
+
+############################################################################################
+# Webtrekk Opt-Out Cookie Notice
+############################################################################################
+
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
+;;CookieNoticeMoreInfoLink;"(lt)More Information"

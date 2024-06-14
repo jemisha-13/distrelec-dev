@@ -1,0 +1,15 @@
+INSERT_UPDATE NotNullConstraint;id[unique=true]                               ;active[default=true];type(code)          ;target                                                                    ;qualifier             ;annotation                           ;severity(code);
+                               ;OCICustomerConfigUseShippingConstraint        ;                    ;OCICustomerConfig   ;com.namics.distrelec.b2b.core.model.eprocurement.OCICustomerConfigModel   ;useShipping           ;javax.validation.constraints.NotNull ;ERROR         ;
+                               ;OCICustomerConfigUseLongDescConstraint        ;                    ;OCICustomerConfig   ;com.namics.distrelec.b2b.core.model.eprocurement.OCICustomerConfigModel   ;useLongDesc           ;javax.validation.constraints.NotNull ;ERROR         ;
+                               ;DistCustomerConfigCompanyConstraint           ;                    ;DistCustomerConfig  ;com.namics.distrelec.b2b.core.model.eprocurement.DistCustomerConfigModel  ;company               ;javax.validation.constraints.NotNull ;ERROR         ;
+                               ;DistCustomerConfigRestrictCatalogsConstraint  ;                    ;DistCustomerConfig  ;com.namics.distrelec.b2b.core.model.eprocurement.DistCustomerConfigModel  ;restrictCatalogs      ;javax.validation.constraints.NotNull ;ERROR         ;
+                               ;AribaCustomerConfigRestrictCatalogsConstraint ;                    ;AribaCustomerConfig ;com.namics.distrelec.b2b.core.model.eprocurement.AribaCustomerConfigModel ;useBasketFromCustomer ;javax.validation.constraints.NotNull ;ERROR         ;
+
+INSERT_UPDATE DynamicConstraint;id[unique=true]                    ;active[default=true];type(code)         ;target                                                                   ;language(code[default=BEANSHELL]);message[lang=en]                                          ;expression;
+                               ;DistCustomerConfigUniqueConstraint ;                    ;DistCustomerConfig ;com.namics.distrelec.b2b.core.model.eprocurement.DistCustomerConfigModel ;                                 ;"Customer configuration already exists for this customer" ;"
+searchService=ctx.getBean(""flexibleSearchService"");
+paramMap=new HashMap();
+paramMap.put(""company"", ref.company);
+searchResult=searchService.search(""SELECT {pk} FROM {DistCustomerConfig} WHERE {company}=?company"", paramMap);
+return searchResult.getCount()==0;
+"

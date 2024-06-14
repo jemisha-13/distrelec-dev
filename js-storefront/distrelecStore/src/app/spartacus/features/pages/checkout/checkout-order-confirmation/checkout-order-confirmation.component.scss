@@ -1,0 +1,87 @@
+@import 'global-utilities';
+
+.checkout-order-confirmation {
+  .control-label {
+    @include font-size(14px);
+    margin: 0;
+  }
+
+  // TODO: Once we will have storybook component for input and select, use it here and remove styles below
+  .form-control {
+    @include font-size(14px);
+    @include line-height(22px);
+    @include transition(border 0.3s ease, background-color 0.3s ease);
+    width: 100%;
+    height: 40px;
+    padding: 0 ($spacing-unit * 2);
+    border: 1px solid $colour-redesign-light-grey;
+    border-radius: 4px;
+    outline: none;
+    margin: 0 0 $spacing-unit;
+    font-weight: $font-weight-medium;
+    color: $ux-text-default;
+
+    &:hover {
+      background-color: $colour-pale-grey;
+      border: 1px solid $colour-black;
+    }
+
+    &.is-correct {
+      background-color: $colour-white;
+
+      &,
+      &[disabled],
+      &[disabled]:hover,
+      &:hover {
+        border: 1px solid $ux-green;
+      }
+    }
+
+    &.is-invalid {
+      &,
+      &:hover {
+        border: 1px solid $colour-error-text;
+      }
+    }
+
+    &.is-correct,
+    &.is-invalid {
+      &,
+      &:hover {
+        background-color: $colour-white;
+      }
+    }
+
+    &[disabled] {
+      cursor: not-allowed;
+
+      &,
+      &:hover {
+        border: 1px solid $ux-input-border-color-light;
+      }
+    }
+
+    ~ .ng-fa-icon {
+      pointer-events: none;
+    }
+  }
+
+  select.form-control {
+    padding: 0 ($spacing-unit * 4) 0 ($spacing-unit * 2);
+
+    ~ .ng-fa-icon {
+      @include font-size(16px);
+      @include line-height(16px);
+      position: absolute;
+      top: 13px;
+      right: 12px;
+    }
+  }
+
+  &__continue-shopping {
+    @include mobileOnly {
+      width: 100%;
+      display: block;
+    }
+  }
+}

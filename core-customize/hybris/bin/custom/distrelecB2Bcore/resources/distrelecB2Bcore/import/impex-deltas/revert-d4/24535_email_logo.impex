@@ -1,0 +1,46 @@
+$cmsSiteUID=distrelec_FR
+$contentCatalog=distrelec_FRContentCatalog
+$mode=Staged
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=$mode])[default=$contentCatalog:$mode]
+$picture=media(code, $contentCV);
+$contentMasterCatalog=distrelecContentCatalog
+$siteResource=jar:com.namics.distrelec.b2b.initialdata.constants.Namb2bacceleratorInitialDataConstants&/distrelecB2Binitialdata/import/project/contentCatalogs/$contentMasterCatalog
+$emailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/emails
+$stockEmailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/essential/common/email
+$templateScript=templateScript[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+$translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator
+
+# remove distrelec logo from d4 content catalog
+REMOVE CMSImageComponent;uid[unique=true];$contentCV[unique=true]
+                        ;D4LogoImage;
+
+# Email Logo
+INSERT_UPDATE Media;code[unique=true]               ;realfilename     ;@media[translator=$translator];mime     ;altText;$contentCV[unique=true]
+                   ;/images/theme/current_distrelec_logo.png;current_distrelec_logo.png;$siteResource/images/theme/current_distrelec_logo.png ;image/png;Distrelec Logo;
+
+INSERT_UPDATE CMSImageComponent;uid[unique=true];$picture[lang=en]              ;$picture[lang=fr]              ;&componentRef;$contentCV[unique=true]
+                               ;DistrelecLogoImage     ;/images/theme/current_distrelec_logo.png;/images/theme/current_distrelec_logo.png;DistrelecLogoImage
+
+UPDATE ContentSlot;uid[unique=true];cmsComponents(&componentRef);$contentCV[unique=true]
+                  ;EmailLogoSlot;DistrelecLogoImage
+
+# Email velocity templates
+UPDATE RendererTemplate;code[unique=true]                               ;templateScript[lang=en,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];templateScript[lang=fr,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+                       ;$cmsSiteUID-CMSImageComponent-template         ;$emailResource/email-cmsImageComponentTemplate.vm                                                          ;$emailResource/email-cmsImageComponentTemplate.vm
+                       ;$cmsSiteUID-Email_Customer_Registration_Body   ;$emailResource/email-customerRegistrationBody.vm                                                           ;$emailResource/email-customerRegistrationBody.vm
+                       ;$cmsSiteUID-Email_ExistRegOrg_Confirmation_Body;$emailResource/email-ExisRegOrgEmailBody.vm                                                                ;$emailResource/email-ExisRegOrgEmailBody.vm
+                       ;$cmsSiteUID-Email_Forgotten_Password_Body      ;$emailResource/email-forgottenPasswordBody.vm                                                              ;$emailResource/email-forgottenPasswordBody.vm
+                       ;$cmsSiteUID-Email_Header                       ;$emailResource/email-header.vm                                                                             ;$emailResource/email-header.vm
+                       ;$cmsSiteUID-Email_Obsolescence_Preference_Body ;$emailResource/email-ObsolescencePreferenceEmailBody.vm                                                    ;$emailResource/email-ObsolescencePreferenceEmailBody.vm
+                       ;$cmsSiteUID-Email_Send_To_Friend_Body          ;$emailResource/email-sendToFriendBody.vm                                                                   ;$emailResource/email-sendToFriendBody.vm
+                       ;$cmsSiteUID-Email_Stock_Notification_Body      ;$stockEmailResource/email-StockNotificationBody.vm                                                         ;$stockEmailResource/email-StockNotificationBody.vm
+
+INSERT_UPDATE ContentSlot;uid[unique=true]                ;name                                ;active;cmsComponents(uid,$contentCV);$contentCV[unique=true]
+                         ;EmailLogo-StockNotificationEmail;Logo Slot for StockNotificationEmail;true  ;DistrelecLogoImage
+
+INSERT_UPDATE ContentSlotForPage;uid[unique=true]                ;position;page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV);$contentCV[unique=true]
+                                ;EmailLogo-StockNotificationEmail;Logo    ;StockNotificationEmail           ;EmailLogo-StockNotificationEmail
+
+UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];subject(code);htmlTemplate(code)
+                        ;;StockNotificationEmailTemplate;$cmsSiteUID-Email_Stock_Notification_Subject;$cmsSiteUID-Email_Stock_Notification_Body
+

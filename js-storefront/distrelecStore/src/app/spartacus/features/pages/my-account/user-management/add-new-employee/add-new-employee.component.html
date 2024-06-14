@@ -1,0 +1,503 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-9">
+      <ng-container class="account-information-main">
+        <div class="add-new-employee-wrapper">
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+              <h1 id="addNewEmployee_page_title">
+                {{
+                  addNewEmployee?.uid
+                    ? ('text.account.company.userManagement.edit.employee' | cxTranslate)
+                    : ('form.register_new_employee' | cxTranslate)
+                }}
+              </h1>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-12">
+              <app-action-message
+                id="userChangeId"
+                [type]="responseEmployeeType"
+                [message]="responseEmployeeMessage"
+              ></app-action-message>
+            </div>
+          </div>
+
+          <div *ngIf="addNewEmployee?.uid !== ''">
+            <div class="row mt-exta">
+              <label class="col-md-2 col-sm-12" id="addNewEmployee-status">{{ 'form.status' | cxTranslate }}</label>
+              <div class="col-md-4 col-sm-12">
+                <label
+                  *ngIf="addNewEmployee && addNewEmployee.doubleOptinActivated && !addNewEmployee.loginDisabled"
+                  class="text-success font-weight-bold"
+                  id="addNewEmployee-active"
+                >
+                  <fa-icon class="text-success" [icon]="checkIcon"></fa-icon>
+                  {{ 'form.active' | cxTranslate }}
+                </label>
+                <label
+                  *ngIf="addNewEmployee && !addNewEmployee.doubleOptinActivated && !addNewEmployee.loginDisabled"
+                  class="text-secondary font-weight-bold"
+                  id="addNewEmployee-confirmationPending"
+                >
+                  <fa-icon class="text-danger" [icon]="crossIcon"></fa-icon>
+                  {{ 'form.user_confirmation_pending' | cxTranslate }}
+                </label>
+                <label
+                  *ngIf="addNewEmployee && !addNewEmployee.doubleOptinActivated && addNewEmployee.loginDisabled"
+                  class="text-warning font-weight-bold"
+                  id="addNewEmployee-deactivated"
+                >
+                  {{ 'form.deactivated' | cxTranslate }}
+                </label>
+              </div>
+            </div>
+            <div class="row mt-exta">
+              <div class="col-md-4 col-sm-12 distrelecLink font-weight-bold">
+                <label
+                  *ngIf="!loadingResendEmail"
+                  class="cursor"
+                  id="addNewEmployee.resendEmail"
+                  (click)="resendActivationEmail()"
+                >
+                  {{ 'form.resend_activation_email' | cxTranslate }}
+                </label>
+                <label *ngIf="loadingResendEmail" id="addNewEmployee.spinner">
+                  <img class="min-width" src="app/spartacus/assets/media/spinner.gif" />
+                  {{ 'form.please_wait' | cxTranslate }} ...
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <form [formGroup]="addNewEmployeeForm">
+            <div class="row">
+              <div class="col-sm-12 col-md-12 mt-4 mb-4">
+                <h2 id="addNewEmployee.userDetails">{{ 'userdetailform.userDetails' | cxTranslate }}</h2>
+              </div>
+            </div>
+
+            <div class="row mt-exta">
+              <label
+                class="col-md-2 col-sm-12 col-md-offset-4"
+                id="addNewEmployee.title"
+                for="addNewEmployee.titleSelect"
+              >
+                {{ 'form.title' | cxTranslate }} *
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <ng-container *ngIf="titleList">
+                  <ng-select
+                    class="account-info"
+                    id="addNewEmployee.titleSelect"
+                    [(ngModel)]="addNewEmployee.titleCode"
+                    [items]="titleList.titles"
+                    formControlName="title"
+                    bindLabel="name"
+                    bindValue="code"
+                  ></ng-select>
+                  <small
+                    *ngIf="addNewEmployeeForm.get('title').errors && addNewEmployeeForm.get('title').touched"
+                    class="error"
+                  >
+                    {{ 'validations.title_required' | cxTranslate }}
+                  </small>
+                </ng-container>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <label class="col-md-2 col-sm-12" id="addNewEmployee-firstName" for="addNewEmployee.firstName">
+                {{ 'form.first_name' | cxTranslate }} *
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input
+                  class="form-control"
+                  id="addNewEmployee.firstName"
+                  [(ngModel)]="addNewEmployee.firstName"
+                  [class.is-correct]="addNewEmployeeForm.get('firstName').valid"
+                  [class.is-invalid]="
+                    addNewEmployeeForm.get('firstName').errors && addNewEmployeeForm.get('firstName').touched
+                  "
+                  type="text"
+                  formControlName="firstName"
+                />
+                <small
+                  *ngIf="addNewEmployeeForm.get('firstName').errors && addNewEmployeeForm.get('firstName').touched"
+                  class="error"
+                >
+                  {{ 'validations.first_name_required' | cxTranslate }}
+                </small>
+              </div>
+              <label class="col-md-2 col-sm-12" id="addNewEmployee-firstName" for="addNewEmployee.lastName">
+                {{ 'form.last_name' | cxTranslate }} *
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input
+                  class="form-control"
+                  id="addNewEmployee.lastName"
+                  [(ngModel)]="addNewEmployee.lastName"
+                  [class.is-correct]="addNewEmployeeForm.get('lastName').valid"
+                  [class.is-invalid]="
+                    addNewEmployeeForm.get('lastName').errors && addNewEmployeeForm.get('lastName').touched
+                  "
+                  type="text"
+                  formControlName="lastName"
+                />
+                <small
+                  *ngIf="addNewEmployeeForm.get('lastName').errors && addNewEmployeeForm.get('lastName').touched"
+                  class="error"
+                >
+                  {{ 'validations.surname_required' | cxTranslate }}
+                </small>
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <label class="col-md-2 col-sm-12" id="addNewEmployee-department" for="addNewEmployee.departmentSelect">
+                {{ 'form.department' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <ng-container *ngIf="departmentList$ | async as departmentList">
+                  <ng-select
+                    class="account-info"
+                    id="addNewEmployee.departmentSelect"
+                    [(ngModel)]="addNewEmployee.departmentCode"
+                    formControlName="departmentCode"
+                    name="userDepartment"
+                  >
+                    <ng-option id="" value="" selected disabled>{{ 'form.select_empty' | cxTranslate }}</ng-option>
+                    <ng-option
+                      *ngFor="let departmentItem of departmentList.departments"
+                      [value]="departmentItem.code"
+                      [id]="departmentItem.code"
+                    >
+                      {{ departmentItem.name }}
+                    </ng-option>
+                  </ng-select>
+                </ng-container>
+              </div>
+              <label class="col-md-2 col-sm-12" id="addNewEmployee-function" for="addNewEmployee.fucntionSelect">
+                {{ 'form._function' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <ng-container *ngIf="functionList$ | async as functionList">
+                  <ng-select
+                    class="account-info"
+                    id="addNewEmployee.fucntionSelect"
+                    [(ngModel)]="addNewEmployee.functionCode"
+                    formControlName="functionCode"
+                  >
+                    <ng-option id="" value="" selected disabled>{{ 'form.select_empty' | cxTranslate }}</ng-option>
+                    <ng-option
+                      *ngFor="let functionItem of functionList.functions"
+                      [value]="functionItem.code"
+                      [id]="functionItem.code"
+                    >
+                      {{ functionItem.name }}
+                    </ng-option>
+                  </ng-select>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <label class="col-md-2 col-sm-12" id="addNewEmployee-email" for="addNewEmployee.emailLogin">
+                {{ 'form.log_in_or_email_address' | cxTranslate }} *
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input
+                  class="form-control"
+                  id="addNewEmployee.emailLogin"
+                  [(ngModel)]="addNewEmployee.email"
+                  [class.is-correct]="addNewEmployeeForm.get('email').valid"
+                  [class.is-invalid]="addNewEmployeeForm.get('email').errors && addNewEmployeeForm.get('email').touched"
+                  type="text"
+                  formControlName="email"
+                />
+                <small
+                  *ngIf="addNewEmployeeForm.get('email').errors && addNewEmployeeForm.get('email').touched"
+                  class="error"
+                >
+                  {{ 'validations.email_error_invalid' | cxTranslate }}
+                </small>
+              </div>
+
+              <label class="col-md-2 col-sm-12" id="addNewEmployee-phone" for="addNewEmployee.phone">
+                {{ 'form.phone' | cxTranslate }} **
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input
+                  class="form-control"
+                  id="addNewEmployee.phone"
+                  [(ngModel)]="addNewEmployee.phoneNumber"
+                  [class.is-correct]="addNewEmployeeForm.get('phoneNumber').valid"
+                  [class.is-invalid]="
+                    addNewEmployeeForm.get('phoneNumber').errors && addNewEmployeeForm.get('phoneNumber').touched
+                  "
+                  type="text"
+                  formControlName="phoneNumber"
+                  placeholder="{{ phonePrefix }}"
+                />
+                <small
+                  *ngIf="addNewEmployeeForm.get('phoneNumber').errors && addNewEmployeeForm.get('phoneNumber').touched"
+                  class="error"
+                >
+                  {{ 'validations.enter_valid_phone_mobile' | cxTranslate }}
+                </small>
+              </div>
+
+              <label class="col-md-2 col-sm-12" id="addNewEmployee-mobilePhone" for="addNewEmployee.mobilePhone">
+                {{ 'form.mobile_phone' | cxTranslate }} **
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input
+                  class="form-control"
+                  id="addNewEmployee.mobilePhone"
+                  [(ngModel)]="addNewEmployee.mobileNumber"
+                  [class.is-correct]="addNewEmployeeForm.get('mobilePhone').valid"
+                  [class.is-invalid]="
+                    addNewEmployeeForm.get('mobilePhone').errors && addNewEmployeeForm.get('mobilePhone').touched
+                  "
+                  type="text"
+                  formControlName="mobilePhone"
+                  placeholder="{{ phonePrefix }}"
+                />
+                <small
+                  *ngIf="addNewEmployeeForm.get('mobilePhone').errors && addNewEmployeeForm.get('mobilePhone').touched"
+                  class="error"
+                >
+                  {{ 'validations.enter_valid_phone_mobile' | cxTranslate }}
+                </small>
+              </div>
+
+              <label class="col-md-2 col-sm-12" id="addNewEmployee-fax" for="addNewEmployee.fax">
+                {{ 'form.fax' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input
+                  class="form-control"
+                  id="addNewEmployee.fax"
+                  [(ngModel)]="addNewEmployee.faxNumber"
+                  type="text"
+                  formControlName="faxNumber"
+                  placeholder="{{ phonePrefix }}"
+                />
+              </div>
+            </div>
+
+            <div class="row mt-4 border-top">
+              <div class="col-md-6 col-sm-12">
+                <div class="row">
+                  <div class="col-sm-12 col-md-12 mt-4 mb-4">
+                    <h2 id="addNewEmployee-approvedBudget">{{ 'form.approved_budget' | cxTranslate }}*</h2>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-md-8 col-sm-12">
+                    <label class="form-check-label" for="addNewEmployee.withoutBudgetLimit">
+                      <input
+                        id="addNewEmployee.withoutBudgetLimit"
+                        [(ngModel)]="addNewEmployee.budgetWithoutLimit"
+                        type="checkbox"
+                        formControlName="budgetWithoutLimit"
+                      />
+
+                      {{ 'form.without_budget_limit' | cxTranslate }}
+                    </label>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <label class="col-md-3 col-sm-12" id="addNewEmployee-perOrder">
+                    {{ 'form.per_order' | cxTranslate }}
+                  </label>
+                  <div class="col-md-8 col-sm-12">
+                    <label
+                      class="col-md-3 d-inline-block col-2"
+                      id="addNewEmployee-currencyName"
+                      for="addNewEmployee.currencyName"
+                    >
+                      {{ currencyName }}
+                    </label>
+                    <input
+                      class="col-10 form-control col-md-9 d-inline-block"
+                      id="addNewEmployee.currencyName"
+                      [(ngModel)]="addNewEmployee.budgetPerOrder"
+                      [readonly]="addNewEmployee.budgetWithoutLimit"
+                      [class.is-correct]="addNewEmployeeForm.get('budgetPerOrder').valid"
+                      [class.is-invalid]="
+                        addNewEmployeeForm.get('budgetPerOrder').errors &&
+                        addNewEmployeeForm.get('budgetPerOrder').touched
+                      "
+                      formControlName="budgetPerOrder"
+                      type="text"
+                    />
+                    <small
+                      *ngIf="
+                        addNewEmployeeForm.get('budgetPerOrder').errors &&
+                        addNewEmployeeForm.get('budgetPerOrder').touched
+                      "
+                      class="error"
+                    >
+                      {{ 'validations.enter_order_yearly_budget' | cxTranslate }}
+                    </small>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <label class="col-md-3 col-sm-12" id="addNewEmployee-yearly">{{ 'form.yearly' | cxTranslate }}</label>
+                  <div class="col-md-8 col-sm-12">
+                    <label
+                      class="col-md-3 d-inline-block col-2"
+                      id="addNewEmployee-yearly"
+                      for="addNewEmployee.yearlyBudget"
+                    >
+                      {{ currencyName }}
+                    </label>
+                    <input
+                      class="col-10 form-control col-md-9 d-inline-block"
+                      id="addNewEmployee.yearlyBudget"
+                      [(ngModel)]="addNewEmployee.yearlyBudget"
+                      [readonly]="addNewEmployee.budgetWithoutLimit"
+                      [class.is-correct]="addNewEmployeeForm.get('yearlyBudget').valid"
+                      [class.is-invalid]="
+                        addNewEmployeeForm.get('yearlyBudget').errors && addNewEmployeeForm.get('yearlyBudget').touched
+                      "
+                      type="text"
+                      formControlName="yearlyBudget"
+                    />
+                    <small
+                      *ngIf="
+                        addNewEmployeeForm.get('yearlyBudget').errors && addNewEmployeeForm.get('yearlyBudget').touched
+                      "
+                      class="error"
+                    >
+                      {{ 'validations.enter_order_yearly_budget' | cxTranslate }}
+                    </small>
+                  </div>
+                </div>
+                <div *ngIf="addNewEmployee.residualBudget" class="row mt-2">
+                  <label class="col-md-3 col-sm-12" id="addNewEmployee.residualBudget">
+                    {{ 'form.residual_budget' | cxTranslate }}
+                  </label>
+                  <div class="col-md-8 col-sm-12">
+                    <label class="col-md-3 d-inline-block col-2" id="addNewEmployee-currencyName">
+                      {{ currencyName }}
+                    </label>
+                    <label class="col-10 form-control col-md-9 d-inline-block" id="addNewEmployee-residualBudget">
+                      {{ addNewEmployee.residualBudget | price }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="row mt-4">
+                  <div class="col-sm-12 col-md-12 mb-4">
+                    <h2 id="addNewEmployee-allowedPermissions">{{ 'form.alloed_permissions' | cxTranslate }}*</h2>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <label
+                    class="col-md-4 col-sm-12"
+                    id="addNewEmployee-requestQuotations"
+                    for="addNewEmployee-quotationRequest"
+                  >
+                    {{ 'form.request_quotations' | cxTranslate }}
+                  </label>
+                  <div class="col-sm-12 col-md-8">
+                    <div class="form-check form-check-inline">
+                      <input
+                        class="form-check-input"
+                        id="addNewEmployee-quotationRequest"
+                        id="quotationRequest1"
+                        [(ngModel)]="addNewEmployee.requestQuotationPermission"
+                        [value]="true"
+                        type="radio"
+                        formControlName="quotationRequest"
+                      />
+                      <label class="form-check-label" for="quotationRequest1">
+                        {{ 'form.yes' | cxTranslate }}
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input
+                        class="form-check-input"
+                        id="quotationRequest2"
+                        [(ngModel)]="addNewEmployee.requestQuotationPermission"
+                        [value]="false"
+                        type="radio"
+                        formControlName="quotationRequest"
+                      />
+                      <label class="form-check-label" for="quotationRequest2">
+                        {{ 'form.no' | cxTranslate }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row mt-4 border-top">
+              <div class="col-md-2 col-sm-12 mb-2 mt-3">
+                <button class="btn btn-secondary btn-distrelec btn-gray float-left" (click)="goBack()">
+                  {{ 'form.cancel' | cxTranslate }}
+                  <div class="float-sm-left ml-2">
+                    <fa-icon [icon]="faAngleLeft"></fa-icon>
+                  </div>
+                </button>
+              </div>
+
+              <div *ngIf="addNewEmployee?.uid !== ''" class="col-md-3 col-sm-12 mb-2 mt-3">
+                <button class="btn btn-secondary btn-distrelec btn-gray w-fc" (click)="deactivateUser()">
+                  {{ 'form.deactivate_user' | cxTranslate }}
+                </button>
+              </div>
+              <div *ngIf="addNewEmployee?.uid !== ''" class="col-md-3 col-sm-12 mb-2 mt-3">
+                <button class="btn btn-secondary btn-distrelec btn-gray" (click)="deleteEmployee()">
+                  {{ 'form.delete_user' | cxTranslate }}
+                </button>
+              </div>
+              <div *ngIf="addNewEmployee?.uid !== ''" class="col-md-1 col-sm-12 mb-2 mt-3"></div>
+
+              <div *ngIf="addNewEmployee?.uid === ''" class="col-md-7 col-sm-12"></div>
+
+              <div class="col-md-3 col-sm-12 mt-3">
+                <button
+                  class="btn btn-secondary btn-distrelec float-right"
+                  id="addNewEmployee-saveClose"
+                  (click)="addEditNewUser()"
+                >
+                  {{ isSaving ? ('form.please_wait' | cxTranslate) : ('form.save_and_close' | cxTranslate) }}
+                  <div class="float-sm-right mr-2">
+                    <fa-icon [icon]="faAngleRight"></fa-icon>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </ng-container>
+
+      <app-confirm-popup
+        *ngIf="showConfirm"
+        [data]="{
+          title: 'form.confirm_default_message' | cxTranslate,
+          content: 'form.delete_employee' | cxTranslate,
+          type: 'warning'
+        }"
+        (confirmedEvents)="confirmEmployeeDelete($event)"
+      ></app-confirm-popup>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

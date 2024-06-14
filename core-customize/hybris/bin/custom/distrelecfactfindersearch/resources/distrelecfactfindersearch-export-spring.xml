@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans 	xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+        					http://www.springframework.org/schema/beans/spring-beans.xsd
+        					http://www.springframework.org/schema/context
+        					http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- Jobs -->
+	
+	<bean id="distff.factFinderExportJob" class="com.namics.hybris.ffsearch.export.DistFactFinderExportJob" parent="abstractJobPerformable">
+		<property name="catalogVersionService" ref="catalogVersionService" />
+		<property name="configurationService" ref="configurationService"/>
+		<property name="exportHelper" ref="distff.factFinderExportHelper" />
+		<property name="distCsvTransformationService" ref="core.distCsvTransformationService" />
+		<property name="factFinderIndexManagementService" ref="distff.indexManagementService" />
+		<!-- Default Parameter Provider - Can be overridden in Job Definition -->
+		<property name="parameterProvider" ref="distff.productExportParameterProvider" />
+		<!-- Default Query Creator - Can be overridden in Job Definition -->
+		<property name="distFlexibleSearchQueryCreator" ref="distff.distFactFinderProductExportQueryCreator3" />
+		<property name="modelService" ref="modelService" />
+		<property name="flexibleSearchExecutionService" ref="core.distFlexibleSearchExecutionService"/>
+	</bean>
+
+	<bean id="distff.factFinderSequentialExportJob" class="com.namics.hybris.ffsearch.export.DistFactFinderSequentialExportJob" parent="abstractJobPerformable">
+		<property name="catalogVersionService" ref="catalogVersionService" />
+		<property name="configurationService" ref="configurationService" />
+		<property name="exportHelper" ref="distff.factFinderExportHelper" />
+		<property name="factFinderDetailQueryCreator" ref="distff.factFinderDetailQueryCreator" />
+		<property name="factFinderPkQueryCreator" ref="distff.factFinderPkQueryCreator" />
+		<property name="factFinderIndexManagementService" ref="distff.indexManagementService" />
+		<property name="flexibleSearchExecutionService" ref="core.distFlexibleSearchExecutionService" />
+		<property name="mediaService" ref="mediaService" />
+	</bean>
+
+	<!-- 
+	<bean id="wtCustomerExportJob" class="com.namics.hybris.ffsearch.export.webtrekk.DistWTcustomerExportJob" parent="abstractJobPerformable">
+		<property name="exportHelper" ref="distff.factFinderExportHelper" />
+		<property name="distCsvTransformationService" ref="core.distCsvTransformationService" />
+	</bean>
+	 -->
+	 
+	<bean id="exportProductInfoJob" class="com.namics.hybris.ffsearch.export.ExportProductInfoJob" parent="abstractJobPerformable">
+		<property name="commonI18NService" ref="commonI18NService" />
+		<property name="exportHelper" ref="distff.factFinderExportHelper" />
+		<property name="distCsvTransformationService" ref="core.distCsvTransformationService" />
+	</bean>
+	
+	<bean id="distff.categoryStructureExportJob" class="com.namics.hybris.ffsearch.export.DistCategoryStructureExportJob" parent="abstractJobPerformable">
+		<property name="configurationService" ref="configurationService" />
+		<property name="commonI18NService" ref="commonI18NService" />
+		<property name="distCategoryService" ref="distCategoryService" />
+		<property name="exportHelper" ref="distff.factFinderExportHelper" />
+	</bean>
+	
+	
+	<bean id="distff.factFinderErpExportJob" class="com.namics.hybris.ffsearch.export.DistFactFinderErpExportJob" parent="abstractJobPerformable">
+		<property name="catalogVersionService" ref="catalogVersionService" />
+		<property name="exportHelper" ref="distff.factFinderExportHelper" />
+		<property name="distCsvTransformationService" ref="core.distCsvTransformationService" />
+		<property name="factFinderIndexManagementService" ref="distff.indexManagementService" />
+		<!-- Default Parameter Provider - Can be overridden in Job Definition -->
+		<property name="parameterProvider" ref="distff.productExportParameterProvider" />
+		<!-- Default Query Creator - Can be overridden in Job Definition -->
+		<property name="queryCreator" ref="distff.distFactFinderErpExportQueryCreator" />
+		<property name="modelService" ref="modelService" />		
+	</bean>
+	
+	<bean id="scriptExecutionJob" class="com.namics.hybris.ffsearch.unix.UnixScriptExecutionJob" parent="abstractJobPerformable" />
+	
+	<bean id="distff.factFinderAttributeExportJob" class="com.namics.hybris.ffsearch.export.DistFactFinderGenericExportJob" parent="abstractJobPerformable">
+		<property name="distFlexibleSearchQueryCreator" ref="distff.distFactFinderAttributeExportQueryCreator" />
+		<property name="distCsvTransformationService" ref="core.distCsvTransformationService" />
+		<property name="configurationService" ref="configurationService"/>
+		<property name="exportHelper" ref="distff.factFinderExportHelper" />
+	</bean>
+	
+	<bean id="distff.factFinderUnitExportJob" class="com.namics.hybris.ffsearch.export.DistFactFinderGenericExportJob" parent="abstractJobPerformable">
+		<property name="distFlexibleSearchQueryCreator" ref="distff.distFactFinderUnitExportQueryCreator" />
+		<property name="distCsvTransformationService" ref="core.distCsvTransformationService" />
+		<property name="configurationService" ref="configurationService"/>
+		<property name="exportHelper" ref="distff.factFinderExportHelper" />
+	</bean>
+	
+	<bean id="distff.factFinderCatPlusExportJob" class="com.namics.distrelec.b2b.core.inout.export.job.DistFlexibleSearchExportJob" parent="abstractJobPerformable">
+		<property name="distFlexibleSearchQueryCreator" ref="distff.distFactFinderCatPlusExportQueryCreator" />
+	</bean>
+	
+	<!-- Export Query Creators and Parameter Providers -->
+	<bean id="distff.distFactFinderErpExportQueryCreator" class="com.namics.hybris.ffsearch.export.query.DistFactFinderErpExportQueryCreator" />
+	<bean id="distff.distFactFinderProductExportQueryCreator3" class="com.namics.hybris.ffsearch.export.query.DistFactFinderProductExportQueryCreator3" />
+	<bean id="distff.distFactFinderProductExportQueryCreatorFromFile" class="com.namics.hybris.ffsearch.export.query.DistFactFinderProductExportQueryCreatorFromFile" />
+	
+	<bean id="distff.distFactFinderAttributeExportQueryCreator" class="com.namics.hybris.ffsearch.export.query.DistFactFinderAttributeExportQueryCreator" />
+	
+	<bean id="distff.distFactFinderUnitExportQueryCreator" class="com.namics.hybris.ffsearch.export.query.DistFactFinderUnitExportQueryCreator" />
+	
+	<bean id="distff.distFactFinderCatPlusExportQueryCreator" class="com.namics.hybris.ffsearch.export.query.DistFactFinderCatPlusExportQueryCreator" />
+		
+	<bean id="distff.productExportParameterProvider" class="com.namics.hybris.ffsearch.export.query.DistFactFinderProductExportParameterProvider">
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+	</bean>
+
+	<bean id="distff.factFinderDetailQueryCreator" class="com.namics.hybris.ffsearch.export.query.DefaultDistFactFinderDetailQueryCreator">
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+
+	<bean id="distff.factFinderPkQueryCreator" class="com.namics.hybris.ffsearch.export.query.DefaultDistFactFinderPkQueryCreator"/>
+
+	<!-- Export Helper -->
+	
+	<bean id="distff.factFinderExportHelper" class="com.namics.hybris.ffsearch.export.DistFactFinderExportHelper">
+		<property name="mediaService" ref="mediaService" />
+		<property name="modelService" ref="modelService" />
+		<property name="distZipService" ref="core.distZipService" />
+		<property name="configurationService" ref="configurationService" />
+		<property name="catalogService" ref="catalogService" />
+		<property name="mediaStorageConfigService" ref="mediaStorageConfigService" />
+		<property name="mediaStorageRegistry" ref="mediaStorageRegistry" />
+	</bean>
+	
+</beans>

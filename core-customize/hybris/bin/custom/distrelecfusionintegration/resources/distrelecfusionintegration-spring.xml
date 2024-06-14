@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/util 
+                      http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="gson" class="com.google.gson.Gson" />
+
+	<bean id="distFusionIndexerStrategy" class="com.distrelec.solrfacetsearch.indexer.strategies.impl.DistIndexerStrategy" parent="defaultIndexerStrategy">
+		<property name="flexibleSearchQuerySpecFactory" ref="distFlexibleSearchQuerySpecFactory"/>
+	</bean>
+
+	<alias name="distIndexNameStrategy" alias="indexNameStrategy"></alias>
+	<bean id="distIndexNameStrategy" class='com.distrelec.solrfacetsearch.indexer.strategies.impl.DistIndexNameStrategy'>
+		<constructor-arg name="configurationService" ref="configurationService"/>
+	</bean>
+
+    <bean id="distFusionStandaloneSearchProvider"
+		  class="com.distrelec.solrfacetsearch.solr.impl.FusionSolrStandaloneSearchProvider" parent="abstractSolrSearchProvider">
+		<constructor-arg name="fusionExportService" ref="fusionExportService"/>
+		<constructor-arg name="createIndexNameStrategy" ref="distIndexNameStrategy"/>
+	</bean>
+
+    <alias name="distSolrSearchProviderFactory" alias="solrSearchProviderFactory" />
+    <bean id="distSolrSearchProviderFactory"
+          class="com.distrelec.solrfacetsearch.solr.impl.DistSolrSearchProviderFactory" parent="defaultSolrSearchProviderFactory">
+        <property name="solrDistStandaloneSearchProvider" ref="distFusionStandaloneSearchProvider" />
+    </bean>
+
+    <alias name="distIndexerStrategyFactory" alias="indexerStrategyFactory" />
+    <bean id="distIndexerStrategyFactory" class="com.distrelec.solrfacetsearch.indexer.strategies.impl.DistIndexerStrategyFactor" parent="defaultIndexerStrategyFactory">
+        <property name="distFusionIndexerStrategy" value="distFusionIndexerStrategy" />
+    </bean>
+
+    <alias name="defaultSolrServerConfigWithCredentialsConverter" alias="solrServerConfigConverter" />
+
+   	<bean id="solr.exporter.fusion" class="com.distrelec.solrfacetsearch.indexer.impl.DistFusionExporter">
+		<constructor-arg name="indexNameStrategy" ref="distIndexNameStrategy" />
+   		<constructor-arg name="indexerBatchContextFactory" ref="indexerBatchContextFactory" />
+        <constructor-arg name="distFusionExportService" ref="distFusionExportService"/>
+   	</bean>
+
+	<alias name="distIndexer" alias="indexer" />
+	<bean id="distIndexer" class="com.distrelec.solrfacetsearch.indexer.impl.DistIndexer" parent="defaultIndexer" >
+		<constructor-arg name="contextProvidersByType">
+			<util:map map-class="java.util.HashMap">
+					<entry key="Product" value-ref="distProductDocumentContextProvider" />
+
+			</util:map>
+		</constructor-arg>
+	</bean>
+
+	<alias name="distIndexerContextFactory" alias="indexerContextFactory" />
+	<bean id="distIndexerContextFactory"
+		  class="com.distrelec.solrfacetsearch.indexer.impl.DistIndexerContextFactory"
+		  parent="defaultIndexerContextFactory">
+	</bean>
+
+	<bean id="distProductDocumentContextProvider" class="com.distrelec.solrfacetsearch.indexer.impl.DistProductDocumentContextProvider">
+		<constructor-arg name="distPriceService" ref="priceService"/>
+		<constructor-arg name="distProductSearchExportDAO" ref="distProductSearchExportDAO"/>
+		<constructor-arg name="distrelecCodelistService" ref="distCodelistService"/>
+		<constructor-arg name="enumerationService" ref="enumerationService"/>
+		<constructor-arg name="sessionService" ref="sessionService"/>
+	</bean>
+
+
+<!--    redeclare distFusionExportService in order to inject distIndexerStrategyFactory, else-->
+<!--    BackofficeIndexerStrategyFactory wind over  distIndexerStrategyFactory-->
+	<alias name="defaultIndexerService" alias="indexerService"/>
+	<bean id="defaultIndexerService" class="de.hybris.platform.solrfacetsearch.indexer.impl.DefaultIndexerService">
+		<property name="indexerStrategyFactory" ref="distIndexerStrategyFactory"/>
+	</bean>
+
+	<alias name="distFusionExportService" alias="fusionExportService"/>
+	<bean id="distFusionExportService" class="com.distrelec.solrfacetsearch.service.impl.DistFusionExportService">
+		<property name="restTemplate" ref="fusionRestTemplate"/>
+		<property name="configurationService" ref="configurationService"/>
+		<property name="fusionDocumentRequestDTOConverter" ref="fusionDocumentRequestDTOConverter"/>
+		<property name="deleteRequestDTOConverter" ref="deleteRequestDTOConverter"/>
+		<property name="migrationStatusRequestDTOConverter" ref="migrationStatusRequestDTOConverter"/>
+	</bean>
+
+
+	<bean id="poolingHttpClientConnectionManager" class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager">
+		<property name="maxTotal" value="30"/>
+	</bean>
+
+	<bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig"
+		  factory-method="custom">
+		<property name="socketTimeout" value="${distrelecfusionintegration.fusion.fusionTimeoutInMillis}"/>
+		<property name="connectTimeout" value="${distrelecfusionintegration.fusion.fusionTimeoutInMillis}"/>
+		<property name="cookieSpec" value="standard"/>
+	</bean>
+
+	<bean id="requestConfig" factory-bean="requestConfigBuilder" factory-method="build">
+	</bean>
+
+	<bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder"
+		  factory-method="create">
+		<property name="defaultRequestConfig" ref="requestConfig"/>
+		<property name="connectionManager" ref="poolingHttpClientConnectionManager"/>
+	</bean>
+
+	<bean id="fusionRestTemplate" class="org.springframework.web.client.RestTemplate">
+		<constructor-arg name="requestFactory" ref="httpComponentsClientHttpRequestFactory"/>
+	</bean>
+
+	<bean id="httpComponentsClientHttpRequestFactory" class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+		<property name="httpClient" ref="httpClient"/>
+	</bean>
+
+	<bean id="httpClient" factory-bean="httpClientBuilder" factory-method="build"/>
+
+	<bean id="threadPoolTaskScheduler" class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+		<property name="poolSize" value="30"/>
+
+	</bean>
+
+	<bean id="distCountryValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistCountryValueResolver" parent="abstractDistValueResolver"/>
+
+	<bean id="distSapPlantProfilesValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistSapPlantProfilesValueResolver" parent="abstractDistProductValueResolver"/>
+
+	<bean id="distShopVisibilityValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistShopVisibilityValueResolver" parent="abstractDistProductValueResolver"/>
+
+	<bean id="distTotalInStockForCMSSiteValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistTotalInStockForCMSSiteValueResolver"
+		  parent="abstractDistProductValueResolver"/>
+
+	<bean id="distPromotionLabelValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistPromotionLabelValueResolver" parent="abstractDistProductValueResolver"/>
+
+	<bean id="distProductStatusCodesValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistProductStatusCodesValueResolver"
+		  parent="abstractDistProductValueResolver"/>
+
+	<bean id="distProductStatusNamesValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistProductStatusNamesValueResolver" parent="abstractDistProductValueResolver"/>
+
+	<bean id="distVisibleInChannelsValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistVisibleInChannelsValueResolver" parent="abstractDistProductValueResolver"/>
+
+	<bean id="distAllPriceAttributesValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistAllPriceAttributesValueResolver" parent="abstractDistProductValueResolver">
+		<constructor-arg name="distProductSearchExportDAO" ref="distProductSearchExportDAO"/>
+	</bean>
+
+	<bean id="abstractDistPimWebUseValueResolver" abstract="true" class="com.distrelec.solrfacetsearch.provider.product.impl.AbstractDistPimWebUseValueResolver" parent="abstractDistProductValueResolver">
+		<constructor-arg name="unitConversionService" ref="distUnitConversionService"/>
+		<constructor-arg name="gson" ref="gson"/>
+	</bean>
+
+	<bean id="distPimWebUseIndividualFieldsValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistPimWebUseIndividualFieldsValueResolver" parent="abstractDistPimWebUseValueResolver"/>
+	<bean id="distPimWebUseFullTextSearchValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistPimWebUseFullTextSearchValueResolver" parent="abstractDistPimWebUseValueResolver"/>
+	<bean id="distPimWebUseDisplayValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistPimWebUseDisplayValueResolver" parent="abstractDistPimWebUseValueResolver"/>
+
+	<bean id="distProductEligibleForReevooValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistProductEligibleForReevooValueResolver" parent="abstractDistProductValueResolver">
+		<constructor-arg name="revooProductFeedExportDao" ref="revooProductFeedExportDao" />
+	</bean>
+
+	<alias name="distItemIdentityProvider" alias="itemIdentityProvider" />
+	<bean id="distItemIdentityProvider" class="com.distrelec.solrfacetsearch.provider.impl.DistItemIdentityProvider">
+		<property name="modelService" ref="modelService" />
+		<property name="catalogTypeService" ref="catalogTypeService" />
+	</bean>
+
+	<alias name="distLanguageQualifierProvider" alias="languageQualifierProvider" />
+	<bean id="distLanguageQualifierProvider"
+		 class="com.distrelec.solrfacetsearch.provider.impl.DistLanguageQualifierProvider">
+		<property name="commonI18NService" ref="commonI18NService" />
+	</bean>
+
+	<bean id="abstractDistValueResolver" class="com.distrelec.solrfacetsearch.provider.impl.AbstractDistValueResolver" parent="modelAttributesValueResolver"/>
+
+	<bean abstract="true" id="abstractDistProductValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.AbstractDistProductValueResolver" parent="abstractDistValueResolver" >
+		<constructor-arg name="distCMSSiteDao" ref="cmsSiteDao"/>
+		<constructor-arg name="enumerationService" ref="enumerationService"/>
+	</bean>
+
+	<bean id="distProductSearchExportDAO" class="com.distrelec.solrfacetsearch.dao.impl.DefaultDistProductSearchExportDAO">
+		<constructor-arg name="flexibleSearchService" ref="flexibleSearchService"></constructor-arg>
+	</bean>
+
+	<bean id="distCategoryAttributeResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistCategoryAttributeValueResolver" parent="abstractDistProductValueResolver"/>
+	<bean id="distCategoryMLAttributeResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistCategoryMLAttributeValueResolver" parent="abstractDistProductValueResolver">
+		<constructor-arg name="gson" ref="gson"/>
+	</bean>
+
+	<bean id="distProductImagesValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistProductImagesValueResolver" parent="abstractDistProductValueResolver">
+		<constructor-arg name="distSiteBaseUrlResolutionService" ref="distSiteBaseUrlResolutionService"/>
+	</bean>
+
+	<bean id="distProductFamilyURLValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistProductFamilyURLValueResolver" parent="abstractDistProductValueResolver">
+		<constructor-arg  name="categoryService" ref="categoryService" />
+		<constructor-arg name="distProductFamilyUrlResolver" ref="headlessDistProductFamilyUrlResolver"/>
+	</bean>
+
+	<bean id="distProductURLValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistProductURLValueResolver" parent="abstractDistProductValueResolver">
+		<constructor-arg name="productUrlResolver" ref="headlessDistProductModelUrlResolver" />
+	</bean>
+
+	<bean id="distProductManufacturerURLValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistProductManufacturerURLValueResolver" parent="abstractDistProductValueResolver">
+		<constructor-arg name="manufacturerUrlResolver" ref="headlessDistManufacturerModelUrlResolver" />
+	</bean>
+
+	<bean id="distSalesUnitValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistSalesUnitValueResolver" parent="abstractDistValueResolver"></bean>
+
+	<bean id="distCategoryCodesValueResolver" class="com.distrelec.solrfacetsearch.provider.product.impl.DistCategoryCodesValueResolver" parent="abstractDistValueResolver"></bean>
+
+
+	<bean id="distManufacturerImageValueResolver" class="com.distrelec.solrfacetsearch.provider.manufacturer.impl.DistManufacturerImageValueResolver" parent="abstractDistValueResolver"></bean>
+
+	<bean id="distManufacturerURLValueResolver" class="com.distrelec.solrfacetsearch.provider.manufacturer.impl.DistManufacturerURLValueResolver" parent="abstractDistValueResolver">
+		<constructor-arg name="manufacturerUrlResolver" ref="headlessDistManufacturerModelUrlResolver"/>
+	</bean>
+
+	<bean id="distBaseUnitSymbolValueResolver" class="com.distrelec.solrfacetsearch.provider.unit.DistBaseUnitSymbolValueResolver" parent="abstractDistValueResolver">
+		<constructor-arg name="distClassificationDao" ref="classificationDao" />
+	</bean>
+
+	<bean id="distCategoryURLValueResolver" class="com.distrelec.solrfacetsearch.provider.category.impl.DistCategoryURLValueResolver" parent="abstractDistValueResolver">
+		<constructor-arg name="categoryModelUrlResolver" ref="headlessDistCategoryModelUrlResolver" />
+	</bean>
+
+	<bean id="distCategoryShopVisibilityValueResolver" class="com.distrelec.solrfacetsearch.provider.category.impl.DistCategoryShopVisibilityValueResolver" parent="abstractDistValueResolver" />
+
+	<bean id="distCategoryImageValueResolver" class="com.distrelec.solrfacetsearch.provider.category.impl.DistCategoryImageValueResolver"  parent="abstractDistValueResolver" />
+
+	<bean id="distCategorySuperCategoriesValueResolver" class="com.distrelec.solrfacetsearch.provider.category.impl.DistCategorySuperCategoriesValueResolver"  parent="abstractDistValueResolver" />
+
+	<bean id="distClassAttributeAssignmentValueResolver" class="com.distrelec.solrfacetsearch.provider.classattributeassignment.impl.DistClassAttributeAssignmentCodeValueResolver" parent="abstractDistValueResolver" />
+
+	<bean id="distClassAttributeAssignmentUnitValueResolver" class="com.distrelec.solrfacetsearch.provider.classattributeassignment.impl.DistClassAttributeAssignmentUnitValueResolver" parent="abstractDistValueResolver">
+		<constructor-arg name="unitConversionService" ref="distUnitConversionService"/>
+	</bean>
+
+	<bean id="distClassAttributeAssignmentFieldTypeValueResolver" class="com.distrelec.solrfacetsearch.provider.classattributeassignment.impl.DistClassAttributeAssignmentFieldTypeValueResolver" parent="abstractDistValueResolver" />
+
+	<bean id="distPunchOutAllAttributesValueResolver" class="com.distrelec.solrfacetsearch.provider.punchout.impl.DistPunchOutAllAttributesValueResolver" parent="abstractDistValueResolver"></bean>
+
+	<!-- HEADLESS-URL-RESOLVER -->
+	<bean id="headlessDistProductModelUrlResolver"
+		  class="com.namics.distrelec.b2b.core.service.url.impl.DefaultDistProductModelUrlResolver"
+		  parent="defaultProductModelUrlResolver">
+		<property name="eolLandingPage" value="/cms/productEOL"/>
+		<property name="commonI18NService" ref="commonI18NService"/>
+		<property name="defaultPattern"
+				  value="/{product-name}-{manufacturer-name}-{product-type}/p/{product-code}"/>
+		<property name="canonicalPattern" value="/{product-name}-{manufacturer-name}-{product-type}/p/{product-code}"/>
+	</bean>
+
+	<bean id="headlessDistProductFamilyUrlResolver"
+		  class="com.namics.distrelec.b2b.core.service.url.impl.DefaultDistProductFamilyUrlResolver"
+		  parent="defaultCategoryModelUrlResolver">
+		<property name="commonI18NService" ref="commonI18NService"/>
+		<property name="distCategoryService" ref="distCategoryService"/>
+		<property name="pattern" value="/{product-family-name}/pf/{product-family-code}"/>
+	</bean>
+
+	<bean id="headlessDistManufacturerModelUrlResolver"
+		  class="com.namics.distrelec.b2b.core.service.url.impl.DefaultDistManufacturerModelUrlResolver">
+		<property name="threadContextService" ref="threadContextService"/>
+		<property name="baseSiteService" ref="baseSiteService"/>
+		<property name="commonI18NService" ref="commonI18NService"/>
+		<property name="pattern" value="/manufacturer/{manufacturer-name}/{manufacturer-code}"/>
+	</bean>
+
+	<bean id="headlessDistCategoryModelUrlResolver"
+		  class="com.namics.distrelec.b2b.core.service.url.impl.DefaultDistCategoryModelUrlResolver"
+		  parent="defaultCategoryModelUrlResolver">
+		<property name="commonI18NService" ref="commonI18NService"/>
+		<property name="baseSiteService" ref="baseSiteService"/>
+		<property name="pattern" value="/{category-path}/c/{category-code}"/>
+	</bean>
+
+	<bean id="distSolrIndexerJob" class="com.distrelec.solrfacetsearch.indexer.cron.DistSolrIndexerJob" parent="abstractIndexerJob">
+	</bean>
+
+	<alias alias="flexibleSearchQuerySpecFactory" name="defaultFlexibleSearchQuerySpecFactory"/>
+	<bean id="distFlexibleSearchQuerySpecFactory" class="com.distrelec.solrfacetsearch.config.factories.impl.DistFlexibleSearchQuerySpecFactory"
+		  parent="defaultFlexibleSearchQuerySpecFactory">
+	</bean>
+
+	<alias name="distIndexerWorker" alias="indexerWorker"/>
+	<bean id="distIndexerWorker" class="com.distrelec.solrfacetsearch.indexer.workers.impl.DistIndexerWorker" parent="defaultIndexerWorker">
+		<constructor-arg name="facetSearchConfigMapper" ref="facetSearchConfigMapper"/>
+	</bean>
+
+	<bean id="pimWebUseMigrationJob" class="com.distrelec.job.PimWebUseMigrationJob" parent="abstractJobPerformable" />
+
+	<bean id="fusionPimWebUseMigrationJob" class="com.distrelec.job.FusionPimWebUseMigrationJob" parent="abstractJobPerformable"/>
+
+	<bean id="fusionMigrationAuditSendJob" class="com.distrelec.job.FusionMigrationAuditSendJob" parent="abstractJobPerformable"/>
+
+	<!-- Populator and converters -->
+	<bean id="fusionDocumentRequestDTOPopulator" class="com.distrelec.solrfacetsearch.indexer.populators.FusionDocumentRequestDTOPopulator" />
+
+	<bean id="fusionDocumentRequestDTOConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="com.distrelec.fusion.integration.dto.FusionDocumentRequestDTO"/>
+		<property name="populators">
+			<list merge="false">
+				<ref bean="fusionDocumentRequestDTOPopulator"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="deleteRequestDTOPopulator" class="com.distrelec.solrfacetsearch.indexer.populators.DeleteRequestDTOPopulator" />
+
+	<bean id="deleteRequestDTOConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="com.distrelec.fusion.integration.dto.DeleteRequestDTO"/>
+		<property name="populators">
+			<list merge="false">
+				<ref bean="deleteRequestDTOPopulator"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="migrationStatusRequestDTOPopulator" class="com.distrelec.solrfacetsearch.indexer.populators.MigrationStatusRequestDTOPopulator" />
+
+	<bean id="migrationStatusRequestDTOConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="com.distrelec.fusion.integration.dto.MigrationStatusRequestDTO"/>
+		<property name="populators">
+			<list merge="false">
+				<ref bean="migrationStatusRequestDTOPopulator"/>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Index listeners -->
+	<!-- Order of listeners is reverted for afterIndex calls! -->
+	<bean id="distMigrationStatusListener"
+		  class="com.distrelec.solrfacetsearch.indexer.listeners.DistMigrationStatusListener">
+		<property name="distFusionExportService" ref="distFusionExportService"/>
+	</bean>
+
+	<bean id="distMigrationStatusListenerDefinition" parent="solrListenerDefinition">
+		<property name="priority" value="1010" />
+		<property name="listener" ref="distMigrationStatusListener" />
+	</bean>
+
+	<bean id="distExecutionTimesListener"
+		  class="com.distrelec.solrfacetsearch.indexer.listeners.DistExecutionTimesListener">
+		<property name="modelService" ref="modelService"/>
+	</bean>
+
+	<bean id="distExecutionTimesListenerDefinition" parent="solrListenerDefinition">
+		<property name="priority" value="1000" />
+		<property name="listener" ref="distExecutionTimesListener" />
+	</bean>
+
+</beans>
+                                       

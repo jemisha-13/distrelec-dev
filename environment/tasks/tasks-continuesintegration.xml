@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Continues Integration (CI) [Common tasks for Bamboo,Go,Jenkins,etc.]
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-continuesintegration" basedir=".">
+
+	<!--
+	=================================
+	macro: continousintegrationtest
+	=================================
+	-->
+	<macrodef name="continousintegrationtest" description="This target will call all targets with this ant script">
+		<sequential>
+			<!-- Clean can not been executed because of the virtualjdbc extension -->
+			<!-- antcall target="clean" / -->
+			<antcall target="checkout" />
+			<antcall target="configure" />
+			<antcall target="build" />
+			<!--
+		We first have to update the master, so new types 
+		are introduced. Then, we can update/initialize the 
+		junit tenant.
+		-->
+			<antcall target="updatesystem" />
+
+			<!--
+		Force running all the following targets. If specified as "depends" in <target>, a failure in "testinit" would not continue with "test".
+		-->
+			<antcall target="testinit" />
+			<antcall target="test4continousintegration" />
+
+			<!--<antcall target="coveragereport" />-->
+
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: waitforurl
+	=================================
+	-->
+	<macrodef name="waitforurl" description="Waits till the URL is accessible.">
+		<attribute name="url"/>
+		<attribute name="timeout"/>
+		<sequential>
+			<echo message="Waiting for '@{url}' to be deployed (Timeout after @{timeout} seconds)." />
+			<waitfor maxwait="@{timeout}" maxwaitunit="second" checkevery="10" timeoutproperty="waitforurltimeoutproperty">
+			        <http url="@{url}"/>
+			</waitfor>
+
+      <fail message="ERROR: url '@{url}' run into a timeout after @{timeout} seconds!">           
+        <condition>
+          <isset property="waitforurltimeoutproperty"/>
+        </condition>
+      </fail>
+      <echo message="url '@{url}' was successfully deployed!" />
+
+		</sequential>
+	</macrodef>
+
+
+	<!--
+	=================================
+	macro: test4continousintegration
+	=================================
+	-->
+	<macrodef name="test4continousintegration" description="This target will call the hybris platform junit tests (yunit) via external cmd command. Hence, this target will NEVER fail. Do only use this target in a bamboo plan.">
+		<sequential>
+			<exec dir="${project.home}/hybris/bin/platform" executable="cmd.exe" failonerror="false">
+				<arg value="/c" />
+				<arg value="%ANT_HOME%/bin/ant" />
+				<arg value="yunit" />
+			</exec>
+		</sequential>
+	</macrodef>
+
+
+</project>
+

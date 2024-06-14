@@ -1,0 +1,34 @@
+#
+# Import the CMS content for the Distrelec site emails
+#
+# Localization en
+#
+
+$cmsSiteUID=distrelec_DE
+$contentCatalog=distrelec_DEContentCatalog
+$contentMasterCatalog=distrelecContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$emailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/emails
+
+# Language
+$lang=en
+
+# Email velocity templates
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];rendererType(code)[default='velocity']
+ ;$cmsSiteUID-BannerComponent-template;"CMSBannerComponent Template";$emailResource/email-bannerComponentTemplate.vm
+ ;$cmsSiteUID-CMSImageComponent-template;"CMSImageComponent Template";$emailResource/email-cmsImageComponentTemplate.vm
+ ;$cmsSiteUID-CMSLinkComponent-template;"CMSLinkComponent Template";$emailResource/email-cmsLinkComponentTemplate.vm
+ ;$cmsSiteUID-CMSParagraphComponent-template;"CMSParagraphComponent Template";$emailResource/email-cmsParagraphComponentTemplate.vm
+ ;$cmsSiteUID-SimpleBannerComponent-template;"CMSSimpleBannerComponent Template";$emailResource/email-bannerComponentTemplate.vm
+ 
+ ;$cmsSiteUID-Email_Header;"Email Header Template";$emailResource/email-header.vm
+ ;$cmsSiteUID-Email_Footer;"Email Footer Template";$emailResource/email-footer.vm
+ ;$cmsSiteUID-Email_Education_Registration_Request_Body;E-Mail Education Registration Request;$emailResource/email-educationRegistrationRequestBody.vm;
+ ;$cmsSiteUID-Email_Education_Registration_Request_Subject;E-Mail-Subject Education Registration Request;$emailResource/email-educationRegistrationRequestSubject.vm;
+ ;$cmsSiteUID-Email_Education_Registration_Request_Confirmation_Body;E-Mail Education Registration Request Confirmation;$emailResource/email-educationRegistrationRequestConfirmationBody.vm;
+ ;$cmsSiteUID-Email_Education_Registration_Request_Confirmation_Subject;E-Mail-Subject Education Registration Request Confirmation;$emailResource/email-educationRegistrationRequestConfirmationSubject.vm;
+
+# Email Pages
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang];masterTemplate(uid,$contentCV)
+ ;;EducationRegistrationRequestEmail;education@distrelec.com;"Distrelec Customer";EducationRegistrationRequestEmailTemplate
+ ;;EducationRegistrationRequestConfirmationEmail;education@distrelec.com;"Candidature for 3D printer competition 2015";EducationRegistrationRequestConfirmationEmailTemplate

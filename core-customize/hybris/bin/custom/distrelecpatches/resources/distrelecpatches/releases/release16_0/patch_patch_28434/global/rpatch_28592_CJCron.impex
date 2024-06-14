@@ -1,0 +1,22 @@
+################################################################
+## Impex File to create CJ Product Feed cronjobs                     ##
+################################################################
+INSERT_UPDATE DistCJProductFeedCronJob;code[unique=true];sessionLanguage(isocode);mediaPrefix;site(uid);job(code)[default='cJProductFeedJob'];sessionUser(uid)[default='techUserFactFinderExportJobs'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='ERROR'];nodeGroup[default='integration']
+;distCJFeedExportJob_CH;en;DIS-CH-ProductFeed;distrelec_CH;
+
+UPDATE DistCJProductFeedCronJob;code[unique=true];supportedLanguages(isocode)
+;distCJFeedExportJob_CH;"en,de,fr"
+
+################################################################
+## Create a composite entry for each site cronjob
+################################################################
+
+# composite entries
+INSERT_UPDATE CompositeEntry;code[unique=true];executableCronJob(code)
+;distCJFeedExportJob_CH_Entry;distCJFeedExportJob_CH
+
+###############################################################
+## Create a composite cronjob to run all the site cronjobs
+################################################################
+INSERT_UPDATE CompositeCronJob;code[unique=true];sessionLanguage(isocode);compositeEntries(code)[mode=append];job(code)[default='compositeJobPerformable'];sendEmail[default='true'];logLevelFile(code)[default='WARNING'];nodeGroup[default='integration']
+;distCJFeedExportExportCronJob;en;"distCJFeedExportJob_CH_Entry"

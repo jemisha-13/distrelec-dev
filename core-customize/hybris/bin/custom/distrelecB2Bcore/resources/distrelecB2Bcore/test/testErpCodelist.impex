@@ -1,0 +1,127 @@
+$catalogId = testCatalog
+$catalogVersion = catalogVersion(catalog(id[default=$catalogId]), version[default='Online'])
+$languages = en
+
+INSERT_UPDATE Catalog; id[unique = true]
+                     ; $catalogId
+
+INSERT_UPDATE CatalogVersion; catalog(id)[unique = true]; version[unique = true]; active; languages(isoCode);
+                            ; $catalogId                ; Online                ; true  ; $languages
+
+INSERT_UPDATE UserPriceGroup; code[unique = true]
+                            ; SalesOrg_UPG_7310
+                            ; SalesOrg_UPG_7320
+                            ; SalesOrg_UPG_7330
+                            ; SalesOrg_UPG_7350
+                            ; SalesOrg_UPG_7620
+
+INSERT_UPDATE UserTaxGroup; code[unique = true]
+                          ; SalesOrg_UTG_7310
+                          ; SalesOrg_UTG_7320
+                          ; SalesOrg_UTG_7330
+                          ; SalesOrg_UTG_7350
+                          ; SalesOrg_UTG_7620
+
+INSERT_UPDATE Tax; code[unique = true] ; value
+                 ; TAX_0               ; 0
+                 ; TAX_1_SALESORG_7310 ; 8
+                 ; TAX_2_SALESORG_7310 ; 2.4
+                 ; TAX_1_SALESORG_7320 ; 20
+                 ; TAX_2_SALESORG_7320 ; 10
+
+INSERT_UPDATE ProductTaxGroup; code[unique = true]
+                             ; 0
+                             ; 1
+                             ; 2
+
+INSERT_UPDATE TaxRow; ug(code)[unique = true]; pg(code)[unique = true]; tax(code)
+                    ; SalesOrg_UTG_7310      ; 0                      ; TAX_0
+                    ; SalesOrg_UTG_7310      ; 1                      ; TAX_1_SALESORG_7310
+                    ; SalesOrg_UTG_7310      ; 2                      ; TAX_2_SALESORG_7310
+                    ; SalesOrg_UTG_7320      ; 0                      ; TAX_0
+                    ; SalesOrg_UTG_7320      ; 1                      ; TAX_1_SALESORG_7320
+                    ; SalesOrg_UTG_7320      ; 2                      ; TAX_2_SALESORG_7320
+                    ; SalesOrg_UTG_7330      ; 0                      ; TAX_0
+                    ; SalesOrg_UTG_7350      ; 0                      ; TAX_0
+                    ; SalesOrg_UTG_7620      ; 0                      ; TAX_0
+
+INSERT_UPDATE Vendor; code[unique = true]; name
+                    ; default            ; Default Vendor
+
+INSERT_UPDATE Warehouse; code[unique = true]; pickupStreetName; pickupStreetNumber; pickupPostalCode; pickupTown; pickupPhone; pickupOpeningHoursMoFr; pickupOpeningHoursSa; default; vendor(code)[default = default]; stockManagementSystem(code)
+                       ; 7311               ; ???             ; ?                 ; ????            ; ?         ; ????       ; "??:?? - ??:??"       ; "??:?? - ??:??"     ; false  ;                                ; SAP
+
+INSERT_UPDATE DistBrand; code[unique = true]
+                       ; distrelec
+
+INSERT_UPDATE DistMaterialType; code[unique = true]
+                              ; ZCON
+                              ; ZOCC
+
+INSERT_UPDATE Country; isocode[unique = true]; active[default = true]
+                     ; CH                    ;
+                     ; AT                    ;
+                     ; IT                    ;
+                     ; DE                    ;
+                     ; SE                    ;
+
+INSERT_UPDATE Currency; isocode[unique = true]; conversion; digits; symbol; roundCommercial; active[default = true];
+                      ; CAD                   ; 1.5       ; 2     ; C$    ; false          ;
+                      ; CHF                   ; 1         ; 2     ; CHF   ; true           ;
+                      ; DKK                   ; 1         ; 2     ; dkr   ; false          ;
+                      ; EUR                   ; 1         ; 2     ; €     ; false          ;
+                      ; LTL                   ; 1         ; 2     ; lt    ; false          ;
+                      ; LVL                   ; 1         ; 2     ; Ls    ; false          ;
+                      ; NOK                   ; 1         ; 2     ; kr    ; false          ;
+                      ; PLN                   ; 1         ; 2     ; zł    ; false          ;
+                      ; SEK                   ; 1         ; 2     ; Skr   ; false          ;
+                      ; USD                   ; 1.5       ; 2     ; $     ; false          ;
+                      ; BAM                   ; 1         ; 2     ; KM    ; false          ;
+                      ; ISK                   ; 1         ; 2     ; ikr   ; false          ;
+                      ; RUB                   ; 1         ; 2     ; R     ; false          ;
+
+INSERT_UPDATE DistSalesOrg; code[unique = true]; brand(code); country(isocode); erpSystem(code)
+                          ; 7310               ; distrelec  ; CH              ; SAP ;
+                          ; 7320               ; distrelec  ; AT              ; SAP ;
+                          ; 7330               ; distrelec  ; IT              ; SAP ;
+                          ; 7350               ; distrelec  ; DE              ; SAP ;
+                          ; 7620               ; distrelec  ; SE              ; SAP ;
+
+INSERT_UPDATE CMSSite; uid[unique = true]; country(isocode); defaultCurrency(isocode); registrationCurrencies(isocode); salesOrg(code); userPriceGroup(code); userTaxGroup(code); pickupWarehouses(code)
+                     ; distrelec_CH      ; CH              ; CHF                     ; CHF                            ; 7310          ; SalesOrg_UPG_7310   ; SalesOrg_UTG_7310 ; 7311
+                     ; distrelec_AT      ; AT              ; EUR                     ; EUR                            ; 7320          ; SalesOrg_UPG_7320   ; SalesOrg_UTG_7320 ; 7311
+                     ; distrelec_IT      ; IT              ; EUR                     ; EUR                            ; 7330          ; SalesOrg_UPG_7330   ; SalesOrg_UTG_7330 ; 7311
+                     ; distrelec_DE      ; DE              ; EUR                     ; EUR                            ; 7350          ; SalesOrg_UPG_7350   ; SalesOrg_UTG_7350 ; 7311
+                     ; distrelec_SE      ; SE              ; SEK                     ; SEK                            ; 7620          ; SalesOrg_UPG_7620   ; SalesOrg_UTG_7620 ; 7311
+
+INSERT_UPDATE DistSalesStatus; code[unique = true]; visibleInShop; buyableInShop; newInShop; endOfLifeInShop
+                             ; 10                 ; false        ; false        ; true     ; false
+                             ; 20                 ; true         ; true         ; true     ; false
+                             ; 21                 ; true         ; true         ; true     ; false
+                             ; 30                 ; true         ; true         ; false    ; false
+                             ; 31                 ; true         ; true         ; false    ; false
+                             ; 32                 ; true         ; true         ; false    ; false
+                             ; 40                 ; true         ; true         ; false    ; false
+                             ; 41                 ; true         ; true         ; false    ; false
+                             ; 43                 ; true         ; false        ; false    ; false
+                             ; 50                 ; true         ; true         ; false    ; false
+                             ; 60                 ; true         ; false        ; false    ; true
+                             ; 61                 ; false        ; false        ; false    ; false
+
+
+INSERT_UPDATE DistReplacementReason; code[unique = true]
+                                   ; C
+
+# DistPromotionLabel
+# WARNING: Code needs to be one String (without spaces) if the promotion is maintained in DistSalesOrgProduct.
+# If it has, the attributeProvider will throw AttributeNotSupportedException.
+INSERT_UPDATE DistPromotionLabel; code[unique = true]; rank; maintainedInDistSalesOrgProduct; maintainedInProductCountry
+                                ; hotOffer           ; 1   ; false                          ; true
+                                ; top                ; 2   ; false                          ; true
+                                ; hit                ; 3   ; false                          ; true
+                                ; used               ; 4   ; false                          ; false
+                                ; offer              ; 5   ; false                          ; false
+                                ; bestseller         ; 6   ; true                           ; false
+                                ; new                ; 7   ; true                           ; false
+                                ; noMover            ; 8   ; false                          ; true
+

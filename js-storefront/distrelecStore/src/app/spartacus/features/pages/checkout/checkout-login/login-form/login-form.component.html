@@ -1,0 +1,111 @@
+<form id="loginForm" [formGroup]="checkoutLoginForm">
+  <div class="ch__component__title">
+    <h2 id="checkout.login.signin_title">{{ 'checkout.login.signin_title' | cxTranslate }}</h2>
+    <p id="checkout.login.signin_subtitle">{{ 'checkout.login.signin_subtitle' | cxTranslate }}</p>
+  </div>
+  <ng-container *ngIf="isErrorMessage_ | async as errorMessage">
+    <div *ngIf="errorMessage === 'checkout.login.forgotten_pwd_error'" class="ch__component-error">
+      <div class="ch__login-error__icon">
+        <fa-icon id="faInfoCircleError" [icon]="faInfoCircle"></fa-icon>
+      </div>
+
+      <p class="ch__component-error__text pl-3" id="checkout.login.forgotten_pwd_error">
+        {{ 'checkout.login.forgotten_pwd_error_prefix' | cxTranslate }}
+        <span class="ch__component-error__link" (click)="setForgottenPwdValue()">
+          {{ 'checkout.login.forgotten_pwd_error_link' | cxTranslate }}
+        </span>
+        {{ 'checkout.login.forgotten_pwd_error_suffix' | cxTranslate }}
+      </p>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isPwdResetSuccess_ | async">
+    <div class="ch__component-success">
+      {{ 'login.reset_success' | cxTranslate }}
+    </div>
+  </ng-container>
+  <div class="row ch__component__form-group">
+    <div class="col-12 ch__component__label">
+      <label id="form.email">
+        {{ 'form.email_placeholder' | cxTranslate }}
+      </label>
+    </div>
+    <div class="col-12 ch__component__field">
+      <input
+        class="login__body--form-input"
+        [class.is-invalid]="checkoutLoginForm.get('loginEmail').touched && checkoutLoginForm.get('loginEmail').errors"
+        [class.ng-invalid]="isErrorMessage_ | async"
+        autocomplete="email"
+        type="email"
+        formControlName="loginEmail"
+      />
+      <div *ngIf="checkoutLoginForm.get('loginEmail').touched && checkoutLoginForm.get('loginEmail').errors">
+        <small class="text-danger" id="validations.email_valid_example">
+          {{ 'validations.email_valid_example' | cxTranslate }}
+        </small>
+      </div>
+    </div>
+  </div>
+  <div class="row ch__component__form-group">
+    <div class="col-12 ch__component__label">
+      <label id="login.password">
+        {{ 'login.password' | cxTranslate }}
+      </label>
+    </div>
+    <div class="col-12 ch__component__field">
+      <input
+        class="login__body--form-input"
+        [class.is-invalid]="checkoutLoginForm.get('password').touched && checkoutLoginForm.get('password').errors"
+        [class.ng-invalid]="isErrorMessage_ | async"
+        autocomplete="password"
+        type="password"
+        formControlName="password"
+      />
+      <div *ngIf="checkoutLoginForm.get('password').touched && checkoutLoginForm.get('password').errors">
+        <small class="text-danger" id="validations.enter_pwd">{{ 'validations.enter_pwd' | cxTranslate }}</small>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="ch__component__remember ch__component__remember-input" (click)="triggerCheckbox('rememberMe')">
+        <fa-icon *ngIf="!checkoutLoginForm.get('rememberMe').value" [icon]="faSquare"></fa-icon>
+        <fa-icon *ngIf="checkoutLoginForm.get('rememberMe').value" [icon]="faCheckSquare"></fa-icon>
+
+        <input id="j_remember" type="checkbox" formControlName="rememberMe" />
+        <label class="remember" id="j_remember_label">{{ 'login.checkout_remember_me' | cxTranslate }}</label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 ch__component__submit">
+      <button
+        *ngIf="!(isCaptchaDisabled_ | async)"
+        class="btn"
+        id="checkout.login.cta_signin"
+        (click)="captchaRef.execute()"
+      >
+        {{ 'checkout.login.cta_signin' | cxTranslate }}
+      </button>
+      <button
+        *ngIf="isCaptchaDisabled_ | async"
+        class="btn disabled-captcha"
+        id="checkout.login.cta_signin"
+        (click)="signIn()"
+      >
+        {{ 'checkout.login.cta_signin' | cxTranslate }}
+      </button>
+      <re-captcha
+        #captchaRef="reCaptcha"
+        (resolved)="onCaptchaResolved($event, captchaRef)"
+        size="invisible"
+      ></re-captcha>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center ch__component__forgot-pwd">
+      <span id="login.forgot_pwd" (click)="setForgottenPwdValue()">
+        {{ 'checkout.login.forgot_pwd' | cxTranslate }}
+      </span>
+    </div>
+  </div>
+</form>

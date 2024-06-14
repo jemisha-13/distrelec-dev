@@ -1,0 +1,93 @@
+<h2
+  class="import-total"
+  id="bom_review_summary_title"
+  [innerHTML]="'importTool.summaryTitle' | cxTranslate: { '0': foundProducts, '1': totalProducts }"
+></h2>
+
+<p *ngIf="matchingProducts.length" class="import-success" id="bom_review_summary_matched_success_label">
+  <fa-icon class="icon-green" [icon]="icons.faCheckCircle"></fa-icon>
+  {{ 'importTool.successText' | cxTranslate: { '0': file.matchingProducts.length } }}
+</p>
+
+<ng-container *ngIf="unavailableProductsWithAlternative">
+  <p class="import-info" id="bom_review_summary_matched_alternative_label">
+    <fa-icon class="icon-orange" [icon]="icons.faInfoCircle"></fa-icon>
+    {{ 'bom.matchedalternative.info' | cxTranslate: { '0': unavailableProductsWithAlternative } }}
+  </p>
+</ng-container>
+
+<ng-container *ngIf="mpnDuplicateProductCount > 0">
+  <p class="import-info" id="bom_review_summary_mpnduplicatesummary_label">
+    <fa-icon class="icon-orange" [icon]="icons.faInfoCircle"></fa-icon>
+    {{ 'bom.mpnduplicatesummary.info' | cxTranslate: { '0': mpnDuplicateProductCount } }}
+  </p>
+</ng-container>
+
+<div *ngIf="file.quantityAdjustedProductsCount > 0" class="showhidetoggle import-red">
+  <span class="showhidetoggle__header" id="bom_review_summary_qty_adjusted_products">
+    <fa-icon class="icon-red" [icon]="icons.faTimesCircle"></fa-icon>
+    {{ 'importTool.stockLevel' | cxTranslate: { '0': file.quantityAdjustedProductsCount } }}
+    <span
+      class="showhidetoggle__header-link"
+      id="bom_review_summary_qty_adjusted_products_toggle"
+      (click)="showQuantityAdjustedProducts = !showQuantityAdjustedProducts"
+    >
+      <span [id]="'bom_review_summary_qty_adjusted_product_toggle_' + showQuantityAdjustedProducts">
+        {{ (showQuantityAdjustedProducts ? 'text.hide' : 'text.show') | cxTranslate }}
+      </span>
+    </span>
+  </span>
+
+  <div *ngIf="showQuantityAdjustedProducts" class="showhidetoggle__content">
+    <span class="showhidetoggle__label" id="bom_review_summary_matching_options_qty">
+      ({{ 'import-tool.matching.options.quantity' | cxTranslate }},
+      {{ 'import-tool.matching.options.distArticleNumber' | cxTranslate }},
+      {{ 'bomnomatches.itemReference' | cxTranslate }})
+    </span>
+
+    <ul class="showhidetoggle__content-list" id="bom_review_summary_matching_options_qty_list">
+      <li *ngFor="let matchingProduct of file.quantityAdjustedProducts; index as i">
+        <span class="showhidetoggle__label" [id]="'bom_review_summary_matching_product_' + i">
+          {{ matchingProduct.quantity }},
+          <b>{{ matchingProduct.product.code }}</b>
+          / {{ matchingProduct.product.typeName }}, {{ matchingProduct.reference }}
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div *ngIf="file.notMatchingProductCodes.length > 0" class="showhidetoggle import-red">
+  <p class="showhidetoggle__header" id="bom_review_summary_not_matching_product_codes">
+    <fa-icon class="icon-red" [icon]="icons.faTimesCircle"></fa-icon>
+    {{ 'bom.notmatched.info' | cxTranslate: { '0': file.notMatchingProductCodes.length } }}
+
+    <span
+      class="showhidetoggle__header-link"
+      id="bom_review_summary_not_matching_product_codes_toggle"
+      (click)="showNotMatchingProducts = !showNotMatchingProducts"
+    >
+      <span [id]="'bom_review_summary_qty_adjusted_product_toggle_' + showNotMatchingProducts">
+        {{ (showNotMatchingProducts ? 'text.hide' : 'text.show') | cxTranslate }}
+      </span>
+    </span>
+  </p>
+
+  <div *ngIf="showNotMatchingProducts" class="showhidetoggle__content" id="bom_review_summary_not_matched_message_info">
+    {{ 'bom.notmatched.message.info' | cxTranslate }}
+    <br />
+    <span class="showhidetoggle__label" id="bom_review_summary_matching_options_quantity">
+      ({{ 'import-tool.matching.options.quantity' | cxTranslate }},
+      {{ 'import-tool.matching.options.distArticleNumber' | cxTranslate }},
+      {{ 'bomnomatches.itemReference' | cxTranslate }})
+    </span>
+
+    <ul class="showhidetoggle__content-list" id="bom_review_summary_not_matching_product_list">
+      <li *ngFor="let notMatchingProduct of file.notMatchingProductCodes; index as i">
+        <span class="showhidetoggle__label" [id]="'bom_review_summary_not_matching_product_' + i">
+          {{ notMatchingProduct.quantityRaw }}, {{ notMatchingProduct.productCode }}, {{ notMatchingProduct.reference }}
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>

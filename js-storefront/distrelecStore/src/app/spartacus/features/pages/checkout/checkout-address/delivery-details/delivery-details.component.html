@@ -1,0 +1,90 @@
+<form id="checkoutDeliveryDetailsForm" [formGroup]="billingForm">
+  <ng-container *ngIf="isBillingFormSaved_ | async as isBillingFormSaved">
+    <ng-container *ngIf="isDetailsFormSaved_ | async as isDetailsFormSaved">
+      <ng-container *ngIf="deliveryAddresses_ | async as deliveryAddresses">
+        <div class="delivery-details">
+          <div *ngIf="!billingForm.get('isDeliverySame').value" class="ch__component">
+            <div class="ch__component__title">
+              <h2
+                id="checkout.delivery_details"
+                [class.greyed-out]="
+                  !billingForm.get('isDeliverySame').value &&
+                  !isBillingFormSaved.isSaved &&
+                  deliveryAddresses.length === 0
+                "
+              >
+                {{ 'checkout.delivery_details' | cxTranslate }}
+              </h2>
+
+              <!-- DISPLAY ADDRESS FORM BLOCK -->
+              <ng-container *ngIf="!isDetailsFormSaved.isSaved">
+                <div id="deliveryAddressFormWrapper">
+                  <app-address-form-delivery
+                    [deliveryDetails]="deliveryDetails"
+                    [billingForm]="billingForm"
+                    [isDetailsFormSaved_]="isDetailsFormSaved_"
+                    [triggerDeliveryInlineValidationOnLoad]="triggerDeliveryInlineValidationOnLoad_ | async"
+                    [activeSiteId]="activeSiteId"
+                    [isDeliveryLoading_]="isDeliveryLoading_"
+                    [isEditable_]="isEditable_"
+                    [setDeliveryAddressId_]="setDeliveryAddressId_"
+                    [scrollToDeliveryFormOnError]="scrollToDeliveryFormOnError_ | async"
+                    [isB2BAccount]="isB2BAccount"
+                  ></app-address-form-delivery>
+                </div>
+              </ng-container>
+
+              <!-- Map and display all shipping addresses if more than one is present  or if form has been saved-->
+              <ng-container *ngIf="isDetailsFormSaved.isSaved">
+                <ng-container *ngFor="let address of deliveryAddresses; let i = index">
+                  <ng-container *ngIf="isAddressDisplayable(address)">
+                    <app-delivery-address-single
+                      [deliveryDetails]="deliveryDetails"
+                      [address]="address"
+                      [selectDeliveryAddress]="selectDeliveryAddress"
+                      [getAddressDetails]="getAddressDetails"
+                      [isDetailsFormSaved_]="isDetailsFormSaved_"
+                      [editSpecificAddress]="editSpecificAddress"
+                      [displayRelevantAddress]="displayRelevantAddress"
+                      [setDeliveryAddress]="setDeliveryAddress"
+                      [isDeliveryLoading_]="isDeliveryLoading_"
+                      [isEditable_]="isEditable_"
+                      [deliveryAddresses_]="deliveryAddresses_"
+                      [isSavedAddressValid]="isSavedAddressValid"
+                      [checkIfAllFieldsArePrefilled]="checkIfAllFieldsArePrefilled"
+                      [billingForm]="billingForm"
+                      [setDeliveryAddressId_]="setDeliveryAddressId_"
+                      [isB2BAccount]="isB2BAccount"
+                      [isInputOptional]="isInputOptional"
+                      [getCountryDetails]="getCountryDetails"
+                      [addressPosition]="i"
+                      [updateDefaultFlagOnAddresses]="updateDefaultFlagOnAddresses"
+                    ></app-delivery-address-single>
+                  </ng-container>
+                </ng-container>
+
+                <button
+                  *ngIf="isDetailsFormSaved.isSaved"
+                  class="btn add-delivery-address"
+                  id="addNewDeliveryBtn"
+                  (click)="editSpecificAddress(null)"
+                >
+                  <img src="app/spartacus/assets/media/checkout/Plus.svg" alt="plus" />
+
+                  <span class="link" id="checkout.delivery.add_new_delivery">
+                    {{ 'checkout.delivery.add_new_delivery' | cxTranslate }}
+                  </span>
+                </button>
+              </ng-container>
+
+              <app-component-loading-spinner
+                *rxIf="isDeliveryLoading_"
+                id="app-component-loading-spinner-delivery"
+              ></app-component-loading-spinner>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</form>

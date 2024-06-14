@@ -1,0 +1,185 @@
+.mod-metahd-item {
+	@_height: @mod-metahd-height;
+
+	display: block;
+	float: left;
+	margin-left: 20px;
+
+	.box-sizing(content-box);
+	vertical-align: top;
+
+	border: 1px solid black;
+
+	.lt-ie8 & {
+		display: inline-block;
+		float: left;
+		height: 52px;
+	}
+
+	// General Background settings for MetaHD Items
+	.metaHdStatesBg();
+
+	//
+	// Link Wrapper
+	//
+	.menuitem-wrapper {
+		display: block;
+		position: relative;
+
+		&--SK {
+			.menuitem {
+				.label {
+					font-size: 14px;
+				}
+			}
+		}
+
+		&--HU {
+			.menuitem {
+				.label {
+					font-size: 13px;
+				}
+			}
+		}
+	}
+
+	//
+	// Link
+	//
+	.menuitem {
+		display: block;
+		padding: 12px 10px 10px;
+		height: @_height;
+		font-weight: bold;
+		cursor: pointer;
+
+		.lt-ie8 & {
+			height: 30px;
+		}
+	}
+
+	// Class is added on hover in JS
+	&.hover {
+		.flyout {
+			margin-top:-8px !important;
+			display: block;
+
+			.lt-ie9 & {
+				background-image: url('@{path-assets}/transparent.gif');
+				background-repeat: repeat;
+			}
+		}
+	}
+
+	//
+	// Flyout
+	//
+
+	.flyout-mixin(@_flyout_width, @_flyout_offset, @_arrow_offset) {
+
+		.flyout {
+			
+			display: none;
+			position: absolute;
+			left: 50%;
+			margin-left: @_flyout_offset;
+			width: @_flyout_width;
+			padding-top: 15px;
+			z-index: 1150;
+
+			// Arrow Indicator
+			&:before {
+				content: " ";
+				display: block;
+				position: relative;
+				left: @_arrow_offset;
+				width: 0px;
+				height: 0px;
+				border-style: solid;
+				border-width: 0 9px 10px;
+				border-color: transparent transparent @c-grey20 transparent;
+			}
+		}
+	}
+
+	// The Flyout Head
+	.hd {
+		.vertical-align-parent();
+		height: 3px; // works as min-height
+		border-top: 3px solid @c-grey20;
+		background-color: @c-white;
+
+		h3 {
+			#typo > .size-m();
+			font-weight: @font-base-bold;
+			color: @c-grey20;
+			display: block;
+			height: 40px;
+			padding: 13px 20px 0 20px;
+			border-right: 1px solid @c-grey80;
+			border-left: 1px solid @c-grey80;
+
+			.lt-ie8 & {
+				.ib();
+			}
+
+			& + small {
+				#typo > .size-s();
+				color: @c-grey80;
+				padding-left: 8px;
+				padding-right: 8px;
+			}
+			&.loggedin {
+				padding-left: 34px;
+			}
+
+		}
+
+		.btn-close {
+			#obj > .close-button();
+			.no-touch & {
+				display: none;
+			}
+		}
+	}
+
+	// The Flyout Body
+	.bd {
+		.cf();
+		border: 1px solid @c-grey80;
+		border-top: none;
+		background-color: @c-white;
+		.input-field {
+			padding-left: 13px; // Review: KR: Left Alignment
+		}
+
+		h3 {
+			#typo > .size-m();
+			font-weight: @font-base-bold;
+			color: @c-grey20;
+			display: inline-block;
+			margin-left: 14px;
+			margin-bottom: 7px;
+		}
+	}
+
+	.ft {
+		background-color: @c-white;
+	}
+}
+
+// States Mixin for Meta HD Items
+.metaHdStatesBg(@hoverBg: @c-white, @hoverText: @c-grey20, @hoverBorder: @c-grey20, @activeBg: @c-white, @activeText: @c-grey20) {
+
+	// States
+	&.hover {
+		background-color: @hoverBg;
+		color: @hoverText;
+		border-color: @hoverBorder;
+	}
+	> a:focus {
+		//	> a:active { // active state not really used..
+		background-color: @activeBg;
+		color: @activeText;
+	}
+}

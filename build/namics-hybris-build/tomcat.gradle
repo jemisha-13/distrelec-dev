@@ -1,0 +1,139 @@
+
+task compile_cp_tomcat() {
+    doLast {
+        compileBasicAuth("nonprod")
+        compileBasicAuth("prod")
+
+        composeCommonProperties("d1")
+        composeCommonProperties("d2")
+        composeCommonProperties("d3")
+        composeCommonProperties("s1")
+        composeCommonProperties("s2")
+        composeCommonProperties("p1")
+    }
+}
+
+def compileBasicAuth(String environment) {
+    mergeFiles(environment, "web", "xml")
+    mergeFiles(environment, "server.xml", "tmpl")
+    composeApiServiceProperties(environment)
+    composeStorefrontServiceProperties(environment)
+}
+
+def mergeFiles(String environment, String prefix, String suffix) {
+    def finalWebXml = new File(environmentPath(environment, prefix + "." + suffix))
+
+    // global web.prepend.xml
+    def webPrepandFile = new File(globalPath(prefix + ".prepend." + suffix))
+    finalWebXml.write(webPrepandFile.getText("UTF-8"))
+
+    // environment web.append.xml
+    def envWebFile = new File(environmentPath(environment, prefix + ".append." + suffix))
+    if (envWebFile.exists()) {
+        finalWebXml.append(envWebFile.getText("UTF-8"))
+    }
+
+    // global web.append.xml
+    def webAppendFile = new File(globalPath(prefix + ".append." + suffix))
+    finalWebXml.append(webAppendFile.getText("UTF-8"))
+}
+
+def composeCommonProperties(String environment) {
+    def commonPropertiesFolder = new File(environmentFolder(environment))
+    commonPropertiesFolder.mkdirs()
+
+    def commonPropertiesFile = new File(environmentPath(environment, "hcs_common_service_properties.txt"))
+
+    // hcs_common
+    def hcsCommonBaseFile = new File(baseHcsCommonPath(environment))
+    commonPropertiesFile.write(hcsCommonBaseFile.text)
+
+    //Jgroup TCP change for no physical address for hybrisnode
+    def jgroupTcp = new File(globalPath("jgroups-tcp.xml"))
+    commonPropertiesFile.append("\nccv2.file.override.51.content=" + base64Encode(jgroupTcp))
+    commonPropertiesFile.append("\nccv2.file.override.51.path=/opt/hybris/bin/platform/ext/core/resources/jgroups/jgroups-tcp.xml")
+
+    commonPropertiesFile.append("\n")
+}
+
+def composeApiServiceProperties(String environment) {
+    def servicePropertiesFile = new File(environmentPath(environment, "api_service_properties.txt"))
+    servicePropertiesFile.delete()
+
+    // tomcat-users.xml
+    def tomcatUsersXml = new File(environmentPath(environment, "tomcat-users.xml"))
+    servicePropertiesFile.append("\nccv2.file.override.52.content=" + base64Encode(tomcatUsersXml))
+    servicePropertiesFile.append("\nccv2.file.override.52.path=/opt/aspects/api/tomcat/conf/tomcat-users.xml")
+
+    // server.xml.tmpl
+    def serverXmlTmpl = new File(environmentPath(environment, "server.xml.tmpl"))
+    servicePropertiesFile.append("\nccv2.file.override.53.content=" + base64Encode(serverXmlTmpl))
+    servicePropertiesFile.append("\nccv2.file.override.53.path=/opt/startup/server.xml.tmpl")
+
+    // distrelectomcat.jar
+    // server.xml.tmpl
+    def enhancedYTomcatJar = new File(project.hybris_temp_dir + File.separator + "enhancedytomcat.jar")
+    servicePropertiesFile.append("\nccv2.file.override.54.content=" + base64Encode(enhancedYTomcatJar))
+    servicePropertiesFile.append("\nccv2.file.override.54.path=/opt/tomcat/lib/ytomcat.jar")
+}
+
+def composeStorefrontServiceProperties(String environment) {
+    def servicePropertiesFile = new File(environmentPath(environment, "storefront_service_properties.txt"))
+    servicePropertiesFile.delete()
+
+    // web.xml
+    def webXml = new File(environmentPath(environment, "web.xml"))
+    servicePropertiesFile.write("ccv2.file.override.52.content=" + base64Encode(webXml))
+    servicePropertiesFile.append("\nccv2.file.override.52.path=/opt/aspects/accstorefront/tomcat/conf/web.xml")
+
+    // tomcat-users.xml
+    def tomcatUsersXml = new File(environmentPath(environment, "tomcat-users.xml"))
+    servicePropertiesFile.append("\nccv2.file.override.53.content=" + base64Encode(tomcatUsersXml))
+    servicePropertiesFile.append("\nccv2.file.override.53.path=/opt/aspects/accstorefront/tomcat/conf/tomcat-users.xml")
+
+    // server.xml.tmpl
+    def serverXmlTmpl = new File(environmentPath(environment, "server.xml.tmpl"))
+    servicePropertiesFile.append("\nccv2.file.override.54.content=" + base64Encode(serverXmlTmpl))
+    servicePropertiesFile.append("\nccv2.file.override.54.path=/opt/startup/server.xml.tmpl")
+
+    // distrelectomcat.jar
+    // server.xml.tmpl
+    def enhancedYTomcatJar = new File(project.hybris_temp_dir + File.separator + "enhancedytomcat.jar")
+    servicePropertiesFile.append("\nccv2.file.override.55.content=" + base64Encode(enhancedYTomcatJar))
+    servicePropertiesFile.append("\nccv2.file.override.55.path=/opt/tomcat/lib/ytomcat.jar")
+
+    // rewrite.config
+    def rewriteConfig = new File(globalPath("rewrite.config"))
+    servicePropertiesFile.append("\nccv2.file.override.56.content=" + base64Encode(rewriteConfig))
+    servicePropertiesFile.append("\nccv2.file.override.56.path=/opt/aspects/accstorefront/tomcat/conf/Catalina/localhost/rewrite.config")
+
+    // context.xml
+    def contextXml = new File(environmentPath(environment, "context.xml"))
+    if (contextXml.exists()) {
+        servicePropertiesFile.append("\nccv2.file.override.57.content=" + base64Encode(contextXml))
+        servicePropertiesFile.append("\nccv2.file.override.57.path=/opt/hybris/bin/platform/tomcat/conf/context.xml")
+    }
+
+    servicePropertiesFile.append("\n")
+}
+
+def globalPath(String fileName) {
+    return project.env_cp_tomcat_dir + fileName
+}
+
+def baseHcsCommonPath(String environment) {
+    return project.env_cp_basehcscommon_dir + "hcs_common-" + environment + ".properties"
+}
+
+def environmentFolder(String environment) {
+    return project.env_cp_tomcat_dir + environment
+}
+
+def environmentPath(String environment, String fileName) {
+    return environmentFolder(environment) + File.separator + fileName
+}
+
+def base64Encode(File file) {
+    String base64Text = file.bytes.encodeBase64().toString()
+    return base64Text.replaceAll("=", "\\\\=")
+}

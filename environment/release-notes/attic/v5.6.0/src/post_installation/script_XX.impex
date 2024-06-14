@@ -1,0 +1,82 @@
+##
+# Import this impex file for all countries.
+##
+
+
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;ContentPageFullWidthWithoutNavigationTemplate;Content Page Full Width Without Navigation Template;layout/contentPageFullWidthWithoutNavigation;ContentPage
+
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;ContentPageFullWidthWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_contentPageFullWidthWithoutNavigationTemplate.vm
+
+
+# Simple Landing Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ContentPageFullWidthWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ContentPageFullWidthWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ContentPageFullWidthWithoutNavigation;Logo;;LogoSlot;false
+;;ServiceNav-ContentPageFullWidthWithoutNavigation;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ContentPageFullWidthWithoutNavigation;MainNav;;MainNavSlot;false
+;;Swyn-ContentPageFullWidthWithoutNavigation;Swyn;;SwynSlot;false
+;;FooterLinks-ContentPageFullWidthWithoutNavigation;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ContentPageFullWidthWithoutNavigation;CertLabels;;CertLabelsSlot;false
+;;Impressum-ContentPageFullWidthWithoutNavigation;Impressum;;ImpressumSlot;false
+
+
+# DISTRELEC-8623 Remove all existing social medias to avoid ClassCastException
+INSERT_UPDATE DistFooterComponent;$contentCV[unique=true];uid[unique=true];socialMedias(uid,$contentCV)
+;;DistFooterComponent;
+
+
+# DISTRELEC-9489 Adding product box to the cart and checkout
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CartPageTemplate'];validComponentTypes(code)
+;ProductBox;;DistProductBoxComponent
+# Checkout Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CheckoutPageTemplate'];validComponentTypes(code)
+;ProductBox;;DistProductBoxComponent
+
+INSERT_UPDATE DistProductBoxComponent;$contentCV[unique=true];uid[unique=true];name;visible[default=true];horizontal;checkout;heroProduct
+;;heroProductBoxCart;"Hero Products Component Cart";;false;false;true
+;;heroProductBoxCheckout;"Hero Products Component Checkout";;true;true;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(uid,$contentCV)
+;;ProductBoxSlotCart;Product Box Slot Cart Page;true;heroProductBoxCart
+;;ProductBoxSlotCheckout;Product Box Slot Checkout;true;heroProductBoxCheckout
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CartPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;ProductBox-CartPageTemplate;ProductBox;;ProductBoxSlotCart;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CheckoutPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;ProductBox-CheckoutPageTemplate;ProductBox;;ProductBoxSlotCheckout;false
+
+

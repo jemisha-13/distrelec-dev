@@ -1,0 +1,81 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+task merge_redirect_rules() {
+    doLast {
+        mergeRedirectRules()
+    }
+}
+
+def mergeRedirectRules() {
+    createCompiledFolder();
+    mergeHeadlessRedirects();
+    mergeAccStorefrontRedirects();
+}
+
+def createCompiledFolder() {
+    def compiledPath = new File(getCompiledPath())
+    compiledPath.mkdirs()
+}
+
+def getCompiledPath() {
+    return getRootFolderPath() + File.separator + "compiled";
+}
+
+def getRootFolderPath() {
+    return project.env_cp_redirect_dir;
+}
+
+def mergeHeadlessRedirects() {
+    fileTree(dir: getRootFolderPath(), include: 'redirect_headless_addition_*.txt')
+            .visit{
+                file -> handleEnvironmentRules(file.name);
+            };
+}
+
+def handleEnvironmentRules(String environmentRulesFileName) {
+    String environment = findEnvironment(environmentRulesFileName);
+    createEnvironmentFolder(environment);
+    mergeEnvironmentRedirectRules(environmentRulesFileName, environment)
+}
+
+def findEnvironment(String environmentRulesFileName) {
+    String environmentPattern = "redirect_headless_addition_([a-z][0-9])\\.txt\$";
+    Pattern pattern = Pattern.compile(environmentPattern);
+    Matcher matcher = pattern.matcher(environmentRulesFileName);
+    if (matcher.find()) {
+        return matcher.group(1);
+    }
+    throw new IllegalArgumentException("Environment redirect rules file name " + environmentRulesFileName + " is not in expected format!" );
+}
+
+def createEnvironmentFolder(String environment) {
+    def environmentPath = new File(getEnvironmentPath(environment))
+    environmentPath.mkdirs()
+}
+
+def getEnvironmentPath(String environment) {
+    return getCompiledPath() + File.separator + environment
+}
+
+def mergeEnvironmentRedirectRules(String environmentRulesFileName, String environment) {
+    File commonRedirectRules = new File(getRootFolderPath() + File.separator + 'redirect_common.txt');
+    File environmentRedirectRules = new File(getRootFolderPath() + File.separator + environmentRulesFileName);
+
+    File result = new File(getEnvironmentPath(environment) + File.separator + "redirect_headless.txt");
+    result.delete();
+    result.createNewFile();
+    result.append(environmentRedirectRules.getText("UTF-8"))
+    result.append(commonRedirectRules.getText("UTF-8"));
+}
+
+def mergeAccStorefrontRedirects() {
+    File commonRedirectRules = new File(getRootFolderPath() + File.separator + 'redirect_common.txt');
+    File accStorefrontRedirectRules = new File(getRootFolderPath() + File.separator + 'redirect_accstorefront_addition.txt');
+
+    File result = new File(getCompiledPath() + File.separator + 'redirect_accstorefront.txt');
+    result.delete();
+    result.createNewFile();
+    result.append(accStorefrontRedirectRules.getText("UTF-8"));
+    result.append(commonRedirectRules.getText("UTF-8"));
+}

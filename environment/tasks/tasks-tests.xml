@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Testing
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-tests" basedir=".">
+
+	<property name="testsrc.original" value="testsrc" />
+	<!-- original directory name for test source files -->
+	<property name="testsrc.excluded" value="testsrc-excluded-by-namics" />
+	<!-- direcotry name for test source to allow exclution from yunit testing (any name but testsrc) -->
+
+
+	<!--
+	=================================
+	macro: test
+	=================================
+	-->
+	<macrodef name="test" description="This target will call the hybris platform junit tests (yunit).">
+		<sequential>
+			<ant antfile="${hybris.platform.home}\build.xml" target="yunit">
+				<property name="platformhome" value="${hybris.platform.home}" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+
+	<!--
+	=================================
+	macro: webtest
+	=================================
+	-->
+	<macrodef name="webtest" description="This target will call the hybris platform junit web tests (yunitweb).">
+		<sequential>
+			<antcall target="clean" />
+			<antcall target="checkout" />
+			<antcall target="configure" />
+			<antcall target="build" />
+			<antcall target="testinit" />
+			<ant antfile="${hybris.platform.home}\build.xml" target="yunitweb">
+				<property name="platformhome" value="${hybris.platform.home}" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: webtestlight
+	=================================
+	-->
+	<macrodef name="webtestlight" description="This target will call the hybris platform junit web tests without building etc. (yunitweb).">
+		<sequential>
+			<ant antfile="${hybris.platform.home}\build.xml" target="yunitweb">
+				<property name="platformhome" value="${hybris.platform.home}" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+
+	<!--
+	=================================
+	macro: testinit
+	=================================
+	-->
+	<macrodef name="testinit" description="This target will call the hybris platform junit initialization (yunitinit).">
+		<sequential>
+			<ant antfile="${hybris.platform.home}\build.xml" target="yunitinit">
+				<property name="platformhome" value="${hybris.platform.home}" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+
+	<!--
+	=================================
+	macro: excludeplatformtests
+	=================================
+	-->
+	<macrodef name="excludeplatformtests" description="This target will rename the testsrc folders to its original name.">
+		<sequential>
+			<echo message="Rename all '${testsrc.original}' folders in the platform to '${testsrc.excluded}'. This will exclude the containing test classes from the next yunit run." />
+			<move file="${hybris.home}/bin/platform/ext/platformservices/${testsrc.original}" tofile="${hybris.home}/bin/platform/ext/platformservices/${testsrc.excluded}" failonerror="false" />
+			<move file="${hybris.home}/bin/platform/ext/platformwebservices/web/${testsrc.original}" tofile="${hybris.home}/bin/platform/ext/platformwebservices/web/${testsrc.excluded}" failonerror="false" />
+			<move file="${hybris.home}/bin/platform/ext/servicelayer/${testsrc.original}" tofile="${hybris.home}/bin/platform/ext/servicelayer/${testsrc.excluded}" failonerror="false" />
+		</sequential>
+	</macrodef>
+
+
+	<!--
+	=================================
+	macro: includeplatformtests
+	=================================
+	-->
+	<macrodef name="includeplatformtests" description="This target will rename the testsrc folders to its original name.">
+		<sequential>
+			<echo message="Rename all '${testsrc.excluded}' folders in the platform back to the original name '${testsrc.original}'. This will include the containing test classes in the next yunit run." />
+			<move file="${hybris.home}/bin/platform/ext/platformservices/${testsrc.excluded}" tofile="${hybris.home}/bin/platform/ext/platformservices/${testsrc.original}" failonerror="false" />
+			<move file="${hybris.home}/bin/platform/ext/platformwebservices/web/${testsrc.excluded}" tofile="${hybris.home}/bin/platform/ext/platformwebservices/web/${testsrc.original}" failonerror="false" />
+			<move file="${hybris.home}/bin/platform/ext/servicelayer/${testsrc.excluded}" tofile="${hybris.home}/bin/platform/ext/servicelayer/${testsrc.original}" failonerror="false" />
+		</sequential>
+	</macrodef>
+
+
+</project>
+

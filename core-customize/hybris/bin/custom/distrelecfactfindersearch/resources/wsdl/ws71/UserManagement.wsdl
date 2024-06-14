@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ws71.webservice.adapters.factfinder.de" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws71.webservice.adapters.factfinder.de" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns2="http://usermanagement.ws71.webservice.factfinder.de" xmlns:ns1="http://ws71.webservice.factfinder.de" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:ns3="http://exception.security.factfinder.de">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws71.webservice.factfinder.de">
+<xsd:complexType name="AuthenticationToken">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="timestamp" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="username" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws71.webservice.adapters.factfinder.de">
+<xsd:element name="getAllGroups">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getAllGroupsResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:ArrayOfGroup"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getAllUsers">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:complexType name="ArrayOfString">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="getAllUsersResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:ArrayOfUser"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="createGroup">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns2:ArrayOfRole"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="createGroupResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:Group"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="InvalidGroupException" type="ns3:InvalidGroupException"/>
+<xsd:element name="GroupAlreadyExistsException" type="ns3:GroupAlreadyExistsException"/>
+<xsd:element name="getAllRoles">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getAllRolesResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:ArrayOfRole"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getGroup">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getGroupResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:Group"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getUser">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getUserResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:User"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="deleteUser">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="deleteUserResponse">
+<xsd:complexType/>
+</xsd:element>
+<xsd:element name="updateGroup">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="ns2:Group"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="updateGroupResponse">
+<xsd:complexType/>
+</xsd:element>
+<xsd:element name="GroupNotFoundException" type="ns3:GroupNotFoundException"/>
+<xsd:element name="updateUser">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="ns2:User"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="updateUserResponse">
+<xsd:complexType/>
+</xsd:element>
+<xsd:element name="createUser">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="tns:ArrayOfString"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in3" nillable="true" type="tns:ArrayOfString"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in4" nillable="true" type="ns2:ArrayOfRole"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in5" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="createUserResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:User"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="deleteGroup">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="deleteGroupResponse">
+<xsd:complexType/>
+</xsd:element>
+<xsd:element name="isAdmin">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="isAdminResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" type="xsd:boolean"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://usermanagement.ws71.webservice.factfinder.de">
+<xsd:complexType name="ArrayOfGroup">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Group" nillable="true" type="ns2:Group"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Group">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="roles" nillable="true" type="ns2:ArrayOfRole"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfRole">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Role" nillable="true" type="ns2:Role"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:simpleType name="Role">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="AfterSearchNavigationManager"/>
+<xsd:enumeration value="BackupManager"/>
+<xsd:enumeration value="CacheManager"/>
+<xsd:enumeration value="CampaignManager"/>
+<xsd:enumeration value="ConfiguratorManager"/>
+<xsd:enumeration value="DeploymentManager"/>
+<xsd:enumeration value="ImportManager"/>
+<xsd:enumeration value="InstallManager"/>
+<xsd:enumeration value="LanguageManager"/>
+<xsd:enumeration value="LogfileAnalyzerManager"/>
+<xsd:enumeration value="MayChangePassword"/>
+<xsd:enumeration value="MessagesManager"/>
+<xsd:enumeration value="NotificationManager"/>
+<xsd:enumeration value="PreprocessorManager"/>
+<xsd:enumeration value="RankingManager"/>
+<xsd:enumeration value="RecommendationEngineManager"/>
+<xsd:enumeration value="SearchInterfaceUser"/>
+<xsd:enumeration value="SearchManager"/>
+<xsd:enumeration value="ShowHelpSection"/>
+<xsd:enumeration value="SuggestManager"/>
+<xsd:enumeration value="ThesaurusManager"/>
+<xsd:enumeration value="UserManager"/>
+<xsd:enumeration value="WhatshotManager"/>
+<xsd:enumeration value="WordValuesManager"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="ArrayOfUser">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="User" nillable="true" type="ns2:User"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="User">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="channels" nillable="true" type="tns:ArrayOfString"/>
+<xsd:element minOccurs="0" name="groups" nillable="true" type="ns2:ArrayOfGroup"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="roles" nillable="true" type="ns2:ArrayOfRole"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://exception.security.factfinder.de">
+<xsd:complexType name="InvalidGroupException"/>
+<xsd:complexType name="GroupAlreadyExistsException"/>
+<xsd:complexType name="GroupNotFoundException"/>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="updateUserResponse">
+    <wsdl:part name="parameters" element="tns:updateUserResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createGroupRequest">
+    <wsdl:part name="parameters" element="tns:createGroup">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GroupNotFoundException">
+    <wsdl:part name="GroupNotFoundException" element="tns:GroupNotFoundException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateUserRequest">
+    <wsdl:part name="parameters" element="tns:updateUser">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteGroupResponse">
+    <wsdl:part name="parameters" element="tns:deleteGroupResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createUserRequest">
+    <wsdl:part name="parameters" element="tns:createUser">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllGroupsResponse">
+    <wsdl:part name="parameters" element="tns:getAllGroupsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getGroupResponse">
+    <wsdl:part name="parameters" element="tns:getGroupResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllUsersRequest">
+    <wsdl:part name="parameters" element="tns:getAllUsers">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserResponse">
+    <wsdl:part name="parameters" element="tns:getUserResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllRolesRequest">
+    <wsdl:part name="parameters" element="tns:getAllRoles">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteGroupRequest">
+    <wsdl:part name="parameters" element="tns:deleteGroup">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllUsersResponse">
+    <wsdl:part name="parameters" element="tns:getAllUsersResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InvalidGroupException">
+    <wsdl:part name="InvalidGroupException" element="tns:InvalidGroupException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllRolesResponse">
+    <wsdl:part name="parameters" element="tns:getAllRolesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteUserRequest">
+    <wsdl:part name="parameters" element="tns:deleteUser">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteUserResponse">
+    <wsdl:part name="parameters" element="tns:deleteUserResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllGroupsRequest">
+    <wsdl:part name="parameters" element="tns:getAllGroups">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createGroupResponse">
+    <wsdl:part name="parameters" element="tns:createGroupResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateGroupResponse">
+    <wsdl:part name="parameters" element="tns:updateGroupResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GroupAlreadyExistsException">
+    <wsdl:part name="GroupAlreadyExistsException" element="tns:GroupAlreadyExistsException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createUserResponse">
+    <wsdl:part name="parameters" element="tns:createUserResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="isAdminResponse">
+    <wsdl:part name="parameters" element="tns:isAdminResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getGroupRequest">
+    <wsdl:part name="parameters" element="tns:getGroup">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateGroupRequest">
+    <wsdl:part name="parameters" element="tns:updateGroup">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserRequest">
+    <wsdl:part name="parameters" element="tns:getUser">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="isAdminRequest">
+    <wsdl:part name="parameters" element="tns:isAdmin">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="UserManagementPortType">
+    <wsdl:operation name="getAllGroups">
+      <wsdl:input name="getAllGroupsRequest" message="tns:getAllGroupsRequest">
+    </wsdl:input>
+      <wsdl:output name="getAllGroupsResponse" message="tns:getAllGroupsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllUsers">
+      <wsdl:input name="getAllUsersRequest" message="tns:getAllUsersRequest">
+    </wsdl:input>
+      <wsdl:output name="getAllUsersResponse" message="tns:getAllUsersResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createGroup">
+      <wsdl:input name="createGroupRequest" message="tns:createGroupRequest">
+    </wsdl:input>
+      <wsdl:output name="createGroupResponse" message="tns:createGroupResponse">
+    </wsdl:output>
+      <wsdl:fault name="InvalidGroupException" message="tns:InvalidGroupException">
+    </wsdl:fault>
+      <wsdl:fault name="GroupAlreadyExistsException" message="tns:GroupAlreadyExistsException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllRoles">
+      <wsdl:input name="getAllRolesRequest" message="tns:getAllRolesRequest">
+    </wsdl:input>
+      <wsdl:output name="getAllRolesResponse" message="tns:getAllRolesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getGroup">
+      <wsdl:input name="getGroupRequest" message="tns:getGroupRequest">
+    </wsdl:input>
+      <wsdl:output name="getGroupResponse" message="tns:getGroupResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUser">
+      <wsdl:input name="getUserRequest" message="tns:getUserRequest">
+    </wsdl:input>
+      <wsdl:output name="getUserResponse" message="tns:getUserResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteUser">
+      <wsdl:input name="deleteUserRequest" message="tns:deleteUserRequest">
+    </wsdl:input>
+      <wsdl:output name="deleteUserResponse" message="tns:deleteUserResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateGroup">
+      <wsdl:input name="updateGroupRequest" message="tns:updateGroupRequest">
+    </wsdl:input>
+      <wsdl:output name="updateGroupResponse" message="tns:updateGroupResponse">
+    </wsdl:output>
+      <wsdl:fault name="GroupNotFoundException" message="tns:GroupNotFoundException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateUser">
+      <wsdl:input name="updateUserRequest" message="tns:updateUserRequest">
+    </wsdl:input>
+      <wsdl:output name="updateUserResponse" message="tns:updateUserResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createUser">
+      <wsdl:input name="createUserRequest" message="tns:createUserRequest">
+    </wsdl:input>
+      <wsdl:output name="createUserResponse" message="tns:createUserResponse">
+    </wsdl:output>
+      <wsdl:fault name="GroupNotFoundException" message="tns:GroupNotFoundException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteGroup">
+      <wsdl:input name="deleteGroupRequest" message="tns:deleteGroupRequest">
+    </wsdl:input>
+      <wsdl:output name="deleteGroupResponse" message="tns:deleteGroupResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="isAdmin">
+      <wsdl:input name="isAdminRequest" message="tns:isAdminRequest">
+    </wsdl:input>
+      <wsdl:output name="isAdminResponse" message="tns:isAdminResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UserManagementHttpBinding" type="tns:UserManagementPortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getAllGroups">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getAllGroupsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllGroupsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllUsers">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getAllUsersRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllUsersResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createGroup">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="createGroupRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createGroupResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidGroupException">
+        <wsdlsoap:fault name="InvalidGroupException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GroupAlreadyExistsException">
+        <wsdlsoap:fault name="GroupAlreadyExistsException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAllRoles">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getAllRolesRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllRolesResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getGroup">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getGroupRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getGroupResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUser">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getUserRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getUserResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteUser">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="deleteUserRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteUserResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateGroup">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="updateGroupRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateGroupResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundException">
+        <wsdlsoap:fault name="GroupNotFoundException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateUser">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="updateUserRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateUserResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createUser">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="createUserRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createUserResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundException">
+        <wsdlsoap:fault name="GroupNotFoundException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteGroup">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="deleteGroupRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteGroupResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="isAdmin">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="isAdminRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="isAdminResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UserManagement">
+    <wsdl:port name="UserManagementHttpPort" binding="tns:UserManagementHttpBinding">
+      <wsdlsoap:address location="http://test72-basic.fact-finder.de/Distrelec/webservice/ws71/UserManagement"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

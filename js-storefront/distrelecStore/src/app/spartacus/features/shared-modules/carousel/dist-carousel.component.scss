@@ -1,0 +1,88 @@
+@import 'global-utilities';
+
+:host {
+  display: flex;
+  flex: 100%;
+  flex-direction: column;
+  background-color: $colour-pale-grey;
+
+  .carousel-panel {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+
+    .slides {
+      padding-bottom: $ux-spacing-unit * 5;
+      overflow: hidden;
+    }
+  }
+
+  .slide {
+    @include hide-scrollbar;
+
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    flex: auto;
+    flex-wrap: nowrap;
+    gap: 20px;
+    justify-content: flex-start;
+    width: 100%;
+    padding-bottom: $ux-spacing-unit * 5;
+    margin-bottom: $ux-spacing-unit * 4;
+    overflow: scroll hidden;
+    background-color: $colour-white;
+
+    .item {
+      position: relative;
+      flex: 0 0 100%;
+      background-color: $colour-white;
+
+      @include mobileLandscape {
+        flex: 0 0 50%;
+      }
+
+      @include tablet {
+        flex: 0 0 33%;
+      }
+
+      @include desktop {
+        flex: 0 0 244px;
+      }
+
+      &::after {
+        position: absolute;
+        top: 0;
+        left: -20px;
+        display: block;
+        width: 20px;
+        height: 100%;
+        content: '';
+        background-color: $colour-white;
+      }
+    }
+  }
+
+  .previous,
+  .next {
+    position: absolute;
+    top: 40%;
+    z-index: 10;
+    padding: 7px;
+    color: $ux-text-default;
+    background-color: $colour-white;
+    border: 1px solid $ux-text-default;
+    border-radius: 100%;
+    box-shadow:
+      0 4px 4px -2px rgb(24 39 75 / 8%),
+      0 2px 4px -2px rgb(24 39 75 / 12%);
+  }
+
+  .next {
+    right: 10.5px;
+  }
+
+  .previous {
+    left: 10.5px;
+  }
+}

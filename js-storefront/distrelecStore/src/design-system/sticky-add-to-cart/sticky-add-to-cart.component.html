@@ -1,0 +1,48 @@
+<div class="sticky" id="sticky-add-to-cart">
+  <div class="sticky-basket container">
+    <div class="titles d-none d-lg-flex">
+      <span class="product-title" id="sticky-cart-title">{{ title }}</span>
+      <span class="manufacturer" id="sticky-cart-man-number">{{ manNumber }}</span>
+    </div>
+    <div *ngIf="pricing$ | async as pricing" class="prices d-none d-sm-flex">
+      <ng-container *ngIf="currentChannelData$ | async as currentChannel">
+        <app-dist-prices
+          [formattedBasePrice]="pricing.basePrice"
+          [formattedPriceWithVat]="pricing.priceWithVat"
+          [currency]="pricing.price.currencyIso"
+          [currentChannel]="currentChannel"
+          [componentId]="'sticky-cart-prices'"
+          [toDecimalPlaces]="4"
+          [excVatText]="'product.exc_vat' | cxTranslate"
+          [incVatText]="'product.inc_vat' | cxTranslate"
+        ></app-dist-prices>
+      </ng-container>
+    </div>
+
+    <div *ngIf="availability$ | async as availabilityData" class="buttons">
+      <app-numeric-stepper
+        [ids]="numericStepperID"
+        [minimumQuantity]="orderQuantityMinimum"
+        [quantityStep]="quantityStep"
+        [productCode]="productCode"
+        [control]="addToCartForm.get('quantity')"
+        [availabilityData]="availabilityData"
+        [salesStatus]="salesStatus"
+        [inputDelay]="inputDelay"
+      ></app-numeric-stepper>
+
+      <app-atc-button
+        id="sticky-add-to-cart"
+        [shouldOpenFlyout]="true"
+        [id]="cartButtonId"
+        [availableQty]="availableQty"
+        [productCode]="productCode"
+        [availabilityData]="availabilityData"
+        [salesStatus]="salesStatus"
+        [minimumQuantity]="orderQuantityMinimum"
+        [quantityStep]="quantityStep"
+        [control]="addToCartForm.get('quantity')"
+      ></app-atc-button>
+    </div>
+  </div>
+</div>

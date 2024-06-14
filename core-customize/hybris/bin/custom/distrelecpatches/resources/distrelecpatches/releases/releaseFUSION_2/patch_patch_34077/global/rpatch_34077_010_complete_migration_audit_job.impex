@@ -1,0 +1,51 @@
+INSERT_UPDATE ServicelayerJob;code[unique=true]               ;springId[unique=true]
+                             ;fusionMigrationAuditSendJob;fusionMigrationAuditSendJob
+
+# add sending of migration audit COMPLETE record job as a last job entry in full product composite job - type BULK
+$fullIndexJob=full-ProdCatMan-Fusion
+
+INSERT_UPDATE FusionMigrationAuditSendCronJob;code[unique=true]            ;sessionLanguage(isocode);job(code)[default='fusionMigrationAuditSendJob'];migrationAuditType(code);migrationAuditStatus(code);sessionUser(uid)[default='techUserFusion'];active
+                                             ;$fullIndexJob-migration-audit;en                      ;                       ;bulk                    ;COMPLETE                  ;                            ;true
+
+INSERT_UPDATE CompositeEntry;code[unique=true]                  ;executableCronJob(code)
+                            ;$fullIndexJob-migration-audit_Entry;$fullIndexJob-migration-audit
+
+INSERT_UPDATE CompositeCronJob;code[unique=true];compositeEntries(code)[mode=append]
+                              ;$fullIndexJob    ;$fullIndexJob-migration-audit_Entry
+
+# add sending of migration audit COMPLETE record job as a last job in update product composite job - type INCREMENTAL
+$updateIndexJob=update-ProdCatMan-Fusion
+
+INSERT_UPDATE FusionMigrationAuditSendCronJob;code[unique=true]              ;sessionLanguage(isocode);job(code)[default='fusionMigrationAuditSendJob'];migrationAuditType(code);migrationAuditStatus(code);sessionUser(uid)[default='techUserFusion'];active
+                                             ;$updateIndexJob-migration-audit;en                      ;                       ;incremental             ;COMPLETE                   ;                            ;true
+
+INSERT_UPDATE CompositeEntry;code[unique=true]                    ;executableCronJob(code)
+                            ;$updateIndexJob-migration-audit_Entry;$updateIndexJob-migration-audit
+
+INSERT_UPDATE CompositeCronJob;code[unique=true];compositeEntries(code)[mode=append]
+                              ;$updateIndexJob  ;$updateIndexJob-migration-audit_Entry
+
+# add sending of migration audit COMPLETE record job as a last job in full EOL composite job - type EOL
+$fullEOLIndexJob=full-Product-EOL-Fusion
+
+INSERT_UPDATE FusionMigrationAuditSendCronJob;code[unique=true]               ;sessionLanguage(isocode);job(code)[default='fusionMigrationAuditSendJob'];migrationAuditType(code);migrationAuditStatus(code);sessionUser(uid)[default='techUserFusion'];active
+                                             ;$fullEOLIndexJob-migration-audit;en                      ;                       ;eol                     ;COMPLETE                   ;                            ;true
+
+INSERT_UPDATE CompositeEntry;code[unique=true]                     ;executableCronJob(code)
+                            ;$fullEOLIndexJob-migration-audit_Entry;$fullEOLIndexJob-migration-audit
+
+INSERT_UPDATE CompositeCronJob;code[unique=true];compositeEntries(code)[mode=append]
+                              ;$fullEOLIndexJob ;$fullEOLIndexJob-migration-audit_Entry
+
+# add sending of migration audit COMPLETE record job as a last job in atomic composite job - type ATOMIC
+$updateAtomicIndexJob=update-Product-Atomic-Fusion
+
+INSERT_UPDATE FusionMigrationAuditSendCronJob;code[unique=true]                    ;sessionLanguage(isocode);job(code)[default='fusionMigrationAuditSendJob'];migrationAuditType(code);migrationAuditStatus(code);sessionUser(uid)[default='techUserFusion'];active
+                                             ;$updateAtomicIndexJob-migration-audit;en                      ;                       ;atomic                  ;COMPLETE                  ;                            ;true
+
+INSERT_UPDATE CompositeEntry;code[unique=true]                          ;executableCronJob(code)
+                            ;$updateAtomicIndexJob-migration-audit_Entry;$updateAtomicIndexJob-migration-audit
+
+INSERT_UPDATE CompositeCronJob;code[unique=true]    ;compositeEntries(code)[mode=append]
+                              ;$updateAtomicIndexJob;$updateAtomicIndexJob-migration-audit_Entry
+

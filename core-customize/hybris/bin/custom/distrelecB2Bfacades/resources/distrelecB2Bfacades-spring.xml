@@ -1,0 +1,1968 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <context:component-scan base-package="com.namics.distrelec.b2b.facades"/>
+    <aop:aspectj-autoproxy/>
+
+    <!-- Sync product hierarchy job -->
+    <bean id="checkDeactivatedCategoriesJob"
+          class="com.namics.distrelec.b2b.facades.category.job.CheckDeactivatedCategoriesJob"
+          parent="abstractJobPerformable"/>
+
+    <!-- FACADES -->
+    <alias alias="simpleSuggestionFacade" name="defaultSimpleSuggestionFacade"/>
+    <bean id="defaultSimpleSuggestionFacade"
+          class="com.namics.distrelec.b2b.facades.suggestion.impl.DefaultSimpleSuggestionFacade">
+        <property name="simpleSuggestionService" ref="b2bSimpleSuggestionService"/>
+        <property name="userService" ref="userService"/>
+        <property name="categoryService" ref="categoryService"/>
+        <property name="productPricePopulator" ref="productPricePopulator"/>
+        <property name="productPrimaryImagePopulator" ref="productPrimaryImagePopulator"/>
+        <property name="productPopulator" ref="productPopulator"/>
+    </bean>
+
+    <alias alias="productSearchFacade" name="defaultDistFactFinderProductSearchFacade"/>
+    <bean id="defaultDistFactFinderProductSearchFacade"
+          class="com.namics.distrelec.b2b.facades.search.impl.DefaultDistProductSearchFacade">
+        <property name="productSearchService" ref="distff.productSearchService"/>
+        <property name="autocompleteService" ref="distff.autocompleteService"/>
+        <property name="directOrderAutocompleteService" ref="distff.directOrderAutocompleteService"/>
+        <property name="productSearchPageConverter" ref="productSearchPageConverter"/>
+        <property name="productPaginationConverter" ref="productPaginationConverter"/>
+        <property name="searchQueryDecoder" ref="searchQueryDecoder"/>
+        <property name="autocompleteSuggestionConverter" ref="autocompleteSuggestionConverter"/>
+        <property name="priceDataFactory" ref="priceDataFactory"/>
+        <property name="distCategoryService" ref="distCategoryService"/>
+        <property name="distCategoryFacade" ref="distCategoryFacade"/>
+        <property name="distrelecStoreSessionFacade" ref="distrelecStoreSessionFacade"/>
+        <property name="baseStoreService" ref="defaultDistrelecBaseStoreService"/>
+    </bean>
+
+    <alias alias="distRecommendationFacade" name="defaultDistFactFinderRecommendationFacade"/>
+    <bean id="defaultDistFactFinderRecommendationFacade"
+          class="com.namics.distrelec.b2b.facades.reco.impl.DefaultDistRecommendationFacade">
+        <property name="campaignService" ref="distff.campaignService"/>
+        <property name="recommendationService" ref="distff.recommendationService"/>
+        <property name="searchResultProductConverter" ref="searchResultProductConverter"/>
+    </bean>
+
+    <alias alias="distCampaignFacade" name="defaultDistFactFinderCampaignFacade"/>
+    <bean id="defaultDistFactFinderCampaignFacade"
+          class="com.namics.distrelec.b2b.facades.campaigns.impl.DefaultDistCampaignFacade">
+        <property name="campaignService" ref="distff.campaignService"/>
+        <property name="searchResultProductConverter" ref="searchResultProductConverter"/>
+    </bean>
+
+    <alias alias="distFactFinderTrackingFacade" name="defaultDistFactFinderTrackingFacade"/>
+    <bean id="defaultDistFactFinderTrackingFacade"
+          class="com.namics.distrelec.b2b.facades.tracking.impl.DefaultDistTrackingFactFinderFacade"/>
+
+    <alias alias="storeSessionFacade" name="distrelecStoreSessionFacade"/>
+    <bean id="distrelecStoreSessionFacade"
+          class="com.namics.distrelec.b2b.facades.storesession.impl.DefaultDistrelecStoreSessionFacade"
+          parent="namicsStoreSessionFacade"/>
+    <bean id="namicsStoreSessionFacade"
+          class="com.namics.distrelec.b2b.facades.storesession.impl.DefaultNamicsStoreSessionFacade"
+          parent="defaultStoreSessionFacade"/>
+
+    <alias alias="webtrekkFacade" name="distrelecWebtrekkFacade"/>
+    <bean id="distrelecWebtrekkFacade"
+          class="com.namics.distrelec.b2b.facades.webtrekk.impl.DefaultDistWebtrekkFacade"/>
+
+    <alias name="defaultDistPromotionLabelsFacade" alias="distPromotionLabelsFacade"/>
+    <bean id="defaultDistPromotionLabelsFacade"
+          class="com.namics.distrelec.b2b.facades.product.impl.DefaultDistPromotionLabelsFacade"/>
+
+    <alias alias="productFacade" name="distrelecProductFacade"/>
+    <bean id="distrelecProductFacade"
+          class="com.namics.distrelec.b2b.facades.product.impl.DefaultDistrelecProductFacade"
+          parent="defaultProductFacade">
+        <property name="productConverter" ref="b2bProductConverter"/>
+        <property name="productConfiguredPopulator" ref="productConfiguredPopulator"/>
+        <property name="productReferenceTargetConverter" ref="productReferenceTargetConverter"/>
+        <property name="occProductReferenceTargetConverter" ref="occProductReferenceTargetConverter"/>
+        <property name="energyEfficencyPopulator" ref="energyEfficencyPopulator"/>
+    </bean>
+
+    <bean id="namicsWishlistConverter"
+          class="com.namics.distrelec.b2b.facades.wishlist.converter.NamicsWishlistConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.wishlist.data.NamicsWishlistData"/>
+    </bean>
+    <bean id="namicsWishlistEntryConverter"
+          class="com.namics.distrelec.b2b.facades.wishlist.converter.NamicsWishlistEntryConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.wishlist.data.NamicsWishlistEntryData"/>
+    </bean>
+    <bean id="namicsMiniWishlistConverter"
+          class="com.namics.distrelec.b2b.facades.wishlist.converter.NamicsMiniWishlistConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.wishlist.data.MiniWishlistData"/>
+    </bean>
+
+    <bean id="distCompareListFacade"
+          class="com.namics.distrelec.b2b.facades.wishlist.impl.DefaultDistCompareListFacade"/>
+
+    <bean id="distShoppingListFacade"
+          class="com.namics.distrelec.b2b.facades.wishlist.impl.DefaultDistShoppingListFacade"/>
+
+    <alias name="defaultDistExportFacade" alias="distExportFacade"/>
+    <bean id="defaultDistExportFacade" class="com.namics.distrelec.b2b.facades.export.impl.DefaultDistExportFacade"/>
+
+    <alias name="defaultDistShareWithFriendsFacade" alias="distShareWithFriendsFacade"/>
+    <bean id="defaultDistShareWithFriendsFacade"
+          class="com.namics.distrelec.b2b.facades.misc.impl.DefaultDistShareWithFriendsFacade"/>
+
+    <alias name="defaultDistFeedbackFacade" alias="distFeedbackFacade"/>
+    <bean id="defaultDistFeedbackFacade"
+          class="com.namics.distrelec.b2b.facades.feedback.impl.DefaultDistFeedbackFacade"/>
+
+    <alias name="defaultDistSupportFacade" alias="distSupportFacade"/>
+    <bean id="defaultDistSupportFacade" class="com.namics.distrelec.b2b.facades.support.impl.DefaultDistSupportFacade"/>
+
+    <alias name="defaultDistInfoCenterFacade" alias="distInfoCenterFacade"/>
+    <bean id="defaultDistInfoCenterFacade"
+          class="com.namics.distrelec.b2b.facades.infocenter.impl.DefaultDistInfoCenterFacade"/>
+
+    <alias alias="distCachingFacade" name="defaultDistCachingFacade"/>
+    <bean id="defaultDistCachingFacade" class="com.namics.distrelec.b2b.facades.caching.impl.DefaultDistCachingFacade">
+        <property name="baseSiteService" ref="baseSiteService"/>
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+        <property name="baseStoreService" ref="baseStoreService"/>
+        <property name="cmsPageService" ref="cmsPageService"/>
+        <property name="distSalesOrgService" ref="distSalesOrgService"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+        <property name="modelService" ref="modelService"/>
+        <property name="userService" ref="userService"/>
+    </bean>
+
+    <!-- Education Facade -->
+    <alias name="defaultDistEducationFacade" alias="educationFacade"/>
+    <bean id="defaultDistEducationFacade"
+          class="com.namics.distrelec.b2b.facades.education.impl.DefaultDistEducationFacade"/>
+
+    <alias name="defaultDistManufacturerFacade" alias="distManufacturerFacade"/>
+    <bean id="defaultDistManufacturerFacade"
+          class="com.namics.distrelec.b2b.facades.manufacturer.impl.DefaultDistManufacturerFacade"/>
+
+    <alias name="defaultDistMediaFacade" alias="mediaFacade"/>
+    <bean id="defaultDistMediaFacade" class="com.namics.distrelec.b2b.facades.media.impl.DefaultDistMediaFacade"
+          parent="defaultMediaFacade"/>
+
+    <alias name="defaultDistCreateMediaFileValidator" alias="createMediaFileValidator"/>
+    <bean id="defaultDistCreateMediaFileValidator"
+          class="com.namics.distrelec.b2b.facades.media.validator.DistCreateMediaFileValidator"
+          parent="defaultCreateMediaFileValidator">
+        <property name="configurationService" ref="configurationService"/>
+    </bean>
+
+    <alias name="defaultDistQuotationEmailFacade" alias="distQuotationEmailFacade"/>
+    <bean id="defaultDistQuotationEmailFacade"
+          class="com.namics.distrelec.b2b.facades.product.impl.DefaultDistQuotationEmailFacade"/>
+
+    <alias name="defaultDistProductPriceQuotationFacade" alias="distProductPriceQuotationFacade"/>
+    <bean id="defaultDistProductPriceQuotationFacade"
+          class="com.namics.distrelec.b2b.facades.product.impl.DefaultDistProductPriceQuotationFacade"/>
+
+    <alias name="distMinCartModificationPopulator" alias="cartModificationPopulator"/>
+    <bean id="distMinCartModificationPopulator" parent="defaultCartModificationPopulator"
+          class="com.namics.distrelec.b2b.facades.order.converters.populator.DistMinCartModificationPopulator"/>
+
+    <bean id="quotationsResponsePopulator"
+          class="com.namics.distrelec.b2b.facades.order.quotation.converters.QuotationsPopulator">
+    </bean>
+
+    <bean id="quotationHistoryPopulator"
+          class="com.namics.distrelec.b2b.facades.order.quotation.converters.QuotationsResponseConverter"/>
+
+    <alias alias="quotationEntriesConverter" name="quotationEntries2SubOrderEntryModelConverter"/>
+    <bean id="quotationEntries2SubOrderEntryModelConverter"
+          class="com.namics.distrelec.b2b.facades.order.quotation.converters.QuotationEntries2SubOrderEntryModelConverter"/>
+
+
+    <alias alias="distCustomerFacade" name="defaultDistCustomerFacade"/>
+    <alias alias="customerFacade" name="defaultDistCustomerFacade"/>
+    <bean id="defaultDistCustomerFacade"
+          class="com.namics.distrelec.b2b.facades.customer.impl.DefaultDistCustomerFacade"
+          parent="defaultCustomerFacade"/>
+    <!-- DISTRELEC-7670 -->
+    <bean id="distCustomerUtilFacade" class="com.namics.distrelec.b2b.facades.customer.impl.DistCustomerUtilFacade"/>
+
+    <bean id="distUserDashboardFacade"
+          class="com.namics.distrelec.b2b.facades.customer.impl.DistUserDashboardContentFacade"/>
+
+
+    <alias alias="distVatEUFacade" name="defaultDistVatEUFacade"/>
+    <bean id="defaultDistVatEUFacade" class="com.namics.distrelec.b2b.facades.vat.eu.impl.DefaultDistVatEUFacade"/>
+
+    <alias alias="b2bCustomerFacade" name="defaultDistB2BCustomerFacade"/>
+    <bean id="defaultDistB2BCustomerFacade" parent="defaultDistCustomerFacade">
+        <property name="customerConverter" ref="b2BCustomerConverter"/>
+    </bean>
+
+    <alias name="defaultDistProductFinderFacade" alias="distProductFinderFacade"/>
+    <bean id="defaultDistProductFinderFacade"
+          class="com.namics.distrelec.b2b.facades.productfinder.impl.DefaultDistProductFinderFacade">
+        <property name="distProductFinderService" ref="distProductFinderService"/>
+        <property name="productSearchService" ref="distff.productSearchService"/>
+        <property name="distProductFinderDecoder" ref="distProductFinderDecoder"/>
+        <property name="searchStateConverter" ref="searchStateConverter"/>
+        <property name="distProductFinderDataCreator" ref="distProductFinderDataCreator"/>
+        <property name="distProductFinderHelper" ref="distProductFinderHelper"/>
+    </bean>
+
+    <alias name="defaultDistImporToolFacade" alias="distImportToolFacade"/>
+    <bean id="defaultDistImporToolFacade"
+          class="com.namics.distrelec.b2b.facades.importtool.impl.DefaultDistImportToolFacade"/>
+
+    <alias name="defaultDistBomToolFacade" alias="distBomToolFacade"/>
+    <bean id="defaultDistBomToolFacade" class="com.namics.distrelec.b2b.facades.bomtool.impl.DefaultDistBomToolFacade"/>
+
+    <alias name="defaultDistBomFileUtil" alias="distBomFileUtil"/>
+    <bean id="defaultDistBomFileUtil" class="com.namics.distrelec.b2b.facades.bomtool.impl.DefaultDistBomFileParser"/>
+
+    <alias name="defaultDistBomImportDataParser" alias="distBomImportDataParser"/>
+    <bean id="defaultDistBomImportDataParser"
+          class="com.namics.distrelec.b2b.facades.bomtool.impl.DefaultDistBomImportDataParser"/>
+
+    <alias name="defaultDistNewsletterFacade" alias="distNewsletterFacade"/>
+    <bean id="defaultDistNewsletterFacade"
+          class="com.namics.distrelec.b2b.facades.newsletter.impl.DefaultDistNewsletterFacade"/>
+
+    <alias name="defaultDistB2BOrderFacade" alias="b2bOrderFacade"/>
+    <bean id="defaultDistB2BOrderFacade" class="com.namics.distrelec.b2b.facades.order.impl.DefaultDistB2BOrderFacade"
+          parent="defaultB2BOrderFacade"/>
+
+    <alias name="defaultDistReturnRequestFacade" alias="distReturnRequestFacade"/>
+    <bean id="defaultDistReturnRequestFacade"
+          class="com.namics.distrelec.b2b.facades.rma.impl.DefaultDistReturnRequestFacade"/>
+
+    <bean id="distFeedbackReverseConverter"
+          class="com.namics.distrelec.b2b.facades.feedback.converter.DistFeedbackReverseConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.core.model.feedback.DistFeedbackModel"/>
+    </bean>
+
+    <!-- Net Promoter Score -->
+    <bean id="distNetPromoterScoreConverter"
+          class="com.namics.distrelec.b2b.facades.nps.converter.DistNetPromoterScoreConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.core.service.nps.data.DistNetPromoterScoreData"/>
+    </bean>
+
+    <alias name="defaultDistNetPromoterScoreFacade" alias="distNetPromoterScoreFacade"/>
+    <bean id="defaultDistNetPromoterScoreFacade"
+          class="com.namics.distrelec.b2b.facades.nps.impl.DefaultDistNetPromoterScoreFacade"/>
+
+    <!-- Online Survey -->
+    <bean id="onlineSurveyQuestionConverter"
+          class="com.namics.distrelec.b2b.facades.survey.converter.DistOnlineSurveyQuestionConverter"/>
+
+    <bean id="onlineSurveySectionConverter"
+          class="com.namics.distrelec.b2b.facades.survey.converter.DistOnlineSurveySectionConverter">
+        <lookup-method bean="onlineSurveyQuestionConverter" name="getOnlineSurveyQuestionConverter"/>
+    </bean>
+
+    <bean id="onlineSurveyAnswerConverter"
+          class="com.namics.distrelec.b2b.facades.survey.converter.DistOnlineSurveyAnswerConverter">
+        <lookup-method bean="onlineSurveyQuestionConverter" name="getOnlineSurveyQuestionConverter"/>
+    </bean>
+
+    <bean id="onlineSurveyConverter"
+          class="com.namics.distrelec.b2b.facades.survey.converter.DistOnlineSurveyConverter">
+        <lookup-method bean="onlineSurveySectionConverter" name="getOnlineSurveySectionConverter"/>
+    </bean>
+
+    <alias name="defaultDistOnlineSurveyFacade" alias="onlineSurveyFacade"/>
+    <bean id="defaultDistOnlineSurveyFacade"
+          class="com.namics.distrelec.b2b.facades.survey.impl.DefaultDistOnlineSurveyFacade"/>
+
+
+    <bean id="defaultDistCustomerFeedbackFacade"
+          class="com.namics.distrelec.b2b.facades.errorFeedback.impl.DefaultDistCustomerFeedbackFacade"/>
+
+    <alias alias="erp.orderHistoryFacade" name="sap.orderHistoryFacade"/>
+    <bean id="sap.orderHistoryFacade" class="com.namics.distrelec.b2b.facades.order.impl.SapOrderHistoryFacade"/>
+
+    <alias alias="erp.invoiceHistoryFacade" name="sap.invoiceHistoryFacade"/>
+    <bean id="sap.invoiceHistoryFacade"
+          class="com.namics.distrelec.b2b.facades.order.invoice.impl.SapInvoiceHistoryFacade">
+        <property name="userService" ref="userService"/>
+        <property name="configurationService" ref="configurationService"/>
+        <property name="invoiceService" ref="sap.invoiceService"/>
+        <property name="distInvoiceSearchRequestConverter" ref="distInvoiceSearchRequestConverter"/>
+        <property name="distB2BInvoiceHistoryDataConverter" ref="distB2BInvoiceHistoryDataConverter"/>
+        <property name="distSearchRequestConverter" ref="distSearchRequestConverter"/>
+        <property name="distB2BInvoiceSearchDataConverter" ref="distB2BInvoiceSearchDataConverter"/>
+    </bean>
+
+    <bean id="sapSearchOrderRequestConverter"
+          class="com.namics.distrelec.b2b.facades.order.converters.SapSearchOrderRequestConverter">
+        <property name="targetClass" value="com.distrelec.webservice.if15.v1.OrderSearchRequestV2"/>
+        <property name="distUserService" ref="distUserService"/>
+        <property name="codelistService" ref="distCodelistService"/>
+    </bean>
+
+    <bean id="quotationRequestConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.QuotationRequestConverter">
+        <property name="productService" ref="distProductService"/>
+        <property name="productConverter" ref="b2bProductConverter"/>
+        <property name="distrelecCodelistService" ref="distCodelistService"/>
+    </bean>
+
+    <alias name="distLanguagePopulator" alias="languagePopulator"/>
+    <bean id="distLanguagePopulator" class="com.namics.distrelec.b2b.facades.compare.converter.DistLanguagePopulator"
+          parent="defaultLanguagePopulator"/>
+
+    <alias name="defaultDistLanguageConverter" alias="languageConverter"/>
+    <bean id="defaultDistLanguageConverter" parent="defaultLanguageConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.storesession.data.LanguageData"/>
+    </bean>
+
+    <bean id="distTransportGroupConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.DistTransportGroupConverter"/>
+
+
+    <!-- SOAP Response CONVERTER -->
+    <bean id="sapSearchOrderHistoryConverter"
+          class="com.namics.distrelec.b2b.facades.order.converters.SapSearchOrderHistoryConverter"/>
+    <bean id="sapReadOrderResponseOrderHistoryConverter"
+          class="com.namics.distrelec.b2b.facades.order.converters.SapReadOrderResponseOrderHistoryConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.order.data.OrderData"/>
+    </bean>
+
+    <bean id="sapReadAllOpenOrdersResponseConverter"
+          class="com.namics.distrelec.b2b.facades.order.converters.SapReadAllOpenOrdersResponseConverter"/>
+    <bean id="sapReadAllOpenOrdersDetailsResponse"
+          class="com.namics.distrelec.b2b.facades.order.converters.SapReadAllOpenOrdersDetailsResponseConvertor">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.order.data.OrderData"/>
+    </bean>
+    <!-- End of SOAP Response CONVERTER -->
+
+    <!-- CONVERTER -->
+    <alias alias="imagePopulator" name="defaultDistImagePopulator"/>
+    <bean id="defaultDistImagePopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistImagePopulator"
+          parent="defaultImagePopulator">
+        <property name="baseSiteService" ref="baseSiteService"/>
+        <property name="siteBaseUrlResolutionService" ref="siteBaseUrlResolutionService"/>
+    </bean>
+
+    <alias name="defaultDistImageConverter" alias="imageConverter"/>
+    <bean id="defaultDistImageConverter" parent="defaultImageConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.product.data.ImageData"/>
+    </bean>
+
+    <!-- CONVERTER FOR VoucherInfoData-->
+    <bean id="distErpVoucherInfoDataConverter"
+          class="com.namics.distrelec.b2b.facades.order.converters.DistErpVoucherInfoDataConverter"/>
+
+    <!-- Start: Search Converters -->
+    <alias name="defaultProductSearchPageConverter" alias="productSearchPageConverter"/>
+    <bean id="defaultProductSearchPageConverter"
+          class="com.namics.distrelec.b2b.facades.search.converter.ProductSearchPageConverter"/>
+
+    <alias name="defaultSearchResultProductConverter" alias="searchResultProductConverter"/>
+    <bean id="defaultSearchResultProductConverter"
+          class="com.namics.distrelec.b2b.facades.search.converter.SearchResultProductConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.product.data.ProductData"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+        <property name="distSalesOrgService" ref="distSalesOrgService"/>
+        <property name="productFeatureListPopulator" ref="productFeatureListPopulator"/>
+        <property name="searchResultUrlPopulator" ref="searchResultUrlPopulator"/>
+        <property name="populators">
+            <list>
+                <ref bean="searchResultPromotionLabelPopulator"/>
+                <ref bean="searchResultPricePopulator"/>
+                <ref bean="searchResultReplacementPopulator"/>
+                <ref bean="searchResultProductImagePopulator"/>
+                <ref bean="searchResultManufacturerPopulator"/>
+                <ref bean="searchResultProductTechnicalAttributesPopulator"/>
+                <ref bean="searchResultChannelAvailabilityPopulator"/>
+                <ref bean="searchResultProductEanPopulator"/>
+                <ref bean="searchResultEnergyEfficiencyPopulator"/>
+
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultSingleWordSearchProductConverter" alias="singleWordSearchProductConverter"/>
+    <bean id="defaultSingleWordSearchProductConverter"
+          class="com.namics.distrelec.b2b.facades.search.converter.SingleWordSearchProductConverter">
+        <property name="targetClass" value="com.namics.hybris.ffsearch.data.facet.SingleWordSearchItem"/>
+        <property name="searchResultProductConverter" ref="searchResultProductConverter"/>
+    </bean>
+
+    <bean id="outletSearchResultProductConverter"
+          class="com.namics.distrelec.b2b.facades.search.converter.SearchResultProductConverter"
+          parent="defaultSearchResultProductConverter">
+        <property name="searchType" value="OUTLET"/>
+    </bean>
+
+    <bean id="newSearchResultProductConverter"
+          class="com.namics.distrelec.b2b.facades.search.converter.SearchResultProductConverter"
+          parent="defaultSearchResultProductConverter">
+        <property name="searchType" value="NEW"/>
+    </bean>
+
+    <alias name="defaultSearchResultPromotionLabelPopulator" alias="searchResultPromotionLabelPopulator"/>
+    <bean id="defaultSearchResultPromotionLabelPopulator"
+          class="com.namics.distrelec.b2b.facades.search.converter.populator.SearchResultPromotionLabelPopulator"/>
+
+    <alias name="defaultSearchResultPricePopulator" alias="searchResultPricePopulator"/>
+    <bean id="defaultSearchResultPricePopulator"
+          class="com.namics.distrelec.b2b.facades.search.converter.populator.SearchResultPricePopulator"/>
+
+    <alias name="defaultSearchResultReplacementPopulator" alias="searchResultReplacementPopulator"/>
+    <bean id="defaultSearchResultReplacementPopulator"
+          class="com.namics.distrelec.b2b.facades.search.converter.populator.SearchResultReplacementPopulator"/>
+
+    <alias name="defaultSearchResultUrlPopulator" alias="searchResultUrlPopulator"/>
+    <bean id="defaultSearchResultUrlPopulator"
+          class="com.namics.distrelec.b2b.facades.search.converter.populator.SearchResultUrlPopulator">
+        <property name="productDataUrlResolver" ref="productDataUrlResolver"/>
+    </bean>
+
+    <alias name="defaultSearchResultProductImagePopulator" alias="searchResultProductImagePopulator"/>
+    <bean id="defaultSearchResultProductImagePopulator"
+          class="com.namics.distrelec.b2b.facades.search.converter.populator.SearchResultProductImagePopulator"/>
+
+    <alias name="defaultSearchResultManufacturerPopulator" alias="searchResultManufacturerPopulator"/>
+    <bean id="defaultSearchResultManufacturerPopulator"
+          class="com.namics.distrelec.b2b.facades.search.converter.populator.SearchResultManufacturerPopulator"/>
+
+    <alias name="defaultSearchResultEnergyEfficiencyPopulator" alias="searchResultEnergyEfficiencyPopulator"/>
+    <bean id="defaultSearchResultEnergyEfficiencyPopulator"
+          class="com.namics.distrelec.b2b.facades.search.converter.populator.SearchResultEnergyEfficiencyPopulator"/>
+
+    <alias name="defaultSearchResultProductTechnicalAttributesPopulator"
+           alias="searchResultProductTechnicalAttributesPopulator"/>
+    <bean id="defaultSearchResultProductTechnicalAttributesPopulator"
+          class="com.namics.distrelec.b2b.facades.search.converter.populator.SearchResultProductTechnicalAttributesPopulator">
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+        <property name="configurationService" ref="configurationService"/>
+        <property name="storeSessionFacade" ref="storeSessionFacade"/>
+    </bean>
+
+    <alias name="defaultSearchResultChannelAvailabilityPopulator" alias="searchResultChannelAvailabilityPopulator"/>
+    <bean id="defaultSearchResultChannelAvailabilityPopulator"
+          class="com.namics.distrelec.b2b.facades.search.converter.populator.SearchResultChannelAvailabilityPopulator"/>
+
+    <alias name="defaultSearchResultProductEanPopulator" alias="searchResultProductEanPopulator"/>
+    <bean id="defaultSearchResultProductEanPopulator"
+          class="com.namics.distrelec.b2b.facades.search.converter.populator.SearchResultProductEanPopulator"/>
+
+    <alias name="defaultProductPaginationConverter" alias="productPaginationConverter"/>
+    <bean name="defaultProductPaginationConverter"
+          class="com.namics.distrelec.b2b.facades.search.converter.ProductPaginationConverter">
+        <property name="searchStateConverter" ref="searchStateConverter"/>
+    </bean>
+
+    <alias name="defaultSearchStateConverter" alias="searchStateConverter"/>
+    <bean id="defaultSearchStateConverter"
+          class="com.namics.distrelec.b2b.facades.search.converter.SearchStateConverter">
+        <property name="searchPath" value="/search"/>
+        <property name="outletPath" value="/clearance"/>
+        <property name="newPath" value="/new"/>
+        <property name="categoryDataUrlResolver" ref="categoryDataUrlResolver"/>
+        <property name="searchQueryConverter" ref="searchQueryEncoder"/>
+        <property name="distManufacturerDataUrlResolver" ref="distManufacturerDataUrlResolver"/>
+    </bean>
+
+    <alias name="defaultFacetConverter" alias="facetConverter"/>
+    <bean id="defaultFacetConverter" class="com.namics.distrelec.b2b.facades.search.converter.FactFinderFacetConverter">
+        <property name="facetValueConverter" ref="facetValueConverter"/>
+    </bean>
+
+    <alias name="defaultLazyFacetConverter" alias="lazyFacetConverter"/>
+    <bean id="defaultLazyFacetConverter"
+          class="com.namics.distrelec.b2b.facades.search.converter.FactFinderLazyFacetConverter">
+        <property name="searchStateConverter" ref="searchStateConverter"/>
+    </bean>
+
+    <alias name="defaultFacetValueConverter" alias="facetValueConverter"/>
+    <bean id="defaultFacetValueConverter"
+          class="com.namics.distrelec.b2b.facades.search.converter.FactFinderFacetValueConverter"/>
+
+    <bean id="filterBadgeConverter" class="com.namics.distrelec.b2b.facades.search.converter.FilterBadgeConverter">
+        <property name="searchStateConverter" ref="searchStateConverter"/>
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+    </bean>
+
+    <bean id="distRMAReasonConverter" class="com.namics.distrelec.b2b.facades.rma.converters.DistRMAReasonConverter"/>
+
+    <bean id="distRMAPackagingConverter"
+          class="com.namics.distrelec.b2b.facades.rma.converters.DistRMAPackagingConverter"/>
+
+    <alias name="distSeminarConverter" alias="seminarConverter"/>
+    <bean id="distSeminarConverter" class="com.namics.distrelec.b2b.facades.infocenter.converter.DistSeminarConverter"/>
+
+    <!-- END: Search Converters -->
+
+    <!-- CMS Populators -->
+    <alias name="defaultDistCarouselProductDataConverter" alias="distCarouselProductDataConverter"/>
+    <bean id="defaultDistCarouselProductDataConverter"
+          class="com.namics.distrelec.b2b.facades.cms.converters.DistCarouselProductDataConverter"/>
+
+    <alias name="defaultDistCarouselCategoryDataConverter" alias="distCarouselCategoryDataConverter"/>
+    <bean id="defaultDistCarouselCategoryDataConverter"
+          class="com.namics.distrelec.b2b.facades.cms.converters.DistCarouselCategoryDataConverter"/>
+
+    <alias name="defaultDistCarouselManufacturerDataConverter" alias="distCarouselManufacturerDataConverter"/>
+    <bean id="defaultDistCarouselManufacturerDataConverter"
+          class="com.namics.distrelec.b2b.facades.cms.converters.DistCarouselManufacturerDataConverter"/>
+
+    <alias name="defaultDistFooterComponentConverter" alias="distFooterComponentConverter"/>
+    <bean id="defaultDistFooterComponentConverter"
+          class="com.namics.distrelec.b2b.facades.cms.converters.DistFooterComponentConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.cms.data.DistFooterComponentData"/>
+    </bean>
+
+    <!-- End CMS Populators -->
+
+    <alias name="defaultPromotionLabelConverter" alias="promotionLabelConverter"/>
+    <bean id="defaultPromotionLabelConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.DistPromotionLabelConverter"/>
+
+    <alias name="defaultDistFeaturePopulator" alias="featurePopulator"/>
+    <bean id="defaultDistFeaturePopulator" parent="defaultFeaturePopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.DistFeaturePopulator"/>
+
+    <bean id="salesOrgConverter" class="com.namics.distrelec.b2b.facades.storesession.converters.SalesOrgConverter"/>
+    <bean id="channelConverter" class="com.namics.distrelec.b2b.facades.storesession.converters.ChannelConverter"/>
+
+    <alias name="defaultProductReferenceTargetConverter" alias="productReferenceTargetConverter"/>
+    <bean id="defaultProductReferenceTargetConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.ProductReferenceTargetConverter">
+        <property name="populators">
+            <list>
+                <ref bean="productBasicPopulator"/>
+                <ref bean="productPrimaryImagePopulator"/>
+                <ref bean="productStockPopulator"/>
+                <ref bean="productVolumePricesPopulator"/>
+                <ref bean="productPricePopulator"/>
+                <ref bean="productUrlConverter"/>
+                <ref bean="productManufacturerPopulator"/>
+                <ref bean="productWebusePopulator"/>
+                <ref bean="distProductCategoriesPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultProductReferenceConverter" alias="productReferenceConverter"/>
+    <bean id="defaultProductReferenceConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.ProductReferenceConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.product.data.ProductReferenceData"/>
+        <property name="productReferenceTargetConverter" ref="productReferenceTargetConverter"/>
+    </bean>
+
+    <alias name="defaultOCCProductReferenceTargetConverter" alias="occProductReferenceTargetConverter"/>
+    <bean id="defaultOCCProductReferenceTargetConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.ProductReferenceTargetConverter"
+          autowire-candidate="false">
+        <property name="populators">
+            <list>
+                <ref bean="productBasicPopulator"/>
+                <ref bean="productPrimaryImagePopulator"/>
+                <ref bean="productStockPopulator"/>
+                <ref bean="productUrlConverter"/>
+                <ref bean="productManufacturerPopulator"/>
+                <ref bean="productWebusePopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultDistMetaDataConverter" alias="distMetaDataConverter"/>
+    <bean id="defaultDistMetaDataConverter"
+          class="com.namics.distrelec.b2b.facades.seo.converters.DistMetaDataConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.seo.data.MetaData"/>
+    </bean>
+
+    <alias name="defaultDistHeroProductsConverter" alias="distHeroProductsConverter"/>
+    <bean id="defaultDistHeroProductsConverter"
+          class="com.namics.distrelec.b2b.facades.marketing.converters.DistHeroProductsConverter">
+        <property name="basicProductPopulator" ref="productBasicPopulator"/>
+    </bean>
+
+
+    <alias name="defaultProductAvailabilityConverter" alias="productAvailabilityConverter"/>
+    <bean id="defaultProductAvailabilityConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.ProductAvailabilityConverter"/>
+
+    <alias name="defaultDistManufacturerConverter" alias="distManufacturerConverter"/>
+    <bean id="defaultDistManufacturerConverter"
+          class="com.namics.distrelec.b2b.facades.manufacturer.converters.DistManufacturerConverter"/>
+
+    <alias name="defaultDistCategoryPopulator" alias="categoryPopulator"/>
+    <bean id="defaultDistCategoryPopulator" parent="defaultCategoryPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.DistCategoryPopulator"/>
+
+    <alias name="obsolescenceCategoryPopulator" alias="obsolescenceCategoryPopulator"/>
+    <bean id="obsolescenceCategoryPopulator"
+          class="com.namics.distrelec.b2b.facades.customer.converters.populator.ObsolescenceCategoryPopulator"/>
+
+    <bean id="productFamilyPopulator"
+          class="com.namics.distrelec.b2b.facades.category.populator.DistProductFamilyPopulator"/>
+
+    <alias name="defaultDistCategoryConverter" alias="categoryConverter"/>
+    <bean id="defaultDistCategoryConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.product.data.CategoryData"/>
+        <property name="populators">
+            <list>
+                <ref bean="categoryPopulator"/>
+                <ref bean="productFamilyPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="obsolescenceCategoryConverter" alias="obsolescenceCategoryConverter"/>
+    <bean id="obsolescenceCategoryConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.user.data.ObsolescenceCategoryData"/>
+        <property name="populators">
+            <list>
+                <ref bean="obsolescenceCategoryPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultMediaContainerToImageMapConverter" alias="mediaContainerToImageMapConverter"/>
+    <bean id="defaultMediaContainerToImageMapConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.MediaContainerToImageMapConverter"/>
+
+    <alias name="defaultDistAudioMediaConverter" alias="distAudioMediaConverter"/>
+    <bean id="defaultDistAudioMediaConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.DistAudioMediaConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.product.data.DistAudioData"/>
+    </bean>
+
+    <alias name="defaultDistDownloadMediaConverter" alias="distDownloadMediaConverter"/>
+    <bean id="defaultDistDownloadMediaConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.DistDownloadMediaConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.product.data.DistDownloadData"/>
+    </bean>
+
+    <alias name="defaultDistVideoMediaConverter" alias="distVideoMediaConverter"/>
+    <bean id="defaultDistVideoMediaConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.DistVideoMediaConverter"/>
+
+    <alias name="defaultDistImage360Converter" alias="distImage360Converter"/>
+    <bean id="defaultDistImage360Converter"
+          class="com.namics.distrelec.b2b.facades.product.converters.DistImage360Converter"/>
+
+    <alias name="defaultDistDocumentTypeConverter" alias="distDocumentTypeConverter"/>
+    <bean id="defaultDistDocumentTypeConverter"
+          class="com.namics.distrelec.b2b.facades.product.converters.DistDocumentTypeConverter"/>
+
+    <alias name="distMarketingConsentProfileModelConverter" alias="distMarketingConsentProfileModelConverter"/>
+    <bean id="distMarketingConsentProfileModelConverter"
+          class="com.namics.distrelec.b2b.facades.newsletter.converter.DistMarketingConsentProfileModelConverter"/>
+
+    <alias name="defaultDistNewsletterProfileExtModelConverter" alias="distNewsletterProfileExtModelConverter"/>
+    <bean id="defaultDistNewsletterProfileExtModelConverter"
+          class="com.namics.distrelec.b2b.facades.newsletter.converter.DistNewsletterProfilExtModelConverter"/>
+
+    <alias name="defaultDistNewsletterDataConverter" alias="distNewsletterDataConverter"/>
+    <bean id="defaultDistNewsletterDataConverter"
+          class="com.namics.distrelec.b2b.facades.newsletter.converter.DistNewsletterDataConverter"/>
+
+    <alias name="defaultDistMarketingProfileDataConverter" alias="distMarketingProfileDataConverter"/>
+    <bean id="defaultDistMarketingProfileDataConverter"
+          class="com.namics.distrelec.b2b.facades.newsletter.converter.DistMarketingProfileDataConverter"/>
+
+    <alias name="defaultDistCountryPopulator" alias="countryPopulator"/>
+    <bean id="defaultDistCountryPopulator"
+          class="com.namics.distrelec.b2b.facades.i18n.converter.DistCountryPopulator"/>
+
+    <alias name="defaultDistCountryConverter" alias="countryConverter"/>
+    <bean id="defaultDistCountryConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.user.data.CountryData"/>
+        <property name="populators">
+            <list>
+                <ref bean="countryPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultDistAddressConverter" alias="addressConverter"/>
+    <bean id="defaultDistAddressConverter" parent="defaultAddressConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.user.data.AddressData"/>
+    </bean>
+
+    <alias name="defaultDistRegionConverter" alias="regionConverter"/>
+    <bean id="defaultDistRegionConverter" class="com.namics.distrelec.b2b.facades.i18n.converter.DistRegionConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.user.data.RegionData"/>
+    </bean>
+
+    <alias name="defaultDistB2BBudgetConverter" alias="b2bBudgetConverter"/>
+    <bean id="defaultDistB2BBudgetConverter"
+          class="com.namics.distrelec.b2b.facades.customer.b2b.budget.converters.DistB2BBudgetConverter">
+        <property name="targetClass"
+                  value="de.hybris.platform.b2bcommercefacades.company.data.B2BBudgetData"/>
+    </bean>
+
+    <alias name="defaultDistB2BBudgetFacade" alias="b2bBudgetFacade"/>
+    <bean id="defaultDistB2BBudgetFacade"
+          class="com.namics.distrelec.b2b.facades.customer.b2b.budget.impl.DefaultDistB2BBudgetFacade"/>
+
+    <alias name="defaultDistB2BUnitPopulator" alias="b2bUnitPopulator"/>
+    <bean id="defaultDistB2BUnitPopulator" class="com.namics.distrelec.b2b.facades.user.converters.DistB2BUnitPopulator"
+          parent="defaultB2BUnitPopulator"/>
+
+    <alias name="defaultDistCardTypePopulator" alias="cardTypePopulator"/>
+    <bean id="defaultDistCardTypePopulator"
+          class="com.namics.distrelec.b2b.facades.order.converters.DistCardTypePopulator"
+          parent="defaultCardTypePopulator"/>
+
+    <alias name="defaultDepartmentConverter" alias="departmentConverter"/>
+    <bean id="defaultDepartmentConverter"
+          class="com.namics.distrelec.b2b.facades.user.converters.DistDepartmentConverter"/>
+
+    <alias name="defaultFunctionConverter" alias="functionConverter"/>
+    <bean id="defaultFunctionConverter" class="com.namics.distrelec.b2b.facades.user.converters.DistFunctionConverter"/>
+
+    <alias name="defaultDistB2bCustomerConverter" alias="b2BCustomerConverter"/>
+    <bean id="defaultDistB2bCustomerConverter" parent="defaultB2BCustomerConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.user.data.CustomerData"/>
+        <property name="populators">
+            <list>
+                <ref bean="distB2BCustomerPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultDistCreditCardPaymentInfoConverter" alias="creditCardPaymentInfoConverter"/>
+    <bean id="defaultDistCreditCardPaymentInfoConverter" parent="defaultCreditCardPaymentInfoConverter">
+        <property name="populators" ref="distCreditCardPaymentInfoPopulator"/>
+    </bean>
+
+    <bean id="distCreditCardPaymentInfoPopulator"
+          class="com.namics.distrelec.b2b.facades.order.cart.converters.populator.DistCreditCardPaymentInfoPopulator"/>
+
+    <!-- alias name="distB2BCustomerPopulator" alias="customerPopulator" / -->
+    <bean id="distB2BCustomerPopulator"
+          class="com.namics.distrelec.b2b.facades.customer.converters.populator.DistB2BCustomerPopulator"
+          parent="b2bCustomerPopulator"/>
+
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="customerConverter"/>
+        <property name="remove" ref="b2bCustomerPopulator"/>
+    </bean>
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="customerConverter"/>
+        <property name="add" ref="distB2BCustomerPopulator"/>
+    </bean>
+
+    <bean id="distB2BCustomerModelValidateInterceptor" class="com.namics.distrelec.b2b.facades.interceptor.DistB2BCustomerModelValidateInterceptor"
+          parent="B2BCustomerModelValidateInterceptor" autowire="byName" />
+    <alias name="distB2BCustomerModelValidateInterceptorMapping" alias="B2BCustomerModelValidateInterceptorMapping" />
+    <bean id="distB2BCustomerModelValidateInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+        <property name="interceptor" ref="distB2BCustomerModelValidateInterceptor" />
+        <property name="typeCode" value="B2BCustomer" />
+    </bean>
+
+    <bean id="wtBasicParamPopulator"
+          class="com.namics.distrelec.b2b.facades.cms.converters.WtBasicParameterDataPopulator"/>
+
+    <bean id="wtAdvancedParamPopulator"
+          class="com.namics.distrelec.b2b.facades.cms.converters.WtAdvancedParameterDataPopulator"/>
+
+    <alias name="defaultDistCustomerReversePopulator" alias="customerReversePopulator"/>
+    <bean id="defaultDistCustomerReversePopulator"
+          class="com.namics.distrelec.b2b.facades.customer.converters.populator.DistCustomerReversePopulator"
+          parent="defaultB2BCustomerReversePopulator"/>
+
+    <alias name="distAddressPopulator" alias="addressPopulator"/>
+    <bean id="distAddressPopulator" parent="defaultAddressPopulator"
+          class="com.namics.distrelec.b2b.facades.user.converters.DistAddressPopulator"/>
+
+    <alias name="defaultDistAddressReversePopulator" alias="addressReversePopulator"/>
+    <bean id="defaultDistAddressReversePopulator"
+          class="com.namics.distrelec.b2b.facades.user.converters.populator.DistAddressReversePopulator"
+          parent="defaultAddressReversePopulator"/>
+
+    <alias name="defaultDistProductFinderValueDelegatingConverter" alias="distProductFinderValueDelegatingConverter"/>
+    <bean id="defaultDistProductFinderValueDelegatingConverter"
+          class="com.namics.distrelec.b2b.facades.productfinder.converter.DistProductFinderValueDelegatingConverter">
+        <property name="converters">
+            <map>
+                <entry key="DistProductFinderSingleValue" value-ref="distProductFinderSingleValueConverter"/>
+                <entry key="DistProductFinderListValue" value-ref="distProductFinderListValueConverter"/>
+                <entry key="DistProductFinderRangeValue" value-ref="distProductFinderRangeValueConverter"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="distProductFinderSingleValueConverter"
+          class="com.namics.distrelec.b2b.facades.productfinder.converter.DistProductFinderValueConverter">
+        <property name="targetClass"
+                  value="com.namics.distrelec.b2b.facades.productfinder.data.DistProductFinderValueData"/>
+        <property name="populators">
+            <list>
+                <ref bean="distProductFinderManufacturerValuePopulator"/>
+                <ref bean="distProductFinderFeatureValuePopulator"/>
+                <ref bean="distProductFinderPriceValuePopulator"/>
+                <ref bean="distProductFinderInStockValuePopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="distProductFinderListValueConverter"
+          class="com.namics.distrelec.b2b.facades.productfinder.converter.DistProductFinderListValueConverter">
+        <property name="targetClass"
+                  value="com.namics.distrelec.b2b.facades.productfinder.data.DistProductFinderValueData"/>
+        <property name="singleValueConverter" ref="distProductFinderSingleValueConverter"/>
+    </bean>
+
+    <bean id="distProductFinderRangeValueConverter"
+          class="com.namics.distrelec.b2b.facades.productfinder.converter.DistProductFinderRangeValueConverter">
+        <property name="targetClass"
+                  value="com.namics.distrelec.b2b.facades.productfinder.data.DistProductFinderValueData"/>
+        <property name="singleValueConverter" ref="distProductFinderSingleValueConverter"/>
+    </bean>
+
+    <alias name="defaultDistProductFinderDecoder" alias="distProductFinderDecoder"/>
+    <bean id="defaultDistProductFinderDecoder"
+          class="com.namics.distrelec.b2b.facades.productfinder.converter.DistProductFinderDecoder">
+        <property name="targetClass" value="com.namics.hybris.ffsearch.data.search.SearchQueryData"/>
+    </bean>
+
+    <alias name="distApprovalDataPopulator" alias="b2bOrderApprovalDataPopulator"/>
+    <bean id="distApprovalDataPopulator"
+          class="com.namics.distrelec.b2b.facades.order.converters.DistApprovalDataPopulator"
+          parent="defaultB2BOrderApprovalDataPopulator"/>
+
+    <alias name="defaultDistB2BOrderApprovalDataConverter" alias="b2bOrderApprovalDataConverter"/>
+    <bean id="defaultDistB2BOrderApprovalDataConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="de.hybris.platform.b2bacceleratorfacades.order.data.B2BOrderApprovalData"/>
+        <property name="populators">
+            <list>
+                <ref bean="b2bOrderApprovalDataPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="distInvoiceSearchRequestConverter"
+          class="com.namics.distrelec.b2b.facades.order.invoice.converters.DistInvoiceSearchRequestConverter">
+        <property name="userService" ref="userService"/>
+        <property name="distSalesOrgService" ref="distSalesOrgService"/>
+    </bean>
+
+    <bean id="distB2BInvoiceHistoryDataConverter"
+          class="com.namics.distrelec.b2b.facades.order.invoice.converters.DistB2BInvoiceHistoryDataConverter"/>
+
+    <bean id="distSearchRequestConverter"
+          class="com.namics.distrelec.b2b.facades.order.invoice.converters.if12.DistInvoiceSearchRequestIF12Converter">
+        <property name="userService" ref="userService"/>
+        <property name="distSalesOrgService" ref="distSalesOrgService"/>
+    </bean>
+    <bean id="distB2BInvoiceSearchDataConverter"
+          class="com.namics.distrelec.b2b.facades.order.invoice.converters.if12.DistInvoiceSearchResponseIF12Converter"/>
+
+    <alias name="defaultDistFeatureConverter" alias="featureConverter"/>
+    <bean id="defaultDistFeatureConverter" parent="defaultFeatureConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.product.data.FeatureData"/>
+    </bean>
+
+    <!-- POPULATOR -->
+
+    <alias alias="cmsLocalizedPopulator" name="defaultDistLocalizedPopulator"/>
+    <bean id="defaultDistLocalizedPopulator"
+          class="com.namics.distrelec.b2b.facades.common.populator.impl.DefaultDistLocalizedPopulator"
+          parent="defaultLocalizedPopulator"/>
+
+    <alias name="defaultProductDownloadMediaPopulator" alias="productDownloadMediaPopulator"/>
+    <bean id="defaultProductDownloadMediaPopulator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistDownloadMediaPopulator"/>
+
+    <alias name="defaultProductAudioMediaPopulator" alias="productAudioMediaPopulator"/>
+    <bean id="defaultProductAudioMediaPopulator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistAudioMediaPopulator"/>
+
+    <alias name="defaultProductVideoMediaPopulator" alias="productVideoMediaPopulator"/>
+    <bean id="defaultProductVideoMediaPopulator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistVideoMediaPopulator"/>
+
+    <alias name="defaultProductImage360Populator" alias="productImage360Populator"/>
+    <bean id="defaultProductImage360Populator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistImage360Populator"/>
+
+    <alias name="defaultProductInformationPopulator" alias="productInformationPopulator"/>
+    <bean id="defaultProductInformationPopulator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.ProductInformationPopulator"/>
+
+    <alias name="defaultDistProductFeatureListPopulator" alias="productFeatureListPopulator"/>
+    <bean id="defaultDistProductFeatureListPopulator" parent="defaultProductFeatureListPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductFeatureListPopulator"/>
+
+    <alias name="defaultProductMetaDataPopulator" alias="productMetaDataPopulator"/>
+    <bean id="defaultProductMetaDataPopulator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductMetaDataPopulator"/>
+
+    <bean id="productRobotsPopulator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductRobotsPopulator"/>
+
+    <alias name="defaultProductReferencePopulator" alias="productReferencePopulator"/>
+    <bean id="defaultProductReferencePopulator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.ProductReferencePopulator">
+        <property name="productReferenceConverter" ref="productReferenceConverter"/>
+        <property name="activeOnly" value="true"/>
+    </bean>
+
+    <alias name="defaultProductAccessoryPopulator" alias="productAccessoryPopulator"/>
+    <bean id="defaultProductAccessoryPopulator" parent="productReferencePopulator">
+        <property name="productReferenceType">
+            <value type="de.hybris.platform.catalog.enums.ProductReferenceTypeEnum">DIST_ACCESSORY</value>
+        </property>
+    </bean>
+
+    <alias name="defaultSimilarProductPopulator" alias="similarProductPopulator"/>
+    <bean id="defaultSimilarProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.SimilarProductPopulator">
+        <property name="modelService" ref="modelService"/>
+        <property name="productReferenceTargetConverter" ref="productReferenceTargetConverter"/>
+        <property name="distProductService" ref="distProductService"/>
+        <property name="similarProductsLimit" value="${product.detail.similarProducts.limit}"/>
+    </bean>
+
+    <alias name="defaultProductPromotionLabelsPopulator" alias="productPromotionLabelsPopulator"/>
+    <bean id="defaultProductPromotionLabelsPopulator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.ProductPromotionLabelsPopulator">
+        <property name="promotionLabelsFacade" ref="distPromotionLabelsFacade"/>
+    </bean>
+
+    <alias name="defaultProductCountryOfOriginPopulator" alias="productCountryOfOriginPopulator"/>
+    <bean id="defaultProductCountryOfOriginPopulator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.ProductCountryOfOriginPopulator"/>
+
+    <!-- Adding Min Basic Product Populator -->
+    <alias name="defaultDistProductMinBasicPopulator" alias="productMinBasicPopulator"/>
+    <bean id="defaultDistProductMinBasicPopulator" parent="defaultProductBasicPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductMinBasicPopulator"/>
+
+    <!-- Override ProductBasicPopulator -->
+    <alias name="defaultDistProductBasicPopulator" alias="productBasicPopulator"/>
+    <bean id="defaultDistProductBasicPopulator" parent="defaultProductBasicPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductBasicPopulator"/>
+
+    <!-- Override ProductPricePopulator -->
+    <alias name="defaultDistProductPricePopulator" alias="productPricePopulator"/>
+    <bean id="defaultDistProductPricePopulator" parent="defaultProductPricePopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductPricePopulator"/>
+
+    <alias name="defaultDistProductOnlinePricePopulator" alias="productOnlinePricePopulator"/>
+    <bean id="defaultDistProductOnlinePricePopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductOnlinePricePopulator"
+          parent="defaultDistProductPricePopulator"/>
+
+    <alias name="defaultProductManufacturerPopulator" alias="productManufacturerPopulator"/>
+    <bean id="defaultProductManufacturerPopulator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductManufacturerPopulator"/>
+    <alias name="defaultPickupStockLevel" alias="pickupStockLevelPopulator"/>
+    <bean id="defaultPickupStockLevel"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.PickupStockLevelPopulator"/>
+
+    <alias name="defaultProductWebusePopulator" alias="productWebusePopulator"/>
+    <bean id="defaultProductWebusePopulator" parent="baseProductPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.ProductTechnicalAttributesPopulator"/>
+
+    <alias name="defaultEnergyEfficencyPopulator" alias="energyEfficencyPopulator"/>
+    <bean id="defaultEnergyEfficencyPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistEnergyEfficencyPopulator"/>
+
+    <bean id="stateResultPopulator" class="com.namics.distrelec.b2b.facades.search.converter.StateResultPopulator"/>
+
+    <bean id="categoryDisplayDataConverter"
+          class="com.namics.distrelec.b2b.facades.category.converter.CategoryDisplayDataConverter"/>
+
+    <bean id="feedbackCampaignConverter"
+          class="com.namics.distrelec.b2b.facades.search.converter.FeedbackCampaignConverter">
+        <property name="searchResultProductConverter" ref="searchResultProductConverter"/>
+    </bean>
+
+    <bean id="advisorCampaignConverter"
+          class="com.namics.distrelec.b2b.facades.search.converter.AdvisorCampaignConverter">
+        <property name="searchStateConverter" ref="searchStateConverter"/>
+    </bean>
+
+    <alias name="defaultDistProductFinderManufacturerValuePopulator"
+           alias="distProductFinderManufacturerValuePopulator"/>
+    <bean id="defaultDistProductFinderManufacturerValuePopulator"
+          class="com.namics.distrelec.b2b.facades.productfinder.converter.DistProductFinderManufacturerValuePopulator"/>
+
+    <alias name="defaultDistProductFinderFeatureValuePopulator" alias="distProductFinderFeatureValuePopulator"/>
+    <bean id="defaultDistProductFinderFeatureValuePopulator"
+          class="com.namics.distrelec.b2b.facades.productfinder.converter.DistProductFinderFeatureValuePopulator"/>
+
+    <alias name="defaultDistProductFinderPriceValuePopulator" alias="distProductFinderPriceValuePopulator"/>
+    <bean id="defaultDistProductFinderPriceValuePopulator"
+          class="com.namics.distrelec.b2b.facades.productfinder.converter.DistProductFinderPriceValuePopulator"/>
+
+    <alias name="defaultDistProductFinderInStockValuePopulator" alias="distProductFinderInStockValuePopulator"/>
+    <bean id="defaultDistProductFinderInStockValuePopulator"
+          class="com.namics.distrelec.b2b.facades.productfinder.converter.DistProductFinderInStockValuePopulator"/>
+
+    <!-- ENCODER/DECODER -->
+    <bean id="searchQueryEncoder" class="com.namics.distrelec.b2b.facades.search.converter.SearchQueryEncoder"/>
+    <bean id="searchQueryDecoder" class="com.namics.distrelec.b2b.facades.search.converter.SearchQueryDecoder"/>
+
+    <!-- Define a new price factory that creates prices of type B2BPriceData -->
+
+    <alias name="defaultDistPriceDataFactory" alias="priceDataFactory"/>
+    <bean id="defaultDistPriceDataFactory"
+          class="com.namics.distrelec.b2b.facades.product.impl.DefaultDistPriceDataFactory"
+          parent="defaultPriceDataFactory"/>
+
+    <bean id="priceData" class="de.hybris.platform.commercefacades.product.data.PriceData" scope="prototype"/>
+
+    <bean id="b2bPriceDataFactory" parent="defaultPriceDataFactory">
+        <lookup-method name="createPriceData" bean="priceData"/>
+    </bean>
+
+    <alias name="b2bProductConverter" alias="productConverter"/>
+    <bean id="b2bProductConverter" parent="defaultProductConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.product.data.ProductData"/>
+    </bean>
+
+    <alias name="defaultDistProductUrlConverter" alias="productUrlConverter"/>
+    <bean id="defaultDistProductUrlConverter" parent="defaultProductUrlConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.product.data.ProductData"/>
+    </bean>
+
+
+    <!-- Define a new populator for volume prices -->
+
+    <alias name="defaultProductVolumePricesPopulator" alias="productVolumePricesPopulator"/>
+    <bean id="defaultProductVolumePricesPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.ProductVolumePricesPopulator"
+          parent="baseProductPopulator"/>
+
+    <alias name="defaultClassificationAndProductInformationPopulator"
+           alias="classificationAndProductInformationPopulator"/>
+    <bean id="defaultClassificationAndProductInformationPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.ClassificationAndProductInformationPopulator"
+          parent="productInformationPopulator">
+        <property name="productFeatureListPopulator" ref="productFeatureListPopulator"/>
+    </bean>
+
+    <bean id="distProductCategoriesPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductCategoriesPopulator"
+          parent="productCategoriesPopulator">
+        <property name="distCategoryService" ref="distCategoryService"/>
+    </bean>
+
+    <bean id="distProductBulkPermissionPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductBulkPermissionPopulator"/>
+
+    <bean id="distProductChannelAvailabilityPopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductChannelAvailabilityPopulator"/>
+
+    <!-- deprecated type - will be changed to de.hybris.platform.converters.impl.DefaultModifableConfigurablePopulator in 6.2 -->
+    <alias name="defaultDistProductConfiguredPopulator" alias="productConfiguredPopulator"/>
+    <bean id="defaultDistProductConfiguredPopulator"
+          class="de.hybris.platform.converters.impl.DefaultModifableConfigurablePopulator">
+        <property name="populators">
+            <map key-type="de.hybris.platform.commercefacades.product.ProductOption">
+                <entry key="BASIC" value-ref="productBasicPopulatorList"/>
+                <entry key="PRICE" value-ref="productPricePopulatorList"/>
+                <entry key="PRICE_RANGE" value-ref="productPriceRangePopulator"/>
+                <entry key="GALLERY" value-ref="productGalleryPopulatorList"/>
+                <entry key="SUMMARY" value-ref="productSummaryPopulatorList"/>
+                <entry key="DESCRIPTION" value-ref="productDescriptionPopulatorList"/>
+                <entry key="CATEGORIES" value-ref="productCategoriesPopulatorList"/>
+                <entry key="PROMOTIONS" value-ref="productPromotionsPopulatorList"/>
+                <entry key="STOCK" value-ref="productStockPopulatorList"/>
+                <entry key="REVIEW" value-ref="productReviewPopulatorList"/>
+                <entry key="CLASSIFICATION" value-ref="productClassificationPopulatorList"/>
+                <entry key="VARIANT_FULL" value-ref="productVariantFullPopulatorList"/>
+                <entry key="REFERENCES" value-ref="productReferencesPopulator"/>
+                <entry key="DELIVERY_MODE_AVAILABILITY" value-ref="productDeliveryModeAvailabilityPopulator"/>
+                <entry key="URL" value-ref="productUrlPopulator"/>
+                <entry key="IMAGES" value-ref="productPrimaryImagePopulator"/>
+
+                <!-- NEW KEYS + POPULATORS -->
+                <entry key="MIN_BASIC" value-ref="productMinBasicPopulator"/>
+                <entry key="ONLINE_PRICE" value-ref="productOnlinePricePopulator"/>
+                <entry key="VOLUME_PRICES" value-ref="productVolumePricesPopulator"/>
+                <entry key="SIMILAR_PRODUCTS" value-ref="similarProductPopulator"/>
+                <entry key="ACCESSORIES" value-ref="productAccessoryPopulator"/>
+                <entry key="PROMOTION_LABELS" value-ref="productPromotionLabelsPopulator"/>
+                <entry key="DIST_MANUFACTURER" value-ref="productManufacturerPopulator"/>
+                <entry key="COUNTRY_OF_ORIGIN" value-ref="productCountryOfOriginPopulator"/>
+                <entry key="AUDIOS" value-ref="productAudioMediaPopulator"/>
+                <entry key="DOWNLOADS" value-ref="productDownloadMediaPopulator"/>
+                <entry key="VIDEOS" value-ref="productVideoMediaPopulator"/>
+                <entry key="IMAGE360" value-ref="productImage360Populator"/>
+                <entry key="PRODUCT_INFORMATION" value-ref="productInformationPopulator"/>
+                <entry key="CLASSIFICATION_AND_PRODUCT_INFORMATION"
+                       value-ref="classificationAndProductInformationPopulator"/>
+                <entry key="TECH_ATTRIBUTE" value-ref="productWebusePopulator"/>
+                <entry key="BREADCRUMBS" value-ref="distProductCategoriesPopulator"/>
+                <entry key="METADATA" value-ref="productMetaDataPopulator"/>
+                <entry key="BULK_PERMISSION" value-ref="distProductBulkPermissionPopulator"/>
+                <entry key="CHANNEL_AVAILABILITY" value-ref="distProductChannelAvailabilityPopulator"/>
+                <entry key="ROBOTS" value-ref="productRobotsPopulator"/>
+            </map>
+        </property>
+    </bean>
+
+
+    <!-- accelerator Image Format Mappings -->
+    <alias name="acceleratorImageFormatMapping" alias="imageFormatMapping"/>
+    <bean id="acceleratorImageFormatMapping" parent="defaultImageFormatMapping">
+        <property name="mapping">
+            <map>
+                <entry key="superZoom" value="LARGE"/>
+                <entry key="zoom" value="515Wx515H"/>
+                <entry key="store" value="365Wx246H"/>
+                <entry key="product" value="MEDIUM"/>
+                <entry key="thumbnail" value="THUMB"/>
+                <entry key="cartIcon" value="THUMB"/>
+                <entry key="styleSwatch" value="30Wx30H"/>
+            </map>
+        </property>
+    </bean>
+
+    <alias name="acceleratorProductPrimaryImagePopulator" alias="productPrimaryImagePopulator"/>
+    <bean id="acceleratorProductPrimaryImagePopulator" parent="defaultProductPrimaryImagePopulator">
+        <property name="imageFormats">
+            <list>
+                <value>zoom</value>
+                <value>product</value>
+                <value>thumbnail</value>
+                <value>cartIcon</value>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="acceleratorProductGalleryImagesPopulator" alias="productGalleryImagesPopulator"/>
+    <bean id="acceleratorProductGalleryImagesPopulator" parent="defaultProductGalleryImagesPopulator">
+        <property name="imageFormats">
+            <list>
+                <value>zoom</value>
+                <value>product</value>
+                <value>thumbnail</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- EMAIL CONTEXT -->
+    <bean id="customerEmailContext" class="com.namics.distrelec.b2b.facades.process.email.context.CustomerEmailContext"
+          parent="abstractDistEmailContext" scope="prototype">
+        <property name="customerConverter" ref="customerConverter"/>
+        <property name="b2bCustomerConverter" ref="b2BCustomerConverter"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+        <property name="userService" ref="userService"/>
+    </bean>
+
+    <bean id="existingCustomerRegistrationEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.ExistingCustomerRegistrationEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="obsolescencePreferenceEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.ObsolescencePreferenceEmailContext"
+          parent="abstractDistEmailContext" scope="prototype">
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <bean id="bomNotificationEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.BomNotificationEmailContext"
+          parent="abstractDistEmailContext" scope="prototype">
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <bean id="checkNewCustomerRegistrationEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.CheckNewCustomerRegistrationEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="b2bForgottenPasswordEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.ForgottenPasswordEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="setInitialPasswordEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.SetInitialPasswordEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="deactivateUserEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DeactivateUserEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="orderReplenishmentEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.OrderReplenishmentEmailContext"
+          parent="abstractDistEmailContext" scope="prototype">
+        <property name="scheduledCartConverter" ref="scheduledCartConverter"/>
+    </bean>
+
+    <bean id="b2bOrderNotificationContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.OrderNotificationEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="sendToFriendEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistSendToFriendEmailContext"
+          parent="abstractDistEmailContext" scope="prototype">
+        <property name="productConverter" ref="b2bProductConverter"/>
+        <property name="cartConverter" ref="defaultDistCartConverter"/>
+    </bean>
+
+    <bean id="feedbackEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistFeedbackEmailContext"
+          parent="abstractDistEmailContext" scope="prototype"/>
+    <bean id="DistCustomerErrorFeedbackEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistCustomerErrorFeedbackEmailContext"
+          parent="abstractDistEmailContext" scope="prototype"/>
+
+    <!-- NPS Email Context -->
+    <bean id="netPromoterScoreEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.NetPromoterScoreEmailContext"
+          parent="abstractDistEmailContext" scope="prototype"/>
+
+    <bean id="sapVoucherEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.SapVoucherEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="supportEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistSupportEmailContext"
+          parent="abstractDistEmailContext" scope="prototype"/>
+
+    <bean id="addressChangeEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistAddressChangeEmailContext"
+          parent="abstractDistEmailContext" scope="prototype"/>
+
+    <bean id="catalogOrderEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistCatalogOrderEmailContext"
+          parent="abstractDistEmailContext" scope="prototype"/>
+
+    <bean id="OrderApprovalRejectionEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.OrderApprovalRejectionEmailContext"
+          parent="customerEmailContext" scope="prototype">
+        <property name="orderConverter" ref="b2bOrderConverter"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <bean id="OrderPendingApprovalEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.OrderPendingApprovalEmailContext"
+          parent="customerEmailContext" scope="prototype">
+        <property name="orderConverter" ref="b2bOrderConverter"/>
+    </bean>
+
+    <bean id="distQuoteEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistQuoteEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="OrderPendingAdminApprovalEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.OrderPendingAdminApprovalEmailContext"
+          parent="customerEmailContext" scope="prototype">
+        <property name="orderConverter" ref="b2bOrderConverter"/>
+    </bean>
+
+    <bean id="pdfContext" class="com.namics.distrelec.b2b.core.service.process.pdfgeneration.PDFContext"
+          scope="prototype"/>
+
+    <bean id="orderConfirmationPDFContext" class="com.namics.distrelec.b2b.facades.pdf.OrderConfirmationPDFContext"
+          parent="pdfContext" scope="prototype">
+        <property name="mediaService" ref="mediaService"/>
+        <property name="configurationService" ref="configurationService"/>
+        <property name="priceDataFactory" ref="priceDataFactory"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <bean id="RmaRequestEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.RmaRequestEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="orderCancellationEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="pimImportNotificationEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.PimImportNotificationEmailContext"
+          parent="abstractDistEmailContext" scope="prototype">
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <bean id="paymentNotifyOrderEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.PaymentNotifyOrderEmailContext"
+          parent="abstractDistEmailContext" scope="prototype">
+        <property name="commonI18NService" ref="commonI18NService"/>
+        <property name="b2bOrderDao" ref="b2bOrderDao"/>
+    </bean>
+
+    <bean id="customerErrorFeedbackEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistCustomerErrorFeedbackEmailContext"
+          parent="abstractDistEmailContext" scope="prototype">
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <bean id="quoteProductPriceEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistQuoteProductPriceEmailContext"
+          parent="customerEmailContext" scope="prototype">
+        <property name="b2bProductConverter" ref="b2bProductConverter"/>
+        <property name="b2bCustomerConverter" ref="b2BCustomerConverter"/>
+        <property name="productConfiguredPopulator" ref="productConfiguredPopulator"/>
+    </bean>
+
+    <bean id="catalogPlusProductPriceRequestEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistCatalogPlusProductPriceRequestEmailContext"
+          parent="customerEmailContext" scope="prototype">
+        <property name="b2bProductConverter" ref="b2bProductConverter"/>
+        <property name="b2bCustomerConverter" ref="b2BCustomerConverter"/>
+        <property name="productConfiguredPopulator" ref="productConfiguredPopulator"/>
+    </bean>
+
+    <bean id="seminarRegistrationRequestEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistSeminarRegistrationRequestEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="educationRegistrationRequestEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistEducationRegistrationRequestEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="requestInvoicePaymentMethodEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.RequestInvoicePaymentModeEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+    <bean id="missingOrdersReportEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistMissingOrdersReportEmailContext"
+          parent="abstractDistEmailContext" scope="prototype">
+    </bean>
+
+    <bean id="distNewCustomerActivationEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistNewCustomerActivationEmailContext"
+          parent="customerEmailContext" scope="prototype"/>
+
+
+    <alias name="b2bDefaultStoreFinderFacade" alias="b2bStoreFinderFacade"/>
+    <bean id="b2bDefaultStoreFinderFacade"
+          class="de.hybris.platform.commercefacades.storefinder.impl.DefaultStoreFinderFacade">
+        <property name="baseStoreService" ref="baseStoreService"/>
+        <property name="storeFinderService" ref="storeFinderService"/>
+        <property name="searchPagePointOfServiceDistanceConverter" ref="searchPagePointOfServiceDistanceConverter"/>
+        <property name="pointOfServiceConverter" ref="pointOfServiceConverter"/>
+        <property name="pointOfServiceDistanceConverter" ref="pointOfServiceDistanceConverter"/>
+    </bean>
+
+    <bean id="distBaseSiteConverter" class="com.namics.distrelec.b2b.facades.order.converters.DistBaseSiteConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.basesite.data.BaseSiteData"/>
+    </bean>
+
+    <bean id="distBaseStoreConverter" class="com.namics.distrelec.b2b.facades.order.converters.DistBaseStoreConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.basestore.data.BaseStoreData"/>
+        <property name="baseSiteConverter" ref="distBaseSiteConverter"/>
+    </bean>
+
+    <bean id="discountConverter" class="com.namics.distrelec.b2b.facades.order.converters.DistDiscountConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.order.data.DistDiscountData"/>
+        <property name="currencyPopulator" ref="currencyPopulator"/>
+    </bean>
+
+    <bean id="newProductsNewsLetterEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistNewProductsNewsLetterEmailContext"
+          parent="abstractDistEmailContext" scope="prototype"/>
+
+    <bean id="distVoucherToErpVoucherInfoConverter"
+          class="com.namics.distrelec.b2b.facades.order.converters.DistVoucherToErpVoucherInfoConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.order.data.DistErpVoucherInfoData"/>
+    </bean>
+
+    <alias name="distOrderPopulator" alias="orderPopulator"/>
+    <bean id="distOrderPopulator" parent="defaultOrderPopulator"
+          class="com.namics.distrelec.b2b.facades.order.converters.DistOrderPopulator"/>
+
+    <bean id="distB2BOrderPopulator" parent="b2bOrderPopulator"
+          class="com.namics.distrelec.b2b.facades.order.converters.populator.DistOrderPopulator">
+        <property name="warehouseConverter" ref="warehouseConverter"/>
+        <property name="addressConverter" ref="addressConverter"/>
+        <property name="discountConverter" ref="discountConverter"/>
+        <property name="deliveryModeConverter" ref="deliveryModeConverter"/>
+        <property name="baseStoreConverter" ref="distBaseStoreConverter"/>
+        <property name="baseSiteConverter" ref="distBaseSiteConverter"/>
+        <property name="paymentModeConverter" ref="paymentModeConverter"/>
+        <property name="distErpVoucherInfoDataConverter" ref="distErpVoucherInfoDataConverter"/>
+        <property name="currencyConverter" ref="currencyConverter"/>
+        <property name="b2bUnitConverter">
+            <!-- pass empty converter as it is not used -->
+            <bean parent="abstractPopulatingConverter">
+                <lookup-method name="createTarget" bean="b2bUnitData"/>
+            </bean>
+        </property>
+    </bean>
+
+    <alias name="defaultDistOrderConverter" alias="b2bOrderConverter"/>
+    <bean id="defaultDistOrderConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.order.data.OrderData"/>
+        <property name="populators">
+            <list merge="false">
+                <ref bean="distOrderPopulator"/>
+                <ref bean="distB2BOrderPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="defaultDistOrderConverter"/>
+        <property name="remove" ref="b2bOrderPopulator"/>
+    </bean>
+
+    <bean id="defaultDistSubOrderEntryDataConverter"
+          class="com.namics.distrelec.b2b.facades.order.converters.SubOrderEntryDataConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.order.data.SubOrderEntryData"/>
+    </bean>
+
+    <!-- Replace the orderEntryConverter to use a custom orderEntryProductConverter -->
+    <alias name="defaultDistOrderEntryPopulator" alias="orderEntryPopulator"/>
+    <bean id="defaultDistOrderEntryPopulator" parent="defaultOrderEntryPopulator"
+          class="com.namics.distrelec.b2b.facades.order.converters.populator.DistOrderEntryPopulator">
+        <property name="productConverter" ref="orderEntryProductConverter"/>
+        <property name="occProductConverter" ref="occOrderEntryProductConverter"/>
+    </bean>
+
+    <alias name="defaultDistOrderEntryConverter" alias="orderEntryConverter"/>
+    <bean id="defaultDistOrderEntryConverter" parent="defaultOrderEntryConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.order.data.OrderEntryData"/>
+    </bean>
+
+
+    <!-- Create a custom ProductConverter that always populates the stock & categories. -->
+    <alias name="defaultDistOrderEntryProductConverter" alias="orderEntryProductConverter"/>
+    <bean id="defaultDistOrderEntryProductConverter" parent="b2bProductConverter">
+        <property name="populators">
+            <list merge="true">
+                <ref bean="productStockPopulator"/>
+                <ref bean="distProductCategoriesPopulator"/>
+                <ref bean="productManufacturerPopulator"/>
+                <ref bean="productVolumePricesPopulator"/>
+                <!-- DISTRELEC-7226 populator disabled to avoid customerPrice Calculation (IF-07) -->
+                <!-- <ref bean="productPromotionLabelsPopulator"/> -->
+            </list>
+        </property>
+    </bean>
+
+    <!-- Create a custom ProductConverter that always populates the stock & categories. -->
+    <alias name="defaultOccDistOrderEntryProductConverter" alias="occOrderEntryProductConverter"/>
+    <bean id="defaultOccDistOrderEntryProductConverter" parent="b2bProductConverter" autowire-candidate="false">
+        <property name="populators">
+            <list merge="true">
+                <ref bean="productStockPopulator"/>
+                <ref bean="distProductCategoriesPopulator"/>
+                <ref bean="productManufacturerPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="distB2BCartPopulator"
+          class="com.namics.distrelec.b2b.facades.order.cart.converters.populator.DistB2BCartPopulator"/>
+
+    <alias name="distMiniCartPopulator" alias="miniCartPopulator"/>
+    <bean id="distMiniCartPopulator"
+          class="com.namics.distrelec.b2b.facades.order.cart.converters.populator.DistMiniCartPopulator"
+          parent="defaultMiniCartPopulator"/>
+
+    <alias name="defaultDistSeoFacade" alias="distSeoFacade"/>
+    <bean id="defaultDistSeoFacade" class="com.namics.distrelec.b2b.facades.seo.impl.DefaultDistSeoFacade"/>
+
+    <bean id="defaultDistCartPopulator"
+          class="com.namics.distrelec.b2b.facades.order.cart.converters.populator.DistCartPopulator"
+          parent="b2bCartPopulator">
+        <property name="paymentModeConverter" ref="paymentModeConverter"/>
+        <property name="warehouseConverter" ref="warehouseConverter"/>
+        <property name="currencyConverter" ref="currencyConverter"/>
+        <property name="distDeliveryModeConverter" ref="deliveryModeConverter"/>
+        <property name="configurationService" ref="configurationService"/>
+        <property name="erpOrderService" ref="sapOrderService"/>
+        <property name="distErpVoucherInfoDataConverter" ref="distErpVoucherInfoDataConverter"/>
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+    </bean>
+
+
+    <alias name="defaultDistCartConverter" alias="cartConverter"/>
+    <bean id="defaultDistCartConverter" parent="b2bCartConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.order.data.CartData"/>
+        <property name="populators">
+            <list merge="false">
+                <ref bean="defaultDistCartPopulator"/>
+                <ref bean="pickupOrderEntryGroupPopulator"/>
+                <ref bean="deliveryOrderEntryGroupPopulator"/>
+                <ref bean="orderAppliedVouchersPopulator"/>
+                <ref bean="groupOrderEntryPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- remove the b2b specific cart populator to the default cartConverter -->
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="cartConverter"/>
+        <property name="remove" ref="b2bCartPopulator"/>
+    </bean>
+
+    <alias name="defaultDistMiniCartConverter" alias="miniCartConverter"/>
+    <bean id="defaultDistMiniCartConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.order.data.CartData"/>
+        <property name="populators">
+            <list>
+                <ref bean="miniCartPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="defaultDistB2BCartFacade" alias="b2bCartFacade"/>
+    <bean id="defaultDistB2BCartFacade"
+          class="com.namics.distrelec.b2b.facades.order.cart.impl.DefaultDistB2BCartFacade"
+          parent="defaultB2BCartFacade">
+    </bean>
+
+    <!-- Create CartFacade for anonymous User. Since he is not part of b2bcustomergroup. -->
+    <alias name="defaultDistCartFacade" alias="cartFacade"/>
+    <bean id="defaultDistCartFacade" class="com.namics.distrelec.b2b.facades.order.cart.impl.DefaultDistCartFacade"
+          parent="defaultCartFacade">
+        <property name="cartService" ref="b2bCartService"/>
+    </bean>
+
+    <!-- Facade which return all subcategories of a category in a DTO -->
+    <alias name="defaultDistCategoryIndexFacade" alias="distCategoryIndexFacade"/>
+    <bean id="defaultDistCategoryIndexFacade"
+          class="com.namics.distrelec.b2b.facades.category.impl.DefaultDistCategoryIndexFacade"/>
+
+    <!-- Facade which return all subcategories of a category in a DTO -->
+    <alias name="defaultDistCategoryFacade" alias="distCategoryFacade"/>
+    <bean id="defaultDistCategoryFacade"
+          class="com.namics.distrelec.b2b.facades.category.impl.DefaultDistCategoryFacade"/>
+
+    <bean id="distProductFamilyFacade"
+          class="com.namics.distrelec.b2b.facades.category.impl.DefaultDistProductFamilyFacade"/>
+
+    <alias alias="userFacade" name="defaultDistUserFacade"/>
+    <bean id="defaultDistUserFacade" class="com.namics.distrelec.b2b.facades.user.impl.DefaultDistUserFacade"
+          parent="defaultUserFacade"/>
+
+    <!-- URL-RESOLVER -->
+    <alias name="defaultDistManufacturerDataUrlResolver" alias="distManufacturerDataUrlResolver"/>
+    <bean id="defaultDistManufacturerDataUrlResolver"
+          class="com.namics.distrelec.b2b.facades.url.impl.DefaultDistManufacturerDataUrlResolver">
+        <property name="threadContextService" ref="threadContextService"/>
+        <property name="distManufacturerService" ref="distManufacturerService"/>
+        <property name="distManufacturerModelUrlResolver" ref="distManufacturerModelUrlResolver"/>
+        <property name="pattern" value="/manufacturer/{manufacturer-name}/{manufacturer-code}"/>
+    </bean>
+
+    <!-- Checkout -->
+    <alias name="defaultDistPaymentModeConverter" alias="paymentModeConverter"/>
+    <bean name="defaultDistPaymentModeConverter"
+          class="com.namics.distrelec.b2b.facades.order.converters.DistPaymentModeConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.order.data.DistPaymentModeData"/>
+    </bean>
+
+
+    <alias name="defaultDistDeliveryModePopulator" alias="deliveryModePopulator"/>
+    <bean id="defaultDistDeliveryModePopulator" parent="defaultDeliveryModePopulator"
+          class="com.namics.distrelec.b2b.facades.order.converters.populator.DistDeliveryModePopulator"/>
+
+    <alias name="defaultDistDeliveryModeConverter" alias="deliveryModeConverter"/>
+    <bean id="defaultDistDeliveryModeConverter" parent="defaultDeliveryModeConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.order.data.DeliveryModeData"/>
+    </bean>
+
+    <alias name="defaultDistCheckoutFacade" alias="b2bCheckoutFacade"/>
+    <bean id="defaultDistCheckoutFacade"
+          class="com.namics.distrelec.b2b.facades.order.checkout.impl.DefaultDistCheckoutFacade"
+          parent="defaultB2BCheckoutFacade"/>
+
+    <alias name="defaultWarehouseConverter" alias="warehouseConverter"/>
+    <bean id="defaultWarehouseConverter"
+          class="com.namics.distrelec.b2b.facades.order.warehouse.converters.WarehouseConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.order.warehouse.data.WarehouseData"/>
+    </bean>
+
+    <alias name="defaultWarehouseFacade" alias="warehouseFacade"/>
+    <bean id="defaultWarehouseFacade"
+          class="com.namics.distrelec.b2b.facades.order.warehouse.impl.DefaultWarehouseFacade"/>
+
+    <!-- E-Procurement -->
+    <alias name="defaultDistAribaFacade" alias="distAribaFacade"/>
+    <bean id="defaultDistAribaFacade"
+          class="com.namics.distrelec.b2b.facades.eprocurement.impl.DefaultDistAribaFacade"/>
+
+    <!-- ProductFinder helpers -->
+
+    <alias name="defaultDistProductFinderCompareHelper" alias="distProductFinderCompareHelper"/>
+    <bean id="defaultDistProductFinderCompareHelper"
+          class="com.namics.distrelec.b2b.facades.productfinder.helper.impl.DefaultDistProductFinderCompareHelper"/>
+
+    <alias name="defaultDistProductFinderDataCreator" alias="distProductFinderDataCreator"/>
+    <bean id="defaultDistProductFinderDataCreator"
+          class="com.namics.distrelec.b2b.facades.productfinder.helper.impl.DefaultDistProductFinderDataCreator">
+        <property name="distProductFinderHelper" ref="distProductFinderHelper"/>
+        <property name="valueDelegatingConverter" ref="distProductFinderValueDelegatingConverter"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <alias name="defaultDistProductFinderHelper" alias="distProductFinderHelper"/>
+    <bean id="defaultDistProductFinderHelper"
+          class="com.namics.distrelec.b2b.facades.productfinder.helper.impl.DefaultDistProductFinderHelper">
+        <property name="distProductFinderCompareHelper" ref="distProductFinderCompareHelper"/>
+    </bean>
+
+    <!-- Adobe DigitalDatalayer -->
+    <alias name="defaultDistDigitalDatalayerFacade" alias="distDigitalDatalayerFacade"/>
+    <bean id="defaultDistDigitalDatalayerFacade"
+          class="com.namics.distrelec.b2b.facades.adobe.datalayer.impl.DefaultDistDigitalDatalayerFacade"/>
+
+
+    <!-- AOP Logging -->
+    <bean id="stopWatchWishlistAspect" class="com.namics.distrelec.b2b.core.aop.StopWatchAspect">
+        <property name="loggerName" value="com.namics.distrelec.b2b.facades.wishlist"/>
+        <property name="thresholdValue" value="0.1"/>
+    </bean>
+    <aop:config>
+        <aop:aspect ref="stopWatchWishlistAspect">
+            <aop:around method="invoke"
+                        pointcut="execution(* com.namics.distrelec.b2b.facades.wishlist.impl.DefaultDistCompareListFacade.*(..))"/>
+            <aop:around method="invoke"
+                        pointcut="execution(* com.namics.distrelec.b2b.facades.wishlist.impl.DefaultDistShoppingListFacade.*(..))"/>
+        </aop:aspect>
+    </aop:config>
+
+    <alias name="defaultDistSimpleMessageFacade" alias="distSimpleMessageFacade"/>
+    <bean id="defaultDistSimpleMessageFacade"
+          class="com.namics.distrelec.b2b.facades.message.queue.impl.DefaultDistSimpleMessageFacade">
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+    </bean>
+
+    <alias name="defaultDistRelatedDataFacade" alias="distRelatedDataFacade"/>
+    <bean id="defaultDistRelatedDataFacade"
+          class="com.namics.distrelec.b2b.facades.message.queue.cassandra.impl.DefaultDistRelatedDataFacade"/>
+
+    <alias name="defaultDistTitlePopulator" alias="titlePopulator"/>
+    <bean id="defaultDistTitlePopulator"
+          class="com.namics.distrelec.b2b.facades.user.converters.populator.DistTitlePopulator"
+          parent="defaultTitlePopulator"/>
+
+    <!-- RMA Bean definitions start -->
+    <!-- RMA Get Order List Converter -->
+    <bean id="sapGetOrderItemsRequestConverter"
+          class="com.namics.distrelec.b2b.facades.order.converters.SapGetOrderItemsRequestConverter">
+        <property name="targetClass" value="com.distrelec.webservice.if19.v1.RMAGetOrderItemsRequest"/>
+        <property name="userService" ref="userService"/>
+        <property name="distSalesOrgService" ref="distSalesOrgService"/>
+    </bean>
+
+    <bean id="distCreateRMARequestConverter"
+          class="com.namics.distrelec.b2b.facades.rma.converters.DistCreateRMARequestConverter">
+        <property name="targetClass" value="com.distrelec.webservice.if19.v1.RMACreateRequest"/>
+    </bean>
+
+    <alias name="distRMAEntryDataConverter" alias="defaultDistRMAEntryDataConverter"/>
+    <bean id="distRMAEntryDataConverter"
+          class="com.namics.distrelec.b2b.facades.order.converters.DistRMAEntryDataConverter">
+        <property name="targetClass" value="de.hybris.platform.commercefacades.order.data.DistRMAEntryData"/>
+    </bean>
+    <!-- RMA Bean definitions end -->
+
+
+    <bean id="distCreateRMAResponseConverter"
+          class="com.namics.distrelec.b2b.facades.rma.converters.DistCreateRMAResponseDataConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.core.service.rma.data.CreateRMAResponseData"/>
+    </bean>
+
+    <!-- Out Of Stock Notification -->
+    <bean id="distStockNotificationEmailContext"
+          class="com.namics.distrelec.b2b.facades.process.email.context.DistStockNotificationEmailContext"
+          parent="abstractDistEmailContext"
+          scope="prototype"/>
+    <!-- Out Of Stock Notification -->
+
+    <bean id="defaultBackOrderFacade"
+          class="com.namics.distrelec.b2b.facades.backorder.impl.DefaultBackOrderFacadeImpl"/>
+
+    <bean id="defaultOutOfStockFacade"
+          class="com.namics.distrelec.b2b.facades.product.impl.DefaultDistOutOfStockNotificationFacade"/>
+
+
+    <!-- cmsfacades -->
+
+    <alias name="defaultDistCmsCatalogModelToDataPopulator" alias="basicCmsCatalogModelToDataPopulator"/>
+    <bean id="defaultDistCmsCatalogModelToDataPopulator"
+          class="com.namics.distrelec.b2b.facades.catalogs.populator.DistCatalogModelToDataPopulator"
+          parent="defaultCmsCatalogModelToDataPopulator"/>
+
+    <alias name="defaultDistCmsSiteFacade" alias="siteFacade"/>
+    <bean id="defaultDistCmsSiteFacade" class="com.namics.distrelec.b2b.facades.sites.impl.DefaultDistSiteFacade"
+          parent="defaultCmsSiteFacade"/>
+
+    <bean id="distCmsSiteModelPopulator"
+          class="com.namics.distrelec.b2b.facades.sites.populator.model.DistSiteModelPopulator"/>
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="cmsSiteModelConverter"/>
+        <property name="add" ref="distCmsSiteModelPopulator"/>
+    </bean>
+
+    <alias name="distRenderingPageCheckers" alias="cmsRenderingPageCheckers"/>
+    <util:list id="distRenderingPageCheckers">
+        <ref bean="cmsRenderingCatalogPageChecker"/>
+        <ref bean="cmsRenderingCategoryPageChecker"/>
+        <ref bean="cmsRenderingContentPageChecker"/>
+    </util:list>
+
+
+    <bean class="com.namics.distrelec.b2b.facades.uniqueidentifier.functions.DefaultDistCatalogVersionModelUniqueIdentifierConverter">
+        <property name="catalogVersionService" ref="catalogVersionService"/>
+        <property name="itemDataDataFactory" ref="cmsItemDataDataFactory"/>
+    </bean>
+
+    <alias name="defaultDistHazardousFacade" alias="distHazardousFacade"/>
+    <bean id="defaultDistHazardousFacade"
+          class="com.namics.distrelec.b2b.facades.hazardous.impl.DefaultDistHazardousFacade"></bean>
+
+    <!-- permissionsfacades -->
+
+    <alias name="defaultDistPermissionsFacade" alias="permissionsFacade"/>
+    <bean id="defaultDistPermissionsFacade"
+          class="com.namics.distrelec.b2b.facades.permissions.impl.DefaultDistPermissionsFacade"
+          parent="defaultPermissionsFacade"/>
+
+    <!-- predicates -->
+
+    <alias name="defaultDistCatalogExistsPredicate" alias="catalogExistsPredicate"/>
+    <bean id="defaultDistCatalogExistsPredicate"
+          class="com.namics.distrelec.b2b.facades.predicate.DistCatalogExistsPredicate"
+          parent="defaultCatalogExistsPredicate"/>
+
+    <!-- previewwebservices -->
+
+    <bean id="distPreviewTicketPopulator" class="com.namics.distrelec.b2b.facades.preview.DistPreviewTicketPopulator">
+        <property name="localViewExecutor" ref="localViewExecutor"/>
+    </bean>
+
+    <bean parent="modifyPopulatorList">
+        <property name="list" ref="previewTicketConverter"/>
+        <property name="add" ref="distPreviewTicketPopulator"/>
+    </bean>
+
+    <!-- cmswebservices -->
+    <alias name="distPageTemplateFacade" alias="pageTemplateFacade"/>
+    <bean id="distPageTemplateFacade" class="com.namics.distrelec.b2b.facades.pagetemplates.DistPageTemplateFacade"
+          parent="defaultPageTemplateFacade"/>
+
+    <bean id="distPDFGenerationFacade"
+          class="com.namics.distrelec.b2b.facades.pdf.impl.DefaultDistPDFGenerationFacade"/>
+
+    <bean id="distComplianceFacade"
+          class="com.namics.distrelec.b2b.facades.compliance.impl.DefaultDistComplianceFacade"/>
+
+    <bean id="distQualityAndLegalFacade"
+          class="com.namics.distrelec.b2b.facades.legal.impl.DefaultDistQualityAndLegalFacade"/>
+
+    <bean id="distQualityAndLegalParser"
+          class="com.namics.distrelec.b2b.facades.legal.impl.DefaultDistQualityAndLegalParser"/>
+
+    <bean id="distDateFormatPerLocaleHelper"
+          class="com.namics.distrelec.b2b.facades.helper.DistDateFormatPerLocaleHelper"/>
+
+    <bean id="distLogoUrlHelper" class="com.namics.distrelec.b2b.facades.helper.impl.DistLogoUrlHelperImpl"/>
+
+    <alias name="distrelecCmsComponentModelToDataRenderingConverter" alias="cmsComponentModelToDataRenderingConverter"/>
+    <bean id="distrelecCmsComponentModelToDataRenderingConverter"
+          parent="defaultCMSComponentModelToDataRenderingConverter">
+        <property name="targetClass" value="de.hybris.platform.cmsfacades.data.AbstractCMSComponentData"/>
+    </bean>
+
+    <bean id="distrelecOCCBaseSiteFacade"
+          class="com.namics.distrelec.b2b.facades.basesites.impl.DistrelecOCCBaseSiteFacadeImpl">
+        <property name="productFacade" ref="productFacade"/>
+        <property name="distManufacturerFacade" ref="distManufacturerFacade"/>
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+        <property name="distCategoryFacade" ref="distCategoryFacade"/>
+        <property name="configurationService" ref="configurationService"/>
+        <property name="i18nService" ref="i18nService"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <alias name="distNavigationEntryModelToDataPopulator" alias="cmsNavigationEntryModelToDataPopulator"/>
+    <bean id="distNavigationEntryModelToDataPopulator"
+          class="com.namics.distrelec.b2b.facades.cms.populator.DistNavigationEntryModelToDataPopulator"
+          parent="defaultNavigationEntryModelToDataPopulator"/>
+
+
+    <!-- adding list of new populator that always populates ContentPageNavigationData -->
+    <alias name="distContentPageModelToDataRenderingConverter" alias="contentPageModelToDataRenderingConverter"/>
+    <bean id="distContentPageModelToDataRenderingConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="com.namics.distrelec.occ.cms.data.ContentPageNavigationData"/>
+        <property name="populators">
+            <list merge="true">
+                <ref bean="contentPageModelToDataRenderingPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="distContentPageModelToDataRenderingPopulator" alias="contentPageModelToDataRenderingPopulator"/>
+    <bean id="distContentPageModelToDataRenderingPopulator"
+          class="com.namics.distrelec.b2b.facades.cms.populator.DistContentPageModelToDataRenderingPopulator">
+        <property name="cmsRenderingNavigationNodeToDataContentConverter"
+                  ref="cmsRenderingNavigationNodeToDataContentConverter"/>
+    </bean>
+
+    <alias name="distProductPrimaryImagePopulator" alias="productPrimaryImagePopulator"/>
+    <bean id="distProductPrimaryImagePopulator"
+          class="com.namics.distrelec.b2b.facades.product.converters.populator.DistProductPrimaryImagePopulator"
+          parent="defaultProductPrimaryImagePopulator">
+        <property name="imageFormats">
+            <list>
+                <value>landscape_small</value>
+                <value>landscape_medium</value>
+                <value>landscape_large</value>
+                <value>portrait_small</value>
+                <value>portrait_medium</value>
+                <value>landscape_small_webp</value>
+                <value>landscape_medium_webp</value>
+                <value>landscape_large_webp</value>
+                <value>portrait_small_webp</value>
+                <value>portrait_medium_webp</value>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="distProductGalleryImagesPopulator" alias="productGalleryImagesPopulator"/>
+    <bean id="distProductGalleryImagesPopulator" parent="defaultProductGalleryImagesPopulator">
+        <property name="imageFormats">
+            <list>
+                <value>landscape_small</value>
+                <value>landscape_medium</value>
+                <value>landscape_large</value>
+                <value>portrait_small</value>
+                <value>portrait_medium</value>
+                <value>landscape_small_webp</value>
+                <value>landscape_medium_webp</value>
+                <value>landscape_large_webp</value>
+                <value>portrait_small_webp</value>
+                <value>portrait_medium_webp</value>
+            </list>
+        </property>
+    </bean>
+
+    <alias name="distrelecSnapEdaFacade" alias="snapEdaFacade"/>
+    <bean id="distrelecSnapEdaFacade" class="com.namics.distrelec.b2b.facades.snapeda.impl.DistrelecSnapEdaFacadeImpl"/>
+
+    <!-- manufacturer page -->
+
+    <bean id="manufacturerPageTypeCodePredicate"
+          class="com.namics.distrelec.b2b.facades.common.predicate.ManufacturerPageTypeCodePredicate"/>
+
+    <bean id="renderingManufacturerPageModelSupplier"
+          class="com.namics.distrelec.b2b.facades.rendering.suppliers.page.impl.RenderingManufacturerPageModelSupplier">
+        <property name="constrainedBy" ref="manufacturerPageTypeCodePredicate"/>
+        <property name="distCmsDataFactory" ref="cmsDataFactory"/>
+        <property name="distCmsPageService" ref="cmsPageService"/>
+        <property name="distManufacturerService" ref="distManufacturerService"/>
+    </bean>
+
+    <bean depends-on="renderingPageModelSuppliers"
+          parent="listMergeDirective">
+        <property name="add" ref="renderingManufacturerPageModelSupplier"/>
+    </bean>
+
+    <!-- product family page -->
+
+    <bean id="productFamilyPageTypeCodePredicate"
+          class="com.namics.distrelec.b2b.facades.common.predicate.ProductFamilyPageTypeCodePredicate"/>
+
+    <bean id="renderingProductFamilyPageModelSupplier"
+          class="com.namics.distrelec.b2b.facades.rendering.suppliers.page.impl.RenderingProductFamilyPageModelSupplier">
+        <property name="constrainedBy" ref="productFamilyPageTypeCodePredicate"/>
+        <property name="distProductFamilyFacade" ref="distProductFamilyFacade"/>
+        <property name="distCategoryService" ref="distCategoryService"/>
+        <property name="cmsDataFactory" ref="cmsDataFactory"/>
+    </bean>
+
+    <bean depends-on="renderingPageModelSuppliers"
+          parent="listMergeDirective">
+        <property name="add" ref="renderingProductFamilyPageModelSupplier"/>
+    </bean>
+
+    <alias name="distPrincipalPopulator" alias="principalPopulator"/>
+    <bean id="distPrincipalPopulator"
+          class="com.namics.distrelec.b2b.facades.user.converters.populator.DistPrincipalPopulator"/>
+    <alias name="DefaultDistCSPReportFacade" alias="distCSPReportFacade"/>
+    <bean id="defaultDistCSPReportFacade"
+          class="com.namics.distrelec.b2b.facades.report.csp.impl.DefaultDistCSPReportFacade"/>
+
+
+    <bean id="quoteStatusDataPopulator"
+          class="com.namics.distrelec.b2b.facades.order.quotation.converters.QuoteStatusDataPopulator"/>
+
+    <bean id="quoteStatusDataConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="com.namics.distrelec.b2b.facades.order.quotation.data.QuoteStatusData"/>
+        <property name="populators">
+            <list>
+                <ref bean="quoteStatusDataPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+
+    <alias name="defaultDistCmsRenderingNavigationNodeToDataContentConverter"
+           alias="cmsRenderingNavigationNodeToDataContentConverter"/>
+    <bean id="defaultDistCmsRenderingNavigationNodeToDataContentConverter"
+          class="com.namics.distrelec.b2b.facades.rendering.attributeconverters.DistNavigationNodeToDataContentConverter"
+          parent="defaultCmsRenderingNavigationNodeToDataContentConverter">
+    </bean>
+
+    <bean id="distBloomreachFacade"
+          class="com.namics.distrelec.b2b.facades.bloomreach.impl.DistBloomreachFacadeImpl"/>
+
+
+    <alias name="distCommerceCartParameterBasicPopulator" alias="commerceCartParameterBasicPopulator"/>
+    <bean id="distCommerceCartParameterBasicPopulator"
+          class="com.namics.distrelec.b2b.facades.order.converters.populator.DistCommerceCartParameterBasicPopulator">
+        <property name="cartService" ref="cartService"/>
+        <property name="productService" ref="productService"/>
+        <property name="pointOfServiceService" ref="pointOfServiceService"/>
+    </bean>
+
+    <!-- allows RestrictionComponentGroup component to enable lazy evaluation at frontend layer -->
+
+    <bean id="allowedCmsComponentRenderingVisibilityRule"
+          class="com.namics.distrelec.b2b.facades.rendering.visibility.impl.AllowedCMSComponentRenderingVisibilityRule"
+          parent="defaultCMSComponentRenderingVisibilityRule">
+    </bean>
+
+    <alias name="allowedRenderingVisibilityRules" alias="cmsRenderingVisibilityRules"/>
+    <util:list id="allowedRenderingVisibilityRules">
+        <ref bean="allowedCmsComponentRenderingVisibilityRule"/>
+        <ref bean="cmsNavigationNodeRenderingVisibilityRule"/>
+    </util:list>
+
+    <bean id="restrictedCmsRenderingVisibilityService"
+          class="de.hybris.platform.cmsfacades.rendering.visibility.impl.DefaultRenderingVisibilityService">
+        <!-- references ootb visibility rules -->
+        <property name="renderingVisibilityRules" ref="renderingVisibilityRules"/>
+    </bean>
+
+    <bean id="restrictedCmsComponentRenderingService"
+          class="de.hybris.platform.cmsfacades.rendering.impl.DefaultComponentRenderingService"
+          parent="defaultComponentRenderingService">
+        <property name="renderingVisibilityService" ref="restrictedCmsRenderingVisibilityService"/>
+    </bean>
+
+    <bean id="restrictedComponentItemFacade" class="de.hybris.platform.cmsfacades.items.impl.DefaultComponentItemFacade"
+          parent="defaultComponentItemFacade">
+        <property name="componentRenderingService" ref="restrictedCmsComponentRenderingService" />
+    </bean>
+
+</beans>

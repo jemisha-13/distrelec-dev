@@ -1,0 +1,31 @@
+Download and extract the zip file obtain from the export job
+once extracted into a folder open all the file in any editor 
+and replace the following
+
+1) Change the Local like (impex.setLocale( new Locale( ""en"" , ""XX"" ) );")
+2) Change 'distrelec_DEContentCatalog' to 'distrelec_XXContentCatalog'
+3) Change 'distrelec_ATContentCatalog' to 'distrelec_XXContentCatalog'
+4) Change 'distrelec_ITContentCatalog' to 'distrelec_XXContentCatalog'
+5) Change ':Online' to ':Staged'
+
+After these changes create a zipfile which contain all these files. and goto to the hmc
+System >> Tools >> Import
+a. choose the zip file created in the last step
+b. set Local setting to empty from drop down menue 
+c. 	Allow code execution from within the file: yes
+d. Additional referenced files contain: Header definitions and data
+e. Allow code execution from within additional referenced files.: yes
+
+Click next and start. 
+Once import is done successful synchronized the catalog
+
+java.lang.String pages = ""'catalogOrderPage','feedback','JobsPage','NewsletterConfirmationPage','NewsletterRegisterPage','NewsletterSuccessPage','optOutInformationPage','page_000013D2','page_000013D3','page_000013D4','page_000013D6','page_0000144G','page_0000144L','page_0000144M','page_0000144P','page_0000144R','page_0000144T','page_0000144U','page_0000144X','page_0000144Z','page_00001452','page_00001453','page_00001454','page_00001457','page_00001459','page_0000145B','page_0000145C','page_0000145F','page_0000145G','page_00001EXD','searchEmpty','searchFeedbackSent','TermsConditionsPage'""
+
+
+================== [ContentPage along with  Catalog version Query] ====================
+select {cp.uid},{cp.name} from {Catalog as ct join CatalogVersion as cv on {cv.catalog} = {ct.pk} 
+join ContentPage as cp on {cp.catalogVersion} = {cv.pk}  } where {ct.id} = 'distrelec_EXContentCatalog' 
+and {cv.version} = 'Staged' and {cp.uid} like 'page%'
+============(*)==================(*)==================(*)=================(*)===========
+
+'offlineAddressChangeSuccessPage','page_0000144W','offlineAddressChangePage','page_000032CG','page_0000144Y','ShippingCostsPage','page_00002YHG','page_000013D0','page_0000144Q','eprocurementHomepage','page_000009A7','page_000009A3','FaqPage','page_000009A5','page_0000099Y','page_0000099F','support'

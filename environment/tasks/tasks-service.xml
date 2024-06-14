@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Services/Daemon (hybris)
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-services" basedir=".">
+
+	<!--
+		=================================
+		macro: startHybrisService
+		=================================
+	-->
+	<macrodef name="startHybrisService">
+		<sequential>
+			<if>
+				<os family="unix" />
+				<then>
+					<startHybrisServiceUnix />
+				</then>
+				<else>
+					<startHybrisServiceWin />
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+	<!--
+		=================================
+		macro: stopHybrisService
+		=================================
+	-->
+	<macrodef name="stopHybrisService">
+		<sequential>
+			<if>
+				<os family="unix" />
+				<then>
+					<stopHybrisServiceUnix />
+				</then>
+				<else>
+					<stopHybrisServiceWin />
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+	
+	<!--
+		=================================
+		macro: restartHybrisService
+		=================================
+	-->
+	<macrodef name="restartHybrisService">
+		<sequential>
+			<antcall target="stopHybrisService" />
+			<sleep seconds="5"/>
+			<antcall target="startHybrisService" />
+		</sequential>
+	</macrodef>
+	
+	<!--
+		=================================
+		macro: installHybrisService
+		=================================
+	-->
+	<macrodef name="installHybrisService">
+		<sequential>
+			<!-- Configuration of the service is done in /config/tomcat/conf/wrapper.conf -->
+			<if>
+				<os family="unix" />
+				<then>
+					<installHybrisServiceUnix />
+				</then>
+				<else>
+					<installHybrisServiceWin />
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+	
+	<!--
+		=================================
+		macro: uninstallHybrisService
+		=================================
+	-->
+	<macrodef name="uninstallHybrisService">
+		<sequential>
+			<!-- Configuration of the service is done in /config/tomcat/conf/wrapper.conf -->
+			<if>
+				<os family="unix" />
+				<then>
+					<uninstallHybrisServiceUnix />
+				</then>
+				<else>
+					<uninstallHybrisServiceWin />
+				</else>
+			</if>
+		</sequential>
+	</macrodef>		
+	
+
+
+</project>

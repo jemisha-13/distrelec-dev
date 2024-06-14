@@ -1,0 +1,101 @@
+@import 'global-utilities';
+
+.radio {
+  &.is-emphasised {
+    padding: 20px 16px;
+    background-color: $ux-input-default-bg;
+    border: 2px solid $ux-hover-state;
+    border-radius: 8px;
+
+    &:hover {
+      border-color: $ux-outline-hover;
+    }
+
+    &.is-small {
+      padding: 12px;
+    }
+
+    &.is-checked {
+      background-color: transparent;
+      border-color: $ux-green;
+    }
+
+    &.is-disabled {
+      background-color: transparent;
+      border-color: $ux-button-disabled;
+    }
+  }
+}
+
+.primary-label,
+.secondary-label {
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.primary-label {
+  @include typography-text-sm;
+
+  display: flex;
+  flex-basis: 100%;
+  font-weight: $font-weight-medium;
+  color: $ux-text-default;
+}
+
+.secondary-label {
+  @include typography-text-xs;
+
+  color: $ux-grey;
+}
+
+.primary-label-disabled {
+  flex-basis: 100%;
+  font-weight: $font-weight-medium;
+  color: $ux-label-disabled;
+  cursor: not-allowed;
+
+  @include typography-text-sm;
+}
+
+.secondary-label-disabled {
+  @include typography-text-xs;
+
+  color: $ux-label-disabled;
+  cursor: not-allowed;
+}
+
+.radio-input {
+  // set custom stylings
+  position: relative;
+  width: 24px;
+  height: 24px;
+  // Unset the default appearance so that we can style it ourselves
+  appearance: none;
+  cursor: pointer;
+  background: $colour-white;
+  border: 1px solid $colour-redesign-light-grey;
+  border-radius: 50%;
+
+  .is-small & {
+    width: 20px;
+    height: 20px;
+  }
+
+  .is-disabled & {
+    cursor: not-allowed;
+    background-color: $ux-button-disabled;
+    border: 0;
+  }
+
+  &:checked:not(.is-disabled) {
+    background: url('../../app/spartacus/assets/media/icons/icon/radio-selected-large.svg') no-repeat center/12px;
+  }
+
+  .is-small:checked:not(.is-disabled) & {
+    background: url('../../app/spartacus/assets/media/icons/icon/radio-selected-small.svg') no-repeat center/8px;
+  }
+
+  &:hover:not(&:checked, .is-disabled) {
+    border: 2px solid $ux-outline-hover;
+  }
+}

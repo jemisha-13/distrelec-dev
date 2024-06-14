@@ -1,0 +1,37 @@
+<label *ngIf="labelText" id="{{ fieldId }}-label" [for]="fieldId">
+  {{ labelText }}
+</label>
+<ng-container [formGroup]="parentFormGroup">
+  <input
+    [id]="fieldId"
+    [formControlName]="parentFormControlName"
+    [autocomplete]="autoComplete"
+    [class.is-invalid]="isInvalidState && !isValidState"
+    [class.is-valid]="isValidState && !isInvalidState"
+    [class.secure]="isSecure"
+    [type]="showSecureText && isSecure ? 'password' : 'text'"
+    [maxlength]="maxLength"
+  />
+  <ng-container *ngIf="isSecure; else default">
+    <button class="icon secure" id="{{ fieldId }}-show-secure-text" (click)="toggleSecureField()" type="button">
+      <app-icon *ngIf="showSecureText" iconName="eye-slash" iconType="svg" iconAltText="hiding secure text"></app-icon>
+      <app-icon *ngIf="!showSecureText" iconName="eye" iconType="svg" iconAltText="showing secure text"></app-icon>
+    </button>
+  </ng-container>
+  <ng-template #default>
+    <app-icon
+      *ngIf="isValidState && !isInvalidState"
+      class="icon valid-check"
+      iconName="success-tick"
+      iconType="svg"
+      iconAltText="valid check"
+    ></app-icon>
+    <app-icon
+      *ngIf="isInvalidState && !isValidState"
+      class="icon invalid-cross"
+      iconName="login-invalid"
+      iconType="svg"
+      iconAltText="invalid cross"
+    ></app-icon>
+  </ng-template>
+</ng-container>

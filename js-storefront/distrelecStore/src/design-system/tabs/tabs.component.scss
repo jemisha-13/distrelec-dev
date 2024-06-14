@@ -1,0 +1,144 @@
+@import 'global-utilities';
+
+.tabs {
+  padding: 0;
+  list-style-type: none;
+
+  &.is-grouped:not(.is-pill, .is-big-line) {
+    &::after {
+      display: block;
+      width: 100%;
+      content: '';
+      border-bottom: 1px solid $ux-outline;
+      transform: translate(0, -1px);
+    }
+  }
+
+  &.is-big-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.tab {
+  display: inline-flex;
+  margin-right: 16px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  .is-big-line & {
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+.button {
+  padding: 12px 24px;
+  color: $colour-dist-grey;
+  background-color: transparent;
+  border: 0;
+
+  .is-folder & {
+    @include font-size($font-size-text-sm);
+
+    font-weight: $font-weight-medium;
+    line-height: $line-height-ui;
+    background-color: $ux-hover-state;
+    border: 1px solid $ux-outline;
+    border-radius: 2px 2px 0 0;
+
+    &.is-active {
+      position: relative;
+      top: 1px;
+      z-index: 1;
+      overflow: hidden;
+      font-weight: $font-weight-semiBold;
+      background-color: $colour-white;
+      border-bottom: 1px solid $colour-white;
+    }
+  }
+
+  .is-line & {
+    z-index: 1;
+    overflow: hidden;
+
+    @include font-size($font-size-text-sm);
+
+    font-weight: $font-weight-medium;
+    line-height: $line-height-ui;
+
+    &.is-active {
+      font-weight: $font-weight-semiBold;
+      border-bottom: 2px solid $ux-green;
+    }
+  }
+
+  .is-big-line & {
+    width: 100%;
+    padding: 0 10px 10px;
+    font-weight: $font-weight-normal;
+    color: $colour-redesign-light-grey;
+    text-align: center;
+
+    @include font-size($font-size-display-xl);
+    @include line-height(29px);
+
+    &.is-active {
+      position: relative;
+      color: $colour-dist-grey;
+
+      &::after {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        display: block;
+        width: 100%;
+        height: 4px;
+        content: '';
+        background-color: $colour-dist-marigold;
+        border-radius: 2px;
+      }
+    }
+  }
+
+  .is-pill & {
+    @include font-size($font-size-text-sm);
+
+    font-weight: $font-weight-medium;
+    line-height: $line-height-ui;
+    border-radius: 4px;
+
+    &.is-active {
+      font-weight: $font-weight-semiBold;
+      background-color: $ux-light-grey;
+    }
+  }
+
+  .is-small:not(.is-big-line) & {
+    padding: 9px 24px;
+
+    @include font-size($font-size-text-xs);
+  }
+
+  .is-folder &:hover:not(.is-active) {
+    color: $colour-white;
+    background-color: $colour-dist-grey;
+  }
+
+  .is-line &:hover:not(.is-active) {
+    padding-bottom: 12px;
+    border-bottom: 1px solid $ux-text-default;
+  }
+
+  .is-pill &:hover:not(.is-active) {
+    background-color: $colour-pale-grey;
+  }
+
+  .is-line.is-small &:hover:not(.is-active) {
+    padding-bottom: 10px;
+  }
+}

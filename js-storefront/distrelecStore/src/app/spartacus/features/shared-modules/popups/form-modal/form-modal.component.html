@@ -1,0 +1,95 @@
+<div class="overlay" id="formModalMain">
+  <div class="form-modal">
+    <div class="form-modal__header">
+      <img id="formModalIcon" [src]="data.icon" alt="formModalIcon" />
+      <span class="form-modal__header--title" id="formModalTitle">{{ data.title | cxTranslate }}</span>
+    </div>
+
+    <div class="form-modal__form" [formGroup]="form">
+      <div class="form-modal__form--holder">
+        <label class="form-modal__form--label" id="formModalLine1">
+          {{ data.senderName.key | cxTranslate }}
+        </label>
+        <input
+          class="form-control"
+          id="formModalSenderName"
+          [class.is-invalid]="form.get('senderName').touched && form.get('senderName').invalid"
+          type="text"
+          formControlName="senderName"
+        />
+      </div>
+
+      <div class="form-modal__form--holder">
+        <label class="form-modal__form--label" id="formModalLine2">
+          {{ data.senderEmail.key | cxTranslate }}
+        </label>
+        <input
+          class="form-control"
+          id="formModalSenderEmail"
+          [class.is-invalid]="form.get('senderEmail').touched && form.get('senderEmail').invalid"
+          type="email"
+          formControlName="senderEmail"
+        />
+      </div>
+
+      <div class="form-modal__form--holder">
+        <label class="form-modal__form--label" id="formModalLine3">
+          {{ data.receiverName.key | cxTranslate }}
+        </label>
+        <input
+          class="form-control"
+          id="formModalReceiverName"
+          [class.is-invalid]="form.get('receiverName').touched && form.get('receiverName').invalid"
+          type="text"
+          formControlName="receiverName"
+        />
+      </div>
+
+      <div class="form-modal__form--holder">
+        <label class="form-modal__form--label" id="formModalLine4">
+          {{ data.receiverEmail.key | cxTranslate }}
+        </label>
+        <input
+          class="form-control"
+          id="formModalReceiverEmail"
+          [class.is-invalid]="form.get('receiverEmail').touched && form.get('receiverEmail').invalid"
+          type="email"
+          formControlName="receiverEmail"
+        />
+      </div>
+
+      <div class="form-modal__form--holder">
+        <div class="form-modal__form--row">
+          <label class="form-modal__form--label" id="formModalMessageLabel">
+            {{ data.message.key | cxTranslate }}
+          </label>
+        </div>
+
+        <textarea
+          class="form-control form-modal__form--message"
+          id="formModalMessageTextarea"
+          [class.is-invalid]="form.get('message').touched && form.get('message').invalid"
+          type="text"
+          formControlName="message"
+        ></textarea>
+      </div>
+
+      <div class="form-modal__form--holder">
+        <div class="form-modal__form--buttons">
+          <button class="btn form-modal__form--buttons-cancel" id="formModalCancelBtn" (click)="onCancelClick()">
+            {{ 'form.cancel' | cxTranslate }}
+          </button>
+          <button
+            class="btn form-modal__form--buttons-submit"
+            id="formModalSubmitBtn"
+            [disabled]="form.invalid"
+            (click)="onSendClick()"
+          >
+            {{ 'form.ok' | cxTranslate }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <app-component-loading-spinner *ngIf="isLoading_ | async"></app-component-loading-spinner>
+  </div>
+</div>

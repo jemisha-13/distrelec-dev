@@ -1,0 +1,20 @@
+#
+# Import the Distrelec CH Content Catalog
+#
+$contentCatalog=distrelec_CHContentCatalog
+$languages=en,de,fr
+
+# Languages
+INSERT_UPDATE Language;isocode[unique=true];fallbackLanguages(isocode);isocodePim;active[default=true]
+;en;;eng;
+;de;en;ger;
+;fr;en;fre;
+
+# Content catalog for CMS contents
+INSERT_UPDATE ContentCatalog;id[unique=true]
+;$contentCatalog
+
+# Catalog versions for content catalogs
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;languages(isocode)
+;$contentCatalog;Staged;false;$languages
+;$contentCatalog;Online;true;$languages

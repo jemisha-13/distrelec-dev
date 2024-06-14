@@ -1,0 +1,100 @@
+<div *ngIf="currentChannelData$ | async as currentChannel" class="col-sm-12 col-md-4 back-order-alternative">
+  <div class="card-item" [id]="'backorder-alternative-entry-' + itemNumber">
+    <div class="card-item__items">
+      <div class="card-item__items__image" [id]="'backorder-alternative-entry-' + itemNumber + '-image'">
+        <img class="img-responsive" [src]="product.images[0]?.url" [alt]="product.name" width="61" height="46" />
+      </div>
+
+      <app-back-order-alternative-product-details-modal
+        *ngIf="openModal"
+        [productCode]="product.code"
+        (closeAlternative)="openModal = false"
+      ></app-back-order-alternative-product-details-modal>
+
+      <div
+        class="card-item__items__modal"
+        [id]="'backorder-alternative-entry-' + itemNumber + '-view-details'"
+        (click)="openModal = true"
+      >
+        <a>{{ 'backorder.item.view.details' | cxTranslate }}</a>
+      </div>
+
+      <div class="card-item__items__content">
+        <a
+          class="card-item-anchor"
+          [routerLink]="product.url"
+          [id]="'backorder-alternative-entry-' + itemNumber + '-name'"
+        >
+          <h3 [id]="'backorder-alternative-entry-' + itemNumber + '-name-text'">{{ product.name }}</h3>
+        </a>
+
+        <div
+          class="card-item__items__content__product-info"
+          [id]="'backorder-alternative-entry-' + itemNumber + '-product-details'"
+        >
+          <p
+            class="card-item__items__content__product-info__item"
+            [id]="'backorder-alternative-entry-' + itemNumber + '-product-details-manufacturer'"
+          >
+            <strong>{{ 'homepage.manufacturer' | cxTranslate }}:</strong>
+            {{ product.manufacturer }}
+          </p>
+          <p
+            class="card-item__items__content__product-info__item"
+            [id]="'backorder-alternative-entry-' + itemNumber + '-product-details-artnr'"
+          >
+            <strong>{{ 'backorder.articleNumber' | cxTranslate }}:</strong>
+            {{ product.codeErpRelevant | articleNumber: product.codeErpRelevant }}
+          </p>
+          <p
+            class="card-item__items__content__product-info__item"
+            [id]="'backorder-alternative-entry-' + itemNumber + '-product-details-mpn'"
+          >
+            <strong>{{ 'homepage.mpn' | cxTranslate }}:</strong>
+            {{ product.typeName }}
+          </p>
+        </div>
+
+        <div class="card-item__items__content__stock" [id]="'backorder-alternative-entry-' + itemNumber + '-stock'">
+          <p [id]="'backorder-alternative-entry-' + itemNumber + '-product-details-stock'">
+            <ng-container *ngIf="stockLevel_ | async as stockLevel">{{ stockLevel?.stockLevelTotal }}</ng-container>
+            {{ 'backorder.item.instock' | cxTranslate }}
+          </p>
+        </div>
+
+        <p class="card-item__items__content__price" [id]="'backorder-alternative-entry-' + itemNumber + '-price'">
+          <span
+            class="card-item__items__content__price__item"
+            [id]="'backorder-alternative-entry-' + itemNumber + '-price-currency'"
+          >
+            {{ product.price.currencyIso }}
+          </span>
+          <span
+            class="card-item__items__content__price__item"
+            [id]="'backorder-alternative-entry-' + itemNumber + '-price-value'"
+          >
+            {{
+              productPrice | decimalPlaces: 4 | volumePrice: product.price.currencyIso : currentChannel : productPrice
+            }}
+          </span>
+          <span
+            class="card-item__items__content__price__item--small"
+            [id]="'backorder-alternative-entry-' + itemNumber + '-price-vat'"
+          >
+            ({{ (currentChannel.channel === 'B2C' ? 'product.inc_vat' : 'product.exc_vat') | cxTranslate }})
+          </span>
+        </p>
+
+        <div class="card-item__items__holder" [id]="'backorder-alternative-entry-' + itemNumber + '-add-to-cart'">
+          <app-add-to-queue
+            [productCode]="product.code"
+            [productQuantity]="this.product.orderQuantityMinimum"
+            [minQuantity]="product.orderQuantityMinimum"
+            (backorderAddToCart)="productCodeReceived($event)"
+            (recalculatePrice)="setPrice($event)"
+          ></app-add-to-queue>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

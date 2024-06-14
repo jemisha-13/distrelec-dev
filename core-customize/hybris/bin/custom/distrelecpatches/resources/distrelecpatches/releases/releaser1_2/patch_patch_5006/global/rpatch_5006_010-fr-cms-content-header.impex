@@ -1,0 +1,8 @@
+$contentCatalog = distrelec_IntContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$frContentCatalog = distrelec_FRContentCatalog
+$frContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $frContentCatalog]), CatalogVersion.version[default = Online])[default = $frContentCatalog:Online]
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $frContentCV)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent

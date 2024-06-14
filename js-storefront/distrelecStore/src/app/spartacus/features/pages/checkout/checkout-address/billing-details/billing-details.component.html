@@ -1,0 +1,259 @@
+<!-- GUEST ADDRESS FORM -->
+<ng-container *ngIf="cartData_ | async as cartData">
+  <ng-container *ngIf="userType.toLowerCase() === 'guest'; else notGuest">
+    <ng-container *ngIf="isBillingFormSaved_ | async as isBillingFormSaved">
+      <form [formGroup]="billingForm">
+        <div class="ch__component__title">
+          <ng-container *ngIf="(isBillingLoading_ | async) === false">
+            <div *ngIf="isBillingFormSaved.isSaved" class="ch__component__edit">
+              <button class="btn" id="editBillingBtn" (click)="editDetails()">
+                <a class="link" id="checkout.delivery.edit">{{ 'checkout.delivery.edit' | cxTranslate }}</a>
+                <fa-icon id="faPenEdit" [icon]="faPen"></fa-icon>
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="isPickUp(); else notGuestPickup">
+            <h2 id="checkout.billing_details">{{ 'checkout.billing_details' | cxTranslate }}</h2>
+          </ng-container>
+
+          <ng-template #notGuestPickup>
+            <h2 id="checkout.delivery.billing_and_delivery_title">
+              {{ 'checkout.delivery.billing_and_delivery_title' | cxTranslate }}
+            </h2>
+          </ng-template>
+        </div>
+
+        <ng-container *ngIf="!isBillingFormSaved.isSaved; else billingSaved">
+          <app-address-form-billing
+            [billingForm]="billingForm"
+            [isBillingFormSaved_]="isBillingFormSaved_"
+            [isDetailsFormSaved_]="isDetailsFormSaved_"
+            [activeSiteId]="activeSiteId"
+            [isEditAddress_]="isEditAddress_"
+            [isExportShop]="isExportShop"
+            (cancelEditing)="resetSingleBillingAddressValuesInInfoMode()"
+          ></app-address-form-billing>
+        </ng-container>
+
+        <ng-template #billingSaved>
+          <div class="ch__component__details">
+            <span id="firstNamelastNameBilling">
+              {{ 'form.' + billingDetails.get('titleCode')?.value | cxTranslate }}
+              {{ billingDetails.get('firstName')?.value }} {{ billingDetails.get('lastName')?.value }}
+            </span>
+            <span id="line1line2Billing">
+              {{ billingDetails.get('line1').value }} {{ billingDetails.get('line2').value }}
+            </span>
+            <span id="postalCodetownBilling">
+              {{ billingDetails.get('postalCode').value }} {{ billingDetails.get('town').value }}
+            </span>
+            <span id="countryCodeBilling">
+              {{ billingDetails.get('countryName').value }}
+            </span>
+            <span id="phoneBilling">
+              {{ billingDetails.get('phone').value }}
+            </span>
+          </div>
+        </ng-template>
+
+        <app-component-loading-spinner
+          *ngIf="isBillingLoading_ | async"
+          id="app-component-loading-spinner"
+        ></app-component-loading-spinner>
+      </form>
+    </ng-container>
+  </ng-container>
+
+  <!-- B2C, B2B, B2E ADDRESS FORM -->
+  <ng-template #notGuest>
+    <form [formGroup]="billingForm">
+      <ng-container *ngIf="isBillingFormSaved_ | async as isBillingFormSaved">
+        <ng-container *ngIf="billingAddressesFromDB">
+          <div class="ch__component__title">
+            <ng-container *ngIf="(isBillingLoading_ | async) === false">
+              <div
+                *ngIf="
+                  isBillingFormSaved.isSaved &&
+                  checkoutService.isBillingEditable(activeSiteId) &&
+                  billingAddressesFromDB?.length === 1 &&
+                  userType !== 'B2B_KEY_ACCOUNT'
+                "
+                class="ch__component__edit"
+              >
+                <button class="btn" (click)="editDetails()">
+                  <a class="link" id="checkout.delivery.edit">{{ 'checkout.delivery.edit' | cxTranslate }}</a>
+                  <fa-icon id="faPenEdit" [icon]="faPen"></fa-icon>
+                </button>
+              </div>
+            </ng-container>
+
+            <ng-container
+              *ngIf="
+                billingForm.value.isDeliverySame && (!isPickUp() || (isPickUp() && isExportShop));
+                else billingTitle
+              "
+            >
+              <h2 id="checkout.delivery.billing_and_delivery_title">
+                {{ 'checkout.delivery.billing_and_delivery_title' | cxTranslate }}
+              </h2>
+            </ng-container>
+
+            <ng-template #billingTitle>
+              <h2 id="checkout.billing_details">{{ 'checkout.billing_details' | cxTranslate }}</h2>
+            </ng-template>
+
+            <!-- DISPLAY ADDRESS FORM BLOCK -->
+            <!-- Map and display all shipping addresses if more than one is present  or if form has been saved-->
+            <ng-container *ngIf="!isBillingFormSaved.isSaved">
+              <app-address-form-billing
+                [billingForm]="billingForm"
+                [isBillingFormSaved_]="isBillingFormSaved_"
+                [isDetailsFormSaved_]="isDetailsFormSaved_"
+                [activeSiteId]="activeSiteId"
+                [isEditAddress_]="isEditAddress_"
+                (cancelEditing)="resetSingleBillingAddressValuesInInfoMode()"
+              ></app-address-form-billing>
+            </ng-container>
+
+            <!-- DISPLAY INFORMATION BLOCK -->
+            <ng-container *ngIf="isBillingFormSaved.isSaved && billingAddressesFromDB.length <= 1">
+              <div class="ch__component__details">
+                <ng-container *ngIf="userType === 'B2B' || userType === 'B2B_KEY_ACCOUNT'">
+                  <span id="companyNamecompanyName2Billing">
+                    {{ billingDetails.get('companyName')?.value }}
+                  </span>
+                  <span>
+                    {{ billingDetails.get('companyName2')?.value }}
+                  </span>
+                </ng-container>
+
+                <ng-container *ngIf="userType === 'B2C' || userType === 'B2E'">
+                  <span id="firstNamelastNameBilling">
+                    {{ 'form.' + billingDetails.get('titleCode')?.value | cxTranslate }}
+                    {{ billingDetails.get('firstName')?.value }}
+                    {{ billingDetails.get('lastName')?.value }}
+                  </span>
+                </ng-container>
+
+                <span *ngIf="billingDetails.get('email')" id="emailBilling">
+                  {{ billingDetails.get('email').value }}
+                </span>
+
+                <span id="line1line2Billing">
+                  {{ billingDetails.get('line1').value }} {{ billingDetails.get('line2').value }}
+                </span>
+
+                <span id="postalCodetownBilling">
+                  {{ billingDetails.get('postalCode').value }} {{ billingDetails.get('town').value }},
+                </span>
+                <span id="countryCodeBilling">
+                  <ng-container *ngIf="billingDetails.get('region')?.value">
+                    {{ billingDetails.get('region')?.value + ', ' }}
+                  </ng-container>
+                  {{ billingDetails.get('countryName').value }}
+                </span>
+                <span id="phoneBilling">
+                  {{ billingDetails.get('phone').value }}
+                </span>
+              </div>
+            </ng-container>
+
+            <!-- DISPLAY LIST OF ADDRESSES -->
+            <ng-container *ngIf="isBillingFormSaved.isSaved && billingAddressesFromDB.length > 1">
+              <form [formGroup]="billingDetails">
+                <ng-container *ngFor="let address of billingAddressesFromDB; let i = index">
+                  <div
+                    class="ch__component__selections__item"
+                    [class.selected]="billingDetails.get('id').value === address.id"
+                  >
+                    <div class="ch__component__selections__item--row is-align-center">
+                      <button
+                        class="btn ch__component__selections__item__radio"
+                        [id]="'selectBillingBtn_' + i"
+                        [class.is-checked]="billingDetails.get('id').value === address.id"
+                        (click)="selectBillingAddress(address); setBillingAddressOnCart(address)"
+                      >
+                        <input
+                          class="custom-control-input"
+                          [id]="'selectBillingInput_' + address.id"
+                          [value]="billingDetails.get('id').value"
+                          type="radio"
+                          formControlName="id"
+                        />
+                      </button>
+
+                      <div
+                        class="ch__component__selections__item__radio-icon"
+                        [class.is-checked]="billingDetails.get('id').value === address.id"
+                      ></div>
+
+                      <fa-icon id="iconSelectBilling" [icon]="faLocationDot"></fa-icon>
+
+                      <div class="ch__component__selections__item__info">
+                        <div>
+                          <span
+                            *ngIf="address.firstName && address.lastName"
+                            class="ch__component__selections__item__content--address"
+                            id="nameLineDelivery"
+                          >
+                            {{ 'form.' + address.titleCode | cxTranslate }} {{ address.firstName }}&nbsp;{{
+                              address.lastName
+                            }},
+                          </span>
+                          <span class="ch__component__selections__item__content--address" [id]="'companyFirstLine' + i">
+                            {{ address.companyName }} {{ address.line1 }} {{ address.line2 }},
+                          </span>
+                          <span class="ch__component__selections__item__content--address" [id]="'companyFirstLine' + i">
+                            {{ address.postalCode }} {{ address.town }}, {{ address.country.name }}
+                            {{ address.cellphone ?? address.phone }}
+                          </span>
+                        </div>
+
+                        <div class="ch__component__selections__item__cta" [class.is-default]="address.defaultBilling">
+                          <ng-container *ngIf="!address.defaultBilling">
+                            <button
+                              class="btn link is-set-default"
+                              id="checkout.billing.set_default"
+                              (click)="setBillingDefault(address.id)"
+                            >
+                              {{ 'checkout.delivery.set_default' | cxTranslate }}
+                            </button>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </form>
+            </ng-container>
+
+            <div *ngIf="isDeliverySamePossible(cartData.user, isBillingFormSaved)" class="ch__component__details row">
+              <button
+                class="btn is-delivery-same-as-billing"
+                id="deliverySameAsBillingBtn"
+                (click)="onSameDeliveryClick()"
+              >
+                <fa-icon *ngIf="!billingForm.value.isDeliverySame" id="iconDelivery" [icon]="faSquare"></fa-icon>
+                <fa-icon
+                  *ngIf="billingForm.value.isDeliverySame"
+                  id="iconDeliverySame"
+                  [icon]="faSquareCheck"
+                ></fa-icon>
+
+                <label class="ch__component__details--title help-text" id="checkout.delivery.billing_and_delivery_sam">
+                  {{ 'checkout.delivery.billing_and_delivery_same' | cxTranslate }}
+                </label>
+              </button>
+            </div>
+
+            <app-component-loading-spinner
+              *ngIf="isBillingLoading_ | async"
+              id="app-component-loading-spinner-billing"
+            ></app-component-loading-spinner>
+          </div>
+        </ng-container>
+      </ng-container>
+    </form>
+  </ng-template>
+</ng-container>

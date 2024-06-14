@@ -1,0 +1,73 @@
+<ng-container *ngIf="order$ | async as order; else orderLoading">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="checkout-order-confirmation mw-760 mx-auto">
+          <app-dist-card class="d-block mt-3" id="checkoutOrderConfirmationCard">
+            <ul class="card-item-list">
+              <li class="card-item">
+                <app-checkout-order-info
+                  [customerUid]="customerUid"
+                  [erpCode]="erpCode_ | async"
+                  [order]="order"
+                ></app-checkout-order-info>
+              </li>
+
+              <li *ngIf="isCustomerGuest" class="card-item">
+                <app-checkout-guest-registration
+                  [customerUid]="customerUid"
+                  [order]="order"
+                ></app-checkout-guest-registration>
+              </li>
+
+              <li *ngIf="order.canRequestInvoicePaymentMode" class="card-item">
+                <app-checkout-invoice-request [order]="order"></app-checkout-invoice-request>
+              </li>
+
+              <ng-container *ngIf="erpCode_ | async as erpCode">
+                <li *ngIf="erpCode.erpVoucher?.code" class="card-item">
+                  <app-checkout-erp-voucher [erpVoucher]="erpCode.erpVoucher"></app-checkout-erp-voucher>
+                </li>
+              </ng-container>
+
+              <li *ngIf="displayProfileInformation" class="card-item">
+                <app-checkout-profile-information [order]="order"></app-checkout-profile-information>
+              </li>
+
+              <li *ngIf="!isCustomerGuest && !isCustomerB2E" class="card-item">
+                <app-checkout-manage-your-account
+                  [isCustomerB2C]="isCustomerB2C"
+                  [order]="order"
+                ></app-checkout-manage-your-account>
+              </li>
+
+              <li *ngIf="isNewsletterEnabled$ | async" class="card-item">
+                <app-checkout-consent-capture
+                  [customerUid]="customerUid"
+                  [order]="order"
+                ></app-checkout-consent-capture>
+              </li>
+
+              <li class="card-item">
+                <app-dist-button
+                  class="checkout-order-confirmation__continue-shopping"
+                  buttonId="product.notify_me_section.btn_continue_shop"
+                  height="h-default"
+                  routerLink="/"
+                  type="primary"
+                  width="w-fixed"
+                >
+                  {{ 'product.notify_me_section.btn_continue_shop' | cxTranslate }}
+                </app-dist-button>
+              </li>
+            </ul>
+          </app-dist-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #orderLoading>
+  <app-component-loading-spinner></app-component-loading-spinner>
+</ng-template>

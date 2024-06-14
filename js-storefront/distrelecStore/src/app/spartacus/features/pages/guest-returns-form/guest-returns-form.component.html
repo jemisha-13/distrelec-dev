@@ -1,0 +1,213 @@
+<ng-container *ngIf="isProductReturnEnabled$ | async">
+  <div class="scroll-anchor" id="guestReturnsScrollAnchor"></div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="data-response-holder">
+          <div *ngIf="responseSuccess === true" class="data-response-holder__success">
+            {{ 'rma.guest.returnPage.confirmation' | cxTranslate }}
+          </div>
+          <div *ngIf="responseSuccess === false" class="data-response-holder__fail">
+            {{ 'feedback.nps.error' | cxTranslate }}
+          </div>
+        </div>
+
+        <section class="content-three">
+          <h3>{{ 'rma.guest.returnPage.formTitle' | cxTranslate }}</h3>
+          <p>{{ 'rma.guest.returnPage.formParagraph' | cxTranslate }}</p>
+          <form
+            class="rma-guest-return"
+            id="guestRMACreateRequestForm"
+            [formGroup]="guestRMACreateRequestForm"
+            (ngSubmit)="isCaptchaDisabled_.getValue() ? submitReturnRequest() : captchaRef.execute()"
+          >
+            <div
+              class="input-holder"
+              [ngClass]="{
+                'has-error':
+                  guestRMACreateRequestForm.controls['customerName'].invalid &&
+                  !guestRMACreateRequestForm.controls['customerName'].pristine &&
+                  guestRMACreateRequestForm.controls['customerName'].touched
+              }"
+            >
+              <div class="input-wrapper">
+                <label for="customerName">{{ 'rma.guest.returnPage.formName' | cxTranslate }} *</label>
+                <input id="customerName" formControlName="customerName" required type="text" />
+              </div>
+              <div class="input-holder__error-msg">{{ 'validations.enter_valid_field' | cxTranslate }}</div>
+            </div>
+
+            <div
+              class="input-holder"
+              [ngClass]="{
+                'has-error':
+                  guestRMACreateRequestForm.controls['orderNumber'].invalid &&
+                  !guestRMACreateRequestForm.controls['orderNumber'].pristine &&
+                  guestRMACreateRequestForm.controls['orderNumber'].touched
+              }"
+            >
+              <div class="input-wrapper">
+                <label for="orderNumber">{{ 'rma.guest.returnPage.orderNumber' | cxTranslate }} *</label>
+                <input id="orderNumber" formControlName="orderNumber" required type="text" />
+              </div>
+              <div class="input-holder__error-msg">{{ 'validations.enter_valid_field' | cxTranslate }}</div>
+            </div>
+            <div
+              class="input-holder"
+              [ngClass]="{
+                'has-error':
+                  guestRMACreateRequestForm.controls['emailAddress'].invalid &&
+                  !guestRMACreateRequestForm.controls['emailAddress'].pristine &&
+                  guestRMACreateRequestForm.controls['emailAddress'].touched
+              }"
+            >
+              <div class="input-wrapper">
+                <label for="emailAddress">{{ 'rma.guest.returnPage.formEmail' | cxTranslate }} *</label>
+                <input id="emailAddress" formControlName="emailAddress" required type="email" />
+              </div>
+              <div class="input-holder__error-msg">{{ 'validations.email_error_invalid' | cxTranslate }}</div>
+            </div>
+            <div class="input-holder">
+              <div class="input-wrapper">
+                <label for="phoneNumber">{{ 'rma.guest.returnPage.formPhone' | cxTranslate }}</label>
+                <input id="phoneNumber" formControlName="phoneNumber" type="text" />
+              </div>
+            </div>
+            <div
+              class="input-holder"
+              [ngClass]="{
+                'has-error':
+                  guestRMACreateRequestForm.controls['articleNumber'].invalid &&
+                  !guestRMACreateRequestForm.controls['articleNumber'].pristine &&
+                  guestRMACreateRequestForm.controls['articleNumber'].touched
+              }"
+            >
+              <div class="input-wrapper">
+                <label for="articleNumber">{{ 'rma.guest.returnPage.formArticle' | cxTranslate }} *</label>
+                <input id="articleNumber" formControlName="articleNumber" required type="text" />
+              </div>
+              <div class="input-holder__error-msg">{{ 'validations.enter_valid_field' | cxTranslate }}</div>
+            </div>
+            <div
+              class="input-holder"
+              [ngClass]="{
+                'has-error':
+                  guestRMACreateRequestForm.controls['quantity'].invalid &&
+                  !guestRMACreateRequestForm.controls['quantity'].pristine &&
+                  guestRMACreateRequestForm.controls['quantity'].touched
+              }"
+            >
+              <div class="input-wrapper">
+                <label for="quantity">{{ 'rma.guest.returnPage.formQuantity' | cxTranslate }} *</label>
+                <input id="quantity" formControlName="quantity" max="9999" min="1" required type="number" />
+              </div>
+              <div class="input-holder__error-msg">{{ 'validations.enter_valid_field' | cxTranslate }}</div>
+            </div>
+            <div
+              class="input-holder"
+              [ngClass]="{
+                'has-error':
+                  guestRMACreateRequestForm.controls['returnReason'].invalid &&
+                  !guestRMACreateRequestForm.controls['returnReason'].pristine &&
+                  guestRMACreateRequestForm.controls['returnReason'].touched
+              }"
+            >
+              <div class="input-wrapper">
+                <label for="returnReason">{{ 'rma.guest.returnPage.formReason' | cxTranslate }} *</label>
+                <ng-select
+                  class="dropdown account-info"
+                  id="returnReason"
+                  (change)="onMainReasonChange($event)"
+                  formControlName="returnReason"
+                  name="returnReason"
+                >
+                  <ng-option id="0" selected value="0">{{ 'form.return_reason_ps' | cxTranslate }}</ng-option>
+                  <ng-option
+                    *ngFor="let mainReason of returnReasons"
+                    [id]="mainReason.mainReasonId"
+                    [value]="mainReason"
+                  >
+                    {{ mainReason.mainReasonText | cxTranslate }}
+                  </ng-option>
+                </ng-select>
+              </div>
+              <div class="input-holder__error-msg">{{ 'validations.enter_valid_field' | cxTranslate }}</div>
+            </div>
+            <div
+              class="input-holder"
+              [ngClass]="{
+                'has-error':
+                  guestRMACreateRequestForm.controls['returnSubReason'].invalid &&
+                  !guestRMACreateRequestForm.controls['returnSubReason'].pristine &&
+                  guestRMACreateRequestForm.controls['returnSubReason'].touched &&
+                  guestRMACreateRequestForm.controls['returnReason'].value.mainReasonId !== orderNotReceivedReasonId
+              }"
+            >
+              <div class="input-wrapper">
+                <label for="returnSubReason">&nbsp;</label>
+                <ng-select
+                  *ngIf="
+                    guestRMACreateRequestForm.controls.returnReason.value?.mainReasonId &&
+                    guestRMACreateRequestForm.controls.returnReason.value?.subReasons?.length > 0
+                  "
+                  class="dropdown account-info"
+                  id="returnSubReason"
+                  formControlName="returnSubReason"
+                  name="returnSubReason"
+                >
+                  <ng-option id="" selected value="">{{ 'form.return_reason_ps' | cxTranslate }}</ng-option>
+                  <ng-option
+                    *ngFor="let subReason of guestRMACreateRequestForm.controls.returnReason.value?.subReasons"
+                    [id]="subReason.subReasonId"
+                    [value]="subReason"
+                  >
+                    {{ subReason.subReasonMessages[0] | cxTranslate }}
+                  </ng-option>
+                </ng-select>
+              </div>
+              <div class="input-holder__error-msg">{{ 'validations.enter_valid_field' | cxTranslate }}</div>
+            </div>
+            <div class="input-holder input-holder--has-counter">
+              <div class="input-wrapper">
+                <label for="customerText">{{ 'rma.guest.returnPage.formMoreInformation' | cxTranslate }}</label>
+                <textarea
+                  id="customerText"
+                  [(ngModel)]="customerTextInputFieldValue"
+                  cols="28"
+                  formControlName="customerText"
+                  maxlength="50"
+                  name="customerText"
+                  rows="3"
+                  type="text"
+                ></textarea>
+              </div>
+              <div class="input-holder__counter">
+                {{ customerTextInputFieldValue?.length ? customerTextInputFieldValue?.length : 0 }}&nbsp;/&nbsp;50
+              </div>
+            </div>
+            <div class="recaptcha-holder recaptcha">
+              <re-captcha
+                #captchaRef="reCaptcha"
+                (resolved)="$event && submitReturnRequest()"
+                size="invisible"
+              ></re-captcha>
+            </div>
+            <div class="btn-holder">
+              <app-button
+                class="button-right-float"
+                [disabled]="guestRMACreateRequestForm.invalid"
+                [modifiers]="['sm-text']"
+                buttonId="guest_return_submit"
+                colour="red"
+                type="submit"
+              >
+                {{ 'rma.guest.returnPage.submitButton' | cxTranslate }}
+              </app-button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </div>
+</ng-container>

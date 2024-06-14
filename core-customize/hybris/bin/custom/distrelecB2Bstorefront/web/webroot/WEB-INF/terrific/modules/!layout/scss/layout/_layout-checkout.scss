@@ -1,0 +1,402 @@
+$login-card-space: $spacing-unit * 4;
+
+.mod-layout--checkout {
+  @media #{$ipad-landscape} {
+    background-color: $ux-page-bg;
+  }
+
+  .header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 9;
+    width: 100%;
+    padding: ($spacing-unit * 4) 0;
+    border-top-color: $colour-dark-red;
+    background-color: $colour-white;
+
+    @media #{$ipad} {
+      padding: ($spacing-unit * 6) 0 ($spacing-unit * 2);
+    }
+
+    &,
+    &:before,
+    &:after {
+      border-top-width: 4px;
+      border-top-style: solid;
+    }
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: -($spacing-unit - 1);
+      width: 33%;
+    }
+
+    &::before {
+      border-top-color: $colour-dist-marigold;
+      left: 0;
+      z-index: 1;
+    }
+
+    &::after {
+      border-top-color: $colour-dist-red;
+      right: 0;
+      z-index: 2;
+    }
+
+    &__logo {}
+
+    &__info {}
+
+    &__secure-info {
+      @include font-size(14px);
+      color: $colour-redesign-light-grey;
+
+      .fa-lock {
+        @include font-size(16px);
+        padding-bottom: 5px; // Fixing align issue because of line-height
+        margin-right: $spacing-unit;
+      }
+    }
+  }
+
+  &__main {
+    min-height: 90vh;
+    padding-top: 125px; // Height of header + space top
+    padding-bottom: 30px;
+  }
+
+  .body {
+    .login {
+      &__page-title {
+        @include font-size(24px);
+        @include line-height(40px);
+        margin: 0 0 1em;
+        color: $colour-black;
+        font-weight: 500;
+
+        @media #{$ipad} {
+          @include font-size(32px);
+        }
+      }
+
+      &__card {
+        background-color: $colour-white;
+        box-shadow: $cr-block-boxshadow;
+        padding: $spacing-unit * 4;
+
+        @media #{$ipad} {
+          padding: $spacing-unit * 6;
+        }
+
+        &.has-margin-top {
+          margin-top: $login-card-space;
+        }
+
+        &__title {
+          h2, p {
+            margin-top: 0;
+            margin-bottom: $login-card-space;
+            color: $colour-black;
+            font-weight: 500;
+          }
+
+          h2 {
+            @include font-size(20px);
+            @include line-height(30px);
+
+            @media #{$ipad} {
+              @include font-size(24px);
+            }
+          }
+
+          p {
+            @include font-size(14px);
+          }
+        }
+
+        &__info {
+          border: 1px solid $link-blue;
+          color: $link-blue;
+          background: $colour-pale-blue;
+          @include font-size(14px);
+          text-align: left;
+          padding: $spacing-unit * 2 + 2;
+          margin-bottom: $login-card-space;
+          font-weight: 500;
+
+          i {
+            margin-right: $spacing-unit * 2;
+          }
+        }
+
+        &__form-group {
+          margin-bottom: $login-card-space;
+
+          &.has-loader {
+            .loading {
+              position: absolute;
+              top: 10px;
+              right: 10px;
+              width: 20px;
+            }
+            .login-addl-error {
+              display: flex;
+              align-items: center;
+              padding: $spacing-unit * 3;
+              color: $checkout-express-delivery-disclaimer;
+              border: 1px solid $checkout-express-delivery-disclaimer-border;
+              background: $checkout-express-delivery-disclaimer-bg;
+              margin-bottom: $spacing-unit * 4;
+    
+              &__icon {
+                @include font-size(26px);
+                padding-right: $spacing-unit * 3;
+              }
+    
+              &__text {
+                @include font-size(14px);
+                @include line-height(20px);
+                font-weight: 500;
+                color: $checkout-express-delivery-disclaimer;
+                margin-bottom: 0;
+
+                span {
+                  font-weight: bold;
+                  text-decoration: underline;
+                  cursor: pointer;
+                  &:hover {
+                    color: $link-dark-blue;
+                    text-decoration: none;
+                  }
+                }
+
+              }
+            }
+          }
+
+          &.is-success {
+            .tickItem {
+              display: block;
+            }
+
+            .field-msgs {
+              display: none;
+            }
+
+            input.field {
+              border-color: $colour-dist-green;
+            }
+          }
+
+          &.is-error {
+            .field-msgs,
+            .tickItemError {
+              display: block;
+            }
+          .guest-input-note {
+                display: none;
+              }
+            }
+
+          &.is-loading {
+            .field-msgs,
+            .tickItem,
+            .tickItemError {
+              opacity: 0;
+            }
+          }
+
+          label {
+            @include font-size(14px);
+            display: inline-block;
+            margin-bottom: $spacing-unit;
+            font-weight: 600;
+            color: $colour-black;
+          }
+
+          input {
+            display: block;
+            width: 100%;
+            height: 40px;
+            border-color: $ux-input-border-color-light;
+
+            &.error {
+              border: 2px solid lighten($colour-dist-red, 20%);
+            }
+          }
+
+          small {
+            @include font-size(12px);
+            display: inline-block;
+            margin-top: $spacing-unit;
+            color: $ux-txt-grey;
+            font-weight: 500;
+          }
+
+          .field-msgs {
+            .error {
+              @include font-size(12px);
+              margin-top: $spacing-unit;
+              color: $colour-dist-red;
+              font-weight: 500;
+            }
+          }
+
+          .tickItem,
+          .tickItemError,
+          .field-msgs {
+            display: none;
+          }
+
+          .tickItem,
+          .tickItemError {
+            @include font-size(18px);
+            position: absolute;
+            top: 12px;
+            right: 10px;
+          }
+
+          .tickItem {
+            color: $colour-dist-green;
+          }
+
+          .tickItemError {
+            color: $colour-dist-red;
+          }
+        }
+
+        &__check-list {
+          margin-bottom: $login-card-space;
+
+          > li {
+            @include font-size(14px);
+            display: flex;
+            margin-bottom: $spacing-unit * 2;
+            font-weight: 500;
+
+            .fa-check {
+              padding-top: $spacing-unit;
+              margin-right: $spacing-unit * 2;
+              color: $colour-dist-green;
+            }
+          }
+        }
+      }
+
+      &__new {
+        margin-top: $login-card-space;
+
+        @media #{$ipad} {
+          margin-top: 0;
+        }
+      }
+
+      &__returnlink {
+        margin-top: $spacing-unit * 6;
+
+        .fa-arrow-left {
+          display: inline-block;
+          margin-right: $spacing-unit * 2;
+          margin-bottom: 2px;
+          color: $colour-redesign-light-grey;
+        }
+      }
+    }
+
+    .billing {
+      &__payment {
+        margin-bottom: $spacing-unit * 4;
+
+        @media #{$ipad-landscape} {
+          margin-bottom: 0;
+        }
+      }
+
+      &__address {
+        margin-bottom: $spacing-unit * 4;
+
+        @media #{$ipad-landscape} {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .summary {
+      display: flex;
+      flex-direction: column;
+
+      h3 {
+        @include font-size(24px);
+        padding-top: ($spacing-unit * 5);
+
+        @media #{$ipad} {
+          padding-top: ($spacing-unit * 6);
+        }
+
+        @media #{$ipad-landscape} {
+          padding-top: 0;
+        }
+      }
+
+      .method-button {
+        .mat-button {
+          @include line-height(40px);
+          color: $colour-white;
+          text-transform: capitalize;
+
+          &:hover {
+            border: 1px solid $colour-dist-red;
+            color: $colour-dist-red;
+          }
+        }
+      }
+    }
+
+    .review {
+      &__wrapper {
+        background-color: $colour-white;
+        box-shadow: 0 ($spacing-unit - 3) ($spacing-unit - 1) rgba(0, 0, 0, .15);
+        padding: $spacing-unit * 6;
+
+        h1 {
+          @include font-size(24px);
+          margin-bottom: $spacing-unit * 4;
+        }
+      }
+
+      &__options {
+        &__edit {
+          a {
+            @include font-size(12px);
+            color: $link-blue;
+            font-family: $font-stack-alt;
+            margin-bottom: $spacing-unit * 2;
+            text-align: right;
+            width: 100%;
+
+            &:hover,
+            &:focus {
+              color: $link-dark-blue;
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+
+    .go-back-link {
+      @include font-size(15px);
+      color: $colour-dist-mid-grey;
+      display: block;
+
+      &:hover {
+        color: $colour-dist-grey;
+        text-decoration: underline;
+      }
+    }
+  }
+}

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <alias name="defaultDistBackofficeValidationService" alias="backofficeValidationService"/>
+    <bean id="defaultDistBackofficeValidationService"
+          class="com.namics.distrelec.b2b.backoffice.cockpitng.dataaccess.facades.object.validation.impl.DefaultDistBackofficeValidationService"
+          parent="defaultBackofficeValidationService">
+        <property name="interceptorRegistry" ref="interceptorRegistry"/>
+    </bean>
+
+    <alias name="defaultDistGenericQueryBuilder" alias="genericQueryBuilder"/>
+    <bean id="defaultDistGenericQueryBuilder"
+          class="com.namics.distrelec.b2b.backoffice.cockpitng.search.builder.impl.GenericDistConditionQueryBuilder"
+          parent="defaultGenericQueryBuilder">
+        <property name="cockpitConfigurationService" ref="cockpitConfigurationService"/>
+        <lookup-method name="getFieldSearchFacadeStrategyRegistry" bean="fieldSearchFacadeStrategyRegistry"/>
+    </bean>
+
+    <alias name="defaultDistLocalizedQueryBuilder" alias="localizedQueryBuilder"/>
+    <bean id="defaultDistLocalizedQueryBuilder"
+          class="com.hybris.backoffice.cockpitng.search.builder.impl.LocalizedGenericConditionQueryBuilder"
+          parent="defaultGenericQueryBuilder">
+        <property name="commonI18NService" ref="commonI18NService"/>
+        <property name="i18nService" ref="i18nService"/>
+        <property name="localizationService" ref="localizationService"/>
+        <property name="typeService" ref="typeService"/>
+    </bean>
+
+    <alias alias="platformFieldSearchFacadeStrategy" name="defaultDistPlatformFieldSearchFacadeStrategy"/>
+    <bean id="defaultDistPlatformFieldSearchFacadeStrategy"
+          class="com.namics.distrelec.b2b.backoffice.cockpitng.dataaccess.facades.search.DefaultDistPlatformFieldSearchFacadeStrategy"
+          parent="defaultPlatformFieldSearchFacadeStrategy">
+    </bean>
+
+    <alias alias="treeViewRenderer" name="defaultDistTreeViewRenderer"/>
+    <bean id="defaultDistTreeViewRenderer"
+          class="com.namics.distrelec.b2b.backoffice.cockpitng.collectionbrowser.mold.impl.treeview.renderer.DefaultDistTreeViewRenderer"
+          parent="defaultTreeViewRenderer"
+          scope="prototype">
+    </bean>
+
+    <alias alias="labelService" name="distBackofficeLabelService"/>
+    <bean id="distBackofficeLabelService" class="com.namics.distrelec.b2b.backoffice.cockpitng.labels.impl.DistBackofficeCoreLabelService"
+          parent="backofficeLabelService"/>
+
+    <alias name="distCompanyAddressValueProvider" alias="companyAddressValueProvider" />
+    <bean id="distCompanyAddressValueProvider" class="com.namics.distrelec.b2b.backoffice.editorsearchfacade.CompanyAddressValueProvider" />
+
+    <alias name="distCustomerAddressValueProvider" alias="customerAddressValueProvider" />
+    <bean id="distCustomerAddressValueProvider" class="com.namics.distrelec.b2b.backoffice.editorsearchfacade.CustomerAddressValueProvider" />
+
+    <alias name="genericDistMediaItemUploadPanelRenderer" alias="mediaItemUploadRenderer"/>
+    <bean id="genericDistMediaItemUploadPanelRenderer"
+          class="com.namics.distrelec.b2b.backoffice.renderers.DistGenericMediaItemUploadPanelRenderer"
+          parent="genericMediaItemUploadPanelRenderer"
+          scope="prototype">
+        <property name="configurationService" ref="configurationService"/>
+    </bean>
+
+    <alias name="defaultDistPreviewListCellRenderer" alias="previewListCellRenderer"/>
+    <bean id="defaultDistPreviewListCellRenderer"
+          class="com.namics.distrelec.b2b.backoffice.widgets.collectionbrowser.mold.impl.listview.renderer.DefaultDistPreviewListCellRenderer"
+          parent="defaultPreviewListCellRenderer"/>
+
+    <alias name="defaultDistEditorAreaSectionRenderer" alias="editorAreaSectionRenderer"/>
+    <bean id="defaultDistEditorAreaSectionRenderer"
+          class="com.namics.distrelec.b2b.backoffice.widgets.editorarea.renderer.impl.DefaultDistEditorAreaSectionRenderer"
+          parent="defaultEditorAreaSectionRenderer"
+          scope="prototype"/>
+
+    <alias name="defaultDistAdvancedSearchRenderer" alias="advancedSearchRenderer"/>
+    <bean id="defaultDistAdvancedSearchRenderer"
+          class="com.namics.distrelec.b2b.backoffice.widgets.advancedsearch.impl.renderer.DistAdvancedSearchRenderer"
+          parent="defaultAdvancedSearchRenderer"
+          scope="prototype"/>
+
+    <alias name="defaultDistAdvancedSearchDataUtil" alias="advancedSearchDataUtil"/>
+    <bean id="defaultDistAdvancedSearchDataUtil"
+          class="com.namics.distrelec.b2b.backoffice.widgets.advancedsearch.util.DistAdvancedSearchDataUtil"
+          parent="defaultAdvancedSearchDataUtil"/>
+
+    <alias name="defaultDistClassificationTabEditorAreaRenderer" alias="classificationTabEditorAreaRenderer"/>
+    <bean id="defaultDistClassificationTabEditorAreaRenderer"
+          class="com.namics.distrelec.b2b.backoffice.classification.DistClassificationTabEditorAreaRenderer"
+          parent="defaultClassificationTabEditorAreaRenderer">
+        <property name="classificationService" ref="defaultCoreClassificationService"/>
+        <property name="classificationClassComparator">
+            <bean class="com.namics.distrelec.b2b.backoffice.classification.comparator.DistClassificationClassComparator"/>
+        </property>
+        <property name="featurePeristanceHandler">
+            <bean class="de.hybris.platform.platformbackoffice.classification.FeaturePeristanceHandler">
+                <property name="classificationService" ref="defaultCoreClassificationService"/>
+            </bean>
+        </property>
+        <property name="configurationService" ref="configurationService"/>
+    </bean>
+
+    <!-- recreated because defaultClassificationService cannot be used directly as there are defined two different
+         services in hybris in extensions platformservices and backoffice -->
+    <bean id="defaultCoreClassificationService" class="de.hybris.platform.classification.impl.DefaultClassificationService" parent="abstractBusinessService">
+        <property name="classificationDao" ref="classificationDao" />
+        <property name="productService" ref="productService" />
+        <property name="formatFactory" ref="formatFactory" />
+        <property name="loadStoreFeaturesStrategy" ref="loadStoreFeaturesStrategy" />
+        <property name="classResolverStrategy" ref="classificationClassesResolverStrategy" />
+    </bean>
+
+    <alias name="defaultDistPriceRowLabelProvider" alias="distPriceRowLabelProvider" />
+    <bean id="defaultDistPriceRowLabelProvider" class="com.namics.distrelec.b2b.backoffice.labels.labelproviders.DistPriceRowLabelProvider"
+        parent="defaultPriceRowLabelProvider"/>
+
+    <alias name="defaultDistConfigurableBundleSynchronizationFacade" alias="synchronizationFacade"/>
+    <bean id="defaultDistConfigurableBundleSynchronizationFacade" class="com.namics.distrelec.b2b.backoffice.sync.facades.DefaultDistSynchronizationFacade"
+            parent="defaultBackofficeSynchronizationFacade">
+    </bean>
+
+    <bean id="backofficeAppMediaFilter" class="com.namics.distrelec.b2b.backoffice.web.DistWebAppMediaFilter">
+        <property name="mediaPermissionService" ref="mediaPermissionService"/>
+        <property name="modelService" ref="modelService"/>
+        <property name="userService" ref="userService"/>
+        <property name="mediaService" ref="mediaService"/>
+        <property name="addContextPath" value="false"/>
+    </bean>
+</beans>

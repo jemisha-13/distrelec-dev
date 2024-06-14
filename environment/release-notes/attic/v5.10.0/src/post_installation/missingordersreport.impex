@@ -1,0 +1,27 @@
+#Please run after deployment
+# Import the CMS content for the Distrelec site emails -distrelec_CHContentCatalog
+#
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$emailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/distrelecContentCatalog/emails
+
+# Language
+$lang=en
+
+#Insert velocity template
+INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;description[lang=$lang];templateScript[lang=en,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];rendererType(code)[default='velocity'];
+;Missing_Orders_CronJob_Report_Template;com.namics.distrelec.b2b.core.mail.internal.DistInternalMailContext;Missing orders report;$emailResource/email-MissingOrdersCronJobReport.vm;
+;Missing_Paypal_Orders_CronJob_Report_Template;com.namics.distrelec.b2b.core.mail.internal.DistInternalMailContext;Missing paypal orders report;$emailResource/email-paypalOrdersCronJobReport.vm;
+
+#Insert CronJob
+INSERT_UPDATE DistMissingOrdersCronjob;code[unique=true];job(code);singleExecutable;sessionLanguage(isocode)
+;DistMissingOrdersCronJob;DistMissingOrdersCronJob;false;en;
+
+
+INSERT_UPDATE DistPaypalOrdersCronjob;code[unique=true];job(code);singleExecutable;sessionLanguage(isocode)
+;DistPaypalOrdersjob;DistPaypalOrdersCronjob;false;en;
+ 
+INSERT_UPDATE Trigger;cronjob(code)[unique=true];cronExpression
+;DistMissingOrdersCronJob;0 0 8 * * ?
+;DistPaypalOrdersCronjob;0 0 8 * * ?

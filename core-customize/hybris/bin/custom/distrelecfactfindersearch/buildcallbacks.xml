@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+
+  
+-->
+
+
+<project name="distrelecfactfindersearch_buildcallbacks" >
+	
+	<macrodef name="distrelecfactfindersearch_before_build">
+		<sequential>
+			<sequential>
+				<generateJavaStubsFromWSDL filename="Campaign.wsdl" packagepart="campaign" binding="bindings.xjb" />
+				<generateJavaStubsFromWSDL filename="Import.wsdl" packagepart="import" binding="bindings.xjb" />
+				<generateJavaStubsFromWSDL filename="Recommender.wsdl" packagepart="recommender" binding="bindings.xjb" />
+				<generateJavaStubsFromWSDL filename="Search.wsdl" packagepart="search" binding="bindings.xjb" />
+				<generateJavaStubsFromWSDL filename="Tracking.wsdl" packagepart="tracking" binding="bindings.xjb" />
+				<generateJavaStubsFromWSDL filename="CampaignReminder.wsdl" packagepart="campaign" binding="bindings.xjb" />
+				<generateJavaStubsFromWSDL filename="ProductComparison.wsdl" packagepart="product" binding="bindings.xjb" />
+				<generateJavaStubsFromWSDL filename="SimilarProducts.wsdl" packagepart="product" binding="bindings.xjb" />
+			</sequential>
+		</sequential>
+	</macrodef>
+	
+	<macrodef name="generateJavaStubsFromWSDL">
+		<attribute name="filename" />
+		<attribute name="packagepart" />
+		<attribute name="binding" />
+			
+		<sequential>
+			<condition property="antRunsInDirOfHybrisServer" value="true">
+				<contains string="${platformhome}" substring="hybrisserver" casesensitive="false" />
+			</condition>
+			<if>
+				<istrue value="${antRunsInDirOfHybrisServer}" />
+				<then>
+					<echo message="Ant build is running in production environment, skip development build actions." />
+				</then>
+				<else>
+					<echo message="Ant build is run in development environment => generate webservice stubs of hybris" />
+					<echo message="Make gensrc dir if it is not exist"/>
+					<mkdir dir="${ext.distrelecfactfindersearch.path}/gensrc"/>
+					<echo message="Generation Java Stubs from WSDL file @{filename}" />
+					<wsimport
+							    wsdl="${ext.distrelecfactfindersearch.path}/resources/wsdl/${distrelecfactfindersearch.factfinder.webservice.version}/@{filename}"
+							    destdir="${ext.distrelecfactfindersearch.path}/gensrc" 
+							    sourcedestdir="${ext.distrelecfactfindersearch.path}/gensrc"
+							    keep="true"
+							    extension="false"
+							    verbose="true"
+								package="de.factfinder.webservice.${distrelecfactfindersearch.factfinder.webservice.version}.FF@{packagepart}"
+							    target="2.0"
+							    quiet="true"
+							    xdebug="false"
+								xadditionalHeaders="true"
+								xnocompile="true">
+						<arg value="-B-XautoNameResolution" />
+						<binding file="${ext.distrelecfactfindersearch.path}/resources/wsdl/${distrelecfactfindersearch.factfinder.webservice.version}/@{binding}" />
+						<produces dir="${ext.distrelecfactfindersearch.path}/gensrc/de/factfinder/webservice/${distrelecfactfindersearch.factfinder.webservice.version}/FF@{packagepart}" includes="*" />
+					</wsimport>
+				</else>
+			</if>
+		</sequential>
+	</macrodef>	
+		
+</project>

@@ -1,0 +1,22 @@
+# NO
+$contentCatalog=distrelec_NOContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+
+$lang=en
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;localizedUrl[lang=$lang];linkName[lang=$lang]
+;;QLLink;Product Quality & Legislation;Product Quality & Legislation;/cms/quality-and-legislation;Product Quality & Legislation
+
+
+$lang=no
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;localizedUrl[lang=$lang];linkName[lang=$lang]
+;;QLLink;Produktkvalitet og lovgivning;Produktkvalitet og lovgivning;/cms/quality-and-legislation;Produktkvalitet og lovgivning
+
+
+
+UPDATE DistFooterComponent;UID[unique=true];impressumLinks(uid,$contentCV)[mode=append];$contentCV[unique=true]
+                                                                          ;DistFooterComponent;QLLink
+

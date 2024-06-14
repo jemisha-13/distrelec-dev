@@ -1,0 +1,127 @@
+## messageSource=classpath:/distrelecB2Bcore/messages/email-seminarRegistrationRequest_$lang.properties
+#macro(genHtmlLink $url $label)
+<a style="color: #AA1936; text-decoration: underline;" href="$url" target="_blank"><span style="color: #AA1936;">$label</span></a>
+#end
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+#set($messages=${ctx.messages})
+<html>
+<head>
+	<meta charset="UTF-8">
+</head>
+<body style="padding: 0; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 12px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+	## HEADER include
+	${ctx.header}
+
+	## MOOD IMAGE
+	<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+		<tr>
+			<td style="border-left: 1px solid #cccccc; border-right: 1px solid #cccccc;">
+				${ctx.cmsSlotContents.MoodImage}
+			</td>
+		</tr>
+		<tr>
+			<td height="5" bgcolor="#AA1936"style="border-right: 1px solid #cccccc; border-left: 1px solid #cccccc;"></td>
+		</tr>
+	</table>
+
+	## CONTENT
+	<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+		<tr>
+			<td style="border-collapse: collapse; border-right: 1px solid #cccccc; border-left: 1px solid #cccccc; padding: 20px;">
+				## title
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 20px;">${messages.title}</p>
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.getMessage("text", "${ctx.topic}")}</p>
+
+				## button
+				<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-spacing: 0; border-collapse: collapse;font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+					<tr>
+						<td style="padding-bottom: 12px;">
+							<table border="0" width="100%" cellpadding="0" cellspacing="0" style="font-size: 12px;">
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">&#160;</td>
+									<td width="50%" style="border-collapse: collapse;">&#160;</td>
+								</tr>
+								<tr>
+									<td colspan="2" style="border-collapse: collapse;"><h4>${messages.yourData}:</h4></td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">${messages.topic}:</td>
+									<td width="50%" style="border-collapse: collapse;">${ctx.topic}</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">${messages.seminarDate}:</td>
+									<td width="50%" style="border-collapse: collapse;">${ctx.seminarDate}</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">${messages.customerNumber}:</td>
+									<td width="50%" style="border-collapse: collapse;">#if(${ctx.customerNumber})${ctx.customerNumber}#else - #end</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">${messages.companyName}:</td>
+									<td width="50%" style="border-collapse: collapse;">#if(${ctx.companyName})${ctx.companyName}#else - #end</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">${messages.customerName}:</td>
+									<td width="50%" style="border-collapse: collapse;">${ctx.salutation} &nbsp; ${ctx.firstName} &nbsp; ${ctx.lastName}</td>
+								</tr>
+								<tr><td colspan="2" style="border-collapse: collapse;">&#160;</td></tr>
+								<tr>
+									<td colspan="2" style="border-collapse: collapse;"><h5>${messages.address}:</h5></td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">&nbsp;&nbsp;&nbsp;${messages.department}:</td>
+									<td width="50%" style="border-collapse: collapse;">#if(${ctx.department})${ctx.department}#else - #end</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">&nbsp;&nbsp;&nbsp;${messages.street}:</td>
+									<td width="50%" style="border-collapse: collapse;">${ctx.street} &nbsp; #if(${ctx.number})${ctx.number}#end</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">&nbsp;&nbsp;&nbsp;${messages.pobox}:</td>
+									<td width="50%" style="border-collapse: collapse;">#if(${ctx.pobox})${ctx.pobox}#else - #end</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">&nbsp;&nbsp;&nbsp;${messages.zipCode}:</td>
+									<td width="50%" style="border-collapse: collapse;">${ctx.zip}</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">&nbsp;&nbsp;&nbsp;${messages.place}:</td>
+									<td width="50%" style="border-collapse: collapse;">${ctx.place}</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">&nbsp;&nbsp;&nbsp;${messages.country}:</td>
+									<td width="50%" style="border-collapse: collapse;">${ctx.country}</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">&nbsp;&nbsp;&nbsp;${messages.phone}:</td>
+									<td width="50%" style="border-collapse: collapse;">#if(${ctx.directPhone})${ctx.directPhone}#else - #end</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">&nbsp;&nbsp;&nbsp;${messages.fax}:</td>
+									<td width="50%" style="border-collapse: collapse;">#if(${ctx.fax})${ctx.fax}#else - #end</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">&nbsp;&nbsp;&nbsp;${messages.email}:</td>
+									<td width="50%" style="border-collapse: collapse;">${ctx.eMail}</td>
+								</tr>
+								<tr>
+									<td colspan="2" style="border-collapse: collapse;">&#160;</td>
+								</tr>
+								<tr>
+									<td width="50%" style="border-collapse: collapse;">${messages.comment}:</td>
+									<td width="50%" style="border-collapse: collapse;">#if(${ctx.comment})${ctx.comment}#else - #end</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.complimentaryClosing}</p>
+			</td>
+		</tr>
+	</table>
+
+	## FOOTER include
+	${ctx.footer}
+</body>
+</html>

@@ -1,0 +1,195 @@
+.o-cr-inline-datepicker {
+  padding-top: $spacing-unit * 2;
+  padding-left: $spacing-unit * 3;
+  border-top: 2px solid $ux-light-grey;
+
+  @media #{$ipad} {
+    padding-left: $spacing-unit * 10;
+  }
+
+  &__info-txt {
+    @include font-size(12px);
+    padding-left: $spacing-unit * 10;
+    margin: ($spacing-unit * 4) 0 0;
+  }
+
+  .ui-datepicker {
+    width: 100%;
+    margin: 0;
+    background: transparent;
+
+    .ui-datepicker {
+      &-header {
+        display: flex;
+        align-items: center;
+        padding-bottom: 0;
+        background: transparent;
+        color: $colour-dark-grey;
+
+        &:after {
+          content: normal;
+        }
+      }
+
+      &-title {
+        margin: 0;
+        font-weight: 600;
+      }
+
+      &-next,
+      &-prev {
+        width: 30px !important; // Overriding ui-datepicker styles
+        height: 30px !important; // Overriding ui-datepicker styles
+        background-image: none;
+
+        &:before {
+          @include font-size(18px);
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $ux-input-border-color-light;
+          font-family: $fontAwesome;
+          font-weight: 900;
+        }
+
+        &:not(.ui-state-disabled):hover:before {
+          color: $ux-grey;
+        }
+
+        &.ui-state-disabled {
+          &:before {
+            opacity: .4;
+            cursor: not-allowed;
+          }
+        }
+      }
+
+      &-next {
+        right: 20px;
+
+        &:before {
+          content: $fa-angle-right;
+        }
+      }
+
+      &-prev {
+        right: 60px;
+        left: auto;
+
+        &:before {
+          content: $fa-angle-left;
+        }
+      }
+
+      &-calendar {
+        border: none;
+        margin-left: -15px; // Since cells contain fixed width, there is space around, so we want to align cells with other data
+
+        a,
+        .ui-state-default {
+          margin: auto;
+        }
+
+        thead {
+          th {
+            @include font-size(14px);
+            color: $ux-grey;
+            font-weight: 500;
+          }
+        }
+
+        tbody {
+          td {
+            padding-top: $spacing-unit * 2;
+
+            &.ui-datepicker-today {
+              &,
+              &.ui-state-disabled {
+                .ui-state-default {
+                  text-decoration: none;
+
+                  &,
+                  &:hover {
+                    border-color: $colour-dist-grey;
+                    background: $colour-white;
+                    color: $colour-dist-grey;
+                  }
+                }
+              }
+            }
+
+            &.ui-datepicker-current-day {
+              .ui-state-default {
+                &,
+                &:hover {
+                  background: $colour-dist-grey;
+                  border-color: $colour-dist-grey;
+                  color: $colour-white;
+                }
+              }
+            }
+
+            &.ui-state-disabled {
+              .ui-state-default {
+                text-decoration: line-through;
+                cursor: not-allowed;
+
+                &,
+                &:hover {
+                  border-color: $cr-inline-datepicker-disabled-bg;
+                  background-color: $cr-inline-datepicker-disabled-bg;
+                  color: $ux-light-grey;
+                }
+              }
+            }
+          }
+
+          .ui-state-default {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border: 2px solid $ux-light-grey;
+            border-radius: 40px;
+            font-weight: 600;
+
+            @media #{$ipad} {
+              width: 40px;
+              height: 40px;
+            }
+          }
+
+          a {
+            color: $colour-black;
+
+            &,
+            &:hover {
+              background: $colour-white;
+            }
+
+            &.ui-state-active {
+              &,
+              &:hover {
+                background: $ux-page-bg;
+              }
+            }
+
+            &.ui-state-hover {
+              border-color: darken($ux-light-grey, 10%);
+            }
+          }
+
+          span {
+            color: $ux-grey;
+          }
+        }
+      }
+    }
+  }
+}

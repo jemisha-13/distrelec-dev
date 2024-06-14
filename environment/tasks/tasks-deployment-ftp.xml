@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Deployment over FTP
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-deployment-ftp" basedir=".">
+
+
+	<!--
+	=================================
+	macro: testFtpConnection
+	=================================
+	-->
+	<macrodef name="testFtpConnection" description="Test, if the FTP connection can be establish.">
+		<sequential>
+		    <echo message="Testing FTP-Connection to '${ftp.server}' with user '${ftp.username}'..." />
+			<trycatch property="exceptionMessage" reference="exceptionReference">
+			  <try>
+				 <ftp server="${ftp.server}" userid="${ftp.username}" password="${ftp.password}" action="mkdir" remotedir="${ftp.deployment.dir.base}/connectiontest" passive="true" />
+ 				 <ftp server="${ftp.server}" userid="${ftp.username}" password="${ftp.password}" remotedir="${ftp.deployment.dir.base}/connectiontest" passive="true">
+					<fileset dir=".">
+						<include name="readme.txt" />
+					</fileset>
+				 </ftp>
+			  </try>
+			  <catch>
+			  	<fail>Error during FTP-Test: ${exceptionMessage}.</fail>
+			  </catch>
+			</trycatch>
+		    <echo message="FTP-Connection successfully tested." />
+			
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: createDeploymentUnitInFtp (client part)
+	=================================
+	-->
+	<macrodef name="createDeploymentUnitInFtp" description="Create a deployment unit and uploads it on the ftp server.">
+		<sequential>
+			<testFtpConnection />
+			<delete dir="${hybris.extensions.home}" />
+			<delete dir="${second.hybris.extensions.home}" />
+			<delete dir="${project.home}/deployment" />
+			<antcall target="checkout" />
+			<antcall target="updateHybrisPlatformAndExtensions" />
+			<antcall target="configure" />
+			<antcall target="clean" />
+			<antcall target="build" />
+			<antcall target="createproduction" />
+			<antcall target="uploadDeploymentUnitToFtp" />
+		</sequential>
+	</macrodef>
+	
+	<!--
+	=================================
+	macro: uploadDeploymentUnitToFtp (client part)
+	=================================
+	-->
+	<macrodef name="uploadDeploymentUnitToFtp" description="Upload the zip file to FTP">
+		<sequential>
+			<detectDeploymentRelease />
+			
+			<echo message="Set ftp.deployment.dir.release to ${releasePath}" />
+			<property name="ftp.deployment.dir.release" value="${ftp.deployment.dir.base}/${releasePath}" />
+
+			
+			<echo message="Upload the zip file to ftp: ${ftp.server}" />
+			
+			<ftp server="${ftp.server}" userid="${ftp.username}" password="${ftp.password}" action="mkdir" remotedir="${ftp.deployment.dir.release}" passive="true" />
+			<ftp server="${ftp.server}" userid="${ftp.username}" password="${ftp.password}" remotedir="${ftp.deployment.dir.release}" passive="true">
+				<fileset dir="${hybris.home}\temp\hybris\hybrisServer">
+					<include name="hybrisServer-AllExtensions.zip" />
+					<include name="hybrisServer-Platform.zip" />
+				</fileset>
+			</ftp>
+		</sequential>
+	</macrodef>
+	
+	<!--
+	=================================
+	macro: installDeploymentUnitFromFtp (server part)
+	=================================
+	-->
+	<macrodef name="installDeploymentUnitFromFtp" description="Install a deployment unit, previously created with ant target 'createDeploymentUnitInFtp', from FTP on a server. if the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk.">
+		<sequential>
+			<delete dir="${project.home}/deployment" />
+			<antcall target="downloadDeploymentUnitFromFtp" />
+			<antcall target="extractProductionZip" >
+				<param name="fromPath" >${project.home}/deployment</param>
+			</antcall>
+			<antcall target="configureHybrisServer" />
+			<antcall target="rebuildProduction" />
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: downloadDeploymentUnitFromFtp (server part)
+	=================================
+	-->
+	<macrodef name="downloadDeploymentUnitFromFtp" description="Download the zip file from FTP. if the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk.">
+		<sequential>
+			<detectDeploymentRelease />
+			
+			<echo message="Set ftp.deployment.dir.release to ${releasePath}" />
+			<property name="ftp.deployment.dir.release" value="${ftp.deployment.dir.base}/${releasePath}" />
+			
+			<echo message="Download deployment unit from ${ftp.server} and path ${ftp.deployment.dir.release}" />
+			<ftp action="get" server="${ftp.server}" userid="${ftp.username}" password="${ftp.password}" remotedir="${ftp.deployment.dir.release}" verbose="yes" passive="true">
+				<fileset dir="${project.home}/deployment">
+					<include name="hybrisServer-AllExtensions.zip" />
+					<include name="hybrisServer-Platform.zip" />
+				</fileset>
+			</ftp>
+		</sequential>
+	</macrodef>
+
+
+</project>
+

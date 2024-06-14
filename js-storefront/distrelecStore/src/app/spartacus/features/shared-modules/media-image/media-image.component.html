@@ -1,0 +1,19 @@
+<div *ngIf="containsWidthAndHeight; else noWidthAndHeightTemplate">
+  <img
+    [attr.alt]="mediaData.altText"
+    [ngClass]="{ 'full-width': isCategoryPage$ | async }"
+    [ngSrc]="mediaData.url"
+    [width]="mediaData.width"
+    [height]="mediaData.height"
+    [priority]="loadingPriority"
+  />
+</div>
+
+<ng-template #noWidthAndHeightTemplate>
+  <img
+    [attr.alt]="mediaData.altText"
+    [src]="mediaData.url"
+    [fetchpriority]="loadingPriority ? 'high' : 'auto'"
+    [loading]="loadingPriority ? 'eager' : 'lazy'"
+  />
+</ng-template>

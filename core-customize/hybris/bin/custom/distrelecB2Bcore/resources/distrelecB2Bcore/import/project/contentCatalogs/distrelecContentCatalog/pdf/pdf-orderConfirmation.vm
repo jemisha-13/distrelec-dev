@@ -1,0 +1,105 @@
+## messageSource=classpath:/distrelecB2Bcore/messages/$site/pdf-orderConfirmation_$lang.properties
+#set($order=${ctx.orderModel})
+#set($pickupLocation=$order.pickupLocation)
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+<?xml version="1.0" encoding="UTF-8" ?>
+<ORDER>
+	<HEADER>
+		<LOGO_URL>${ctx.logoURL}</LOGO_URL>
+		<COMPANY_NAME>${ctx.messages.headerCompanyName}</COMPANY_NAME>
+		<STREET>${ctx.messages.headerStreet}</STREET>
+		<CITY>${ctx.messages.headerCity}</CITY>
+		<TEL>${ctx.messages.headerTel}</TEL>
+		<FAX>${ctx.messages.headerFax}</FAX>
+		<URL>${ctx.messages.headerUrl}</URL>
+		<EMAIL>${ctx.messages.headerEmail}</EMAIL>
+		<VAT>${ctx.messages.vatNumber}</VAT>
+	</HEADER>
+	<ORDER_INFO>
+		<ORDER_CODE_LABEL>${ctx.messages.orderCode}</ORDER_CODE_LABEL>
+		<ORDER_CODE>$!order.code</ORDER_CODE>
+		<USER_NUMBER_LABEL>${ctx.messages.userNumber}</USER_NUMBER_LABEL>
+		<USER_NUMBER>$!{ctx.customerModel.defaultB2BUnit.erpCustomerID}</USER_NUMBER>
+		<DATE_LABEL>${ctx.messages.date}</DATE_LABEL>
+		<DATE>$!{ctx.formattedDate}</DATE>
+		#if ($order.costCenter)
+		<COST_CENTER_NUMBER_LABEL>${ctx.messages.costCenterNumber}</COST_CENTER_NUMBER_LABEL>
+		<COST_CENTER_NUMBER>$!StringEscapeUtils.escapeXml($order.costCenter)</COST_CENTER_NUMBER>
+		#end
+		#if ($order.projectNumber)
+		<PROJECT_NUMBER_LABEL>${ctx.messages.projectNumber}</PROJECT_NUMBER_LABEL>
+		<PROJECT_NUMBER>$!StringEscapeUtils.escapeXml($order.projectNumber)</PROJECT_NUMBER>
+		#end
+		#if ($order.requestedDeliveryDate)
+		<REQUESTED_DELIVERY_DATE_LABEL>${ctx.messages.requestedDeliveryDate}</REQUESTED_DELIVERY_DATE_LABEL>
+		<REQUESTED_DELIVERY_DATE>$order.requestedDeliveryDate</REQUESTED_DELIVERY_DATE>
+		#end
+		<DELIVERY_MODE_LABEL>${ctx.messages.deliveryMode}</DELIVERY_MODE_LABEL>
+		<DELIVERY_MODE_CODE>$!StringEscapeUtils.escapeXml($order.deliveryMode.code)</DELIVERY_MODE_CODE>
+		<PAYMENT_MODE_LABEL>${ctx.messages.paymentMode}</PAYMENT_MODE_LABEL>
+		<DELIVERY_MODE>$!StringEscapeUtils.escapeXml(${ctx.deliveryMode})</DELIVERY_MODE>
+		<PAYMENT_MODE>$!StringEscapeUtils.escapeXml(${ctx.paymentMode})</PAYMENT_MODE>
+		<USER_TYPE>$!{ctx.customerModel.customerType.code}</USER_TYPE>
+		#if ($order.note)
+		<ORDER_NOTE_LABEL>${ctx.messages.orderNote}</ORDER_NOTE_LABEL>
+		<ORDER_NOTE>$!StringEscapeUtils.escapeXml($order.note)</ORDER_NOTE>
+		#end
+	</ORDER_INFO>
+	<PAYMENT_ADDRESS>
+		<LABEL>${ctx.messages.paymentAddress}</LABEL>
+		${ctx.paymentAddress}
+	</PAYMENT_ADDRESS>
+	<DELIVERY_ADDRESS>
+		<LABEL>${ctx.messages.deliveryAddress}</LABEL>
+		${ctx.deliveryAddress}
+	</DELIVERY_ADDRESS>
+	<PICKUP_LOCATION>
+		<LABEL>${ctx.messages.pickupLocation}</LABEL>
+		<NAME>$!StringEscapeUtils.escapeXml($pickupLocation.pickupName)</NAME>		
+		<STREET>$!StringEscapeUtils.escapeXml($pickupLocation.pickupStreetName) $!StringEscapeUtils.escapeXml($pickupLocation.pickupStreetNumber)</STREET>		
+		<CITY>$!StringEscapeUtils.escapeXml($pickupLocation.pickupPostalCode) $!StringEscapeUtils.escapeXml($pickupLocation.pickupTown)</CITY>
+		<PHONE>$!StringEscapeUtils.escapeXml($pickupLocation.pickupPhone)</PHONE>
+		<OPENING_HOURS_MO_FR>${ctx.messages.pickupOpeningHoursMoFr} $!StringEscapeUtils.escapeXml($pickupLocation.pickupOpeningHoursMoFr)</OPENING_HOURS_MO_FR>
+		<OPENING_HOURS_SA>${ctx.messages.pickupOpeningHoursSa} $!StringEscapeUtils.escapeXml($pickupLocation.pickupOpeningHoursSa)</OPENING_HOURS_SA>
+	</PICKUP_LOCATION>
+	<TABLE_HEADER>
+		<ART_NUMBER>${ctx.messages.tableHeaderArticleNumber}</ART_NUMBER>
+		<DESCRIPTION>${ctx.messages.tableHeaderDescription}</DESCRIPTION>
+		<ART_REFERENCE>${ctx.messages.tableHeaderArticleReference}</ART_REFERENCE>
+		<PIECES>${ctx.messages.tableHeaderPieces}</PIECES>
+		<LIST_PRICE>${ctx.messages.tableHeaderListPrice}</LIST_PRICE>
+		<TOTAL_PRICE>${ctx.messages.tableHeaderTotalPrice}</TOTAL_PRICE>
+	</TABLE_HEADER>
+	<ORDER_ENTRIES>
+			#foreach ($entry in ${ctx.orderModel.entries})
+				<ORDER_ENTRY>
+					<PRODUCT_CODE>$!entry.product.codeMovex</PRODUCT_CODE>
+					<PRODUCT_NAME>$!StringEscapeUtils.escapeXml($entry.product.name)</PRODUCT_NAME>
+					<PRODUCT_REFERENCE>$!StringEscapeUtils.escapeXml($entry.customerReference)</PRODUCT_REFERENCE>
+					<PIECES>$!entry.quantity</PIECES>
+					<LIST_PRICE>$!{ctx.getFormattedPrice($entry.baseNetPrice)}</LIST_PRICE>
+					<TOTAL_PRICE>$!{ctx.getFormattedPrice($entry.totalNetPrice)}</TOTAL_PRICE>
+					<CURRENCY>$order.currency.isocode</CURRENCY>
+				</ORDER_ENTRY>
+			#end
+			<CURRENCY>$order.currency.isocode</CURRENCY>
+			<SUBTOTAL_LABEL>${ctx.messages.subtotal}</SUBTOTAL_LABEL>
+			<DELIVERY_COST_LABEL>${ctx.messages.deliveryCost}</DELIVERY_COST_LABEL>
+			<PAYMENT_COST_LABEL>${ctx.messages.paymentCost}</PAYMENT_COST_LABEL>
+			<TOTAL_TAX_LABEL>${ctx.messages.totalTax}</TOTAL_TAX_LABEL>
+			<TOTAL_PRICE_LABEL>${ctx.messages.totalPrice}</TOTAL_PRICE_LABEL>
+			<SUBTOTAL>$!{ctx.getFormattedPrice($order.netSubTotal)}</SUBTOTAL>
+			<DELIVERY_COST>$!{ctx.getFormattedPrice($order.netDeliveryCost)}</DELIVERY_COST>
+			<PAYMENT_COST>$!{ctx.getFormattedPrice($order.netPaymentCost)}</PAYMENT_COST>
+			<TOTAL_TAX>$!{ctx.getFormattedPrice($order.totalTax)}</TOTAL_TAX>
+			<TOTAL_PRICE>$!{ctx.getFormattedPrice($order.totalPrice)}</TOTAL_PRICE>
+			
+			#if ($order.netPaymentCost > 0.0) 
+				<SHOW_PAYMENT_COST>show</SHOW_PAYMENT_COST> 
+			#else 
+				<SHOW_PAYMENT_COST>hide</SHOW_PAYMENT_COST> 
+			#end
+			
+	</ORDER_ENTRIES>
+	<INFO_TEXT>${ctx.messages.infoText}</INFO_TEXT>
+</ORDER>

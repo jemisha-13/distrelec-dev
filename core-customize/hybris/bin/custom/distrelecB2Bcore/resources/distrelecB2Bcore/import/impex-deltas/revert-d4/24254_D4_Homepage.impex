@@ -1,0 +1,50 @@
+# Update the banner for D4 Homepage.
+$country=FR
+
+# Constants
+$mediaTranslator = de.hybris.platform.impex.jalo.media.MediaDataTranslator
+$siteResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/revert-d4/media/pdp
+$mode = Staged
+
+# FR Catalog
+$contentCatalog = distrelec_FRContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = $mode])[default = $contentCatalog:$mode]
+
+# Default Catalog
+$defaultContentCatalog=Default
+$defaultContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $defaultContentCatalog]), CatalogVersion.version[default = $mode])[default = $defaultContentCatalog:$mode]
+
+# International Catalog
+$internationalContentCatalog = distrelec_IntContentCatalog
+$internationalContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $internationalContentCatalog]), CatalogVersion.version[default = $mode])[default = $internationalContentCatalog:$mode]
+
+INSERT_UPDATE DistFeaturedProductsComponent ;uid[unique = true]; $internationalContentCV[unique = true];dataAttributes[map-delimiter = |];&componentRef
+                                            ;comp_00000048; ;aaSectionPos->c1r3 | aaSectionTitle->Featured products | aaLinkText->Shop Now | aaType->homepage-interaction;comp_00000048
+
+## Hide D4 dernieres components
+# Hide the inside of the D4 Offers Section
+UPDATE DistComponentGroup;uid[unique = true];$contentCV[unique = true];visible[default = false]
+                        ;cmsitem_00020010;                                 ;
+                        ;Homepage-TopBrands-D4;                            ;
+
+# Hide this component too
+UPDATE DistFeaturedProductsComponent;uid[unique = true];$contentCV[unique = true];visible[default = false]
+                                    ;d4-fp2;           ;                                ;
+
+##loggedOutHomepageDistrelecServicesGroup - Intentionally left blank
+UPDATE DistComponentGroup; uid[unique = true]; $contentCV[unique = true];visible[default = true];&componentRef
+                         ;loggedOutHomepageDistrelecServicesGroup;;;loggedOutHomepageDistrelecServicesGroup
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]; $internationalContentCV[unique = true];visible[default = true];&componentRef
+                                ;comp_00000049;;;comp_00000049
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]; $contentCV[unique = true];visible[default = true];&componentRef
+                                ;cmsitem_00020010;;;cmsitem_00020010
+                                ;Homepage-TopBrands-D4;;;Homepage-TopBrands-D4
+
+# loggedOutHomepageDistrelecServicesGroup - Intentionally left empty on Prod
+# comp_00000048 - Homepage Featured products INT - Week 1
+# loggedOutHomepageCurrentMagazineGroup - blog thing
+UPDATE ContentSlot; uid[unique = true];$contentCV[unique=true];cmsComponents(&componentRef)
+                  ;Homepage2018-MainContentSlot;;cmsitem_00020010, Homepage-TopBrands-D4,loggedOutHomepageDistrelecServicesGroup,comp_00000048
+                  ;Homepage2018-BottomContentSlot;;

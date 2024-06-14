@@ -1,0 +1,17 @@
+$contentCatalog = distrelec_FRContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$internationalContentCatalog = distrelec_IntContentCatalog
+$internationalContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $internationalContentCatalog]), CatalogVersion.version[default = Staged])[default = $internationalContentCatalog:Staged]
+
+
+UPDATE DistComponentGroup; uid[unique = true] 					   ; $contentCV[unique = true] ; &componentRef
+                         ; Homepage-TopBrands-D4 			   	   ; 						   ;  Homepage-TopBrands-D4
+                         ; loggedOutHomepageDistrelecServicesGroup ; 						   ;  loggedOutHomepageDistrelecServicesGroup
+
+UPDATE DistFeaturedProductsComponent; uid[unique = true] ; $internationalContentCV[unique = true] ; &componentRef
+                                    ; comp_00000048      ;                                        ; comp_00000048
+
+
+UPDATE ContentSlot; uid[unique = true]                 ; $contentCV[unique = true]; cmsComponents(&componentRef)
+                  ; Homepage2018-MainContentSlot       ;                          ; Homepage-TopBrands-D4,loggedOutHomepageDistrelecServicesGroup,comp_00000048

@@ -1,0 +1,59 @@
+# Add manufacturer data for assingnment testing
+INSERT_UPDATE Catalog;id[unique=true];name[lang=en]
+                     ;testCatalog    ;Electronics
+
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true]
+                            ;testCatalog             ;Online
+
+INSERT_UPDATE DistManufacturer;code[unique=true]                        ;name
+                              ;assignedAndHasActiveProducts             ;Assigned and has active products
+                              ;assignedAndHasPuchedOutActiveProducts    ;Assigned and has puched out active products
+                              ;assignedAndDoesntHaveActiveProducts      ;Assigned and doesnt have active products
+                              ;notAssignedAndDoesntHaveActiveProducts   ;Not assigned and doesnt have active producst
+                              ;notAssignedAndHasActiveProducts          ;Not assigned and has active products
+                              ;notAssignedAndHasPuchedOutActiveProducts ;Not assigned and has punched out active products
+                              ;assignedToOtherCountry                   ;Assigned to other country
+
+INSERT_UPDATE Country;isocode[unique=true];name
+                     ;test                ;Test country
+                     ;other               ;Other test country
+
+INSERT_UPDATE DistManufacturerCountry;manufacturer(code)[unique=true]       ;country(isocode)[unique=true]
+                                     ;assignedAndHasActiveProducts          ;test
+                                     ;assignedAndHasPuchedOutActiveProducts ;test
+                                     ;assignedAndDoesntHaveActiveProducts   ;test
+                                     ;assignedToOtherCountry                ;other
+
+$catalogVersion=catalogversion(catalog(id[default='testCatalog']), version[default='Online'])
+
+INSERT_UPDATE Product;code[unique=true]             ;manufacturer(code)                       ;$catalogVersion
+                     ;assigned_activeProduct        ;assignedAndHasActiveProducts             ;
+                     ;assigned_inactiveProduct      ;assignedAndDoesntHaveActiveProducts      ;
+                     ;assigned_punchedOutProduct    ;assignedAndHasPuchedOutActiveProducts    ;
+                     ;notassigned_activeProduct     ;notAssignedAndHasActiveProducts          ;
+                     ;notassigned_inactiveProduct   ;notAssignedAndDoesntHaveActiveProducts   ;
+                     ;notassigned_punchedOutProduct ;notAssignedAndHasPuchedOutActiveProducts ;
+                     ;other_activeProduct           ;assignedToOtherCountry                   ;
+
+INSERT_UPDATE DistSalesStatus;code[unique=true];buyableInShop;endOfLifeInShop;visibleInShop
+                             ;active           ;true         ;false          ;true  ;
+                             ;inactive         ;false        ;true           ;false ;
+
+INSERT_UPDATE DistBrand;code[unique=true];
+                       ;test             ;
+
+INSERT_UPDATE DistSalesOrg;code[unique=true];brand(code);country(isocode);erpSystem(code);
+                          ;test             ;test       ;test            ;SAP            ;
+
+INSERT_UPDATE DistSalesOrgProduct;salesOrg(code)[unique=true];product(code)[unique=true]    ;salesStatus(code);
+                                 ;test                       ;assigned_activeProduct        ;active           ;
+                                 ;test                       ;assigned_inactiveProduct      ;inactive         ;
+                                 ;test                       ;assigned_punchedOutProduct    ;active           ;
+                                 ;test                       ;notassigned_activeProduct     ;active           ;
+                                 ;test                       ;notassigned_inactiveProduct   ;inactive         ;
+                                 ;test                       ;notassigned_punchedOutProduct ;active           ;
+                                 ;test                       ;other_activeProduct           ;active           ;
+
+INSERT_UPDATE DistCOPunchOutFilter;country(isocode)[unique=true];product(code)[unique=true]    ;salesOrg(code);lastModifiedErp[dateformat=yyyy-MM-dd];validFromDate[dateformat=yyyy-MM-dd];validUntilDate[dateformat=yyyy-MM-dd];
+                                  ;test                         ;assigned_punchedOutProduct    ;test          ;1975-01-01                            ;1975-01-01                          ;9999-12-31                           ;
+                                  ;test                         ;notassigned_punchedOutProduct ;test          ;1975-01-01                            ;1975-01-01                          ;9999-12-31                           ;

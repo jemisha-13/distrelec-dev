@@ -1,0 +1,322 @@
+.skin-cart-pricecalcbox-cart-page {
+  display: flex;
+  flex-wrap: wrap;
+  float: left;
+  padding: ($spacing-unit * 2) ($spacing-unit * 3);
+  width: 100%;
+
+  @media #{$ipad-landscape} {
+    padding: 0;
+  }
+
+  .reevo-container {
+      margin-top: $spacing-unit * 2;
+      order: 5;
+
+      @media #{$ipad-landscape} {
+        margin-bottom: $spacing-unit * 4;
+        margin-top: 0;
+      }
+
+      .reevo-checkbox-container {
+        display: inline-block;
+        height: 20px;
+        margin-top: $spacing-unit * 9;
+        width: 5%;
+
+        @media #{$ipad-landscape} {
+            width: 10%;
+        }
+      }
+
+      .reevo-checkbox {
+        cursor: pointer;
+        height: 12px;
+        position: relative;
+        top: -45px;
+        width: 12px;
+      }
+
+      .reevo-label-container {
+        display: inline-block;
+        float: right;
+        @include font-size(12px);
+        @include line-height(14px);
+        width: 95%;
+
+        @media #{$ipad-landscape} {
+          width: 90%;
+        }
+
+        .reevo-label {
+          cursor: default;
+        }
+      }
+
+      .fa-info-circle {
+        color: $colour-checkout-blue;
+        cursor: pointer;
+        @include font-size(14px);
+        padding-left: $spacing-unit - 3;
+
+        @media #{$ipad-landscape} {
+          padding-left: $spacing-unit - 1;
+        }
+
+        &:hover:after {
+          transition: all 0.1s ease 0.5s;
+          opacity: 1;
+          visibility: visible;
+        }
+
+        &:after {
+            background-color: $colour-white;
+            bottom: 5em;
+            border: 1px solid $border-global-grey;
+            box-shadow: 1px 1px 3px $colour-black;
+            content: attr(data-title);
+            color: $colour-paragraph-grey;
+            font-family: $font-stack-dist;
+            font-weight: normal;
+            @include font-size(12px);
+            left: 10%;
+            opacity: 0;
+            position: absolute;
+            padding: ($spacing-unit - 3) ($spacing-unit);
+            width: 80%;
+            white-space: normal;
+            visibility: hidden;
+            z-index: 100;
+
+            @media #{$ipad-landscape} {
+              bottom: -2em;
+              left: 50%;
+              width: 80%;
+            }
+        }
+      }
+  }
+
+  .voucher-holder {
+    display: none;
+    order: 3;
+    width: 100%;
+
+    &.active {
+      display: block;
+    }
+
+    @media #{$ipad-landscape} {
+      display: block;
+      order: 4;
+    }
+  }
+
+  .calc-box {
+    border: 0;
+
+    &.calc-box-total {
+      background: transparent;
+      border: 0;
+      color: $colour-black;
+      display: flex;
+      flex-wrap: wrap;
+      order: 4;
+
+      @media #{$ipad-landscape} {
+        border-top: 1px solid $cart-pricecalbox-cart-page-border-grey;
+        display: table;
+        order: 3;
+      }
+
+      .calc-row {
+        display: inline-block;
+        flex-shrink: 0;
+
+        @media #{$ipad-landscape} {
+          display: table-row;
+        }
+
+        .calc-cell {
+          display: inline-block;
+
+          @media #{$ipad-landscape} {
+            display: table-cell;
+          }
+
+          &.nth-1 {
+            display: block;
+            width: auto;
+
+            @media #{$ipad-landscape} {
+              display: inherit;
+              width: 55%;
+            }
+
+            small {
+              @include font-size(12px);
+              font-weight: 400;
+              margin-bottom: $spacing-unit * 2;
+              margin-left: $spacing-unit;
+
+              @media #{$ipad-landscape} {
+                display: block;
+                margin-left: 0;
+              }
+            }
+          }
+
+          &.nth-2 {
+            @include line-height(14px);
+            width: auto;
+
+            @media #{$ipad-landscape} {
+              @include line-height(50px);
+              @include font-size(12px);
+              width: 10%;
+            }
+
+            .currency {
+              @include font-size(15px);
+              font-weight: normal;
+
+              @media #{$ipad-landscape} {
+                @include font-size(12px);
+                font-weight: bold;
+              }
+            }
+          }
+
+          &.nth-3 {
+            font-weight: normal;
+            width: auto;
+
+            @media #{$ipad-landscape} {
+              font-weight: bold;
+              width: 30%;
+            }
+          }
+        }
+      }
+
+      .calc-box-total-btn {
+        flex-grow: 1;
+        text-align: right;
+
+        @media #{$ipad-landscape} {
+          display: none;
+        }
+
+        .btn-holder {
+          @include font-size(15px);
+          @include line-height(29px);
+          color: $link-blue;
+
+          .show-btn:hover,
+          .hide-btn:hover {
+            color: $link-dark-blue;
+            text-decoration: underline;
+          }
+
+          .hide-btn {
+            display: none;
+          }
+
+          .show-btn {
+            display: inline-block;
+          }
+
+          &.active {
+            .hide-btn {
+              display: inline-block;
+            }
+
+            .show-btn {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    &.calc-box-subtotal {
+      display: none;
+      font-weight: normal;
+
+      @media print {
+        display: table;
+      }
+
+      &.active {
+        display: table;
+      }
+
+      @media #{$ipad-landscape} {
+        display: table;
+      }
+    }
+
+    &.calc-box-details {
+      display: none;
+
+      @media print {
+        display: table;
+      }
+
+      &.active {
+        display: table;
+      }
+
+      @media #{$ipad-landscape} {
+        display: table;
+      }
+
+      .calc-cell {
+        &.nth-1 {
+          @include line-height(17px);
+          padding-bottom: ($spacing-unit * 3);
+
+          span {
+            @include font-size(12px);
+            display: block;
+
+            @media #{$ipad-landscape} {
+              @include font-size(10px);
+              padding-right: ($spacing-unit * 2);
+            }
+
+            @media #{$desktop} {
+              @include font-size(12px);
+            }
+          }
+        }
+      }
+    }
+
+    .calc-cell {
+      @include font-size(15px);
+      font-weight: 500;
+
+      @media #{$ipad-landscape} {
+        @include font-size(12px);
+      }
+
+      @media #{$desktop} {
+        @include font-size(15px);
+      }
+
+      &.nth-1 {
+        padding: 0;
+      }
+
+      &.nth-2 {
+        @include font-size(12px);
+        width: 10%;
+      }
+
+      &.nth-3 {
+        padding-right: 0;
+      }
+    }
+  }
+}

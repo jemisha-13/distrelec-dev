@@ -1,0 +1,170 @@
+<ng-container *ngIf="suggestions$ | async as suggestions">
+  <div
+    *ngIf="suggestions.results.products.length > 0"
+    class="container-suggest container"
+    [class.error-page-suggest]="pageType === 'ErrorPageTemplate'"
+  >
+    <div class="content">
+      <div *rxIf="suggestions.displayLeftSideSuggestions" class="left">
+        <div *rxIf="suggestions.results.termSuggestions.length" class="suggest-section">
+          <h3 class="suggest-title">{{ 'searchResults.searchSuggestions' | cxTranslate }}</h3>
+          <ul class="suggest-list">
+            <li *ngFor="let item of suggestions.results.termSuggestions" class="suggest-list-item">
+              <a
+                class="suggest-item-link"
+                [queryParams]="{ q: item.name, queryFromSuggest: true }"
+                routerLink="/search"
+              >
+                <div class="suggestion">
+                  <span class="name ellipsis">
+                    {{ item.name }}
+                  </span>
+                  <fa-icon [icon]="faAngleRight"></fa-icon>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div *rxIf="suggestions.results.categorySuggestions.length" class="suggest-section">
+          <h3 class="suggest-title">{{ 'text.plp.categories' | cxTranslate }}</h3>
+          <ul class="suggest-list">
+            <li *ngFor="let item of suggestions.results.categorySuggestions" class="suggest-list-item">
+              <a class="suggest-item-link" [absoluteRouterLink]="item.url" [queryParams]="{ queryFromSuggest: true }">
+                <div class="suggestion">
+                  <span class="name ellipsis">
+                    {{ item.name }}
+                  </span>
+                  <fa-icon [icon]="faAngleRight"></fa-icon>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div *ngIf="suggestions.results.manufacturerSuggestions.length" class="suggest-section">
+          <h3 class="suggest-title">{{ 'searchResults.manuBrands' | cxTranslate }}</h3>
+          <ul class="suggest-list">
+            <li *ngFor="let item of suggestions.results.manufacturerSuggestions" class="suggest-list-item">
+              <a class="suggest-item-link" [absoluteRouterLink]="item.url" [queryParams]="{ queryFromSuggest: true }">
+                <div class="suggestion">
+                  <span class="name ellipsis">
+                    {{ item.name }}
+                  </span>
+                  <fa-icon [icon]="faAngleRight"></fa-icon>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div *ngIf="suggestions.results.products.length" class="suggest-section prods">
+        <h3 class="suggest-title-header">
+          {{ 'searchResults.productSuggestions' | cxTranslate: { search: searchTerm } }}
+          <span class="suggest-category-type">
+            in
+            <span class="suggest-category-text">
+              {{ categoryName !== '' ? categoryName : ('form.search_all' | cxTranslate) }}
+            </span>
+          </span>
+        </h3>
+        <div #result class="results">
+          <ng-container *ngIf="currentChannel$ | async as currentChannel">
+            <ng-container *ngFor="let item of suggestions.results.products; let i = index">
+              <a
+                [attr.data-rowindex]="i + 1"
+                [class]="'suggest-row data-row-' + (i + 1)"
+                (click)="onProductClick(item, i, currentChannel)"
+              >
+                <div
+                  class="product-wrapper"
+                  [attr.data-href]="item?.url"
+                  [queryParams]="{ queryFromSuggest: true, itemList: itemListEntity.SUGGESTED_SEARCH }"
+                >
+                  <div class="product-image">
+                    <picture>
+                      <img [src]="item?.image" (error)="getDefaultImage($event)" height="68" width="82" />
+                    </picture>
+                  </div>
+                  <div class="product-row">
+                    <span class="product-name title-text" [innerHTML]="item?.name"></span>
+                    <span class="product-price text-highlight">
+                      {{ item?.priceData?.currency }}
+                      <span class="inner-price">
+                        {{ item?.priceData.price | price }}
+                      </span>
+                      <span class="vat-text">
+                        ({{ (currentChannel.channel === 'B2B' ? 'product.exc_vat' : 'product.inc_vat') | cxTranslate }})
+                      </span>
+                    </span>
+                  </div>
+                  <div class="product-row last" (click)="$event.stopPropagation(); $event.preventDefault()">
+                    <div class="product-details">
+                      <span
+                        class="tooltip-copy-actions"
+                        (click)="copyText(item.articleNr, 'article_' + item?.articleNr)"
+                      >
+                        <fa-icon [icon]="faCopy"></fa-icon>
+                        <span class="bold">Art.Nr.</span>
+                        {{ item?.articleNr | articleNumber: item?.articleNr }}
+
+                        <ng-container *ngIf="copiedState$ | async as copiedState">
+                          <app-article-tooltip
+                            *ngIf="copiedState['article_' + item?.articleNr]"
+                            [copiedText]="item?.articleNr"
+                          ></app-article-tooltip>
+                        </ng-container>
+                      </span>
+                      <span
+                        class="tooltip-copy-actions"
+                        [title]="item?.typeName"
+                        (click)="copyText(item?.typeName, 'manufacturer_' + item?.typeName)"
+                      >
+                        <fa-icon [icon]="faCopy"></fa-icon>
+                        <span class="bold">Man Pt. No.</span>
+                        {{ item?.typeName }}
+
+                        <ng-container *ngIf="copiedState$ | async as copiedState">
+                          <app-article-tooltip
+                            *ngIf="copiedState['manufacturer_' + item?.typeName]"
+                            [copiedText]="item?.typeName"
+                          ></app-article-tooltip>
+                        </ng-container>
+                      </span>
+
+                      <div
+                        *ngIf="testEnergyLabel(item?.energyEfficiency)"
+                        class="suggest-efficiency-label"
+                        (click)="scroll()"
+                      >
+                        <app-energy-efficiency-label
+                          [id]="i.toString(10)"
+                          [energyEfficiency]="getEnergyEfficiencyRating(item.energyEfficiency)"
+                          [energyEfficiencyLabelImageUrl]="
+                            getEnergyEfficiencyLabelImageUrl(item.energyEfficiencyLabelImageUrl)
+                          "
+                          [isSearchPopup]="true"
+                          (popupState)="eventFromChild($event)"
+                          arrowSize="small"
+                        ></app-energy-efficiency-label>
+                      </div>
+                    </div>
+                    <div class="product-cart">
+                      <app-search-suggestion-add-to-cart
+                        [artNr]="item?.articleNr | articleNumber: item?.articleNr"
+                        [index]="i"
+                        [moq]="+item?.itemMin"
+                        [qtyStep]="+item?.itemStep"
+                      ></app-search-suggestion-add-to-cart>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

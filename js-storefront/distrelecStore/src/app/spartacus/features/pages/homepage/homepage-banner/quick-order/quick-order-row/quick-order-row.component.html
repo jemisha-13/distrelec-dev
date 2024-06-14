@@ -1,0 +1,75 @@
+<div class="quick-order-row" id="quick-order-row-{{ rowNumber }}">
+  <div class="col-8 col-md-8 quickorder-input-wrap">
+    <input
+      class="field col-12 quickorder__article-number js-quickorder-field"
+      id="article-number-{{ rowNumber }}"
+      [attr.data-row-pos]="rowNumber"
+      [placeholder]="'homepage.ArtNrFull' | cxTranslate"
+      [value]="productCode"
+      [ngClass]="{ 'empty-order': submittedEmptyOrder && rowNumber === 0 }"
+      (keyup)="onSearch($event.target.value)"
+      (focus)="showDropdown = true"
+    />
+    <ul *rxIf="showDropdown && productResults$ | async as productResults" class="product-results">
+      <ng-container *rxFor="let item of productResults.products">
+        <li
+          *ngIf="item"
+          class="product-item"
+          [ngClass]="validateEnergy(item.energyEfficiency) ? 'h-60px' : 'h-90px'"
+          (click)="selectedProduct(item?.articleNr, item?.itemMin)"
+        >
+          <div class="product-image">
+            <img class="image-wrap" [alt]="item?.name" [src]="item?.image" />
+          </div>
+
+          <div class="product-info">
+            <h3 [title]="item?.name | stripHTMLTags" [innerHTML]="item?.name"></h3>
+            <p class="article-number">
+              <strong>{{ 'homepage.artNr' | cxTranslate }}</strong>
+              {{ item?.articleNr | articleNumber }}
+            </p>
+          </div>
+          <div class="product-currency">
+            <p class="dropdown-qty">
+              {{ item?.itemMin }} {{ 'cart.directorder.pieces' | cxTranslate }}
+              <br />
+              {{ item?.priceData?.currency }}
+            </p>
+          </div>
+          <div class="product-price">
+            {{ item?.priceData.price | price }}
+          </div>
+        </li>
+        <ng-container *ngIf="item.energyEfficiency">
+          <app-energy-efficiency-label
+            [isQuickOrder]="true"
+            [id]="item?.code + '-energy-efficiency-label'"
+            [energyEfficiency]="getEnergyLabel(item?.energyEfficiency)"
+            [energyEfficiencyLabelImageUrl]="getEnergyUrl(item.energyEfficiencyLabelImageUrl)"
+            [arrowSize]="'small'"
+          ></app-energy-efficiency-label>
+        </ng-container>
+      </ng-container>
+    </ul>
+  </div>
+  <div class="col-4 col-md-4 quickorder__quantity">
+    <input
+      #qty
+      class="qty col-12 js-quickorder-field"
+      id="quantity={{ rowNumber }}"
+      [ngClass]="{ 'empty-order': submittedEmptyOrder && rowNumber === 0 }"
+      [placeholder]="'homepage.qty' | cxTranslate"
+      [disabled]="isQtyDisabled"
+      (keyup)="validateQuantity($event.target.value)"
+      (focus)="hasErrors = false"
+      (focusout)="validateQuantity($event.target.value)"
+    />
+
+    <app-min-order-quantity-popup
+      *rxIf="hasErrors"
+      [minQuantity]="minQuantity"
+      [row]="rowNumber"
+      translationKey="homepage.quickOrderMoq"
+    ></app-min-order-quantity-popup>
+  </div>
+</div>

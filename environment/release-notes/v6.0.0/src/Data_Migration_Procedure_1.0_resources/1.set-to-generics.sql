@@ -1,0 +1,14 @@
+UPDATE composedtypes SET itemtypecode = 99, itemjndiname = 'de.hybris.platform.persistence.GenericItem' WHERE internalcode = 'DistErpPriceConditionType';
+UPDATE composedtypes SET itemtypecode = 99, itemjndiname = 'de.hybris.platform.persistence.GenericItem' WHERE internalcode = 'DistCarpetContentTeaser';
+UPDATE composedtypes SET itemtypecode = 99, itemjndiname = 'de.hybris.platform.persistence.GenericItem' WHERE internalcode = 'DistCarpetContentTeaserWithText';
+UPDATE composedtypes SET itemtypecode = 99, itemjndiname = 'de.hybris.platform.persistence.GenericItem' WHERE internalcode = 'DistCarpetItem';
+UPDATE composedtypes SET itemtypecode = 99, itemjndiname = 'de.hybris.platform.persistence.GenericItem' WHERE internalcode = 'DistExtCarpetItem';
+UPDATE composedtypes SET itemtypecode = 99, itemjndiname = 'de.hybris.platform.persistence.GenericItem' WHERE internalcode = 'DistExtHeroRotatingTeaser';
+UPDATE composedtypes SET itemtypecode = 99, itemjndiname = 'de.hybris.platform.persistence.GenericItem' WHERE internalcode = 'DistExtHeroRotatingTeaserItem';
+UPDATE composedtypes SET itemtypecode = 99, itemjndiname = 'de.hybris.platform.persistence.GenericItem' WHERE internalcode = 'DistHeroRotatingTeaser';
+UPDATE composedtypes SET itemtypecode = 99, itemjndiname = 'de.hybris.platform.persistence.GenericItem' WHERE internalcode = 'DistHeroRotatingTeaserItem';
+UPDATE composedtypes SET itemtypecode = 99, itemjndiname = 'de.hybris.platform.persistence.GenericItem' WHERE internalcode = 'DistHeroRotatingTeaserWithText';
+UPDATE composedtypes SET itemtypecode = 99, itemjndiname = 'de.hybris.platform.persistence.GenericItem' WHERE internalcode = 'DistRmaRequestProcessEntry';
+UPDATE composedtypes SET itemtypecode = 7, itemjndiname = 'de.hybris.platform.persistence.link.Link' WHERE internalcode = 'BaseStore2RegCountryRel';
+UPDATE composedtypes SET itemtypecode = 7, itemjndiname = 'de.hybris.platform.persistence.link.Link' WHERE internalcode = 'DistDownloadMedia2Language';
+UPDATE composedtypes SET itemtypecode = 7, itemjndiname = 'de.hybris.platform.persistence.link.Link' WHERE internalcode = 'DistVideoMedia2Language';

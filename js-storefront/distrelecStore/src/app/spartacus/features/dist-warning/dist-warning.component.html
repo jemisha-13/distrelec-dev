@@ -1,0 +1,61 @@
+<ng-container *ngIf="instance === 0 && warningMessages$ | async as warningMessages">
+  <div
+    #warning
+    *ngIf="
+      warningMessages.length > 0 && {
+        isExpanded: isExpanded$ | async,
+        animationPlaying: animationPlaying$ | async
+      } as state
+    "
+    class="app-disruption-message WARNING"
+    id="warning-banner"
+  >
+    <div class="container center">
+      <div
+        class="holder container"
+        [class.more]="state.isExpanded || state.animationPlaying"
+        [class.less]="!state.isExpanded && !state.animationPlaying"
+        [class.closed]="!state.isExpanded"
+        (animationend)="onAnimationEnd()"
+      >
+        <span
+          class="text-center wrap"
+          id="headline-text"
+          [class.d-none]="!getHeadline()"
+          [innerHTML]="getHeadline()"
+        ></span>
+        <span
+          class="text-center"
+          id="body-text"
+          [class.wrap]="!state.isExpanded && !state.animationPlaying"
+          [class.no-headline]="!getHeadline()"
+          [class.hide]="!state.isExpanded && !state.animationPlaying"
+          [class.fade-in]="state.isExpanded && pageLoaded"
+          [class.fade-out]="!state.isExpanded && pageLoaded"
+          [innerHTML]="getBody()"
+        ></span>
+        <button
+          *ngIf="showToggle$ | async"
+          class="toggle"
+          [id]="state.isExpanded ? 'read-less-btn' : 'read-more-btn'"
+          [ngClass]="state.animationPlaying ? 'd-none' : 'd-inline'"
+          (click)="toggleView()"
+        >
+          {{ (state.isExpanded ? 'product.read_less' : 'product.read_more') | cxTranslate }}
+        </button>
+      </div>
+    </div>
+
+    <button class="btn-close" id="close-btn" (click)="closeInfoMessage(warningMessages[0]?.uid)" type="button">
+      <app-icon [icon]="cancel" iconType="svg" iconAltText="Cancel icon" size="sm"></app-icon>
+    </button>
+
+    <div #ghost class="ghost container" [ngClass]="state.isExpanded ? 'more' : 'less'">
+      <span class="headline" [innerHTML]="getHeadline()"></span>
+      <span [innerHTML]="getBody()"></span>
+      <button class="ghost--button">
+        {{ (state.isExpanded ? 'product.read_less' : 'product.read_more') | cxTranslate }}
+      </button>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,16 @@
+<ul *ngIf="(totalCount | async) !== 1" class="facet-list">
+  <li
+    *ngFor="let facet of filters$ | async; index as index"
+    class="facet-group type-{{ facet.type | lowercase }} small"
+    id="facet-{{ index }}"
+  >
+    <div class="facet-item" id="facet-telescope-option-{{ index }}" (click)="facet.open = !facet.open">
+      <span [innerHtml]="facet.name"></span>
+      <app-icon *ngIf="facet.open" class="icon-arrow" [icon]="arrowUp" size="md"></app-icon>
+      <app-icon *ngIf="!facet.open" class="icon-arrow" [icon]="arrowDown" size="md"></app-icon>
+    </div>
+    <div *ngIf="facet.open">
+      <app-product-list-filter-values [facet]="facet" [index]="index"></app-product-list-filter-values>
+    </div>
+  </li>
+</ul>

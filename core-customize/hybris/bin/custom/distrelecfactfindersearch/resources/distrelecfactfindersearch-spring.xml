@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	<aop:aspectj-autoproxy />
+	<bean class="com.namics.hybris.toolbox.spring.HybrisConfigurationPropertyPlaceholderConfigurer"/>
+	
+	<!-- Export -->
+	<import resource="distrelecfactfindersearch-export-spring.xml" />
+	
+	<!-- Converters/Populators -->
+	<import resource="distrelecfactfindersearch-search-converters-spring.xml" />
+	<import resource="distrelecfactfindersearch-search-populators-spring.xml" />
+	
+	<!-- FactFinder WebService clients -->
+	<import resource="distrelecfactfindersearch-factfinder-webservices-spring.xml" />
+	
+	<!-- Services -->
+	<bean id="distff.productSearchService" class="com.namics.hybris.ffsearch.service.impl.FactFinderSearchServiceImpl" >
+		<property name="searchServiceConverter" ref="distff.searchServiceConverter"/>
+		<property name="searchRequestConverter" ref="distff.searchRequestConverter"/>
+		<property name="searchResponseConverter" ref="distff.searchResponseConverter"/>
+		<property name="searchResponsePagingConverter" ref="distff.searchResponsePagingConverter"/>
+		<property name="distEProcurementService" ref="distEProcurementCustomerConfigService" />
+	</bean>
+	<bean id="distff.autocompleteService" class="com.namics.hybris.ffsearch.service.impl.FactFinderAutocompleteServiceImpl" >
+		<property name="suggestRequestConverter" ref="distff.suggestRequestConverter"/>
+		<property name="suggestResponseConverter" ref="distff.suggestResponseConverter"/>
+		<property name="channelService" ref="distff.channelService" />
+	</bean>
+	<bean id="distff.directOrderAutocompleteService" parent="distff.autocompleteService">
+		<property name="suggestResponseConverter" ref="distff.directOrderSuggestResponseConverter"/>
+	</bean>
+	<bean id="distff.campaignService" class="com.namics.hybris.ffsearch.service.impl.FactFinderCampaignServiceImpl" >
+		<property name="cartRequestConverter" ref="distff.cartCampaignRequestConverter" />
+		<property name="requestConverter" ref="distff.campaignRequestConverter" />
+		<property name="responseConverter" ref="distff.campaignResponseConverter" />
+		<property name="responseFeedbackTextConverter" ref="distff.campaignResponseFeedbackTextConverter" />
+		<property name="channelService" ref="distff.channelService" />
+	</bean>
+	<bean id="distff.recommendationService" class="com.namics.hybris.ffsearch.service.impl.FactFinderRecommendationServiceImpl" >
+		<property name="cartRequestConverter" ref="distff.cartRecommendationRequestConverter" />
+		<property name="requestConverter" ref="distff.recommendationRequestConverter" />
+		<property name="responseConverter" ref="distff.recommendationResponseConverter" />
+		<property name="channelService" ref="distff.channelService" />
+	</bean>
+	<bean id="distff.trackingService" class="com.namics.hybris.ffsearch.service.impl.FactFinderTrackingServiceImpl" >
+		<property name="authentication" ref="distff.factFinderAuthentication" />
+		<property name="channelService" ref="distff.channelService" />
+		<property name="trackingWebserviceClient" ref="namff.trackingWebserviceClient"/>
+	</bean>
+	<bean id="distff.indexManagementService" class="com.namics.hybris.ffsearch.service.impl.FactFinderIndexManagementServiceImpl" >
+		<property name="indexManagementWebserviceClient" ref="namff.indexMgmtWebserviceClient" />
+		<property name="authentication" ref="distff.factFinderAuthentication" />
+		<property name="modelService" ref="modelService" />
+	</bean>
+	
+	<!-- Channels -->
+	<bean id="distff.channelService" class="com.namics.hybris.ffsearch.service.impl.FactFinderChannelServiceImpl" >
+		<property name="channelDao" ref="distff.channelDao" />
+		<property name="cmsSiteService" ref="cmsSiteService"/>
+		<property name="flexibleSearchService" ref="flexibleSearchService"/>
+		<property name="distCommerceCommonI18NService" ref="distCommerceCommonI18NService"/>
+	</bean>
+	<bean id="distff.channelDao" class="com.namics.hybris.ffsearch.service.impl.DistFactFinderChannelDaoImpl" >
+		<property name="flexibleSearchService" ref="flexibleSearchService"/>
+	</bean>
+	
+	<!-- Helpers -->
+	<bean id="distff.factFinderAuthentication" class="com.namics.hybris.ffsearch.service.impl.FactFinderAuthentication" />
+	
+	<!-- System Setup -->
+	<bean id="distrelecfactfindersearchSystemSetup" class="com.namics.hybris.ffsearch.setup.DistFactFindersearchSystemSetup"  parent="abstractCoreSystemSetup"/>
+	
+	<!-- AOP Logging -->
+	<bean id="stopWatchAspect" class="com.namics.distrelec.b2b.core.aop.StopWatchAspect" >
+		<property name="loggerName" value="com.namics.hybris.ffsearch" />
+		<property name="thresholdValue" value="1.0" />
+	</bean>
+	<aop:config>
+		<aop:aspect ref="stopWatchAspect">
+			<aop:around method="invoke" pointcut="execution(* com.namics.hybris.ffsearch.service.FactFinderAutocompleteService.*(..))" />
+			<aop:around method="invoke" pointcut="execution(* com.namics.hybris.ffsearch.service.FactFinderCampaignService.*(..))" />
+			<aop:around method="invoke" pointcut="execution(* com.namics.hybris.ffsearch.service.FactFinderIndexManagementService.*(..))" />
+			<aop:around method="invoke" pointcut="execution(* com.namics.hybris.ffsearch.service.FactFinderRecommendationService.*(..))" />
+			<aop:around method="invoke" pointcut="execution(* com.namics.hybris.ffsearch.service.FactFinderSearchService.*(..))" />
+			<aop:around method="invoke" pointcut="execution(* com.namics.hybris.ffsearch.service.FactFinderTrackingService.*(..))" />
+		</aop:aspect>
+	</aop:config>
+
+	<!-- Category -->
+	<bean id="distUpdateCategoryTraversalDataJob" class="com.namics.hybris.ffsearch.category.UpdateCategoryTraversalDataJob" parent="abstractJobPerformable">
+		<property name="updateCategoryTraversalDataService" ref="distUpdateCategoryTraversalDataService"/>
+	</bean>
+
+	<alias name="defaultDistUpdateCategoryTraversalDataService" alias="distUpdateCategoryTraversalDataService"/>
+	<bean id="defaultDistUpdateCategoryTraversalDataService" class="com.namics.hybris.ffsearch.category.DefaultUpdateCategoryTraversalDataService">
+		<property name="commonI18NService" ref="commonI18NService"/>
+		<property name="distCategoryDao" ref="categoryDao"/>
+		<property name="distFactFinderChannelDao" ref="distff.channelDao"/>
+		<property name="i18NService" ref="i18NService"/>
+		<property name="modelService" ref="modelService"/>
+		<property name="categoryModelUrlResolver" ref="categoryModelUrlResolver" />
+	</bean>
+
+	<bean id="searchBreadcrumbBuilder"
+		  class="com.namics.hybris.ffsearch.breadcrumb.SearchBreadcrumbBuilder">
+		<property name="categoryModelUrlResolver" ref="categoryModelUrlResolver"/>
+		<property name="messageSource" ref="messageSource"/>
+		<property name="i18nService" ref="i18nService"/>
+		<property name="commerceCategoryService" ref="commerceCategoryService"/>
+	</bean>
+</beans>

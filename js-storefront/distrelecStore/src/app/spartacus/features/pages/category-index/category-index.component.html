@@ -1,0 +1,21 @@
+<div *ngIf="categories$ | async as categories" class="category-index-holder container">
+  <div class="row">
+    <div *ngFor="let category of categories; index as i" class="col-12 col-md-6">
+      <div class="category-index-holder__item">
+        <div class="main-holder">
+          <a [id]="'category-' + i" [routerLink]="category.url">
+            <h2 class="category-title">{{ category.name }}</h2>
+          </a>
+        </div>
+
+        <div *ngFor="let subcategory of category.children; index as j" class="category-index-holder__sub">
+          <div class="sub-holder">
+            <a [id]="'category-' + i + '-subcategory-' + j" [routerLink]="subcategory.url">
+              <h3 class="subcategory-title">{{ subcategory.name }}</h3>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

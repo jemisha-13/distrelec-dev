@@ -1,0 +1,23 @@
+$atContentCatalog = distrelec_ATContentCatalog
+$atContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $atContentCatalog]), CatalogVersion.version[default = Staged])[default = $atContentCatalog:Staged]
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true]              ;name                             ;$atContentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=de]
+                              ;orderingDeliveriesPaymentLink ;Ordering deliveries payment link ;                         ;/cms/ordering        ;/cms/ordering
+                              ;returnsRepairsLink            ;Returns repairs link             ;                         ;/cms/returnorrepair  ;/cms/returnorrepair
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]             ;$atContentCV[unique=true] ;name                                ;item(CMSLinkComponent.uid, CMSLinkComponent.$atContentCV);navigationNode(uid, $atContentCV)
+                                ;NavNode_L2D_Services_01Entry ;                          ;"Ordering deliveries payment Entry" ;orderingDeliveriesPaymentLink                            ;NavNode_L2D_Services_01
+                                ;NavNode_L2D_Services_04Entry ;                          ;"Returns repairs Entry"             ;returnsRepairsLink                                       ;NavNode_L2D_Services_04
+
+
+$beContentCatalog = distrelec_BEContentCatalog
+$beContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $beContentCatalog]), CatalogVersion.version[default = Staged])[default = $beContentCatalog:Staged]
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true]              ;name                             ;$beContentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=fr];localizedUrl[lang=nl]
+                              ;orderingDeliveriesPaymentLink ;Ordering deliveries payment link ;                         ;/cms/ordering        ;/cms/ordering        ;/cms/ordering
+                              ;returnsRepairsLink            ;Returns repairs link             ;                         ;/cms/returnorrepair  ;/cms/returnorrepair  ;/cms/returnorrepair
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]             ;$beContentCV[unique=true] ;name                                ;item(CMSLinkComponent.uid, CMSLinkComponent.$beContentCV);navigationNode(uid, $beContentCV)
+                                ;NavNode_L2D_Services_01Entry ;                          ;"Ordering deliveries payment Entry" ;orderingDeliveriesPaymentLink                            ;NavNode_L2D_Services_01
+                                ;NavNode_L2D_Services_04Entry ;                          ;"Returns repairs Entry"             ;returnsRepairsLink                                       ;NavNode_L2D_Services_04
+

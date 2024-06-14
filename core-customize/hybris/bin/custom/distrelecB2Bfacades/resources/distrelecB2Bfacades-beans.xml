@@ -1,0 +1,1521 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2016 SAP SE or an SAP affiliate company.
+ All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+
+    <!-- Extending the ProductOption Enumeration -->
+    <enum class="de.hybris.platform.commercefacades.product.ProductOption">
+        <value>MIN_BASIC</value>
+        <value>KEYWORDS</value>
+        <value>ONLINE_PRICE</value>
+        <value>SIMILAR_PRODUCTS</value>
+        <value>ACCESSORIES</value>
+        <value>PROMOTION_LABELS</value>
+        <value>DIST_MANUFACTURER</value>
+        <value>COUNTRY_OF_ORIGIN</value>
+		<value>AUDIOS</value>
+        <value>DOWNLOADS</value>
+        <value>VIDEOS</value>
+        <value>PRODUCT_INFORMATION</value>
+        <value>CLASSIFICATION_AND_PRODUCT_INFORMATION</value>
+        <value>IMAGE360</value>
+        <value>TECH_ATTRIBUTE</value>
+        <value>BREADCRUMBS</value>
+        <value>ADDITIONAL</value>
+        <value>METADATA</value>
+        <value>ROBOTS</value>
+        <value>BULK_PERMISSION</value>
+        <value>CHANNEL_AVAILABILITY</value>
+    </enum>
+    <enum class="com.namics.distrelec.b2b.facades.user.data.DistConsentStatus">
+        <value>Y</value>
+        <value>N</value>
+        <value>DOUBLE_OPTIN_PENDING</value>
+        <value>NOT_FOUND</value>
+        <value>ERROR_FETCHING_DETAILS</value>
+    </enum>
+
+    <bean class="de.hybris.platform.acceleratorservices.hostedorderpage.data.HostedOrderPageData">
+        <description>POJO representation of Hosted order PageData.</description>
+        <property name="postUrl" type="String"/>
+        <property name="debugMode" type="Boolean"/>
+        <property name="parameters" type="java.util.Map&lt;String, String>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bcommercefacades.company.data.B2BUnitData">
+        <property name="vatID" type="String"/>
+        <property name="erpCustomerId" type="String"/>
+        <property name="onlinePriceCalculation" type="boolean"/>
+        <property name="country" type="de.hybris.platform.commercefacades.user.data.CountryData"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.user.data.TitleData">
+        <property name="sapCode" type="String"/>
+        <property name="active" type="boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.user.data.CustomerData">
+        <property name="customerType" type="de.hybris.platform.commerceservices.enums.CustomerType"/>
+        <property name="contactId" type="String"/>
+        <property name="companyName" type="String"/>
+        <property name="channelType" type="String"/>
+        <property name="department" type="String"/>
+        <property name="functionCode" type="String"/>
+        <property name="subscribedForNewsletter" type="String"/>
+        <property name="newsletter" type="boolean"/>
+        <property name="npsConsent" type="boolean"/>
+        <property name="doubleOptinActivated" type="boolean"/>
+        <property name="loginDisabled" type="boolean"/>
+        <property name="adminUser" type="boolean"/>
+        <property name="allowedToPlaceOpenOrders" type="boolean"/>
+        <property name="subscribePhoneMarketing" type="boolean"/>
+        <property name="vat4" type="String"/>
+        <property name="legalEmail" type="String"/>
+        <property name="optedForObsolescence" type="boolean"/>
+        <property name="categories"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.user.data.ObsolescenceCategoryData>"/>
+        <property name="allObsolCatSelected" type="boolean"/>
+        <property name="userProfileData" type="com.namics.distrelec.b2b.facades.customer.data.DistUserProfileData"/>
+        <property name="registeredAsGuest" type="Boolean"/>
+        <property name="contactAddress" type="de.hybris.platform.commercefacades.user.data.AddressData"/>
+        <property name="billingAddress" type="de.hybris.platform.commercefacades.user.data.AddressData"/>
+        <property name="ccPaymentInfos"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.CCPaymentInfoData>"/>
+        <property name="budget" type="de.hybris.platform.b2bcommercefacades.company.data.B2BBudgetData"/>
+        <property name="createdDate" type="java.util.Date"/>
+        <property name="functionName" type="String"/>
+        <property name="defaultPaymentMode" type="String"/>
+        <property name="defaultPaymentInfo" type="de.hybris.platform.commercefacades.order.data.CCPaymentInfoData"/>
+        <property name="functionNameEN" type="String"/>
+        <property name="defaultDeliveryMode" type="String"/>
+        <property name="encryptedUserID" type="java.lang.String"/>
+        <property name="rsCustomer" type="Boolean"/>
+        <property name="erpSelectedCustomer" type="Boolean"/>
+        <property name="consentConditionRequired" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.user.data.DistDepartmentData">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.user.data.ObsolescenceCategoryData">
+        <property name="isObsolCategorySelected" type="boolean"/>
+        <property name="category" type="de.hybris.platform.commercefacades.product.data.CategoryData"/>
+        <property name="categoryCode" type="String"/>
+    </bean>
+    <bean class="com.namics.distrelec.b2b.facades.user.data.ObsolescenceTempData">
+        <property name="optedForObsol" type="boolean"/>
+        <property name="obsolCategorySelected" type="boolean"/>
+        <property name="allCatSelected" type="boolean"/>
+        <property name="code" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.user.data.DistFunctionData">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.EnergyEfficencyData">
+        <property name="efficency" type="String"/>
+        <property name="power" type="String"/>
+        <property name="type" type="String"/>
+        <property name="manufacturer" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.DistHandlingUnitItem">
+        <property name="materialID" type="String"/>
+        <property name="articleName" type="String"/>
+        <property name="quantity" type="java.math.BigDecimal"/>
+        <property name="unit" type="String"/>
+        <property name="type" type="String"/>
+        <property name="manufacturer" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.DistHandlingUnit">
+        <property name="unitID" type="String"/>
+        <property name="trackingURL" type="String"/>
+        <property name="handlingUnitItem" type="java.util.List&lt;DistHandlingUnitItem>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.DistDeliveryData">
+        <property name="deliveryID" type="String"/>
+        <property name="deliveryDate" type="java.util.Date"/>
+        <property name="handlingUnit" type="java.util.List&lt;DistHandlingUnit>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bacceleratorfacades.order.data.B2BOrderApprovalData">
+        <property name="status" type="String"/>
+        <property name="decisionDate" type="java.util.Date"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.OrderHistoryData">
+        <property name="rmaStatus" type="boolean"/>
+        <property name="currency" type="String"/>
+        <property name="subTotal" type="Double"/>
+        <property name="totalTax" type="Double"/>
+        <property name="totalDiscounts" type="Double"/>
+        <property name="deliveryDate" type="java.util.Date"/>
+        <property name="track" type="String"/>
+        <property name="userFullName" type="String"/>
+        <property name="approvalStatus" type="String"/>
+        <property name="beforeOrderBudget" type="Double"/>
+        <property name="totalBudget" type="Double"/>
+        <property name="exceededBudget" type="Double"/>
+        <property name="invoiceIds" type="String"/>
+        <property name="orderReference" type="String"/>
+        <property name="closeDate" type="java.util.Date"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.DistMiniCategoryData">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+        <property name="url" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.cms.data.CategoryListData">
+        <property name="title" type="String"/>
+        <property name="moreLinkText" type="String"/>
+        <property name="categories"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.DistMiniCategoryData>"/>
+        <property name="dataAttributes" type="java.util.Map&lt;String,String>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.CCPaymentInfoData">
+        <property name="isValid" type="boolean"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.b2b.facades.hazard.data.HazardStatementData">
+        <property name="code" type="String"/>
+        <property name="description" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.hazard.data.SupplementalHazardInfoData">
+        <property name="code" type="String"/>
+        <property name="description" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.product.data.CategoryData">
+        <property name="nameEN" type="String"/>
+        <property name="introText" type="String"/>
+        <property name="seoMetaTitle" type="String"/>
+        <property name="seoMetaDescription" type="String"/>
+        <property name="seoSections"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.category.CategorySEOSectionData>"/>
+        <property name="familyMedia"
+                  type="java.util.List&lt;java.util.Map&lt;java.lang.String, de.hybris.platform.commercefacades.product.data.ImageData>>"/>
+        <property name="familyVideo"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.DistVideoData>"/>
+        <property name="familyImage"
+                  type="java.util.Map&lt;java.lang.String, de.hybris.platform.commercefacades.product.data.ImageData>"/>
+        <property name="familyDatasheet"
+                  type="java.util.Map&lt;java.lang.String, de.hybris.platform.commercefacades.product.data.ImageData>"/>
+        <property name="familyManufacturerImage"
+                  type="java.util.Map&lt;java.lang.String, de.hybris.platform.commercefacades.product.data.ImageData>"/>
+        <property name="familyBullets" type="java.util.Map&lt;java.lang.Integer, java.lang.String>"/>
+        <property name="familyApplications" type="java.util.List&lt;java.lang.String>"/>
+        <property name="familyCategoryCode" type="String"/>
+        <property name="promotionText" type="String"/>
+        <property name="images"
+                  type="java.util.Map&lt;java.lang.String, de.hybris.platform.commercefacades.product.data.ImageData>"/>
+        <property name="level" type="int"/>
+        <property name="selected" type="boolean"/>
+        <property name="subCategoryList"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.CategoryData>"/>
+        <property name="productCount" type="int"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.category.CategorySEOSectionData">
+        <property name="header" type="String"/>
+        <property name="text" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.DistVideoData">
+        <property name="brightcoveVideoId" type="String"/>
+        <property name="brightcovePlayerId" type="String"/>
+        <property name="youtubeUrl" type="String"/>
+        <property name="languages"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.storesession.data.LanguageData>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.storesession.data.LanguageData">
+        <property name="nameEN" type="String"/>
+        <property name="rank" type="java.lang.Integer"/>
+        <property name="isocodePim" type="String"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.b2b.facades.smartedit.SmarteditManufacturerData">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.cmswebservices.data.MediaData">
+        <property name="youtubeUrl" type="java.lang.String"/>
+    </bean>
+
+     <bean class="de.hybris.platform.cmsfacades.data.MediaData">
+        <property name="height" type="java.lang.Integer"/>
+        <property name="width" type="java.lang.Integer"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.cmswebservices.data.PageContentSlotData">
+        <hints>
+            <hint name="wsRelated"/>
+        </hints>
+        <property name="name" type="String"/>
+    </bean>
+
+    <!--Marketing Consent data-->
+    <bean class="com.namics.distrelec.b2b.facades.user.data.DistConsentData">
+        <property name="uid" type="java.lang.String">
+            <description>Marketing Consent Email</description>
+        </property>
+        <property name="titleCode" type="java.lang.String">
+            <description>Customer title</description>
+        </property>
+        <property name="firstName" type="java.lang.String">
+            <description>Customer first name</description>
+        </property>
+        <property name="lastName" type="java.lang.String">
+            <description>Customer last name</description>
+        </property>
+        <property name="division" type="java.lang.String">
+            <description>Division</description>
+        </property>
+        <property name="role" type="java.lang.String">
+            <description>Customer role</description>
+        </property>
+        <property name="activeSubscription" type="boolean">
+            <description>Active product subscription</description>
+        </property>
+        <property name="npsSubscription" type="boolean">
+            <description>NPS subscription</description>
+        </property>
+        <property name="segmentedTopic" type="boolean">
+            <description>Segmented topic</description>
+        </property>
+        <property name="isAnonymousUser" type="boolean">
+            <description>Is anonymous user topic</description>
+        </property>
+        <property name="isRegistration" type="boolean">
+            <description>Is Registration consent</description>
+        </property>
+        <property name="status" type="com.namics.distrelec.b2b.facades.user.data.DistConsentStatus">
+            <description>Marketing Consent status</description>
+        </property>
+        <property name="modifiedTime" type="java.util.Date">
+            <description>Consent modified Timestamp</description>
+        </property>
+        <property name="erpContactId" type="java.lang.String">
+            <description>Customer ERP contact ID</description>
+        </property>
+        <property name="consentType" type="java.lang.String">
+            <description>Type of consent eg EMAIL OR PHONE or FB or WHATSAPP</description>
+        </property>
+        <property name="contactOrigin" type="java.lang.String">
+            <description>SAP_HYBRIS_CONSUMER or ZDIS_SUBSCRIPTION_PA</description>
+        </property>
+        <property name="marketingArea" type="java.lang.String">
+            <description>DISRELEC or else</description>
+        </property>
+        <property name="lastChangedbyUser" type="java.lang.String">
+            <description>User who changed the permission</description>
+        </property>
+        <property name="communicationCategory" type="java.lang.String">
+            <description>Communication category/Segmention topic</description>
+        </property>
+        <property name="phoneNumber" type="java.lang.String">
+            <description>Phone Number</description>
+        </property>
+        <property name="mobileNumber" type="java.lang.String">
+            <description>Mobile Number</description>
+        </property>
+        <property name="sendNewsletterWelcomeEmail" type="boolean">
+            <description>Send Newsletter Welcome email</description>
+        </property>
+        <property name="smsPermissions" type="boolean">
+            <description>SMS permissions</description>
+        </property>
+        <property name="phonePermission" type="boolean">
+            <description>Phone permission</description>
+        </property>
+        <property name="paperPermission" type="boolean">
+            <description>Paper permission</description>
+        </property>
+        <property name="personalisationSubscription" type="boolean">
+            <description>Personalisation subscription</description>
+        </property>
+        <property name="profilingSubscription" type="boolean">
+            <description>Profiling subscription</description>
+        </property>
+         <property name="countryCode" type="java.lang.String">
+            <description>Country code</description>
+        </property>
+         <property name="placement" type="java.lang.String">
+            <description>Placement</description>
+        </property>
+        <property name="rsCustomer" type="boolean">
+            <description>Is RS customer</description>
+        </property>
+    </bean>
+
+    <!--Marketing Consent data-->
+    <bean class="com.namics.distrelec.b2b.facades.user.data.DistMarketingConsentData">
+        <property name="uid" type="java.lang.String">
+            <description>Marketing Consent Email</description>
+        </property>
+        <property name="titleCode" type="java.lang.String">
+            <description>Customer title</description>
+        </property>
+        <property name="firstName" type="java.lang.String">
+            <description>Customer first name</description>
+        </property>
+        <property name="lastName" type="java.lang.String">
+            <description>Customer last name</description>
+        </property>
+        <property name="division" type="java.lang.String">
+            <description>Division</description>
+        </property>
+        <property name="role" type="java.lang.String">
+            <description>Customer role</description>
+        </property>
+        <property name="activeSubscription" type="boolean">
+            <description>Active product subscription</description>
+        </property>
+        <property name="npsSubscription" type="boolean">
+            <description>NPS subscription</description>
+        </property>
+        <property name="segmentedTopic" type="boolean">
+            <description>Segmented topic</description>
+        </property>
+        <property name="isAnonymousUser" type="boolean">
+            <description>Is anonymous user topic</description>
+        </property>
+        <property name="isRegistration" type="boolean">
+            <description>Is Registration consent</description>
+        </property>
+        <property name="status" type="com.namics.distrelec.b2b.facades.user.data.DistConsentStatus">
+            <description>Marketing Consent status</description>
+        </property>
+        <property name="modifiedTime" type="java.util.Date">
+            <description>Consent modified Timestamp</description>
+        </property>
+        <property name="erpContactId" type="java.lang.String">
+            <description>Customer ERP contact ID</description>
+        </property>
+        <property name="consentType" type="java.lang.String">
+            <description>Type of consent eg EMAIL OR PHONE or FB or WHATSAPP</description>
+        </property>
+        <property name="contactOrigin" type="java.lang.String">
+            <description>SAP_HYBRIS_CONSUMER or ZDIS_SUBSCRIPTION_PA</description>
+        </property>
+        <property name="marketingArea" type="java.lang.String">
+            <description>DISRELEC or else</description>
+        </property>
+        <property name="lastChangedbyUser" type="java.lang.String">
+            <description>User who changed the permission</description>
+        </property>
+        <property name="communicationCategory" type="java.lang.String">
+            <description>Communication category/Segmention topic</description>
+        </property>
+        <property name="emailConsent" type="boolean">
+            <description>Email Consent</description>
+        </property>
+        <property name="newsLetterConsent" type="boolean">
+            <description>News Letter Consent</description>
+        </property>
+        <property name="saleAndClearanceConsent" type="boolean">
+            <description>Sale And Clearance Consent</description>
+        </property>
+        <property name="knowHowConsent" type="boolean">
+            <description>KnowHow Consent</description>
+        </property>
+        <property name="obsolescenceConsent" type="boolean">
+            <description>Obsolescence Consent</description>
+        </property>
+        <property name="smsConsent" type="boolean">
+            <description>Sms Consent</description>
+        </property>
+        <property name="phoneConsent" type="boolean">
+            <description>Phone Consent</description>
+        </property>
+        <property name="postConsent" type="boolean">
+            <description>Post Consent</description>
+        </property>
+        <property name="personalisationConsent" type="boolean">
+            <description>Personalisation Consent</description>
+        </property>
+        <property name="profilingConsent" type="boolean">
+            <description>Profiling Consent</description>
+        </property>
+        <property name="phoneNumber" type="String">
+            <description>Phone number</description>
+        </property>
+        <property name="mobileNumber" type="String">
+            <description>Phone number</description>
+        </property>
+        <property name="selectAllemailConsents" type="boolean">
+            <description>Select All emails Consent</description>
+        </property>
+        <property name="termsAndConditionsConsent" type="boolean">
+            <description>Terms And conditions Accepted</description>
+        </property>
+        <property name="personalisedRecommendationConsent" type="boolean">
+            <description>Terms And conditions Accepted</description>
+        </property>
+        <property name="customerSurveysConsent" type="boolean">
+            <description>Terms And conditions Accepted</description>
+        </property>
+    </bean>
+
+    <!--Bloomreach Consent data-->
+    <bean class="com.namics.distrelec.b2b.facades.bloomreach.data.DistBloomreachConsentData">
+        <property name="uid" type="String"/>
+        <property name="contentNewsConsent" type="boolean"/>
+        <property name="emailConsent" type="boolean"/>
+        <property name="newBrandsConsent" type="boolean"/>
+        <property name="npsConsent" type="boolean"/>
+        <property name="paperConsent" type="boolean"/>
+        <property name="personalisationConsent" type="boolean"/>
+        <property name="personalisedRecommendationsConsent" type="boolean"/>
+        <property name="phoneConsent" type="boolean"/>
+        <property name="profilingConsent" type="boolean"/>
+        <property name="salesAndClearanceConsent" type="boolean"/>
+        <property name="smsMarketingConsent" type="boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.user.data.RegionData">
+        <property name="nameEN" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.user.data.CountryData" superEquals="true">
+        <property name="european" type="boolean"/>
+        <property name="regions" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.RegionData>"/>
+        <property name="nameEN" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.user.data.AddressData">
+        <property name="companyName2" type="java.lang.String"/>
+        <property name="companyName3" type="java.lang.String"/>
+        <property name="pobox" type="java.lang.String"/>
+        <property name="department" type="java.lang.String"/>
+        <property name="departmentCode" type="java.lang.String"/>
+        <property name="phone1" type="java.lang.String"/>
+        <property name="phone2" type="java.lang.String"/>
+        <property name="fax" type="java.lang.String"/>
+        <property name="additionalAddress" type="java.lang.String"/>
+        <property name="erpAddressID" type="java.lang.String"/>
+        <property name="contactAddress" type="boolean"/>
+        <property name="regionData" type="de.hybris.platform.commercefacades.user.data.RegionData"/>
+        <property name="defaultShipping" type="boolean"/>
+        <property name="defaultBilling" type="boolean"/>
+        <property name="isValid" type="boolean"/>
+        <property name="departmentEN" type="String"/>
+        <property name="codiceFiscale" type="java.lang.String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.product.data.PriceData">
+        <property name="pricePerX" type="java.math.BigDecimal"/>
+        <property name="formattedPricePerX" type="String"/>
+        <property name="pricePerXUOM" type="String"/>
+        <property name="pricePerXUOMDesc" type="String"/>
+        <property name="pricePerXUOMQty" type="java.lang.Long"/>
+        <property name="pricePerXBaseQty" type="java.lang.Long"/>
+        <property name="vatPercentage" type="java.lang.Double"/>
+        <property name="vatValue" type="java.math.BigDecimal"/>
+        <property name="basePrice" type="java.math.BigDecimal"/>
+        <property name="priceWithVat" type="java.math.BigDecimal"/>
+        <property name="formattedPriceWithVat" type="String"/>
+        <property name="originalValue" type="java.math.BigDecimal"/>
+        <property name="formattedOriginalValue" type="java.lang.String"/>
+        <property name="discountValue" type="java.math.BigDecimal"/>
+        <property name="formattedDiscountValue" type="java.lang.String"/>
+        <property name="saving" type="java.lang.Integer"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.product.data.VolumePriceData">
+        <property name="quantity" type="java.lang.Integer"/>
+        <property name="priceWithoutVat" type="java.lang.Double"/>
+        <property name="pricePerX" type="java.math.BigDecimal"/>
+        <property name="pricePerXUOM" type="String"/>
+        <property name="pricePerXUOMDesc" type="String"/>
+        <property name="pricePerXUOMQty" type="java.lang.Long"/>
+        <property name="pricePerXBaseQty" type="java.lang.Long"/>
+        <property name="priceWithVat" type="java.lang.Double"/>
+        <property name="vatPercentage" type="java.lang.String"/>
+        <property name="vat" type="java.math.BigDecimal"/>
+    </bean>
+    <bean class="de.hybris.platform.commercefacades.product.data.ProductPriceData">
+        <property name="articleNumber" type="java.lang.String"/>
+        <property name="volumePriceData"
+                  type="java.util.Set&lt;de.hybris.platform.commercefacades.product.data.VolumePriceData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.quotation.data.DistRequestQuoteData">
+        <property name="companyName" type="java.lang.String"/>
+        <property name="customerNo" type="java.lang.String"/>
+        <property name="title" type="java.lang.String"/>
+        <property name="firstName" type="java.lang.String"/>
+        <property name="lastName" type="java.lang.String"/>
+        <property name="email" type="java.lang.String"/>
+        <property name="telephone" type="java.lang.String"/>
+        <property name="requiredDeliveryDate" type="java.lang.String"/>
+        <property name="reference" type="java.lang.String"/>
+        <property name="isTenderProcess" type="Boolean"/>
+        <property name="rows"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.user.data.DistRequestQuoteRowData>"/>
+
+
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.user.data.DistRequestQuoteRowData">
+        <property name="rowNumber" type="java.lang.Integer"/>
+        <property name="quantity" type="java.lang.Long"/>
+        <property name="article" type="java.lang.String"/>
+        <property name="mpn" type="java.lang.String"/>
+        <property name="description" type="java.lang.String"/>
+        <property name="price" type="java.lang.String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.cmsfacades.data.NavigationEntryData">
+        <property name="localizedUrl" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.wishlist.data.NamicsWishlistEntryData">
+        <property name="product" type="de.hybris.platform.commercefacades.product.data.ProductData"/>
+        <property name="baseProduct" type="de.hybris.platform.commercefacades.product.data.ProductData"/>
+        <property name="desired" type="java.lang.Integer"/>
+        <property name="received" type="java.lang.Integer"/>
+        <property name="addedDate" type="java.util.Date"/>
+        <property name="comment" type="java.lang.String"/>
+        <property name="salesStatus" type="java.lang.String" />
+        <property name="isBuyable" type="java.lang.Boolean" />
+        <property name="isPunchedOut" type="java.lang.Boolean" />
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.wishlist.data.NamicsWishlistData">
+        <property name="name" type="java.lang.String"/>
+        <property name="description" type="java.lang.String"/>
+        <property name="defaultWishlist" type="java.lang.Boolean"/>
+        <property name="listType" type="java.lang.String"/>
+        <property name="uniqueId" type="java.lang.String"/>
+        <property name="entries"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.wishlist.data.NamicsWishlistEntryData&gt;"/>
+        <property name="customer" type="de.hybris.platform.commercefacades.user.data.CustomerData"/>
+        <property name="totalUnitCount" type="java.lang.Integer"/>
+        <property name="totalPrice" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="calculated" type="boolean"/>
+        <property name="totalTax" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="subTotal" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="productCodes" type="java.util.List&lt;String>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.wishlist.data.MiniWishlistData">
+        <property name="name" type="String"/>
+        <property name="uniqueId" type="String"/>
+        <property name="totalUnitCount" type="int"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.wishlist.data.SendWishlistData">
+        <property name="name" type="String"/>
+        <property name="uniqueId" type="String"/>
+        <property name="totalUnitCount" type="int"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.user.data.UserDashboardContentData">
+        <property name="openOrdersCount" type="Integer"/>
+        <property name="newInvoicesCount" type="Integer"/>
+        <property name="appReqCount" type="Integer"/>
+        <property name="quoteCount" type="Integer"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.core.customer.error.feedback.data.DistCustomerErrorFeedbackData">
+        <property name="productId" type="java.lang.String"/>
+        <property name="productName" type="java.lang.String"/>
+        <property name="errorReason" type="java.lang.String"/>
+        <property name="errorDescription" type="java.lang.String"/>
+        <property name="customerEmailId" type="java.lang.String"/>
+        <property name="customerName" type="java.lang.String"/>
+        <property name="erpCustomerId" type="java.lang.String"/>
+        <property name="languageIso" type="java.lang.String"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.core.v2.forms.EmployeeSearchB2BForm">
+        <property name="name" type="String"/>
+        <property name="stateCode" type="String"/>
+        <property name="sort" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.customer.data.DistUserProfileData">
+        <property name="userProfileName" type="String"/>
+    </bean>
+
+    <enum class="com.namics.distrelec.b2b.facades.basesites.seo.LinkType">
+        <value>HEADER</value>
+        <value>FOOTER</value>
+        <value>ALL</value>
+    </enum>
+
+    <bean class="com.namics.distrelec.b2b.facades.basesites.seo.DistLink">
+        <property name="rel" type="java.lang.String"/>
+        <property name="href" type="java.lang.String"/>
+        <property name="hreflang" type="java.lang.String"/>
+        <property name="countryName" type="java.lang.String"/>
+        <property name="mediaQuery" type="java.lang.String"/>
+        <property name="type" type="LinkType"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.DistPromotionLabelData">
+        <description>Representation of DISTRELEC Promotion Label</description>
+        <property name="code" type="java.lang.String"/>
+        <property name="label" type="java.lang.String"/>
+        <property name="nameEN" type="java.lang.String"/>
+        <property name="rank" type="java.lang.Integer"/>
+        <property name="priority" type="java.lang.Integer"/>
+        <property name="active" type="java.lang.Boolean"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.DistDownloadData">
+        <property name="name" type="java.lang.String"/>
+        <property name="downloadUrl" type="java.lang.String"/>
+        <property name="mimeType" type="java.lang.String"/>
+        <property name="languages"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.storesession.data.LanguageData>"/>
+        <property name="icon" type="de.hybris.platform.commercefacades.product.data.ImageData"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.DistDownloadSectionData">
+        <property name="code" type="java.lang.String"/>
+        <property name="title" type="java.lang.String"/>
+        <property name="description" type="java.lang.String"/>
+        <property name="rank" type="java.lang.Integer"/>
+        <property name="downloads"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.DistDownloadData>"/>
+        <property name="alternativeDownloads"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.DistDownloadData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.DistImage360Data">
+        <property name="rows" type="java.lang.Integer"/>
+        <property name="cols" type="java.lang.Integer"/>
+        <property name="pattern" type="java.lang.String"/>
+        <property name="firstImageSmallPath" type="java.lang.String"/>
+        <property name="firstImageMediumPath" type="java.lang.String"/>
+        <property name="firstImageLargePath" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.manufacturer.data.DistMiniManufacturerData">
+        <property name="url" type="java.lang.String"/>
+        <property name="name" type="java.lang.String"/>
+        <property name="nameEN" type="java.lang.String"/>
+        <property name="nameSeo" type="java.lang.String"/>
+        <property name="code" type="java.lang.String"/>
+        <property name="urlId" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.manufacturer.data.DistManufacturerMenuData">
+        <property name="key" type="java.lang.String"/>
+        <property name="manufacturerList"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.manufacturer.data.DistMiniManufacturerData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.manufacturer.data.DistManufacturerMenuResponseData">
+        <property name="response"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.manufacturer.data.DistManufacturerMenuData>"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.b2b.facades.manufacturer.data.DistManufacturerData"
+          extends="com.namics.distrelec.b2b.facades.manufacturer.data.DistMiniManufacturerData">
+        <property name="promotionText" type="java.lang.String"/>
+        <property name="webshopUrl" type="java.lang.String"/>
+        <property name="image"
+                  type="java.util.Map&lt;String,de.hybris.platform.commercefacades.product.data.ImageData>"/>
+        <property name="productGroups" type="java.util.List&lt;String>"/>
+        <property name="languages" type="java.util.List&lt;String>"/>
+        <property name="phoneNumbers" type="java.util.List&lt;String>"/>
+        <property name="websites" type="java.util.List&lt;String>"/>
+        <property name="emailAddresses" type="java.util.List&lt;String>"/>
+        <property name="repairsText" type="java.lang.String"/>
+        <property name="seoMetaDescription" type="java.lang.String"/>
+        <property name="seoMetaTitle" type="java.lang.String"/>
+        <property name="webDescription" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.DistTransportGroupData">
+        <property name="code" type="java.lang.String"/>
+        <property name="name" type="java.lang.String"/>
+        <property name="nameErp" type="java.lang.String"/>
+        <property name="relevantName" type="java.lang.String"/>
+        <property name="bulky" type="java.lang.Boolean"/>
+        <property name="dangerous" type="java.lang.Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.ProductInformationData">
+        <property name="orderNote" type="java.lang.String"/>
+        <property name="orderNoteArticle" type="java.lang.String"/>
+        <property name="deliveryNote" type="java.lang.String"/>
+        <property name="deliveryNoteArticle" type="java.lang.String"/>
+        <property name="assemblyNote" type="java.lang.String"/>
+        <property name="usageNote" type="java.util.List&lt;String>"/>
+        <property name="familyDescription" type="java.util.List&lt;String>"/>
+        <property name="familyDescriptionBullets" type="java.util.List&lt;String>"/>
+        <property name="seriesDescription" type="java.util.List&lt;String>"/>
+        <property name="seriesDescriptionBullets" type="java.util.List&lt;String>"/>
+        <property name="articleDescription" type="java.util.List&lt;String>"/>
+        <property name="articleDescriptionBullets" type="java.util.List&lt;String>"/>
+        <property name="paperCatalogPageNumber" type="java.lang.String"/>
+        <property name="paperCatalogPageNumber_16_17" type="java.lang.String"/>
+    </bean>
+
+    <!--    transfer to Map-->
+    <bean class="com.namics.distrelec.b2b.facades.product.data.KeyValueAttributeData">
+        <property name="key" type="java.lang.String"/>
+        <property name="value" type="java.lang.String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.product.data.ProductData">
+        <property name="codeErpRelevant" type="java.lang.String"/>
+        <property name="activePromotionLabels"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.DistPromotionLabelData>"/>
+        <property name="typeName" type="java.lang.String"/>
+        <property name="rohs" type="java.lang.String"/>
+        <property name="rohsCode" type="java.lang.String"/>
+        <property name="rohsURL" type="java.lang.String"/>
+        <property name="rohsExemptions" type="java.util.List&lt;java.lang.String>"/>
+        <property name="rohsExemptionsFormatted" type="java.lang.String"/>
+        <property name="svhc" type="java.lang.String"/>
+        <property name="svhcURL" type="java.lang.String"/>
+        <property name="hasSvhc" type="java.lang.Boolean"/>
+        <property name="unspsc5" type="java.lang.String"/>
+        <property name="dangerousSubstancesDirective" type="java.lang.String"/>
+        <property name="svhcReviewDate" type="java.util.Date"/>
+        <property name="scip" type="java.lang.String"/>
+        <property name="productReferencesMap"
+                  type="java.util.Map&lt;String, java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductReferenceData>>"/>
+        <property name="listPrice" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="volumePricesMap"
+                  type="java.util.Map&lt;Long, java.util.Map&lt;String, de.hybris.platform.commercefacades.product.data.PriceData>>"/>
+        <property name="orderQuantityMinimum" type="java.lang.Long"/>
+        <property name="orderQuantityStep" type="java.lang.Long"/>
+        <property name="grossWeight" type="java.lang.Double"/>
+        <property name="grossWeightUnit" type="String"/>
+        <property name="dimensions" type="String"/>
+        <property name="originalPackSize" type="String"/>
+        <property name="customsCode" type="String"/>
+        <property name="salesUnit" type="String"/>
+        <property name="productImages"
+                  type="java.util.List&lt;java.util.Map&lt;String,de.hybris.platform.commercefacades.product.data.ImageData>>"/>
+        <property name="downloads"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.DistDownloadSectionData>"/>
+        <property name="videos" type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.DistVideoData>"/>
+        <property name="images360"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.DistImage360Data>"/>
+        <property name="distManufacturer"
+                  type="com.namics.distrelec.b2b.facades.manufacturer.data.DistManufacturerData"/>
+        <property name="countryOfOrigin" type="de.hybris.platform.commercefacades.user.data.CountryData"/>
+        <property name="transportGroup" type="String"/>
+        <property name="transportGroupData"
+                  type="com.namics.distrelec.b2b.facades.product.data.DistTransportGroupData"/>
+        <property name="buyable" type="boolean"/>
+        <property name="endOfLifeDate" type="java.util.Date"/>
+        <property name="promotionText" type="String"/>
+        <property name="nextUrl" type="String"/>
+        <property name="prevUrl" type="String"/>
+        <property name="buyableReplacementProduct" type="java.lang.Boolean"/>
+        <property name="replacementReason" type="String"/>
+        <property name="productInformation"
+                  type="com.namics.distrelec.b2b.facades.product.data.ProductInformationData"/>
+        <property name="productFamilyName" type="String"/>
+        <property name="productFamilyUrl" type="String"/>
+        <property name="technicalAttributes"
+                  type="java.util.Collection&lt;com.namics.distrelec.b2b.facades.product.data.KeyValueAttributeData>"/>
+        <property name="tabularFilterCodes"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.KeyValueAttributeData>"/>
+        <property name="promotionEndDate" type="java.util.Date"/>
+        <property name="technicalAttributeMap" type="java.util.Map&lt;String,String>"/>
+        <!-- For compare -->
+        <property name="possibleCommonAttributes" type="java.util.Map&lt;String,String>"/>
+        <property name="commonAttributes"
+                  type="java.util.Map&lt;String,de.hybris.platform.commercefacades.product.data.FeatureData>"/>
+        <property name="possibleOtherAttributes" type="java.util.Map&lt;String,String>"/>
+        <property name="otherAttributes"
+                  type="java.util.Map&lt;String,de.hybris.platform.commercefacades.product.data.FeatureData>"/>
+        <property name="illustrativeImage" type="java.lang.Boolean"/>
+        <property name="catPlusSupplierAID" type="java.lang.String"/>
+        <property name="catPlusItem" type="java.lang.Boolean"/>
+        <property name="buyablePhaseoutProduct" type="java.lang.Boolean"/>
+        <property name="withSavings" type="java.lang.Boolean"/>
+        <!-- energy efficiency -->
+        <property name="energyEfficiency" type="java.lang.String"/>
+        <property name="energyPower" type="java.lang.String"/>
+        <property name="energyClassesFitting" type="java.lang.String"/>
+        <property name="energyClassesIncludedBulb" type="java.lang.String"/>
+        <property name="energyClassesBuiltInLed" type="java.lang.String"/>
+        <property name="energyTopText" type="java.lang.String"/>
+        <property name="energyBottomText" type="java.lang.String"/>
+        <property name="salesStatus" type="java.lang.String"/>
+        <property name="movexArticleNumber" type="java.lang.String"/>
+        <property name="navisionArticleNumber" type="java.lang.String"/>
+        <property name="elfaArticleNumber" type="java.lang.String"/>
+        <!-- true when this is a calibrated product -->
+        <property name="calibrationService" type="java.lang.Boolean"/>
+        <property name="calibrated" type="java.lang.Boolean"/>
+        <!-- Item number of the corresponding (un)calibrated product -->
+        <property name="calibrationItemArtNo" type="java.lang.String"/>
+        <!-- Product EAN Number -->
+        <property name="ean" type="java.lang.String"/>
+        <!-- E-Number introduced D-11625 -->
+        <property name="enumber" type="java.lang.String"/>
+        <property name="origPosition" type="java.lang.String"/>
+        <property name="categoryCodePath" type="java.lang.String"/>
+        <property name="campaign" type="java.lang.String"/>
+        <property name="formattedSvhcReviewDate" type="java.lang.String"/>
+        <property name="alternativeAliasMPN" type="java.lang.String"/>
+        <property name="alternateCategory" type="java.lang.String"/>
+        <property name="batteryComplianceCode" type="java.lang.String"/>
+        <!-- Breadcrumbs -->
+        <property name="breadcrumbs"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.CategoryData>"/>
+        <!-- SEO related information -->
+        <property name="metaData" type="com.namics.distrelec.b2b.facades.seo.data.MetaData"/>
+        <property name="phaseoutProductFlag" type="Boolean"/>
+        <property name="primaryCategory" type="de.hybris.platform.commercefacades.product.data.CategoryData"/>
+        <property name="availableInSnapEda" type="boolean"/>
+        <property name="allowBulk" type="java.lang.Boolean"/>
+        <property name="nameEN" type="String"/>
+        <property name="descriptionEN" type="String"/>
+        <property name="rohsEN" type="String"/>
+        <property name="productFamilyNameEN" type="String"/>
+        <property name="eligibleForReevoo" type="Boolean"/>
+        <property name="ghsImages" type="java.util.List&lt;java.lang.String>"/>
+        <property name="signalWord" type="String"/>
+        <property name="hazardStatements" type="java.util.List&lt;java.lang.String>"/>
+        <property name="supplementalHazardInfos" type="java.util.List&lt;java.lang.String>"/>
+        <property name="availableToB2B" type="java.lang.Boolean"/>
+        <property name="availableToB2C" type="java.lang.Boolean"/>
+        <property name="itemCategoryGroup" type="java.lang.String"/>
+        <property name="primaryImage" type="de.hybris.platform.commercefacades.product.data.ImageData"/>
+        <property name="inShoppingList" type="boolean"/>
+        <property name="energyEfficiencyLabelImage" type="java.util.Map&lt;java.lang.String, de.hybris.platform.commercefacades.product.data.ImageData>"/>
+        <property name="audios" type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.DistAudioData>"/>
+        <property name="weeeCategory" type="java.lang.String"/>
+        <property name="isBetterWorld" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.DistAudioData">
+        <property name="audioUrl" type="java.lang.String" />
+        <property name="mimeType" type="java.lang.String" />
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.seo.data.MetaData">
+        <property name="title" type="java.lang.String"/>
+        <property name="description" type="java.lang.String"/>
+        <property name="keywords" type="java.lang.String"/>
+        <property name="h1" type="java.lang.String"/>
+        <property name="contentTitle" type="java.lang.String"/>
+        <property name="contentDescription" type="java.lang.String"/>
+        <property name="robots" type="java.lang.String"/>
+        <property name="cachingKey" type="java.lang.String"/>
+
+        <property name="alternateHreflangUrls" type="java.lang.String"/>
+        <property name="canonicalUrl" type="java.lang.String"/>
+        <property name="metaTitle" type="java.lang.String"/>
+        <property name="metaImage" type="java.lang.String"/>
+        <property name="metaDescription" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.basesites.seo.DistAllSitesResponse">
+        <property name="canonicalLink"
+                  type="com.namics.distrelec.b2b.facades.basesites.seo.DistLink"/>
+        <property name="headerLinksLangTags"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.basesites.seo.DistLink>"/>
+        <property name="footerLinksLangTags"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.basesites.seo.DistLink>"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.b2b.facades.message.queue.data.AddToCartBulkResponseData">
+        <property name="cartModifications"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.CartModificationData>"/>
+        <property name="errorProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductData>"/>
+        <property name="punchOutProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductData>"/>
+        <property name="phaseOutProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductData>"/>
+        <property name="blockedProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.message.queue.data.AddToCartBulkRequestData">
+        <property name="products"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.message.queue.data.BulkProductData>"/>
+        <property name="addedFrom" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.message.queue.data.BulkProductData">
+        <property name="productCode" type="String"/>
+        <property name="quantity" type="java.lang.Long"/>
+        <property name="itemNumber" type="String"/>
+        <property name="reference" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.carousel.data.ProductCarouselData">
+        <property name="carouselProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.ProductAvailabilityData">
+        <property name="productCode" type="String"/>
+        <property name="country" type="String"/>
+        <property name="requestedQuantity" type="java.lang.Integer"/>
+        <property name="detailInfo" type="Boolean"/>
+        <property name="statusLabel" type="String"/>
+        <property name="stockLevelTotal" type="Integer"/>
+        <property name="backorderQuantity" type="Integer"/>
+        <property name="stockLevelPickup"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.PickupStockLevelData>"/>
+        <property name="backorderDeliveryDate" type="java.util.Date"/>
+        <property name="deliveryTimeBackorder" type="String"/>
+        <property name="leadTimeErp" type="Integer"/>
+        <property name="stockLevels"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.core.service.product.model.StockLevelData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.PickupStockLevelData">
+        <property name="warehouseCode" type="String"/>
+        <property name="warehouseName" type="String"/>
+        <property name="stockLevel" type="Integer"/>
+        <property name="waldom" type="boolean"/>
+        <property name="replenishmentDeliveryTime" type="String"/>
+        <property name="replenishmentDeliveryTime2" type="String"/>
+        <property name="mview" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.core.service.product.model.StockLevelData">
+        <property name="warehouseId" type="String"/>
+        <property name="warehouseName" type="String"/>
+        <property name="available" type="Integer"/>
+        <property name="deliveryTime" type="String" equals="0"/>
+        <property name="leadTime" type="Integer"/>
+        <property name="fast" type="Boolean"/>
+        <property name="external" type="Boolean"/>
+        <property name="exclusive" type="Boolean"/>
+        <property name="waldom" type="boolean"/>
+        <property name="replenishmentDeliveryTime" type="String"/>
+        <property name="replenishmentDeliveryTime2" type="String"/>
+        <property name="mview" type="String"/>
+        <property name="vendorNumber" type="String" />
+        <property name="availablePO" type="String" />
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.cms.data.ContentPageNavigationData">
+        <property name="navRootNodes" type="java.util.List&lt;de.hybris.platform.cmsfacades.data.NavigationNodeData>"/>
+        <property name="pageRootNavNode" type="de.hybris.platform.cmsfacades.data.NavigationNodeData"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.invoice.data.DistB2BInvoiceHistoriesData">
+        <property name="sorts" type="java.util.List&lt;de.hybris.platform.commerceservices.search.pagedata.SortData>"/>
+        <property name="pagination" type="de.hybris.platform.commerceservices.search.pagedata.PaginationData"/>
+    </bean>
+
+    <!--Base Sites-->
+    <bean class="de.hybris.platform.commercefacades.basesite.data.BaseSiteData">
+        <property name="wtTrackId" type="String"/>
+        <property name="wtTrackDomain" type="String"/>
+        <property name="wtDomain" type="String"/>
+        <property name="wtActivateEventTracking" type="String"/>
+        <property name="wtDefaultAreaCode" type="String"/>
+        <property name="printFooterContent" type="String"/>
+        <property name="exclusiveFastDeliveryTime" type="String"/>
+        <property name="exclusiveSlowDeliveryTime" type="String"/>
+        <property name="externalFastDeliveryTime" type="String"/>
+        <property name="externalSlowDeliveryTime" type="String"/>
+        <property name="fastDeliveryTime" type="String"/>
+        <property name="slowDeliveryTime" type="String"/>
+        <property name="backorderDeliveryTime" type="String"/>
+        <property name="redirect404" type="String"/>
+        <property name="reevooPurchaserDuration" type="java.lang.Integer"/>
+        <property name="requestedDeliveryDateMaxDays" type="java.lang.Integer"/>
+        <property name="doNotCalcuteTaxForB2B" type="boolean"/>
+        <property name="shippingOptionsEditable" type="boolean"/>
+        <property name="paymentOptionsEditable" type="boolean"/>
+        <property name="requestedDeliveryDateEnabled" type="boolean"/>
+        <property name="httpsOnly" type="boolean"/>
+        <property name="hidden" type="boolean"/>
+        <property name="reevooActivated" type="boolean"/>
+        <property name="reevooBrandVisible" type="boolean"/>
+        <property name="useProductFeatures" type="boolean"/>
+        <property name="guestCheckoutEnabled" type="boolean"/>
+        <property name="tracking" type="com.namics.distrelec.occ.core.basesite.data.DistSiteTrackingSettingsData"/>
+        <property name="checkoutDeliveryMethodPricesShown" type="Boolean"/>
+        <property name="maintenanceActive" type="boolean"/>
+        <property name="bloomreachScriptToken" type="String"/>
+        <property name="enableAddToCart" type="boolean"/>
+        <property name="enableNewsletter" type="boolean"/>
+        <property name="enableMyAccountRedirect" type="boolean"/>
+        <property name="enableProductReturn" type="boolean"/>
+        <property name="enableSubUserManagement" type="boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.quotation.data.QuotationHistoriesData">
+        <property name="sorts" type="java.util.List&lt;de.hybris.platform.commerceservices.search.pagedata.SortData>"/>
+        <property name="pagination" type="de.hybris.platform.commerceservices.search.pagedata.PaginationData"/>
+        <property name="contactsOfCustomer"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.CustomerData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.quotation.data.QuotationProductData">
+        <property name="productCode" type="String"/>
+        <property name="quantity" type="long"/>
+        <property name="itemNumber" type="String"/>
+        <property name="reference" type="String"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.b2bcommercefacades.company.data.B2BBudgetData">
+        <property name="orderBudget" type="java.math.BigDecimal"/>
+        <property name="originalYearlyBudget" type="java.math.BigDecimal"/>
+        <property name="yearlyBudget" type="java.math.BigDecimal"/>
+        <property name="exceededOrderBudget" type="java.math.BigDecimal"/>
+        <property name="exceededYearlyBudget" type="java.math.BigDecimal"/>
+        <property name="yearlyBudgetUsedToDate" type="java.math.BigDecimal"/>
+        <property name="approver" type="de.hybris.platform.commercefacades.user.data.CustomerData"/>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.company.B2BOrderApprovalsData">
+        <property name="orderApprovals"
+                  type="java.util.List&lt;de.hybris.platform.b2bacceleratorfacades.order.data.B2BOrderApprovalData>"/>
+        <property name="sorts" type="java.util.List&lt;de.hybris.platform.commerceservices.search.pagedata.SortData>"/>
+        <property name="pagination" type="de.hybris.platform.commerceservices.search.pagedata.PaginationData"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.basestore.data.BaseStoreData">
+        <property name="backorderAllowed" type="boolean"/>
+        <property name="quotationsEnabled" type="boolean"/>
+        <property name="orderApprovalEnabled" type="boolean"/>
+        <property name="searchExperienceMap"
+                  type="java.util.Map&lt;String, com.namics.distrelec.b2b.facades.search.data.SearchExperienceDTO>"/>
+        <property name="cmsSites"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.basesite.data.BaseSiteData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.data.PossibleDeliveryDatesData">
+        <description>Get possible delivery dates DATA in checkout, Returns min and max date for current cart
+        </description>
+        <property name="minRequestedDeliveryDateForCurrentCart" type="java.util.Date"/>
+        <property name="maxRequestedDeliveryDateForCurrentCart" type="java.util.Date"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.search.data.SearchStateData">
+        <property name="searchExperience" type="com.namics.distrelec.b2b.core.enums.SearchExperience"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.user.data.PrincipalData">
+        <property name="type" type="String"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.cmsfacades.data.NavigationNodeData">
+        <property name="sortingNumber" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.user.data.RegisterData">
+        <property name="uid" type="String"/>
+        <property name="currencyCode" type="String"/>
+        <property name="telephoneNumber" type="String"/>
+        <property name="checkPwd" type="String"/>
+        <property name="customerId" type="String"/>
+        <property name="additionalAddress" type="String"/>
+        <property name="countryCode" type="String"/>
+        <property name="phoneNumber" type="String"/>
+        <property name="mobileNumber" type="String"/>
+        <property name="codiceFiscale" type="String"/>
+        <property name="faxNumber" type="String"/>
+        <property name="invoiceEmail" type="String"/>
+        <property name="termsOfUseOption" type="Boolean"/>
+        <property name="marketingConsent" type="Boolean"/>
+        <property name="npsConsent" type="Boolean"/>
+        <property name="customerType" type="String"/>
+        <property name="existingCustomer" type="Boolean"/>
+        <property name="vat4" type="String"/>
+        <property name="legalEmail" type="String"/>
+        <property name="registrationType" type="String"/>
+        <property name="selectAllemailConsents" type="Boolean"/>
+        <property name="saleAndClearanceConsent" type="Boolean"/>
+        <property name="knowHowConsent" type="Boolean"/>
+        <property name="obsolescenceConsent" type="Boolean"/>
+        <property name="smsConsent" type="Boolean"/>
+        <property name="phoneConsent" type="Boolean"/>
+        <property name="postConsent" type="Boolean"/>
+        <property name="personalisationConsent" type="Boolean"/>
+        <property name="profilingConsent" type="Boolean"/>
+        <property name="newsLetterConsent" type="Boolean"/>
+        <property name="termsAndConditionsConsent" type="Boolean"/>
+        <property name="personalisedRecommendationConsent" type="Boolean"/>
+        <property name="customerSurveysConsent" type="Boolean"/>
+        <property name="company" type="String"/>
+        <property name="company2" type="String"/>
+        <property name="company3" type="String"/>
+        <property name="functionCode" type="String"/>
+        <property name="groupVatId" type="String"/>
+        <property name="vatId" type="String"/>
+        <property name="organizationalNumber" type="String"/>
+        <property name="duns" type="String"/>
+        <property name="vatIdMessage" type="String"/>
+        <property name="companyMessage" type="String"/>
+        <property name="companyMatch" type="String"/>
+        <property name="streetName" type="String"/>
+        <property name="postalCode" type="String"/>
+        <property name="town" type="String"/>
+        <property name="isMarketingCookieEnabled" type="Boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.product.data.ImageData">
+        <property name="name" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.data.DistPaymentModeData">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+        <property name="description" type="String"/>
+        <property name="url" type="String"/>
+        <property name="icons" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ImageData>"/>
+        <property name="paymentCost" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="selectable" type="Boolean"/>
+        <property name="hop" type="Boolean"/>
+        <property name="iframe" type="Boolean"/>
+        <property name="creditCardPayment" type="Boolean"/>
+        <property name="invoicePayment" type="Boolean"/>
+        <property name="defaultPaymentMode" type="Boolean"/>
+        <property name="ricevutaBancaria" type="Boolean"/>
+        <property name="translationKey" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.warehouse.data.WarehouseData">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+        <property name="streetName" type="String"/>
+        <property name="streetNumber" type="String"/>
+        <property name="postalCode" type="String"/>
+        <property name="town" type="String"/>
+        <property name="phone" type="String"/>
+        <property name="openingsHourMoFr" type="String"/>
+        <property name="openingsHourSa" type="String"/>
+        <property name="pickupDate" type="String"/>
+        <property name="availableForImmediatePickup" type="Boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.DeliveryModeData">
+        <property name="shippingCost" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="defaultDeliveryMode" type="Boolean"/>
+        <property name="selectable" type="Boolean"/>
+        <property name="translationKey" type="String"/>
+        <property name="translation" type="String"/>
+        <property name="selected" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.data.DistDiscountData">
+        <property name="code" type="String"/>
+        <property name="discountString" type="String"/>
+        <property name="global" type="Boolean"/>
+        <property name="absolute" type="Boolean"/>
+        <property name="priority" type="Integer"/>
+        <property name="value" type="Double"/>
+        <property name="currency" type="de.hybris.platform.commercefacades.storesession.data.CurrencyData"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.data.DistOpenOrderData">
+        <property name="code" type="String"/>
+        <property name="closeDate" type="java.util.Date"/>
+        <property name="orderStatus" type="String"/>
+        <property name="contactId" type="String"/>
+        <property name="orderReferenceHeaderLevel" type="String"/>
+        <property name="currentContactCreatorOrAdmin" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.data.DistErpVoucherInfoData">
+        <property name="code" type="String"/>
+        <property name="fixedValue" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="currency" type="String"/>
+        <property name="valid" type="Boolean"/>
+        <property name="returnERPCode" type="String"/>
+        <property name="erpErrorMessageKey" type="String"/>
+        <property name="calculatedInERP" type="Boolean"/>
+        <property name="fixedFormattedValue" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.CartData">
+        <property name="validPaymentModes"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.order.data.DistPaymentModeData>"/>
+        <property name="validDeliveryModes"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.DeliveryModeData>"/>
+        <property name="totalItemsSingle" type="Long"/>
+        <property name="openOrderNew" type="Boolean"/>
+        <property name="openOrderErpCode" type="String"/>
+        <property name="openOrderCreationDate" type="java.util.Date"/>
+        <property name="confirmedEntries"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.OrderEntryData>"/>
+        <property name="reqDeliveryDateHeaderLevel" type="java.util.Date"/>
+        <property name="freeFreightValue" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="currency" type="de.hybris.platform.commercefacades.storesession.data.CurrencyData"/>
+        <property name="completeDelivery" type="Boolean"/>
+        <property name="deliveryCostExcluded" type="Boolean"/>
+        <property name="missingMov" type="Double"/>
+        <property name="movLimit" type="Double"/>
+        <property name="movCurrency" type="String"/>
+        <property name="skipMovCheck" type="Boolean"/>
+        <property name="reevooEligible" type="Boolean"/>
+        <property name="waldom" type="Boolean"/>
+        <property name="creditBlocked" type="Boolean"/>
+        <property name="codiceCIG" type="String"/>
+        <property name="codiceCUP" type="String"/>
+        <property name="ghostOrder" type="boolean" />
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.data.SapVoucherData">
+        <property name="code" type="String"/>
+        <property name="value" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="validFrom" type="java.util.Date"/>
+        <property name="validUntil" type="java.util.Date"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.AbstractOrderData">
+        <property name="billingAddress" type="de.hybris.platform.commercefacades.user.data.AddressData"/>
+        <property name="paymentMode" type="com.namics.distrelec.b2b.facades.order.data.DistPaymentModeData"/>
+        <property name="pickupLocation" type="com.namics.distrelec.b2b.facades.order.warehouse.data.WarehouseData"/>
+        <property name="paymentCost" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="note" type="String"/>
+        <property name="distCostCenter" type="String"/>
+        <property name="projectNumber" type="String"/>
+        <property name="discounts"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.order.data.DistDiscountData>"/>
+        <property name="bankCollectionCAB" type="String"/>
+        <property name="bankCollectionABI" type="String"/>
+        <property name="bankCollectionInstitute" type="String"/>
+        <property name="erpVoucherInfoData" type="com.namics.distrelec.b2b.facades.order.data.DistErpVoucherInfoData"/>
+        <property name="openOrder" type="Boolean"/>
+        <property name="openOrderEditableForAllContacts" type="Boolean"/>
+        <property name="openOrderClosingDates" type="java.util.List&lt;java.util.Date>"/>
+        <property name="openOrderSelectedClosingDate" type="java.util.Date"/>
+        <property name="currency" type="de.hybris.platform.commercefacades.storesession.data.CurrencyData"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.OrderData">
+        <property name="orderDate" type="java.util.Date"/>
+        <property name="baseSite" type="de.hybris.platform.commercefacades.basesite.data.BaseSiteData"/>
+        <property name="baseStore" type="de.hybris.platform.commercefacades.basestore.data.BaseStoreData"/>
+        <property name="salesApplication" type="String"/>
+        <property name="customerType" type="String"/>
+        <property name="deliveryDate" type="java.util.Date"/>
+        <property name="requestedDeliveryDate" type="java.util.Date"/>
+        <property name="deliveryData"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.DistDeliveryData>"/>
+        <property name="erpOrderCode" type="String"/>
+        <property name="openOrder" type="Boolean"/>
+        <property name="erpOpenOrderCode" type="String"/>
+        <property name="openOrderReference" type="String"/>
+        <property name="openOrderCloseLink" type="String"/>
+        <property name="generatedVoucher" type="com.namics.distrelec.b2b.facades.order.data.SapVoucherData"/>
+        <property name="validForReturn" type="Boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.CardTypeData">
+        <property name="icon" type="de.hybris.platform.commercefacades.product.data.ImageData"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.category.data.DistCategoryPageData">
+        <property name="sourceCategory" type="de.hybris.platform.commercefacades.product.data.CategoryData"/>
+        <property name="subCategories"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.CategoryData>"/>
+        <property name="breadcrumbs"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.CategoryData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.quotation.data.QuoteStatusData">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+        <property name="status" type="String"/>
+        <property name="message" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.quotation.data.QuotationHistoryData">
+        <property name="quotationId" type="String"/>
+        <property name="poNumber" type="String"/>
+        <property name="total" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="currency" type="de.hybris.platform.commercefacades.storesession.data.CurrencyData"/>
+        <property name="status" type="com.namics.distrelec.b2b.facades.order.quotation.data.QuoteStatusData"/>
+        <property name="quotationRequestDate" type="java.util.Date"/>
+        <property name="quotationExpiryDate" type="java.util.Date"/>
+        <property name="customerName" type="String"/>
+        <property name="purchasable" type="boolean"/>
+        <property name="quotationDocURL" type="String"/>
+        <property name="previousQuoteID" type="String"/>
+        <property name="isTender" type="Boolean"/>
+        <property name="reqDate" type="java.util.Date"/>
+        <property name="expireDate" type=" java.math.BigInteger"/>
+        <property name="yourHeaderRef" type="String"/>
+        <property name="resubmitted" type="boolean"/>
+        <property name="childQuote" type="String"/>
+        <property name="resubmitOrChildQuotationUrl" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.quotation.data.QuotationEntry">
+        <property name="itemNumber" type="String"/>
+        <property name="product" type="de.hybris.platform.commercefacades.product.data.ProductData"/>
+        <property name="price" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="subtotal" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="quantity" type="Integer"/>
+        <property name="articleDescription" type="String"/>
+        <property name="dummyItem" type="boolean"/>
+        <property name="quantityModificationType" type="com.namics.distrelec.b2b.core.enums.QuoteModificationType"/>
+        <property name="mandatory" type="boolean"/>
+        <property name="itemNote" type="String"/>
+        <property name="manufacturerType" type="String"/>
+        <property name="manufacturerPartNumber" type="String"/>
+        <property name="customerReference" type="String"/>
+        <property name="yourItemRef" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.quotation.data.QuotationData"
+          extends="com.namics.distrelec.b2b.facades.order.quotation.data.QuotationHistoryData">
+        <property name="customerId" type="String"/>
+        <property name="fullQuote" type="boolean"/>
+        <property name="quotationChannel" type="String"/>
+        <property name="quotationNote" type="String"/>
+        <property name="subtotal1" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="subtotal2" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="tax" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="quotationEntries"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.order.quotation.data.QuotationEntry>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.invoice.data.DistB2BInvoiceHistoryOrderData">
+        <property name="orderNumber" type="String"/>
+        <property name="contactName" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.order.invoice.data.DistB2BInvoiceHistoryData">
+        <property name="invoiceNumber" type="String"/>
+        <property name="invoiceDate" type="java.util.Date"/>
+        <property name="invoiceDueDate" type="java.util.Date"/>
+        <property name="invoiceStatus" type="String"/>
+        <property name="invoiceTotal" type="Double"/>
+        <property name="currency" type="String"/>
+        <property name="invoiceDocumentURL" type="String"/>
+        <property name="relatedOrders"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.order.invoice.data.DistB2BInvoiceHistoryOrderData>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.product.data.FeatureData">
+        <property name="visibility" type="String"/>
+        <property name="searchable" type="Boolean"/>
+        <property name="position" type="Integer"/>
+        <property name="featurePosition" type="int"/>
+        <property name="featureValuesWithUnit"
+                  type="java.util.Map&lt;de.hybris.platform.commercefacades.product.data.FeatureValueData, de.hybris.platform.commercefacades.product.data.FeatureUnitData>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.product.data.FeatureValueData">
+        <property name="baseUnitValue" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.rma.data.DistRMAReasonData">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+        <property name="relevantName" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.rma.data.DistRMAPackagingData">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+        <property name="relevantName" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.storesession.data.ChannelData">
+        <property name="uid" type="String"/>
+        <property name="nativeName" type="String"/>
+        <property name="type" type="String"/>
+        <property name="net" type="boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.storesession.data.SalesOrgData">
+        <property name="code" type="String"/>
+        <property name="brand" type="String"/>
+        <property name="nativeName" type="String"/>
+        <property name="countryNativeName" type="String"/>
+        <property name="countryIsocode" type="String"/>
+        <property name="erpSystem" type="String"/>
+        <property name="calibrationInfoDeactivated" type="boolean"/>
+        <property name="adminManagingSubUsers" type="boolean"/>
+        <property name="invoiceVisibleToAll" type="boolean"/>
+        <property name="orderVisibleToAll" type="boolean"/>
+        <property name="quotationVisibibleToAll" type="boolean"/>
+        <property name="offlineRegistrationAllowed" type="boolean"/>
+        <property name="registeringNewContactToExistingCustomerAllowed" type="boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.storesession.data.ShoppingSettingsCookieData">
+        <property name="channel" type="String"/>
+        <property name="language" type="String"/>
+        <property name="country" type="String"/>
+        <property name="cookieMessageConfirmed" type="Boolean"/>
+        <property name="useIconView" type="Boolean"/>
+        <property name="useListView" type="Boolean"/>
+        <property name="autoApplyFilter" type="Boolean"/>
+        <property name="itemsPerPage" type="String"/>
+        <property name="useDetailView" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.user.data.DistSubUserData">
+        <property name="login" type="String"/>
+        <property name="password" type="String"/>
+        <property name="titleCode" type="String"/>
+        <property name="firstName" type="String"/>
+        <property name="lastName" type="String"/>
+        <property name="email" type="String"/>
+        <property name="phoneNumber" type="String"/>
+        <property name="mobileNumber" type="String"/>
+        <property name="faxNumber" type="String"/>
+        <property name="functionCode" type="String"/>
+        <property name="departmentCode" type="String"/>
+        <property name="budgetWithoutLimit" type="boolean"/>
+        <property name="budgetPerOrder" type="java.math.BigDecimal"/>
+        <property name="yearlyBudget" type="java.math.BigDecimal"/>
+        <property name="residualBudget" type="java.math.BigDecimal"/>
+        <property name="requestQuotationPermission" type="boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.ProductEnhancementData">
+        <property name="productCode" type="String"/>
+        <property name="inShoppingList" type="boolean"/>
+        <property name="exclusionReason" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.ProductEnhancementListData">
+        <property name="productEnhancements"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.ProductEnhancementData>"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.commercefacades.order.data.OrderEntryData">
+        <property name="addedFrom" type="String"/>
+    </bean>
+</beans>
+

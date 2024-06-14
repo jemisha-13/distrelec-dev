@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.hybris.com/cockpit/config">
+   <context merge-by="module" component="explorer-tree">
+      <explorer-tree xmlns="http://www.hybris.com/cockpitng/config/explorertree">
+         <navigation-node id="hmc.group.distrelecfactfindersearch.factfinder.name" position="23">
+            <type-node id="hmc_typenode_distfactfinderexportcronjob"
+                       code="DistAbstractFactFinderExportCronJob"/>
+            <type-node id="hmc_typenode_distfactfinderexportchannel"
+                       code="DistFactFinderExportChannel"/>
+            <type-node id="hmc_typenode_unixscriptexecutioncronjob"
+                       code="UnixScriptExecutionCronJob"/>
+         </navigation-node>
+         <navigation-node id="hmc.group.distrelecexports.name" position="24">
+            <type-node id="hmc_typenode_distproductinfoexportcronjob"
+                       code="DistProductInfoExportCronJob"/>
+            <type-node id="hmc_typenode_distwtcustomerexportcronjob"
+                       code="DistWTcustomerExportCronJob"/>
+            <type-node id="hmc_typenode_distcategorystructureexportcronjob"
+                       code="DistCategoryStructureExportCronJob"/>
+         </navigation-node>
+      </explorer-tree>
+   </context>
+   <context merge-by="type"
+            type="DistFactFinderExportCronJob"
+            parent="GenericItem"
+            component="advanced-search">
+      <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch">
+         <field-list>
+            <field selected="true" name="code" operator="contains"/>
+            <field selected="true" name="channel"/>
+            <field selected="true" name="active"/>
+            <field selected="true" name="status"/>
+            <field selected="true" name="result"/>
+            <field selected="true" name="startTime"/>
+            <field selected="true" name="endTime"/>
+         </field-list>
+      </advanced-search>
+   </context>
+   <context merge-by="type"
+            type="DistFactFinderExportCronJob"
+            parent="CronJob"
+            component="listview">
+      <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+         <column qualifier="code" width="250px"/>
+         <column qualifier="channel" width="250px"/>
+         <column qualifier="active" width="50px"/>
+         <column qualifier="status" width="120px"/>
+         <column qualifier="result" width="120px"/>
+         <column qualifier="startTime" width="150px"/>
+         <column qualifier="endTime"/>
+      </list-view>
+   </context>
+   <context merge-by="type"
+            type="DistAbstractFactFinderExportCronJob"
+            parent="CronJob"
+            component="editor-area">
+      <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+         <tab name="hmc.tab.cronjob.common">
+            <section name="hmc.section.cronjob.factfinderexport"
+                     position="0"
+                     columns="1">
+               <attribute qualifier="mediaPrefix"/>
+            </section>
+         </tab>
+      </editorArea>
+   </context>
+   <context merge-by="type"
+            type="DistFactFinderExportCronJob"
+            parent="DistAbstractFactFinderExportCronJob"
+            component="editor-area">
+      <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+         <tab name="hmc.tab.cronjob.common">
+            <section name="hmc.section.cronjob.factfinderexport"
+                     position="0"
+                     columns="1">
+               <attribute qualifier="mediaPrefix"/>
+               <attribute qualifier="cmsSite"/>
+               <attribute qualifier="channel"/>
+               <attribute qualifier="language"/>
+               <attribute qualifier="media"/>
+               <attribute qualifier="ffImportTriggered" readonly="true"/>
+               <attribute qualifier="suggestFFImportTriggered" readonly="true"/>
+            </section>
+            <section name="hmc.section.cronjob.strategy" position="0" columns="1">
+               <attribute qualifier="queryCreatorStrategyBean"/>
+               <attribute qualifier="parameterProvideStrategyBean"/>
+            </section>
+         </tab>
+      </editorArea>
+   </context>
+   <context merge-by="type"
+            type="DistFactFinderSequentialExportCronJob"
+            parent="DistAbstractFactFinderExportCronJob"
+            component="editor-area">
+      <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+         <tab name="hmc.tab.cronjob.common" merge-mode="merge">
+            <section name="hmc.section.cronjob.factfinderexport" merge-mode="merge">
+               <attribute qualifier="cmsSites"/>
+               <attribute qualifier="medias"/>
+            </section>
+         </tab>
+      </editorArea>
+   </context>
+   <context merge-by="type"
+            type="DistFactFinderExportChannel"
+            parent="GenericItem"
+            component="advanced-search">
+      <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch">
+         <field-list>
+            <field selected="true" name="code"/>
+            <field selected="true" name="channel"/>
+            <field selected="true" name="cmsSite"/>
+            <field selected="true" name="language"/>
+         </field-list>
+      </advanced-search>
+   </context>
+   <context merge-by="type"
+            type="DistFactFinderExportChannel"
+            parent="GenericItem"
+            component="listview">
+      <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+         <column qualifier="code" width="200px"/>
+         <column qualifier="channel" width="150px"/>
+         <column qualifier="cmsSite" width="150px"/>
+         <column qualifier="language"/>
+         <column qualifier="active"/>
+      </list-view>
+   </context>
+   <context merge-by="type"
+            type="DistFactFinderExportChannel"
+            parent="GenericItem"
+            component="editor-area">
+      <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+         <essentials>
+            <essentialSection name="hmc.essential">
+               <attribute qualifier="code"/>
+               <attribute qualifier="channel"/>
+               <attribute qualifier="active"/>
+            </essentialSection>
+         </essentials>
+         <tab name="hmc.properties">
+            <section name="hmc.properties" columns="1">
+               <attribute qualifier="cmsSite"/>
+               <attribute qualifier="language"/>
+               <attribute qualifier="catalogVersion"/>
+            </section>
+         </tab>
+      </editorArea>
+   </context>
+   <context merge-by="type"
+            type="DistFactFinderExportChannel"
+            parent="GenericItem"
+            component="base">
+      <base xmlns="http://www.hybris.com/cockpit/config/hybris">
+         <labels>
+            <label>code+' - '+channel</label>
+         </labels>
+      </base>
+   </context>
+   <context merge-by="type"
+            type="DistCategoryStructureExportCronJob"
+            parent="GenericItem"
+            component="advanced-search">
+      <advanced-search xmlns="http://www.hybris.com/cockpitng/config/advancedsearch">
+         <field-list>
+            <field selected="true" name="code"/>
+            <field selected="true" name="channel"/>
+         </field-list>
+      </advanced-search>
+   </context>
+   <context merge-by="type"
+            type="DistCategoryStructureExportCronJob"
+            parent="CronJob"
+            component="listview">
+      <list-view xmlns="http://www.hybris.com/cockpitng/component/listView">
+         <column qualifier="code" width="200px"/>
+         <column qualifier="channel"/>
+      </list-view>
+   </context>
+   <context merge-by="type"
+            type="DistCategoryStructureExportCronJob"
+            parent="CronJob"
+            component="editor-area">
+      <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+         <essentials>
+            <essentialSection name="hmc.essential">
+               <attribute qualifier="code"/>
+               <attribute qualifier="channel"/>
+            </essentialSection>
+         </essentials>
+         <tab name="hmc.properties">
+            <section name="hmc.properties" columns="1">
+               <attribute qualifier="channel"/>
+               <attribute qualifier="catalogVersion"/>
+            </section>
+         </tab>
+      </editorArea>
+   </context>
+   <context merge-by="type"
+            type="DistCategoryStructureExportCronJob"
+            parent="CronJob"
+            component="base">
+      <base xmlns="http://www.hybris.com/cockpit/config/hybris">
+         <labels>
+            <label>code+' - '+channel</label>
+         </labels>
+      </base>
+   </context>
+   <context merge-by="type"
+            type="CMSSite"
+            parent="BaseSite"
+            component="editor-area">
+      <editorArea xmlns="http://www.hybris.com/cockpitng/component/editorArea">
+         <tab name="hmc.tab.cmssite.factfinder" position="2">
+            <section name="hmc.section.cmssite.factfinder.channels">
+               <attribute qualifier="ffExportChannels"/>
+            </section>
+         </tab>
+      </editorArea>
+   </context>
+</config>

@@ -1,0 +1,76 @@
+<div class="consent-capture">
+  <h2 class="card-item__title" id="checkout.confirmation.stay_tuned">
+    {{ 'checkout.confirmation.stay_tuned' | cxTranslate }}
+  </h2>
+
+  <p
+    class="card-item__txt"
+    id="checkout.confirmation.signup_info"
+    [innerHTML]="'checkout.confirmation.signup_info' | cxTranslate"
+  ></p>
+
+  <div class="py-3">
+    <app-checkbox
+      (change)="onChangePersonalRecommendationsCheckbox($event)"
+      primaryLabelID="checkout.confirmation.receive_comm"
+      primaryLabel="{{ 'checkout.confirmation.receive_comm' | cxTranslate }}"
+      primaryLabelForAttribute="receive_comm"
+    ></app-checkbox>
+  </div>
+
+  <div class="consent-capture__form" [formGroup]="subscribeForm">
+    <div class="form-group" [formGroup]="subscribeForm">
+      <input
+        class="form-control js-validate mr-2"
+        id="subscribeEmailInput"
+        [placeholder]="customerUid"
+        [class.is-correct]="subscribeForm.get('email')?.valid && subscribeForm.get('email')?.touched"
+        [class.empty-field]="subscribeForm.get('email')?.value"
+        [class.is-invalid]="subscribeForm.get('email')?.errors && subscribeForm.get('email')?.touched"
+        autocomplete="given-name"
+        type="text"
+        formControlName="email"
+      />
+
+      <app-dist-button
+        [isDisabled]="subscribeForm.invalid"
+        (click)="subscribeForm.get('email')?.valid && submitSubscribeClick(subscribeReCaptchaRef)"
+        buttonId="subscribeFormBtn"
+        width="w-fixed"
+      >
+        <div class="submit" id="checkout.confirmation.subscribe">
+          <span>{{ 'checkout.confirmation.subscribe' | cxTranslate }}</span>
+          <fa-icon [icon]="faArrowRight"></fa-icon>
+        </div>
+      </app-dist-button>
+    </div>
+
+    <div class="consent-capture__form-info">
+      <div *ngIf="subscribeEmailSuccess_ | async" class="success-info" id="checkout.confirmation.success">
+        {{ 'subscribe.popup.thankyou' | cxTranslate }}
+      </div>
+
+      <div *ngIf="subscribeEmailError.length !== 0" class="error-info" id="checkout.confirmation.error">
+        <strong>{{ subscribeEmailError }}</strong>
+      </div>
+
+      <p
+        class="privacy"
+        id="checkout.confirmation.privacy"
+        [innerHTML]="'checkout.confirmation.privacy' | cxTranslate: { url: '/data-protection/cms/datenschutz' }"
+      ></p>
+
+      <re-captcha
+        #subscribeReCaptchaRef="reCaptcha"
+        (resolved)="$event && subscribeCaptchaResolvedFallback($event)"
+        size="invisible"
+      ></re-captcha>
+
+      <app-checkout-double-opt-in-modal
+        *ngIf="(showDoubleOptInModal_ | async) && !subscribeForm.invalid"
+        [email]="subscribeForm.get('email').value"
+        (doubleOptInModalVisibility)="activateDoubleOptInModal($event)"
+      ></app-checkout-double-opt-in-modal>
+    </div>
+  </div>
+</div>

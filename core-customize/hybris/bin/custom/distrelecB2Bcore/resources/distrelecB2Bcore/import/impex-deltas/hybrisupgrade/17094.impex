@@ -1,0 +1,34 @@
+$contentCatalog = distrelec_IntContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+$distContent = SimpleBannerComponent, CMSParagraphComponent, DistProductCookieCarouselComponent, DistProductReferencesCarouselComponent, DistProductCarouselComponent, DistCategoryCarouselComponent, DistManufacturerCarouselComponent, DistHeroRotatingTeaserComponent, DistCarpetComponent, DistExtCarpetComponent, DistHeadlineComponent, DistIframeComponent, DistWarningComponent, DistContentTeaserComponent, DistLeadTextComponent, DistLinkedImageComponent, DistLinkedImageTextComponent, DistProductFFCampaignCarouselComponent, DistExtHeroRotatingTeaserComponent, DistrelecManufacturerLinecardComponent, DistrelecCategoryGridComponent, DistProductBoxComponent, DistrelecCategoryManagerCardComponent
+$distLogoContent = SimpleBannerComponent
+$distServiceNavContent = CMSLinkComponent
+$distMainNavContent = DistLocalCatalogFilterComponentContainer
+$distSwynContent = CMSLinkComponent
+$distFooterLinksContent = DistLocalCatalogFilterComponentContainer
+$distCertLabelsContent = SimpleBannerComponent
+$distImpressumContent = CMSLinkComponent
+
+INSERT_UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                            ; name                                                      ; frontendTemplateName                         ; restrictedPageTypes(code); active[default = true]
+                          ;                          ; ContentPageFullWidthWithoutNavigationTemplate ; INT - Content Page Full Width Without Navigation Template ; layout/contentPageFullWidthWithoutNavigation ; ContentPage
+
+# Simple Landing Page Templates
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ContentPageFullWidthWithoutNavigationTemplate']; validComponentTypes(code)
+                             ; Logo               ;                                                                                                    ; DistLocalCatalogFilterComponentContainer
+                             ; ServiceNav         ;                                                                                                    ; DistLocalCatalogFilterComponentContainer
+                             ; MainNav            ;                                                                                                    ; DistLocalCatalogFilterComponentContainer
+                             ; Content            ;                                                                                                    ; $distContent
+                             ; Swyn               ;                                                                                                    ; $distSwynContent
+                             ; FooterLinks        ;                                                                                                    ; DistLocalCatalogFilterComponentContainer
+                             ; CertLabels         ;                                                                                                    ; $distCertLabelsContent
+                             ; Impressum          ;                                                                                                    ; $distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; pageTemplate(uid, $contentCV)                 ; position; contentSlot(uid, $contentCV)
+                                    ; Logo-ContentPageFullWidthWithoutNavigationTemplate ;                          ; ContentPageFullWidthWithoutNavigationTemplate ; Logo    ; InternationalLogoContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                    ; $contentCV[unique = true]; pageTemplate(uid, $contentCV)                 ; position; contentSlot(uid, $contentCV)
+                                    ; MainNav-ContentPageFullWidthWithoutNavigationTemplate ;                          ; ContentPageFullWidthWithoutNavigationTemplate ; MainNav ; InternationaMainNavContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                   ; $contentCV[unique = true]; pageTemplate(uid, $contentCV)                 ; position    ; contentSlot(uid, $contentCV)
+                                    ; Footer-ContentPageFullWidthWithoutNavigationTemplate ;                          ; ContentPageFullWidthWithoutNavigationTemplate ; FooterLinks ; InternationaFooterContentSlot

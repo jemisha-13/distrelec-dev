@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- Request Populators -->
+	
+	<bean id="distff.requestAdditionalControlParamsPopulator" class="com.namics.hybris.ffsearch.populator.request.RequestAdditionalControlParamsPopulator"  />
+	<bean id="distff.requestAdditionalSearchParamsPopulator" class="com.namics.hybris.ffsearch.populator.request.RequestAdditionalSearchParamsPopulator" >
+		<property name="sessionService" ref="sessionService" />
+	</bean>
+	
+	<bean id="distff.requestQueryPopulator" class="com.namics.hybris.ffsearch.populator.request.RequestQueryPopulator" >
+		<property name="channelService" ref="distff.channelService" />
+		<property name="baseStoreService" ref="baseStoreService" />
+		<property name="cmsSiteService" ref="cmsSiteService" />
+		<property name="commonI18NService" ref="commonI18NService" />
+		<property name="queryTypePopulator" ref="distff.requestQueryTypePopulator" />
+		<property name="userService" ref="userService" />
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+		<property name="sessionService" ref="sessionService" />
+	</bean>
+	<bean id="distff.requestQueryTypePopulator" class="com.namics.hybris.ffsearch.populator.request.RequestQueryTypePopulator"  />
+	<bean id="distff.requestFiltersPopulator" class="com.namics.hybris.ffsearch.populator.request.RequestFiltersPopulator"  >
+		<property name="categoryService" ref="commerceCategoryService" />
+		<property name="queryTransformer" ref="distff.queryTransformer"/>
+		<property name="distManufacturerService" ref="distManufacturerService"/>
+		<property name="sessionService" ref="sessionService"/>
+		<property name="distPunchoutService" ref="distPunchoutService"/>
+	</bean>
+	<bean id="distff.requestSortsPopulator" class="com.namics.hybris.ffsearch.populator.request.RequestSortsPopulator"  />
+	<bean id="distff.requestPaginationPopulator" class="com.namics.hybris.ffsearch.populator.request.RequestPaginationPopulator" >
+		<property name="defaultPageSize" value="${distrelecfactfindersearch.populators.pagination.defaultPageSize}" />
+	</bean>
+	<bean id="distff.requestManufacturerPopulator" class="com.namics.hybris.ffsearch.populator.request.RequestManufacturerPopulator"  />
+	<bean id="distff.requestSessionIdPopulator" class="com.namics.hybris.ffsearch.populator.request.RequestSessionIdPopulator" />
+	
+	<!-- Response Populators -->
+	<bean id="distff.responseQueryPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponsePageDataPopulator"  >
+		<property name="queryDataPopulator" ref="distff.responseQueryDataPopulator" />
+	</bean>
+	
+	<bean id="distff.productsPerPageOptionPopulator" class="com.namics.hybris.ffsearch.populator.paging.ProductsPerPageOptionPopulator"  />	
+	<bean id="distff.responsePaginationPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponsePaginationPopulator" >
+		<property name="productsPerPageOptionPopulator" ref="distff.productsPerPageOptionPopulator" />
+	</bean>
+	<bean id="distff.responseResultsPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseResultValuesPopulator"  />
+	<bean id="distff.responseOtherFacetPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseOtherFacetPopulator"  >
+		<property name="responseFacetPopulator" ref="distff.responseFacetPopulator" />
+	</bean>
+	<bean id="distff.responseLazyFacetPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseLazyFacetPopulator"  />
+	<bean id="distff.responseQueryDataPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseQueryDataPopulator"/>
+	<bean id="distff.responseCategoryFacetPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseCategoryFacetPopulator"   >
+		<property name="responseFacetPopulator" ref="distff.responseFacetPopulator" />
+		<property name="queryTransformer" ref="distff.queryTransformer" />
+	</bean>
+	<bean id="distff.responseFilterBadgesPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseFilterBadgesPopulator"  >
+		<property name="filterBadgeSorter" ref="distff.responseBreadcrumbSorter" />
+		<property name="messageSource" ref="messageSource"/>
+		<property name="queryTransformer" ref="distff.queryTransformer"/>
+	</bean>
+	<bean id="distff.responseBreadcrumbSorter" class="com.namics.hybris.ffsearch.populator.response.helper.ResponseFilterBadgesSorter"  />
+	<bean id="distff.responseSortPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponsePageDataSortPopulator"  >
+		<property name="responseQueryDataSortPopulator" ref="distff.responseQueryDataSortPopulator" />
+	</bean>
+	<bean id="distff.responseCampaignPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseCampaignPopulator" >
+		<property name="advisorCampaignPopulator" ref="distff.responseAdvisorCampaignPopulator" />
+		<property name="feedbackCampaignPopulator" ref="distff.responseFeedbackCampaignPopulator" />
+		<property name="redirectCampaignPopulator" ref="distff.responseRedirectCampaignPopulator" />
+	</bean>
+	<bean id="distff.responseAdvisorCampaignPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseAdvisorCampaignPopulator" >
+		<property name="searchQueryTransformer" ref="distff.queryTransformer" />
+	</bean>
+	<bean id="distff.responseFeedbackCampaignPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseFeedbackCampaignPopulator"  />
+	<bean id="distff.responseRedirectCampaignPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseRedirectCampaignPopulator"  />
+	
+	<bean id="distff.singleWordSearchItemsPopulator" class="com.namics.hybris.ffsearch.populator.response.SingleWordSearchItemsPopulator" />
+
+	<bean id="distff.responseSessionIdPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseSessionIdPopulator" />
+
+	<!-- Helpers -->
+	<bean id="distff.responseFacetPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseFacetPopulator" >
+		<property name="queryTransformer" ref="distff.queryTransformer"/>
+		<property name="minSliderRange" value="${distrelecfactfindersearch.populators.facet.minSliderRange}" />
+		<property name="commonI18NService" ref="commonI18NService" />
+	</bean>
+	<bean id="distff.responseQueryDataSortPopulator" class="com.namics.hybris.ffsearch.populator.response.ResponseQueryDataSortPopulator"  />
+	<bean id="distff.queryTransformer" class="com.namics.hybris.ffsearch.populator.response.helper.SearchQueryTransformer">
+		<property name="categoryService" ref="commerceCategoryService" />
+		<property name="i18nService" ref="i18nService" />
+		<property name="distManufacturerService" ref="distManufacturerService" />
+		<property name="categoryNavigationHelper" ref="distff.categoryNavigationHelper" />
+		<property name="distCategoryService" ref="distCategoryService" />
+	</bean>
+	<bean id="distff.categoryNavigationHelper" class="com.namics.hybris.ffsearch.populator.response.helper.CategoryNavigationHelper" />
+
+	<bean id="distff.distFactFinderEnergyEfficiencyPopulator" class="com.namics.hybris.ffsearch.populator.suggestion.DistFactFinderEnergyEfficiencyPopulator" />
+
+</beans>

@@ -1,0 +1,142 @@
+<div class="overlay" id="communicationPreferencePopupMain">
+  <div class="communication-pref-popup">
+    <div class="communication-pref-popup__body">
+      <div class="communication-pref-popup__title h3" id="communicationPef_sorryToInterrupt">
+        {{ 'text.login.interrupt' | cxTranslate }}
+      </div>
+      <div class="communication-pref-popup__content" id="communicationPef_desclaimer1">
+        <div class="row communication-pref-popup__row">
+          <div class="col-md-6" id="communicationPef_byEmail">
+            <app-checkbox
+              [primaryLabel]="'registration.comm_pref.receive_email' | cxTranslate"
+              [checked]="communicationPref.emailConsent"
+              (change)="communicationPref.emailConsent = !communicationPref.emailConsent"
+              size="small"
+              checkboxID="communicationPef_byEmailCheck"
+            ></app-checkbox>
+          </div>
+
+          <div class="col-md-6" id="communicationPef_byEmailDisclaimer">
+            {{ 'text.preferences.newsletter.disclaimer' | cxTranslate }}
+          </div>
+        </div>
+        <div class="row communication-pref-popup__row">
+          <div class="col-md-6" id="communicationPef_bySms">
+            <div>
+              <app-checkbox
+                [primaryLabel]="'registration.comm_pref.receive_sms' | cxTranslate"
+                [checked]="communicationPref.smsConsent"
+                (change)="communicationPref.smsConsent = !communicationPref.smsConsent"
+                size="small"
+                checkboxID="communicationPef_bySmsCheck"
+              ></app-checkbox>
+            </div>
+
+            <div>
+              <app-checkbox
+                [primaryLabel]="'registration.comm_pref.receive_phone' | cxTranslate"
+                [checked]="communicationPref.phoneConsent"
+                (change)="communicationPref.phoneConsent = !communicationPref.phoneConsent"
+                size="small"
+                checkboxID="communicationPef_byPhoneCheck"
+              ></app-checkbox>
+            </div>
+
+            <div>
+              <app-checkbox
+                [primaryLabel]="'registration.comm_pref.receive_post' | cxTranslate"
+                [checked]="communicationPref.postConsent"
+                (change)="communicationPref.postConsent = !communicationPref.postConsent"
+                size="small"
+                checkboxID="communicationPef_byPostCheck"
+              ></app-checkbox>
+            </div>
+          </div>
+
+          <div class="col-md-6" id="communicationPef_bySmsDisclaimer">
+            {{ 'registration.comm_pref.receive_marketing_descr' | cxTranslate }}
+          </div>
+        </div>
+
+        <div class="row communication-pref-popup__row">
+          <div class="col-md-6" id="communicationPef_Disclaimer5">
+            <app-checkbox
+              [primaryLabel]="'registration.comm_pref.receive_person_comm' | cxTranslate"
+              [checked]="communicationPref.personalisationConsent"
+              (change)="communicationPref.personalisationConsent = !communicationPref.personalisationConsent"
+              size="small"
+              checkboxID="communicationPef_personalizedCheck"
+            ></app-checkbox>
+          </div>
+
+          <div class="col-md-6" id="communicationPef_Disclaimer6">
+            {{ 'registration.comm_pref.receive_person_comm_descr' | cxTranslate }}
+          </div>
+        </div>
+
+        <div class="row communication-pref-popup__row">
+          <div class="col-md-6" id="communicationPef_Disclaimer7">
+            <app-checkbox
+              [primaryLabel]="'text.preferences.combine.data' | cxTranslate"
+              [checked]="communicationPref.profilingConsent"
+              (change)="communicationPref.profilingConsent = !communicationPref.profilingConsent"
+              size="small"
+              checkboxID="communicationPef_personalizedDataCheck"
+            ></app-checkbox>
+          </div>
+
+          <div
+            class="col-md-6"
+            id="communicationPef_Disclaimer8"
+            [innerHtml]="'registration.comm_pref.receive_profiling_descr' | cxTranslate"
+          ></div>
+        </div>
+
+        <div class="row communication-pref-popup__row">
+          <div
+            class="col-6"
+            id="communicationPef_Disclaimer_data"
+            [innerHtml]="'registration.comm_pref.data.choice' | cxTranslate"
+          ></div>
+        </div>
+
+        <div class="row">
+          <div class="col-6" id="communicationPef_Disclaimer9">
+            {{ 'text.preferences.newsletter.disclaimer.after.register' | cxTranslate }}
+          </div>
+        </div>
+
+        <hr class="communication-pref-popup__horizontal-line" />
+
+        <div>
+          <app-checkbox
+            [primaryLabel]="
+              'text.registration.accept.privacy'
+                | cxTranslate: { '0': '/general-terms-and-conditions/cms/agb?marketingPopup=false' }
+            "
+            [checked]="communicationPref.termsAndConditionsConsent"
+            (change)="communicationPref.termsAndConditionsConsent = !communicationPref.termsAndConditionsConsent"
+            size="small"
+            checkboxID="communicationPef_termsAndConditionsCheck"
+          ></app-checkbox>
+
+          <div class="communication-pref-popup__accept-text">
+            {{ 'text.registration.accept.registering' | cxTranslate }}
+          </div>
+
+          <app-dist-button
+            [isDisabled]="!communicationPref.termsAndConditionsConsent"
+            (click)="completeSetup()"
+            buttonId="completeAccountSetup"
+            routerLink="/"
+            type="primary"
+            height="h-default"
+            width="w-fixed"
+          >
+            {{ 'text.registration.create.account' | cxTranslate }}
+          </app-dist-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

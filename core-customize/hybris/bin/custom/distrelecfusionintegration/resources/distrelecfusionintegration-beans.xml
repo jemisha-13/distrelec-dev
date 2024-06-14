@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<!--
+	ATTENTION: This is just an example file. You have to edit it according to your needs.
+-->
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+
+    <enum  class="de.hybris.platform.solrfacetsearch.config.SolrServerMode">
+        <value>FUSION</value>
+    </enum>
+
+    <bean class="de.hybris.platform.solrfacetsearch.config.IndexConfig" >
+        <property name="cmsSite" type="de.hybris.platform.cms2.model.site.CMSSiteModel" />
+        <property name="startTime" type="java.time.LocalDateTime" />
+        <property name="endTime" type="java.time.LocalDateTime" />
+        <property name="visibleCategoryCodes" type="java.util.Set&lt;java.lang.String>" />
+        <property name="atomicUpdate" type="boolean" />
+        <property name="allCountries"
+                  type="java.util.List&lt;de.hybris.platform.core.model.c2l.CountryModel>" />
+    </bean>
+    
+    <bean class="de.hybris.platform.solrfacetsearch.indexer.workers.IndexerWorkerParameters">
+        <property name="facetSearchConfigData" type="de.hybris.platform.solrfacetsearch.config.FacetSearchConfig" />
+    </bean>
+
+    <bean class="com.distrelec.fusion.integration.dto.FusionDocumentRequestDTO" >
+        <import type="com.fasterxml.jackson.annotation.JsonAnyGetter"/>
+        <property name="fields" type="java.util.Map&lt;java.lang.String, java.lang.Object>" >
+            <annotations scope="getter">@JsonAnyGetter</annotations>
+        </property>
+    </bean>
+
+    <bean class="com.distrelec.fusion.integration.dto.MigrationStatusRequestDTO" >
+        <property name="id" type="Long" />
+        <property name="indexOperationId" type="Long" />
+        <property name="message" type="String" />
+        <property name="name" type="String" />
+        <property name="status" type="String" />
+        <property name="type" type="String" />
+        <property name="count" type="Integer" />
+        <property name="country" type="String"/>
+        <property name="start" type="String"/>
+        <property name="end" type="String"/>
+    </bean>
+
+    <bean class="com.distrelec.fusion.integration.dto.DeleteRequestDTO" >
+        <property name="query" type="String" />
+    </bean>
+
+</beans>

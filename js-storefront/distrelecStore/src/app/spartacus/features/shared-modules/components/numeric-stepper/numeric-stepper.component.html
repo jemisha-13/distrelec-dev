@@ -1,0 +1,62 @@
+<div class="quantity-wrapper">
+  <app-dist-quantity-selector
+    [productCode]="productCode"
+    [quantityStep]="quantityStep"
+    [minimumQuantity]="minimumQuantity"
+    [maximumQuantity]="maximumQuantity"
+    [ids]="ids"
+    [salesStatus]="salesStatus"
+    [isMaximumReachable]="isMaximumReachable"
+    [hasStock]="hasStock"
+    [control]="control"
+    [isCart]="isCart"
+    [disabled]="disabled || (isAddToCartDisabled$ | async)"
+    [inputDelay]="inputDelay"
+  ></app-dist-quantity-selector>
+
+  <ng-container *ngIf="control?.errors?.length > 0">
+    <ng-container *ngFor="let error of control?.errors">
+      <ng-container *ngIf="error.minOrderQuantityDisplayed && !isMaximumSelectedError">
+        <app-tooltip
+          class="min-quantity-tooltip"
+          [size]="'md'"
+          [position]="'bottom'"
+          [tooltipID]="ids.popupId"
+          textAlign="center"
+        >
+          {{
+            isCartSearch
+              ? ('homepage.quickOrderMoq' | cxTranslate: { productCode: productCode, quantity: minimumQuantity })
+              : ('searchResults.moqMsg' | cxTranslate: { productCode: productCode, quantity: minimumQuantity })
+          }}
+        </app-tooltip>
+      </ng-container>
+
+      <ng-container *ngIf="error.maxOrderQuantityDisplayed">
+        <app-tooltip
+          class="maximum-quantity-tooltip"
+          [position]="'bottom'"
+          [tooltipID]="ids.popupId"
+          textAlign="center"
+        >
+          {{ 'validation.error.max.order.quantity.reached' | cxTranslate }}
+        </app-tooltip>
+      </ng-container>
+
+      <ng-container *ngIf="error.remainderQuantityDisplayed">
+        <app-tooltip
+          class="maximum-quantity-tooltip"
+          [position]="'bottom'"
+          [tooltipID]="ids.popupId"
+          textAlign="center"
+        >
+          {{
+            isCartSearch
+              ? ('homepage.quickOrderMoq' | cxTranslate: { productCode: productCode, quantity: quantityStep })
+              : ('searchResults.stepMsg' | cxTranslate: { productCode: productCode, quantity: quantityStep })
+          }}
+        </app-tooltip>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

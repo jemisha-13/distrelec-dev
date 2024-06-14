@@ -1,0 +1,126 @@
+<form [formGroup]="generalRegForm">
+  <ng-container *ngIf="vatIdValidation$ | async as vat">
+    <!-- Displayed when no VAT value is returned from the list -->
+    <ng-container *ngIf="!vat.vatValue">
+      <div class="register__form__additional">
+        <!-- Display organiational number if user is on DK, NO, SE, EE, LV, NL -->
+        <ng-container *ngIf="generalRegForm.get('orgNumber')">
+          <div class="register__form__holder">
+            <div class="register__form__holder--full">
+              <label
+                *ngIf="this.generalRegForm.get('countryCode').value === 'NL'"
+                class="register__form__holder--title"
+                id="registration.b2b.org_No"
+              >
+                {{ 'registration.b2b.comm_number' | cxTranslate }}*
+              </label>
+              <label
+                *ngIf="this.generalRegForm.get('countryCode').value !== 'NL'"
+                class="register__form__holder--title"
+                id="registration.b2b.org_No"
+              >
+                {{ 'registration.b2b.org_No' | cxTranslate }}*
+              </label>
+              <div class="p-relative">
+                <input
+                  class="register__form__holder--input js-validate"
+                  [id]="'orgNumber' + registrationType"
+                  [class.is-correct]="generalRegForm.get('orgNumber').valid"
+                  [class.is-invalid]="generalRegForm.get('orgNumber').errors && generalRegForm.get('orgNumber').touched"
+                  (click)="onControlTouch('orgNumber')"
+                  autocomplete="family-name"
+                  type="text"
+                  formControlName="orgNumber"
+                />
+                <fa-icon
+                  *ngIf="generalRegForm.get('orgNumber').errors && generalRegForm.get('orgNumber').touched"
+                  id="faTimesOrgNumb"
+                  [icon]="faTimes"
+                ></fa-icon>
+                <fa-icon *ngIf="!generalRegForm.get('orgNumber').errors" id="faCheckOrgNumb" [icon]="faCheck"></fa-icon>
+                <small *ngIf="!vat.orgNumberHint" id="vat.vatText">
+                  {{ vat.vatText | cxTranslate }}
+                </small>
+                <small *ngIf="vat.orgNumberHint" id="vat.orgNumberHint">
+                  {{ vat.orgNumberHint | cxTranslate }}
+                </small>
+                <small
+                  *ngIf="generalRegForm.get('orgNumber').errors && generalRegForm.get('orgNumber').touched"
+                  class="error"
+                  id="validations.vat.error_text_orgNo"
+                >
+                  {{ 'validations.vat.error_text_orgNo' | cxTranslate }}
+                  <span *ngIf="vat.orgNumberHint" id="vat.orgNumberHint">
+                    {{ vat.orgNumberHint | cxTranslate }}
+                  </span>
+                </small>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <!-- VAT ID -->
+        <div *ngIf="generalRegForm.get('vatId')" class="register__form__holder">
+          <div class="register__form__holder--full">
+            <label *ngIf="vat.optional" class="register__form__holder--title" id="validations.vat.optional">
+              {{ 'validations.vat.vat' | cxTranslate }} ({{ 'validations.vat.optional' | cxTranslate }})
+            </label>
+            <label *ngIf="!vat.optional" class="register__form__holder--title" id="validations.vat.company_vat">
+              {{ 'validations.vat.company_vat' | cxTranslate }}*
+            </label>
+            <div class="p-relative">
+              <div
+                class="register__form__vatholder"
+                [class.no-vat-prefilled]="generalRegForm.get('countryCode').value === 'LI'"
+              >
+                <div
+                  *ngIf="vatIdPrefix !== ''"
+                  class="prefilled"
+                  id="vatId"
+                  [class.is-invalid]="vat.isVatValidated && !vat.isVatValid"
+                  [class.is-valid]="vat.isVatValidated && vat.isVatValid"
+                >
+                  <p class="vatPrevalue" id="vatPrevalue">
+                    {{ vatIdPrefix }}
+                  </p>
+                </div>
+                <input
+                  class="register__form__holder--input js-validate register__form__vatholder--input"
+                  id="vatIdB2B"
+                  [class.js-validate-optional]="vat.optional"
+                  [placeholder]="vat.placeholder ?? ''"
+                  [disabled]="isLoading$ | async"
+                  [class.is-valid]="vat.isVatValidated && vat.isVatValid"
+                  [class.is-invalid]="vat.isVatValidated && !vat.isVatValid"
+                  [class.register__form__vatholder--input--full-length]="vatIdPrefix === ''"
+                  (click)="onControlTouch('vatId')"
+                  type="text"
+                  formControlName="vatId"
+                />
+                <ng-container *ngIf="isLoading$ | async as isLoading; else successErrorIcons">
+                  <fa-icon id="faCircleNotchGroupVat" [icon]="faCircleNotch" spin="true"></fa-icon>
+                </ng-container>
+                <ng-template #successErrorIcons>
+                  <fa-icon
+                    *ngIf="vat.isVatValidated && !vat.isVatValid"
+                    id="faTimesGroupVat"
+                    [icon]="faTimes"
+                  ></fa-icon>
+                  <fa-icon *ngIf="vat.isVatValidated && vat.isVatValid" id="faCheckGroupVat" [icon]="faCheck"></fa-icon>
+                </ng-template>
+              </div>
+              <small *ngIf="vat.isVatValidated && !vat.isVatValid" class="error" id="validations.vat.error_text">
+                {{ 'validations.vat.error_text' | cxTranslate }}
+                <ng-container *ngIf="isExportShop">
+                  {{ vat.vatText | cxTranslate }}
+                </ng-container>
+              </small>
+              <small class="vat-help" id="vat.vatText">
+                {{ vat.vatText | cxTranslate }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</form>

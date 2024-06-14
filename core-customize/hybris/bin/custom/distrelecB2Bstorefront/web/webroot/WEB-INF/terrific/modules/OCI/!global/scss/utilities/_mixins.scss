@@ -1,0 +1,64 @@
+// Mixins For Matterhorn Design System Theme
+
+// Font Size & Line Height Calculation In PX and REM
+
+@use "sass:math";
+
+@function calculateRem($size) {
+  $remSize: math.div($size, 16px);
+  @return $remSize * 1rem;
+}
+
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+
+@mixin font-size-important($size) {
+  font-size: $size !important;
+  font-size: calculateRem($size) !important;
+}
+
+@mixin line-height($size) {
+  line-height: $size;
+  line-height: calculateRem($size);
+}
+
+@mixin placeholder {
+  &::-webkit-input-placeholder {@content}
+  &:-moz-placeholder           {@content}
+  &::-moz-placeholder          {@content}
+  &:-ms-input-placeholder      {@content}
+}
+
+@mixin img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+@mixin center-fluid() {
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  position:absolute;
+}
+
+// Makes the @content apply between the min and max breakpoints
+@mixin media-breakpoint-between($lower, $upper) {
+  $min: $lower;
+  $max: $upper;
+
+  @if $min != null and $max != null {
+    @media (min-width: $min) and (max-width: $max) {
+      @content;
+    }
+  } @else if $max == null {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else if $min == null {
+    @media (max-width: $max) {
+      @content;
+    }
+  }
+}

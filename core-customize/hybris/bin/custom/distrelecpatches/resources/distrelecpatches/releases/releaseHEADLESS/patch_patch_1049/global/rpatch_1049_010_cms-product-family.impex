@@ -1,0 +1,1396 @@
+$contentIntCatalog = distrelec_IntContentCatalog
+$contentIntCVStaged = catalogVersion(catalog(id[default=$contentIntCatalog]), version[default='Staged'])
+
+REMOVE PageTemplate; uid[unique = true]       ; $contentIntCVStaged[unique = true];
+                   ; ProductFamilyPageTemplate
+
+REMOVE ProductFamilyPage; uid[unique = true]    ; $contentIntCVStaged[unique = true];
+                        ; product-family-default
+
+$contentIntCVOnline = catalogVersion(catalog(id[default=$contentIntCatalog]), version[default='Online'])
+
+REMOVE PageTemplate; uid[unique = true]       ; $contentIntCVOnline[unique = true];
+                   ; ProductFamilyPageTemplate
+
+REMOVE ProductFamilyPage; uid[unique = true]    ; $contentIntCVOnline[unique = true];
+                        ; product-family-default
+
+$contentATCatalog = distrelec_ATContentCatalog
+$atContentCV = catalogVersion(catalog(id[default=$contentATCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $atContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $atContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $atContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $atContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $atContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $atContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $atContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$atContentCV)              ; pageTemplate(uid,$atContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $atContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $atContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentBECatalog = distrelec_BEContentCatalog
+$beContentCV= catalogVersion(catalog(id[default=$contentBECatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $beContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $beContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $beContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $beContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $beContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $beContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $beContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$beContentCV)              ; pageTemplate(uid,$beContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $beContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $beContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentCHCatalog = distrelec_CHContentCatalog
+$chContentCV = catalogVersion(catalog(id[default=$contentCHCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $chContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $chContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $chContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $chContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $chContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $chContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $chContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$chContentCV)              ; pageTemplate(uid,$chContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $chContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $chContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentCZCatalog = distrelec_CZContentCatalog
+$czContentCV= catalogVersion(catalog(id[default=$contentCZCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $czContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $czContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $czContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $czContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $czContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $czContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $czContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$czContentCV)              ; pageTemplate(uid,$czContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $czContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $czContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentDECatalog = distrelec_DEContentCatalog
+$deContentCV= catalogVersion(catalog(id[default=$contentDECatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $deContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $deContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $deContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $deContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $deContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $deContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $deContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$deContentCV)              ; pageTemplate(uid,$deContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $deContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $deContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentDKCatalog = distrelec_DKContentCatalog
+$dkContentCV= catalogVersion(catalog(id[default=$contentDKCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $dkContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $dkContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $dkContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $dkContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $dkContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $dkContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $dkContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$dkContentCV)              ; pageTemplate(uid,$dkContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $dkContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $dkContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentEECatalog = distrelec_EEContentCatalog
+$eeContentCV= catalogVersion(catalog(id[default=$contentEECatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $eeContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $eeContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $eeContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $eeContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $eeContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $eeContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $eeContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$eeContentCV)              ; pageTemplate(uid,$eeContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $eeContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $eeContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentEXCatalog = distrelec_EXContentCatalog
+$exContentCV= catalogVersion(catalog(id[default=$contentEXCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $exContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $exContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $exContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $exContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $exContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $exContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $exContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$exContentCV)              ; pageTemplate(uid,$exContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $exContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $exContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentFICatalog = distrelec_FIContentCatalog
+$fiContentCV= catalogVersion(catalog(id[default=$contentFICatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $fiContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $fiContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $fiContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $fiContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $fiContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $fiContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $fiContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$fiContentCV)              ; pageTemplate(uid,$fiContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $fiContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $fiContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentFRCatalog = distrelec_FRContentCatalog
+$frContentCV= catalogVersion(catalog(id[default=$contentFRCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $frContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $frContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $frContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $frContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $frContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $frContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $frContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$frContentCV)              ; pageTemplate(uid,$frContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $frContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $frContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentHUCatalog = distrelec_HUContentCatalog
+$huContentCV= catalogVersion(catalog(id[default=$contentHUCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $huContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $huContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $huContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $huContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $huContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $huContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $huContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$huContentCV)              ; pageTemplate(uid,$huContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $huContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $huContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentITCatalog = distrelec_ITContentCatalog
+$itContentCV= catalogVersion(catalog(id[default=$contentITCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $itContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $itContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $itContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $itContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $itContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $itContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $itContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$itContentCV)              ; pageTemplate(uid,$itContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $itContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $itContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentLVCatalog = distrelec_LVContentCatalog
+$lvContentCV= catalogVersion(catalog(id[default=$contentLVCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $lvContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $lvContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $lvContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $lvContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $lvContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $lvContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $lvContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$lvContentCV)              ; pageTemplate(uid,$lvContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $lvContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $lvContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentLTCatalog = distrelec_LTContentCatalog
+$ltContentCV= catalogVersion(catalog(id[default=$contentLTCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $ltContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $ltContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $ltContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $ltContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $ltContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $ltContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $ltContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$ltContentCV)              ; pageTemplate(uid,$ltContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $ltContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $ltContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentNLCatalog = distrelec_NLContentCatalog
+$nlContentCV= catalogVersion(catalog(id[default=$contentNLCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $nlContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $nlContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $nlContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $nlContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $nlContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $nlContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $nlContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$nlContentCV)              ; pageTemplate(uid,$nlContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $nlContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $nlContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentNOCatalog = distrelec_NOContentCatalog
+$noContentCV= catalogVersion(catalog(id[default=$contentNOCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $noContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $noContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $noContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $noContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $noContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $noContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $noContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$noContentCV)              ; pageTemplate(uid,$noContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $noContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $noContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentPLCatalog = distrelec_PLContentCatalog
+$plContentCV= catalogVersion(catalog(id[default=$contentPLCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $plContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $plContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $plContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $plContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $plContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $plContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $plContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$plContentCV)              ; pageTemplate(uid,$plContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $plContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $plContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentROCatalog = distrelec_ROContentCatalog
+$roContentCV= catalogVersion(catalog(id[default=$contentROCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $roContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $roContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $roContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $roContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $roContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $roContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $roContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$roContentCV)              ; pageTemplate(uid,$roContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $roContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $roContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentSECatalog = distrelec_SEContentCatalog
+$seContentCV= catalogVersion(catalog(id[default=$contentSECatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $seContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $seContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $seContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $seContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $seContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $seContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $seContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$seContentCV)              ; pageTemplate(uid,$seContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $seContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $seContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page
+
+$contentSKCatalog = distrelec_SKContentCatalog
+$skContentCV= catalogVersion(catalog(id[default=$contentSKCatalog]), version[default='Staged'])
+
+INSERT_UPDATE PageTemplate; $skContentCV[unique = true]; uid[unique = true]       ; name                       ; frontendTemplateName      ; active[default = true]
+                          ;                            ; ProductFamilyPageTemplate; Product Family PageTemplate; category/productFamilyPage
+
+INSERT_UPDATE CMSFlexComponent; $skContentCV[unique = true]; uid[unique = true]                ; name                                   ; flexType
+                              ;                            ; ProductListMainComponent          ; Prod List Main Component               ; ProductListMainComponent
+                              ;                            ; ProductListSideBarComponent       ; Prod List Side Bar Component           ; ProductListSideBarComponent
+                              ;                            ; ProductListFiltersComponent       ; Prod List Filters Component            ; ProductListFiltersComponent
+                              ;                            ; ProductListTitleComponent         ; Prod List Title Component              ; ProductListTitleComponent
+                              ;                            ; ProductListPaginationComponent    ; Prod List Pagination Component         ; ProductListPaginationComponent
+                              ;                            ; ProductFamilyDetailTopBarComponent; Product Family Detail Top Bar Component; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]      ; validComponentTypes(code); template(uid, $skContentCV)[default = 'ProductFamilyPageTemplate' ,unique = true]
+                             ; Logo
+                             ; MainNav
+                             ; FooterLinks
+                             ; MainCategoryNav
+                             ; breadcrumb
+                             ; HeaderWrapper
+                             ; SearchBox                ; CMSFlexComponent
+                             ; HeaderLogin              ; CMSFlexComponent
+                             ; MiniCart                 ; CMSFlexComponent
+                             ; SiteSwitcher             ; CMSFlexComponent
+                             ; ProductListMain          ; CMSFlexComponent
+                             ; ProductListSideBar       ; CMSFlexComponent
+                             ; ProductListFilters       ; CMSFlexComponent
+                             ; ProductListTitle         ; CMSFlexComponent
+                             ; ProductListPagination    ; CMSFlexComponent
+                             ; ProductFamilyDetailTopBar; CMSFlexComponent
+
+INSERT_UPDATE ContentSlot; $skContentCV[unique=true]; uid[unique=true]                           ; name
+                         ;                          ; SearchBoxSlot                              ; Search Box Slot
+                         ;                          ; HeaderLoginSlot                            ; Header Login Slot
+                         ;                          ; MiniCartSlot                               ; Mini Cart Slot
+                         ;                          ; SiteSwitcherSlot                           ; Site Switcher Slot
+                         ;                          ; BreadcrumbContentSlot                      ; Breadcrumb Slot
+                         ;                          ; HeaderWrapperSlot                          ; Header Wrapper Slot
+
+INSERT_UPDATE ContentSlot; $skContentCV[unique=true]; uid[unique=true]                           ; name                                                        ; cmsComponents(uid, $skContentCV); active[default = true]
+                         ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain Content Slot for ProductFamilyPage          ; ProductListMainComponent
+                         ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar Content Slot for ProductFamilyPage       ; ProductListSideBarComponent
+                         ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters Content Slot for ProductFamilyPage       ; ProductListFiltersComponent
+                         ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle Content Slot for ProductFamilyPage         ; ProductListTitleComponent
+                         ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination Content Slot for ProductFamilyPage    ; ProductListPaginationComponent
+                         ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar Content Slot for ProductFamilyPage; ProductFamilyDetailTopBarComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $skContentCV[unique=true]; uid[unique=true]                           ; position[unique=true]    ; contentSlot(uid,$skContentCV)              ; pageTemplate(uid,$skContentCV)[default = 'ProductFamilyPageTemplate', unique=true];
+                                    ;                          ; Logo-ProductFamilyPage                     ; Logo                     ; LogoSlot
+                                    ;                          ; MainNav-ProductFamilyPage                  ; MainNav                  ; MainNavSlot
+                                    ;                          ; Footer-ProductFamilyPage                   ; FooterLinks              ; FooterLinksSlot
+                                    ;                          ; CategoryMainNav-ProductFamilyPage          ; MainCategoryNav          ; MainCategoryNavSlot
+                                    ;                          ; SearchBox-ProductFamilyPage                ; SearchBox                ; SearchBoxSlot
+                                    ;                          ; HeaderLogin-ProductFamilyPage              ; HeaderLogin              ; HeaderLoginSlot
+                                    ;                          ; MiniCart-ProductFamilyPage                 ; MiniCart                 ; MiniCartSlot
+                                    ;                          ; SiteSwitcher-ProductFamilyPage             ; SiteSwitcher             ; SiteSwitcherSlot
+                                    ;                          ; Breadcrumbs-ProductFamilyPage              ; breadcrumb               ; BreadcrumbContentSlot
+                                    ;                          ; HeaderWrapper-ProductFamilyPage            ; HeaderWrapper            ; HeaderWrapperSlot
+                                    ;                          ; ProductListMain-ProductFamilyPage          ; ProductListMain          ; ProductListMain-ProductFamilyPage
+                                    ;                          ; ProductListSideBar-ProductFamilyPage       ; ProductListSideBar       ; ProductListSideBar-ProductFamilyPage
+                                    ;                          ; ProductListFilters-ProductFamilyPage       ; ProductListFilters       ; ProductListFilters-ProductFamilyPage
+                                    ;                          ; ProductListTitle-ProductFamilyPage         ; ProductListTitle         ; ProductListTitle-ProductFamilyPage
+                                    ;                          ; ProductListPagination-ProductFamilyPage    ; ProductListPagination    ; ProductListPagination-ProductFamilyPage
+                                    ;                          ; ProductFamilyDetailTopBar-ProductFamilyPage; ProductFamilyDetailTopBar; ProductFamilyDetailTopBar-ProductFamilyPage
+
+INSERT_UPDATE ProductFamilyPage; $skContentCV[unique = true]; uid[unique = true]; name               ; title              ; masterTemplate(uid, $skContentCV)[unique = true][default = 'ProductFamilyPageTemplate']; defaultFamilyPage[default = true]; approvalStatus(code)[default = 'approved']
+                               ;                            ; ProductFamilyPage ; Product Family Page; Product Family Page

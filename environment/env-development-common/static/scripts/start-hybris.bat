@@ -1,0 +1,1 @@
+call core-customize\hybris\bin\platform\hybrisserver.bat

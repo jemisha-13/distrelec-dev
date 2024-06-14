@@ -1,0 +1,139 @@
+@if (productData$ | async; as productData) {
+  <app-dist-sticky-add-to-cart
+    [class.d-none]="!isStickyAddToCartShown"
+    [productCode]="productData.code"
+    [orderQuantityMinimum]="productData.orderQuantityMinimum"
+    [quantityStep]="productData.orderQuantityStep"
+    [salesStatus]="productData.salesStatus"
+    [title]="productData.name"
+    [manNumber]="productData.typeName"
+    [currentChannelData$]="currentChannelData$"
+  ></app-dist-sticky-add-to-cart>
+  <div class="container summary">
+    <app-product-intro
+      [title]="productData.name"
+      [brandLogo]="productData.distManufacturer"
+      [code]="productData.code"
+      [manNumber]="productData.typeName"
+      [familyName]="productData.distManufacturer?.name"
+      [familyNameUrl]="productData.distManufacturer?.urlId"
+      [reevooEligible]="productData.eligibleForReevoo"
+      [productFamilyUrl]="productData.productFamilyUrl"
+      [alternativeAliasMPN]="productData.alternativeAliasMPN"
+    ></app-product-intro>
+    @if (isAlertBannerShown(productData) | async) {
+      <app-alert-banner bannerType="warning" alertType="regular-alert">
+        @if (altProducts$ | async; as altProducts) {
+          <p *ngIf="altProducts.length > 0" class="alert-text">
+            {{ alertBannerMessage | cxTranslate }}.
+            <a class="view-alternative" (click)="scrollToAlternative('pdp_alternatives_accessories')">
+              {{ 'salesStatus.pdp.view_alternative' | cxTranslate }}
+            </a>
+          </p>
+          <p *ngIf="altProducts.length === 0" class="alert-text">
+            {{ alertBannerMessage | cxTranslate }}.
+            <a class="view-alternative" [routerLink]="productData.breadcrumbs?.[0]?.url">
+              {{ 'product.eol.backToCategory' | cxTranslate }}
+            </a>
+          </p>
+        }
+      </app-alert-banner>
+    }
+
+    <app-calibrated-banner
+      *ngIf="productData.calibrationItemArtNo"
+      [calibratedProductCode]="productData.calibrationItemArtNo"
+      [isCalibrated]="productData.calibrated"
+    ></app-calibrated-banner>
+
+    <div class="image-row row">
+      <div class="col-12 col-lg-8 col-md-7 image-container">
+        <app-image-holder
+          [productImageData]="productData?.images"
+          [code]="productData?.code"
+          [isCalibrated]="productData?.calibrated"
+          [activePromotionLabels]="productData?.activePromotionLabels"
+          [statusCode]="productData?.salesStatus"
+          [energyEfficiency]="productData?.energyEfficiency"
+          [energyPower]="productData?.energyPower"
+          [productTitle]="productData?.name"
+          [energyEfficiencyLabelImageUrl]="getEnergyEfficiencyLabelImageUrl(productData?.energyEfficiencyLabelImage)"
+          [productData]="productData"
+        ></app-image-holder>
+        @if (!isOnlyImage(productData.images, productData.videos)) {
+          <app-image-gallery
+            class="w-100 d-flex justify-content-center"
+            [productImages]="productData?.images"
+            [productVideos]="productData?.videos"
+          ></app-image-gallery>
+        }
+        <div class="w-100 image-reference d-flex justify-content-center">
+          <p id="pdp_image_holder_image_reference">
+            {{ 'product.image_holder.image_reference' | cxTranslate }}
+          </p>
+        </div>
+        <app-add-to-list
+          class="w-100 add-to-list d-flex justify-content-center"
+          [product]="productData"
+          [control]="addToCartForm.get('quantity')"
+          compareListId="pdp_compare_btn"
+          shoppingListId="pdp_shopping_list_link"
+        ></app-add-to-list>
+        <app-back-to-category-cta class="w-100 back-to-category"></app-back-to-category-cta>
+      </div>
+      <div class="col-12 col-lg-4 col-md-5 price-and-stock">
+        <app-price-and-stock
+          [product]="productData"
+          [displayNotifyModal$]="displayNotifyModal$"
+          [ghsIcons]="productData.ghsImages"
+        ></app-price-and-stock>
+      </div>
+    </div>
+    <div class="row product-spec-row">
+      <div
+        class="product-spec-col col-12"
+        [class]="productData.downloads?.length ? 'col-md-7 col-lg-8 has-downloads' : ''"
+      >
+        <app-product-specifications [productData]="productData"></app-product-specifications>
+      </div>
+      <div *ngIf="productData.downloads?.length" class="downloads-col col-12 col-lg-4 col-md-5">
+        <app-downloads [product]="productData" [downloads]="productData.downloads"></app-downloads>
+      </div>
+      <div class="content-holder-col col-lg-8 col-md-7">
+        <div class="content-holder">
+          <a
+            class="email-share"
+            id="pdp_shareBy_email_link"
+            [href]="getShareUrl(productData) | async"
+            data-aainteraction="share by email"
+            data-location="pdp"
+          >
+            <app-icon [icon]="iconLetter"></app-icon>
+            <span>{{ 'product.specification.share_by_email' | cxTranslate }}</span>
+          </a>
+          <button
+            class="btn error-link"
+            id="pdp_spec_report_btn"
+            (click)="openDisplayForm()"
+            data-aainteraction="report an error"
+            data-location="pdp"
+          >
+            <app-icon [icon]="iconBug"></app-icon>
+            <span>{{ 'product.specification.report_error' | cxTranslate }}</span>
+          </button>
+        </div>
+        <ng-container></ng-container>
+        <div *ngIf="isDisplayReportErrorForm | async">
+          <app-report-error-form
+            [isDisplayReportErrorForm]="isDisplayReportErrorForm"
+            [productId]="productData.code"
+            [productTitle]="productData.name"
+          ></app-report-error-form>
+        </div>
+      </div>
+    </div>
+    <div class="product-details-row">
+      <app-product-details [productData]="productData"></app-product-details>
+    </div>
+  </div>
+}

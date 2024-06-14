@@ -1,0 +1,16 @@
+# Replacing the D4 Logo with the Distrelec Logo
+
+$defaultCatalog=Default
+$defaultCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $defaultCatalog]), CatalogVersion.version[default = Staged])[default = $defaultCatalog:Staged]
+
+$contentCatalog=distrelec_FRContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/revert-d4/media/header
+
+UPDATE Media; code[unique = true]   ;$defaultCV[unique = true];mime[default = image/jpeg]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator];
+            ;distrelec_webshop_logo ;                         ;                          ; $siteResource/DISTRELEC_Logo.png
+
+UPDATE SimpleBannerComponent;uid[unique = true]; $contentCV[unique = true]; media(code, $defaultCV)[lang = fr];media(code, $defaultCV)[lang = en]; localizedUrlLink[lang = en]; localizedUrlLink[lang = fr]
+                            ;LogoComponent     ;                          ; distrelec_webshop_logo            ; distrelec_webshop_logo ; / ; /
+

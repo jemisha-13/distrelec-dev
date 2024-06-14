@@ -1,0 +1,19 @@
+<div *ngIf="component" class="item">
+  <ng-template [ngIf]="component?.localizedUrl === '#triggerCookieSettings'" [ngIfElse]="regularLink">
+    <a class="item-link" [id]="id" [title]="component.linkName" (click)="openPrivacyBanner()">
+      {{ component.linkName }}
+    </a>
+  </ng-template>
+
+  <ng-template #regularLink>
+    <a
+      class="item-link"
+      [id]="id"
+      [title]="component.linkName"
+      [externalRouterLink]="component?.localizedUrl || component?.url"
+      (click)="dispatchInteractionEvent()"
+    >
+      {{ component.linkName }}
+    </a>
+  </ng-template>
+</div>

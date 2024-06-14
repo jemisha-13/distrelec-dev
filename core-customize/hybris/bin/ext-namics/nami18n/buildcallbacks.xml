@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2010 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+
+  
+-->
+<!--
+ All hybris buildcallbacks.xml macrodefinitions:
+ 
+ Build/Documentation
+ 
+	 before/after ant macro "clean"
+		 <macrodef name="nami18n_before_clean"/>
+		 <macrodef name="nami18n_after_clean"/>
+	 
+	 before/after ant macro "build"
+		 <macrodef name="nami18n_before_build"/>
+		 <macrodef name="nami18n_after_build"/>
+		 
+	 before/after ant macro "compile_core" - the core module of the extension
+		 <macrodef name="nami18n_before_compile_core">
+		 <macrodef name="nami18n_after_compile_core">
+	 
+	 before/after ant macro "compile_web" - the web module of the extension
+		 <macrodef name="nami18n_before_compile_web" />
+		 <macrodef name="nami18n_after_compile_web" />
+	 
+	 before/after ant macro "compile_hmc" - the hmc module of the extension
+		 <macrodef name="nami18n_before_compile_hmc" />
+		 <macrodef name="nami18n_after_compile_hmc" />
+ 
+ Preparing extension
+ 
+	 will be called in the beginning of the ant call and only once (also when using multiple 
+	 ant targets e.g. ant build yunittest)	
+		 <macrodef name="nami18n_only_once_prepare"/>
+ 
+ Creating ear module/production
+ 
+	 before/after ant macro "ear"
+		 <macrodef name="nami18n_before_ear"/>
+		 <macrodef name="nami18n_after_ear"/>
+
+	 before/after ant macro "production" - for hybris server only
+		 <macrodef name="nami18n_before_production" />
+		 <macrodef name="nami18n_after_production" />
+ 
+ JUnit Test
+ 
+	 before/after ant macro "yunitinit" 
+		 <macrodef name="nami18n_before_yunitinit" />
+		 <macrodef name="nami18n_after_yunitinit" />
+	 
+	 before/after ant macro "yunit"
+		 <macrodef name="nami18n_before_yunit" />
+		 <macrodef name="nami18n_after_yunit" /> 
+		 
+ Distribution package
+ 
+ 	 before/after ant macro "dist" - internal target; only for use when platform is available in source code
+		 <macrodef name="nami18n_after_dist"/>
+		 <macrodef name="nami18n_before_dist"/>
+	 
+	 before/after ant macro "dist_copy" - internal target; only for use when platform is available in source code
+		 <macrodef name="nami18n_before_dist_copy"/>
+		 <macrodef name="nami18n_after_dist_copy"/>
+ 
+-->
+
+<project name="nami18n_buildcallbacks" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<property name="maven-ant-tasks-jar" location="${ext.nami18n.path}/antlib/maven-ant-tasks-2.1.1.jar" />
+
+
+	<path id="maven-ant-tasks.classpath" path="${maven-ant-tasks-jar}" />
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="maven-ant-tasks.classpath" />
+
+	<macrodef name="nami18n_only_once_prepare">
+		<sequential>
+			<!--<echo message="Namics I18N Maven depenency run..." />-->
+
+			<!-- Sources auch landen: sourcesFilesetId="namicsI18n.sources.dependency.fileset"
+			-->
+
+			<!--
+			<artifact:dependencies pathId="maven-ant-tasks.classpath"  
+				filesetId="namicsI18n.dependency.fileset"
+				sourcesFilesetId="namicsI18n.sources.dependency.fileset"
+				versionsId="namicsI18n.dependency.versions">
+				
+			  		<remoteRepository id="nexus.namics.com" url="http://nexus.namics.com/content/repositories/namics-common/" layout="default" />  
+			  		<dependency groupId="com.namics.commons.i18n" artifactId="namics-i18n" version="1.1.0" scope="provided"/>
+			</artifact:dependencies>
+			
+			<echo message="Copy maven artifacts to lib directory..." />
+			<copy todir="${ext.nami18n.path}/lib">
+			  <fileset refid="namicsI18n.dependency.fileset" />
+			  
+				<mapper classpath="${maven-ant-tasks-jar}"
+			          classname="org.apache.maven.artifact.ant.VersionMapper"
+			          from="${namicsI18n.dependency.versions}" to="flatten" />
+			  
+			</copy>
+			-->
+    <!--
+			<echo message="Copy repository libs to lib directory..." />
+			<copy todir="${ext.nami18n.path}/lib" overwrite="true" verbose="true">
+				<fileset dir="${ext.nami18n.path}/repositorylib">
+					<exclude name="**/*.svn" />
+					<exclude name="readme.txt" />
+				</fileset>
+			</copy>
+    -->
+			<!--
+			<copy todir="${ext.nami18n.path}/gensrc">
+			  <fileset refid="namicsI18n.sources.dependency.fileset" />
+  			  <mapper classpath="${maven-ant-tasks-jar}"
+			          classname="org.apache.maven.artifact.ant.VersionMapper"
+			          from="${namicsI18n.dependency.versions}" to="flatten" />
+			  
+			</copy>
+			-->
+
+			<!--<echo message="Finished Namics I18N Maven depenency import!" />-->
+		</sequential>
+	</macrodef>
+
+	<!--
+	<macrodef name="nami18n_after_clean">
+		<sequential>
+		<echo message="Remove libs in lib directory..." />
+			<delete file="${ext.nami18n.path}/lib/lightweight-namics-i18n.jar" verbose="true" />
+		</sequential>
+	</macrodef>
+	-->	
+</project>

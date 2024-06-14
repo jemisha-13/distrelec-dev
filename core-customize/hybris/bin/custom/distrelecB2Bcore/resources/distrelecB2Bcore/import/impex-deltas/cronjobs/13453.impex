@@ -1,0 +1,8 @@
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; templateScript[lang = en]                  ; contextClass[default = 'com.namics.distrelec.b2b.core.mail.internal.DistInternalMailContext']; rendererType(code)[default = 'velocity']
+                              ; MOQ_Over_Stock_CronJob_Report_Template ; These are the Products with MOQ Over Stock ;
+
+INSERT_UPDATE DistInternalCronjob; code[unique = true]       ; job(code)[unique = true]  ; fromMailAddress            ; toMailAddress            ; emailSubject                        ; sessionUser(uid)[default = technicalSanityCheckUser]; sessionLanguage(isocode)[default = 'en']; emailTemplate[default = 'MOQ_Over_Stock_CronJob_Report_Template']
+                                 ; DistMOQOverStockReportJob ; DistMOQOverStockReportJob ; do-not-reply@distrelec.com ; steve.herd@distrelec.com ; Products with MOQ over Stock {date} ;
+
+INSERT_UPDATE Trigger; cronjob(code)[unique = true]; cronExpression
+                     ; DistMOQOverStockReportJob   ; 0 0 7 15 * ? * ;

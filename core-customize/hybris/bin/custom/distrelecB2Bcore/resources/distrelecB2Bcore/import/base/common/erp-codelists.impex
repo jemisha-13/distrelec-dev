@@ -1,0 +1,716 @@
+#-------------------------------------------------------------------------------
+# GERMAN is set as default locale for ImpEx. Then, the decimal separator would be a comma!
+# Set locale to ch_DE. Hence, the usual number format can be used.  e.g.  7.2
+#-------------------------------------------------------------------------------
+#% impex.setLocale(new Locale("de","CH"));
+
+# Warehouse
+INSERT_UPDATE Warehouse;code[unique=true];stockManagementSystem(code);name[lang=en];pickupStreetName;pickupStreetNumber;pickupPostalCode;pickupTown;pickupPhone;pickupOpeningHoursMoFr;pickupOpeningHoursSa;default;vendor(code)[default=default]
+;7371;SAP  ;TeCo CDC;De Tweeling;28;5215;MC ’s Hertogenbosch (The Netherlands NL);;"07:00 - 20:00";"";false;
+;EF71;SAP  ;Virtual Supplier Warehouse beside 7371 used for drop shipment articles with a short delivery time;;;;;;;;false;
+;ES71;SAP  ;Virtual Supplier Warehouse beside 7371 used for drop shipment articles with a long delivery time;;;;;;;;false;
+;7372;SAP  ;DE WH NewCo Switzerland;;;;;;"??:?? - ??:??";"??:?? - ??:??";false;
+;EF72;SAP  ;Virtual Supplier Warehouse beside 7372 used for drop shipment articles with a short delivery time;;;;;;;;false;
+;ES72;SAP  ;Virtual Supplier Warehouse beside 7372 used for drop shipment articles with a long delivery time;;;;;;;;false;
+;7374;SAP  ;Distrelec Switzerland;Grabenstrasse;6;8606;Nänikon;044 944 99 11;"07:30 - 18:00";;false;
+;7641;SAP  ;Elfa Distrelec Solna;Industrivägen;23;171 45;Solna;"+46 (0)20 75 80 00";"08:00 - 17:00";"-";false;
+;7661;SAP  ;Elfa Distrelec Sp. z o.o.;Al. Jerozolimskie;136;02-305;Warszawa;;"??:?? - ??:??";"??:?? - ??:??";false;
+#;7711;SAP  ;Pickup Distrelec LT;Visorių g.;2;08300;Vilnius;+370 5 2789259;"08:00 - 17:00";"-";false;
+#;7821;SAP  ;Pickup Distrelec LT;Visorių g.;2;08300;Vilnius;+370 5 2789259;"08:00 - 17:00";"-";false;
+;7373;SAP  ;Pickup Distrelec SE;Visorių g.;2;08300;Vilnius;+370 5 2789259;"08:00 - 17:00";"-";false;
+;7791;SAP  ;Elfa Distrelec O\u00DC;Valukoja;8;;Tallinn;+3726605327;"9:00 - 18:00";"-";false;
+;7811;SAP  ;Elfa Distrelec Latvija;Mednieku iela;4A;;Rīģa;67885544;"9:00 - 18:00";"-";false;
+;EF51;SAP  ;Virtual Supplier Warehouse beside 7371 used for drop shipment articles with a short delivery time;;;;;;;;false;
+;ES51;SAP  ;Virtual Supplier Warehouse beside 7371 used for drop shipment articles with a long delivery time;;;;;;;;false;
+;EF31;SAP  ;Virtual Supplier Warehouse only for Italy. Used for local drop shipment articles with a short delivery time;;;;;;;;false;
+;ES31;SAP  ;Virtual Supplier Warehouse only for Italy. Used for local drop shipment articles with a long delivery time;;;;;;;;false;
+;7171;SAP  ;Warehouse only for CH. With a long delivery time;;;;;;;;false;
+;7375;SAP ;CH Dummy warehouse for Proditec slow moving stock;;;;;;;;false;
+
+
+
+
+# DistDocumentType
+INSERT_UPDATE DistDocumentType;code[unique=true];rank
+;datasheets;1
+;manuals;2
+;certificates;3
+;brochures;4
+;cad_and_drawings;4
+;software;5
+;templates;6
+
+
+# DistPromotionLabel
+# WARNING: Code needs to be one String (without spaces) if the promotion is maintained in DistSalesOrgProduct.
+# In case of a space in the code, the attributeProvider will throw AttributeNotSupportedException.
+INSERT_UPDATE DistPromotionLabel;code[unique=true];rank;priority;maintainedInDistSalesOrgProduct;maintainedInProductCountry
+;hotOffer;1;2;false;true
+;top;2;6;false;true
+;hit;3;7;false;true
+;used;4;8;false;false
+;offer;5;3;false;false
+;bestseller;6;5;true;false
+;new;7;4;true;false
+;noMover;8;1;false;true
+;calibrationService;9;0;false;false
+
+# DistSalesUnit
+INSERT_UPDATE DistSalesUnit;code[unique=true];amount;unit(code);nameErp[lang=en];nameErp[lang=de]
+;0001;2;PC;PAAR (= 2 STÜCK);PAAR (= 2 STÜCK)
+;0003;5;PAA;SET WITH 5 PAIRS;SET WITH 5 PAIRS
+;0009;50;PAA;SET WITH 50 PAIRS;SET WITH 50 PAIRS
+;0013;7;PC;PACKUNG À 7 STÜCK;PACKUNG À 7 STÜCK
+;0016;16;PC;PACKUNG À 16 STÜCK;PACKUNG À 16 STÜCK
+;0027;60;PC;PACKUNG À 60 STÜCK;PACKUNG À 60 STÜCK
+;0033;108;PC;PACKUNG À 108 STÜCK;PACKUNG À 108 STÜCK
+;0034;410;PC;PACKUNG À 410 STÜCK;PACKUNG À 410 STÜCK
+;0035;1440;PC;PACKUNG À 1440 STÜCK;PACKUNG À 1440 STÜCK
+;0036;500;M;ROLLE À 500 METER;ROLLE À 500 METER
+;0037;1.5;M;ROLLE À 1.5 METER;ROLLE À 1.5 METER
+;0038;2;M;ROLLE À 2 METER;ROLLE À 2 METER
+;0039;2.5;M;ROLLE À 2.5 METER;ROLLE À 2.5 METER
+;0040;3;M;ROLLE À 3 METER;ROLLE À 3 METER
+;0041;15;M;ROLLE À 15 METER;ROLLE À 15 METER
+;0042;5;M;ROLLE À 5 METER;ROLLE À 5 METER
+;0043;10;M;ROLLE À 10 METER;ROLLE À 10 METER
+;0044;20;M;ROLLE À 20 METER;ROLLE À 20 METER
+;0045;25;M;ROLLE À 25 METER;ROLLE À 25 METER
+;0046;30;M;ROLLE À 30 METER;ROLLE À 30 METER
+;0047;3.5;M;ROLLE À 3.5 METER;ROLLE À 3.5 METER
+;0048;4.5;M;ROLLE À 4.5 METER;ROLLE À 4.5 METER
+;0049;1000;M;ROLLE À 1000 METER;ROLLE À 1000 METER
+;0050;50;M;ROLLE À 50 METER;ROLLE À 50 METER
+;0051;60;M;ROLLE À 60 METER;ROLLE À 60 METER
+;0052;83.82;M;ROLLE À 83.82 METER;ROLLE À 83.82 METER
+;0053;457;M;ROLLE À 457 METER;ROLLE À 457 METER
+;0054;250;M;ROLLE À 250 METER;ROLLE À 250 METER
+;0055;100;M;ROLLE À 100 METER;ROLLE À 100 METER
+;0056;1000;PC;ROLLE À 1000 STÜCK;ROLLE À 1000 STÜCK
+;0057;305;M;ROLLE À 305 METER;ROLLE À 305 METER
+;0058;300;M;ROLLE À 300 METER;ROLLE À 300 METER
+;0059;32;PC;BOGEN À 32 STK.;BOGEN À 32 STK.
+;0060;1;KG;ROLLE À 1 KG;ROLLE À 1 KG
+;0061;200;G;ROLLE À 200 G;ROLLE À 200 G
+;0062;100;G;ROLLE À 100 G;ROLLE À 100 G
+;0063;2;M;BOX À 2 METER;BOX À 2 METER
+;0064;0.1;KG;ROLLE À 0.1 KG;ROLLE À 0.1 KG
+;0065;4;PC;PACKUNG À 4 STÜCK;PACKUNG À 4 STÜCK
+;0067;10;PC;ELEMENT À 10 STÜCK;ELEMENT À 10 STÜCK
+;0068;5;PC;PACKUNG À 5 STÜCK;PACKUNG À 5 STÜCK
+;0069;10;PC;PACKUNG À 10 STÜCK;PACKUNG À 10 STÜCK
+;0071;30;PC;BOGEN À 30 ETIKETTEN;BOGEN À 30 ETIKETTEN
+;0072;100;PC;BOGEN À 100 ETIKETTEN;BOGEN À 100 ETIKETTEN
+;0073;3;PC;PACKUNG À 3 STÜCK;PACKUNG À 3 STÜCK
+;0074;6;PC;PACKUNG À 6 STÜCK;PACKUNG À 6 STÜCK
+;0075;15;PC;PACKUNG À 15 STÜCK;PACKUNG À 15 STÜCK
+;0076;20;PC;PACKUNG À 20 STÜCK;PACKUNG À 20 STÜCK
+;0077;25;PC;PACKUNG À 25 STÜCK;PACKUNG À 25 STÜCK
+;0078;50;PC;PACKUNG À 50 STÜCK;PACKUNG À 50 STÜCK
+;0079;75;PC;PACKUNG À 75 STÜCK;PACKUNG À 75 STÜCK
+;0080;100;PC;PACKUNG À 100 STÜCK;PACKUNG À 100 STÜCK
+;0081;85;PC;PACKUNG À  85 STÜCK;PACKUNG À  85 STÜCK
+;0083;198;PC;PACKUNG À 198 STÜCK;PACKUNG À 198 STÜCK
+;0084;280;PC;ROLLE À 280 STÜCK;ROLLE À 280 STÜCK
+;0085;24;PC;BOGEN À 24 ETIKETTEN;BOGEN À 24 ETIKETTEN
+;0086;310;PC;ROLLE À 310 STÜCK;ROLLE À 310 STÜCK
+;0087;330;PC;ROLLE À 330 STÜCK;ROLLE À 330 STÜCK
+;0088;530;PC;ROLLE À 530 STÜCK;ROLLE À 530 STÜCK
+;0089;500;PC;PACKUNG À 500 STÜCK;PACKUNG À 500 STÜCK
+;0090;250;PC;ROLLE À 250 STÜCK;ROLLE À 250 STÜCK
+;0091;770;PC;ROLLE À 770 STÜCK;ROLLE À 770 STÜCK
+;0092;100;PC;ROLLE À 100 STÜCK;ROLLE À 100 STÜCK
+;0093;500;PC;ROLLE À 500 STÜCK;ROLLE À 500 STÜCK
+;0094;44;PC;BOGEN À 44 HÜLLEN;BOGEN À 44 HÜLLEN
+;0095;12000;PC;ROLLE À 12000 STÜCK;ROLLE À 12000 STÜCK
+;0096;7000;PC;ROLLE À 7000 STÜCK;ROLLE À 7000 STÜCK
+;0097;750;PC;ROLLE À 750 STÜCK;ROLLE À 750 STÜCK
+;0098;1900;PC;ROLLE À 1900 STÜCK;ROLLE À 1900 STÜCK
+;0099;6000;PC;ROLLE À 6000 STÜCK;ROLLE À 6000 STÜCK
+;0100;1.2;M;STÜCK = 1.2 M;STÜCK = 1.2 M
+;0101;24;PC;STÜCK = 24 ELEMENTE;STÜCK = 24 ELEMENTE
+;0102;1.83;M;STÜCK = 1.83 M;STÜCK = 1.83 M
+;0103;2;M;STÜCK = 2 M;STÜCK = 2 M
+;0104;610;MM;STÜCK = 610 MM;STÜCK = 610 MM
+;0105;125;PC;BOX = 125 STK.;BOX = 125 STK.
+;0106;40;PC;PACKUNG À 40 STK.;PACKUNG À 40 STK.
+;0107;12;PC;PACKUNG À 12 STK.;PACKUNG À 12 STK.
+;0108;350;PC;ROLLE À 350 STÜCK;ROLLE À 350 STÜCK
+;0109;300;PC;ROLLE À 300 STÜCK;ROLLE À 300 STÜCK
+;0110;1;PAC;SET;SET
+;0111;1;PAC;BLISTER;BLISTER
+;0112;25;M;BOX À 25 M;BOX À 25 M
+;0113;1;PAC;PACKUNG;PACKUNG
+;0114;2;PC;PACKUNG À 2 STÜCK;PACKUNG À 2 STÜCK
+;0115;100;PAA;BOX À 100 PAAR;BOX À 100 PAAR
+;0117;50;PC;ROLLE À 50 STÜCK;ROLLE À 50 STÜCK
+;0118;406;MM;STÜCK = 406 MM;STÜCK = 406 MM
+;0119;305;MM;STÜCK = 305 MM;STÜCK = 305 MM
+;0120;5000;PC;ROLLE À 5000 STÜCK;ROLLE À 5000 STÜCK
+;0121;1700;PC;ROLLE À 1700 STÜCK;ROLLE À 1700 STÜCK
+;0123;8;PC;PACKUNG À 8 STÜCK;PACKUNG À 8 STÜCK
+;0124;30;PC;PACKUNG À 30 STÜCK;PACKUNG À 30 STÜCK
+;0125;42;PC;PACKUNG À 42 STK.;PACKUNG À 42 STK.
+;0127;72;PC;PACKUNG À 72 STÜCK;PACKUNG À 72 STÜCK
+;0128;36;PC;PACKUNG À 36 STÜCK;PACKUNG À 36 STÜCK
+;0129;600;PC;PACKUNG À 600 STÜCK;PACKUNG À 600 STÜCK
+;0130;700;PC;PACKUNG À 700 STÜCK;PACKUNG À 700 STÜCK
+;0131;18;PC;PACKUNG À 18 STÜCK;PACKUNG À 18 STÜCK
+;0132;24;PC;PACKUNG À 24 STÜCK;PACKUNG À 24 STÜCK
+;0133;48;PC;PACKUNG À 48 STÜCK;PACKUNG À 48 STÜCK
+;0134;200;PC;PACKUNG À 200 STÜCK;PACKUNG À 200 STÜCK
+;0135;440;PC;PACKUNG À 440 STÜCK;PACKUNG À 440 STÜCK
+;0136;10000;PC;ROLLE À 10000 STÜCK;ROLLE À 10000 STÜCK
+;0138;200;PAA;BOX À 200 PAAR;BOX À 200 PAAR
+;0139;3000;PC;ROLLE À 3000 STÜCK;ROLLE À 3000 STÜCK
+;0140;2000;PC;ROLLE À 2000 STÜCK;ROLLE À 2000 STÜCK
+;0141;2500;PC;ROLLE À 2500 STÜCK;ROLLE À 2500 STÜCK
+;0142;4000;PC;ROLLE À 4000 STÜCK;ROLLE À 4000 STÜCK
+;0143;800;PC;ROLLE À 800 STÜCK;ROLLE À 800 STÜCK
+;0144;600;PC;ROLLE À 600 STÜCK;ROLLE À 600 STÜCK
+;0146;425;PC;ROLLE À 425 STÜCK;ROLLE À 425 STÜCK
+;0147;1250;PC;ROLLE À 1250 STÜCK;ROLLE À 1250 STÜCK
+;0148;1875;PC;ROLLE À 1875 STÜCK;ROLLE À 1875 STÜCK
+;0149;625;PC;ROLLE À 625 STÜCK;ROLLE À 625 STÜCK
+;0150;375;PC;ROLLE À 375 STÜCK;ROLLE À 375 STÜCK
+;0151;1500;PC;ROLLE À 1500 STÜCK;ROLLE À 1500 STÜCK
+;0152;5000;PC;PACKUNG À 5000 STÜCK;PACKUNG À 5000 STÜCK
+;0153;1000;PC;PACKUNG À 1000 STÜCK;PACKUNG À 1000 STÜCK
+;0155;2000;PC;PACKUNG À 2000 STÜCK;PACKUNG À 2000 STÜCK
+;0156;1200;PC;PACKUNG À 1200 STÜCK;PACKUNG À 1200 STÜCK
+;0157;1100;PC;PACKUNG À 1100 STÜCK;PACKUNG À 1100 STÜCK
+;0158;800;PC;BOX À 800 STÜCK;BOX À 800 STÜCK
+;0159;28;PC;BOGEN À 28 STK.;BOGEN À 28 STK.
+;0160;1800;PC;PACKUNG À 1800 STÜCK;PACKUNG À 1800 STÜCK
+;0161;850;PC;PACKUNG À 850 STÜCK;PACKUNG À 850 STÜCK
+;0162;250;PC;PACKUNG À 250 STÜCK;PACKUNG À 250 STÜCK
+;0163;1500;PC;PACKUNG À 1500 STÜCK;PACKUNG À 1500 STÜCK
+;0164;396;PC;PACKUNG À 396 STÜCK;PACKUNG À 396 STÜCK
+;0165;0.2;M;STÜCK = 0.2 M;STÜCK = 0.2 M
+;0166;2500;PC;PACKUNG À 2500 STÜCK;PACKUNG À 2500 STÜCK
+;0170;1;PC;BOGEN;BOGEN
+;0171;1;ROL;ROLLE;ROLLE
+;0172;638;PC;PACKUNG À 638 STÜCK;PACKUNG À 638 STÜCK
+;0173;204;PC;PACKUNG À 204 STÜCK;PACKUNG À 204 STÜCK
+;0174;150;PC;PACKUNG À 150 STÜCK;PACKUNG À 150 STÜCK
+;0175;17;PC;PACKUNG À 17 STÜCK;PACKUNG À 17 STÜCK
+;0176;26;PC;PACKUNG À 26 STÜCK;PACKUNG À 26 STÜCK
+;0177;34;PC;PACKUNG À 34 STÜCK;PACKUNG À 34 STÜCK
+;0178;80;PC;PACKUNG À 80 STÜCK;PACKUNG À 80 STÜCK
+;0179;56;PC;PACKUNG À 56 STÜCK;PACKUNG À 56 STÜCK
+;0180;144;PC;PACKUNG À 144 STÜCK;PACKUNG À 144 STÜCK
+;0181;136;PC;PACKUNG À 136 STÜCK;PACKUNG À 136 STÜCK
+;0182;480;PC;PACKUNG À 480 STÜCK;PACKUNG À 480 STÜCK
+;0183;400;PC;PACKUNG À 400 STK.;PACKUNG À 400 STK.
+;0184;76;PC;PACKUNG À 76 STK.;PACKUNG À 76 STK.
+;0185;77;PC;BOGEN À 77 ETIKETTEN;BOGEN À 77 ETIKETTEN
+;0186;12;PC;BOGEN À 12 ETIKETTEN;BOGEN À 12 ETIKETTEN
+;0187;9;PC;BOGEN À 9 ETIKETTEN;BOGEN À 9 ETIKETTEN
+;0188;45;PC;PACKUNG À 45 STÜCK;PACKUNG À 45 STÜCK
+;0189;120;PC;PACKUNG À 120 STÜCK;PACKUNG À 120 STÜCK
+;0190;64;PC;PACKUNG À 64 STÜCK;PACKUNG À 64 STÜCK
+;0191;9;M;ROLLE À 9 M;ROLLE À 9 M
+;0192;44;PC;PACKUNG À 44 STK.;PACKUNG À 44 STK.
+;0193;3500;PC;ROLLE À 3500 STÜCK;ROLLE À 3500 STÜCK
+;0194;1200;PC;ROLLE À 1200 STÜCK;ROLLE À 1200 STÜCK
+;0195;400;PC;ROLLE À 400 STÜCK;ROLLE À 400 STÜCK
+;0196;175;PC;PACKUNG À 175 STÜCK;PACKUNG À 175 STÜCK
+;0197;350;PC;PACKUNG À 350 STÜCK;PACKUNG À 350 STÜCK
+;0198;975;PC;PACKUNG À 975 STÜCK;PACKUNG À 975 STÜCK
+;0199;10;PAA;PACKUNG À 10 PAAR;PACKUNG À 10 PAAR
+;0200;160;PC;PACKUNG À 160 STÜCK;PACKUNG À 160 STÜCK
+;0201;240;PC;PACKUNG À 240 STÜCK;PACKUNG À 240 STÜCK
+;0202;300;PC;PACKUNG À 300 STÜCK;PACKUNG À 300 STÜCK
+;0203;900;PC;PACKUNG À 900 STÜCK;PACKUNG À 900 STÜCK
+;0204;1250;PC;PACKUNG À 1250 STÜCK;PACKUNG À 1250 STÜCK
+;0205;3000;PC;PACKUNG À 3000 STÜCK;PACKUNG À 3000 STÜCK
+;0206;4000;PC;PACKUNG À 4000 STÜCK;PACKUNG À 4000 STÜCK
+;0207;10000;PC;PACKUNG À 10000 STÜCK;PACKUNG À 10000 STÜCK
+;0208;8000;PC;PACKUNG À 8000 STÜCK;PACKUNG À 8000 STÜCK
+;0209;25000;PC;ROLLE À 25000 STÜCK;ROLLE À 25000 STÜCK
+;0210;2600;PC;PACKUNG À 2600 STÜCK;PACKUNG À 2600 STÜCK
+;0211;20000;PC;PACKUNG À 20000 STÜCK;PACKUNG À 20000 STÜCK
+;0212;16000;PC;PACKUNG À 16000 STÜCK;PACKUNG À 16000 STÜCK
+;0217;200;M;Roll of 200 meter;Rolle à 200 Meter
+;0218;400;M;Roll of 400 meter;Rolle à 400 Meter
+;0219;210;PC;1 Pack of 210 pieces;Packung à 210 Stück
+;0220;1;M;1 Pieces = 1 m;Stück = 1 m
+;0221;84;PC;1 Pack of 84 pieces;Packung à 84 Stück
+;0222;96;PC;1 Pack of 96 pieces;Packung à 96 Stück
+;0223;408;PC;1 Pack of 408 pieces;Packung à 408 Stück
+;0224;18000;PC;Roll of 18000 pieces;Rolle à 18000 Stück
+;0225;20000;PC;Roll of 20000 pieces;Rolle à 20000 Stück
+
+INSERT_UPDATE DistDepartment;code[unique=true];erpSystem(code);name[lang=en];nameErp[lang=en];nameErp[lang=de]
+;0014;SAP;"Field service/repairs/facility management";"Field service/repairs/facility management";"Wartung/ Reparatur/ Facility-Management"
+;0015;SAP;"Electronics manufacturing (EMS)";"Electronics manufacturing (EMS)";"Elektronikfertigung (EMS)"
+;0016;SAP;"Contract Manufacturing (CEM)";"Contract Manufacturing (CEM)";"Auftragsfertigung (CEM)"
+;0017;SAP;"Original equipment manufacturer (OEM)";"Original equipment manufacturer (OEM)";"Fertigung/Erstausrüster (OEM)"
+;0018;SAP;"Other maintenance";"Other maintenance";"Instandhaltung für Produktion/Anlagenbetrieb"
+;0019;SAP;"EDE/product design";"EDE/product design";"Elektronikentwicklung/ Produktdesign"
+;0020;SAP;"Resale/Wholesale";"Resale/Wholesale";"Wiederverkauf/ Großhandel"
+;0021;SAP;"Education (incl. research)";"Education (incl. research)";"Ausbildung / Bildung (einschließlich Forschung)"
+;0022;SAP;"Government (incl. research)";"Government (incl. research)";"öffentliche Auftraggeber / staatliche Forschungseinrichtungen"
+;0023;SAP;"(Other) Research";"(Other) Research";"(Andere) Forschungs- und Entwicklungseinrichtungen"
+
+
+INSERT_UPDATE DistFunction;code[unique=true];erpSystem(code);name[lang=en];nameErp[lang=en];nameErp[lang=de]
+;20;SAP;"Maintenance/service technician";"Maintenance/service technician";"Instandhaltungs-/Servicetechniker/in"
+;21;SAP;"Industrial design engineer";"Industrial design engineer";"Ingenieur/in (Industriedesign)"
+;22;SAP;"Electronic design engineer";"Electronic design engineer";"Ingenieur/in (Elektronikentwicklung)"
+;23;SAP;"Electrician";"Electrician";"Elektriker/in / Industrieelektriker/in"
+;24;SAP;"Buyer (operative)";"Buyer (operative)";"Einkäufer/in"
+;25;SAP;"Purchasing manager (strategic)";"Purchasing manager (strategic)";"Einkaufsleiter/in"
+;26;SAP;"General manager";"General manager";"Geschäftsleiter/in"
+;27;SAP;"Department manager";"Department manager";"Abteilungsleiter/in"
+;28;SAP;"Professor/researcher/educator";"Professor/researcher/educator";"Professor/in/ betrieblicher Ausbilder/in / Forscher/in"
+;29;SAP;"Student";"Student";"Student/in"
+;30;SAP;"Hobbyist";"Hobbyist";"Privatkunde"
+
+
+# DistOrderStatus
+INSERT_UPDATE DistOrderStatus;code[unique=true];codeErp;hybrisOrderStatus(code)
+;00;;OPEN
+;01;01;ERP_STATUS_RECIEVED
+;02;02;ERP_STATUS_IN_PROGRESS
+;03;03;ERP_STATUS_PARTIALLY_SHIPPED
+;04;04;ERP_STATUS_SHIPPED
+;05;05;ERP_STATUS_CANCELLED
+
+
+# DistQuotationStatus
+INSERT_UPDATE DistQuotationStatus;code[unique=true]
+;01
+;02
+;03
+;04
+;05
+;06
+
+
+# DistOrderChannel
+INSERT_UPDATE DistOrderChannel;code[unique=true];nameErp[lang=en];nameErp[lang=de]
+;DIST;Distrelec;Distrelec
+;EDI;Ecommerce;Ecommerce
+;EFAX;Electronic Fax;Elektronischer Fax
+;MAIL;eMail;E-Mail
+;SHOP;Shop store sales;Shopverkauf
+;TELE;Telephone Orders;Telefonbestellung
+;WEB;Web shop order;Online Shop Bestellung
+
+
+# DistRmaReason
+INSERT_UPDATE DistRMAReason;code[unique=true];name[lang=en];name[lang=de];name[lang=fr];name[lang=it];name[lang=lt]
+;001;"Ordered wrong product";"Falscher Artikel bestellt";"Mauvais produit commandé";"Prodotto ordinato errato";"Užsakytas netinkamas produktas";
+;002;"Ordered wrong quantity / Wrong quantity shipped";"Falsche Anzahl bestellt/falsche Anzahl geliefert";"Mauvaise quantité commandée / Mauvaise quantité expédiée";"Quantità ordinata errata/Quantità spedita errata";"Užsakytas netinkamas kiekis / Išsiųstas netinkamas kiekis";
+;005;"Shipping damage / Damaged";"Transportschäden/Schäden";"Endommagé durant l'expédition / Endommagé";"Danni di spedizione/Danneggiato";"Pažeista siunta / Sugadinta";
+;007;"Wrong product shipped";"Falsches Produkt geliefert";"Mauvais produit expédié";"Prodotto spedito errato";"Išsiųstas netinkamas produktas";
+;010;"Not as pictured / Not as described";"Nicht wie abgebildet/nicht wie beschrieben";"Ne correspond pas à l'image / Ne correspond pas à la description";"L'articolo non corrisponde all'immagine/L'articolo non corrisponde alla descrizione";"Neatitinka pavaizduoto / Neatitinka aprašymo";
+;012;"Arrived late";"Späte Zustellung";"Reçu avec du retard";"Arrivato in ritardo";"Gautas per vėlai";
+
+
+##################################################
+# Back end objects. Don't need other translations
+##################################################
+
+# DistPimCategoryType
+INSERT_UPDATE DistPimCategoryType;code[unique=true];visible;categoryPage;categoryWithSimilarProducts;forceProductList[default=false];name[lang=en];name[lang=de]
+;"ClassFolder";false;false;false;false;"ClassFolder";"ClassFolder"
+;"L0D e-Shop";false;false;false;false;"L0D e-Shop";"L0D e-Shop"
+;"L1D Section";true;true;false;false;"L1D Section";"L1D Section"
+;"L2D Category";true;true;false;false;"L2D Category";"L2D Category"
+;"L2-3D Cluster";true;true;false;false;"L2-3D Cluster";"L2-3D Cluster"
+;"L3D Sub Category";true;false;true;false;"L3D Sub Category";"L3D Sub Category"
+;"DL3_Productline";true;false;true;true;"DL3 Productline";"DL3 Productline"
+
+INSERT_UPDATE DistPimCategoryType;code[unique=true];name[lang=en];visible;categoryPage;categoryWithSimilarProducts
+;"icon-L1D Section";"Icon L1D Section";true;true;false
+;"list-L1D Section";"List L1D Section";true;false;false
+;"icon-L2D Category";"Icon L2D Category";true;true;false
+;"list-L2D Category";"List L2D Category";true;false;false
+;"icon-L2-3D Cluster";"Icon L2-3D Cluster";true;true;false
+;"list-L2-3D Cluster";"List L2-3D Cluster";true;false;false
+;"icon-L3D Sub Category";"Icon L3D Sub Category";true;true;false
+;"list-L3D Sub Category";"List L3D Sub Category";true;false;false
+;"icon-DL3_Productline";"Icon DL3 Productline";true;true;true
+;"list-DL3_Productline";"List DL3 Productline";true;false;true
+
+INSERT_UPDATE DistPimCategoryType;code[unique=true];forceProductList[default=true]
+;Familie;true
+;Serie;true
+;SerieSpezial;true
+
+# DistSalesStatus
+INSERT_UPDATE DistSalesStatus;code[unique=true];visibleInShop;buyableInShop;newInShop;endOfLifeInShop;nameErp[lang=en];nameErp[lang=de]
+;10;false;false;true;false ;"New product/inactive";"New product/inactive"
+;20;true;true;true;false   ;"New prod/direct ship";"New prod/direct ship"
+;30;true;true;false;false  ;"Product/active";"Product/active"
+;31;true;true;false;false  ;"Product/act.BTO/Dirc";"Product/act.BTO/Dirc"
+;32;true;true;false;false  ;"Planned Direct Shipm";"Planned Direct Shipm"
+;33;true;true;false;false  ;"Phased out in the future";"Phased out in the future"
+;35;true;true;false;false  ;"No regular physical shop article";"No regular physical shop article"
+;40;true;true;false;false  ;"Phase out--not wanted";"Phase out--not wanted"
+;41;true;true;false;false  ;"Phase out--prod. stop";"Phase out--prod. stop"
+;42;true;true;false;false  ;"Phased out > low sales";"Phased out > low sales"
+;43;true;true;false;false ;"Phase out--notallowed";"Phase out--notallowed"
+;44;true;true;false;false ;"Double item";"Double item"
+;45;true;true;false;false  ;"Changed packsize";"Changed packsize"
+;50;true;true;false;false  ;"Liquidation/Scrapp.";"Liquidation/Scrapp."
+;60;true;false;false;true  ;"End of Live";"End of Live"
+;61;false;false;false;false;"Interim Inactive";"Interim Inactive"
+;90;true;false;false;false ;"QC Problems";"QC Problems"
+;91;true;false;false;false ;"Interim inactive";"Interim inactive"
+;92;false;false;false;false;"Inactive";"Inactive"
+
+# DistShippingMethod
+INSERT_UPDATE DistShippingMethod;code[unique=true];nameErp[lang=en];nameErp[lang=de]
+;A1;"Collection/Pick up";"Abholung"
+;N1;"Nomal to door";"Postversand"
+;N2;"Normal to pick up place";"Normal: Abholung am Schalter"
+;E1;"Economy to door";"Economy: zur Tür"
+;E2;"Economy to pick up place";"Economy: Abholung am Schalter"
+;X1;"Emergency";"Express"
+;X4;"Emergency";"Express"
+
+# DistPaymentMethod
+INSERT_UPDATE DistPaymentMethod;code[unique=true];nameErp[lang=en];nameErp[lang=de]
+# NEW SAP Payment Methods
+;WB01;"Credit Card";"Kreditkarte"
+;WB02;"GiroPay";"GiroPay"
+;WB03;"Paypal";"Paypal"
+;WB03ID;"Ideal";"Ideal"
+;WB04;"Click & Buy";"Click & Buy"
+;WB05;"Direct Debit";"Lastschriftverfahren"
+;WB06;"Pre Payment";"Vorauszahlung"
+;WB07;"Bank Transfer";"Banküberweisung"
+;WB10;"iDeal";"iDeal"
+;WB08;"Cash on delivery";"Zahlung bei Lieferung"
+;WB09;"Klarna Faktura";"Klarna Faktura"
+;Z001;"Invoice 8 days 2%, 30 days net";"(de)8 days 2%, 30 days net"
+;Z002;"Invoice 8 days 3%, 30 days net";"(de)8 days 3%, 30 days net"
+;Z003;"Invoice 10 day net";"(de)10 day net"
+;Z004;"Invoice 10 days 1%, 30 days net";"(de)10 days 1%, 30 days net"
+;Z005;"Invoice 10 days 2%, 30 days net";"(de)10 days 2%, 30 days net"
+;Z006;"Invoice 10 days 3%, 30 days 2%, 60 days net";"(de)10 days 3%, 30 days 2%, 60 days net"
+;Z007;"Invoice 10 days 3%, 60 days net";"(de)10 days 3%, 60 days net"
+;Z008;"Invoice 14th following month, net";"(de)14th following month, net"
+;Z009;"Invoice 10 days 4%, 30 days net";"(de)10 days 4%, 30 days net"
+;Z010;"Invoice 10 days 5%, 30 days net";"(de)10 days 5%, 30 days net"
+;Z011;"Invoice 14 days 2%, 30 days net";"(de)14 days 2%, 30 days net"
+;Z012;"Invoice 14 days 3%, 30 days net";"(de)14 days 3%, 30 days net"
+;Z013;"Invoice 14 days 3%, 60 days net";"(de)14 days 3%, 60 days net"
+;Z014;"Invoice 14 days net";"(de)14 days net"
+;Z015;"Invoice 15 days 2%, 30 days net";"(de)15 days 2%, 30 days net"
+;Z016;"Invoice 20 days net";"(de)20 days net"
+;Z017;"Invoice 30 days net";"(de)30 days net"
+;Z018;"Invoice 30 days 2%, 35 days net";"(de)30 days 2%, 35 days net"
+;Z019;"Invoice 30 days 2%, 45 days net";"(de)30 days 2%, 45 days net"
+;Z020;"Invoice 30 days 2%, 60 days net";"(de)30 days 2%, 60 days net"
+;Z021;"Invoice 30 days 3%, 60 days net";"(de)30 days 3%, 60 days net"
+;Z022;"Invoice 40 days net";"(de)40 days net"
+;Z023;"Invoice 45 days net 3%, 60 days net";"(de)45 days net 3%, 60 days net"
+;Z024;"Invoice 45 days net";"(de)45 days net"
+;Z025;"Invoice 60 days net";"(de)60 days net"
+;Z026;"Invoice 90 days net";"(de)90 days net"
+;Z027;"Invoice 10 days net 2%, 40 day net";"(de)10 days net 2%, 40 day net"
+;Z028;"Invoice 21 days net";"(de)21 days net"
+;Z029;"Invoice 15th following month 2% net";"(de)15th following month 2% net"
+;Z030;"Invoice 8 days net 2%, 14 days net";"(de)8 days net 2%, 14 days net"
+;Z031;"Invoice 15th following month 3% net";"(de)15th following month 3% net"
+;Z032;"Invoice 30 days net 3%, 45 days net";"(de)30 days net 3%, 45 days net"
+;Z033;"Invoice 15th following month net";"(de)15th following month net"
+;Z034;"Invoice 21 days net 2%, 30 days net";"(de)21 days net 2%, 30 days net"
+;Z035;"Invoice 14 days net 6%, 30 net";"(de)14 days net 6%, 30 net"
+;Z036;"Invoice 30 days net 3%, 90 net";"(de)30 days net 3%, 90 net"
+;Z037;"Invoice 30 days net 2%, 45 net";"(de)30 days net 2%, 45 net"
+;Z038;"Invoice 20 days net 2%, 60 net";"(de)20 days net 2%, 60 net"
+;Z039;"Invoice 21 days net 3%, 45 net";"(de)21 days net 3%, 45 net"
+;Z040;"Invoice 21 days net 3%, 30 net";"(de)21 days net 3%, 30 net"
+;Z041;"Invoice 14 days net 3%, end of following month";"(de)14 days net 3%, end of following month"
+;Z042;"Invoice 15th following month 3% net, 60 days net";"(de)15th following month 3% net, 60 days net"
+;Z043;"Invoice 25th following month 3% net, 60 days net";"(de)25th following month 3% net, 60 days net"
+;Z044;"Invoice 14 days net 3%, 45 net";"(de)14 days net 3%, 45 net"
+;Z045;"Invoice 14 days net 2%, 60 net";"(de)14 days net 2%, 60 net"
+;Z046;"Invoice 10th following month 3% net, 60 days net";"(de)10th following month 3% net, 60 days net"
+;Z047;"Invoice 15th following month 2% net, 60 days net";"(de)15th following month 2% net, 60 days net"
+;Z048;"Invoice 25th following month 2% net, 60 days net";"(de)25th following month 2% net, 60 days net"
+;Z049;"Invoice 20 days net 2%, 45 net";"(de)20 days net 2%, 45 net"
+;Z050;"Invoice 14 days net 4%, 30 net";"(de)14 days net 4%, 30 net"
+;Z051;"Invoice 14 days net";"(de)14 days net"
+;Z052;"Invoice 20 days net 3%, 60 net";"(de)20 days net 3%, 60 net"
+;Z053;"Invoice 25th following month 3% net";"(de)25th following month 3% net"
+;Z054;"Invoice 20th following month, net";"(de)20th following month, net"
+;Z055;"Invoice 14 days net 2%, 45 net";"(de)14 days net 2%, 45 net"
+;Z056;"Invoice 15th foll. month 2%, 30 days foll. month net";"(de)15th foll. month 2%, 30 days foll. month net"
+;Z057;"Advance payment and invoice";"(de)Advance payment and invoice"
+;Z058;"Invoice";"(de)Invoice"
+;Z060;"Invoice Direct Debit after 8 days";"(de)Direct Debit after 8 days"
+;Z061;"Invoice 30th following month, net";"(de)30th following month, net"
+;Z062;"Invoice 25th following month, net";"(de)25th following month, net" 
+;Z063;"Invoice 30 Days EOM from Doc Date";"(de)30 Days EOM from Doc Date" 
+;Z064;"Invoice 60 Days EOM from Doc Date";"(de)60 Days EOM from Doc Date" 
+;Z065;"Invoice 90 Days EOM from Doc Date";"(de)90 Days EOM from Doc Date" 
+;Z066;"Invoice 120 Days EOM from Doc Date";"(de)120 Days EOM from Doc Date" 
+;Z115;"Invoice within 15 days Due net";"(de)within 15 days Due net"
+
+# ELFA SAP Payment Modes
+;000;"Cash";"Barzahlung"
+;004;"Credit Card";"Kreditkarte"
+;006;"Pre payment";"Vorauszahlung"
+;008;"Invoice 8 days net";"(de)Invoice 8 days net"
+;010;"Invoice 10 days net";"(de)Invoice 10 days net"
+;015;"Invoice 15 days net";"(de)Invoice 15 days net"
+;021;"Invoice 21 days net";"(de)Invoice 21 days net"
+;030;"Invoice 30 days net";"(de)Invoice 30 days net"
+;060;"Invoice 60 days net";"(de)Invoice 60 days net"
+;090;"Invoice 90 days net";"(de)Invoice 90 days net"
+;120;"Invoice 120 days net";"(de)Invoice 120 days net"
+
+# DistTransportGroup
+INSERT_UPDATE DistTransportGroup;code[unique=true];bulky;dangerous;nameErp[lang=en];nameErp[lang=de]
+;0001;false;false;Normal products;Normal products
+;0002;false;false;Dangerous goods;Dangerous goods
+;0003;true;false;Bulky items;Bulky items
+;0004;true;false;Bulky items / dangers.;Bulky items / dangers.
+;0005;false;false;Calibration;Calibration
+;0006;false;false;Calibration / dangers.;Calibration / dangers.
+;1000;false;false;Std / Non DG / No Calibration;Std / Non DG / No Calibration
+;1005;false;false;Std / Non DG / Calibration;Std / Non DG / Calibration
+;1010;false;true;Std / DG / No Calibration;Std / DG / No Calibration
+;1015;false;true;Std / DG / Calibration;Std / DG / Calibration
+;2000;true;true;Bulky / Non DG / No Calibration;Bulky / Non DG / No Calibration
+;2005;true;true;Bulky / Non DG / Calibration;Bulky / Non DG / Calibration
+;2010;true;true;Bulky / DG / No Calibration;Bulky / DG / No Calibration
+;2015;true;true;Bulky / DG / Calibration;Bulky / DG / Calibration
+;3000;false;true;Cargo / Non DG / No Calibration;Cargo / Non DG / No Calibration
+;3005;false;true;Cargo / Non DG / Calibration;Cargo / Non DG / Calibration
+;3010;false;true;Cargo / DG / No Calibration;Cargo / DG / No Calibration
+;3015;false;true;Cargo / DG / Calibration;Cargo / DG / Calibration
+;4000;false;false;Re-reeling / Non DG;Re-reeling / Non DG
+;9999;false;false;not defined / not act.;not defined / not act.
+
+INSERT_UPDATE UserPriceGroup;code[unique=true];name[lang=en];name[lang=de]
+;SalesOrg_UPG_7310_01;Price Group 7310_01;Price Group 7310_01
+;SalesOrg_UPG_7320_01;Price Group 7320_01;Price Group 7320_01
+;SalesOrg_UPG_7320_06;Price Group 7320_06;Price Group 7320_06
+;SalesOrg_UPG_7330_01;Price Group 7330_01;Price Group 7330_01
+;SalesOrg_UPG_7350_01;Price Group 7350_01;Price Group 7350_01
+;SalesOrg_UPG_7640_01;Price Group 7640_01;Price Group 7640_01
+;SalesOrg_UPG_7640_04;Price Group 7640_04;Price Group 7640_04
+;SalesOrg_UPG_7801_01;Price Group 7801_01;Price Group 7801_01
+;SalesOrg_UPG_7801_04;Price Group 7801_04;Price Group 7801_04
+;SalesOrg_UPG_7650_01;Price Group 7650_01;Price Group 7650_01
+;SalesOrg_UPG_7650_04;Price Group 7650_04;Price Group 7650_04
+;SalesOrg_UPG_7660_01;Price Group 7660_01;Price Group 7660_01
+;SalesOrg_UPG_7660_04;Price Group 7660_04;Price Group 7660_04
+;SalesOrg_UPG_7670_01;Price Group 7670_01;Price Group 7670_01
+;SalesOrg_UPG_7670_04;Price Group 7670_04;Price Group 7670_04
+;SalesOrg_UPG_7680_01;Price Group 7680_01;Price Group 7680_01
+;SalesOrg_UPG_7680_04;Price Group 7680_04;Price Group 7680_04
+;SalesOrg_UPG_7810_01;Price Group 7810_01;Price Group 7810_01
+;SalesOrg_UPG_7810_04;Price Group 7810_04;Price Group 7810_04
+;SalesOrg_UPG_7820_01;Price Group 7820_01;Price Group 7820_01
+;SalesOrg_UPG_7820_04;Price Group 7820_04;Price Group 7820_04
+;SalesOrg_UPG_7790_01;Price Group 7790_01;Price Group 7790_01
+;SalesOrg_UPG_7790_04;Price Group 7790_04;Price Group 7790_04
+;SalesOrg_UPG_7800_01;Price Group 7800_01;Price Group 7800_01
+;SalesOrg_UPG_7800_04;Price Group 7800_04;Price Group 7800_04
+
+INSERT_UPDATE UserTaxGroup;code[unique=true];name[lang=en];name[lang=de]
+;SalesOrg_UTG_7310;Tax Group 7310;Tax Group 7310
+;SalesOrg_UTG_7320;Tax Group 7320;Tax Group 7320
+;SalesOrg_UTG_7330;Tax Group 7330;Tax Group 7330
+;SalesOrg_UTG_7350;Tax Group 7350;Tax Group 7350
+;SalesOrg_UTG_7640;Tax Group 7640;Tax Group 7640
+;SalesOrg_UTG_7801;Tax Group 7801;Tax Group 7801
+;SalesOrg_UTG_7650;Tax Group 7650;Tax Group 7650
+;SalesOrg_UTG_7660;Tax Group 7660;Tax Group 7660
+;SalesOrg_UTG_7670;Tax Group 7670;Tax Group 7670
+;SalesOrg_UTG_7680;Tax Group 7680;Tax Group 7680
+;SalesOrg_UTG_7810;Tax Group 7810;Tax Group 7810
+;SalesOrg_UTG_7820;Tax Group 7820;Tax Group 7820
+;SalesOrg_UTG_7790;Tax Group 7790;Tax Group 7790
+;SalesOrg_UTG_7800;Tax Group 7800;Tax Group 7800
+
+INSERT_UPDATE Tax;code[unique=true];value;name[lang=en];name[lang=de]
+;TAX_0              ;0  ;No Tax
+;TAX_1_SALESORG_7310;8  ;Default Tax 7310;Default Tax 7310
+;TAX_2_SALESORG_7310;2.5;Reduced Tax 7310;Reduced Tax 7310
+;TAX_1_SALESORG_7320;20 ;Default Tax 7320;Default Tax 7320
+;TAX_2_SALESORG_7320;10 ;Reduced Tax 7320;Reduced Tax 7320
+;TAX_1_SALESORG_7330;22 ;Default Tax 7330;Default Tax 7330
+;TAX_2_SALESORG_7330;4  ;Reduced Tax 7330;Reduced Tax 7330
+;TAX_5_SALESORG_7330;0  ;No Tax 7330;No Tax 7330
+;TAX_1_SALESORG_7350;19 ;Default Tax 7350;Default Tax 7350
+;TAX_2_SALESORG_7350;7  ;Reduced Tax 7350;Reduced Tax 7350
+;TAX_1_SALESORG_7640;25 ;Default Tax 7640;Default Tax 7640
+;TAX_2_SALESORG_7640;6  ;Reduced Tax 7640;Reduced Tax 7640
+;TAX_1_SALESORG_7801;25 ;Default Tax 7801;Default Tax 7801
+;TAX_2_SALESORG_7801;6  ;Reduced Tax 7801;Reduced Tax 7801
+;TAX_1_SALESORG_7650;25 ;Default Tax 7650;Default Tax 7650
+;TAX_2_SALESORG_7650;8  ;Reduced Tax 7650;Reduced Tax 7650
+;TAX_1_SALESORG_7660;23 ;Default Tax 7660;Default Tax 7660
+;TAX_2_SALESORG_7660;5  ;Reduced Tax 7660;Reduced Tax 7660
+;TAX_1_SALESORG_7670;24 ;Default Tax 7670;Default Tax 7670
+;TAX_2_SALESORG_7670;10 ;Reduced Tax 7670;Reduced Tax 7670
+;TAX_1_SALESORG_7680;25 ;Default Tax 7680;Default Tax 7680
+;TAX_2_SALESORG_7680;25 ;Reduced Tax 7680;Reduced Tax 7680
+;TAX_1_SALESORG_7810;21 ;Default Tax 7810;Default Tax 7810
+;TAX_2_SALESORG_7810;12 ;Reduced Tax 7810;Reduced Tax 7810
+;TAX_1_SALESORG_7820;21 ;Default Tax 7820;Default Tax 7820
+;TAX_2_SALESORG_7820;9  ;Reduced Tax 7820;Reduced Tax 7820
+;TAX_1_SALESORG_7790;20 ;Default Tax 7790;Default Tax 7790
+;TAX_2_SALESORG_7790;9  ;Reduced Tax 7790;Reduced Tax 7790
+;TAX_1_SALESORG_7800;21 ;Default Tax 7800;Default Tax 7800
+;TAX_2_SALESORG_7800;6  ;Reduced Tax 7800;Reduced Tax 7800
+
+INSERT_UPDATE ProductTaxGroup;code[unique=true];name[lang=en];name[lang=de]
+;0;"No Tax";"Keine Mehrwertssteuer"
+;1;"Full Tax";"Volle Mehrwertssteuer"
+;2;"Reduced Tax";"Reduzierte Mehrwertssteuer"
+;5;"No Tax (5)";"Keine Mehrwertssteuer (5)"
+
+INSERT_UPDATE TaxRow;ug(code)[unique=true];pg(code)[unique=true];tax(code)
+;SalesOrg_UTG_7310;0;TAX_0
+;SalesOrg_UTG_7310;1;TAX_1_SALESORG_7310
+;SalesOrg_UTG_7310;2;TAX_2_SALESORG_7310
+;SalesOrg_UTG_7320;0;TAX_0
+;SalesOrg_UTG_7320;1;TAX_1_SALESORG_7320
+;SalesOrg_UTG_7320;2;TAX_2_SALESORG_7320
+;SalesOrg_UTG_7330;0;TAX_0
+;SalesOrg_UTG_7330;1;TAX_1_SALESORG_7330
+;SalesOrg_UTG_7330;2;TAX_2_SALESORG_7330
+;SalesOrg_UTG_7330;5;TAX_5_SALESORG_7330
+;SalesOrg_UTG_7350;0;TAX_0
+;SalesOrg_UTG_7350;1;TAX_1_SALESORG_7350
+;SalesOrg_UTG_7350;2;TAX_2_SALESORG_7350
+;SalesOrg_UTG_7640;0;TAX_0
+;SalesOrg_UTG_7640;1;TAX_1_SALESORG_7640
+;SalesOrg_UTG_7640;2;TAX_2_SALESORG_7640
+;SalesOrg_UTG_7801;0;TAX_0
+;SalesOrg_UTG_7801;1;TAX_1_SALESORG_7801
+;SalesOrg_UTG_7801;2;TAX_2_SALESORG_7801
+;SalesOrg_UTG_7650;0;TAX_0
+;SalesOrg_UTG_7650;1;TAX_1_SALESORG_7650
+;SalesOrg_UTG_7650;2;TAX_2_SALESORG_7650
+;SalesOrg_UTG_7660;0;TAX_0
+;SalesOrg_UTG_7660;1;TAX_1_SALESORG_7660
+;SalesOrg_UTG_7660;2;TAX_2_SALESORG_7660
+;SalesOrg_UTG_7670;0;TAX_0
+;SalesOrg_UTG_7670;1;TAX_1_SALESORG_7670
+;SalesOrg_UTG_7670;2;TAX_2_SALESORG_7670
+;SalesOrg_UTG_7680;0;TAX_0
+;SalesOrg_UTG_7680;1;TAX_1_SALESORG_7680
+;SalesOrg_UTG_7680;2;TAX_2_SALESORG_7680
+;SalesOrg_UTG_7810;0;TAX_0
+;SalesOrg_UTG_7810;1;TAX_1_SALESORG_7810
+;SalesOrg_UTG_7810;2;TAX_2_SALESORG_7810
+;SalesOrg_UTG_7820;0;TAX_0
+;SalesOrg_UTG_7820;1;TAX_1_SALESORG_7820
+;SalesOrg_UTG_7820;2;TAX_2_SALESORG_7820
+;SalesOrg_UTG_7790;0;TAX_0
+;SalesOrg_UTG_7790;1;TAX_1_SALESORG_7790
+;SalesOrg_UTG_7790;2;TAX_2_SALESORG_7790
+;SalesOrg_UTG_7800;0;TAX_0
+;SalesOrg_UTG_7800;1;TAX_1_SALESORG_7800
+;SalesOrg_UTG_7800;2;TAX_2_SALESORG_7800
+
+# DistAssetType
+INSERT_UPDATE DistAssetType;code[unique=true];name[lang=en];name[lang=de]
+;jpg;JPG;JPG
+;pdf;PDF;PDF
+;zip;ZIP;ZIP
+
+# DistBrand
+INSERT_UPDATE DistBrand;code[unique=true];name[lang=en];name[lang=de]
+;distrelec;Distrelec;Distrelec
+;elfa     ;ELFA Distrelec;ELFA Distrelec
+;newco    ;NewCo;NewCo
+;proditec ;Proditec;Proditec
+
+# DistDangerousGoodsProfile
+INSERT_UPDATE DistDangerousGoodsProfile;code[unique=true];dangerous;nameErp[lang=en];nameErp[lang=de]
+;DG;true  ;Dangerous goods;Dangerous goods
+;NDG;false;non Dangerous goods;non Dangerous goods
+;UPN;false;Uploaded - non Dangerous goods;Uploaded - non Dangerous goods
+;UPX;true ;Uploaded - to be checked if DG or NDG;Uploaded - to be checked if DG or NDG
+;X;false  ;to be checked if DG or NDG;to be checked if DG or NDG
+
+# DistMaterialType
+INSERT_UPDATE DistMaterialType;code[unique=true];nameErp[lang=en];nameErp[lang=de]
+;ZCON;"Consumables";"Consumables"
+;ZOCC;"Trading Goods-Occassion";"Trading Goods-Occassion"
+;ZPAC;"Parcel, Pallet, Letter";"Parcel, Pallet, Letter"
+;ZSER;"Service";"Service"
+;ZTRA;"Trading Goods";"Trading Goods"
+;ZUNV;"Nonvaluated materials";"Nonvaluated materials"
+
+# DistReplacementReason
+INSERT_UPDATE DistReplacementReason;code[unique=true];nameErp[lang=en];nameErp[lang=de]
+;A  ;Direct equiv. always;Direct equiv. always
+;A_A;Direct equiv. always;Direct equiv. always
+;A_M;Direct equiv. always;Direct equiv. always
+;B  ;Direct equiv. better;Direct equiv. better
+;B_A;Direct equiv. better;Direct equiv. better
+;B_M;Direct equiv. better;Direct equiv. better
+;C  ;Other dimensions;Other dimensions
+;C_A;Other dimensions;Other dimensions
+;C_M;Other dimensions;Other dimensions
+;D  ;Other characteristic;Other characteristic
+;D_A;Other characteristic;Other characteristic
+;D_M;Other characteristic;Other characteristic
+;E  ;Other dim. & char.;Other dim. & char.
+;E_A;Other dim. & char.;Other dim. & char.
+;E_M;Other dim. & char.;Other dim. & char.
+;F  ;Other colour;Other colour
+;F_A;Other colour;Other colour
+;F_M;Other colour;Other colour
+;G_A;calibrated instruments;calibrated instruments
+;G_B;not calibrated instruments;calibrated instruments
+;N  ;NTE replacement;NTE replacement
+;N_A;NTE replacement;NTE replacement
+;N_M;NTE replacement;NTE replacement
+;O  ;Contact product mgr;Contact product mgr
+;O_A;Contact product mgr;Contact product mgr
+;O_M;Contact product mgr;Contact product mgr
+;S  ;Other supplier;Other supplier
+;S_A;Other supplier;Other supplier
+;S_M;Other supplier;Other supplier
+;W  ;Possible;Possible
+;W_A;Possible;Possible
+;W_M;Possible;Possible
+;Z  ;Other pkg quantity;Other pkg quantity
+;Z_A;Other pkg quantity;Other pkg quantity
+;Z_M;Other pkg quantity;Other pkg quantity
+
+# DistRestrictionOfHazardousSubstances
+INSERT_UPDATE DistRestrictionOfHazardousSubstances;code[unique=true];nameErp[lang=en];nameErp[lang=de];nameErp[lang=da];nameErp[lang=no];nameErp[lang=fr];nameErp[lang=it];nameErp[lang=sv];nameErp[lang=pl];nameErp[lang=nl];nameErp[lang=cs];nameErp[lang=fi];nameErp[lang=hu];nameErp[lang=ro];nameErp[lang=sk];nameErp[lang=et];nameErp[lang=lv];nameErp[lang=lt]
+;10;"No Information";"Keine Information";"Ingen information";"Ingen informasjon";"Aucune information";"Nessuna informazione";"Ingen information";"Brak informacji";"Geen informatie";"Žádné informace";"Ei tietoja";"Nincs információ";"Fără informaţii";"Žiadna informácia";"Pole informatsiooni";"Nav informācijas";"Nėra informacijos"
+;11;"Not Applicable";"Unzutreffend";"Ikke relevant";"ikke relevant";"N'est pas applicable";"Non applicabile";"ej tillämpbar";"nie dotyczy";"Niet toepasbaar";"Nehodí se";"Ei sovellettavissa";"Nem alkalmazható";"Nu se aplică";"Nepoužívané";"Ei kasutata";"Nav piemērojams";"Netaikoma";
+;12;"Conform";"Konform";"Opfylder";"Bekreftet";"Conforme";"Conforme";"Bekräftad";"Zgodny";"in overeenstemming met";"přizpůsobit";"mukainen";"Megfelel";"Conform";"Vyhovuje";"Vastama";"Atbilst";"Atitinka";
+;13;"Not Conform";"Nicht Konform";"Opfylder ikke";"Ikke bekreftet";"Non conforme";"Non conforme";"Ej bekräftad";"Niezgodny";"niet Conform";"neshodují";"ei sovellu";"nem felel";"Ne conform";"Nezhoduje";"Ei vasta";"Neatbilst";"Neatitinka";
+;14;"2002/95/EG Conform";"2002/95/EG Konform";"2002/95/EG opfylder";"2002/95 / EU bekreftet";"2002/95 / UE conforme";"2002/95 / EG conforme";"2002/95 / EU bekräftad";"2002/95 / WE Zgodne";"2002/95 / EG Conform";"2002/95 / EG Conform";"2002/95 / EU mukainen";"2002/95 / EG megfelel";"2002/95 / EG Conform";"2002/95 / EG Vyhovuje";"2002/95 / EG Vastav";"2002/95 / EG Atbilst";"2002/95 / EG Atitinka"
+
+# DistSalesOrg
+INSERT_UPDATE DistSalesOrg;code[unique=true];brand(code);country(isocode);erpSystem(code);nameErp[lang=en];adminManagingSubUsers;invoiceVisibleToAll;orderVisibibleToAll;offlineRegistrationAllowed;registeringNewContactToExistingCustomerAllowed
+;7310;distrelec;CH;SAP  ;Distrelec CH;true;false;false;true;true
+;7320;distrelec;AT;SAP  ;Distrelec AT;true;false;false;true;true
+#;7321;distrelec;AT;SAP  ;Distrelec CEE;true;false;false;true;true
+;7330;distrelec;IT;SAP  ;Distrelec IT;true;false;false;true;true
+;7350;distrelec;DE;SAP  ;Distrelec DE;true;false;false;true;true
+;7640;distrelec;SE;SAP  ;Elfa Distrelec SE;true;false;false;true;true
+;7801;distrelec;EX;SAP  ;Elfa Distrelec Export Shop;true;false;false;true;true
+;7650;distrelec;NO;SAP  ;Elfa Distrelec NO;true;false;false;true;true
+;7660;distrelec;PL;SAP  ;Elfa Distrelec PL;true;false;false;true;true
+;7670;distrelec;FI;SAP  ;Elfa Distrelec FI;true;false;false;true;true
+;7680;distrelec;DK;SAP  ;Elfa Distrelec DK;true;false;false;true;true
+;7810;distrelec;LV;SAP  ;Elfa Distrelec LV;true;false;false;true;true
+;7820;distrelec;LT;SAP  ;Elfa Distrelec LT;true;false;false;true;true
+;7790;distrelec;EE;SAP  ;Elfa Distrelec EE;true;false;false;true;true
+;7800;distrelec;NL;SAP  ;Elfa Distrelec NL;true;false;false;true;true
+
+# DistErpPriceConditionType
+INSERT_UPDATE DistErpPriceConditionType;code[unique=true];priority
+;ZN00;1
+;ZR00;2
+;PR00;3

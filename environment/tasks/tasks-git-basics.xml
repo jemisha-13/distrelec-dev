@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<project name="namics-hybris-tasks-git-basics" basedir=".">
+	<macrodef name="getgitinfo" description="This target will query the current git revision and date and write it to the properties file in the resource folder of the melcore extension">
+		<sequential>
+
+			<tstamp />
+
+			<exec executable="git" outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
+				<arg value="rev-parse" />
+				<arg value="HEAD" />
+			</exec>
+
+			<exec executable="git" outputproperty="git.branch" failifexecutionfails="false" errorproperty="">
+				<arg value="symbolic-ref" />
+				<arg value="--short" />
+				<arg value="HEAD" />
+			</exec>
+
+			<exec executable="git" outputproperty="git.tag" failifexecutionfails="false" errorproperty="">
+				<arg value="describe" />
+				<arg value="--always" />
+				<arg value="--tags" />
+			</exec>
+
+			<exec executable="git" outputproperty="git.lastcommit" failifexecutionfails="false" errorproperty="">
+				<arg value="log" />
+				<arg value="-1" />
+				<arg value="--format=%cd" />
+			</exec>
+
+			<mkdir dir="${hybris.extensions.home}/distrelecB2Bstorefront/resources/gitinfo" />
+			<echo file="${hybris.extensions.home}/distrelecB2Bstorefront/resources/gitinfo/gitinfo.properties" append="false" message="git.revision=${git.revision}${line.separator}git.branch=${git.branch}${line.separator}git.tag=${git.tag}${line.separator}git.lastcommit=${git.lastcommit}${line.separator}builddate=${DSTAMP}-${TSTAMP}" />
+
+		</sequential>
+	</macrodef>
+</project>

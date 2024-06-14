@@ -1,0 +1,65 @@
+# ImpEx for Importing Products
+
+$productCatalog=distrelecProductCatalog
+$productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default='Online'])
+$languages=en,de
+
+INSERT_UPDATE Catalog;id[unique=true]
+;$productCatalog
+
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;languages(isoCode);readPrincipals(uid)
+;$productCatalog;Online;true;$languages;employeegroup
+
+INSERT_UPDATE Product;code[unique=true];productHierarchy;approvalstatus(code)[default='approved'];$productCV[unique=true];
+;9301490_sample;235112;
+;2910243_sample;;
+;9301491_sample;235112;
+;8500027_sample;;
+;8500035_sample;;
+;8500043_sample;421133;
+;8500050_sample;;
+;8706616_sample;;
+;4289013_sample;421133;
+;1351902_sample;142131;
+;1235423_sample;;
+;3248927_sample;;
+;1342351_sample;;
+;2322312_sample;122311;
+;2356342_sample;122311;
+;2323819_sample;122311;
+
+INSERT_UPDATE UserGroup;uid[unique=true]
+;b2bcustomergroup
+
+INSERT_UPDATE B2BUnit;uid[unique=true];erpCustomerID;customerType(code)
+;b2c_unit;111111;B2C
+;b2b_unit;222222;B2B
+
+INSERT_UPDATE B2BCustomer;uid[unique=true];email;name;groups(uid)[mode=append]
+;b2c_cutomer;b2c@test.com;tester;b2bcustomergroup,b2c_unit
+;b2b_cutomer;b2b@test.com;tester;b2bcustomergroup,b2b_unit
+;customer;all@test.com;tester;b2bcustomergroup,b2c_unit,b2b_unit
+
+INSERT_UPDATE DistCUPunchOutFilter;salesOrg(code)[unique=true];erpCustomerID[unique=true];product(code)[unique=true];productHierarchy;validFromDate[dateformat=yyyy-MM-dd hh:mm:ss];validUntilDate[dateformat=yyyy-MM-dd hh:mm:ss];lastModifiedErp[dateformat=yyyyMMddhhmmss]
+;7310;111111;2910243_sample;;2000-01-01 00:00:00;9999-12-31 00:00:00;20131106100000
+;7310;111111;8500027_sample;;2000-01-01 00:00:00;2001-03-12 00:00:00;20131106100000
+;7310;111111;8500050_sample;;2000-01-01 00:00:00;9999-12-31 00:00:00;20131106100000
+;7310;222222;8500050_sample;;2000-01-01 00:00:00;9999-11-12 00:00:00;20131106100000
+;7310;222222;8706616_sample;;2000-01-01 00:00:00;9999-11-12 00:00:00;20131106100000
+;7310;222222;8500035_sample;;2000-01-01 00:00:00;2001-03-12 00:00:00;20131106100000
+;7310;222222;;421133;2000-01-01 00:00:00;9999-12-31 00:00:00;20131106100000
+;7310;222222;1235423_sample;;2000-01-01 00:00:00;9999-12-31 00:00:00;20131106100000
+;7310;222222;3248927_sample;;2000-01-01 00:00:00;2001-12-31 00:00:00;20131106100000
+
+INSERT_UPDATE DistCTPunchOutFilter;customerType(code)[unique=true];product(code)[unique=true];productHierarchy;validFromDate[dateformat=yyyy-MM-dd hh:mm:ss];validUntilDate[dateformat=yyyy-MM-dd hh:mm:ss];lastModifiedErp[dateformat=yyyyMMddhhmmss]
+;B2B;9301490_sample;;2000-01-01 00:00:00;9999-12-31 00:00:00;20131106100000
+;B2B;8500027_sample;;2000-01-01 00:00:00;2001-03-12 00:00:00;20131106100000
+;B2C;;235112;2000-01-01 00:00:00;9999-12-31 00:00:00;20131106100000
+;B2C;;421133;2000-01-01 00:00:00;2001-12-31 00:00:00;20131106100000
+;B2B;1342351_sample;;2000-01-01 00:00:00;9999-12-31 00:00:00;20131106100000
+
+INSERT_UPDATE DistCOPunchOutFilter;salesOrg(code)[unique=true];country(isocode)[unique=true];product(code)[unique=true];productHierarchy;validFromDate[dateformat=yyyy-MM-dd hh:mm:ss];validUntilDate[dateformat=yyyy-MM-dd hh:mm:ss];lastModifiedErp[dateformat=yyyyMMddhhmmss]
+;7310;CH;8706616_sample;;2000-01-01 00:00:00;9999-12-31 00:00:00;20131106100000
+;7310;AT;8500027_sample;;2000-01-01 00:00:00;2014-11-12 00:00:00;20131106100000
+;7310;CH;1351902_sample;;2000-01-01 00:00:00;2001-12-31 00:00:00;20131106100000
+;7310;CH;;122311;2000-01-01 00:00:00;9999-11-12 00:00:00;20131106100000

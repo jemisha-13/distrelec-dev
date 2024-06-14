@@ -1,0 +1,327 @@
+#
+# Import the core CMS content for the Distrelec CH site
+#
+
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+$acceptedComponents=CMSParagraphComponent,DistLinkedImageComponent,SimpleBannerComponent,DistLinkListComponent
+
+
+# Add Velocity templates that are in the CMS Cockpit. These give a better layout for editing pages
+# The FileLoaderValueTranslator loads a File into a String property. The templates could also be inserted in-line in this file.
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;HomePageTemplate      				;$jarResourceCms/structure-view/structure_homePageTemplate.vm
+;;TestHomePageTemplate     				;$jarResourceCms/structure-view/structure_homePageTemplate.vm
+;;CategoryPageTemplate      			;$jarResourceCms/structure-view/structure_categoryPageTemplate.vm
+;;ProductListPageTemplate   			;$jarResourceCms/structure-view/structure_productListPageTemplate.vm
+;;ProductDetailsPageTemplate			;$jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm
+;;CatalogPlusProductDetailsPageTemplate	;$jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm
+;;SearchResultsListPageTemplate 		;$jarResourceCms/structure-view/structure_searchResultsPageTemplate.vm
+;;SearchResultsEmptyPageTemplate		;$jarResourceCms/structure-view/structure_searchResultsEmptyPageTemplate.vm
+;;ContentPageWithNavigationTemplate     ;$jarResourceCms/structure-view/structure_contentPageWithNavigationTemplate.vm
+;;ContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_contentPageWithoutNavigationTemplate.vm
+;;ShoppingListPageTemplate				;$jarResourceCms/structure-view/structure_shoppingListPageTemplate.vm
+;;CompareListPageTemplate				;$jarResourceCms/structure-view/structure_compareListPageTemplate.vm
+;;FeedbackPageTemplate					;$jarResourceCms/structure-view/structure_feedbackPageTemplate.vm
+;;SupportPageTemplate					;$jarResourceCms/structure-view/structure_supportPageTemplate.vm
+;;OfflineAddressChangePageTemplate		;$jarResourceCms/structure-view/structure_offlineAddressChangePageTemplate.vm
+;;CartPageTemplate 		    			;$jarResourceCms/structure-view/structure_cartPageTemplate.vm
+;;OrderConfirmationPageTemplate			;$jarResourceCms/structure-view/structure_orderConfirmationPageTemplate.vm
+;;LoginPageTemplate       			  	;$jarResourceCms/structure-view/structure_loginPageTemplate.vm
+;;RegisterPageTemplate    			  	;$jarResourceCms/structure-view/structure_registerPageTemplate.vm
+;;AccountPageTemplate 					;$jarResourceCms/structure-view/structure_accountPageTemplate.vm
+;;AccountWithoutNavPageTemplate			;$jarResourceCms/structure-view/structure_accountWithoutNavPageTemplate.vm
+;;ErrorPageTemplate						;$jarResourceCms/structure-view/structure_errorPageTemplate.vm
+;;ManufacturerStoresPageTemplate		;$jarResourceCms/structure-view/structure_manufacturerStoresPageTemplate.vm
+;;ManufacturerStoreDetailPageTemplate	;$jarResourceCms/structure-view/structure_manufacturerStoreDetailPageTemplate.vm
+;;NewsDetailPageTemplate				;$jarResourceCms/structure-view/structure_newsDetailPageTemplate.vm
+;;JobDetailPageTemplate					;$jarResourceCms/structure-view/structure_jobDetailPageTemplate.vm
+;;ProductFinderPageTemplate				;$jarResourceCms/structure-view/structure_productFinderPageTemplate.vm
+;;ProductFinderResultPageTemplate		;$jarResourceCms/structure-view/structure_productFinderResultPageTemplate.vm
+;;ImportToolPageTemplate				;$jarResourceCms/structure-view/structure_importToolPageTemplate.vm
+;;NewsletterRegisterPageTemplate    	;$jarResourceCms/structure-view/structure_newsletterRegisterPageTemplate.vm
+;;NewsletterSuccessPageTemplate    		;$jarResourceCms/structure-view/structure_newsletterSuccessPageTemplate.vm
+;;NewsletterConfirmationPageTemplate    ;$jarResourceCms/structure-view/structure_newsletterConfirmationPageTemplate.vm
+;;CatalogOrderPageTemplate				;$jarResourceCms/structure-view/structure_catalogOrderPageTemplate.vm
+;;EducationRegistrationPageTemplate		;$jarResourceCms/structure-view/structure_educationRegistrationPageTemplate.vm
+;;OnlineSurveyPageTemplate				;$jarResourceCms/structure-view/structure_onlineSurveyPageTemplate.vm
+;;StorePageTemplate						;$jarResourceCms/structure-view/structure_storePageTemplate.vm
+
+
+############################################################################################
+# Create Content Slot Names
+############################################################################################
+
+# Home Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='HomePageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Test Home Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TestHomePageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Product Details Page Template
+# The CrossSelling and Accessories slots are designed for related products, cross-sells and up-sells.
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductDetailsPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CatalogPlusProductDetailsPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Product List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductListPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Search Empty is displayed when no results are found
+# Search Results List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SearchResultsListPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Category and Landing Pages are various layouts for a Category Landing page
+# Landing Pages are also good layouts for Homepages or general Content Pages
+# Category Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CategoryPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ContentPageWithNavigationTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Shopping List pages
+# Shopping List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ShoppingListPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Compare List pages
+# Compare List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CompareListPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Feedback Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='FeedbackPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Support Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SupportPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Offline Address Change Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OfflineAddressChangePageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Error Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ErrorPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Search Results Empty Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SearchResultsEmptyPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Cart Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CartPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Login Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='LoginPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Register Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='RegisterPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Newsletter Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='NewsletterRegisterPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Order Confirmation Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='NewsletterSuccessPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Newsletter Confirmation Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='NewsletterConfirmationPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Education Registration Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='EducationRegistrationPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Online Survey Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OnlineSurveyPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Order Confirmation Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderConfirmationPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Account Page Template (Template used for all of the Account pages)
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Account Page Without navigation Template (Template used for all of the Account pages that have left navigation)
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountWithoutNavPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Manufacturer Stores Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ManufacturerStoresPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Manufacturer Store Detail Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ManufacturerStoreDetailPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# News Detail Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='NewsDetailPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Job Detail Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='JobDetailPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Simple Landing Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Product Finder Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductFinderPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Product Finder Result Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductFinderResultPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Import Tool Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ImportToolPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Store Page Templates (Outlet Store)
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='StorePageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+# Catalog Order Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CatalogOrderPageTemplate'];validComponentTypes(code)
+;LeftSideContentPosition;;$acceptedComponents
+
+
+############################################################################################
+# Create Content Slots
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;LeftSideContentSlot;Left Side Content Slot;true
+
+
+############################################################################################
+# Bind Content Slots to Page Templates
+############################################################################################
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='HomePageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-HomePage;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TestHomePageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-TestHomePage;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ProductDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-ProductDetailsPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CatalogPlusProductDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-CatalogPlusProductDetailsPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SearchResultsListPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-SearchResultsListPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CategoryPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-CategoryPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ProductListPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-ProductListPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ErrorPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-ErrorPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SearchResultsEmptyPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-SearchResultsEmptyPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ContentPageWithNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-ContentPageWithNavigationPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ShoppingListPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-ShoppingListPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CompareListPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-CompareListPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='FeedbackPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-FeedbackPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SupportPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-SupportPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OfflineAddressChangePageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-OfflineAddressChangePageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CartPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-CartPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='LoginPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-LoginPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='RegisterPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-RegisterPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='NewsletterRegisterPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-NewsletterRegisterPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='NewsletterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-NewsletterSuccessPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='NewsletterConfirmationPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-NewsletterConfirmationPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='EducationRegistrationPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-EducationRegistrationPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OnlineSurveyPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-OnlineSurveyPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderConfirmationPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-OrderConfirmationPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-AccountPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountWithoutNavPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-AccountWithoutNavPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ManufacturerStoresPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-ManufacturerStoresPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ManufacturerStoreDetailPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-ManufacturerStoreDetailPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='NewsDetailPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-NewsDetailPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='JobDetailPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-JobDetailPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-ContentPageWithoutNavigationPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ProductFinderPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-ProductFinderPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ProductFinderResultPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-ProductFinderResultPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ImportToolPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-ImportToolPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CatalogOrderPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-CatalogOrderPageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='StorePageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;LeftSideContentSlot-StorePageTemplate;LeftSideContentPosition;;LeftSideContentSlot;false
+

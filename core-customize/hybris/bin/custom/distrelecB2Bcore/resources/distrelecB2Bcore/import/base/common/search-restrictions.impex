@@ -1,0 +1,47 @@
+# Remove search restriction set by b2bcommerce extension
+UPDATE SearchRestriction;code[unique=true];active[default=false]
+;branch_restriction;
+;employee_restriction;
+;costcenter_restriction;
+;b2border_restriction;
+;budget_restriction
+
+
+# MessageResourceTableEntry
+INSERT_UPDATE SearchRestriction;code[unique=true];query;principal(UID);restrictedType(code);active;generate
+;Frontend_MessageResourceTableEntry;{catalogVersion} IN ( ?session.catalogversions );customergroup;MessageResourceTableEntry;true;false
+;Frontend_ProductFeature;{language} IS NULL OR {language} = ?session.language;customergroup;ProductFeature;true;false
+
+# B2BUnit
+;Backend_B2BUnit_CH;{salesOrg} in ({{ select {pk} from {DistSalesOrg} where {code} = '7310'}});distCallcenterUserGroup_CH;B2BUnit;true;false
+;Backend_B2BUnit_DE;{salesOrg} in ({{ select {pk} from {DistSalesOrg} where {code} = '7350'}});distCallcenterUserGroup_DE;B2BUnit;true;false
+#;Backend_B2BUnit_LT;{salesOrg} in ({{ select {pk} from {DistSalesOrg} where {code} = '7710'}});distCallcenterUserGroup_LT;B2BUnit;true;false
+;Backend_B2BUnit_LT;{salesOrg} in ({{ select {pk} from {DistSalesOrg} where {code} = '7820'}});distCallcenterUserGroup_LT;B2BUnit;true;false
+
+# Customer
+;Backend_Customer_CH;{defaultb2bunit} in ({{select {pk} from {B2BUnit} where {salesOrg} in ({{ select {pk} from {DistSalesOrg} where {code} = '7310'}})}});distCallcenterUserGroup_CH;B2BCustomer;true;false
+;Backend_Customer_DE;{defaultb2bunit} in ({{select {pk} from {B2BUnit} where {salesOrg} in ({{ select {pk} from {DistSalesOrg} where {code} = '7350'}})}});distCallcenterUserGroup_DE;B2BCustomer;true;false
+#;Backend_Customer_LT;{defaultb2bunit} in ({{select {pk} from {B2BUnit} where {salesOrg} in ({{ select {pk} from {DistSalesOrg} where {code} = '7710'}})}});distCallcenterUserGroup_LT;B2BCustomer;true;false
+;Backend_Customer_LT;{defaultb2bunit} in ({{select {pk} from {B2BUnit} where {salesOrg} in ({{ select {pk} from {DistSalesOrg} where {code} = '7820'}})}});distCallcenterUserGroup_LT;B2BCustomer;true;false
+
+# Address
+;Backend_Address_CH;{country} in ({{select {pk} from {country} where {isocode} in ('CH', 'LI')}});distCallcenterUserGroup_CH;Address;true;false
+;Backend_Address_DE;{country} in ({{select {pk} from {country} where {isocode} in ('DE')}});distCallcenterUserGroup_DE;Address;true;false
+;Backend_Address_LT;{country} in ({{select {pk} from {country} where {isocode} in ('LT')}});distCallcenterUserGroup_LT;Address;true;false
+
+# Order
+;Backend_Order_CH;{site} in ({{select {pk} from {CMSSite} where {uid} in ('distrelec_CH')}});distCallcenterUserGroup_CH;Order;true;false
+;Backend_Order_DE;{site} in ({{select {pk} from {CMSSite} where {uid} in ('distrelec_DE')}});distCallcenterUserGroup_DE;Order;true;false
+;Backend_Order_LT;{site} in ({{select {pk} from {CMSSite} where {uid} in ('distrelec_LT')}});distCallcenterUserGroup_LT;Order;true;false
+
+# OrderEntries
+;Backend_OrderEntry_CH;{order} in ({{  select {pk} from {Order} where {site} in ({{select {pk} from {CMSSite} where {uid} in ('distrelec_CH')}}) }});distCallcenterUserGroup_CH;OrderEntry;true;false
+;Backend_OrderEntry_DE;{order} in ({{  select {pk} from {Order} where {site} in ({{select {pk} from {CMSSite} where {uid} in ('distrelec_DE')}}) }});distCallcenterUserGroup_DE;OrderEntry;true;false
+;Backend_OrderEntry_LT;{order} in ({{  select {pk} from {Order} where {site} in ({{select {pk} from {CMSSite} where {uid} in ('distrelec_LT')}}) }});distCallcenterUserGroup_LT;OrderEntry;true;false
+
+# OrderHistoryEntries
+;Backend_OrderHistoryEntry_CH;{order} in ({{  select {pk} from {Order} where {site} in ({{select {pk} from {CMSSite} where {uid} in ('distrelec_CH')}}) }});distCallcenterUserGroup_CH;OrderHistoryEntry;true;false
+;Backend_OrderHistoryEntry_DE;{order} in ({{  select {pk} from {Order} where {site} in ({{select {pk} from {CMSSite} where {uid} in ('distrelec_DE')}}) }});distCallcenterUserGroup_DE;OrderHistoryEntry;true;false
+;Backend_OrderHistoryEntry_LT;{order} in ({{  select {pk} from {Order} where {site} in ({{select {pk} from {CMSSite} where {uid} in ('distrelec_LT')}}) }});distCallcenterUserGroup_LT;OrderHistoryEntry;true;false
+
+

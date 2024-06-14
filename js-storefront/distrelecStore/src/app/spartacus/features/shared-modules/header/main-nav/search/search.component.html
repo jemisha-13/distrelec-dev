@@ -1,0 +1,60 @@
+<span [appJsonLd]="schema"></span>
+<div class="search-wrapper-container">
+  <form #searchForm="ngForm" name="searchFormName" autocomplete="off">
+    <div class="input-wrapper">
+      <input
+        class="input-search"
+        [id]="inputSearchHtmlId"
+        [placeholder]="(showEmptySearchPlaceholder ? 'form.search_empty' : 'form.search') | cxTranslate"
+        [class.empty-search-text]="showEmptySearchPlaceholder"
+        [value]="searchForm.value.query"
+        (keydown.enter)="onSubmit(searchForm.value)"
+        (ngModelChange)="onModelChange(searchForm.value.query)"
+        name="query"
+        ngModel
+        autocomplete="off"
+        enterkeyhint="search"
+      />
+      <div class="select-holder">
+        <div class="select-holder__facade">
+          <span>{{ selectedCategoryName }}</span>
+          <app-icon iconName="caret-down" iconType="svg" width="24" height="24"></app-icon>
+        </div>
+        <select
+          *rxLet="searchCategories$; let searchCategories"
+          class="metahd-select"
+          [(ngModel)]="selectedCategoryCode"
+          [ngModelOptions]="{ standalone: true }"
+          [id]="selectSearchHtmlId"
+          (change)="onSelectChange($event)"
+          title="searchInCat"
+        >
+          <ng-container *ngIf="{ value: 'form.search_all' | cxTranslate } as defaultTranslation">
+            <option [title]="defaultTranslation.value" value="">{{ defaultTranslation.value }}</option>
+          </ng-container>
+          <option
+            *rxFor="let item of searchCategories"
+            [title]="item?.name"
+            [value]="item?.code"
+            [attr.data-category]="item?.nameEN"
+          >
+            {{ item?.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <button
+      class="search btn-search"
+      [id]="buttonSearchHtmlId"
+      (click)="onSubmit(searchForm.value)"
+      type="button"
+      aria-label="Search For Product"
+    >
+      <app-icon class="search-icon" iconName="search" iconType="svg" width="24" height="24"></app-icon>
+    </button>
+  </form>
+</div>
+
+<app-dist-slide-drawer direction="FROM_SEARCH" uid="search_results">
+  <app-search-results [categoryName]="selectedCategoryName" [searchTerm]="searchForm.value.query"></app-search-results>
+</app-dist-slide-drawer>

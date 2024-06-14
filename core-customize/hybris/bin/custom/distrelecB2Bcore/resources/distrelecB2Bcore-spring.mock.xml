@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- [y] hybris Platform Copyright (c) 2000-2012 hybris AG All rights reserved. This software is the confidential and proprietary information of hybris ("Confidential 
+	Information"). You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement you entered into 
+	with hybris. -->
+
+
+<!-- import mock spring config to overide defaults -->
+<!--
+add the following to the END of the distrelecB2Bcore-spring.xml
+to use the mocks
+ 
+	<import resource="distrelecB2Bcore-spring.mock.xml" />
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!-- PriceFactory -->
+	<bean id="jalosession" class="com.namics.distrelec.b2b.core.jalo.session.DistJaloSession" scope="prototype">
+		<property name="priceFactory" ref="mock.priceFactory" />
+	</bean>
+
+	<bean id="mock.priceFactory" class="com.namics.distrelec.b2b.core.price.impl.MockPriceFactory" parent="abstractPriceFactory" />
+	
+	<bean id="mockNewsletterService" class="com.namics.distrelec.b2b.core.service.newsletter.impl.MockNewsletterService"/>
+	<alias name="mockNewsletterService" alias="newsletterService" />
+	
+	
+	<bean id="mock.sapPiWebserviceClientIF12" class="com.namics.distrelec.b2b.core.inout.erp.mock.MockSIHybrisIF12Out"/>
+	<alias name="mock.sapPiWebserviceClientIF12" alias="sapPiWebserviceClientIF12"/>
+	
+	<bean id="mock.sapPiWebserviceClientIF15" class="com.namics.distrelec.b2b.core.inout.erp.mock.MockSIHybrisIF15Out"/>
+	<alias name="mock.sapPiWebserviceClientIF15" alias="sapPiWebserviceClientIF15"/>
+	
+	<bean id="mock.sapPiWebserviceClient" class="com.namics.distrelec.b2b.core.inout.erp.mock.MockSIHybrisV1Out"/>
+	<alias name="mock.sapPiWebserviceClient" alias="sapPiWebserviceClient"/>
+	
+	<bean id="mock.sapPiWebserviceClientIF08" class="com.namics.distrelec.b2b.core.inout.erp.mock.MockSIHybrisV1Out"/>
+	<alias name="mock.sapPiWebserviceClientIF08" alias="sapPiWebserviceClientIF08"/>
+	
+	<bean id="mock.sap.customerService" class="com.namics.distrelec.b2b.core.inout.erp.impl.mock.MockSapCustomerService" parent="sap.customerService"/>
+	<alias alias="erp.customerService" name="mock.sap.customerService" />
+	
+	<!-- DISTRELEC-14326 -->
+	<bean id="mock.sapPiWebserviceClientIF11" class="com.namics.distrelec.b2b.core.inout.erp.mock.MockSIHybrisIF11V1Out"/>
+	<alias name="mock.sapPiWebserviceClientIF11" alias="sapPiWebserviceClientIF11"/>
+	
+</beans>

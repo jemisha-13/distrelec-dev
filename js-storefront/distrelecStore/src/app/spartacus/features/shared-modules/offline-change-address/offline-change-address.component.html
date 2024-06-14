@@ -1,0 +1,349 @@
+<div class="row">
+  <div class="col-lg-12">
+    <hr class="divider" />
+
+    <form class="address-form" [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <label class="form-row__label" for="customerNumber">
+          {{ 'formOfflineAddressChange.customerNumber' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input
+            class="input"
+            [class.error]="isControlInvalid('customerNumber')"
+            type="text"
+            formControlName="customerNumber"
+          />
+
+          <div *ngIf="isControlInvalid('customerNumber')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <h3>{{ 'formOfflineAddressChange.oldAddress' | cxTranslate }}</h3>
+
+      <div class="form-row">
+        <label class="form-row__label" for="companyName">
+          {{ 'formOfflineAddressChange.oldAddress.companyName' | cxTranslate }}
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input class="input" type="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="firstName">
+          {{ 'formOfflineAddressChange.oldAddress.firstName' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input
+            class="input"
+            [class.error]="isControlInvalid('oldFirstName')"
+            type="text"
+            formControlName="oldFirstName"
+          />
+
+          <div *ngIf="isControlInvalid('oldFirstName')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="lastName">
+          {{ 'formOfflineAddressChange.oldAddress.lastName' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input
+            class="input"
+            [class.error]="isControlInvalid('oldLastName')"
+            type="text"
+            formControlName="oldLastName"
+          />
+
+          <div *ngIf="isControlInvalid('oldLastName')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="department">
+          {{ 'formOfflineAddressChange.oldAddress.department' | cxTranslate }}
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input class="input" type="text" formControlName="oldDepartment" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="street">
+          {{ 'formOfflineAddressChange.oldAddress.street' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input class="input" [class.error]="isControlInvalid('oldStreet')" type="text" formControlName="oldStreet" />
+
+          <div *ngIf="isControlInvalid('oldStreet')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="number">
+          {{ 'formOfflineAddressChange.oldAddress.number' | cxTranslate }}
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input class="input" type="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="postalCode">
+          {{ 'formOfflineAddressChange.oldAddress.postalCode' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input
+            class="input"
+            [class.error]="isControlInvalid('oldPostalCode')"
+            type="text"
+            formControlName="oldPostalCode"
+          />
+
+          <div *ngIf="isControlInvalid('oldPostalCode')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="town">
+          {{ 'formOfflineAddressChange.oldAddress.town' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input class="input" [class.error]="isControlInvalid('oldTown')" type="text" formControlName="oldTown" />
+
+          <div *ngIf="isControlInvalid('oldTown')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="country">
+          {{ 'formOfflineAddressChange.oldAddress.country' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <select
+            class="select"
+            id="countryCodeCheckout"
+            [class.error]="isControlInvalid('oldCountry')"
+            aria-placeholder="Please select"
+            type="text"
+            formControlName="oldCountry"
+          >
+            <option id="form.please_select" [value]="null" disabled="true">
+              {{ 'form.please_select' | cxTranslate }}
+            </option>
+            <option
+              *ngFor="let countryCode of countryList"
+              [value]="countryCode"
+              [id]="'countryCodeOptions' + countryCode"
+            >
+              {{ 'countries.country_distrelec_' + countryCode | cxTranslate }}
+            </option>
+          </select>
+
+          <div *ngIf="isControlInvalid('oldCountry')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <h3>{{ 'formOfflineAddressChange.newAddress' | cxTranslate }}</h3>
+
+      <div class="form-row">
+        <label class="form-row__label" for="companyName">
+          {{ 'formOfflineAddressChange.newAddress.company' | cxTranslate }}
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input class="input" type="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="firstName">
+          {{ 'formOfflineAddressChange.newAddress.firstName' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input
+            class="input"
+            [class.error]="isControlInvalid('newFirstName')"
+            type="text"
+            formControlName="newFirstName"
+          />
+
+          <div *ngIf="isControlInvalid('newFirstName')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" [class.error]="isControlInvalid('newLastName')" for="lastName">
+          {{ 'formOfflineAddressChange.newAddress.lastName' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input class="input" type="text" formControlName="newLastName" />
+
+          <div *ngIf="isControlInvalid('newLastName')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="department">
+          {{ 'formOfflineAddressChange.newAddress.department' | cxTranslate }}
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input class="input" type="text" formControlName="newDepartment" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="street">
+          {{ 'formOfflineAddressChange.newAddress.street' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input class="input" [class.error]="isControlInvalid('newStreet')" type="text" formControlName="newStreet" />
+
+          <div *ngIf="isControlInvalid('newStreet')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="number">
+          {{ 'formOfflineAddressChange.newAddress.number' | cxTranslate }}
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input class="input" type="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="postalCode">
+          {{ 'formOfflineAddressChange.newAddress.postalCode' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input
+            class="input"
+            [class.error]="isControlInvalid('newPostalCode')"
+            type="text"
+            formControlName="newPostalCode"
+          />
+
+          <div *ngIf="isControlInvalid('newPostalCode')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="town">
+          {{ 'formOfflineAddressChange.newAddress.town' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <input class="input" [class.error]="isControlInvalid('newTown')" type="text" formControlName="newTown" />
+
+          <div *ngIf="isControlInvalid('newTown')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="country">
+          {{ 'formOfflineAddressChange.newAddress.country' | cxTranslate }} *
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <select
+            class="select"
+            id="countryCodeCheckout"
+            [class.error]="isControlInvalid('newCountry')"
+            aria-placeholder="Please select"
+            type="text"
+            formControlName="newCountry"
+          >
+            <option id="form.please_select" [value]="null" disabled="true">
+              {{ 'form.please_select' | cxTranslate }}
+            </option>
+            <option
+              *ngFor="let countryCode of countryList"
+              [value]="countryCode"
+              [id]="'countryCodeOptions' + countryCode"
+            >
+              {{ 'countries.country_distrelec_' + countryCode | cxTranslate }}
+            </option>
+          </select>
+
+          <div *ngIf="isControlInvalid('newCountry')" class="text-danger">
+            <fa-icon [icon]="faAlert"></fa-icon>
+            {{ 'validations.enter_valid_field' | cxTranslate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-row__label" for="comment">
+          {{ 'formOfflineAddressChange.newAddress.comment' | cxTranslate }}
+        </label>
+
+        <div class="form-row__input-wrapper">
+          <textarea class="input" rows="5" formControlName="comment"></textarea>
+        </div>
+      </div>
+
+      <div class="form-row__button">
+        <button class="button" type="submit">
+          {{ 'formOfflineAddressChange.sendButton.text' | cxTranslate }}
+          <fa-icon [icon]="faArrowRight"></fa-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

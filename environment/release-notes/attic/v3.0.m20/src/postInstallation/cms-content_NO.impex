@@ -1,0 +1,81 @@
+$contentCatalog=distrelec_NOContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distStoreContent=CMSParagraphComponent,SimpleBannerComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent
+
+# Create Page Templates
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;StorePageTemplate;Store Page Template;search/storePage;ContentPage
+
+# Add Velocity templates that are in the CMS Cockpit. These give a better layout for editing pages
+# The FileLoaderValueTranslator loads a File into a String property. The templates could also be inserted in-line in this file.
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;StorePageTemplate;$jarResourceCms/structure-view/structure_storePageTemplate.vm
+
+# Store Page Templates (Outlet Store)
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='StorePageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;StoreContent;;$distStoreContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='StorePageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-StorePage;Logo;;LogoSlot;false
+;;ServiceNav-StorePage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-StorePage;MainNav;;MainNavSlot;false
+;;Swyn-StorePage;Swyn;;SwynSlot;false
+;;FooterLinks-StorePage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-StorePage;CertLabels;;CertLabelsSlot;false
+;;Impressum-StorePage;Impressum;;ImpressumSlot;false
+
+# Preview Image for use in the CMS Cockpit for special ContentPages
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true]
+;;ContentPageModel_function_preview;text/gif;ContentPageModel_function_preview.gif;$jarResourceCms/preview-images/ContentPageModel_function_preview.gif
+
+# Functional Content Pages
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $contentCV)[default='ContentPageModel_function_preview']
+;;outletStorePage;Outlet Stores Page;StorePageTemplate;outlet
+;;newStorePage;New Store Page;StorePageTemplate;new
+
+############################################################################################
+# Store Page (Outlet Store)
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;StoreContentSlot-OutletStore;Store Content Slot For Outlet Store Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='productList'];contentSlot(uid,$contentCV)[unique=true]
+;;StoreContent-OutletStorePage;StoreContent;;StoreContentSlot-OutletStore
+
+############################################################################################
+# Store Page (New Store)
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;StoreContentSlot-NewStore;Store Content Slot For New Store Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='productList'];contentSlot(uid,$contentCV)[unique=true]
+;;StoreContent-NewStorePage;StoreContent;;StoreContentSlot-NewStore
+
+$lang=en
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;outletStorePage;Clearance Store;
+;;newStorePage;New products;
+
+$lang=sv
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;outletStorePage;(no)Clearance Store;
+;;newStorePage;Nye produkter

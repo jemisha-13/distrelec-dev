@@ -1,0 +1,774 @@
+UPDATE SyncItemJob[batchmode = true]; itemType(code)[unique = true]; removeMissingItems[default = true]
+                                    ; CatalogVersionSyncJob        ;
+                                    ; DistCatalogVersionSyncJob    ;
+
+#################
+### CH Catalog ###
+##################
+$contentCatalog = distrelec_CHContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]                   ; $contentCV[unique = true]
+                             ; MainSlot-checkout                    ;
+                             ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent, DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+##################
+### AT Catalog ###
+##################
+$contentCatalog = distrelec_ATContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+
+##################
+### BE Catalog ###
+##################
+$contentCatalog = distrelec_BEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+
+##################
+### CZ Catalog ###
+##################
+$contentCatalog = distrelec_CZContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+
+##################
+### DE Catalog ###
+##################
+$contentCatalog = distrelec_DEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+##################
+### DK Catalog ###
+##################
+$contentCatalog = distrelec_DKContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+##################
+### EE Catalog ###
+##################
+$contentCatalog = distrelec_EEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+
+##################
+### EX Catalog ###
+##################
+$contentCatalog = distrelec_EXContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+##################
+### FI Catalog ###
+##################
+$contentCatalog = distrelec_FIContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+##################
+### FR Catalog ###
+##################
+$contentCatalog = distrelec_FRContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+##################
+### HU Catalog ###
+##################
+$contentCatalog = distrelec_HUContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+
+##################
+### IT Catalog ###
+##################
+$contentCatalog = distrelec_ITContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+
+##################
+### LT Catalog ###
+##################
+$contentCatalog = distrelec_LTContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+
+##################
+### LV Catalog ###
+##################
+$contentCatalog = distrelec_LVContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+##################
+### NL Catalog ###
+##################
+$contentCatalog = distrelec_NLContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+##################
+### NO Catalog ###
+##################
+$contentCatalog = distrelec_NOContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+##################
+### PL Catalog ###
+##################
+$contentCatalog = distrelec_PLContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+##################
+### RO Catalog ###
+##################
+$contentCatalog = distrelec_ROContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+
+##################
+### SE Catalog ###
+##################
+$contentCatalog = distrelec_SEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot
+##################
+### SK Catalog ###
+##################
+$contentCatalog = distrelec_SKContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE ContentSlotForTemplate; uid[unique = true]; $contentCV[unique = true]
+                             ; MainSlot-checkout ;
+
+REMOVE ContentSlotForPage; uid[unique = true]                   ; $contentCV[unique = true]
+                         ; MainPageSlot-checkout-register-login ;
+
+REMOVE ContentSlot; $contentCV[unique = true]; uid[unique = true]
+                  ;                          ; MainSlot-checkout
+                  ;                          ; MainSlot-checkout-billing
+                  ;                          ; MainSlot-checkout-payment
+
+REMOVE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]
+                       ;                          ; MainCheckoutComponent
+
+REMOVE ContentSlotName; name[unique = true]        ; template(uid, $contentCV)[unique = true][default = 'CheckoutPaymentPageTemplate']
+                      ; FooterLinksSlotForCheckout ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CheckoutPageTemplate']; validComponentTypes(code)
+                             ; FooterLinks        ;                                                                           ; CMSFlexComponent,DistFooterComponent
+
+INSERT_UPDATE CMSFlexComponent; $contentCV[unique = true]; uid[unique = true]            ; name                              ; flexType
+                              ;                          ; CheckoutDeliveryComponent     ; Checkout Delivery Component       ; CheckoutDeliveryComponent
+                              ;                          ; CheckoutReviewAndPayComponent ; Checkout Review and Pay Component ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]              ; name                                          ; active; cmsComponents(uid, $contentCV)
+                         ;                          ; CheckoutDeliveryContentSlot     ; Main Content Slot for Checkout Delivery       ; true  ; CheckoutDeliveryComponent
+                         ;                          ; CheckoutReviewAndPayContentSlot ; Main Content Slot for Checkout Review and Pay ; true  ; CheckoutReviewAndPayComponent
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                     ; position      ; page(uid, $contentCV)    ; contentSlot(uid, $contentCV)
+                                ;                          ; CheckoutDeliveryContentSlotForPage     ; main-checkout ; checkoutDeliveryPage     ; CheckoutDeliveryContentSlot
+                                ;                          ; CheckoutReviewAndPayContentSlotForPage ; main-checkout ; checkoutReviewAndPayPage ; CheckoutReviewAndPayContentSlot

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<process xmlns="http://www.hybris.de/xsd/processdefinition" start="generateStockNotificationEmail" name="distrelecStockNotificationEmailProcess"
+		processClass="com.namics.distrelec.b2b.core.model.process.DistStockNotificationProcessModel" onError="error">
+
+	<action id="generateStockNotificationEmail" bean="generateStockNotificationEmail">
+		<transition name="OK" to="sendEmail"/>
+		<transition name="NOK" to="error"/>
+	</action>
+
+	<action id="sendEmail" bean="distSendEmail">
+		<transition name="OK" to="removeStockNotificationEntry"/>
+		<transition name="NOK" to="failed"/>
+	</action>
+	
+	<action id="removeStockNotificationEntry" bean="removeStockNotificationEntry">
+		<transition name="OK" to="removeSentEmail"/>
+		<transition name="NOK" to="error"/>
+	</action>
+
+	<action id="removeSentEmail" bean="distRemoveSentEmail">
+		<transition name="OK" to="success"/>
+		<transition name="NOK" to="error"/>
+	</action>
+
+	<end id="error" state="ERROR">Something went wrong.</end>
+	<end id="failed" state="FAILED">Could not send Stock Notification email.</end>
+	<end id="success" state="SUCCEEDED">Stock Notification Email sent to customer.</end>
+
+</process>

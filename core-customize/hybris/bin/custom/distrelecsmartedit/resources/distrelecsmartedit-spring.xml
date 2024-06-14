@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2022 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/util
+		   http://www.springframework.org/schema/util/spring-util.xsd
+           ">
+
+    <bean name="abstractPropertyTypeAttributePredicate" class="com.distrelec.smartedit.predicates.PropertyTypeAttributePredicate" abstract="true" />
+    <bean name="abstractRelationCodePredicate" class="com.distrelec.smartedit.predicates.RelationCodePredicate" abstract="true" />
+    <bean name="abstractAssignableToPredicate" class="com.distrelec.smartedit.predicates.AssignableToPredicate" abstract="true" />
+
+    <!-- Predicate that will check if attribute is of DistDataAttributes type in type system -->
+    <bean id="distDataAttributesAttributePredicate" parent="abstractPropertyTypeAttributePredicate" p:type="DistDataAttributes"/>
+
+    <!-- Sets structure type to "Map" -->
+    <bean id="mapComponentTypeAttributePopulator" class="de.hybris.platform.cmsfacades.types.populator.CmsStructureTypeComponentTypeAttributePopulator">
+        <property name="cmsStructureType" value="Map" />
+    </bean>
+
+    <!-- Add mapping to "Map" for attributes of type "DistDataAttributes" -->
+    <bean depends-on="cmsAttributePredicatePopulatorListMap" parent="mapMergeDirective">
+        <property name="key">
+            <ref bean="distDataAttributesAttributePredicate" />
+        </property>
+        <property name="value">
+            <list>
+                <ref bean="mapComponentTypeAttributePopulator" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- Converter for attributes of "DistDataAttributes" type -->
+    <alias name="defaultDistDataAttributesContentConverter" alias="distDataAttributesContentConverter"/>
+    <bean name="defaultDistDataAttributesContentConverter" parent="cmsAbstractContentConverter"
+          p:modelToDataConverter-ref="stringMapToMapEntryDataContentConverter"
+          p:dataToModelConverter-ref="stringToStringMapEntryDataToMapContentConverter"
+          p:constrainedBy-ref="distDataAttributesAttributePredicate">
+    </bean>
+
+    <alias name="defaultStringToStringMapToMapEntryDataContentConverter" alias="stringMapToMapEntryDataContentConverter" />
+    <bean id="defaultStringToStringMapToMapEntryDataContentConverter" class="com.distrelec.smartedit.converter.StringToStringMapToMapEntryDataContentConverter" />
+
+    <alias name="defaultStringToStringMapEntryDataToMapContentConverter" alias="stringToStringMapEntryDataToMapContentConverter" />
+    <bean id="defaultStringToStringMapEntryDataToMapContentConverter" class="com.distrelec.smartedit.converter.StringToStringMapEntryDataToMapContentConverter" />
+
+    <!-- Register converter for DistDataAttributes -->
+    <bean depends-on="cmsAttributeContentConverterList"
+          parent="listMergeDirective" >
+        <property name="add" ref="distDataAttributesContentConverter"  />
+    </bean>
+
+    <!-- Predicate that will check if attribute is of CMSSiteList type in type system -->
+    <bean id="cmsSiteListAttributePredicate" parent="abstractPropertyTypeAttributePredicate" p:type="CMSSiteList"/>
+
+    <bean id="cmsAbstractPagePredicate" parent="abstractAssignableToPredicate" p:assignableToClass="de.hybris.platform.cms2.model.pages.AbstractPageModel"/>
+
+    <!-- Sets structure type to "CMSSiteList" -->
+    <bean id="cmsSiteListComponentTypeAttributePopulator" class="de.hybris.platform.cmsfacades.types.populator.CmsStructureTypeComponentTypeAttributePopulator">
+        <property name="cmsStructureType" value="CMSSiteList" />
+    </bean>
+
+    <bean id="abstractPageToMapDisplayOnSitesPopulator" class="com.distrelec.smartedit.populator.AbstractPageToMapDisplayOnSitesPopulator" />
+
+    <!-- Add mapping to "Map" for attributes of type "DistDataAttributes" -->
+    <bean depends-on="cmsAttributePredicatePopulatorListMap" parent="mapMergeDirective">
+        <property name="key">
+            <ref bean="cmsSiteListAttributePredicate" />
+        </property>
+        <property name="value">
+            <list>
+                <ref bean="cmsSiteListComponentTypeAttributePopulator" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- Add mapping to "CMSSiteList" for attributes of type "CMSSiteList" -->
+    <bean depends-on="cmsAttributeDataPredicatePopulatorListMap" parent="mapMergeDirective">
+        <property name="key">
+            <ref bean="cmsAbstractPagePredicate" />
+        </property>
+        <property name="value">
+            <list>
+                <ref bean="abstractPageToMapDisplayOnSitesPopulator" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="mapToAbstractPageDisplayOnSitesPopulator" class="com.distrelec.smartedit.populator.MapToAbstractPageDisplayOnSitesPopulator" />
+
+    <util:list id="customAbstractPagePopulatorsList">
+        <ref bean="mapToAbstractPageDisplayOnSitesPopulator" />
+    </util:list>
+
+    <util:list id="customContentPagePopulatorsList">
+        <ref bean="mapToAbstractPageDisplayOnSitesPopulator" />
+    </util:list>
+
+    <bean id="distrelecAbstractPagePopulatorsList" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList"
+                  value="#{ T(org.apache.commons.collections.ListUtils).union(@cmsAbstractPagePopulatorsList, @customAbstractPagePopulatorsList) }" />
+    </bean>
+
+    <bean id="distrelecContentPagePopulatorsList" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList"
+                  value="#{ T(org.apache.commons.collections.ListUtils).union(@cmsContentPagePopulatorsList, @customContentPagePopulatorsList) }" />
+    </bean>
+
+    <alias name="distrelecCmsAbstractPagePopulator" alias="cmsAbstractPagePopulator"/>
+    <bean id="distrelecCmsAbstractPagePopulator" parent="cmsCompositePopulator">
+        <property name="populators" ref="distrelecAbstractPagePopulatorsList" />
+    </bean>
+
+    <alias name="distrelecCmsContentPagePopulator" alias="cmsContentPagePopulator"/>
+    <bean id="distrelecCmsContentPagePopulator" parent="cmsCompositePopulator">
+        <property name="populators" ref="distrelecContentPagePopulatorsList" />
+    </bean>
+
+    <!-- Converter for attributes of "CMSSiteList" type -->
+    <alias name="defaultCmsListContentConverter" alias="cmsListContentConverter"/>
+    <bean name="defaultCmsListContentConverter" parent="cmsAbstractContentConverter"
+          p:modelToDataConverter-ref="cmsSiteListToSiteDataListConverter"
+          p:dataToModelConverter-ref="siteDataListToCMSSiteListConverter"
+          p:constrainedBy-ref="cmsSiteListAttributePredicate">
+    </bean>
+
+    <alias name="defaultCmsSiteListToSiteDataListConverter" alias="cmsSiteListToSiteDataListConverter" />
+    <bean id="defaultCmsSiteListToSiteDataListConverter" class="com.distrelec.smartedit.converter.CMSSiteListToSiteDataListConverter" />
+
+    <alias name="defaultSiteDataListToCMSSiteListConverter" alias="siteDataListToCMSSiteListConverter" />
+    <bean id="defaultSiteDataListToCMSSiteListConverter" class="com.distrelec.smartedit.converter.SiteDataListToCMSSiteListConverter" />
+
+    <!-- Register converter for DistDataAttributes -->
+    <bean depends-on="cmsAttributeContentConverterList"
+          parent="listMergeDirective" >
+        <property name="add" ref="cmsListContentConverter"  />
+    </bean>
+
+    <alias name="defaultManufacturerPageModelConverter" alias="manufacturerPageModelConverter" />
+    <bean id="defaultManufacturerPageModelConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="de.hybris.platform.cmsfacades.data.AbstractPageData" />
+        <property name="populators">
+            <list merge="true">
+                <ref bean="basicPageModelPopulator" />
+            </list>
+        </property>
+    </bean>
+
+    <alias name="distrelecPageModelPopulatingConverters" alias="pageModelConverterFactory" />
+    <util:map id="distrelecPageModelPopulatingConverters">
+        <description>deprecated since 6.6</description>
+        <entry value-ref="contentPageModelConverter">
+            <key>
+                <value type="java.lang.Class">de.hybris.platform.cms2.model.pages.ContentPageModel</value>
+            </key>
+        </entry>
+
+        <entry value-ref="productPageModelConverter">
+            <key>
+                <value type="java.lang.Class">de.hybris.platform.cms2.model.pages.ProductPageModel</value>
+            </key>
+        </entry>
+
+        <entry value-ref="categoryPageModelConverter">
+            <key>
+                <value type="java.lang.Class">de.hybris.platform.cms2.model.pages.CategoryPageModel</value>
+            </key>
+        </entry>
+
+        <entry value-ref="defaultPageModelConverter">
+            <key>
+                <value type="java.lang.Class">de.hybris.platform.cms2.model.pages.CatalogPageModel</value>
+            </key>
+        </entry>
+
+        <entry value-ref="defaultPageModelConverter">
+            <key>
+                <value type="java.lang.Class">com.namics.distrelec.b2b.core.model.pages.DistManufacturerPageModel</value>
+            </key>
+        </entry>
+    </util:map>
+
+    <alias name="distrelecCmsSupportedPages" alias="cmsSupportedPages" />
+    <util:set id="distrelecCmsSupportedPages">
+        <value type="java.lang.Class">de.hybris.platform.cms2.model.pages.ContentPageModel</value>
+        <value type="java.lang.Class">de.hybris.platform.cms2.model.pages.ProductPageModel</value>
+        <value type="java.lang.Class">de.hybris.platform.cms2.model.pages.CategoryPageModel</value>
+        <value type="java.lang.Class">com.namics.distrelec.b2b.core.model.pages.DistManufacturerPageModel</value>
+    </util:set>
+
+    <alias name="defaultDistManufacturererPageVariationResolver" alias="distManufacturererPageVariationResolver" />
+    <bean id="defaultDistManufacturererPageVariationResolver" class="com.distrelec.smartedit.variation.DistManufacturerPageVariationResolver" />
+
+    <bean class="de.hybris.platform.cmsfacades.pages.service.impl.DefaultPageVariationResolverType" p:typecode="DistManufacturerPage"
+          p:resolver-ref="distManufacturererPageVariationResolver" />
+
+    <bean class="de.hybris.platform.cmsfacades.navigations.service.converters.DefaultNavigationEntryItemModelConverter"
+          p:itemType="Category"
+          p:converter-ref="cmsNavigationEntryCategoryModelConversionFunction"
+          p:uniqueIdentifierConverter-ref="cmsNavigationEntryCategoryModelIdConversionFunction" />
+
+    <!-- Predicate that will check if attribute is of DistDataAttributes type in type system -->
+    <bean id="distManufacturersAttributePredicate" parent="abstractRelationCodePredicate" p:code="ManufacturersForRestriction"/>
+
+    <!-- Sets structure type to "MultiManufacturerSelector" -->
+    <bean id="manufacturerersComponentTypeAttributePopulator" class="de.hybris.platform.cmsfacades.types.populator.CmsStructureTypeComponentTypeAttributePopulator">
+        <property name="cmsStructureType" value="MultiManufacturerSelector" />
+    </bean>
+
+    <!-- Add mapping to "Map" for attributes of type "DistDataAttributes" -->
+    <bean depends-on="cmsAttributePredicatePopulatorListMap" parent="mapMergeDirective">
+        <property name="key">
+            <ref bean="distManufacturersAttributePredicate" />
+        </property>
+        <property name="value">
+            <list>
+                <ref bean="manufacturerersComponentTypeAttributePopulator" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="distManufacturerRestrictionPredicate" parent="abstractAssignableToPredicate" p:assignableToClass="com.namics.distrelec.b2b.core.model.restrictions.DistManufacturerRestrictionModel"/>
+
+    <bean id="distManufacturerRestrictionToMapManufacturersPopulator" class="com.distrelec.smartedit.populator.DistManufacturerRestrictionToMapManufacturersPopulator" />
+
+    <bean depends-on="cmsAttributeDataPredicatePopulatorListMap" parent="mapMergeDirective">
+        <property name="key">
+            <ref bean="distManufacturerRestrictionPredicate" />
+        </property>
+        <property name="value">
+            <list>
+                <ref bean="distManufacturerRestrictionToMapManufacturersPopulator" />
+            </list>
+        </property>
+    </bean>
+
+    <alias name="distrelecCmsItemTypePopulatorProvider" alias="cmsItemTypePopulatorProvider"/>
+    <bean id="distrelecCmsItemTypePopulatorProvider" parent="defaultCmsItemTypePopulatorProvider">
+        <property name="populatorsMap" ref="distrelecContentItemTypePopulatorsMap"/>
+    </bean>
+
+    <bean id="distrelecContentItemTypePopulatorsMap" class="org.springframework.beans.factory.config.MapFactoryBean">
+        <property name="sourceMap"
+                  value="#{ T(com.namics.distrelec.b2b.core.util.DistUtils).combineMaps(@cmsContentItemTypePopulatorsMap, @customContentItemTypePopulatorsMap) }" />
+    </bean>
+
+    <bean id="mapToDistManufacturerRestrictionManufacturersPopulator" class="com.distrelec.smartedit.populator.MapToDistManufacturerRestrictionManufacturersPopulator" />
+
+    <util:map id="customContentItemTypePopulatorsMap">
+        <entry value-ref="mapToDistManufacturerRestrictionManufacturersPopulator">
+            <key>
+                <util:constant static-field="com.namics.distrelec.b2b.core.model.restrictions.DistManufacturerRestrictionModel._TYPECODE"/>
+            </key>
+        </entry>
+    </util:map>
+
+    <alias name="distrelecCmsItemDeepCloningService" alias="cmsItemDeepCloningService" />
+    <bean id="distrelecCmsItemDeepCloningService" class="com.distrelec.smartedit.cloning.service.DistrelecCMSItemDeepCloningService"
+          parent="defaultCmsItemDeepCloningService" />
+
+    <alias name="defaultNavigationEntryCategoryModelIdConversionFunction" alias="cmsNavigationEntryCategoryModelIdConversionFunction" />
+    <bean id="defaultNavigationEntryCategoryModelIdConversionFunction" class="com.distrelec.smartedit.cmsfacades.navigations.service.functions.DefaultNavigationEntryCategoryModelIdConversionFunction">
+    </bean>
+
+    <alias name="defaultNavigationEntryCategoryModelConversionFunction" alias="cmsNavigationEntryCategoryModelConversionFunction" />
+    <bean id="defaultNavigationEntryCategoryModelConversionFunction" class="com.distrelec.smartedit.cmsfacades.navigations.service.functions.DefaultNavigationEntryCategoryModelConversionFunction">
+    </bean>
+
+    <alias name="distrelecProductSearchService" alias="cmsProductSearchService" />
+    <bean id="distrelecProductSearchService" class="com.distrelec.smartedit.product.search.DistrelecProductSearchService"
+          parent="defaultNamedQueryServiceCmsProductSearchService"/>
+
+    <bean depends-on="namedQueryMap" parent="mapMergeDirective">
+        <property name="key" value="distrelecNamedQueryProductByText" />
+        <property name="value" value="SELECT {pk} FROM {Product} WHERE LOWER({code}) LIKE LOWER(?code) AND {catalogVersion} = ?catalogVersion" />
+    </bean>
+
+    <!-- blacklist attribute Map -->
+    <alias name="distrelecCmsStructureTypeBlacklistAttributeMap" alias="cmsStructureTypeBlacklistAttributeMap"/>
+    <bean id="distrelecCmsStructureTypeBlacklistAttributeMap" class="org.springframework.beans.factory.config.MapFactoryBean" scope="singleton">
+        <property name="sourceMap">
+            <map key-type="java.lang.String" value-type="java.lang.String">
+                <entry key="AbstractPage" value="approvalStatus, masterTemplate, defaultPage, onlyOneRestrictionMustApply, previewImage, contentSlots, type, typeCode, missingContentSlots, availableContentSlots, view, navigationNodeList, lockedBy, copyToCatalogsDisabled, localizedPages, originalPage, pageStatus, template, wtBasicParameters, wtAdvancedParameters, wtAreaCode, wtActivateEventTracking, wtActivateABTracking"/>
+                <entry key="ContentPage" value="homepage, labelOrId, navigationNodes, linkComponents, bannerComponets, flashComponents, linkedImageComponents, linkedImageTextComponents"/>
+                <entry key="SimpleCMSComponent" value="containers"/>
+                <entry key="AbstractCMSComponent" value="uid, onlyOneRestrictionMustApply, type, typeCode, container, restricted, slots, actions"/>
+                <entry key="CMSItem" value="catalogVersion"/>
+                <entry key="AbstractRestriction" value="uid, type, typeCode, pages, components, inverseRestrictions"/>
+                <entry key="CMSCategoryRestriction" value="categoryCodes"/>
+                <entry key="ProductCarouselComponent" value="productCodes, categoryCodes, searchQuery, categoryCode, popup"/>
+                <entry key="NavigationComponent" value="styleClass"/>
+                <entry key="FooterNavigationComponent" value="showLanguageCurrency, notice"/>
+                <entry key="CMSProductRestriction" value="productCodes"/>
+                <entry key="CMSTimeRestriction" value="useStoreTimeZone" />
+                <entry key="BannerComponent" value="page,pageLabelOrId,rotatingComponent" />
+            </map>
+        </property>
+    </bean>
+
+    <!-- Predicate that will check if attribute is of DistDataAttributes type in type system -->
+    <bean id="distVideoAttributePredicate" parent="abstractPropertyTypeAttributePredicate" p:type="DistVideoMedia"/>
+
+    <!-- Sets structure type to "Map" -->
+    <bean id="distVideoMediaComponentTypeAttributePopulator" class="de.hybris.platform.cmsfacades.types.populator.CmsStructureTypeComponentTypeAttributePopulator">
+        <property name="cmsStructureType" value="VideoMedia" />
+    </bean>
+
+    <!-- Add mapping to "Map" for attributes of type "DistDataAttributes" -->
+    <bean depends-on="cmsAttributePredicatePopulatorListMap" parent="mapMergeDirective">
+        <property name="key">
+            <ref bean="distVideoAttributePredicate" />
+        </property>
+        <property name="value">
+            <list>
+                <ref bean="distVideoMediaComponentTypeAttributePopulator" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="distVideoMediaToStringConverter" class="com.distrelec.smartedit.converter.DistVideoMediaToStringConverter" />
+    <bean id="mapToDistVideoMediaConverter" class="com.distrelec.smartedit.converter.StringToDistVideoMediaConverter" />
+
+    <!-- Converter for attributes of "DistDataAttributes" type -->
+    <alias name="defaultDistVideoMediaContentConverter" alias="distVideoMediaContentConverter"/>
+    <bean name="defaultDistVideoMediaContentConverter" parent="cmsAbstractContentConverter"
+          p:modelToDataConverter-ref="distVideoMediaToStringConverter"
+          p:dataToModelConverter-ref="mapToDistVideoMediaConverter"
+          p:constrainedBy-ref="distVideoAttributePredicate">
+    </bean>
+
+    <!-- Register converter for DistVideoMedia -->
+    <bean depends-on="cmsAttributeContentConverterList"
+          parent="listMergeDirective" >
+        <property name="add" ref="distVideoMediaContentConverter"  />
+    </bean>
+
+    <alias name="distrelecPageContentSlotFacade" alias="pageContentSlotFacade" />
+    <bean id="distrelecPageContentSlotFacade" class="de.hybris.platform.cmsfacades.pagescontentslots.impl.DefaultPageContentSlotFacade">
+        <property name="adminContentSlotService" ref="cmsAdminContentSlotService" />
+        <property name="adminPageService" ref="cmsAdminPageService" />
+        <property name="pageContentSlotConverterRegistry" ref="cmsPageContentSlotConverterRegistry" />
+        <property name="contentSlotDataConverter" ref="distrelecCmsContentSlotDataConverter" />
+    </bean>
+
+    <bean id="distrelecCmsContentSlotDataConverter" class="com.distrelec.smartedit.converter.DistrelecContentSlotDataConverter" />
+
+    <bean id="abstractPageDisplayOnSitesComponentTypeDataPopulator" class="com.distrelec.smartedit.type.AbstractPageDisplayOnSitesComponentTypeDataPopulator">
+    </bean>
+
+    <alias name="distrelecComponentTypeFacade" alias="componentTypeFacade" />
+    <bean id="distrelecComponentTypeFacade" class="com.distrelec.smartedit.type.DistrelecComponentTypeFacade" parent="defaultComponentTypeFacade">
+        <property name="componentTypeDataPopulators">
+            <list>
+                <ref bean="abstractPageDisplayOnSitesComponentTypeDataPopulator" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- B2BUnit Prepare Interceptor -->
+    <bean id="abstractPageDisplayOnSitesPrepareInterceptor" class="com.distrelec.smartedit.interceptors.AbstractPageDisplayOnSitesPrepareInterceptor" />
+    <bean id="abstractPageDisplayOnSitesPrepareInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+        <property name="interceptor" ref="abstractPageDisplayOnSitesPrepareInterceptor" />
+        <property name="typeCode" value="AbstractPage" />
+    </bean>
+
+    <alias name="distrelecCmsItemNameExistsPredicate" alias="cmsItemNameExistsPredicate"/>
+    <bean id="distrelecCmsItemNameExistsPredicate" class="com.distrelec.smartedit.predicates.DistrelecCMSItemNameExistsPredicate" parent="defaultCmsItemNameExistsPredicate">
+    </bean>
+
+    <bean id="distComponentGroupModelVisitor" class="com.distrelec.smartedit.visitors.DistComponentGroupModelVisitor"
+          parent="abstractCMSComponentModelVisitor"/>
+
+    <bean depends-on="cmsVisitors" parent="mapMergeDirective">
+        <property name="key">
+            <util:constant static-field="com.namics.distrelec.b2b.core.model.cms2.components.DistComponentGroupModel._TYPECODE"/>
+        </property>
+        <property name="value" ref="distComponentGroupModelVisitor"/>
+    </bean>
+
+    <alias name="distrelecFlexibleCMSItemSearchService" alias="cmsItemSearchService" />
+    <bean name="distrelecFlexibleCMSItemSearchService" class="com.distrelec.smartedit.cmsitems.search.DistrelecFlexibleCMSItemSearchService" parent="flexibleCMSItemSearchService">
+    </bean>
+
+    <alias name="distrelecCmsBannerComponentValidator" alias="cmsBannerComponentValidator"/>
+    <bean id="distrelecCmsBannerComponentValidator" class="com.distrelec.smartedit.cmsitems.validator.DistrelecBannerComponentValidator"
+          parent="defaultCmsBannerComponentValidator">
+    </bean>
+
+    <bean depends-on="namedQueryMap" parent="mapMergeDirective">
+        <property name="key" value="namedQueryMediaSearchByCodeCatalogVersion" />
+        <property name="value" value="SELECT {m.pk} FROM {Media AS m JOIN CatalogVersion AS cv ON {m.catalogVersion}={cv.pk} JOIN Catalog AS c ON {cv.catalog}={c.pk}} WHERE LOWER({m.code}) LIKE LOWER(?code) AND ({m.catalogVersion} = ?catalogVersion OR ({c.id}='Default' AND {cv.version}='Staged'))" />
+    </bean>
+
+    <alias name="distrelecCmsLinkComponentValidator" alias="cmsLinkComponentValidator"/>
+    <bean id="distrelecCmsLinkComponentValidator" class="com.distrelec.smartedit.cmsitems.validator.DistrelecCMSLinkComponentValidator"
+          parent="defaultCmsLinkComponentValidator">
+    </bean>
+
+    <alias name="distrelecCmsBaseAbstractPageValidator" alias="cmsBaseAbstractPageValidator"/>
+    <bean id="distrelecCmsBaseAbstractPageValidator" class="com.distrelec.smartedit.cmsitems.validator.DistrelecBaseAbstractPageValidator"
+          parent="defaultCmsBaseAbstractPageValidator">
+    </bean>
+
+    <!-- Structure Type Mode Data List -->
+    <alias name="distrelecCmsStructureTypeModeAttributeFilterList" alias="cmsStructureTypeModeAttributeFilterList"/>
+    <bean id="distrelecCmsStructureTypeModeAttributeFilterList" class="org.springframework.beans.factory.config.ListFactoryBean" >
+        <property name="targetListClass" value="java.util.LinkedList"/>
+        <property name="sourceList">
+            <list>
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="CMSItem" p:mode="DEFAULT"/>
+                    </property>
+                    <property name="order">
+                        <list>
+                            <value>name</value>
+                            <value>visible</value>
+                            <value>restrictions</value>
+                        </list>
+                    </property>
+                </bean>
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="AbstractRestriction" p:mode="DEFAULT"/>
+                    </property>
+                    <property name="excludes">
+                        <list>
+                            <value>description</value>
+                            <value>pages</value>
+                            <value>components</value>
+                            <value>inverseRestrictions</value>
+                        </list>
+                    </property>
+                </bean>
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="CMSTimeRestriction" p:mode="DEFAULT"/>
+                    </property>
+                    <property name="order">
+                        <list>
+                            <value>name</value>
+                            <value>activeFrom</value>
+                            <value>activeUntil</value>
+                        </list>
+                    </property>
+                </bean>
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="CMSCategoryRestriction" p:mode="DEFAULT"/>
+                    </property>
+                    <property name="order">
+                        <list>
+                            <value>name</value>
+                            <value>recursive</value>
+                            <value>categories</value>
+                        </list>
+                    </property>
+                </bean>
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="CMSUserGroupRestriction" p:mode="DEFAULT"/>
+                    </property>
+                    <property name="order">
+                        <list>
+                            <value>name</value>
+                            <value>includeSubgroups</value>
+                            <value>userGroups</value>
+                        </list>
+                    </property>
+                </bean>
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="ProductCarouselComponent" p:mode="DEFAULT"/>
+                    </property>
+                    <property name="excludes">
+                        <list>
+                            <value>productCodes</value>
+                            <value>categoryCodes</value>
+                            <value>searchQuery</value>
+                            <value>categoryCode</value>
+                            <value>popup</value>
+                        </list>
+                    </property>
+                    <property name="order">
+                        <list>
+                            <value>title</value>
+                            <value>products</value>
+                            <value>categories</value>
+                            <value>scroll</value>
+                        </list>
+                    </property>
+                </bean>
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="PreviewData" p:mode="DEFAULT"/>
+                    </property>
+                    <property name="order">
+                        <list>
+                            <value>previewCatalog</value>
+                            <value>language</value>
+                            <value>time</value>
+                        </list>
+                    </property>
+                </bean>
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="CMSLinkComponent" p:mode="DEFAULT"/>
+                    </property>
+                    <property name="excludes">
+                        <list>
+                            <!--                            <value>linkTo</value>-->
+                            <!--                            <value>contentPage</value>-->
+                            <!--                            <value>product</value>-->
+                            <value>target</value>
+                            <!--                            <value>category</value>-->
+                            <value>url</value>
+                            <value>external</value>
+                            <value>contentPageLabelOrId</value>
+                            <value>productCode</value>
+                            <value>categoryCode</value>
+                            <value>navigationNodes</value>
+                            <value>contentPagePOS</value>
+                            <value>productPOS</value>
+                            <value>categoryPOS</value>
+                            <value>styleAttributes</value>
+                        </list>
+                    </property>
+                    <property name="order">
+                        <list>
+                            <value>linkName</value>
+                            <value>linkTo</value>
+                        </list>
+                    </property>
+                </bean>
+
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="CMSLinkComponent" p:mode="CONTENT"/>
+                    </property>
+                    <property name="includes">
+                        <list>
+                            <value>contentPage</value>
+                            <value>target</value>
+                        </list>
+                    </property>
+                    <property name="order">
+                        <list>
+                            <value>linkName</value>
+                            <value>linkTo</value>
+                            <value>contentPage</value>
+                            <value>target</value>
+                        </list>
+                    </property>
+                </bean>
+
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="CMSLinkComponent" p:mode="PRODUCT"/>
+                    </property>
+                    <property name="includes">
+                        <list>
+                            <value>product</value>
+                            <value>target</value>
+                        </list>
+                    </property>
+                    <property name="order">
+                        <list>
+                            <value>linkName</value>
+                            <value>linkTo</value>
+                            <value>product</value>
+                            <value>target</value>
+                        </list>
+                    </property>
+                </bean>
+
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="CMSLinkComponent" p:mode="CATEGORY"/>
+                    </property>
+                    <property name="includes">
+                        <list>
+                            <value>category</value>
+                            <value>target</value>
+                        </list>
+                    </property>
+                    <property name="order">
+                        <list>
+                            <value>linkName</value>
+                            <value>linkTo</value>
+                            <value>category</value>
+                            <value>target</value>
+                        </list>
+                    </property>
+                </bean>
+
+
+                <bean parent="cmsStructureTypeModeAttributeFilter">
+                    <property name="constrainedBy">
+                        <bean parent="cmsEqualsTypeAndModeBiPredicate" p:typeCode="CMSLinkComponent" p:mode="EXTERNAL"/>
+                    </property>
+                    <property name="includes">
+                        <list>
+                            <value>url</value>
+                            <value>target</value>
+                        </list>
+                    </property>
+                    <property name="order">
+                        <list>
+                            <value>linkName</value>
+                            <value>linkTo</value>
+                            <value>url</value>
+                            <value>target</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.cmsfacades.types.service.impl.DefaultComponentTypeAttributeStructure" p:typecode="CMSLinkComponent" p:qualifier="category">
+        <property name="populators">
+            <set merge="false">
+                <ref bean="categoryTypeAttributePopulator" />
+                <ref bean="nonRequiredComponentTypeAttributePopulator" />
+            </set>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.cmsfacades.types.service.impl.DefaultComponentTypeAttributeStructure" p:typecode="CMSLinkComponent" p:qualifier="product">
+        <property name="populators">
+            <set merge="false">
+                <ref bean="nonRequiredComponentTypeAttributePopulator" />
+            </set>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.cmsfacades.types.service.impl.DefaultComponentTypeAttributeStructure" p:typecode="AbstractPage" p:qualifier="title">
+        <property name="populators">
+            <set>
+                <ref bean="distOptionalComponentTypeAttributePopulator" />
+            </set>
+        </property>
+    </bean>
+
+    <bean id="nonRequiredComponentTypeAttributePopulator" class="de.hybris.platform.cmsfacades.types.populator.RequiredComponentTypeAttributePopulator">
+        <property name="required" value="false" />
+    </bean>
+
+    <bean class="de.hybris.platform.cmsfacades.types.service.impl.DefaultComponentTypeAttributeStructure" p:typecode="DistProductCardComponent"
+          p:qualifier="customDescription">
+        <property name="populators">
+            <set>
+                <ref bean="richTextComponentTypeAttributePopulator" />
+            </set>
+        </property>
+    </bean>
+
+    <bean id="distOptionalComponentTypeAttributePopulator" class="com.distrelec.smartedit.populator.DistOptionalComponentTypeAttributePopulator">
+        <property name="enclosingTypes">
+            <util:set id="enclosingTypeCodes">
+                <util:constant static-field="de.hybris.platform.cms2.model.pages.CategoryPageModel._TYPECODE"/>
+                <util:constant static-field="de.hybris.platform.cms2.model.pages.ProductPageModel._TYPECODE"/>
+            </util:set>
+        </property>
+    </bean>
+
+    <bean id="distBooleanDefaultValueAttributePredicate" class="com.distrelec.smartedit.predicates.DistBooleanDefaultValueAttributePredicate" />
+
+    <bean id="distBooleanDefaultValueComponentTypeAttributePopulator"
+          class="com.distrelec.smartedit.populator.DistBooleanDefaultValueComponentTypeAttributePopulator" />
+
+    <bean depends-on="cmsAttributePredicatePopulatorListMap" parent="mapMergeDirective">
+        <property name="key">
+            <ref bean="distBooleanDefaultValueAttributePredicate" />
+        </property>
+        <property name="value">
+            <list>
+                <ref bean="distBooleanDefaultValueComponentTypeAttributePopulator" />
+            </list>
+        </property>
+    </bean>
+
+    <alias name="distrelecCmsStringDataToAttributeContentConverter" alias="cmsStringDataToAttributeContentConverter"/>
+    <bean id="distrelecCmsStringDataToAttributeContentConverter" class="com.distrelec.smartedit.converter.StringDataToAttributeConverter">
+    </bean>
+
+    <alias name="distrelecCmsItemDefaultAttributesPopulator" alias="cmsItemDefaultAttributesPopulator" />
+    <bean name="distrelecCmsItemDefaultAttributesPopulator" class="com.distrelec.smartedit.populator.DistCmsItemDefaultAttributesPopulator" parent="defaultCmsItemDefaultAttributesPopulator">
+    </bean>
+
+    <alias name="defaultDistLanguageFacade" alias="languageFacade" />
+    <bean id="defaultDistLanguageFacade" class="com.distrelec.smartedit.cmsfacades.languages.impl.DefaultDistLanguageFacade"
+          parent="defaultLanguageFacade">
+        <property name="sessionService" ref="sessionService"/>
+    </bean>
+
+    <alias name="defaultDistCmsItemExistsInCatalogVersionPredicate" alias="cmsItemExistsInCatalogVersionPredicate" />
+    <bean id="defaultDistCmsItemExistsInCatalogVersionPredicate" class="com.distrelec.smartedit.predicates.DistCmsItemExistsInCatalogVersionPredicate"
+          parent="defaultCmsItemExistsInCatalogVersionPredicate"/>
+
+    <alias name="defaultDistCMSUserService" alias="cmsUserService" />
+    <bean id="defaultDistCMSUserService" class="com.distrelec.smartedit.cmsfacades.users.services.impl.DefaultDistCMSUserService"
+          parent="defaultCMSUserService"/>
+
+    <!-- DistDesignImgVideo Populator -->
+    <alias name="defaultDistDesignImgVideoPopulator" alias="distDesignImgVideoPopulator" />
+    <bean id="defaultDistDesignImgVideoPopulator" class="com.distrelec.smartedit.populator.DistDesignImgVideoPopulator" />
+
+    <!-- Custom populators for specific cms item types -->
+    <bean depends-on="cmsRenderingCmsItemConverterCustomPopulators" parent="listMergeDirective">
+        <property name="add" ref="defaultDistDesignImgVideoPopulator" />
+    </bean>
+
+    <alias name="distrelecBasicContentSlotItemCollector" alias="basicContentSlotItemCollector"/>
+    <bean name="distrelecBasicContentSlotItemCollector" class="com.distrelec.smartedit.synchronization.DistrelecContentSlotItemCollector"/>
+
+    <alias name="defaultMapTypePredicate" alias="mapTypePredicate"/>
+    <bean id="defaultMapTypePredicate" class="com.distrelec.smartedit.converter.MapTypePredicate" />
+
+    <alias name="defaultMapAttributeContentConverter" alias="cmsMapAttributeContentConverter"/>
+    <bean name="defaultMapAttributeContentConverter"
+          parent="cmsVersionAttributeContentConverter">
+        <property name="constrainedBy" ref="mapTypePredicate"/>
+        <property name="modelToDataConverter" ref="cmsDefaultAttributeToDataConverter"/>
+    </bean>
+
+    <bean depends-on="cmsVersionAttributesConverterList" parent="listMergeDirective">
+        <property name="add" ref="cmsMapAttributeContentConverter" />
+    </bean>
+
+</beans>

@@ -1,0 +1,76 @@
+<ng-container *ngIf="recommendations$ | async as recommendations">
+  <ng-container *ngIf="isRenderRecommendations$ | async">
+    <div class="product-carousel" id="product-carousel">
+      <h3 class="product-carousel__title" id="cart.related_products">
+        {{ 'cart.related_products' | cxTranslate }}
+      </h3>
+
+      <carousel [autoplay]="true" [loop]="true" [transitionDuration]="1000" [cellsToShow]="4" [height]="240">
+        <ng-container *ngFor="let item of recommendations.resultRecords; let i = index">
+          <div class="carousel-cell" [data-position]="i + 1">
+            <div class="product-carousel__image">
+              <span class="cart-image" [id]="'carousel-item-image-' + i">
+                <img [src]="currentChannel.mediaDomain + images[i].path" [alt]="item.record.Title" />
+              </span>
+            </div>
+
+            <div class="product-carousel__content">
+              <h3
+                class="product-carousel__content--title"
+                [title]="item.record.Title"
+                [attr.data-aabuttonpos]="i + 1"
+                [attr.data-aalinktext]="item.record.Title"
+                [id]="'carousel-item-title-' + i"
+                [innerHtml]="item.record.Title"
+              ></h3>
+
+              <div class="product-carousel__content--price">
+                <span class="product-stock" [id]="'carousel-item-price-label-' + i">
+                  {{ 'product.stock' | cxTranslate }}
+                </span>
+
+                <div class="product-price" [id]="'carousel-item-price-' + i">
+                  <span>
+                    {{
+                      currentChannel.channel === 'B2B' ? item.record.Price[1].currency : item.record.Price[0].currency
+                    }}
+                  </span>
+
+                  <span>
+                    {{
+                      currentChannel.channel === 'B2B'
+                        ? (item.record.Price[1].price.quantityPrice | price)
+                        : (item.record.Price[0].price.quantityPrice | price)
+                    }}
+                  </span>
+                </div>
+
+                <div class="product-atc-btn">
+                  <app-atc-button
+                    class="d-inline-block"
+                    [productCode]="item.record.ProductNumber"
+                    [quantity]="item.record.ItemsMin"
+                    [shouldOpenFlyout]="false"
+                    [showAnimation]="false"
+                    [id]="'carousel-item-add-button-' + i"
+                    [customClass]="'is-buy-now'"
+                    [translationKey]="'cart.buy_now'"
+                    [pageTrackingType]="itemListEntity.CART_RELATED"
+                    [control]="addToCartForm.get('quantity')"
+                  ></app-atc-button>
+                </div>
+              </div>
+            </div>
+
+            <a
+              class="product-carousel__link"
+              [routerLink]="item.record.ProductURL"
+              [queryParams]="{ itemList: itemListEntity.CART_RELATED }"
+              (click)="trackProductClick(item, i)"
+            ></a>
+          </div>
+        </ng-container>
+      </carousel>
+    </div>
+  </ng-container>
+</ng-container>

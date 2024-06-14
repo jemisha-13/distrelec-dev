@@ -1,0 +1,122 @@
+<h3>Post installations for QA & PROD</h3>
+
+
+
+<h4>Hybris Update:</h4>
+- http://[app-node-0]:9001/hac/platform/update
+
+
+
+<h4>System Update:</h4>
+- nothing to do
+
+
+
+<h4>Run Impex:</h4>
+- Import for all content catalog the outlet store:
+#
+# Import the core CMS content for the Distrelec CH site
+
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=CMSParagraphComponent,SimpleBannerComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent
+
+# Preview Image for use in the CMS Cockpit for special ContentPages
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true]
+;;ContentPageModel_function_preview;text/gif;ContentPageModel_function_preview.gif;$jarResourceCms/preview-images/ContentPageModel_function_preview.gif
+
+
+############################################################################################
+# Create Page Templates
+############################################################################################
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;StorePageTemplate;Store Page Template;search/storePage;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;StorePageTemplate	;$jarResourceCms/structure-view/structure_storePageTemplate.vm
+
+############################################################################################
+# Create Content Slot Names
+############################################################################################
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='StorePageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;StoreContent;;$distStoreContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+############################################################################################
+# Bind Content Slots to Page Templates
+############################################################################################
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='StorePageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-StorePage;Logo;;LogoSlot;false
+;;ServiceNav-StorePage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-StorePage;MainNav;;MainNavSlot;false
+;;Swyn-StorePage;Swyn;;SwynSlot;false
+;;FooterLinks-StorePage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-StorePage;CertLabels;;CertLabelsSlot;false
+;;Impressum-StorePage;Impressum;;ImpressumSlot;false
+
+############################################################################################
+# Create Content Pages
+############################################################################################
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $contentCV)[default='ContentPageModel_function_preview']
+;;outletStorePage;Outlet Stores Page;StorePageTemplate;outlet
+
+############################################################################################
+# Store Page (Outlet Store)
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;StoreContentSlot-OutletStore;Store Content Slot For Outlet Store Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='productList'];contentSlot(uid,$contentCV)[unique=true]
+;;StoreContent-OutletStorePage;StoreContent;;StoreContentSlot-OutletStore
+
+$lang=de
+
+# Content Pages
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;outletStorePage;Outlet Store;
+
+$lang=en
+
+# Content Pages
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;outletStorePage;Outlet Store;
+
+
+
+<h4>Blog entries:</h4>
+- nothing to do
+
+
+
+<h4>Misc:</h4>
+- nothing to do
+
+
+
+<h4>Synchronization:</h4>
+- synchronize content catalog

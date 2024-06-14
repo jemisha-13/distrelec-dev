@@ -1,0 +1,211 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-9">
+      <ng-container class="account-information-main">
+        <div class="order-approval-wrapper">
+          <div class="myOrders" id="searchResults">
+            <div class="row mt-4">
+              <div class="col-md-12 col-lg-12 col-sm-12 col-12">
+                <h1 class="accountInformation_page_title" id="orderApproval-myOrders">
+                  {{ 'form.order_approval' | cxTranslate }}
+                </h1>
+              </div>
+            </div>
+            <div class="row mt-1 notForPrint">
+              <div class="col-md-12">
+                <app-action-message
+                  id="orderDetails"
+                  [type]="responseType"
+                  [message]="responseMessage"
+                ></app-action-message>
+              </div>
+            </div>
+            <div class="row mt-exta"></div>
+            <div class="user-management mt-exta" id="searchResults">
+              <hr />
+              <div class="row mb-3 align-items-end">
+                <div class="col-sm-12 col-md-3 mb-2">
+                  <label for="orderApproval-orderSorting">{{ 'accountorder.approvals.order.by' | cxTranslate }}</label>
+                  <ng-select
+                    class="account-info"
+                    id="orderApproval-orderSorting"
+                    [(ngModel)]="selectedOrderSorting"
+                    (change)="onSorting($event)"
+                  >
+                    <ng-option *ngFor="let sortItem of sortingList" [value]="sortItem.value" [id]="sortItem.value">
+                      {{ sortItem.name | cxTranslate }}
+                    </ng-option>
+                  </ng-select>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                  <div class="col-sm-12 col-md-12 mt-2">
+                    <img
+                      class="float-md-right cursor"
+                      id="orderApproval-printImg"
+                      (click)="print()"
+                      src="app/spartacus/assets/media/general/print.svg"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr />
+
+            <div *ngIf="B2BApprovals_ | async as approvalsData; else loadingData">
+              <div *ngIf="approvalsData.orderApprovals?.length > 0; else noApprovals">
+                <div *ngFor="let approval of approvalsData.orderApprovals">
+                  <div
+                    class="row"
+                    [ngClass]="approval?.order?.status === orderStatus.PENDING_APPROVAL ? 'pendingBG' : ''"
+                  >
+                    <div class="col-md-10 col-sm-12">
+                      <div class="row mb-2 mt-2">
+                        <div class="col-md-4 col-sm-6 col-6">
+                          <strong class="fs-twelve">
+                            <label id="orderApproval-requestedBy">
+                              {{ 'accountlist.approvalRequest.requestedBy' | cxTranslate }}
+                            </label>
+                          </strong>
+                          <br />
+                          <label id="orderApproval-customerName">{{ approval?.order?.b2bCustomerData?.name }}</label>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-6">
+                          <strong class="fs-twelve">
+                            <label id="orderApproval-orderTotal">
+                              {{ 'accountlist.approvalRequest.orderTotal' | cxTranslate }}
+                            </label>
+                          </strong>
+                          <br />
+                          <label id="orderApproval-currencyIso">
+                            {{ approval?.order?.totalPrice?.currencyIso }}
+                            {{ approval?.order?.totalPrice?.value | price }}
+                          </label>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-6">
+                          <span *ngIf="approval?.order?.b2bCustomerData?.budget?.exceededYearlyBudget > 0">
+                            <strong class="fs-twelve">
+                              <label id="orderApproval-yearlyBudgetExceeded">
+                                {{ 'accountlist.approvalRequest.yearlyBudgetExceededBy' | cxTranslate }}
+                              </label>
+                            </strong>
+                            <br />
+                            <label class="distrelecAlert" id="orderApproval-exceedYearlyBudgetValue">
+                              {{ approval?.order?.b2bCustomerData?.budget?.currency?.isocode }}
+                              {{ approval?.order?.b2bCustomerData?.budget?.exceededYearlyBudget | price }}
+                            </label>
+                          </span>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-6">
+                          <strong class="fs-twelve">
+                            <label id="orderApproval-requestDate">
+                              {{ 'accountlist.approvalRequest.requestDate' | cxTranslate }}
+                            </label>
+                          </strong>
+                          <br />
+                          <label id="orderApproval-requestDate-value">
+                            {{ approval?.order?.created | date: 'yyyy-MM-dd, HH:mm' : 'UTC' }}
+                          </label>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-6">
+                          <strong class="fs-twelve">
+                            <label id="orderApproval-approvalStatus">
+                              {{ 'accountlist.approvalRequest.approvalStatus' | cxTranslate }}
+                            </label>
+                          </strong>
+                          <br />
+                          <ng-container *ngIf="approval?.order?.status === orderStatus.PENDING_APPROVAL">
+                            <fa-icon [icon]="faPending" ngClass="distrelecAlert"></fa-icon>
+                            <label class="ml-2" id="orderApproval-approvalStatusPending">
+                              {{ 'checkoutorderbudgetapprovalbar.status.PENDING_APPROVAL' | cxTranslate }}
+                            </label>
+                          </ng-container>
+
+                          <ng-container
+                            *ngIf="approval?.order?.status === 'REJECTED'"
+                            id="orderApproval-statusRejected"
+                          >
+                            <fa-icon [icon]="faPending" ngClass="distrelecAlert"></fa-icon>
+                            <label class="ml-2">
+                              {{ 'checkoutorderbudgetapprovalbar.status.REJECTED' | cxTranslate }}
+                            </label>
+                          </ng-container>
+
+                          <ng-container
+                            *ngIf="approval?.order?.status === 'APPROVED'"
+                            id="orderApproval-statusApproved"
+                          >
+                            <fa-icon [icon]="checkIcon"></fa-icon>
+                            <label class="ml-2">
+                              {{ 'checkoutorderbudgetapprovalbar.status.APPROVED' | cxTranslate }}
+                            </label>
+                          </ng-container>
+                        </div>
+
+                        <div class="col-md-4 col-sm-6 col-6">
+                          <span *ngIf="approval?.order?.b2bCustomerData?.budget?.exceededOrderBudget > 0">
+                            <strong class="fs-twelve">
+                              <label id="orderApproval-orderBudgetExceedByText">
+                                {{ 'accountlist.approvalRequest.orderBudgetExceededBy' | cxTranslate }}
+                              </label>
+                            </strong>
+                            <br />
+                            <label class="distrelecAlert" id="orderApproval-orderBudgetExceedByValue">
+                              {{ approval?.order?.b2bCustomerData?.budget?.currency?.isocode }}
+                              {{ approval?.order?.b2bCustomerData?.budget?.exceededOrderBudget | price }}
+                            </label>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                      <div
+                        class="cursor mt-5 view"
+                        id="orderApproval-viewDetails"
+                        (click)="showApprovalDetails(approval)"
+                      ></div>
+                    </div>
+                  </div>
+                  <hr />
+                </div>
+              </div>
+              <ng-template #noApprovals>
+                <div class="row">
+                  <div class="col-md-12 col-lg-12 col-sm-12">
+                    <h5 class="redFont" id="orderApproval-noOrder-text">
+                      {{ 'form.no_order_approval_request' | cxTranslate }}
+                    </h5>
+                  </div>
+                </div>
+                <hr />
+              </ng-template>
+            </div>
+            <ng-template #loadingData>
+              <div class="row mt-4">
+                <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+                  <img src="app/spartacus/assets/media/spinner.gif" />
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

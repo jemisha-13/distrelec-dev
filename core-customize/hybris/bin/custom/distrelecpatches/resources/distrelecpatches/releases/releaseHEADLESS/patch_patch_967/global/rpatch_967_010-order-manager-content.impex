@@ -1,0 +1,1018 @@
+#
+# Import the core ORDER MANAGER content for the Distrelec AT site
+#
+$contentATCatalog = distrelec_ATContentCatalog
+$atContentCV = catalogVersion(catalog(id[default=$contentATCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $atContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $atContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $atContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $atContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $atContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $atContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $atContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $atContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec BE site
+#
+$contentBECatalog = distrelec_BEContentCatalog
+$beContentCV = catalogVersion(catalog(id[default=$contentBECatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $beContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $beContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $beContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $beContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $beContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $beContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $beContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $beContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec CH site
+#
+$contentCHCatalog = distrelec_CHContentCatalog
+$chContentCV = catalogVersion(catalog(id[default=$contentCHCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $chContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $chContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $chContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $chContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $chContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $chContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $chContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $chContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec CZ site
+#
+$contentCZCatalog = distrelec_CZContentCatalog
+$czContentCV = catalogVersion(catalog(id[default=$contentCZCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $czContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $czContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $czContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $czContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $czContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $czContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $czContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $czContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec DE site
+#
+$contentDECatalog = distrelec_DEContentCatalog
+$deContentCV = catalogVersion(catalog(id[default=$contentDECatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $deContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $deContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $deContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $deContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $deContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $deContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $deContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $deContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec DK site
+#
+$contentDKCatalog = distrelec_DKContentCatalog
+$dkContentCV = catalogVersion(catalog(id[default=$contentDKCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $dkContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $dkContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $dkContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $dkContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $dkContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $dkContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $dkContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $dkContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec EE site
+#
+$contentEECatalog = distrelec_EEContentCatalog
+$eeContentCV = catalogVersion(catalog(id[default=$contentEECatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $eeContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $eeContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $eeContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $eeContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $eeContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $eeContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $eeContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $eeContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec EX site
+#
+$contentEXCatalog = distrelec_EXContentCatalog
+$exContentCV = catalogVersion(catalog(id[default=$contentEXCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $exContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $exContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $exContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $exContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $exContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $exContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $exContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $exContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec FI site
+#
+$contentFICatalog = distrelec_FIContentCatalog
+$fiContentCV = catalogVersion(catalog(id[default=$contentFICatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $fiContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $fiContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $fiContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $fiContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $fiContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $fiContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $fiContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $fiContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec HU site
+#
+$contentHUCatalog = distrelec_HUContentCatalog
+$huContentCV = catalogVersion(catalog(id[default=$contentHUCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $huContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $huContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $huContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $huContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $huContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $huContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $huContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $huContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec IT site
+#
+$contentITCatalog = distrelec_ITContentCatalog
+$itContentCV = catalogVersion(catalog(id[default=$contentITCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $itContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $itContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $itContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $itContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $itContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $itContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $itContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $itContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec LV site
+#
+$contentLVCatalog = distrelec_LVContentCatalog
+$lvContentCV = catalogVersion(catalog(id[default=$contentLVCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $lvContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $lvContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $lvContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $lvContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $lvContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $lvContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $lvContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $lvContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec LT site
+#
+$contentLTCatalog = distrelec_LTContentCatalog
+$ltContentCV = catalogVersion(catalog(id[default=$contentLTCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $ltContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $ltContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $ltContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $ltContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $ltContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $ltContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $ltContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $ltContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec NL site
+#
+$contentNLCatalog = distrelec_NLContentCatalog
+$nlContentCV = catalogVersion(catalog(id[default=$contentNLCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $nlContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $nlContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $nlContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $nlContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $nlContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $nlContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $nlContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $nlContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec NO site
+#
+$contentNOCatalog = distrelec_NOContentCatalog
+$noContentCV = catalogVersion(catalog(id[default=$contentNOCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $noContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $noContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $noContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $noContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $noContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $noContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $noContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $noContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec PL site
+#
+$contentPLCatalog = distrelec_PLContentCatalog
+$plContentCV = catalogVersion(catalog(id[default=$contentPLCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $plContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $plContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $plContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $plContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $plContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $plContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $plContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $plContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec RO site
+#
+$contentROCatalog = distrelec_ROContentCatalog
+$roContentCV = catalogVersion(catalog(id[default=$contentROCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $roContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $roContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $roContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $roContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $roContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $roContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $roContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $roContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec SE site
+#
+$contentSECatalog = distrelec_SEContentCatalog
+$seContentCV = catalogVersion(catalog(id[default=$contentSECatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $seContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $seContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $seContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $seContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $seContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $seContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $seContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $seContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec SK site
+#
+$contentSKCatalog = distrelec_SKContentCatalog
+$skContentCV = catalogVersion(catalog(id[default=$contentSKCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $skContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $skContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $skContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $skContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $skContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $skContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $skContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $skContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; quotation-history                          ; /my-account/quote-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee
+
+#
+# Import the core ORDER MANAGER content for the Distrelec TR site
+#
+$contentTRCatalog = distrelec_TRContentCatalog
+$trContentCV = catalogVersion(catalog(id[default=$contentTRCatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $trContentCV[unique = true]; uid[unique = true]           ; name                            ; flexType
+                              ;                            ; OrderHistoryComponent    ; Order History Component    ; OrderHistoryComponent
+                              ;                            ; OrderDetailsComponent    ; Order Details Component    ; OrderDetailsComponent
+                              ;                            ; InvoiceHistoryComponent  ; Invoice History Component  ; InvoiceHistoryComponent
+                              ;                            ; QuoteHistoryComponent    ; Quote History Component    ; QuoteHistoryComponent
+                              ;                            ; OrderApprovalComponent   ; Order Approval Component   ; OrderApprovalComponent
+                              ;                            ; UserManagementComponent  ; User Management Component  ; UserManagementComponent
+                              ;                            ; NewEmployeeComponent     ; New Employee Component     ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlot; $trContentCV[unique = true]; uid[unique = true]             ; name                                       ; active; cmsComponents(uid, $trContentCV)
+                         ;                          ; MainSlot-order-history    ; Main Content Slot for Order History    ; true  ; OrderHistoryComponent
+                         ;                          ; MainSlot-order-details    ; Main Content Slot for Order Details    ; true  ; OrderDetailsComponent
+                         ;                          ; MainSlot-invoice-history  ; Main Content Slot for Invoice History  ; true  ; InvoiceHistoryComponent
+                         ;                          ; MainSlot-quote-history    ; Main Content Slot for Quote History    ; true  ; QuoteHistoryComponent
+                         ;                          ; MainSlot-order-approval   ; Main Content Slot for Order Approval   ; true  ; OrderApprovalComponent
+                         ;                          ; MainSlot-user-management  ; Main Content Slot for User Management  ; true  ; UserManagementComponent
+                         ;                          ; MainSlot-new-employee     ; Main Content Slot for New Employee     ; true  ; NewEmployeeComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $trContentCV)[unique = true][default = 'AccountPageTemplate']; validComponentTypes(code)
+                             ; main-order-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-details    ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+                             ; main-invoice-history  ;                                                                          ; CMSFlexComponent
+                             ; main-quote-history    ;                                                                          ; CMSFlexComponent
+                             ; main-order-approval   ;                                                                          ; CMSFlexComponent
+                             ; main-user-management  ;                                                                          ; CMSFlexComponent
+                             ; main-new-employee     ; AccountWithoutNavPageTemplate                                            ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $trContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $trContentCV)[unique = true][default = 'AccountPageTemplate']; contentSlot(uid, $trContentCV)[unique = true]; allowOverwrite
+                                    ;                          ; MainSlot-order-history    ; main-order-history    ;                                                                              ; MainSlot-order-history    ; false
+                                    ;                          ; MainSlot-order-details    ; main-order-details    ; AccountWithoutNavPageTemplate                                                ; MainSlot-order-details    ; false
+                                    ;                          ; MainSlot-invoice-history  ; main-invoice-history  ;                                                                              ; MainSlot-invoice-history  ; false
+                                    ;                          ; MainSlot-quote-history    ; main-quote-history    ;                                                                              ; MainSlot-quote-history    ; false
+                                    ;                          ; MainSlot-order-approval   ; main-order-approval   ;                                                                              ; MainSlot-order-approval   ; false
+                                    ;                          ; MainSlot-user-management  ; main-user-management  ;                                                                              ; MainSlot-user-management  ; false
+                                    ;                          ; MainSlot-new-employee     ; main-new-employee     ; AccountWithoutNavPageTemplate                                                ; MainSlot-new-employee     ; false
+
+UPDATE ContentPage; $trContentCV[unique = true]; uid[unique = true]; label
+                  ;                          ; order-history                              ; /my-account/order-history
+                  ;                          ; order-details                              ; /my-account/order-history/order-details
+                  ;                          ; invoice-history                            ; /my-account/invoice-history
+                  ;                          ; order-approval                             ; /my-account/order-approval
+                  ;                          ; company-user-management                    ; /my-account/company/user-management
+                  ;                          ; company-user-management-register-employee  ; /my-account/company/create/newemployee

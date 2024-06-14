@@ -1,0 +1,19 @@
+import de.hybris.platform.servicelayer.search.FlexibleSearchQuery;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import org.apache.log4j.Logger;
+
+LOG = Logger.getLogger("BeanShell");
+
+flexibleSearchService = SpringUtil.getBean("flexibleSearchService");
+businessProcessService = SpringUtil.getBean("businessProcessService");
+
+FlexibleSearchQuery query = new FlexibleSearchQuery("SELECT {pk} FROM {OrderProcess} WHERE {processDefinitionName}='distPlaceOrder' AND {endMessage} LIKE '%error%'");
+result = flexibleSearchService.search(query).getResult();
+LOG.info("===Start===");
+for(process : result) {
+	LOG.info("Reparing DistPlaceOrder with code " + process.getCode() + "...");
+	businessProcessService.restartProcess(process, "sendOrderPlacedNotification");
+	LOG.info("DistPlaceOrder with code " + process.getCode() + " repaired===");
+}
+LOG.info("===End===");
+            

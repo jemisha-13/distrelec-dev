@@ -1,0 +1,11 @@
+$contentCatalog = distrelec_IntContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+UPDATE CMSParagraphComponent; &cmsParagraphComp ; uid[unique=true];slots(uid, $contentCV) ; $contentCV[unique = true]
+                            ; uploadPageLink    ; upload-page-link
+
+INSERT_UPDATE DistRestrictionComponentGroup; uid[unique=true]       ; name                   ; slots(uid, $contentCV)               ; components(&cmsParagraphComp) ; $contentCV[unique = true]
+                                           ; upload-page-link-group ; upload-page-link-group ; RightNavigationSlot-cmsitem_00069156 ; uploadPageLink
+
+UPDATE CMSUserGroupRestriction; uid[unique = true]             ; components(uid, $contentCV) ; $contentCV[unique = true]
+                              ; qualityAndLegalLinkRestriction ; upload-page-link-group

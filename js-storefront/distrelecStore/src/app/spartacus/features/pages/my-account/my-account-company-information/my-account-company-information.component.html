@@ -1,0 +1,78 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10 offset-lg-2">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-6 offset-lg-2">
+      <ng-container class="account-information-main">
+        <div class="row mt-4">
+          <div class="col-md-12 col-lg-12 col-sm-12">
+            <h1 id="myAccountCompanyInformation-pageTitle">
+              {{ 'form.company_information' | cxTranslate }}
+            </h1>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <p id="myAccount-changeData" [innerHTML]="'form.change_data' | cxTranslate"></p>
+          </div>
+        </div>
+        <div *ngIf="companyInformation$ | async as companyInformation; else loading" class="row">
+          <div class="col-md-12">
+            <hr />
+          </div>
+          <div class="col-md-4">
+            <p id="myAccountCompanyInformation-companyName">
+              <strong>{{ 'form.company_name' | cxTranslate }}</strong>
+              <br />
+              {{ companyInformation?.companyName }}
+              <span if="companyInformation?.companyName2">
+                <br />
+                {{ companyInformation?.companyName2 }}
+              </span>
+              <span if="companyInformation?.companyName3">
+                <br />
+                {{ companyInformation?.companyName3 }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <p id="myAccountCompanyInformation-VATID">
+              <strong>{{ 'form.vat_id' | cxTranslate }}</strong>
+              <br />
+              {{ getVatId(companyInformation?.vatId) }}
+            </p>
+          </div>
+          <div class="col-md-4">
+            <p id="myAccountCompanyInformation-customerNumber">
+              <strong>{{ 'form.customer_number' | cxTranslate }}</strong>
+              <br />
+              {{ companyInformation?.customerId }}
+            </p>
+          </div>
+          <div class="col-md-12">
+            <hr />
+          </div>
+        </div>
+        <ng-template #loading>
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+              <img src="app/spartacus/assets/media/spinner.gif" />
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

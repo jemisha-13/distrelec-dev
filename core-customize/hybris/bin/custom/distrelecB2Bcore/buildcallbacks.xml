@@ -1,0 +1,296 @@
+<?xml version="1.0"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+
+-->
+<project name="distrelecB2Bcore_buildcallbacks">
+
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+		<classpath path="${ext.acceleratorservices.path}/lib/jacocoant.jar"/>
+	</taskdef>
+
+	<target name="dist_jacocoalltests" description="runs alltests and allwebtests with jacoco attached" xmlns:jacoco="antlib:org.jacoco.ant">
+
+		<sequential>
+			<delete dir="${HYBRIS_LOG_DIR}/junit" />
+
+			<jacoco:agent property="all_agentvmparam"
+						  append="false"
+						  output="file"
+						  destfile="${HYBRIS_LOG_DIR}/junit/jacoco.exec"
+						  includes="com.distrelec.**:com.namics.**"
+			/>
+
+			<if>
+				<not>
+					<isset property="extName"/>
+				</not>
+				<then>
+					<property name="testclasses.extensions" value="distrelecB2Bbackoffice,distrelecB2Bcore,distrelecB2Bfacades,distrelecB2Bfulfilmentprocess,distrelecB2BOCC,distrelecB2Bstorefront,distrelecB2Btest,distreleccmsfacades,distrelecfactfindersearch,distrelecfusionintegration,distrelecoci,distrelecsmartedit,distrelecsmarteditwebservices,distrelecwebexports,distrelecwebpimmedias"/>
+				</then>
+				<else>
+					<property name="testclasses.extensions" value="${extName}"/>
+				</else>
+			</if>
+
+			<ant dir="${platformhome}" target="alltests" inheritrefs="false">
+				<property name="standalone.javaoptions" value="${all_agentvmparam} ${standalone.javaoptions}"/>
+				<property name="testclasses.reportdir" value="${HYBRIS_LOG_DIR}/junit/all" />
+			</ant>
+
+
+			<jacoco:agent property="web_agentvmparam"
+						  append="true"
+						  output="file"
+						  destfile="${HYBRIS_LOG_DIR}/junit/jacoco.exec"
+						  includes="com.distrelec.**:com.namics.**"
+			/>
+
+			<ant dir="${platformhome}" target="allwebtests" inheritrefs="false">
+				<property name="standalone.javaoptions" value="${web_agentvmparam} ${standalone.javaoptions}"/>
+				<property name="testclasses.reportdir" value="${HYBRIS_LOG_DIR}/junit/web" />
+			</ant>
+
+			<delete dir="${HYBRIS_LOG_DIR}/coverage_report" />
+
+			<jacoco:report>
+
+				<executiondata>
+					<file file="${HYBRIS_LOG_DIR}/junit/jacoco.exec"/>
+				</executiondata>
+
+				<structure name="Distrelec project">
+					<classfiles>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Bbackoffice/classes"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Bcore/classes"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Bfacades/classes"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Bfulfilmentprocess/classes"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2BOCC/distrelecB2BOCC/classes"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2BOCC/distreleccmsfacades/classes"/>
+						<!--<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Bstorefront/web/webroot/WEB-INF/classes"/>-->
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Btest/classes"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecfactfindersearch/classes"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecfusionintegration/classes"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecoci/classes"/>
+						<!--<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecsmartedit/classes"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecsmarteditwebservices/classes"/>-->
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecwebexports/classes"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecwebpimmedias/classes"/>
+					</classfiles>
+					<sourcefiles encoding="UTF-8">
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Bbackoffice/src"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Bcore/src"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Bfacades/src"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Bfulfilmentprocess/src"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2BOCC/distrelecB2BOCC/src"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2BOCC/distreleccmsfacades/src"/>
+						<!--<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Bstorefront/web/src"/>-->
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecB2Btest/src"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecfactfindersearch/src"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecfusionintegration/src"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecoci/src"/>
+						<!--<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecsmartedit/src"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecsmarteditwebservices/src"/>-->
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecwebexports/src"/>
+						<fileset dir="${HYBRIS_BIN_DIR}/custom/distrelecwebpimmedias/src"/>
+					</sourcefiles>
+				</structure>
+
+				<html destdir="${HYBRIS_LOG_DIR}/coverage_report"/>
+				<xml destfile="${HYBRIS_LOG_DIR}/jacocoTestReport.xml"/>
+			</jacoco:report>
+		</sequential>
+
+	</target>
+
+	<macrodef name="distrelecB2Bcore_after_build">
+		<sequential>
+			<patchReadReplica />
+			<impexGenerate extname="distrelecB2Bcore"/>
+			<distrelecB2BcorePrepareLog4jXml/>
+			<exec executable="./generating-gitinfo.sh" dir="${ext.distrelecB2Bcore.path}"/>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="distrelecB2Bcore_after_clean">
+		<sequential>
+			<delete file="${ext.distrelecB2Bcore.path}/resources-lang/touch_impexgen" failonerror="false"/>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="distrelecB2Bcore_before_ear">
+		<sequential>
+			<patchReadReplica />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="distrelecB2Bcore_before_production">
+		<sequential>
+			<patchReadReplica />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="distrelecB2Bcore_before_dist">
+		<sequential>
+			<patchReadReplica />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="distrelecB2Bcore_before_build">
+		<sequential>
+			<distrelecB2BcoreGenerateJavaStubsFromWSDL filename="WebShop2SAPIF12.wsdl" packagepart="if12" webserviceversion="v1" />
+			<distrelecB2BcoreGenerateJavaStubsFromWSDL filename="WebShop2SAPIF15.wsdl" packagepart="if15" webserviceversion="v1" />
+			<distrelecB2BcoreGenerateJavaStubsFromWSDL filename="WebShop2SAP.wsdl" packagepart="sap" webserviceversion="v1" />
+			<distrelecB2BcoreGenerateJavaStubsFromWSDL filename="WebShop2SAPIF19.wsdl" packagepart="if19" webserviceversion="v1" />
+			<distrelecB2BcoreGenerateJavaStubsFromWSDL filename="WebShop2SAPIF18.wsdl" packagepart="if18" webserviceversion="v1" />
+			<distrelecB2BcoreGenerateJavaStubsFromWSDL filename="WebShop2SAPIF11.wsdl" packagepart="if11" webserviceversion="v3" />
+			<distrelecB2BcoreGenerateJavaStubsFromWSDL filename="WebShop2SAPIF08.wsdl" packagepart="if08" webserviceversion="v2" />
+			<distrelecB2BcoreGenerateJavaStubsFromWSDL filename="WebShop2SAPIF02.wsdl" packagepart="if02" webserviceversion="v1" />
+			<distrelecB2BcoreGenerateJavaStubsFromWSDL filename="CheckVatService.wsdl" packagepart="checkVatService" webserviceversion="v1" />
+
+			<taskdef name="xjc" classname="org.jvnet.jaxb2_commons.xjc.XJC2Task">
+				<classpath>
+					<fileset dir="${platformhome}/ext/core/lib">
+						<include name="*.jar"/>
+					</fileset>
+					<fileset dir="${ext.distrelecB2Bcore.path}/lib">
+						<include name="*.jar"/>
+					</fileset>
+				</classpath>
+			</taskdef>
+
+			<xjc destdir="${ext.distrelecB2Bcore.path}/gensrc"
+					schema="${ext.distrelecB2Bcore.path}/resources/dtd/cXML.dtd"
+					package="com.namics.distrelec.b2b.cxml.generated"
+				 	extension="true"
+					fork="true">
+				<jvmarg value="-DenableExternalEntityProcessing=true"/>
+				<arg value="-dtd"/>
+				<arg value="-Xequals"/>
+				<arg value="-XhashCode"/>
+				<arg value="-XtoString"/>
+				<classpath>
+					<fileset dir="${ext.distrelecB2Bcore.path}/lib">
+						<include name="jaxb2-basics-*.jar"/>
+						<!-- JAXB2 Basics library dependencies -->
+						<include name="jaxb2-basics-runtime-*.jar"/>
+						<include name="jaxb2-basics-tools-*.jar"/>
+					</fileset>
+				</classpath>
+			</xjc>
+
+		</sequential>
+	</macrodef>
+	
+	<macrodef name="distrelecB2BcoreGenerateJavaStubsFromWSDL">
+		<attribute name="filename" />
+		<attribute name="packagepart" />
+		<attribute name="webserviceversion" />
+			
+		<sequential>
+			<condition property="antRunsInDirOfHybrisServer" value="true">
+				<contains string="${platformhome}" substring="hybrisserver" casesensitive="false" />
+			</condition>
+			<if>
+				<istrue value="${antRunsInDirOfHybrisServer}" />
+				<then>
+					<echo message="Ant build is running in production environment, skip development build actions." />
+				</then>
+				<else>
+					<echo message="Ant build is run in development environment => generate webservice stubs of hybris" />
+					<echo message="Make gensrc dir if it is not exist"/>
+					<mkdir dir="${ext.distrelecB2Bcore.path}/gensrc"/>
+					<echo message="Generation Java Stubs from WSDL file @{filename}" />
+
+					<path id="jaxws.classpath">
+						<fileset dir="${ext.namwebservice.path}/ant/jaxws/libs">
+							<include name="**/*.jar" />
+						</fileset>
+						<fileset dir="${platformhome}/ext/core/lib">
+							<include name="*.jar"/>
+						</fileset>
+						<fileset dir="${ext.distrelecB2Bcore.path}/lib">
+							<include name="*.jar"/>
+						</fileset>
+					</path>
+
+					<taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport" classpathref="jaxws.classpath" />
+
+					<wsimport
+							    wsdl="${ext.distrelecB2Bcore.path}/resources/wsdl/@{packagepart}/@{webserviceversion}/@{filename}"
+							    sourcedestdir="${ext.distrelecB2Bcore.path}/gensrc"
+							    keep="true"
+							    extension="true"
+							    verbose="true"
+								package="com.distrelec.webservice.@{packagepart}.@{webserviceversion}"
+							    target="2.0"
+							    quiet="true"
+							    xdebug="false"
+								xadditionalHeaders="true"
+								xnocompile="true">
+						<arg value="-B-XautoNameResolution" />
+						<xjcArg value="-Xequals"/>
+						<xjcArg value="-XhashCode"/>
+						<xjcArg value="-XtoString"/>
+						<binding file="${ext.distrelecB2Bcore.path}/resources/wsdl/bindings.xjb" />
+						<produces dir="${ext.distrelecB2Bcore.path}/gensrc/com/distrelec/webservice/@{packagepart}/@{webserviceversion}" includes="*" />
+					</wsimport>
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="distrelecB2BcorePrepareLog4jXml">
+		<sequential>
+			<!-- Copy the log4j.xml file -->
+
+			<property name="configfolder" location="${platformhome}/../../config"/>
+
+			<if>
+				<and>
+					<available file="${configfolder}/local.properties"/>
+					<available file="${configfolder}/log4j.xml" />
+				</and>
+				<then>
+					<!-- Load the cluster id property -->
+					<loadproperties srcfile="${configfolder}/local.properties" />
+
+					<echo message="------------------------[copying log4j config file from config folder...]" />
+					<copy todir="${ext.distrelecB2Bcore.path}/resources" overwrite="true" verbose="true">
+						<fileset file="${configfolder}/log4j.xml" />
+						<filterchain>
+							<expandproperties />
+						</filterchain>
+					</copy>
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="patchReadReplica">
+		<sequential>
+			<if>
+				<available file="${ext.core.path}/bin/coreserver.jar" />
+				<then>
+					<echo> PATCHING coreserver.jar to include Read-Replica enabled GenericBMPBean class </echo>
+					<jar destfile="${ext.core.path}/bin/coreserver.jar" update="true">
+						<fileset dir="${ext.distrelecB2Bcore.path}/classes" includes="**/GenericBMPBean*.class" />
+					</jar>
+				</then>
+				<else>
+					<echo> ${ext.core.path}/bin/coreserver.jar doesn't exist Cannot patch Read-Replica enabled GenericBMPBean class!</echo>
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+
+</project>
+

@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2010 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+
+  
+-->
+
+<project name="namwebservice_buildcallbacks" >
+	
+	<path id="xmltask.classpath">
+		<fileset dir="${ext.namwebservice.path}/ant/xmltask">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltask.classpath"/>
+		
+	<path id="jaxws.classpath">
+		<fileset dir="${ext.namwebservice.path}/ant/jaxws/libs">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport" classpathref="jaxws.classpath" /> 
+	
+	
+	<macrodef name="namwebservice_before_build">
+		<sequential>
+			<!-- Diese Zeilen sind nur ein Beispiel und müssen auskommentiert werden, damit sie laufen.
+			     Damit das Projekt trotzdem durchkompilieren kann, wurden die Dateien in ein 
+			     Jar erzeugt /lib/jaxws-generated-example-files.jar -->
+			
+			
+			<!--
+			<namWebservicesGenerateJavaStubsFromWSDL filename="material_master.wsdl" packagepart="materialmaster" />
+			<namWebservicesGenerateJavaStubsFromWSDL filename="customer.wsdl" packagepart="customer" />
+			<namWebservicesGenerateJavaStubsFromWSDL filename="customer_material.wsdl" packagepart="customermaterial" />
+			<namWebservicesGenerateJavaStubsFromWSDL filename="create_or_simulate_order.wsdl" packagepart="createsimulate" />
+			<namWebservicesGenerateJavaStubsFromWSDL filename="order_status.wsdl" packagepart="orderstatus" />
+			
+			-->
+		</sequential>
+	</macrodef>
+
+	
+	<macrodef name="namWebservicesGenerateJavaStubsFromWSDL">
+		<attribute name="filename" />
+		<attribute name="packagepart" />
+		
+		<sequential>
+			<condition property="antRunsInDirOfHybrisServer" value="true">
+				<contains string="${platformhome}" substring="hybrisserver" casesensitive="false" />
+			</condition>
+
+			<if>
+				<istrue value="${antRunsInDirOfHybrisServer}" />
+				<then>
+					<echo message="Ant build is running in production environment, skip development build actions." />
+				</then>
+				<else>
+					<echo message="Ant build is run in development environment => generate webservice stubs of hybris" />
+
+			
+		<!-- http://today.java.net/pub/a/today/2006/11/01/xml-manipulation-using-xmltask.html -->
+					
+		<!-- Diese Anweisung entfernt ein störendes Tag <UsingPolicy ...> in den WSDL-Dateien weg. -->
+		<echo message="Removing &lt;UsingPolicy&gt;-Tag from WSDL file @{filename}" />
+		<xmltask source="${ext.namwebservice.path}/resources/wsdl/v1/@{filename}" dest="${ext.namwebservice.path}/resources/wsdl/v1/@{filename}"> 
+		   <remove path="/wsdl:definitions/wsp:UsingPolicy"/> 
+		</xmltask> 
+
+		
+		<!-- see http://jax-ws.java.net/nonav/2.2.1/docs/wsimportant.html -->
+		<echo message="Generation Java Stubs from WSDL file @{filename}" />
+		
+		<if>
+			<available file="${ext.namwebservice.path}/resources/wsdl/v1/@{filename}.jaxws.customization.xml" />
+			<then>
+				<!-- Hier werden die Java-Stubs generiert mit Hilfe eines Binding-Files (WSDL Customization).
+				     Es wird ein zusÃ¤tzliches Attribut binding="<Pfad zum Customization File>" verwendet.
+				     Für mehr Information über WSDL customization, 
+				     siehe http://jax-ws.java.net/nonav/2.1.1/docs/customizations.html 
+				-->
+				<echo message="Generate Java Stubs WITH binding customization (/resources/wsdl/v1/@{filename}.jaxws.customization.xml)." />
+				<wsimport
+							    wsdl="${ext.namwebservice.path}/resources/wsdl/v1/@{filename}"
+							    destdir="${ext.namwebservice.path}/gensrc" 
+							    sourcedestdir="${ext.namwebservice.path}/gensrc"
+							    keep="true"
+							    extension="false"
+							    verbose="true"
+								package="com.namics.hybris.webservice.example.sika.jaxws.v1.@{packagepart}"
+							    target="2.0"
+							    quiet="false"
+							    xdebug="false"
+								binding="${ext.namwebservice.path}/resources/wsdl/v1/@{filename}.jaxws.customization.xml"
+								xadditionalHeaders="true"
+								xauthfile="${ext.namwebservice.path}/ant/jaxws/config/authorizations.txt"
+							    xnocompile="true">
+					<!-- Mit der produces Anweisung wird zuerst geschaut, ob die Datei schon existiert. Beschleunigt den Build-Vorgang (wesentlich) -->
+					<produces dir="${ext.namwebservice.path}/gensrc/com/namics/hybris/webservice/example/sika/jaxws/v1/@{packagepart}" includes="*" />
+
+							</wsimport>
+				
+
+			</then>
+			<else>
+				<!-- Hier werden die Java-Stubs ohne Binding-File generiert (ohne WSDL customization).
+				-->
+				<echo message="Generate Java Stubs without binding customization." />
+				<wsimport
+							    wsdl="${ext.namwebservice.path}/resources/wsdl/v1/@{filename}"
+							    destdir="${ext.namwebservice.path}/gensrc" 
+							    sourcedestdir="${ext.namwebservice.path}/gensrc"
+							    keep="true"
+							    extension="false"
+							    verbose="true"
+								package="com.namics.hybris.webservice.example.sika.jaxws.v1.@{packagepart}"
+							    target="2.0"
+							    quiet="false"
+							    xdebug="false"
+								xadditionalHeaders="true"
+								xauthfile="${ext.namwebservice.path}/ant/jaxws/config/authorizations.txt"
+							    xnocompile="true">
+					<!-- Mit der produces Anweisung wird zuerst geschaut, ob die Datei schon existiert. Beschleunigt den Build-Vorgang (wesentlich) -->
+					<produces dir="${ext.namwebservice.path}/gensrc/com/namics/hybris/webservice/example/sika/jaxws/v1/@{packagepart}" includes="*" />
+
+							</wsimport>
+			</else>
+		</if>
+		
+					</else>
+				</if>
+
+	
+		</sequential>
+	</macrodef>
+
+		
+</project>

@@ -1,0 +1,215 @@
+.skin-metahd-item-compare {
+
+	@_flyout_width:		340px;
+	@_flyout_offset:	-170px;
+	@_arrow_offset:		162px;
+
+	.lt-ie8 & {
+		width: 118px;
+	}
+
+	// active bg change (because active state is currently unused in parent xmod)
+	&.active,
+	&:active {
+		background-color: @c-grey20;
+		color: @c-white;
+	}
+
+	// state INITIAL
+	.menuitem {
+		i {
+			margin-top: 6px;
+			.s-metahd-compare-header-black();
+		}
+	}
+
+	// state HOVER, ACTIVE
+	&.hover,
+	&.active,
+	&:active {
+		i {
+			.s-metahd-compare-header-white();
+		}
+	}
+
+	// state DISABLED
+	&[disabled],
+	&.disabled {
+		i {
+			.s-metahd-compare-header-black();
+		}
+	}
+	&:disabled {// keep this selector separate (unsupported pseudo class ie8)
+		i {
+			.s-metahd-compare-header-black();
+		}
+	}
+
+
+	// The Flyout
+	.mod-metahd-item > .flyout-mixin(@_flyout_width, @_flyout_offset, @_arrow_offset);
+
+	.ui-list {
+		display: inline-block;
+		width: 100%;
+		margin-bottom: 24px;
+
+		li {
+			padding: 0 2px;
+			border-bottom: 1px solid @c-grey80;
+		}
+
+		// List entries
+		a {
+			#typo > .size-x-c();
+			color: @c-grey20;
+			display: block;
+			line-height: 41px;
+
+			&:hover {
+				color: #AA1936;
+			}
+
+			&:active {
+				color: #AA1936C;
+			}
+		}
+
+		&.-compare {
+			margin-bottom: 0;
+
+			li:last-child {
+				border: none;
+			}
+		}
+	}
+
+	//
+	// Popover
+
+	.popover-variation(@c-white, @c-grey20, 'bottom');
+
+	.popover{
+		z-index: 1160; // override standard popover z index to be visible over the metahd suggest flyout
+	}
+
+	.ico-compare-popover {
+		top: 8px; // was 10px but that was to much down, 8px is ok (design review)
+		right: 10px;
+		position: absolute;
+
+		i {
+			.s-compare-white();
+		}
+	}
+
+
+	// The Flyout footer
+	.ft {
+		padding-left: 20px;
+		padding-right: 20px;
+		border: 1px solid @c-grey80;
+	  	border-top: 0;
+
+		&:hover {
+			background: @c-white;
+		}
+	}
+
+	.show-all {
+		#typo > .size-m();
+		line-height: 60px;
+		display: block;
+	}
+
+
+	// template rows
+	.compare-row {
+		cursor: pointer;
+		border-top: 1px solid @c-grey80;
+
+		&:first-child {
+			border-top: none;
+		}
+
+		&:hover {
+			background-color: @c-white;
+			color: #AA1936;
+
+			.cell-img {
+				border-right-color: transparent;
+			}
+
+			.product-name {
+				color: #AA1936;
+			}
+		}
+
+		&:active {
+			color: #AA1936C;
+
+			.cell-img {
+				border-right-color: @c-border;
+			}
+
+			.product-name {
+				color: #AA1936C;
+			}
+		}
+	}
+
+	.cell {
+		.box-sizing(content-box);
+		display: table-cell;
+		.lt-ie8 & {
+			.ib();
+			vertical-align: top;
+			height: 46px;
+		}
+	}
+
+	.constrain {
+		.ellipsis();
+	}
+
+	.cell-img {
+		width: 69px;
+		height: 66px;
+		background-color: @c-white;
+		text-align: center;
+		vertical-align: middle;
+	  	border-right: 1px solid @c-grey80;
+
+		img {
+			display: block;
+			max-width: 69px;
+			max-height: 66px;
+		}
+	}
+
+
+	.cell-product {
+		padding: 10px 20px 10px 11px;
+
+		.constrain {
+			width: 237px;
+			min-height: 46px;
+
+			&,
+			& span {
+				display: block;
+			}
+		}
+
+		.product-name {
+			.ellipsis();
+			color: @c-red;
+			#typo > .size-l();
+		}
+
+		.product-price {
+			color: @c-grey20;
+			#typo > .size-s();
+		}
+	}
+}

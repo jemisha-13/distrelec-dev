@@ -1,0 +1,28 @@
+<h3>post installations for QA & PROD </h3>
+
+<h4>Hybris Update:</h4>
+http://[app-node-0]:9001/hac/platform/update
+
+<h4>System Updates:</h4>
+- nothing to do
+
+<h4>Run Impex:</h4>
+- nothing to do
+
+<h4>Blog entries:</h4>
+- nothing to do
+
+<h4>Misc:</h4>
+- run beanshell : /environment/release-notes/samples-scripts/beanShellScripts/importUserRights.bs
+- run the script using the lower input area of hAC's FlexibleSearch page (.../hac/console/flexsearch): 
+UPDATE productslp
+SET p_pimXmlHashLocalized = NULL
+WHERE itempk IN
+  (
+  SELECT DISTINCT p_product
+  FROM productfeatures
+  WHERE p_stringvalue LIKE '%#NEWLINE#%'
+  ) 
+
+<h4>Synchronization:</h4>
+- synchronize content catalog

@@ -1,0 +1,66 @@
+<div *ngIf="currentChannel$ | async as currentChannel" class="prices" [ngClass]="{ hasVat: productPriceVAT > 0 }">
+  <div>
+    <div class="prices__price-each">
+      <span [id]="'pricing_price_per_piece_' + indexingPos">
+        {{ 'product.product_info.prices_per' | cxTranslate: { salesUnit } }}
+      </span>
+    </div>
+
+    <app-dist-prices
+      [formattedBasePrice]="basePrice_ | async"
+      [formattedPriceWithVat]="priceWithVat_ | async"
+      [currency]="currencyIso"
+      [currentChannel]="currentChannel"
+      [componentId]="'shopping-list_' + indexingPos"
+      [toDecimalPlaces]="4"
+      [excVatText]="'product.exc_vat' | cxTranslate"
+      [incVatText]="'product.inc_vat' | cxTranslate"
+      [modifierClass]="'is-shopping-list'"
+    ></app-dist-prices>
+  </div>
+
+  <div class="prices__priceholder-per-q">
+    <div class="quantity">
+      <ng-container *ngFor="let volumePriceMap of prices?.volumePrices; let i = index">
+        <span [id]="'pricing_' + indexingPos + '_min_quantity_' + i">{{ volumePriceMap.minQuantity }} +</span>
+      </ng-container>
+    </div>
+    <div *ngIf="productPriceVAT > 0" class="was-price price-per-q">
+      <ng-container *ngFor="let volumePriceMap of prices?.volumePrices; let i = index">
+        <span *ngIf="volumePriceMap?.originalValue" [id]="'pricing_' + indexingPos + '_original_value_' + i">
+          {{ volumePriceMap?.currencyIso }}&nbsp;{{
+            volumePriceMap?.originalValue
+              | volumePrice: volumePriceMap?.currencyIso : currentChannel : prices.price.basePrice
+          }}
+        </span>
+      </ng-container>
+    </div>
+    <div class="price-per-q">
+      <ng-container *ngFor="let volumePriceMap of prices?.volumePrices; let i = index">
+        <span [id]="'pricing_' + indexingPos + '_min_quantity_price_' + i">
+          <ng-container *ngIf="currentChannel.channel === 'B2B'">
+            {{
+              priceService.getPriceWithoutVatForB2B(volumePriceMap)
+                | decimalPlaces: 4
+                | volumePrice: volumePriceMap.currencyIso : currentChannel : prices.price.basePrice
+            }}
+          </ng-container>
+          <ng-container *ngIf="currentChannel.channel === 'B2C'">
+            {{
+              priceService.getPriceWithVatForB2C(volumePriceMap)
+                | decimalPlaces: 4
+                | volumePrice: volumePriceMap.currencyIso : currentChannel : prices.price.basePrice
+            }}
+          </ng-container>
+        </span>
+      </ng-container>
+    </div>
+    <div *ngIf="productPriceVAT > 0" class="saving-percent">
+      <ng-container *ngFor="let volumePriceMap of prices?.volumePrices; let i = index">
+        <span *ngIf="volumePriceMap?.saving > 0" [id]="'pricing_' + indexingPos + '_price_save_percent_' + i">
+          ({{ 'shoppingList.reducedPrice_notification' | cxTranslate }} {{ volumePriceMap?.saving }}%)
+        </span>
+      </ng-container>
+    </div>
+  </div>
+</div>

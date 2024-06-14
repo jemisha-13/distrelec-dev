@@ -1,0 +1,37 @@
+<h3>Post installations for QA & PROD</h3>
+
+
+
+<h4>Hybris Update:</h4>
+http://[app-node-0]:9001/hac/platform/update
+
+
+
+<h4>System Update:</h4>
+- Stop Node 0.
+- Move all pending PIM import files to the error folder.
+- Reset the german product hash values by running the script /environment/release-notes/samples-scripts/sqlScripts/resetPimXMLHashValueOfProductMaster.sql
+- Perform the system update on Node1. 
+- DISTRELEC-6091: execute impex script setNonLocalizedAttributeAssignments.impex
+- Move the newest PIM master file (DIS_10_ger.xml) from the archive or error log to the hotfolder. Create an DIS_10_ger.end file to start the import.  
+
+
+
+<h4>Run Impex:</h4>
+- already mentioned above
+
+
+
+<h4>Blog entries:</h4>
+- https://wiki.namics.com/display/distrelint/2014/06/18/webtrekk+again
+
+
+
+<h4>Misc:</h4>
+- Remove all Message Entries for all content catalogs in the hMC (Internationalization --> Message Entries)
+  (use /environment/release-notes/samples-scripts/impexScripts/removeAllMessageResourceTableEntries.impex for large amount on items)
+
+
+
+<h4>Synchronization:</h4>
+- synchronize content catalog

@@ -1,0 +1,50 @@
+#
+# Import the CMS content for the Distrelec site emails
+#
+$contentCatalog=distrelec_IntContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$cmsSiteUID=distrelec
+$contentMasterCatalog=distrelecContentCatalog
+$emailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/emails
+$lang=en
+
+# Request Invoice Payment Model Email
+INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;active;frontendTemplateName;subject(code);htmlTemplate(code);restrictedPageTypes(code)
+                               ;;RequestInvoicePaymentModeEmailTemplate;Request Invoice Payment Mode Email Template;true;requestInvoicePaymentModeEmail;$cmsSiteUID-Email_Request_Invoice_Payment_Mode_Subject;$cmsSiteUID-Email_Request_Invoice_Payment_Mode_Body;EmailPage
+
+# Email velocity templates
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];contextClass[default=com.namics.distrelec.b2b.facades.process.email.context.RequestInvoicePaymentModeEmailContext];rendererType(code)[default='velocity']
+                              ;$cmsSiteUID-Email_Request_Invoice_Payment_Mode_Body;E-Mail Requesting Invoice Payment Mode;$emailResource/email-requestInvoicePaymentModeBody.vm
+                              ;$cmsSiteUID-Email_Request_Invoice_Payment_Mode_Subject;E-Mail Requesting Invoice Payment Mode;$emailResource/email-requestInvoicePaymentModeSubject.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];validComponentTypes(code);template(uid,$contentCV)[unique=true][default='RequestInvoicePaymentModeEmailTemplate'];
+                             ;MoodImage        ;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE EmailPage;uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved'];$contentCV[unique=true]
+                       ;RequestInvoicePaymentModeEmail;Request Invoice Payment Mode Email;RequestInvoicePaymentModeEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;uid[unique=true]                                 ;name;active[default=true];$contentCV[unique=true]
+                         ;EmailMoodImageSlot-RequestInvoicePaymentModeEmail;Mood Image Slot for RequestInvoicePaymentModeEmail
+
+INSERT_UPDATE ContentSlotForPage;uid[unique=true]                        ;position ;page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV);$contentCV[unique=true]
+                                ;MoodImage-RequestInvoicePaymentModeEmail;MoodImage;RequestInvoicePaymentModeEmail   ;EmailMoodImageSlot-RequestInvoicePaymentModeEmail
+
+# Abstract Email Page
+
+$siteContentCatalog=distrelec_FRContentCatalog
+$siteContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$siteContentCatalog]),CatalogVersion.version[default=Staged])[default=$siteContentCatalog:Staged]
+
+INSERT_UPDATE EmailPageTemplate;$siteContentCV[unique=true];uid[unique=true];name;active;frontendTemplateName;restrictedPageTypes(code)
+                               ;;AbstractEmailPageTemplate;Abstract Email Template;true;AbstractEmailPageTemplate;EmailPage
+
+INSERT_UPDATE ContentSlotName;name[unique=true];validComponentTypes(code);template(uid,$siteContentCV)[unique=true][default='AbstractEmailPageTemplate'];
+                             ;Logo             ;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE EmailPage;uid[unique=true];name;masterTemplate(uid,$siteContentCV);defaultPage;approvalStatus(code)[default='approved'];$siteContentCV[unique=true]
+                       ;AbstractEmail;Abstract Email;AbstractEmailPageTemplate;true
+
+INSERT_UPDATE ContentSlot;$siteContentCV[unique=true];uid[unique=true];name;active;cmsComponents(uid,$siteContentCV)
+                         ;;EmailLogoSlot-AbstractEmail;Logo Slot for AbstractEmail;true;D4LogoImage
+
+INSERT_UPDATE ContentSlotForPage;uid[unique=true]       ;position;page(uid,$siteContentCV)[unique=true];contentSlot(uid,$siteContentCV);$siteContentCV[unique=true]
+                                ;EmailLogo-AbstractEmail;Logo    ;AbstractEmail                    ;EmailLogoSlot-AbstractEmail

@@ -1,0 +1,652 @@
+<div class="product-details-container">
+  <app-accordion
+    id="pdp_product_details"
+    [titleId]="'pdp_product_details_title'"
+    [uniqueIdentifier]="productData?.code"
+    [title]="'product.information_title' | cxTranslate"
+  >
+    @if (productData?.isBetterWorld) {
+      <div class="col">
+        <span class="list-holder-text" id="better-world-text">{{ 'product.better.world.text' | cxTranslate }}&nbsp;</span>
+        <span class="better-world-link" id="better-world-link"><a>{{ 'product.better.world.link' | cxTranslate }}</a></span>
+      </div>
+    }
+    <div class="content-holder">
+      <div class="container">
+        <div class="row product-details-row">
+          <div
+            *ngIf="isProductDataSectionPresent(productData)"
+            class="col d-flex flex-column"
+            id="pdp_product_details_column_one"
+            [class.no-first-column]="!isEnvironmentSectionPresent(productData)"
+          >
+            <div *ngIf="isNotesInfoPresent(productData)" class="list-holder list-holder__notes">
+              <h3 class="list-title" id="product_details_usage_title">
+                {{ 'product.information.notes.title' | cxTranslate }}
+              </h3>
+
+              <ng-container
+                *ngIf="productData?.productInformation?.orderNote || productData?.productInformation?.orderNoteArticle"
+              >
+                <p class="list-title list-title__sub" id="product_details_orderNote_subtitle">
+                  {{ 'product.information.notes.order_note' | cxTranslate }}
+                </p>
+                <p *ngIf="productData?.productInformation?.orderNote" id="product_details_orderNote_note">
+                  <span>{{ productData?.productInformation?.orderNote }}</span>
+                </p>
+                <p *ngIf="productData?.productInformation?.orderNoteArticle" id="product_details_orderNote_article">
+                  <span>{{ productData?.productInformation?.orderNoteArticle }}</span>
+                </p>
+              </ng-container>
+
+              <ng-container
+                *ngIf="
+                  productData?.productInformation?.deliveryNote || productData?.productInformation?.deliveryNoteArticle
+                "
+              >
+                <p class="list-title list-title__sub" id="product_details_delivery_subtitle">
+                  {{ 'product.information.notes.delivery_note' | cxTranslate }}
+                </p>
+                <p
+                  *ngIf="productData?.productInformation?.deliveryNote"
+                  id="product_details_delivery_note"
+                  class="delivery-text"
+                >
+                  <span [innerHTML]="productData?.productInformation?.deliveryNote"></span>
+                </p>
+                <p *ngIf="productData?.productInformation?.deliveryNoteArticle" id="product_details_delivery_article">
+                  <span [innerHTML]="productData?.productInformation?.deliveryNoteArticle"></span>
+                </p>
+              </ng-container>
+
+              <ng-container *ngIf="productData?.productInformation?.assemblyNote">
+                <p class="list-title list-title__sub" id="product_details_assembly_subtitle">
+                  {{ 'product.information.notes.assembly_note' | cxTranslate }}
+                </p>
+                <p *ngIf="productData?.productInformation?.assemblyNote" id="product_details_assembly_note">
+                  <span>{{ productData?.productInformation?.deliveryNoteArticle }}</span>
+                </p>
+              </ng-container>
+
+              <ng-container *ngIf="productData?.productInformation?.usageNote.length">
+                <p class="list-title list-title__sub" id="product_details_usage_subtitle">
+                  {{ 'product.information.notes.usage_note' | cxTranslate }}
+                </p>
+                <ul>
+                  <li
+                    *ngFor="let item of productData?.productInformation?.usageNote; index as i"
+                    [id]="'product_details_usageNote_' + i"
+                  >
+                    {{ item }}
+                  </li>
+                </ul>
+              </ng-container>
+            </div>
+
+            <div
+              *ngIf="
+                productData?.productInformation?.familyDescription.length ||
+                productData?.productInformation?.familyDescriptionBullets.length
+              "
+              class="list-holder__family"
+            >
+              <h3 class="list-title" id="product_details_family_title">
+                {{ 'product.information.family.title' | cxTranslate }}
+              </h3>
+              <div class="holder-content">
+                <p
+                  *ngFor="let familyDesc of productData?.productInformation?.familyDescription; index as i"
+                  [id]="'product_details_familyDescr_' + i"
+                  [innerHTML]="familyDesc + '\n'"
+                ></p>
+                <ul>
+                  <li
+                    *ngFor="let familyInfo of productData?.productInformation?.familyDescriptionBullets; index as i"
+                    [id]="'product_details_familyInfo_' + i"
+                  >
+                    <span [innerHTML]="familyInfo"></span>
+                  </li>
+                </ul>
+              </div>
+              <div
+                *ngIf="
+                  !productData?.productInformation?.seriesDescription.length ||
+                  productData?.productInformation?.seriesDescriptionBullets.length
+                "
+                class="holder-content"
+              >
+                <p
+                  *ngFor="let seriesDesc of productData?.productInformation?.seriesDescription; index as i"
+                  [id]="'product_details_seriesDescr_' + i"
+                  [innerHTML]="seriesDesc + '&nbsp;'"
+                ></p>
+                <ul>
+                  <li
+                    *ngFor="let seriesInfo of productData?.productInformation?.seriesDescriptionBullets; index as i"
+                    [id]="'product_details_seriesInfo_' + i"
+                  >
+                    <span [innerHTML]="seriesInfo"></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="col d-flex flex-column"
+            id="pdp_product_details_column_two"
+            [class.no-first-column]="!isProductDataSectionPresent(productData)"
+          >
+            <div *ngIf="isEnvironmentSectionPresent(productData)" class="list-holder list-holder__environment">
+              <h3 class="list-title" id="product_details_environmental_legislation_title">
+                {{ 'product.information.environmental.legislation_title' | cxTranslate }}
+                <fa-icon
+                  *ngIf="productData?.isProductBatteryCompliant || productData?.isDangerousGoods"
+                  [icon]="faExclamationTriangle"
+                ></fa-icon>
+              </h3>
+              <div *ngIf="productData?.isProductBatteryCompliant" class="holder-content is-battery">
+                <span class="title" id="pdp_environmental_battery">
+                  {{ 'product.information.environmental.battery' | cxTranslate }}
+                </span>
+                <div id="pdp_environmental_battery_compliant">
+                  {{ 'product.information.environmental.battery_compliant' | cxTranslate }}
+                </div>
+                <div id="pdp_environmental_battery_compliant_descr">
+                  {{ 'product.information.environmental.battery_compliant_description' | cxTranslate }}
+                </div>
+                <a
+                  class="link"
+                  id="pdp_environmental_battery_compliant_link"
+                  id="battery-recycling-pdf-link"
+                  (click)="dispatchPDFEvent()"
+                  title="Further information on battery recycling."
+                  href="/compliance-document/document/Battery_Compliance.pdf"
+                  data-aainteraction="file download"
+                  data-file-type="pdf"
+                  data-file-name="Battery_Compliance.pdf"
+                  target="_blank"
+                >
+                  {{ 'product.information.environmental.battery_compliant_url' | cxTranslate }}
+                </a>
+              </div>
+
+              <div class="holder-content flex-holder">
+                <div class="holder-content">
+                  <span class="holder-content-title" id="pdp_environmental_rohs_title">
+                    {{ 'product.information.environmental.rohs' | cxTranslate }}
+                  </span>
+                </div>
+                <div class="holder-content">
+                  <ng-container *ngIf="productData?.isROHSComplaint">
+                    <span class="ROHS-title" id="pdp_environmental_rohs_compliant">
+                      {{ 'product.information.environmental.rohs_compliant' | cxTranslate }}
+                    </span>
+                  </ng-container>
+                  <ng-container *ngIf="!productData?.isROHSComplaint">
+                    <span
+                      *ngIf="productData?.rohsCode === '99'"
+                      class="ROHS-title"
+                      id="pdp_environmental_rohs_under_review"
+                    >
+                      {{ 'product.information.environmental.rohs_under_review' | cxTranslate }}.
+                    </span>
+                    <span
+                      *ngIf="productData?.rohsCode === '13'"
+                      class="ROHS-title"
+                      id="pdp_environmental_rohs_not_compliant"
+                    >
+                      {{ 'product.information.environmental.rohs_not_compliant' | cxTranslate }}
+                    </span>
+                    <span
+                      *ngIf="productData?.rohsCode === '11'"
+                      class="ROHS-title"
+                      id="pdp_environmental_rohs_not_applicable"
+                    >
+                      {{ 'product.information.environmental.rohs_not_applicable' | cxTranslate }}.
+                    </span>
+                    <span
+                      *ngIf="
+                        !(
+                          productData?.rohsCode === '99' ||
+                          productData?.rohsCode === '13' ||
+                          productData?.rohsCode === '11'
+                        )
+                      "
+                      class="ROHS-title"
+                      id="pdp_environmental_rohs_otherwise"
+                    >
+                      {{ productData?.rohs }}
+                    </span>
+                    <a
+                      *ngIf="
+                        productData?.rohsCode === '99' ||
+                        productData?.rohsCode === '13' ||
+                        productData?.rohsCode === '11'
+                      "
+                      class="link link__rohs"
+                      id="pdp_environmental_learn_more"
+                      (click)="openLearnMorePopup(productData?.rohsCode)"
+                    >
+                      {{ 'product.information.environmental.learn_more' | cxTranslate }}
+                    </a>
+                  </ng-container>
+
+                  <div *ngIf="productData?.isRNDProduct && productData?.isROHSConform">
+                    <a
+                      class="link link__rohs"
+                      id="pdp_environmental_rohs_download_link"
+                      id="ROHS-pdf-link"
+                      [href]="'/compliance-document/pdf/ROHS_' + productData?.code"
+                      [data-file-name]="'ROHS_' + productData?.code + '.pdf'"
+                      title="Download RoHS Certificate"
+                      text="Order Note"
+                      data-aainteraction="file download"
+                      data-file-type="pdf"
+                      target="_blank"
+                    >
+                      {{ 'product.information.environmental.rohs_download' | cxTranslate }}
+                    </a>
+                  </div>
+                  <div *ngIf="!productData?.isRNDProduct && productData?.isROHSValidForCountry && productData?.rohs">
+                    <a
+                      class="link link__rohs"
+                      id="ROHS-pdf-link"
+                      [href]="'/compliance-document/pdf/ROHS_' + productData?.code"
+                      [data-file-name]="'ROHS_' + productData?.code + '.pdf'"
+                      title="Download RoHS Certificate"
+                      text="Order Note"
+                      data-aainteraction="file download"
+                      data-file-type="pdf"
+                      target="_blank"
+                    >
+                      {{ 'product.information.environmental.rohs_download' | cxTranslate }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="productData?.hasSvhc" class="holder-content flex-holder">
+                <div class="reach-container">
+                  <span class="reach-title" id="REACH-id">
+                    {{ 'product.information.environmental.reach_regualation' | cxTranslate }}
+                  </span>
+                </div>
+                <div class="reach-container">
+                  <span id="REACH-title-id">
+                    {{ 'product.information.environmental.reach_svhc_named' | cxTranslate }}
+                  </span>
+                  <br />
+                  <a
+                    class="link link__rohs"
+                    id="pdp_environmental_reach_statement_url"
+                    [data-file-name]="'SVHC_' + productData?.code + '.pdf'"
+                    [href]="'/compliance-document/pdf/SVHC_' + productData?.code"
+                    target="_blank"
+                    title="REACH Regulation Statement"
+                    data-aainteraction="file download"
+                    data-file-type="pdf"
+                  >
+                    {{ 'product.information.environmental.reach_statement' | cxTranslate }}
+                  </a>
+                </div>
+              </div>
+
+              <div *ngIf="productData.hasSvhc !== undefined && !productData.hasSvhc" class="holder-content flex-holder">
+                <span class="holder-content-title" id="REACH-id">
+                  {{ 'product.information.environmental.reach_regualation' | cxTranslate }}
+                </span>
+                <span id="REACH-title-id">
+                  {{ 'product.information.environmental.reach_no_svhc_named' | cxTranslate }}
+                </span>
+              </div>
+
+              <div
+                *ngIf="productData.hasSvhc !== undefined && !productData.hasSvhc"
+                class="holder-content flex-holder empty"
+              >
+                <span class="title title__empty" id="REACH-id">&nbsp;</span>
+                <a
+                  class="link"
+                  id="pdp_environmental_reach_no_statement_url"
+                  [data-file-name]="'SVHC_' + productData?.code + '.pdf'"
+                  [href]="'/compliance-document/pdf/SVHC_' + productData?.code"
+                  data-aainteraction="file download"
+                  data-file-type="pdf"
+                  target="_blank"
+                  title="No SVHC Statement"
+                >
+                  {{ 'product.information.environmental.reach_no_statement' | cxTranslate }}
+                </a>
+              </div>
+
+              <ng-container *ngIf="siteCountryCode$ | async as siteCountryCode">
+                <div *ngIf="productData.weeeCategory" class="holder-content flex-holder">
+                  <div class="weee-category">
+                    <ng-container *ngIf="siteCountryCode === 'FR' && weeeCategoryArray">
+                      <ng-container *ngFor="let weeeCategory of weeeCategoryArray">
+                        <ng-container *ngIf="weeeCategory === '1'">
+                          <img
+                            [ngSrc]="assetPath + 'recycling-fr-1.svg'"
+                            width="155"
+                            height="58"
+                            loading="lazy"
+                            alt=""
+                          />
+                        </ng-container>
+                        <ng-container *ngIf="weeeCategory === '2'">
+                          <img
+                            [ngSrc]="assetPath + 'recycling-fr-2.svg'"
+                            width="155"
+                            height="58"
+                            loading="lazy"
+                            alt=""
+                          />
+                        </ng-container>
+                        <ng-container *ngIf="weeeCategory === '3'">
+                          <img
+                            [ngSrc]="assetPath + 'recycling-fr-3.svg'"
+                            width="155"
+                            height="58"
+                            loading="lazy"
+                            alt=""
+                          />
+                        </ng-container>
+                        <ng-container *ngIf="weeeCategory === '4'">
+                          <img
+                            [ngSrc]="assetPath + 'recycling-fr-4.svg'"
+                            width="155"
+                            height="58"
+                            loading="lazy"
+                            alt=""
+                          />
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="siteCountryCode !== 'FR'">
+                      <img [ngSrc]="assetPath + 'recycling-bin.svg'" width="36" height="52" loading="lazy" alt="" />
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container>
+
+              <div *ngIf="productData?.svhc && productData?.hasSvhc" class="holder-content flex-holder">
+                <div class="holder-content flex-holder">
+                  <span class="title title__additional-data" id="pdp_environmental_svhc_title">
+                    {{ 'product.information.environmental.reach_svhc' | cxTranslate }}
+                  </span>
+                  <span class="svhc-additional-data" id="pdp_environmental_svhc">
+                    {{ productData?.svhc }}
+                  </span>
+                </div>
+                <div *ngIf="product?.svhcURL" class="holder-content flex-holder">
+                  <span class="title" id="pdp_environmental_reach_svhc_title">
+                    {{ 'product.information.environmental.reach_svhc_url' | cxTranslate }}
+                  </span>
+                  <a
+                    class="link"
+                    id="pdp_environmental_reach_svhc_url"
+                    [routerLink]="productData?.svhcURL"
+                    title="${product?.svhcURL}"
+                    target="_blank"
+                  >
+                    {{ productData?.svhcURL }}
+                  </a>
+                </div>
+              </div>
+
+              <div *ngIf="productData?.hasSvhc && productData?.scip" class="holder-content flex-holder">
+                <div class="holder-content flex-holder">
+                  <span class="title" id="SCIP-title">SCIP SSN</span>
+                  <span class="scip-code" id="SCIP-code">{{ productData?.scip }}</span>
+                </div>
+              </div>
+
+              <div *ngIf="productData?.transportGroupData?.dangerous" class="holder-content flex-holder">
+                <span class="warntext dangerous" id="pdp_environmental_dangerous">
+                  <i class="dangerous-icon"></i>
+                  {{ 'product.information.environmental.dangerous' | cxTranslate }}
+                </span>
+              </div>
+
+              <div *ngIf="productData?.transportGroupData?.bulky" class="holder-content flex-holder">
+                <span class="warntext bulky" id="pdp_environmental_bulky">
+                  <i class="bulky-icon"></i>
+                  {{ 'product.information.environmental.bulky' | cxTranslate }}
+                </span>
+              </div>
+
+              <ng-container *ngIf="currentChannel$ | async as currentChannel">
+                <div *ngIf="productData?.ghsImages" class="holder-content ghs-images row">
+                  <div *ngFor="let ghsImage of productData?.ghsImages" class="holder-content__ghs-image col-4 col-md-2">
+                    <img class="img-fluid" [src]="currentChannel?.mediaDomain + ghsImage" alt="GHS Image" />
+                  </div>
+                </div>
+              </ng-container>
+
+              <div *ngIf="productData?.signalWord" class="holder-content is-battery">
+                <span class="title" id="pdp_environmental_signal_word">
+                  {{ 'product.information.environmental.signal_word' | cxTranslate }}
+                </span>
+                <span class="info">
+                  <ng-container *ngIf="productData?.signalWord === 'Danger'">
+                    <span id="pdp_environmental_signal_word_info_danger">
+                      {{ 'product.information.environmental.danger' | cxTranslate }}
+                    </span>
+                  </ng-container>
+                  <ng-container *ngIf="productData?.signalWord === 'Warning'">
+                    <span id="pdp_environmental_signal_word_info_warning">
+                      {{ 'product.information.environmental.warning' | cxTranslate }}
+                    </span>
+                  </ng-container>
+                </span>
+              </div>
+
+              <div *ngIf="productData?.hazardStatements?.length" class="holder-content is-hazard">
+                <span class="title" id="pdp_hazard_statement_title">
+                  {{ 'product.hazard_statement' | cxTranslate }}
+                </span>
+                <ul>
+                  <li *ngFor="let item of productData?.hazardStatements; index as i">
+                    <div class="hazardous-content">
+                      <div class="hazardous-content__title" [id]="'pdp_hazardous_content_title_' + i">
+                        {{ item?.code }}:
+                      </div>
+                      <div class="hazardous-content__description" [id]="'pdp_hazardous_content_descr_' + i">
+                        {{ item?.description }}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="productData?.supplementalHazardInfos?.length" class="holder-content is-hazard">
+                <span class="title" id="pdp_hazard_supplemental_title">
+                  {{ 'product.hazard_supplemental' | cxTranslate }}
+                </span>
+                <ul>
+                  <li *ngFor="let item of productData?.supplementalHazardInfos; index as i">
+                    <div class="hazardous-content">
+                      <div class="hazardous-content__title" [id]="'pdp_hazard_supplemental_' + i">
+                        {{ item?.code }}:
+                      </div>
+                      <div class="hazardous-content__description" [id]="'pdp_hazard_supplemental_descr_' + i">
+                        {{ item?.description }}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <ng-container *ngIf="siteCountryCode$ | async as siteCountryCode">
+              <div *ngIf="isArticleInfoPresent(siteCountryCode)" class="holder-content article-information">
+                <h3 class="list-title" id="pdp_article_title">
+                  {{ 'product.article_information' | cxTranslate }}
+                </h3>
+
+                <li
+                  *ngIf="
+                    productData?.productInformation?.articleDescriptionBullets.length ||
+                    productData?.productInformation?.articleDescription.length
+                  "
+                  class="list-holder list-holder__article"
+                >
+                  <div class="holder-content">
+                    <p
+                      *ngFor="let articleDesc of productData?.productInformation?.articleDescription; index as i"
+                      [id]="'product_details_articleDescr_' + i"
+                      [innerHTML]="articleDesc"
+                    ></p>
+                    <ul>
+                      <li
+                        *ngFor="let item of productData?.productInformation?.articleDescriptionBullets; index as i"
+                        [id]="'product_details_articleDescrBullets_' + i"
+                      >
+                        <span [innerHTML]="item"></span>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+
+                <div *ngIf="isMovexArticlePresent(siteCountryCode)" class="holder-content flex-holder">
+                  <div class="holder-content">
+                    <span class="title" id="product_previous_article">
+                      {{ 'product.previous_article' | cxTranslate }}
+                    </span>
+                  </div>
+                  <div class="holder-content">
+                    <span id="product_details_movexArticleNumber">{{ productData?.movexArticleNumber }}</span>
+                  </div>
+                </div>
+
+                <div *ngIf="isElfaArticlePresent(siteCountryCode)" class="holder-content flex-holder">
+                  <div class="holder-content">
+                    <span class="title" id="product_previous_article">
+                      {{ 'product.previous_article' | cxTranslate }}
+                    </span>
+                  </div>
+                  <div class="holder-content">
+                    <span id="product_details_elfaArticleNumber">
+                      {{ productData?.elfaArticleNumber }}
+                    </span>
+                  </div>
+                </div>
+
+                <div *ngIf="isDEAndPreviousArticlePresent(siteCountryCode)" class="holder-content flex-holder">
+                  <div class="holder-content">
+                    <span class="title no-space" id="product_previous_article">
+                      {{ 'product.previous_article' | cxTranslate }}
+                    </span>
+                  </div>
+                  <div class="holder-content">
+                    <span id="product_details_navisionArticleNumber">{{ productData?.navisionArticleNumber }}</span>
+                  </div>
+                </div>
+
+                <div *ngIf="isProductCatalog16or17()" class="holder-content flex-holder">
+                  <div class="holder-content">
+                    <span class="title no-space" id="product_details_paperCatalogPageNumber_16_17">
+                      {{ 'product.information.additional.paper_catalogue_title' | cxTranslate }}
+                    </span>
+                  </div>
+                  <div class="holder-content">
+                    <span>
+                      {{
+                        'product.information.additional.paper_catalogue_16_17'
+                          | cxTranslate
+                            : {
+                                number: productData?.productInformation?.paperCatalogPageNumber_16_17
+                              }
+                      }}
+                    </span>
+                  </div>
+                </div>
+
+                <div *ngIf="isProductCatalogOther()" class="holder-content flex-holder">
+                  <div class="holder-content additional-data">
+                    <span class="title no-space" id="product_details_paperCatalogPageNumber">
+                      {{ 'product.information.additional.paper_catalogue_title' | cxTranslate }}
+                    </span>
+                  </div>
+                  <div class="holder-content additional-data">
+                    <span>
+                      {{
+                        'product.information.additional.paper_catalogue'
+                          | cxTranslate
+                            : {
+                                number: productData?.productInformation?.paperCatalogPageNumber
+                              }
+                      }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="list-holder list-holder__additional">
+              <h3 class="list-title" id="pdp_additional_title">
+                {{ 'product.information.additional.title' | cxTranslate }}
+              </h3>
+              <div *ngIf="productData?.countryOfOrigin" class="holder-content" id="pdp_additional_countryOfOrigin">
+                <span class="holder-content-title" id="pdp_additional_countryOfOrigin_title">
+                  {{ 'product.information.additional.country_origin' | cxTranslate }}
+                </span>
+                {{ productData?.countryOfOrigin?.name }} ({{ productData?.countryOfOrigin?.isocode }})
+              </div>
+              <div *ngIf="productData?.distManufacturer" class="holder-content" id="pdp_additional_distManufacturer">
+                <span class="holder-content-title" id="pdp_additional_distManufacturer-title">
+                  {{ 'product.information.additional.manufacturer' | cxTranslate }}
+                </span>
+                <span itemprop="brand">
+                  <a
+                    class="link"
+                    id="pdp_additional_distManufacturer-name"
+                    [routerLink]="productData?.distManufacturer?.urlId"
+                  >
+                    {{ productData?.distManufacturer?.name }}
+                  </a>
+                </span>
+              </div>
+              <div *ngIf="productData?.grossWeight" class="holder-content" id="pdp_additional_grossWeight">
+                <span class="holder-content-title" id="pdp_additional_grossWeight_title">
+                  {{ 'product.information.additional.gross_weight' | cxTranslate }}
+                </span>
+                {{ productData?.grossWeight }}&nbsp;{{ productData?.grossWeightUnit }}
+              </div>
+              <div *ngIf="productData?.dimensions" class="holder-content" id="pdp_additional_dimensions">
+                <span class="holder-content-title" id="pdp_additional_dimensions_title">
+                  {{ 'product.information.additional.dimensions' | cxTranslate }}
+                </span>
+                {{ productData?.dimensions }}
+              </div>
+              <div *ngIf="productData?.customsCode" class="holder-content" id="pdp_additional_customsCode">
+                <span class="holder-content-title" id="pdp_additional_customsCode_title">
+                  {{ 'product.information.additional.customs_number' | cxTranslate }}
+                </span>
+                {{ productData?.customsCode }}
+              </div>
+              <div *ngIf="productData?.unspsc5" class="holder-content" id="pdp_additional_unspsc5">
+                <span class="holder-content-title" id="pdp_additional_unspsc5_title">
+                  {{ 'product.information.additional.unuspsc' | cxTranslate }}
+                </span>
+                {{ productData?.unspsc5 }}
+              </div>
+              <div *ngIf="productData?.ean" class="holder-content" id="pdp_additional_ean">
+                <span class="holder-content-title" id="pdp_additional_ean_title">
+                  {{ 'product.information.additional.ean' | cxTranslate }}
+                </span>
+                {{ productData?.ean }}
+              </div>
+              <div *ngIf="productData?.enumber" class="holder-content" id="pdp_additional_enumber">
+                <span class="holder-content-title" id="pdp_additional_enumber_title">
+                  {{ 'product.information.additional.e_number' | cxTranslate }}
+                </span>
+                {{ productData?.enumber }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-accordion>
+</div>

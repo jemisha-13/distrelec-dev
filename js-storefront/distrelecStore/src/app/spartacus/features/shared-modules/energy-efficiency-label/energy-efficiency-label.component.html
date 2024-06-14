@@ -1,0 +1,29 @@
+<div
+  *ngIf="isValidEnergyEfficiencyLabel()"
+  class="energy-efficiency-label"
+  [class.quick-order]="isQuickOrder"
+  [class.search-popup]="isSearchPopup"
+  (click)="togglePopup()"
+>
+  <img
+    [class]="arrowSize === 'small' ? 'energy-efficiency-image-small' : 'energy-efficiency-image'"
+    [src]="'app/spartacus/assets/media/energy-labels/energy-label-' + energyEfficiency + '.svg'"
+    alt="Energy Efficiency Label"
+    title="{{ 'product.energy.efficiency.class' | cxTranslate }} {{ energyEfficiency }}"
+  />
+  <div
+    *ngIf="energyEfficiencyLabelImageUrl"
+    class="energy-efficiency pop-over"
+    [class.hidden]="!activePopup"
+    [class.search-popup]="isSearchPopup"
+    (click)="togglePopup()"
+  >
+    <div class="energy-efficiency label__big" (click)="togglePopup()">
+      <img
+        [class]="eelImageSize === 'small' ? 'image-small' : 'image-regular'"
+        src="{{ energyEfficiencyLabelImageUrl }}"
+        alt="Energy Efficiency Label Image"
+      />
+    </div>
+  </div>
+</div>

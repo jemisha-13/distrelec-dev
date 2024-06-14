@@ -1,0 +1,26 @@
+#
+# Import the webtrekk CMS content for Distrelec DE
+#
+$contentCatalog=distrelec_DEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$siteResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/essential/stores/distrelec/media/
+$cmsSiteUID=distrelec_DE
+
+# Set default values for wtAreaCode and wtActivateEventTracking
+$wtActivateEventTrackingDefault='add_products', 'add-cdo', 'acc-att', 'req-hbr', 'add-nsl', 'add-ltc', 'blk-afl', 'blk-acl', 'blk-asl', 'add-ltc', 'blk-rsl', 'cart', 'download', 'list', 'compare', 'favorite', 'print', 'share', 'nlt-nlt', 'nlt-snd', 'sup-sup', 'sup-snd', 'fdk-fdk', 'fdk-snd', 'srh-snd', 'spa-spa', 'spa-snd', 'req-hbr', 'req-snd'
+
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+
+####################
+# Webtrekk medias
+####################
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime
+;;WT_JS_FILE;webtrekk_v3.js;$siteResource/webtrekk_v3.js;application/x-javascript
+;;WT_JS_FILE_TEST;webtrekk_test_v4.js;$siteResource/webtrekk_test_v4.js;application/x-javascript
+
+
+# CMSSite settings
+UPDATE CMSSite;uid[unique=true];wtTrackId;wtTrackDomain;wtDomain;wtDefaultAreaCode;wtActivateEventTracking;wtBasicParameters(id);wtAdvancedParameters(key)
+;$cmsSiteUID;$config-webtrekk.id.distrelec_DE;wt.distrelec.com;$config-webtrekk.domain.distrelec_DE;cn;$wtActivateEventTrackingDefault;linkTrackStandard,heatmap_inactive,form0;linkTrackDownloads

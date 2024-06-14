@@ -1,0 +1,45 @@
+<h3>Post installations for QA & PROD</h3>
+
+
+
+<h4>Hybris Update:</h4>
+http://[app-node-0]:9001/hac/platform/update
+
+
+
+<h4>System Update:</h4>
+- nothing to do
+
+
+
+<h4>Run Impex:</h4>
+- /environment/release-notes/samples-scripts/impexScripts/removeAllMessageResourceTableEntries.impex
+- /distrelecB2Bcore/resources/distrelecB2Bcore/import/project/stores/distrelec_BE/site_nl.impex 
+ 
+Run beanshell script:
+v5.0.1/src/post_installations/main-replacing-for-FF.bs
+-> you dont need to wait until its finished, it will take some time...
+
+First appearance jobs fix:
+steps to fix the wrong first appearance dates on all products:
+1. reset all first appearance dates to null
+UPDATE products item_t0 SET item_t0.p_firstappearancedate = null
+check with:
+select count(*) from {Product as p} where {p.firstAppearanceDate} is not null
+2. reimport the export from PIM (ok to web attribute) -> first appearance update job, import from file:
+-> http://jira.distrelec.com/secure/attachment/23672/Export%20ok%20to%20web%20-%202016%2004%2020.csv
+3. run the update first appearance date job in incremental mode
+4. run the update first appearance date job in initial mode
+5. deactivate the initial mode on the first appearance date job
+
+<h4>Blog entries:</h4>
+- nothing to do
+
+
+
+<h4>Misc:</h4>
+- nothing to do
+
+
+<h4>Synchronization:</h4>
+- synchronize content catalog

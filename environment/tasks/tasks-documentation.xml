@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Documentation
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-documentation" basedir=".">
+
+
+	<!--
+	=================================
+	macro: listextensions
+	=================================
+	-->
+	<macrodef name="listextensions" description="Sets the default svn:ignore property to all extensions.">
+		<sequential>
+			<echo message="All extensions from extensionlist..." />
+			<for list="${extensionlist}" param="extension">
+				<sequential>
+					<echo message="- @{extension}" />
+				</sequential>
+			</for>
+			<echo message="All extensions from the second extensionlist..." />
+			<for list="${second.extensionlist}" param="extension">
+				<sequential>
+					<echo message="- @{extension}" />
+				</sequential>
+			</for>
+
+		</sequential>
+	</macrodef>
+	
+	<!--
+	=================================
+	macro: createapi
+	=================================
+	-->
+	<macrodef name="createapi" description="Creates for each extension the API Javadoc">
+		<sequential>
+			<for list="${extensionlist}" param="extension">
+				<sequential>
+					<if>
+						<available file="${hybris.extensions.home}/@{extension}/build.xml" />
+						<then>
+							<ant antfile="${hybris.extensions.home}/@{extension}/build.xml" dir="${hybris.extensions.home}/@{extension}" target="api" />
+						</then>
+						<else>
+							<echo message="No API doc for extension '@{extension}'." />
+						</else>
+					</if>
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+	
+	<!--
+	=================================
+	macro: createuml
+	=================================
+	-->
+	<macrodef name="createuml" description="Creates for each extension from its items.xml a UML XMI file">
+		<sequential>
+			<for list="${extensionlist}" param="extension">
+				<sequential>
+					<if>
+						<available file="${hybris.extensions.home}/@{extension}/build.xml" />
+						<then>
+							<ant antfile="${hybris.extensions.home}/@{extension}/build.xml" dir="${hybris.extensions.home}/@{extension}" target="uml" />
+						</then>
+						<else>
+							<echo message="No UML for extension '@{extension}'." />
+						</else>
+					</if>
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+
+</project>
+

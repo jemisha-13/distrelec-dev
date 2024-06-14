@@ -1,0 +1,83 @@
+$contentCatalog = distrelec_EEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/template_design/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate	; uid[unique = true]   	; name                    ; $contentCV[unique = true]; frontendTemplateName; active[default = true];restrictedPageTypes(code[default = ContentPage])
+							; CMS3PageTemplate 	 	; CMS3Page Template 	  ;                          ; layout/CMS3_template                        ;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; CMS3PageTemplate    ;                          ; $jarResourceCms/structure-view/structure_cms3PageTemplate.vm
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]             ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = CMS3PageTemplate], $contentCV)
+                                    ; cms3Logo  				     ;                          ; LogoSlot                    ; Logo        ;
+                                    ; cms3ServiceNav			  	 ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; cms3MainNav				     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; cms3FooterLinks	         	 ;                          ; FooterLinksSlot             ; FooterLinks ;     
+								   
+INSERT_UPDATE  ContentPage; uid[unique = true]; name         		; label         ; $contentCV[unique = true][default = $contentCV]	; defaultPage; masterTemplate(uid, $contentCV); approvalStatus(code)    
+						  ; cms3Page		  ; CMS3Page 	 		; CMS3Page	    ;                          							; true       ; CMS3PageTemplate	              ; approved				
+
+
+INSERT_UPDATE ContentSlotName	; name[unique = true]   	; template(uid, $contentCV)[unique = true][default = 'CMS3PageTemplate']	; validComponentTypes(code)
+								; cms3Logo          	   	;                                                                           ; SimpleBannerComponent
+								; cms3ServiceNav	       	;                                                                           ; CMSLinkComponent
+								; cms3MainNav 	         	;                                                                           ; DistMainNavigationComponent
+								; cms3_BannerContentSlot    ;                                                                           ; DesignBannerImgLeft,DesignSpacer, DesignText, DesignBannerImgRight, DesignTextImgVidRight, DesignBannerBgImgColour
+								; cms3_NavTextContentSlot   ;                                                                           ; DesignList, DesignSpacer, DesignText
+								; cms3_MainContentSlot      ;                                                                           ; DesignList, DesignSpacer, DesignText, DesignTextCol2, DesignImgVidTextCol2, DesignImgVidTextCol3, DesignTextCol3,DesignImgLogoTextBtnGrp, DesignImgLogoTextButton
+								; cms3_ImageVideoContentSlot;                                                                           ; DesignSpacer, DesignText, DesignImgVidTextCol2, DesignImgVidTextCol3
+								; cms3_BottomContentSlot    ;                                                                           ; DesignSpacer, DesignText, DesignTextCol2, DesignTextCol3
+
+INSERT_UPDATE DesignText			;$contentCV[unique=true]	;uid[unique=true]		;name							 ;&componentRef					;content;
+									;							;cms3DesignText-1		;CMS3 Paragraph1 COMPONENT 19    ;cms3DesignText-1				;Text;
+									;							;cms3DesignText-2		;CMS3 Paragraph2 COMPONENT 19    ;cms3DesignText-2				;Text;
+									;							;cms3NavText-1			;CMS3 Nav Text 1 COMPONENT 13    ;cms3NavText-1				 	;Nav Text 1;
+									;							;cms3NavText-2			;CMS3 Nav Text 2 COMPONENT 13    ;cms3NavText-2				 	;Nav Text 2;
+									;							;cms3NavText-3			;CMS3 Nav Text 3 COMPONENT 13    ;cms3NavText-3				 	;Nav Text 3;
+									;							;cms3NavText-4			;CMS3 Nav Text 4 COMPONENT 13    ;cms3NavText-4				 	;Nav Text 4;
+									;							;cms3NavText-5			;CMS3 Nav Text 5 COMPONENT 13    ;cms3NavText-5				 	;Nav Text 5;
+									;							;cms3NavText-6			;CMS3 Nav Text 6 COMPONENT 13    ;cms3NavText-6				    ;Nav Text 6;
+
+INSERT_UPDATE DesignTextCol2	;$contentCV[unique=true]	;uid[unique=true]		;name								;text1					;text2				
+								;							;cms3DesignTextCol2		;CMS3 DesignTextCol2		  		;Text 1					;Text 2									
+
+INSERT_UPDATE DesignSpacer		; uid[unique = true]        ; name                      ; $contentCV[unique = true]
+								; cms3DesignSpacer  		; CMS3 DesignSpacer 		;
+
+									
+INSERT_UPDATE DesignImgVidTextCol2	;$contentCV[unique=true]	;uid[unique=true]				;name								;image1(code, $contentCV)  		;video1(code, $contentCV)			;image2(code, $contentCV)  		;video2(code, $contentCV)   ;text1					;text2							
+									;							;cms3DesignImgVidTextCol2		;CMS3 DesignImgVidTextCol2		 	;imageComponent					;component14						;imageComponent					;component14				;ImgVidText 1			;ImgVidText 2		
+									
+INSERT_UPDATE DesignBannerImgLeft	; uid[unique = true]   		; name                       ; $contentCV[unique = true]	; buttonText[lang = en]	; buttonTextURL		 ; longtext[lang = en]   	; backgroundImage(code, $contentCV)
+									; cms3DesignBannerImgLeft   ; CMS3 DesignBannerImgLeft   ;                              ; Button                ; /   				 ; Text   				; banner2                
+
+
+INSERT_UPDATE DesignList	; uid[unique = true]              ; name                              	; $contentCV[unique = true]; listComponents(uid, $contentCV)
+							; cms3DesignList				  ; CMS3 Nav Text DesignList			;                          ; cms3NavText-1, cms3NavText-2, cms3NavText-3, cms3NavText-4, cms3NavText-5, cms3NavText-6
+
+
+INSERT_UPDATE ContentSlot	; uid[unique = true]                 	  ; name                     		; $contentCV[unique = true]	; cmsComponents(uid, $contentCV)
+							; cms3_BannerContentSlot     			  ; CMS3 Banner content slot      	;                          	; cms3DesignBannerImgLeft, cms3DesignSpacer
+							; cms3_NavTextContentSlot     			  ; CMS3 Nav Text slot	         	;                          	; cms3DesignList
+							; cms3_MainContentSlot				  	  ; CMS3 Main Content Slot 		 	;                          	; cms3DesignText-1, cms3DesignSpacer, cms3DesignText-2
+							; cms3_ImageVideoContentSlot		  	  ; CMS3 Image Video Content Slot 	;						   	; cms3DesignImgVidTextCol2
+							; cms3_BottomContentSlot			  	  ; CMS3 Bottom Content Slot		;							; cms3DesignTextCol2
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                 			; $contentCV[unique = true][default = $contentCV]					; contentSlot(uid, $contentCV)    		; page(uid, $contentCV)[unique = true]	; position
+								; cms3_BannerContentSlotForPage                  ;                          										; cms3_BannerContentSlot                ; cms3Page                        		; cms3_BannerContentSlot
+								; cms3_NavTextContentSlotForPage                 ;                          										; cms3_NavTextContentSlot               ; cms3Page                        		; cms3_NavTextContentSlot
+								; cms3_MainContentSlotForPage                    ;                          										; cms3_MainContentSlot                  ; cms3Page                        		; cms3_MainContentSlot
+								; cms3_ImageVideoContentSlotForPage              ;                          										; cms3_ImageVideoContentSlot            ; cms3Page                        		; cms3_ImageVideoContentSlot
+								; cms3_BottomContentSlotForPage                	;                          											; cms3_BottomContentSlot                ; cms3Page                        		; cms3_BottomContentSlot
+
+INSERT_UPDATE Media ; code[unique = true]         ; $contentCV[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = image/png];
+					; imageComponent	          ;                          ; $siteResource/imageComponent.png
+					; banner1             		  ;                          ; $siteResource/banner1.png
+					; banner2             		  ;                          ; $siteResource/banner2.png
+					; banner3             		  ;                          ; $siteResource/banner3.png
+					; logo    				      ;                          ; $siteResource/logo.png
+					; backBanner             	  ;                          ; $siteResource/backBanner.png
+
+INSERT_UPDATE DistVideoMedia; code[unique = true]          ; $contentCV[unique = true]; youtubeUrl;
+							; component14                  ;              			  ; https://www.youtube.com/embed/aQWUn8LTcsI

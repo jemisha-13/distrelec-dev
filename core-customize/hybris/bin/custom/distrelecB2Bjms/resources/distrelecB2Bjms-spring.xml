@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ [y] hybris Platform
+  ~ 
+  ~ Copyright (c) 2000-2016 SAP SE
+  ~ All rights reserved.
+  ~ 
+  ~ This software is the confidential and proprietary information of SAP 
+  ~ Hybris ("Confidential Information"). You shall not disclose such 
+  ~ Confidential Information and shall use it only in accordance with the 
+  ~ terms of the license agreement you entered into with SAP Hybris.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	
+    <bean id="distrelecB2BjmsSystemSetup" class="com.namics.distrelec.b2b.core.jms.setup.DistrelecB2BjmsSystemSetup">
+        <!-- constructor arg injection example -->
+        <constructor-arg ref="distrelecB2BjmsService"/>
+    </bean>
+
+    <bean id="distrelecB2BjmsService" class="com.namics.distrelec.b2b.core.jms.service.impl.DefaultDistrelecB2BjmsService">
+        <!-- setter injection example -->
+        <property name="modelService" ref="modelService"/>
+        <property name="mediaService" ref="mediaService"/>
+        <property name="flexibleSearchService" ref="flexibleSearchService"/>
+    </bean>
+			
+	<!--Embedded JMS configuration with security manager and broker.xml in same context -->
+	<alias name="jmsSecurityManager" alias="securityManager" />
+	<bean id="jmsSecurityManager" class="org.apache.activemq.artemis.spi.core.security.ActiveMQJAASSecurityManager">
+		<constructor-arg value="org.apache.activemq.artemis.spi.core.security.jaas.InVMLoginModule" />
+		<constructor-arg>
+			<bean class="org.apache.activemq.artemis.core.config.impl.SecurityConfiguration">
+				<constructor-arg name="users">
+					<map>
+						<entry key="${jms.queue.user.internal.linking}" value="${jms.queue.password.internal.linking}" />
+					</map>
+				</constructor-arg>
+				<constructor-arg name="roles">
+					<map>
+						<entry key="${jms.queue.user.internal.linking}">
+							<list>
+								<value>${jms.queue.role.admin.internal.linking}</value>
+							</list>
+						</entry>
+					</map>
+				</constructor-arg>
+				<property name="DefaultUser" value="${jms.queue.user.internal.linking}" />
+			</bean>
+		</constructor-arg>
+	</bean>
+	
+	<alias name="distEmbeddedJms" alias="embeddedJms" />
+	<bean id="distEmbeddedJms" class="org.apache.activemq.artemis.integration.spring.SpringJmsBootstrap" init-method="start" destroy-method="close">
+		<property name="SecurityManager" ref="securityManager" />
+		<property name="configResourcePath" value="broker-${tenantId}.xml" />
+	</bean>
+	
+	<!-- JMS Listener Configuration -->
+
+	<alias name="defaultMessageQueueErrorHandler" alias="messageQueueErrorHandler" />
+	<bean id="defaultMessageQueueErrorHandler" class="com.namics.distrelec.b2b.core.message.queue.error.DefaultMessageQueueErrorHandler">
+	</bean>
+
+	<alias name="defaultInternalLinkMessageQueueDao" alias="internalLinkMessageQueueDao" />
+	<bean id="defaultInternalLinkMessageQueueDao" class="com.namics.distrelec.b2b.core.message.queue.dao.DefaultInternalLinkMessageQueueDao" parent="abstractItemDao">
+		<property name="configurationService" ref="configurationService" />
+		<property name="sessionService" ref="sessionService" />
+	</bean>
+
+	<alias name="defaultInternalLinkMessageQueueService" alias="internalLinkMessageQueueService" />
+	<bean id="defaultInternalLinkMessageQueueService" class="com.namics.distrelec.b2b.core.message.queue.service.DefaultInternalLinkMessageQueueService">
+	</bean>
+
+	<bean id="abstractILMessageHandler" class="com.namics.distrelec.b2b.core.message.queue.handlers.AbstractILMessageHandler" abstract="true">
+		<property name="internalLinkMessageQueueService" ref="internalLinkMessageQueueService" />
+		<!--<property name="cassandraInternalLinkDataDao" ref="cassandraInternalLinkDataDao" />-->
+	</bean>
+
+	<bean id="productMessageHandler" class="com.namics.distrelec.b2b.core.message.queue.handlers.ProductILMessageHandler" parent="abstractILMessageHandler" />
+	<bean id="categoryMessageHandler" class="com.namics.distrelec.b2b.core.message.queue.handlers.CategoryILMessageHandler" parent="abstractILMessageHandler" />
+	<bean id="manufacturerMessageHandler" class="com.namics.distrelec.b2b.core.message.queue.handlers.ManufacturerILMessageHandler" parent="abstractILMessageHandler" />
+
+	<alias name="subCategoriesCountProcessCategoryDirectlyOrRecursivelyStrategy" alias="processCategoryDirectlyOrRecursivelyStrategy"/>
+	<bean id="productLineProcessCategoryDirectlyOrRecursivelyStrategy" class="com.namics.distrelec.b2b.core.message.queue.strategies.ProductLineProcessCategoryDirectlyOrRecursivelyStrategy"/>
+	<bean id="subCategoriesCountProcessCategoryDirectlyOrRecursivelyStrategy" class="com.namics.distrelec.b2b.core.message.queue.strategies.SubCategoriesCountProcessCategoryDirectlyOrRecursivelyStrategy"/>
+
+	<alias name="distMessageListenerAdapter" alias="messageListenerAdapter" />
+	<bean id="distMessageListenerAdapter" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		<property name="delegate" ref="messageQueueDelegate" />
+		<property name="defaultListenerMethod" value="handleILMessage" />
+	</bean>
+
+	<alias name="defaultMessageQueueDelegate" alias="messageQueueDelegate" />
+	<bean id="defaultMessageQueueDelegate" class="com.namics.distrelec.b2b.core.message.queue.receive.DefaultMessageQueueDelegate" />
+
+	<bean id="simpleMessageListenerContainer" class="org.springframework.jms.listener.SimpleMessageListenerContainer">
+		<property name="connectLazily" value="true"/>
+		<property name="destination" ref="jmsQueue"/>
+		<property name="messageConverter" ref="internalLinkMessageConverter"/>
+		<property name="messageListener" ref="messageListenerAdapter" />
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="errorHandler" ref="messageQueueErrorHandler" />
+	</bean>			
+
+</beans>

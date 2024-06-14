@@ -1,0 +1,33 @@
+# created based on restrictions on CH site:
+# select {sr.code},{sr.query},{ct.code} from {SearchRestriction as sr
+#    join Principal as p on {p.pk}={sr.principal}
+#    join ComposedType as ct on {ct.pk}={sr.restrictedType}}
+# where {p.uid}='distCallcenterUserGroup_CH'
+
+
+$isocode=FR
+$salesOrg=7900
+$site=distrelec_$isocode
+$callcentergroup=distCallcenterUserGroup_$isocode
+
+$defaultUserPassword=d1str313c!
+$passwordEncoding=md5
+$setPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultUserPassword']
+
+
+INSERT_UPDATE UserGroup;uid[unique=true]          ;locname[lang=en]            ;groups(uid)
+                       ;$callcentergroup;Callcenter User Group for $isocode;distCallcenterUserGroup
+
+INSERT_UPDATE SearchRestriction;code[unique=true]                    ;restrictedType(code);query;principal(uid)[default='$callcentergroup'];active[default=true];generate[default=false]
+                               ;Backend_B2BUnit_$isocode             ;B2BUnit             ;{salesOrg} in ({{ select {pk} from {DistSalesOrg} where {code} = '$salesOrg'}})
+                               ;Backend_Customer_$isocode            ;B2BCustomer         ;{defaultb2bunit} in ({{select {pk} from {B2BUnit} where {salesOrg} in ({{ select {pk} from {DistSalesOrg} where {code} = '$salesOrg'}})}})
+                               ;Backend_Address_$isocode             ;Address             ;{country} in ({{select {pk} from {country} where {isocode} in ('$isocode')}})
+                               ;Backend_Order_$isocode               ;Order               ;{site} in ({{select {pk} from {CMSSite} where {uid} in ('$site')}})
+                               ;Backend_OrderEntry_$isocode          ;OrderEntry          ;{order} in ({{ select {pk} from {Order} where {site} in ({{select {pk} from {CMSSite} where {uid} in ('$site')}}) }})
+                               ;Backend_OrderHistoryEntry_$isocode   ;OrderHistoryEntry   ;{order} in ({{ select {pk} from {Order} where {site} in ({{select {pk} from {CMSSite} where {uid} in ('$site')}}) }})
+                               ;Backend_SapReturnRequest_$isocode    ;SapReturnRequest    ;{salesOrgCode} = '$salesOrg'
+                               ;Backend_DistNetPromoterScore_$isocode;DistNetPromoterScore;{salesOrg} = '$salesOrg'
+
+# Distrelec call center user group
+INSERT_UPDATE Employee;UID[unique=true];$setPassword;description;name;groups(uid);sessionLanguage(isocode);sessionCurrency(isocode)
+                      ;callcenter.$isocode;;"Call center for$isocode";"Call Center $isocode";$callcentergroup;en;EUR

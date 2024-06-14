@@ -1,0 +1,1 @@
+gradlew configure -Penv=env-development

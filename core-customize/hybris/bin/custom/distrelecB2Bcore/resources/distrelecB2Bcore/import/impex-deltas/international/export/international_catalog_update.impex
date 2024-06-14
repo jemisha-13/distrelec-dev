@@ -1,0 +1,12 @@
+$contentCatalog=distrelec_IntContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$frContentCatalog=distrelec_FRContentCatalog
+$frOnlineContentCatalog=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $frContentCatalog]), CatalogVersion.version[default = Online])[default = $frContentCatalog:Online]
+
+#Add container for displaying country specific footer
+#FR
+INSERT_UPDATE DistLocalCatalogFilterComponentContainer;uid[unique=true]              ;$contentCV[unique=true];name                            ;applicableComponents(uid, $frOnlineContentCatalog)[mode=append]
+                                                      ;InternationalLogoContainer    ;                       ;International Logo Container    ;LogoComponent
+                                                      ;InternationalFooterContainer  ;                       ;International Footer Container  ;DistFooterComponent
+                                                      ;InternationalMainNavContainer ;                       ;International MainNav Container ;MainTopNavComponent

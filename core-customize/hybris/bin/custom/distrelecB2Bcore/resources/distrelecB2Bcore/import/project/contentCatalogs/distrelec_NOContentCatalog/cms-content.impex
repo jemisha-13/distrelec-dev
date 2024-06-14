@@ -1,0 +1,1314 @@
+##############################################################################################################
+# DON'T ADD INITIAL COMPONENTS IN THIS FILE, USE cms-content.impex OF THE distrelecB2Binitialdata INSTEAD!!! #
+# THIS IMPEX IS ONLY TO INSERT/UPDATE PAGE STRUCTURE (TEMPLATES, PAGES AND SLOTS)                            #
+##############################################################################################################
+
+#
+# Import the core CMS content for the Distrelec NO site
+#
+
+$contentCatalog=distrelec_NOContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+
+############################################################################################
+# Create Page Templates
+############################################################################################
+
+# These define the layout for pages
+# "FrontendTemplateName" is used to define the JSP that should be used to render the page for pages with multiple possible layouts.
+# "RestrictedPageTypes" is used to restrict templates to page types
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;HomePageTemplate;Home Page Template;layout/homePage;ContentPage
+;;TestHomePageTemplate;TestHome Page Template;layout/testhomePage;
+;;CategoryPageTemplate;Category Page Template;category/categoryPage;CategoryPage
+;;ProductListPageTemplate;Product List Page Template;category/productListPage;CategoryPage
+;;ProductDetailsPageTemplate;Product Details Page Template;product/productPage;ProductPage
+;;CatalogPlusProductDetailsPageTemplate;Product Details Page Template;product/catalogPlusProductPage;ProductPage
+;;SearchResultsListPageTemplate;Search Results List Page Template;search/searchListPage;
+;;SearchResultsEmptyPageTemplate;Search Results Empty Page Template;search/searchEmptyPage;
+;;ContentPageWithNavigationTemplate;Content Page With Navigation Template;layout/contentPageWithNavigation;ContentPage
+;;ContentPageWithoutNavigationTemplate;Content Page Without Navigation Template;layout/contentPageWithoutNavigation;ContentPage
+;;ShoppingListPageTemplate;Shopping List Page Template;/shopping/shoppingListPage;
+;;CompareListPageTemplate;Compare List Page Template;/compare/compareListPage;
+;;FeedbackPageTemplate;Feedback Page Template;/feedback/feedbackPage;
+;;SupportPageTemplate;Support Page Template;/support/supportPage;
+;;OfflineAddressChangePageTemplate;Offline Address Change Page Template;/infoCenter/addressChangePage;
+;;ManufacturerStoreDetailPageTemplate;Manufacturer Store Detail Page Template;manufacturer/manufacturerStoreDetailPage;DistManufacturerPage
+;;ManufacturerStoresPageTemplate;Manufacturer Stores Page Template;manufacturer/manufacturerStoresPage;
+;;NewsDetailPageTemplate;News Detail Page Template;layout/newsDetailPage;ContentPage
+;;JobDetailPageTemplate;Job Detail Page Template;layout/jobDetailPage;ContentPage
+;;ProductFinderPageTemplate;Product Finder Page Template;category/productFinderPage;CategoryPage
+;;ProductFinderResultPageTemplate;Product Finder Result Page Template;category/productFinderResultPage;CategoryPage
+;;NewsletterRegisterPageTemplate;Newsletter Register Page Template;newsletter/newsletterRegisterPage;
+;;CatalogOrderPageTemplate;Catalog Order Page Template;/infoCenter/catalogOrderPage;
+;;StorePageTemplate;Store Page Template;search/storePage;ContentPage;
+;;SearchFeedbackSentPageTemplate;Search Feedback Page Template;search/searchFeedbackSentPage;ContentPage;
+
+# Templates without a frontendTemplateName
+;;CartPageTemplate;Cart Page Template;
+;;CheckoutPageTemplate;Checkout Page Template;
+;;CheckoutPaymentPageTemplate;Checkout Payment Page Template;
+;;CheckoutPaymentUnknownErrorPageTemplate;Checkout Payment Unknown Error Page Template;
+;;OrderConfirmationPageTemplate;Order Confirmation Page Template;
+;;LoginPageTemplate;Login Page Template;
+;;RegisterPageTemplate;Register Page Template;
+;;AccountPageTemplate;Account Page Template;
+;;AccountWithoutNavPageTemplate;Account Without Navigation Page Template;
+;;ErrorPageTemplate;Error Page Template;
+;;ImportToolPageTemplate;Import Tool Page Template;
+;;NewsletterSuccessPageTemplate;Newsletter Success Page Template;
+;;NewsletterConfirmationPageTemplate;Newsletter Confirmation Page Template;
+;;EducationRegistrationPageTemplate;Education Registration Page Template;
+
+
+
+# Add Velocity templates that are in the CMS Cockpit. These give a better layout for editing pages
+# The FileLoaderValueTranslator loads a File into a String property. The templates could also be inserted in-line in this file.
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;HomePageTemplate      				;$jarResourceCms/structure-view/structure_homePageTemplate.vm
+;;TestHomePageTemplate     				;$jarResourceCms/structure-view/structure_homePageTemplate.vm
+;;CategoryPageTemplate      			;$jarResourceCms/structure-view/structure_categoryPageTemplate.vm
+;;ProductListPageTemplate   			;$jarResourceCms/structure-view/structure_productListPageTemplate.vm
+;;ProductDetailsPageTemplate			;$jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm
+;;CatalogPlusProductDetailsPageTemplate	;$jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm
+;;SearchResultsListPageTemplate 		;$jarResourceCms/structure-view/structure_searchResultsPageTemplate.vm
+;;SearchResultsEmptyPageTemplate		;$jarResourceCms/structure-view/structure_searchResultsEmptyPageTemplate.vm
+;;ContentPageWithNavigationTemplate     ;$jarResourceCms/structure-view/structure_contentPageWithNavigationTemplate.vm
+;;ContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_contentPageWithoutNavigationTemplate.vm
+;;ShoppingListPageTemplate				;$jarResourceCms/structure-view/structure_shoppingListPageTemplate.vm
+;;CompareListPageTemplate				;$jarResourceCms/structure-view/structure_compareListPageTemplate.vm
+;;FeedbackPageTemplate					;$jarResourceCms/structure-view/structure_feedbackPageTemplate.vm
+;;SupportPageTemplate					;$jarResourceCms/structure-view/structure_supportPageTemplate.vm
+;;OfflineAddressChangePageTemplate		;$jarResourceCms/structure-view/structure_offlineAddressChangePageTemplate.vm
+;;CartPageTemplate 		    			;$jarResourceCms/structure-view/structure_cartPageTemplate.vm
+;;CheckoutPageTemplate  				;$jarResourceCms/structure-view/structure_checkoutPageTemplate.vm
+;;CheckoutPaymentPageTemplate 		 	;$jarResourceCms/structure-view/structure_checkoutPaymentPageTemplate.vm
+;;CheckoutPaymentUnknownErrorPageTemplate;$jarResourceCms/structure-view/structure_checkoutPaymentUnknownErrorPageTemplate.vm
+;;OrderConfirmationPageTemplate			;$jarResourceCms/structure-view/structure_orderConfirmationPageTemplate.vm
+;;LoginPageTemplate       			  	;$jarResourceCms/structure-view/structure_loginPageTemplate.vm
+;;RegisterPageTemplate    			  	;$jarResourceCms/structure-view/structure_registerPageTemplate.vm
+;;AccountPageTemplate 					;$jarResourceCms/structure-view/structure_accountPageTemplate.vm
+;;AccountWithoutNavPageTemplate			;$jarResourceCms/structure-view/structure_accountWithoutNavPageTemplate.vm
+;;ErrorPageTemplate						;$jarResourceCms/structure-view/structure_errorPageTemplate.vm
+;;ManufacturerStoresPageTemplate		;$jarResourceCms/structure-view/structure_manufacturerStoresPageTemplate.vm
+;;ManufacturerStoreDetailPageTemplate	;$jarResourceCms/structure-view/structure_manufacturerStoreDetailPageTemplate.vm
+;;NewsDetailPageTemplate				;$jarResourceCms/structure-view/structure_newsDetailPageTemplate.vm
+;;JobDetailPageTemplate					;$jarResourceCms/structure-view/structure_jobDetailPageTemplate.vm
+;;ProductFinderPageTemplate				;$jarResourceCms/structure-view/structure_productFinderPageTemplate.vm
+;;ProductFinderResultPageTemplate		;$jarResourceCms/structure-view/structure_productFinderResultPageTemplate.vm
+;;ImportToolPageTemplate				;$jarResourceCms/structure-view/structure_importToolPageTemplate.vm
+;;NewsletterRegisterPageTemplate    	;$jarResourceCms/structure-view/structure_newsletterRegisterPageTemplate.vm
+;;NewsletterSuccessPageTemplate    		;$jarResourceCms/structure-view/structure_newsletterSuccessPageTemplate.vm
+;;NewsletterConfirmationPageTemplate    ;$jarResourceCms/structure-view/structure_newsletterConfirmationPageTemplate.vm
+;;CatalogOrderPageTemplate				;$jarResourceCms/structure-view/structure_catalogOrderPageTemplate.vm
+;;EducationRegistrationPageTemplate		;$jarResourceCms/structure-view/structure_educationRegistrationPageTemplate.vm
+;;StorePageTemplate						;$jarResourceCms/structure-view/structure_storePageTemplate.vm
+;;SearchFeedbackSentPageTemplate        ;$jarResourceCms/structure-view/structure_searchFeedbackSentPageTemplate.vm
+
+
+############################################################################################
+# Create Content Slot Names
+############################################################################################
+
+# Home Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='HomePageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TitleContent;;$distHeadlineComponent
+;HeroContent;;DistHeroRotatingTeaserComponent,DistExtHeroRotatingTeaserComponent
+;Content;;$distHome
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Test Home Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TestHomePageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TitleContent;;$distHeadlineComponent
+;HeroContent;;DistHeroRotatingTeaserComponent,DistExtHeroRotatingTeaserComponent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Product Details Page Template
+# The CrossSelling and Accessories slots are designed for related products, cross-sells and up-sells.
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductDetailsPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+;CalibrationServiceContentSlot;;$distHome
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CatalogPlusProductDetailsPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Product List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductListPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;CatDescriptionContent;;CMSParagraphComponent
+;TeaserContent;;$distTeaserContent
+;Content;;DistProductCarouselComponent,CMSParagraphComponent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Search Empty is displayed when no results are found
+# Search Results List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SearchResultsListPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TeaserContent;;$distTeaserContent
+;Content;;DistProductCarouselComponent,DistIframeComponent,CMSParagraphComponent,DistCategoryThumbsComponent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Category and Landing Pages are various layouts for a Category Landing page
+# Landing Pages are also good layouts for Homepages or general Content Pages
+# Category Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CategoryPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TeaserContent;;$distTeaserContent
+;Content;;DistProductCarouselComponent,DistIframeComponent,CMSParagraphComponent,DistCategoryThumbsComponent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ContentPageWithNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Shopping List pages
+# Shopping List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ShoppingListPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Compare List pages
+# Compare List Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CompareListPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Feedback Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='FeedbackPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TeaserContent;;$distTeaserContent
+;TopContent;;$distContent
+;BottomContent;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Support Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SupportPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TeaserContent;;$distTeaserContent
+;TopContent;;$distContent
+;BottomContent;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Offline Address Change Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OfflineAddressChangePageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TeaserContent;;$distTeaserContent
+;TopContent;;$distContent
+;BottomContent;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Error Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ErrorPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Search Results Empty Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SearchResultsEmptyPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;RecommendationContent;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Cart Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CartPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Login Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='LoginPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Register Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='RegisterPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Newsletter Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='NewsletterRegisterPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;NewsletterDescriptionContent;;CMSParagraphComponent
+;TeaserContent;;$distTeaserContent
+;Content;;DistProductCarouselComponent,CMSParagraphComponent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Order Confirmation Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='NewsletterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TeaserContent;;$distTeaserContent
+;TitleContent;;$distHeadlineComponent
+;TextImage;;$distTextImageContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Newsletter Confirmation Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='NewsletterConfirmationPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TitleContent;;$distHeadlineComponent
+;TextImage;;$distTextImageContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Education Registration Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='EducationRegistrationPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TeaserContent;;$distTeaserContent
+;TopContent;;$distContent
+;BottomContent;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Checkout Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CheckoutPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+# Checkout Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CheckoutPaymentPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+# Checkout Payment Unknown Error Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CheckoutPaymentUnknownErrorPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;Content;;$distCheckoutContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+# Order Confirmation Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderConfirmationPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TitleContent;;$distHeadlineComponent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+;TextImage;;$distTextImageContent
+;Carousel;;$distCarouselContent
+
+
+# Account Page Template (Template used for all of the Account pages)
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TeaserContent;;CMSParagraphComponent
+;Content;;CMSParagraphComponent,DistLeadTextComponent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Account Page Without navigation Template (Template used for all of the Account pages that have left navigation)
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountWithoutNavPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Manufacturer Stores Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ManufacturerStoresPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Manufacturer Store Detail Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ManufacturerStoreDetailPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# News Detail Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='NewsDetailPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Job Detail Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='JobDetailPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Simple Landing Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Product Finder Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductFinderPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Product Finder Result Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductFinderResultPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TeaserContent;;$distTeaserContent
+;Content;;DistProductCarouselComponent,CMSParagraphComponent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Import Tool Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ImportToolPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+# Store Page Templates (Outlet Store)
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='StorePageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;StoreContent;;$distStoreContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+############################################################################################
+# Create Content Slots
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;LogoSlot;Site Logo Slot;true
+;;ServiceNavSlot;Service Navigation Slot;true
+;;MainNavSlot;Main Naviagtion Slot;true
+;;ContentSlot;Content Slot;true
+;;SwynSlot;SWYN Slot;true
+;;FooterLinksSlot;Footer Links Slot;true
+;;CertLabelsSlot;Certification Labels Slot;true
+;;ImpressumSlot;Impressum Slot;true
+;;ConsistentWithSlot;Consistent with Slot;true
+;;RecommendationSlot;Recommendation Slot;true
+;;AlsoBoughtSlot;Also Bought Slot;true
+;;CalibrationServiceContentSlot;Calibration Service Content Slot; true
+
+# Catalog Order Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CatalogOrderPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TeaserContent;;$distTeaserContent
+;TopContent;;$distContent
+;BottomContent;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+############################################################################################
+# Bind Content Slots to Page Templates
+############################################################################################
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='HomePageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-HomePage;Logo;;LogoSlot;false
+;;ServiceNav-HomePage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-HomePage;MainNav;;MainNavSlot;false
+;;Swyn-HomePage;Swyn;;SwynSlot;false
+;;FooterLinks-HomePage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-HomePage;CertLabels;;CertLabelsSlot;false
+;;Impressum-HomePage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TestHomePageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TestHomePage;Logo;;LogoSlot;false
+;;ServiceNav-TestHomePage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TestHomePage;MainNav;;MainNavSlot;false
+;;Swyn-TestHomePage;Swyn;;SwynSlot;false
+;;FooterLinks-TestHomePage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TestHomePage;CertLabels;;CertLabelsSlot;false
+;;Impressum-TestHomePage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ProductDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ProductDetails;Logo;;LogoSlot;false
+;;ServiceNav-ProductDetails;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ProductDetails;MainNav;;MainNavSlot;false
+;;Swyn-ProductDetails;Swyn;;SwynSlot;false
+;;FooterLinks-ProductDetails;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ProductDetails;CertLabels;;CertLabelsSlot;false
+;;Impressum-ProductDetails;Impressum;;ImpressumSlot;false
+;;ConsistentWith-ProductDetails;ConsistentWith;;ConsistentWithSlot;false
+;;Recommendation-ProductDetails;Recommendation;;RecommendationSlot;false
+;;AlsoBought-ProductDetails;AlsoBought;;AlsoBoughtSlot;false
+;;CalibrationService-ProductDetails;CalibrationServiceContent;;CalibrationServiceContentSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CatalogPlusProductDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-CatalogPlusProductDetails;Logo;;LogoSlot;false
+;;ServiceNav-CatalogPlusProductDetails;ServiceNav;;ServiceNavSlot;false
+;;MainNav-CatalogPlusProductDetails;MainNav;;MainNavSlot;false
+;;Swyn-CatalogPlusProductDetails;Swyn;;SwynSlot;false
+;;FooterLinks-CatalogPlusProductDetails;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-CatalogPlusProductDetails;CertLabels;;CertLabelsSlot;false
+;;Impressum-CatalogPlusProductDetails;Impressum;;ImpressumSlot;false
+;;ConsistentWith-CatalogPlusProductDetails;ConsistentWith;;ConsistentWithSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SearchResultsListPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-SearchResultsList;Logo;;LogoSlot;false
+;;ServiceNav-SearchResultsList;ServiceNav;;ServiceNavSlot;false
+;;MainNav-SearchResultsList;MainNav;;MainNavSlot;false
+;;Swyn-SearchResultsList;Swyn;;SwynSlot;false
+;;FooterLinks-SearchResultsList;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-SearchResultsList;CertLabels;;CertLabelsSlot;false
+;;Impressum-SearchResultsList;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CategoryPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-CategoryPage;Logo;;LogoSlot;false
+;;ServiceNav-CategoryPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-CategoryPage;MainNav;;MainNavSlot;false
+;;Swyn-CategoryPage;Swyn;;SwynSlot;false
+;;FooterLinks-CategoryPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-CategoryPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-CategoryPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ProductListPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ProductListPage;Logo;;LogoSlot;false
+;;ServiceNav-ProductListPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ProductListPage;MainNav;;MainNavSlot;false
+;;Swyn-ProductListPage;Swyn;;SwynSlot;false
+;;FooterLinks-ProductListPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ProductListPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-ProductListPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ErrorPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ErrorPage;Logo;;LogoSlot;false
+;;ServiceNav-ErrorPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ErrorPage;MainNav;;MainNavSlot;false
+;;Swyn-ErrorPage;Swyn;;SwynSlot;false
+;;FooterLinks-ErrorPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ErrorPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-ErrorPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SearchResultsEmptyPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-SearchResultsEmptyPage;Logo;;LogoSlot;false
+;;ServiceNav-SearchResultsEmptyPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-SearchResultsEmptyPage;MainNav;;MainNavSlot;false
+;;Swyn-SearchResultsEmptyPage;Swyn;;SwynSlot;false
+;;FooterLinks-SearchResultsEmptyPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-SearchResultsEmptyPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-SearchResultsEmptyPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ContentPageWithNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ContentPageWithNavigation;Logo;;LogoSlot;false
+;;ServiceNav-ContentPageWithNavigation;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ContentPageWithNavigation;MainNav;;MainNavSlot;false
+;;Swyn-ContentPageWithNavigation;Swyn;;SwynSlot;false
+;;FooterLinks-ContentPageWithNavigation;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ContentPageWithNavigation;CertLabels;;CertLabelsSlot;false
+;;Impressum-ContentPageWithNavigation;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ShoppingListPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ShoppingList;Logo;;LogoSlot;false
+;;ServiceNav-ShoppingList;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ShoppingList;MainNav;;MainNavSlot;false
+;;Swyn-ShoppingList;Swyn;;SwynSlot;false
+;;FooterLinks-ShoppingList;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ShoppingList;CertLabels;;CertLabelsSlot;false
+;;Impressum-ShoppingList;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CompareListPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-CompareList;Logo;;LogoSlot;false
+;;ServiceNav-CompareList;ServiceNav;;ServiceNavSlot;false
+;;MainNav-CompareList;MainNav;;MainNavSlot;false
+;;Swyn-CompareList;Swyn;;SwynSlot;false
+;;FooterLinks-CompareList;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-CompareList;CertLabels;;CertLabelsSlot;false
+;;Impressum-CompareList;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='FeedbackPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-Feedback;Logo;;LogoSlot;false
+;;ServiceNav-Feedback;ServiceNav;;ServiceNavSlot;false
+;;MainNav-Feedback;MainNav;;MainNavSlot;false
+;;Swyn-Feedback;Swyn;;SwynSlot;false
+;;FooterLinks-Feedback;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-Feedback;CertLabels;;CertLabelsSlot;false
+;;Impressum-Feedback;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SupportPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-Support;Logo;;LogoSlot;false
+;;ServiceNav-Support;ServiceNav;;ServiceNavSlot;false
+;;MainNav-Support;MainNav;;MainNavSlot;false
+;;Swyn-Support;Swyn;;SwynSlot;false
+;;FooterLinks-Support;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-Support;CertLabels;;CertLabelsSlot;false
+;;Impressum-Support;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OfflineAddressChangePageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-OfflineAddressChange;Logo;;LogoSlot;false
+;;ServiceNav-OfflineAddressChange;ServiceNav;;ServiceNavSlot;false
+;;MainNav-OfflineAddressChange;MainNav;;MainNavSlot;false
+;;Swyn-OfflineAddressChange;Swyn;;SwynSlot;false
+;;FooterLinks-OfflineAddressChange;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-OfflineAddressChange;CertLabels;;CertLabelsSlot;false
+;;Impressum-OfflineAddressChange;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SearchFeedbackSentPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-SearchFeedbackSent;Logo;;LogoSlot;false
+;;ServiceNav-SearchFeedbackSent;ServiceNav;;ServiceNavSlot;false
+;;MainNav-SearchFeedbackSent;MainNav;;MainNavSlot;false
+;;Swyn-SearchFeedbackSent;Swyn;;SwynSlot;false
+;;FooterLinks-SearchFeedbackSent;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-SearchFeedbackSent;CertLabels;;CertLabelsSlot;false
+;;Impressum-SearchFeedbackSent;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CartPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-CartPage;Logo;;LogoSlot;false
+;;ServiceNav-CartPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-CartPage;MainNav;;MainNavSlot;false
+;;Swyn-CartPage;Swyn;;SwynSlot;false
+;;FooterLinks-CartPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-CartPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-CartPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='LoginPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-LoginPage;Logo;;LogoSlot;false
+;;ServiceNav-LoginPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-LoginPage;MainNav;;MainNavSlot;false
+;;Swyn-LoginPage;Swyn;;SwynSlot;false
+;;FooterLinks-LoginPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-LoginPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-LoginPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='RegisterPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-RegisterPage;Logo;;LogoSlot;false
+;;ServiceNav-RegisterPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-RegisterPage;MainNav;;MainNavSlot;false
+;;Swyn-RegisterPage;Swyn;;SwynSlot;false
+;;FooterLinks-RegisterPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-RegisterPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-RegisterPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='NewsletterRegisterPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-NewsletterRegisterPage;Logo;;LogoSlot;false
+;;ServiceNav-NewsletterRegisterPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-NewsletterRegisterPage;MainNav;;MainNavSlot;false
+;;Swyn-NewsletterRegisterPage;Swyn;;SwynSlot;false
+;;FooterLinks-NewsletterRegisterPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-NewsletterRegisterPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-NewsletterRegisterPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='NewsletterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-NewsletterSuccessPage;Logo;;LogoSlot;false
+;;ServiceNav-NewsletterSuccessPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-NewsletterSuccessPage;MainNav;;MainNavSlot;false
+;;Swyn-NewsletterSuccessPage;Swyn;;SwynSlot;false
+;;FooterLinks-NewsletterSuccessPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-NewsletterSuccessPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-NewsletterSuccessPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='NewsletterConfirmationPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-NewsletterConfirmationPage;Logo;;LogoSlot;false
+;;ServiceNav-NewsletterConfirmationPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-NewsletterConfirmationPage;MainNav;;MainNavSlot;false
+;;Swyn-NewsletterConfirmationPage;Swyn;;SwynSlot;false
+;;FooterLinks-NewsletterConfirmationPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-NewsletterConfirmationPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-NewsletterConfirmationPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='EducationRegistrationPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-EducationRegistrationPage;Logo;;LogoSlot;false
+;;ServiceNav-EducationRegistrationPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-EducationRegistrationPage;MainNav;;MainNavSlot;false
+;;Swyn-EducationRegistrationPage;Swyn;;SwynSlot;false
+;;FooterLinks-EducationRegistrationPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-EducationRegistrationPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-EducationRegistrationPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CheckoutPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-CheckoutPage;Logo;;LogoSlot;false
+#;;ServiceNav-CheckoutPage;ServiceNav;;ServiceNavSlot;false
+#;;MainNav-CheckoutPage;MainNav;;MainNavSlot;false
+#;;Swyn-CheckoutPage;Swyn;;SwynSlot;false
+#;;FooterLinks-CheckoutPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-CheckoutPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-CheckoutPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderConfirmationPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-OrderConfirmationPage;Logo;;LogoSlot;false
+;;ServiceNav-OrderConfirmationPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-OrderConfirmationPage;MainNav;;MainNavSlot;false
+;;Swyn-OrderConfirmationPage;Swyn;;SwynSlot;false
+;;FooterLinks-OrderConfirmationPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-OrderConfirmationPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-OrderConfirmationPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountPage;Logo;;LogoSlot;false
+;;ServiceNav-AccountPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountPage;MainNav;;MainNavSlot;false
+;;Swyn-AccountPage;Swyn;;SwynSlot;false
+;;FooterLinks-AccountPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountWithoutNavPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountWithoutNavPage;Logo;;LogoSlot;false
+;;ServiceNav-AccountWithoutNavPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountWithoutNavPage;MainNav;;MainNavSlot;false
+;;Swyn-AccountWithoutNavPage;Swyn;;SwynSlot;false
+;;FooterLinks-AccountWithoutNavPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountWithoutNavPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountWithoutNavPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ManufacturerStoresPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ManufacturerStoresPage;Logo;;LogoSlot;false
+;;ServiceNav-ManufacturerStoresPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ManufacturerStoresPage;MainNav;;MainNavSlot;false
+;;Swyn-ManufacturerStoresPage;Swyn;;SwynSlot;false
+;;FooterLinks-ManufacturerStoresPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ManufacturerStoresPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-ManufacturerStoresPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ManufacturerStoreDetailPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ManufacturerStoreDetailPage;Logo;;LogoSlot;false
+;;ServiceNav-ManufacturerStoreDetailPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ManufacturerStoreDetailPage;MainNav;;MainNavSlot;false
+;;Swyn-ManufacturerStoreDetailPage;Swyn;;SwynSlot;false
+;;FooterLinks-ManufacturerStoreDetailPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ManufacturerStoreDetailPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-ManufacturerStoreDetailPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='NewsDetailPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-NewsDetailPage;Logo;;LogoSlot;false
+;;ServiceNav-NewsDetailPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-NewsDetailPage;MainNav;;MainNavSlot;false
+;;Swyn-NewsDetailPage;Swyn;;SwynSlot;false
+;;FooterLinks-NewsDetailPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-NewsDetailPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-NewsDetailPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='JobDetailPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-JobDetailPage;Logo;;LogoSlot;false
+;;ServiceNav-JobDetailPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-JobDetailPage;MainNav;;MainNavSlot;false
+;;Swyn-JobDetailPage;Swyn;;SwynSlot;false
+;;FooterLinks-JobDetailPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-JobDetailPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-JobDetailPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ContentPageWithoutNavigation;Logo;;LogoSlot;false
+;;ServiceNav-ContentPageWithoutNavigation;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ContentPageWithoutNavigation;MainNav;;MainNavSlot;false
+;;Swyn-ContentPageWithoutNavigation;Swyn;;SwynSlot;false
+;;FooterLinks-ContentPageWithoutNavigation;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ContentPageWithoutNavigation;CertLabels;;CertLabelsSlot;false
+;;Impressum-ContentPageWithoutNavigation;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ProductFinderPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ProductFinderPage;Logo;;LogoSlot;false
+;;ServiceNav-ProductFinderPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ProductFinderPage;MainNav;;MainNavSlot;false
+;;Swyn-ProductFinderPage;Swyn;;SwynSlot;false
+;;FooterLinks-ProductFinderPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ProductFinderPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-ProductFinderPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ProductFinderResultPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ProductFinderResultPage;Logo;;LogoSlot;false
+;;ServiceNav-ProductFinderResultPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ProductFinderResultPage;MainNav;;MainNavSlot;false
+;;Swyn-ProductFinderResultPage;Swyn;;SwynSlot;false
+;;FooterLinks-ProductFinderResultPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ProductFinderResultPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-ProductFinderResultPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ImportToolPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ImportToolPage;Logo;;LogoSlot;false
+;;ServiceNav-ImportToolPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-ImportToolPage;MainNav;;MainNavSlot;false
+;;Swyn-ImportToolPage;Swyn;;SwynSlot;false
+;;FooterLinks-ImportToolPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-ImportToolPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-ImportToolPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CatalogOrderPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-CatalogOrderPage;Logo;;LogoSlot;false
+;;ServiceNav-CatalogOrderPage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-CatalogOrderPage;MainNav;;MainNavSlot;false
+;;Swyn-CatalogOrderPage;Swyn;;SwynSlot;false
+;;FooterLinks-CatalogOrderPage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-CatalogOrderPage;CertLabels;;CertLabelsSlot;false
+;;Impressum-CatalogOrderPage;Impressum;;ImpressumSlot;false
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='StorePageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-StorePage;Logo;;LogoSlot;false
+;;ServiceNav-StorePage;ServiceNav;;ServiceNavSlot;false
+;;MainNav-StorePage;MainNav;;MainNavSlot;false
+;;Swyn-StorePage;Swyn;;SwynSlot;false
+;;FooterLinks-StorePage;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-StorePage;CertLabels;;CertLabelsSlot;false
+;;Impressum-StorePage;Impressum;;ImpressumSlot;false
+
+############################################################################################
+# Create Content Pages
+############################################################################################
+
+# Site-wide Homepage
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;&pageRef;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='true']
+;;homepage;Homepage;homepage;HomePageTemplate;homepage;;;;
+;;testhomepage;Test Homepage;testhomepage;TestHomePageTemplate;testhomepage;;;false;
+
+# Preview Image for use in the CMS Cockpit for special ContentPages
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true]
+;;ContentPageModel_function_preview;text/gif;ContentPageModel_function_preview.gif;$jarResourceCms/preview-images/ContentPageModel_function_preview.gif
+
+# Functional Content Pages
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $contentCV)[default='ContentPageModel_function_preview']
+;;checkoutAddressPage;Checkout Address Page;CheckoutPageTemplate;checkoutAddress
+;;checkoutDetailPage;Checkout Detail Page;CheckoutPageTemplate;checkoutDetail
+;;checkoutReviewPage;Checkout Review Page;CheckoutPageTemplate;checkoutReview
+;;checkoutPaymentPage;Checkout Payment Page;CheckoutPaymentPageTemplate;checkoutPayment
+;;checkoutPaymentUnknownErrorPage;Checkout Payment Unknown Error Page;CheckoutPaymentUnknownErrorPageTemplate;checkoutPaymentUnknownError
+;;orderConfirmationPage;Order Confirmation Page;OrderConfirmationPageTemplate;orderConfirmation
+;;orderConfirmationPickupPage;Order Confirmation Pickup Page;OrderConfirmationPageTemplate;orderConfirmationPickup
+;;orderConfirmationApprovalPage;Order Confirmation Approval Page;OrderConfirmationPageTemplate;orderConfirmation
+;;cartPage;Cart Page;CartPageTemplate;cart
+;;search;Search Results Page;SearchResultsListPageTemplate;search
+;;unknownError;Technical Error Page;ErrorPageTemplate;unknownError
+;;login-data;Account Details Login Data Page;AccountPageTemplate;login-data
+;;company-information;Account Details Company Information Page;AccountPageTemplate;company-information
+;;company-user-management;Account Details User Management Page;AccountPageTemplate;company-user-management
+;;company-user-management-register-employee;Account Details User Management Register Employee Page;AccountWithoutNavPageTemplate;company-user-management-register-employee
+;;addresses;Account Details Addresses Page;AccountPageTemplate;addresses
+;;add-edit-address;Account Details Add/Edit Address Page;AccountWithoutNavPageTemplate;add-edit-address
+;;payment-and-delivery-options;Settings Payment & Delivery Options Page;AccountPageTemplate;payment-and-delivery-options
+;;order-history;Order Manager Order History Page;AccountPageTemplate;order-history
+;;open-orders;Order Manager Open Order History Page;AccountPageTemplate;open-orders
+;;open-order-details;Open Order Manager Order Details Page;AccountWithoutNavPageTemplate;open-order-details
+;;order-details;Order Manager Order Details Page;AccountWithoutNavPageTemplate;order-details
+;;return-items;Order Manager Return Items Page;AccountWithoutNavPageTemplate;return-items
+;;return-items-confirmation;Order Manager Return Items Confirmation Page;AccountWithoutNavPageTemplate;return-items-confirmation
+;;order-approval;Order Manager Order Approval Page;AccountPageTemplate;order-approval
+;;invoice-history;Order Manager Invoice History Page;AccountPageTemplate;invoce-history
+;;checkout-login;Checkout-Login Page;CheckoutPageTemplate;checkout-login
+;;checkout-register;Checkout-Register Page;CheckoutPageTemplate;checkout-register
+;;login;Login Page;LoginPageTemplate;login
+;;register;Register Page;RegisterPageTemplate;register
+;;notFound;Not Found Page;ErrorPageTemplate;notFound
+;;catplusAccessDenied;Catplus Access Denied Page;ErrorPageTemplate;catplusAccessDenied
+;;searchEmpty;Search Results Empty Page;SearchResultsEmptyPageTemplate;searchEmpty
+;;forgottenPassword;Forgotten Password Page;LoginPageTemplate;forgottenPassword
+;;updatePassword;Update Forgotten Password Page;LoginPageTemplate;updatePassword
+;;resendAccountActivationToken;Resend Account Activation Token Page;LoginPageTemplate;resendAccountActivationToken
+;;shopping;Shopping List Page;ShoppingListPageTemplate;shopping
+;;compare;Compare List Page;CompareListPageTemplate;compare
+;;feedback;Feedback Page;FeedbackPageTemplate;feedback
+#;;support;Support Page;SupportPageTemplate;support
+;;manufacturerStoresPage;Manufacturer Stores Page;ManufacturerStoresPageTemplate;manufacturer
+;;searchFeedbackSent;Search Feedback Sent Page;SearchFeedbackSentPageTemplate;searchFeedbackSent
+;;import-tool-upload;Import Tool Upload Page;ImportToolPageTemplate;import-tool-upload
+;;import-tool-matching;Import Tool Matching Page;ImportToolPageTemplate;import-tool-matching
+;;import-tool-review;Import Tool Review Page;ImportToolPageTemplate;import-tool-review
+;;setInitialPassword;Set initial Password Page;LoginPageTemplate;setInitialPassword
+;;ociPage;OCI Page;ContentPageWithNavigationTemplate;oci
+;;cxmlPage;CXML Page;ContentPageWithNavigationTemplate;cxml
+;;aribaPage;Ariba Page;ContentPageWithNavigationTemplate;ariba
+;;optOutInformationPage;Opt-Out Information Page;ContentPageWithNavigationTemplate;optOutInformation
+;;optOutSuccessPage;Opt-Out Success Page;ContentPageWithNavigationTemplate;optOutSuccess
+;;offlineAddressChangePage;Offline Address Change Page;OfflineAddressChangePageTemplate;address-change
+;;offlineAddressChangeSuccessPage;Offline Address Change Success Page;ContentPageWithNavigationTemplate;/address-change/success
+;;seminarRegistrationPage;Seminar Registration Page;ContentPageWithNavigationTemplate;seminarRegistration
+;;seminarRegistrationSuccessPage;Seminar Registration Success Page;ContentPageWithNavigationTemplate;/info-center/seminar/register/success
+;;catalogOrderPage;Catalog Order Page;CatalogOrderPageTemplate;catalog-order
+;;catalogOrderSuccessPage;Catalog Order Success Page;ContentPageWithNavigationTemplate;/catalog-order/success
+;;educationRegistrationPage;Education Registration Page;EducationRegistrationPageTemplate;educationRegistrationPage
+;;educationRegistrationSuccessPage;Education Registration Success Page;EducationRegistrationPageTemplate;educationRegistrationSuccessPage
+;;outletStorePage;Outlet Stores Page;StorePageTemplate;/clearance
+;;newStorePage;New Store Page;StorePageTemplate;new
+
+INSERT_UPDATE DistManufacturerPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage[default='true'];approvalStatus(code)[default='approved']
+;;manufacturerStoreDetailPage;Manufacturer Store Detail Page;ManufacturerStoreDetailPageTemplate
+
+
+############################################################################################
+# Home Page
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TitleContentSlot-Homepage;Title Content Slot for Homepage;true
+;;HeroContentSlot-Homepage;Hero Content Slot for Homepage;true
+;;ContentSlot-Homepage;Content Slot for Homepage;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='homepage'];contentSlot(uid,$contentCV)[unique=true]
+;;TitleContent-Homepage;TitleContent;;TitleContentSlot-Homepage
+;;HeroContent-Homepage;HeroContent;;HeroContentSlot-Homepage
+;;Content-Homepage;Content;;ContentSlot-Homepage
+
+
+
+############################################################################################
+# Test Home Page
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TitleContentSlot-TestHomepage;Title Content Slot for TestHomepage;true
+;;HeroContentSlot-TestHomepage;Hero Content Slot for TestHomepage;true
+;;ContentSlot-TestHomepage;Content Slot for TestHomepage;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='testhomepage'];contentSlot(uid,$contentCV)[unique=true]
+;;TitleContent-TestHomepage;TitleContent;;TitleContentSlot-TestHomepage
+;;HeroContent-TestHomepage;HeroContent;;HeroContentSlot-TestHomepage
+;;Content-TestHomepage;Content;;ContentSlot-TestHomepage
+
+
+
+############################################################################################
+# Product Detail Page
+############################################################################################
+
+INSERT_UPDATE ProductPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;productDetails;Default Product Details;ProductDetailsPageTemplate;true;
+;;catalogPlusProductDetailsPage;Default Product Details for Catalog Plus;CatalogPlusProductDetailsPageTemplate;false;
+
+
+
+############################################################################################
+# Category Page
+############################################################################################
+
+INSERT_UPDATE CategoryPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;category;Default Category Page;CategoryPageTemplate;true;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;ContentSlot-CategoryPage;Content Slot for CategoryPage;true
+;;TeaserContentSlot-CategoryPage;Teaser Content Slot for CategoryPage;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='category'];contentSlot(uid,$contentCV)[unique=true]
+;;Content-CategoryPage;Content;;ContentSlot-CategoryPage
+;;TeaserContent-CategoryPage;TeaserContent;;TeaserContentSlot-CategoryPage
+
+
+
+############################################################################################
+# Product List Page
+############################################################################################
+
+INSERT_UPDATE CategoryPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;productList;Default Product List;ProductListPageTemplate;false;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;CatDescriptionContentSlot-ProductListPage;Cat Description Content Slot for ProductListPage;true
+;;ContentSlot-ProductListPage;Content Slot for ProductListPage;true
+;;TeaserContentSlot-ProductListPage;Teaser Content Slot for ProductListPage;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='productList'];contentSlot(uid,$contentCV)[unique=true]
+;;CatDescriptionContent-ProductListPage;CatDescriptionContent;;CatDescriptionContentSlot-ProductListPage
+;;Content-ProductListPage;Content;;ContentSlot-ProductListPage
+;;TeaserContent-ProductListPage;TeaserContent;;TeaserContentSlot-ProductListPage
+
+
+
+############################################################################################
+# News Page
+############################################################################################
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;NewsPage;News Page;News;News;ContentPageWithNavigationTemplate;news;;;;NewsPage
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;ContentSlot-NewsPage;Content Slot for News Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;Content-NewsPage;Content;NewsPage;ContentSlot-NewsPage
+
+
+
+############################################################################################
+# Jobs Page
+############################################################################################
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;JobsPage;Jobs Page;Jobs;Jobs;ContentPageWithNavigationTemplate;jobs;;;;JobsPage
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;ContentSlot-JobsPage;Content Slot for Jobs Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;Content-JobsPage;Content;JobsPage;ContentSlot-JobsPage
+
+
+
+############################################################################################
+# FAQ Page
+############################################################################################
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;FaqPage;FAQ Page;FAQ;FAQ;ContentPageWithNavigationTemplate;faq;;;;FaqPage
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;ContentSlot-FaqPage;Content Slot for FAQ Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;Content-FaqPage;Content;FaqPage;ContentSlot-FaqPage
+
+
+
+############################################################################################
+# Terms and Condition Page
+############################################################################################
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;TermsConditionsPage;Terms and Conditions Page;Terms and Conditions;Nutzungsbedingungen;ContentPageWithNavigationTemplate;terms-conditions;;;;TermsConditionsPage
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;ContentSlot-TermsConditionsPage;Content Slot for Terms and Conditions Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;Content-TermsConditionsPage;Content;TermsConditionsPage;ContentSlot-TermsConditionsPage
+
+
+
+############################################################################################
+# Shipping Costs Page
+############################################################################################
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;ShippingCostsPage;Shipping Costs Page;Shipping Costs;Versandbedingungen;ContentPageWithNavigationTemplate;shipping;;;;ShippingCostsPage
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;ContentSlot-ShippingCostsPage;Content Slot for Shipping Costs Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;Content-ShippingCostsPage;Content;ShippingCostsPage;ContentSlot-ShippingCostsPage
+
+
+
+############################################################################################
+# Newsletter Register Page
+############################################################################################
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;NewsletterRegisterPage;Newsletter Register Page;Newsletter Register;Newsletter Registrierung;NewsletterRegisterPageTemplate;newsletter;;;;NewsletterRegisterPage
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;NewsletterDescriptionContentSlot-NewsletterRegisterPage;Newsletter Description Content Slot for NewsletterRegisterPage;true
+;;ContentSlot-NewsletterRegisterPage;Content Slot for NewsletterRegisterPage;true
+;;TeaserContentSlot-NewsletterRegisterPage;Teaser Content Slot for NewsletterRegisterPage;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;NewsletterDescriptionContent-NewsletterRegisterPage;NewsletterDescriptionContent;NewsletterRegisterPage;NewsletterDescriptionContentSlot-NewsletterRegisterPage
+;;Content-NewsletterRegisterPage;Content;NewsletterRegisterPage;ContentSlot-NewsletterRegisterPage
+;;TeaserContent-NewsletterRegisterPage;TeaserContent;NewsletterRegisterPage;TeaserContentSlot-NewsletterRegisterPage
+
+
+
+############################################################################################
+# Newsletter Success Page
+############################################################################################
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;NewsletterSuccessPage;Newsletter Success Page;NewsletterSuccessPageTemplate;newsletter/success;;;;NewsletterSuccessPage
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;HeadlineSlot-NewsletterSuccessPage;Headline Slot for NewsletterSuccessPage;true
+;;TextImageSlot-NewsletterSuccessPage;Text Image Slot for NewsletterSuccessPage;true
+;;TeaserContentSlot-NewsletterSuccessPage;Teaser Content Slot for NewsletterSuccessPage;true;
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;HeadlineSlot-NewsletterSuccessPage;TitleContent;NewsletterSuccessPage;HeadlineSlot-NewsletterSuccessPage
+;;TextImage-NewsletterSuccessPage;TextImage;NewsletterSuccessPage;TextImageSlot-NewsletterSuccessPage
+;;TeaserContent-NewsletterSuccessPage;TeaserContent;NewsletterSuccessPage;TeaserContentSlot-NewsletterSuccessPage
+
+
+
+############################################################################################
+# Newsletter Confirmation Page
+############################################################################################
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;NewsletterConfirmationPage;Newsletter Confirmation Page;NewsletterConfirmationPageTemplate;newsletter/confirm;;;;NewsletterConfirmationPage
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;HeadlineSlot-NewsletterConfirmationPage;Headline Slot for NewsletterConfirmationPage;true
+;;TextImageSlot-NewsletterConfirmationPage;Text Image Slot for NewsletterConfirmationPage;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;HeadlineSlot-NewsletterConfirmationPage;TitleContent;NewsletterConfirmationPage;HeadlineSlot-NewsletterConfirmationPage
+;;TextImage-NewsletterConfirmationPage;TextImage;NewsletterConfirmationPage;TextImageSlot-NewsletterConfirmationPage
+
+
+
+############################################################################################
+# Product EOL Page
+############################################################################################
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;ProductEolPage;Product EOL Page;Product EOL;Product EOL;ContentPageWithoutNavigationTemplate;productEOL;;;;ProductEolPage
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;ContentSlot-ProductEolPage;Content Slot for Product EOL Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;Content-ProductEolPage;Content;ProductEolPage;ContentSlot-ProductEolPage
+
+
+
+############################################################################################
+# Product Finder Result Page
+############################################################################################
+
+INSERT_UPDATE CategoryPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;productFinderResult;Default Product Finder Result;ProductFinderResultPageTemplate;false;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;ContentSlot-ProductFinderResultPage;Content Slot for ProductFinderResultPage;true
+;;TeaserContentSlot-ProductFinderResultPage;Teaser Content Slot for ProductFinderResultPage;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='productList'];contentSlot(uid,$contentCV)[unique=true]
+;;Content-ProductFinderResultPage;Content;;ContentSlot-ProductFinderResultPage
+;;TeaserContent-ProductFinderResultPage;TeaserContent;;TeaserContentSlot-ProductFinderResultPage
+
+
+
+############################################################################################
+# Payment Unknown Error Page
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;ContentSlot-CheckoutPaymentUnknownErrorPage;Content Slot for CheckoutPaymentUnknownError Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;Content-CheckoutPaymentUnknownErrorPage;Content;checkoutPaymentUnknownErrorPage;ContentSlot-CheckoutPaymentUnknownErrorPage
+
+
+
+############################################################################################
+# Order Confirmation Pages
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;HeadlineSlot-OrderConfirmation;Headline Slot for OrderConfirmation Page;true
+;;TextImageSlot-OrderConfirmation;Text Image Slot for OrderConfirmation Page;true
+;;CarouselSlot-OrderConfirmation;Carousel Slot for OrderConfirmation Page;true
+;;HeadlineSlot-OrderConfirmationPickup;Headline Slot for OrderConfirmation Pickup Page;true
+;;TextImageSlot-OrderConfirmationPickup;Text Image Slot for OrderConfirmation Pickup Page;true
+;;CarouselSlot-OrderConfirmationPickup;Carousel Slot for OrderConfirmation Pickup Page;true
+;;HeadlineSlot-OrderConfirmationApproval;Headline Slot for OrderConfirmation Approval Page;true
+;;TextImageSlot-OrderConfirmationApproval;Text Image Slot for OrderConfirmation Approval Page;true
+;;CarouselSlot-OrderConfirmationApproval;Carousel Slot for OrderConfirmation Approval Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;HeadlineSlot-OrderConfirmationPage;TitleContent;orderConfirmationPage;HeadlineSlot-OrderConfirmation
+;;TextImage-OrderConfirmationPage;TextImage;orderConfirmationPage;TextImageSlot-OrderConfirmation
+;;Carousel-OrderConfirmationPage;Carousel;orderConfirmationPage;CarouselSlot-OrderConfirmation
+;;HeadlineSlot-OrderConfirmationPickupPage;TitleContent;orderConfirmationPickupPage;HeadlineSlot-OrderConfirmationPickup
+;;TextImage-OrderConfirmationPickupPage;TextImage;orderConfirmationPickupPage;TextImageSlot-OrderConfirmationPickup
+;;Carousel-OrderConfirmationPickupPage;Carousel;orderConfirmationPickupPage;CarouselSlot-OrderConfirmationPickup
+;;HeadlineSlot-OrderConfirmationApprovalPage;TitleContent;orderConfirmationApprovalPage;HeadlineSlot-OrderConfirmationApproval
+;;TextImage-OrderConfirmationApprovalPage;TextImage;orderConfirmationApprovalPage;TextImageSlot-OrderConfirmationApproval
+;;Carousel-OrderConfirmationApprovalPage;Carousel;orderConfirmationApprovalPage;CarouselSlot-OrderConfirmationApproval
+
+
+
+############################################################################################
+# Store Page (Outlet Store)
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;StoreContentSlot-OutletStore;Store Content Slot For Outlet Store Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='productList'];contentSlot(uid,$contentCV)[unique=true]
+;;StoreContent-OutletStorePage;StoreContent;;StoreContentSlot-OutletStore
+
+############################################################################################
+# Store Page (New Store)
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;StoreContentSlot-NewStore;Store Content Slot For New Store Page;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='productList'];contentSlot(uid,$contentCV)[unique=true]
+;;StoreContent-NewStorePage;StoreContent;;StoreContentSlot-NewStore
+
+
+############################################################################################
+# Return & Claim
+############################################################################################
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $contentCV)[default='ContentPageModel_function_preview']
+;;returns-and-claims;Returns and Claims;AccountWithoutNavPageTemplate;/returns

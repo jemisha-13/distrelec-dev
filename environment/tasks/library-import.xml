@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Library Import
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-library-import" basedir=".">
+
+	<path id="xmltask.classpath">
+		<fileset dir="${environment.home}/libs/xmltask">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="svn.classpath">
+		<fileset dir="${environment.home}/libs/svnant">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="antcontrib.classpath">
+		<fileset dir="${environment.home}/libs/ant-contrib">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="yainput.classpath">
+		<fileset dir="${environment.home}/libs/yainput">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="ftp.classpath">
+		<fileset dir="${environment.home}/libs/ftp">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="classloader.classpath">
+		<fileset dir="${environment.home}/libs/classloader">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="hotswap.classpath">
+		<fileset dir="${environment.home}/libs/hotswap">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<path id="property-merge.classpath">
+		<fileset dir="${environment.home}/libs/property-merge">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<path id="ant-props.classpath">
+		<fileset dir="${environment.home}/libs/ant-props">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- load the yainput tasks (yet another input) for password input -->
+	<taskdef name="yainput" classname="com.shivprasad.anttask.YetAnotherInputTask" classpathref="yainput.classpath" />
+
+	<!-- load the svn task -->
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svn.classpath" />
+
+	<!-- load the ant-contrib task (foreach) -->
+	<typedef resource="net/sf/antcontrib/antlib.xml" classpathref="antcontrib.classpath" />
+
+	<!-- load the xmltask tasks -->
+	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltask.classpath"/>
+
+	<!-- class loader -->
+	<taskdef resource="net/jtools/classloadertask/antlib.xml" classpathref="classloader.classpath"/>
+
+	<!-- load the ftp tasks -->
+	<taskdef name="ftp" classname="org.apache.tools.ant.taskdefs.optional.net.FTP" classpathref="ftp.classpath"/>
+
+	<!-- load the scp libraries -->
+	<classloader loader="project">
+		<classpath>
+			<fileset dir="${environment.home}/libs/scp">
+				<include name="jsch-0.1.50.jar" />
+				<include name="ant-jsch-1.7.0.jar" />
+			</fileset>
+		</classpath>
+	</classloader>
+	
+	<!-- load the property merger tasks -->
+	<taskdef name="propertymerge" classname="org.jugbb.ant.propertymerge.PropertyMergeTask" classpathref="property-merge.classpath" />
+
+	<!-- load the hotswap tasks, see http://another-lazy-blogger.blogspot.com/2008/04/how-to-hotswap-classes-in-running.html -->
+	<taskdef name="hotswap" classname="dak.ant.taskdefs.Hotswap" classpathref="hotswap.classpath" />
+	
+	<typedef uri="antlib:org.apache.ant.props" resource="org/apache/ant/props/antlib.xml" classpathref="ant-props.classpath"/>
+</project>

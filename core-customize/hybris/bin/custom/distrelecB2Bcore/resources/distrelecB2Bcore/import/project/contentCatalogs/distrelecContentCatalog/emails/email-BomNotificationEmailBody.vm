@@ -1,0 +1,46 @@
+## messageSource=classpath:/distrelecB2Bcore/messages/$site/email-BomNotificationEmail_$lang.properties
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body style="padding: 0; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+    ## HEADER include
+    ${ctx.header}
+<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+        <tr>
+            <td style="border-collapse: collapse; border-right: 1px solid #cccccc; border-left: 1px solid #cccccc; padding: 20px;">
+                <p colspan="5" style="font-family: Arial, sans-serif; font-size:30px; font-weight:bold;color:#DF1417;">
+                    ${ctx.messages.introHi}
+                </p>
+                <p style="font-size: 14px; padding-bottom: 10px;">
+                    ${ctx.messages.bomFiles}
+                </p>
+                <p style="font-size: 14px; padding-bottom: 10px;">
+                    #foreach($entry in $ctx.unusedFiles)
+
+                        <br>$entry
+
+                    #end
+                </p>
+                <p style="font-size: 14px; padding-bottom: 10px;">
+                    ${ctx.messages.getMessage('letYouKnow',"${ctx.deleteDate}")} ${ctx.messages.orderContactDataEmail}
+                </p>
+                <p style="font-size: 14px; padding-bottom: 10px;">
+                    <a style="font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #AA1936; text-decoration:underline;" href="${ctx.secureUrl}/my-account/savedBomEntries"> ${ctx.messages.viewFiles} </a>
+                </p>
+                <p style="font-size: 14px; padding-bottom: 10px;">
+                    ${ctx.messages.kindRegards}
+                    <br>${ctx.messages.companyName}
+                </p>
+            </td>
+        </tr>
+    </table>
+	## FOOTER include
+	${ctx.footer}
+	</body>
+</html>

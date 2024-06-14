@@ -1,0 +1,136 @@
+
+$contentMasterCatalog=distrelecContentCatalog
+$contentCatalog=distrelec_TRContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$picture=media(code, $contentCV);
+$siteResource=jar:com.namics.distrelec.b2b.initialdata.constants.Namb2bacceleratorInitialDataConstants&/distrelecB2Binitialdata/import/project/contentCatalogs/$contentMasterCatalog
+
+# Language
+$lang=tr
+
+#E-Procurement
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;eprocurementHomepage;(tr)E-Procurement Homepage
+
+
+# Site Logo Component
+UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang];localizedUrlLink[lang=$lang]
+;;LogoComponent;/images/theme/distrelec_logo.png;"/"
+
+
+# Site Certification Logos Component
+UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang];localizedUrlLink[lang=$lang]
+;;CertLabelTuvComponent;/images/certlabels/logo-tuv.png;"/"
+;;CertLabelEhiComponent;/images/certlabels/logo-ehi.png;"/"
+;;CertLabelTrustedShopsComponent;/images/certlabels/logo-trustedshops.png;"/"
+
+
+# CMS Link Components
+UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];localizedUrl[lang=$lang];linkName[lang=$lang]
+;;ImportToolPageLink;"/import-tool";(tr)List import
+;;ImpressumPageLink;;(tr)Impressum
+;;DisclaimerPageLink;;(tr)Disclaimer
+;;FacebookLink;"https://www.facebook.com/DistrelecSwitzerland";Facebook
+;;TwitterLink;"https://twitter.com/distrelec";Twitter
+;;GoogleLink;"https://plus.google.com/111961224551489786574";Google+
+
+
+# CMS Headline Component
+UPDATE DistHeadlineComponent;$contentCV[unique=true];uid[unique=true];headline[lang=$lang]
+;;OrderConfirmationHeadlineComponent;(tr)Thank You for shopping at Distrelec!
+;;OrderConfirmationPickupHeadlineComponent;(tr)Thank You for shopping at Distrelec!
+;;OrderConfirmationApprovalHeadlineComponent;(tr)Your order has been forwarded to your administrator for approval!
+
+
+# CMS ProductReferences Components
+UPDATE DistProductReferencesCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang] 
+;;ConsistentWithProductReferencesComponent;(tr)Consistent with;
+
+UPDATE DistProductFFCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;RecommendationProductFFComponent;(tr)Recommended Products;
+;;AlsoBoughtProductFFComponent;(tr)People who bought this product also bought;
+
+
+# CMS Navigation Nodes
+UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;SiteRootNode;(tr)SiteRoot
+;;MainNavNode;(tr)Main Navigation
+;;FooterNavNode;(tr)Footer Navigation
+##
+;;SupportAndServicesNavNode;(tr)Support and Services 
+;;SupportNavNode;(tr)Support
+;;TechnicalSupportNavNode;(tr)Technical Support
+;;CalibrationServiceNavNode;(tr)Calibration Service
+;;FaqNavNode;(tr)FAQ
+##
+;;InfoCenterNavNode;(tr)Info Center
+;;AboutUsNavNode;(tr)About us
+;;SeminarsNavNode;(tr)Seminars
+;;NewsNavNode;(tr)News
+;;LegalsNavNode;(tr)Legals
+;;ImprintNavNode;(tr)Imprint
+;;PressNavNode;(tr)Press
+;;CatalogOrderNavNode;(tr)Order Catalog
+##
+;;ManufacturerStoresNavNode;(tr)Manufacture Stores
+;;CiscoNavNode;Cisco
+;;SonyNavNode;Sony
+;;AgilentNavNode;Agilent
+;;FlukeNavNode;Fluke
+;;AspNavNode;ASP
+;;AmprobeNavNode;Amprobe
+;;BrotherNavNode;Brother
+;;PanasonicNavNode;Panasonic
+;;KingstonNavNode;Kingston
+;;DevoloNavNode;Devolo
+##
+;;ToolsNavNode;(tr)Tools
+;;ListImportToolsNavNode;(tr)List Import Tools
+;;DirectOrderNavNode;(tr)Direct Order
+;;IPhoneNavNode;(tr)IPhone
+;;DistrelecMobileAppsNavNode;(tr)Distrelec Mobile Apps
+
+
+######  Distrelec Cart Page ######
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;EmptyCartParagraphComponent;"<h2>(tr)Your shopping cart is empty</h2><p>Suggestions</p><ul><li>Browse our products by selecting a category above</li></ul>";
+
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;PaymentInfoParagraphComponent;<h2>(tr)Pay with DeuCS</h2><p>Infos:</p><ul><li>easy payment</li></ul>;
+
+
+###### Distrelec MyAccount Page ######
+UPDATE DistLeadTextComponent;$contentCV[unique=true];uid[unique=true];leadTitle[lang=$lang];leadText[lang=$lang]
+;;CompanyInformationLeadTextComponent;(tr)Company Data;(tr)To change your basic company data, please contact the <a href="https://www.elfaelektronik.dk/elfa3~dk_da/elfa/init.do?page=contact">Distrelec Support</a>;
+
+
+# Dist Product Carousel Components
+UPDATE DistProductCarouselComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;TopProductsComponent;(tr)Top Products
+;;NewProductsComponent;(tr)New Products
+
+# Checkout Payment Unknown Error Paragraph
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;CheckoutPaymentUnknownErrorParagraphComponent;(tr)An unknown error occured on payment. Please contact the Distrelec help line.
+
+
+############################################################################################
+# Webtrekk Opt-Out Information Page
+############################################################################################
+
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+# Load the webtrekk redirect url config param
+$optOutRedirectPath=/cms/optOutSuccess
+$optOutRedirectUrl=$config-website.distrelec_TR.http$optOutRedirectPath
+
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+;;OptOutInformationText;"<a href=""http://optout.webtrekk.net/optout.php?r=$optOutRedirectUrl"">(tr)Webtrekk Opt-Out Link</a>"
+
+############################################################################################
+# Webtrekk Opt-Out Cookie Notice
+############################################################################################
+
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
+;;CookieNoticeMoreInfoLink;"(tr)More Information"

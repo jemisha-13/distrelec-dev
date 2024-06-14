@@ -1,0 +1,94 @@
+$contentCatalog = distrelec_PLContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/template_design/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; Brand1Template		 ; Brand1 Template		   ;                          ; layout/brand1_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; Brand1Template    ;                          ; $jarResourceCms/structure-view/structure_brand1PageTemplate.vm
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]             ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = Brand1Template], $contentCV)[unique=true]
+                                    ; brand1_Logo   			     ;                          ; LogoSlot                    ; Logo        ;
+                                    ; brand1_ServiceNav			  	 ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; brand1_MainNav			     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; brand1_FooterLinks  		     ;                          ; FooterLinksSlot 	          ; FooterLinks ;     
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]; name         		; label      	  	; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV); approvalStatus(code)
+							; brand1Template     ; Brand1Template 	; Brand1Template   	;                          ; true       ; Brand1Template		             ; approved
+
+
+INSERT_UPDATE ContentSlotName	; name[unique = true] 			; template(uid, $contentCV)[unique = true][default = 'Brand1Template']		; validComponentTypes(code)
+								; brand1_Logo   				;                                                                           ; SimpleBannerComponent
+								; brand1_ServiceNav				;                                                                           ; CMSLinkComponent
+								; brand1_MainNav				;                                                                           ; DistMainNavigationComponent
+								; brand1BannerContentSlot     	;                                                              				; DesignSpacer, DesignText, DesignBannerImgRight, DesignTextImgVidRight, DesignBannerBgImgColour, DesignBannerImgLeft
+								; brand1MainContentSlot       	;                                                              				; DesignImgVidTextCol3, DesignTextCol3, DesignSpacer, DesignText, DesignTextCol2,DesignList, DesignImgVidTextCol2
+								; brand1Component11ContentSlot1	;                                                                           ; DesignImgLogoTextBtnGrp, DesignImgLogoTextButton, DesignSpacer, DesignText
+								; brand1Component11ContentSlot2	;                                                                           ; DesignImgLogoTextBtnGrp, DesignImgLogoTextButton, DesignSpacer, DesignText
+								; brand1BottomContentSlot     	; 		                                               						; DesignSpacer, DesignText, DesignBannerImgRight, DesignTextImgVidRight, DesignBannerBgImgColour, DesignBannerImgLeft
+
+INSERT_UPDATE DesignText		;$contentCV[unique=true]	;uid[unique=true]				;name								;&componentRef				;content
+								;							;brand1DesignText-1				;Brand1 Paragraph1 DesignText	    ;brand1DesignText-1			;Text
+								;							;brand1DesignText-2				;Brand1 Paragraph2 DesignText    	;brand1DesignText-2			;Text
+
+INSERT_UPDATE DesignTextCol3	;$contentCV[unique=true]	;uid[unique=true]		;name							;text1					;text2				;text3
+								;							;brand1DesignTextCol3	;Brand1 DesignTextCol3  		;Text 1					;Text 2				;Text 3					
+									
+INSERT_UPDATE DesignImgVidTextCol3	;$contentCV[unique=true]	;uid[unique=true]				;name							;image1(code, $contentCV)  		;video1(code, $contentCV)			;image2(code, $contentCV)  		;video2(code, $contentCV)			;image3(code, $contentCV)  		;video3(code, $contentCV)	;text1					;text2				;text3	
+									;							;brand1DesignImgVidTextCol3		;Brand1 DesignImgVidTextCol3 	;imageComponent					;component14						;imageComponent					;component14						;imageComponent					;component14		        ;ImgVidText 1			;ImgVidText 2		;ImgVidText 3
+									
+
+INSERT_UPDATE DesignSpacer		; uid[unique = true]                  ; name                          ; $contentCV[unique = true]
+								; brand1DesignSpacer  				  ; Brand1 DesignSpacer 		  ;
+
+
+INSERT_UPDATE DesignBannerImgRight	; uid[unique = true]   		    ; name                         ; $contentCV[unique = true]  ; buttonText[lang = en] ; buttonTextURL  	; longtext[lang = en]   ; backgroundImage(code, $contentCV)
+								    ; brand1DesignBannerImgRight    ; Brand1 DesignBannerImgRight  ;                            ; Button                ; /   				; Text   			; banner1                
+
+INSERT_UPDATE DesignTextImgVidRight	; uid[unique = true]   				; name                         ; $contentCV[unique = true]	; image(code, $contentCV)	; headline[lang = en]  ; longtext[lang = en]      ; video(code, $contentCV)
+									; brand1DesignTextImgVidRight		; Brand1 DesignTextImgVidRight ;                          	; banner2				    ; Text      			; Text     				; component16             
+
+INSERT_UPDATE DesignBannerBgImgColour	; uid[unique = true]   				; name                         		; $contentCV[unique = true] ; buttonText[lang = en] ; buttonTextURL  	; longtext[lang = en]   ; backgroundColor ; backgroundImage(code, $contentCV)
+										; brand1DesignBannerBgImgColour		; Brand1 DesignBannerBgImgColour    ;                           ; Button                ; /			    	; Text   			;                 ; banner3                
+
+INSERT_UPDATE DesignImgLogoTextButton	; uid[unique = true]        	; name                          	; $contentCV[unique = true] ; longtext			; logo(code, $contentCV)	; image(code, $contentCV)	; buttonText	; buttonTextURL
+								; brand1DesignImgLogoTextButton-1 		; Brand1 DesignImgLogoTextButton1	;							; Text			; logo						; imageComponent 			; Button		;/
+								; brand1DesignImgLogoTextButton-2		; Brand1 DesignImgLogoTextButton2	;							; Text          ; logo                      ; imageComponent			; Button        ;/	
+								; brand1DesignImgLogoTextButton-3		; Brand1 DesignImgLogoTextButton3	;							; Text			; logo	                    ; imageComponent			; Button        ;/
+								; brand1DesignImgLogoTextButton-4 		; Brand1 DesignImgLogoTextButton4	;							; Text			; logo						; imageComponent 			; Button        ;/
+								; brand1DesignImgLogoTextButton-5		; Brand1 DesignImgLogoTextButton5	;							; Text          ; logo                      ; imageComponent			; Button        ;/
+								; brand1DesignImgLogoTextButton-6		; Brand1 DesignImgLogoTextButton6	;							; Text			; logo	                    ; imageComponent			; Button        ;/
+				
+										
+										
+INSERT_UPDATE DesignImgLogoTextBtnGrp	; uid[unique = true]                	; name                              ; $contentCV[unique = true] ; component1(uid, $contentCV)				; component2(uid, $contentCV)				; component3(uid, $contentCV)
+									; brand1DesignImgLogoTextBtnGrp-1 			; Brand1 DesignImgLogoTextBtnGrp1	;							; brand1DesignImgLogoTextButton-1			; brand1DesignImgLogoTextButton-2			; brand1DesignImgLogoTextButton-3
+									; brand1DesignImgLogoTextBtnGrp-2 			; Brand1 DesignImgLogoTextBtnGrp2	;							; brand1DesignImgLogoTextButton-4			; brand1DesignImgLogoTextButton-5			; brand1DesignImgLogoTextButton-6
+								
+
+INSERT_UPDATE ContentSlot	; uid[unique = true]                    ; name                             ; $contentCV[unique = true]	; cmsComponents(uid, $contentCV)
+							; brand1BannerContentSlot     		  	; Brand1 Banner content slot       ;                          	; brand1DesignBannerImgRight,brand1DesignSpacer,brand1DesignTextImgVidRight,brand1DesignSpacer
+							; brand1MainContentSlot					; Brand1 Main Content Slot 		   ;                          	; brand1DesignText-1, brand1DesignImgVidTextCol3, brand1DesignTextCol3,brand1DesignSpacer, brand1DesignText-2
+							; brand1Component11ContentSlot1			; Brand1 ImageLogo Content Slot 1  ;						    ; brand1DesignImgLogoTextBtnGrp-1
+							; brand1Component11ContentSlot2			; Brand1 ImageLogo Content Slot 2  ;						    ; brand1DesignImgLogoTextBtnGrp-2
+							; brand1BottomContentSlot				; Brand1 Bottom Content Slot	   ;							; brand1DesignSpacer, brand1DesignBannerBgImgColour
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                   	  	   ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       	; page(uid, $contentCV)[unique = true]	; position
+								; brand1_BannerContentSlotForPage              ;                          ; brand1BannerContentSlot           	; brand1Template                        ; brand1BannerContentSlot
+								; brand1_MainContentSlotForPage		       	   ;                          ; brand1MainContentSlot		      	; brand1Template                        ; brand1MainContentSlot
+								; brand1_ImageLogoContentSlot1ForPage	       ;                          ; brand1Component11ContentSlot1	    ; brand1Template                        ; brand1Component11ContentSlot1
+								; brand1_ImageLogoContentSlot2ForPage	       ;                          ; brand1Component11ContentSlot2	    ; brand1Template                        ; brand1Component11ContentSlot2
+								; brand1_BottomContentSlotForPage		       ;                          ; brand1BottomContentSlot		   		; brand1Template                        ; brand1BottomContentSlot
+
+INSERT_UPDATE Media	; code[unique = true]         ; $contentCV[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = image/png];
+					; imageComponent	          ;                          ; $siteResource/imageComponent.png
+					; banner1             		  ;                          ; $siteResource/banner1.png
+					; banner2             		  ;                          ; $siteResource/banner2.png
+					; banner3             		  ;                          ; $siteResource/banner3.png
+					; logo    				      ;                          ; $siteResource/logo.png
+
+INSERT_UPDATE DistVideoMedia; code[unique = true]          ; $contentCV[unique = true]; youtubeUrl;
+							; component14                  ;              			  ; https://www.youtube.com/embed/aQWUn8LTcsI
+							; component16                  ;              			  ; https://www.youtube.com/embed/aQWUn8LTcsI

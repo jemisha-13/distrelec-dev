@@ -1,0 +1,47 @@
+<a
+  class="card-item-anchor"
+  [id]="'pdp_alternative_item_' + index"
+  [externalRouterLink]="product?.target.url + '?itemList=' + itemListEntity"
+  [title]="product?.target.name"
+  (click)="trackProductClick(product, index)"
+>
+  <span *ngIf="product.referenceType === 'DIS_ALTERNATIVE_SIMILAR'" class="item-alternate-category">
+    {{ 'product.alternate_category.similar' | cxTranslate }}
+  </span>
+  <span *ngIf="product.referenceType === 'DIS_ALTERNATIVE_BETTERVALUE'" class="item-alternate-category">
+    {{ 'product.alternate_category.better_value' | cxTranslate }}
+  </span>
+  <span *ngIf="product.referenceType === 'DIS_ALTERNATIVE_DE'" class="item-alternate-category">
+    {{ 'product.alternate_category.direct_equivalent' | cxTranslate }}
+  </span>
+  <span *ngIf="product.referenceType === 'DIS_ALTERNATIVE_UPGRADE'" class="item-alternate-category">
+    {{ 'product.alternate_category.upgrade' | cxTranslate }}
+  </span>
+  <div class="card-item">
+    <div class="card-item__image">
+      <img
+        [src]="findPortraitSmall()"
+        [title]="product?.target.name"
+        [alt]="product?.target.name"
+        width="46"
+        height="26"
+      />
+    </div>
+    <div class="card-item__content">
+      <h3 class="content-title" [innerHtml]="product?.target.name"></h3>
+      <div *ngIf="alternativeStock$ as alternativeStock" class="stock">
+        <ng-container *ngIf="alternativeStock?.stockLevelTotal > 0">
+          {{ 'product.stock_details.stock' | cxTranslate }}
+          <span class="stock-total">{{ alternativeStock?.stockLevelTotal }}</span>
+        </ng-container>
+        <ng-container *ngIf="alternativeStock?.stockLevelTotal === 0">
+          <span>{{ 'product.message.status.30.31' | cxTranslate }}</span>
+        </ng-container>
+      </div>
+      <span *ngIf="price$ | async as price" class="price">
+        {{ price.price?.currencyIso }}
+        {{ price.price?.value | volumePrice: price.price?.currencyIso : currentChannel }}
+      </span>
+    </div>
+  </div>
+</a>

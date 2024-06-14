@@ -1,0 +1,136 @@
+
+/******************************************************
+ *
+ * Object Classes and Mixins
+ *
+ *****************************************************/
+
+
+/*
+ * Captcha
+ */
+.captcha {
+	&.error {
+		.field {
+			border: 2px solid @c-redC;
+		}
+	}
+}
+
+
+/*
+ * Popovers
+ *
+ * use this mixin to get the correct color and arrow for your use
+ */
+
+.popover-variation(@color, @bgc, @placement) {
+
+	.popover-arrow('top') {
+		&.top .arrow {
+			border-top-color: @bgc;
+		}
+	}
+	.popover-arrow('right') {
+		&.right .arrow {
+			border-right-color: @bgc;
+		}
+	}
+	.popover-arrow('bottom') {
+		&.bottom .arrow {
+			border-bottom-color: @bgc;
+		}
+	}
+	.popover-arrow('left') {
+		&.left .arrow {
+			border-left-color: @bgc;
+		}
+	}
+	.popover {
+		background-color: @bgc;
+		color: @color;
+
+		.popover-arrow(@placement);
+	}
+
+	.popover-title, .popover-content {
+		// Review: KR: Red on white
+		color: @color;
+	}
+}
+
+
+
+/*
+ *
+ * Object Mixins
+ *
+ */
+
+#obj {
+
+	//
+	// show more styling
+	// use: <a class="show-more-link" href=""><i></i> Show More</a> and then apply #obj > .show-more-link() as mixin
+	.show-more-link {
+
+		display: block;
+		padding: 13px 40px 0 9px;
+		height: 47px;
+		outline: 0;
+		border-bottom: 1px solid @c-grey80;
+
+		.lt-ie8 & {
+			height: 34px;
+		}
+
+		i {
+			.s-objects-show-more-button-white();
+			display: inline-block;
+			float: left;
+			margin-top: -1px;
+			margin-right: 10px;
+		}
+
+		&:hover i {
+			.s-objects-show-more-button-blue();
+			display: inline-block;
+		}
+
+		&.is-expanded {
+
+			i {
+				.s-objects-show-more-button-expanded-white();
+				display: inline-block;
+				float: left;
+				margin-top: -1px;
+				margin-right: 10px;
+			}
+
+			&:hover i {
+				.s-objects-show-more-button-expanded-blue();
+				display: inline-block;
+			}
+
+		}
+	}
+
+	// Close Button for Lightboxes, MetaHd Popdowns..
+	.close-button {
+
+		.ir();
+		.s-objects-close-button-white();
+		display: inline-block;
+
+		&:hover {
+			.s-objects-close-button-blue();
+			display: inline-block;
+			transition: none;
+		}
+		&:active {
+			.s-objects-close-button-white();
+			display: inline-block;
+		}
+	}
+
+}

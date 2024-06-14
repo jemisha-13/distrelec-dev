@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Hybris Basics tasks
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-hybris-basics" basedir=".">
+
+	<!--
+	=================================
+	macro: customize
+	=================================
+	-->
+	<macrodef name="customize" description="Copies all files from '/config/customize' folder to '/bin' folder recursively">
+		<sequential>
+			<ant antfile="${hybris.platform.home}\build.xml" target="customize">
+				<property name="platformhome" value="${hybris.platform.home}" />
+			</ant>
+		</sequential>
+	</macrodef>	
+	
+	<!--
+	=================================
+	macro: build
+	=================================
+	-->
+	<macrodef name="build" description="This target is about to build the hybris platform with the provided hybris build script.">
+		<sequential>
+			<echo message="Building hybris platform on ${current.os} ..." />
+			<ant antfile="${hybris.platform.home}\build.xml" target="build">
+				<property name="platformhome" value="${hybris.platform.home}" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+
+	<!--
+	=================================
+	macro: clean
+	=================================
+	-->
+	<macrodef name="clean" description="This target is about to clean the hybris platform with the provided hybris build script.">
+		<sequential>
+			<ant antfile="${hybris.platform.home}\build.xml" target="clean">
+				<property name="platformhome" value="${hybris.platform.home}" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+
+	<!--
+	=================================
+	macro: allHybris
+	=================================
+	-->
+	<macrodef name="allHybris" description="This target calls the all target of the hybris platform with the provided hybris build script.">
+		<sequential>
+			<ant antfile="${hybris.platform.home}\build.xml" target="all">
+				<property name="platformhome" value="${hybris.platform.home}" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+
+
+</project>
+

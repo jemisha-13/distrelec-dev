@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+
+-->
+<project name="distrelecB2Bstorefront_buildcallbacks">
+
+    <import file="npmancillary-npm.xml"/>
+
+    <patternset id="extension.distrelecB2Bstorefront.production.filter">
+
+        <patternset refid="extension.production.filter"/>
+
+        <exclude name="node_modules/"/>
+
+    </patternset>
+
+    <macrodef name="distrelecB2Bstorefront_before_web_clean">
+        <sequential>
+            <echo message="before_web_clean: Deleting ${ext.distrelecB2Bstorefront.path}/bin/web/webroot/WEB-INF/"></echo>
+            <delete dir="${ext.distrelecB2Bstorefront.path}/bin/web/webroot/WEB-INF/"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="distrelecB2Bstorefront_before_build">
+        <sequential>
+            <echo message="distrelecB2Bstorefront_before_build"/>
+            <!--<distrelecB2Bstorefront_generatevariables />-->
+            <!--<delete_wro_addons_xml />-->
+            <foreachext>
+                <do>
+                    <if>
+                        <available file="${ext.@{extname}.path}/commonweb"/>
+                        <then>
+                            <echo message="Found commonweb extension:  @{extname}"/>
+                            <copyCommonWebToExtension commonwebextension="@{extname}" commonwebresource="/src"
+                                                      target="distrelecB2Bstorefront"/>
+                        </then>
+                    </if>
+                </do>
+            </foreachext>
+        </sequential>
+
+    </macrodef>
+
+    <macrodef name="distrelecB2Bstorefront_after_build">
+        <sequential>
+            <echo message="distrelecB2Bstorefront_after_build"/>
+            <!--<impexGenerate extname="distrelecB2Bstorefront"/>-->
+            <containsExact separator=";" string="${extension.names}" substring="addonsupport">
+                <do>
+                    <var name="addonTestsrcDirs" value=""/>
+                    <sequential>
+                        <foreachext>
+                            <do>
+                                <sequential>
+                                    <for delimiter=";" list="${addon.folder}" param="addOnFile">
+                                        <sequential>
+                                            <if>
+                                                <available file="${ext.@{extname}.path}/acceleratoraddon/@{addOnFile}"/>
+                                                <then>
+                                                    <copyAddOnToExtension addonextension="@{extname}"
+                                                                          addonresource="@{addOnFile}"
+                                                                          target="distrelecB2Bstorefront"/>
+                                                </then>
+                                            </if>
+                                        </sequential>
+                                    </for>
+                                    <if>
+                                        <available
+                                                file="${ext.distrelecB2Bstorefront.path}/web/addontestsrc/@{extname}"/>
+                                        <then>
+                                            <if>
+                                                <equals arg1="${addonTestsrcDirs}" arg2=""/>
+                                                <then>
+                                                    <var name="addonTestsrcDirs" value="addontestsrc/@{extname}"/>
+                                                </then>
+                                                <else>
+                                                    <var name="addonTestsrcDirs"
+                                                         value="${addonTestsrcDirs},addontestsrc/@{extname}"/>
+                                                </else>
+                                            </if>
+                                        </then>
+                                    </if>
+                                </sequential>
+                                <!--<generate_wro_addons_xml extname="@{extname}"/>-->
+                            </do>
+                        </foreachext>
+
+                        <!-- Create TestClasses Files -->
+                        <if>
+                            <not>
+                                <equals arg1="${addonTestsrcDirs}" arg2=""/>
+                            </not>
+                            <then>
+                                <outofdate>
+                                    <sourcefiles>
+                                        <fileset dir="${ext.distrelecB2Bstorefront.path}">
+                                            <include name="web/addontestsrc/**"/>
+                                        </fileset>
+                                    </sourcefiles>
+                                    <targetfiles
+                                            path="${HYBRIS_TEMP_DIR}/touch/distrelecB2Bstorefront_addontestsrctouch"/>
+                                    <sequential>
+                                        <mkdir dir="${ext.distrelecB2Bstorefront.path}/resources/distrelecB2Bstorefront"/>
+                                        <testClassesScanner extension="distrelecB2Bstorefront"
+                                                            fileExtensions="java,groovy,${ext.distrelecB2Bstorefront.native.file.extension}"
+                                                            testSourceFolders="testsrc,${ext.distrelecB2Bstorefront.additional.testsrc.dir},${addonTestsrcDirs}"/>
+                                        <mkdir dir="${HYBRIS_TEMP_DIR}/touch"/>
+                                        <touch file="${HYBRIS_TEMP_DIR}/touch/distrelecB2Bstorefront_addontestsrctouch"/>
+                                    </sequential>
+                                </outofdate>
+                            </then>
+                        </if>
+                    </sequential>
+                </do>
+            </containsExact>
+            <copy todir="${ext.distrelecB2Bstorefront.path}/web/webroot/WEB-INF/classes">
+                <file file="${ext.distrelecB2Bstorefront.path}/resources/oscache.properties"/>
+            </copy>
+            <property name="NODE_PROJECT_PATH" value="${ext.distrelecB2Bstorefront.path}"/>
+
+            <repairnpmmacro/>
+            <invokeNpmCustomWorkingDir arguments="install" workingDir="${NODE_PROJECT_PATH}"/>
+
+        <!-- Running Gulp build-styles task -->
+		 	<if>
+                <os family="windows"/>
+                <then>
+					<exec executable="${loc.NODE_HOME}${file.separator}node" dir="${NODE_PROJECT_PATH}">
+						<arg line="node_modules/gulp/bin/gulp.js build-styles"/>
+					</exec>
+                </then>
+                <else>
+                   <exec executable="${loc.NODE_HOME}${file.separator}bin${file.separator}node" dir="${NODE_PROJECT_PATH}">
+               		 <arg line="node_modules/gulp/bin/gulp.js build-styles"/>
+           			 </exec>
+                </else>
+            </if>
+		
+
+        <!-- Running Grunt build -->
+			<if>
+                <os family="windows"/>
+                <then>
+					<exec executable="${loc.NODE_HOME}${file.separator}node" dir="${NODE_PROJECT_PATH}">
+                		<arg line="grunt_start.js prod"/>
+            		</exec>
+                </then>
+                <else>
+                    <exec executable="${loc.NODE_HOME}${file.separator}bin${file.separator}node" dir="${NODE_PROJECT_PATH}">
+                		<arg line="grunt_start.js prod"/>
+           			 </exec>
+                </else>
+            </if>
+            
+      
+        </sequential>
+    </macrodef>
+
+</project>

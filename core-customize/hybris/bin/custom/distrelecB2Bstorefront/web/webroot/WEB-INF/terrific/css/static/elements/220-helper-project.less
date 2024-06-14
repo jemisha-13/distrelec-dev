@@ -1,0 +1,174 @@
+/*
+ * Project Helpers
+ */
+
+/**
+ * Container Element, centered
+ */
+.ct {
+	width: @grid-width;
+
+	// Centering
+	margin: 0 auto;
+	overflow: visible; // we have elements breaking out
+	//	background-image: url('@{path-assets}/media/img-test/test-grid_960px-12col-80w-0gut.png'); // Grid Background
+}
+
+/**
+ * Disabled: provides a default opacity for disabled items
+ */
+
+.disabled,
+[disabled] {
+	opacity: 0.4;
+
+  		// Disabled states for old Internet Explorer are handled individually,
+  		// because a global alpha opacity makes png icons ugly in IE8
+
+  		/*
+  			.lt-ie9 & {
+				filter: alpha(opacity=50);        // IE6, IE7
+				-ms-filter: "alpha(opacity=50)"; // IE8
+			}
+		*/
+}
+
+/**
+ * Vertical alignment with display: table
+ */
+.vertical-align-parent {
+	display: table;
+	width: 100%;
+	.lt-ie8 & {
+		.cf();
+	}
+}
+
+.vertical-align-child(@height:80px) {
+	display: table-cell;
+	vertical-align: middle;
+	height: @height;
+	.lt-ie8 & {
+		float: left;
+		padding-top: 15px;
+		height: @height - 15px;
+	}
+}
+
+/**
+ *
+ * border class for use outside of modules
+ * used directly in dom or via mixin
+ *
+ */
+
+#border {
+
+	// Don't use directly
+
+	.base(@color: @c-grey80) {
+		border-color: @color;
+		border-style: solid;
+		border-width: 0;
+
+	}
+
+	// Use as mixin i.e. #border .border-std(1px, 0, 1px, 0);
+
+	.border-std (@top: 1px, @right: 1px, @bottom: 1px, @left: 1px, @color: @c-border) {
+		#border > .base(@c-border);
+		border-top-width: @top;
+		border-right-width: @right;
+		border-bottom-width: @bottom;
+		border-left-width: @left;
+	}
+}
+
+// Don't use directly
+
+.border-top,
+.border-right,
+.border-bottom,
+.border-left {
+	#border > .base();
+}
+
+// Use  via dom i.e. class="border-top border-bottom"
+
+.border-top {
+	border-top-width: 1px;
+}
+
+.border-right {
+	border-right-width: 1px;
+}
+
+.border-bottom {
+	border-bottom-width: 1px;
+}
+
+.border-left {
+	border-left-width: 1px;
+}
+
+/**
+ *
+ * rotate less helper
+ *
+ */
+.rotate(@deg) {
+	transform: rotate(@deg);
+	-ms-transform: rotate(@deg);
+	-webkit-transform: rotate(@deg);
+	-o-transform: rotate(@deg);
+	-moz-transform: rotate(@deg);
+}
+
+/**
+ *
+ * centerWrap less helper
+ *
+ */
+.centerWrap() {
+	position: relative;
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+
+	img, span, button, input {
+		display: inline;
+	}
+}
+
+/**
+ *
+ * ellipsis less helper for text that's too big to fit (in a column for example)
+ *
+ */
+.ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inline-block; // Text overflow can only happen on block or inline-block level elements
+}
+
+/**
+ *
+ * general relative widths: 33%, 66%, 100% (reused in cms components: lead-text, linked-image)
+ *
+ */
+.oneThird {
+	width: 33%;
+}
+
+.twoThird {
+	width: 66%;
+}
+
+.fullWidth {
+	width: 100%;
+}
+
+.width300px{
+	width: 300px !important;
+}

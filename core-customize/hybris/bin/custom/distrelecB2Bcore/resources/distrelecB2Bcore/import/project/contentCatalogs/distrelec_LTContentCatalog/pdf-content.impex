@@ -1,0 +1,30 @@
+$contentMasterCatalog=distrelecContentCatalog
+$contentCatalog=distrelec_LTContentCatalog
+$contentCVStaged=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$contentCVOnline=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Online]
+$pdfResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/pdf
+$cmsSiteUID=distrelec_LT
+
+REMOVE Media;$contentCVStaged[unique=true];code[unique=true]
+;;$cmsSiteUID-PDF_Order_Confirmation
+
+REMOVE Media;$contentCVOnline[unique=true];code[unique=true]
+;;$cmsSiteUID-PDF_Order_Confirmation
+
+INSERT_UPDATE CatalogUnawareMedia;code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime
+;$cmsSiteUID-PDF_Order_Confirmation_en;order_confirmation.vm;$pdfResource/pdf-orderConfirmation.vm;text/html
+;$cmsSiteUID-PDF_Order_Confirmation_lt;order_confirmation.vm;$pdfResource/pdf-orderConfirmation.vm;text/html
+
+INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)[default='velocity']
+;$cmsSiteUID-PDF_Order_Confirmation;com.namics.distrelec.b2b.facades.pdf.OrderConfirmationPDFContext
+
+$lang=en
+UPDATE RendererTemplate;code[unique=true];description[lang=$lang];content(code)[lang=$lang]
+;$cmsSiteUID-PDF_Order_Confirmation;"PDF Order Confirmation Template";$cmsSiteUID-PDF_Order_Confirmation_$lang
+
+$lang=lt
+UPDATE RendererTemplate;code[unique=true];description[lang=$lang];content(code)[lang=$lang]
+;$cmsSiteUID-PDF_Order_Confirmation;"PDF Order Confirmation Template";$cmsSiteUID-PDF_Order_Confirmation_$lang
+
+INSERT_UPDATE Media;$contentCVStaged[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime
+;;PDF_ORDER_CONFIRMATION_XSL;orderConfirmation.xsl;$pdfResource/orderConfirmation.xsl;text/xml

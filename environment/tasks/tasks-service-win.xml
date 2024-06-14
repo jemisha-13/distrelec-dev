@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Windows Services (hybris)
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-services-win" basedir=".">
+
+	<!--
+		=================================
+		macro: startHybrisService
+		=================================
+	-->
+	<macrodef name="startHybrisServiceWin">
+		<sequential>
+			<!-- NET START "hybrisServer" -->
+			<exec dir="." executable="cmd.exe">
+				<arg value="/c" />
+				<arg value="NET START &quot;hybrisServer&quot;" />
+			</exec>
+		</sequential>
+	</macrodef>
+	
+	<!--
+		=================================
+		macro: stopHybrisService
+		=================================
+	-->
+	<macrodef name="stopHybrisServiceWin">
+		<sequential>
+			<!-- NET STOP "hybrisServer" -->
+			<exec dir="." executable="cmd.exe">
+				<arg value="/c" />
+				<arg value="NET STOP &quot;hybrisServer&quot;" />
+			</exec>
+		</sequential>
+	</macrodef>
+	
+	<!--
+		=================================
+		macro: installHybrisService
+		=================================
+	-->
+	<macrodef name="installHybrisServiceWin">
+		<sequential>
+			<!-- /platform/tomcat-6/bin/InstallTomcatService.bat -->
+			<!-- Configuration of the service is done in /config/tomcat/conf/wrapper.conf -->
+			<exec dir="${hybrisserver.platform.home}/tomcat/bin" executable="cmd.exe">
+				<arg value="/c" />
+				<arg value="InstallTomcatService.bat" />
+				<arg value="-p" />				
+			</exec>
+		</sequential>
+	</macrodef>
+	
+	<!--
+		=================================
+		macro: uninstallHybrisService
+		=================================
+	-->
+	<macrodef name="uninstallHybrisServiceWin">
+		<sequential>
+			<!-- /platform/tomcat-6/bin/UninstallTomcatService.bat -->
+			<!-- Configuration of the service is done in /config/tomcat/conf/wrapper.conf -->
+			<exec dir="${hybrisserver.platform.home}/tomcat/bin" executable="cmd.exe">
+				<arg value="/c" />
+				<arg value="UninstallTomcatService.bat" />
+				<arg value="-p" />				
+			</exec>
+		</sequential>
+	</macrodef>	
+
+</project>

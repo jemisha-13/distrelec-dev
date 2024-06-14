@@ -1,0 +1,15 @@
+INSERT_UPDATE DynamicConstraint;id[unique=true]                    ;active[default=true];type(code)         ;target                                                                   ;language(code[default=BEANSHELL]);message[lang=en]                                          ;expression;
+                               ;DistCustomerConfigUniqueConstraint ;                    ;DistCustomerConfig ;com.namics.distrelec.b2b.core.model.eprocurement.DistCustomerConfigModel ;                                 ;"Customer configuration already exists for this customer" ;"
+searchService=ctx.getBean(""flexibleSearchService"");
+paramMap=new HashMap();
+paramMap.put(""company"", ref.company);
+searchResult=searchService.search(""SELECT {pk} FROM {DistCustomerConfig} WHERE {company}=?company"", paramMap);
+resultList=searchResult.getResult();
+for(int i=0; i<resultList.size(); i++){
+    resultItem=resultList.get(i);
+    if(resultItem.pk != ref.pk){
+        return false;
+    }
+}
+return true;
+"

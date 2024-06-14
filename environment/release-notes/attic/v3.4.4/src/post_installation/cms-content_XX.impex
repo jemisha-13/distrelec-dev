@@ -1,0 +1,62 @@
+
+
+$contentCatalog=distrelec_XXContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=CMSParagraphComponent,SimpleBannerComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent
+
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;OnlineSurveyPageTemplate;Online Survey Page Template;
+
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;OnlineSurveyPageTemplate				;$jarResourceCms/structure-view/structure_onlineSurveyPageTemplate.vm
+
+
+# Online Survey Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OnlineSurveyPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TeaserContent;;$distTeaserContent
+;TopContent;;$distContent
+;BottomContent;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OnlineSurveyPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-OnlineSurveyPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-OnlineSurveyPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-OnlineSurveyPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-OnlineSurveyPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-OnlineSurveyPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-OnlineSurveyPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-OnlineSurveyPageTemplate;Impressum;;ImpressumSlot;false
+
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $contentCV)[default='ContentPageModel_function_preview']
+
+;;onlineSurveyPage;Online Survey Page;OnlineSurveyPageTemplate;onlineSurveyPage
+;;onlineSurveySuccessPage;Online Survey Success Page;OnlineSurveyPageTemplate;onlineSurveySuccessPage
+

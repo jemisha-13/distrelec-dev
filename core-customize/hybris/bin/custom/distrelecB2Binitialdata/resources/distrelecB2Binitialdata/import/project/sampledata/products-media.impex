@@ -1,0 +1,17 @@
+# ImPex for Importing Product Media
+
+$productCatalog=distrelecProductCatalog
+$productCV=catalogversion(catalog(id[default=$productCatalog]),version[default='Online'])[unique=true,default=$productCatalog]
+$siteResource=jar:com.namics.distrelec.b2b.initialdata.setup.InitialDataSystemSetup&/distrelecB2Binitialdata/import/project/sampledata
+
+
+INSERT_UPDATE Media;$productCV[unique=true];code[unique=true];mediaFormat(qualifier);@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/png'];altText;&imageRef
+;;600x336.png;landscape_large;$siteResource/images/600x336.png;;"Landscape Large";600x336.png
+;;300x168.png;landscape_medium;$siteResource/images/300x168.png;;"Landscape Medium";300x168.png
+;;118x98.png;landscape_small;$siteResource/images/118x98.png;;"Landscape Small";118x98.png
+;;150x30.png;brand_logo;$siteResource/images/150x30.png;;"Brand Logo";150x30.png
+;;300x400.png;portrait_medium;$siteResource/images/300x400.png;;"Portrait Medium";300x400.png
+;;90x120.png;portrait_small;$siteResource/images/90x120.png;;"Portrait Small";90x120.png
+
+INSERT_UPDATE MediaContainer;$productCV[unique=true];qualifier[unique=true];medias(code,$productCV)
+;;placeholdersMediaContainer;600x336.png,300x168.png,118x98.png,150x30.png,300x400.png,90x120.png

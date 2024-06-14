@@ -1,0 +1,77 @@
+@import 'bootstrap/scss/mixins/transition';
+@import './typography';
+@import './vars';
+
+@mixin placeholder {
+  &::-webkit-input-placeholder {
+    @content;
+  }
+  &:-moz-placeholder {
+    @content;
+  }
+  &::-moz-placeholder {
+    @content;
+  }
+  &:-ms-input-placeholder {
+    @content;
+  }
+}
+
+@mixin img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+@mixin center-fluid() {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
+
+// Makes the @content apply between the min and max breakpoints
+@mixin media-breakpoint-between($lower, $upper) {
+  $min: $lower;
+  $max: $upper;
+
+  @if $min != null and $max != null {
+    @media (min-width: $min) and (max-width: $max) {
+      @content;
+    }
+  } @else if $max == null {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else if $min == null {
+    @media (max-width: $max) {
+      @content;
+    }
+  }
+}
+
+// Browser compatability to remove scroll bar
+@mixin hide-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+@mixin rotate($degrees) {
+  -moz-transform: rotate(#{$degrees}deg);
+  -webkit-transform: rotate(#{$degrees}deg);
+  -o-transform: rotate(#{$degrees}deg);
+  -ms-transform: rotate(#{$degrees}deg);
+  transform: rotate(#{$degrees}deg);
+}
+
+@mixin sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}

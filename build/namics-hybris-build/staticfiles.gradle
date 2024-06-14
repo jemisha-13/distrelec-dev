@@ -1,0 +1,111 @@
+import java.nio.charset.StandardCharsets
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+
+task compile_cp_staticfiles() {
+    doLast {
+        zipStaticFiles(project.env_cp_staticfiles_dir, "maintenance", false, "")
+        zipStaticFiles(project.env_cp_staticfiles_dir, "maintenance-bespoke", false, "_bespoke")
+    }
+}
+
+def zipStaticFiles(String staticFilesFolder, String maintenanceFolder, boolean copyAs403, String folderSuffix) {
+    fileTree(dir: staticFilesFolder + File.separator + maintenanceFolder, include: 'maintenance_*.html').visit{
+            file -> zipMaintenancePage(staticFilesFolder, maintenanceFolder, file.name, copyAs403, folderSuffix)
+    }
+}
+
+def zipMaintenancePage(String staticFilesFolder, String maintenanceFolder, String maintenanceFileName, boolean copyAs403, String folderSuffix) {
+    println("zip maintenance: " + maintenanceFolder + File.separator + maintenanceFileName)
+
+    long lm = calculateLastModified(staticFilesFolder, maintenanceFolder, maintenanceFileName)/1000
+    LocalDateTime lastModified = LocalDateTime.ofEpochSecond(lm, 0, ZoneOffset.UTC)
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmm")
+
+    String zipFolder = staticFilesFolder + File.separator + "compiled"
+    String zipFileName = zipFolder + File.separator + maintenanceFileName.replace(".html", "").replace("maintenance_", "staticfiles_") +
+            folderSuffix + "_" + dtf.format(lastModified) + ".zip"
+
+    File zipDirectory = new File(zipFolder)
+    if (!zipDirectory.exists()) {
+        zipDirectory.mkdirs()
+    }
+
+    FileOutputStream fos = new FileOutputStream(zipFileName)
+    ZipOutputStream zipOut = new ZipOutputStream(fos)
+
+    zipMainMaintenanceHtml(staticFilesFolder, maintenanceFolder, maintenanceFileName, zipOut, copyAs403)
+    zipMaintenanceResources(staticFilesFolder, maintenanceFolder, zipOut)
+    zipOtherResources(staticFilesFolder, zipOut)
+
+    zipOut.close()
+    fos.close()
+}
+
+def zipMainMaintenanceHtml(String staticFilesFolder, String maintenanceFolder, String maintenanceFileName, ZipOutputStream zipOut, boolean copyAs403) {
+    String maintenanceFilePath = staticFilesFolder + File.separator + maintenanceFolder + File.separator + maintenanceFileName
+    zipMainMaintenanceHtml(maintenanceFilePath, "error/503.html", zipOut)
+
+    if (copyAs403) {
+        zipMainMaintenanceHtml(maintenanceFilePath, "error/403.html", zipOut)
+    }
+}
+
+def zipMainMaintenanceHtml(String maintenanceFilePath, String targetFilePath, ZipOutputStream zipOut) {
+    FileInputStream fis = new FileInputStream(maintenanceFilePath)
+    ZipEntry zipEntry = new ZipEntry(targetFilePath)
+    zipOut.putNextEntry(zipEntry)
+    String text = new String(fis.readAllBytes(), StandardCharsets.UTF_8);
+    String processedText = text.replace("<base href=\"error/\"", "<base href=\"/error/\"");
+    zipOut.write(processedText.getBytes())
+    fis.close()
+}
+
+def zipMaintenanceResources(String staticFilesFolder, String maintenanceFolder, ZipOutputStream zipOut) {
+    fileTree(dir: staticFilesFolder + File.separator + maintenanceFolder, excludes: ['maintenance_*.html']).visit {
+        file ->
+            if (!file.directory) {
+                FileInputStream fis = new FileInputStream(staticFilesFolder + File.separator + maintenanceFolder + File.separator + file.path)
+                ZipEntry zipEntry = new ZipEntry(file.path)
+                zipOut.putNextEntry(zipEntry)
+                fis.transferTo(zipOut)
+                fis.close()
+            }
+    }
+}
+
+def zipOtherResources(String staticFilesFolder, ZipOutputStream zipOut) {
+    fileTree(dir: staticFilesFolder, excludes: ['maintenance/*', 'maintenance-bespoke/*', 'compiled/*']).visit{
+        file ->
+            if (!file.directory) {
+                FileInputStream fis = new FileInputStream(staticFilesFolder + File.separator + file.path)
+                ZipEntry zipEntry = new ZipEntry(file.path)
+                zipOut.putNextEntry(zipEntry)
+                fis.transferTo(zipOut)
+                fis.close()
+            }
+    }
+}
+
+def calculateLastModified(String staticFilesFolder, String maintenanceFolder, String maintenanceFileName) {
+    File maintenanceFile = new File(staticFilesFolder + File.separator + maintenanceFolder + File.separator + maintenanceFileName)
+    long lastModified = maintenanceFile.lastModified()
+
+    fileTree(dir: staticFilesFolder + File.separator + maintenanceFolder, excludes: ['maintenance_*.html', 'compiled/*']).visit {
+        file ->
+            if (!file.directory) {
+                lastModified = Long.max(lastModified, file.lastModified)
+            }
+    }
+
+    fileTree(dir: staticFilesFolder, excludes: ['compiled/*', 'maintenance/*', 'maintenace-bespoke/*']).visit {
+        file ->
+            if (!file.directory) {
+                lastModified = Long.max(lastModified, file.lastModified)
+            }
+    }
+
+    return lastModified
+}

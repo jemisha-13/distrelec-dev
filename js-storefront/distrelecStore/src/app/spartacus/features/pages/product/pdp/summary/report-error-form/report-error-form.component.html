@@ -1,0 +1,189 @@
+<div class="report-error" id="pdp_report_form_modal">
+  <div class="report-error__title">
+    <span id="report_form_title">{{ 'reportError.form.title' | cxTranslate }}</span>
+    <button class="btn report-error__title-close" id="report_form_title_close_btn" (click)="closeForm()">
+      <fa-icon [icon]="faTimes"></fa-icon>
+    </button>
+  </div>
+  <div class="report-error__subtitle" id="report_form_subtitle">
+    {{ 'reportError.form.subtitle_line_1' | cxTranslate }}
+    <br />
+    <span
+      [innerHTML]="
+        'reportError.form.subtitle_line_2'
+          | cxTranslate: { code: productId | articleNumber, productTitle: productTitle }
+      "
+    ></span>
+  </div>
+  <form
+    #formDir="ngForm"
+    class="report-error__form"
+    id="pdp_report_form"
+    [formGroup]="reportErrorForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="form__inputslist">
+      <span class="form__inputslist-holder">
+        <input
+          id="report_form_descr_checkbox"
+          (change)="onCheckboxChange($event)"
+          type="checkbox"
+          value="Product Description/Product Image"
+        />
+        <label id="report_form_descr_label" for="report_form_descr_checkbox">
+          {{ 'reportError.reason.prod_descr' | cxTranslate }}
+        </label>
+      </span>
+      <span class="form__inputslist-holder">
+        <input
+          id="report_form_tech_spec_checkbox"
+          (change)="onCheckboxChange($event)"
+          type="checkbox"
+          value="Technical specifications/Datasheet"
+        />
+        <label id="report_form_tech_spec_label" for="report_form_tech_spec_checkbox">
+          {{ 'reportError.reason.tech_spec' | cxTranslate }}
+        </label>
+      </span>
+      <span class="form__inputslist-holder">
+        <input
+          id="report_form_search_nav_checkbox"
+          (change)="onCheckboxChange($event)"
+          type="checkbox"
+          value="Search/Navigation"
+        />
+        <label id="report_form_search_nav_label" for="report_form_search_nav_checkbox">
+          {{ 'reportError.reason.search_nav' | cxTranslate }}
+        </label>
+      </span>
+      <span class="form__inputslist-holder">
+        <input
+          id="report_form_accessories_checkbox"
+          (change)="onCheckboxChange($event)"
+          type="checkbox"
+          value="Accessories"
+        />
+        <label id="report_form_accessories_label" for="report_form_accessories_checkbox">
+          {{ 'reportError.reason.accessories' | cxTranslate }}
+        </label>
+      </span>
+      <span class="form__inputslist-holder">
+        <input id="report_form_other_checkbox" (change)="onCheckboxChange($event)" type="checkbox" value="Other" />
+        <label id="report_form_other_label" for="report_form_other_checkbox">
+          {{ 'reportError.reason.other' | cxTranslate }}
+        </label>
+      </span>
+      <div *ngIf="formDir.submitted && reportErrorForm.controls['checkArray'].errors">
+        <small class="text-danger" id="checkboxes_req_msg">
+          {{ 'validations.checkboxes_error_required' | cxTranslate }}
+        </small>
+      </div>
+    </div>
+
+    <div class="form__textarea">
+      <textarea
+        class="form-control form__textarea-box"
+        id="report_form_desc_textarea"
+        [placeholder]="'form.description' | cxTranslate"
+        [class.is-invalid]="
+          (reportErrorForm.get('textArea').touched && reportErrorForm.get('textArea').errors?.required) ||
+          (formDir.submitted && reportErrorForm.get('textArea').errors?.required)
+        "
+        formControlName="textArea"
+        maxlength="255"
+      ></textarea>
+      <div
+        *ngIf="
+          (reportErrorForm.get('textArea').touched && reportErrorForm.get('textArea').errors?.required) ||
+          (formDir.submitted && reportErrorForm.get('textArea').errors?.required)
+        "
+      >
+        <small class="text-danger" id="desc_textarea_req_msg">
+          {{ 'validations.enter_valid_field' | cxTranslate }}
+        </small>
+      </div>
+    </div>
+    <div class="form__contact">
+      <div class="form__contact--text" [class.d-flex]="isLoggedIn$ | async">
+        <ng-container *ngIf="(isLoggedIn$ | async) === false">
+          <span id="contact_form_email_hint">{{ 'reportError.form.email_hint' | cxTranslate }}</span>
+        </ng-container>
+        <br />
+        <span id="contact_form_contact_hint">
+          {{ 'reportError.form.contact_hint' | cxTranslate }}
+        </span>
+      </div>
+      <div class="form__contact--inputs">
+        <div *ngIf="!name" class="form__contact--inputs-name">
+          <input
+            class="form-control input"
+            id="contact_form_name_input"
+            [placeholder]="'form.name' | cxTranslate"
+            [class.is-invalid]="
+              (reportErrorForm.get('name').touched && reportErrorForm.get('name').errors?.required) ||
+              (formDir.submitted && reportErrorForm.get('name').errors?.required)
+            "
+            formControlName="name"
+          />
+          <div
+            *ngIf="
+              (reportErrorForm.get('name').touched && reportErrorForm.get('name').errors?.required) ||
+              (formDir.submitted && reportErrorForm.get('name').errors?.required)
+            "
+          >
+            <small class="text-danger" id="name_req_msg">{{ 'validations.enter_valid_field' | cxTranslate }}</small>
+          </div>
+        </div>
+        <div *ngIf="!email" class="form__contact--inputs-email">
+          <input
+            class="form-control input"
+            id="contact_form_email_input"
+            [class.is-invalid]="
+              (reportErrorForm.get('email').touched && reportErrorForm.get('email').invalid) ||
+              (formDir.submitted && reportErrorForm.get('email').invalid)
+            "
+            [email]="emailValidation"
+            [placeholder]="'form.email_address' | cxTranslate"
+            type="email"
+            formControlName="email"
+          />
+          <div
+            *ngIf="
+              (reportErrorForm.get('email').touched && reportErrorForm.get('email').invalid) ||
+              (formDir.submitted && reportErrorForm.get('email').invalid)
+            "
+          >
+            <small *ngIf="reportErrorForm.get('email').errors?.required" class="text-danger" id="email_req_msg">
+              {{ 'validations.email_error_invalid' | cxTranslate }}
+            </small>
+            <small *ngIf="reportErrorForm.get('email').errors?.invalid" class="text-danger" id="email_invalid_msg">
+              {{ 'validations.email_error_invalid' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      *ngIf="isFormSubmitted"
+      class="btn form__close"
+      id="report_form_close_btn"
+      (click)="closeForm()"
+      type="button"
+    >
+      {{ 'form.close' | cxTranslate }}
+    </button>
+    <button *ngIf="!isFormSubmitted" class="btn form__submit" id="report_form_submit_btn" type="submit">
+      {{ 'form.submit' | cxTranslate }}
+    </button>
+    <div class="form__footer">
+      <ng-container *ngIf="isFormSubmitted">
+        <span *ngIf="!isFailed" class="form__footer__error-response" id="report_form_success_message">
+          {{ 'form.message_sent' | cxTranslate }}
+        </span>
+        <span *ngIf="isFailed" class="text-danger form__footer__error-response" id="report_form_error_message">
+          {{ 'form.message_error' | cxTranslate }}
+        </span>
+      </ng-container>
+    </div>
+  </form>
+</div>

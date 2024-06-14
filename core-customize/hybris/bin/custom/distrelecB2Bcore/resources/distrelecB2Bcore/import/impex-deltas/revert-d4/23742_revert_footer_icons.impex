@@ -1,0 +1,38 @@
+# Replacing the D4 Red Footer Icons with the Distrelec White ones
+
+$contentCatalog=distrelec_FRContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/revert-d4/media/footer
+
+$defaultContentCatalog=Default
+$defaultContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $defaultContentCatalog]), CatalogVersion.version[default = Staged])[default = $defaultContentCatalog:Staged]
+
+
+REMOVE Media    ;code[unique=true]  ;$contentCV[unique=true]
+                ;D4FooterGelisteter ;
+                ;D4FooterGeotrust   ;
+                ;D4FooterISO9001    ;
+                ;D4FooterMastercard ;
+                ;D4FooterPaypal     ;
+                ;D4FooterVisa       ;
+
+# Footer media
+INSERT_UPDATE Media; code[unique = true]          ; $defaultContentCV[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = image/png];
+                ; footer-logo-mastercard       ;                          ; $siteResource/distrelec-footer-logo-mastercard-def.png
+                ; footer-logo-visa             ;                          ; $siteResource/distrelec-footer-logo-visa-def.png
+                ; footer-logo-geotrust         ;                          ; $siteResource/distrelec-footer-logo-geotrust-def.png
+                ; footer-logo-iso9001          ;                          ; $siteResource/distrelec-footer-logo-iso-def-2021.png
+                ; footer-logo-gelisteter       ;                          ; $siteResource/distrelec-footer-logo-gelisteter.png
+
+
+INSERT_UPDATE DistPaymentMethodComponent; uid[unique = true]               ; $contentCV[unique = true]; icon(code, $contentCV)
+                                        ; FooterMastercardPaymentComponent ;                          ; footer-logo-mastercard
+                                        ; FooterVisaPaymentComponent       ;                          ; footer-logo-visa
+                                        ; FooterGeotrustPaymentComponent   ;                          ; footer-logo-geotrust
+                                        ; FooterIso9001PaymentComponent    ;                          ; footer-logo-iso9001
+                                        ; FooterGelisteterPaymentComponent ;                          ; footer-logo-gelisteter
+
+
+INSERT_UPDATE DistFooterComponent; uid[unique = true]  ; $contentCV[unique = true]; paymentMethods(uid, $contentCV)                                                          ; trademarks(uid, $contentCV)
+                                 ; DistFooterComponent ;                          ; FooterMastercardPaymentComponent,FooterVisaPaymentComponent ; FooterGeotrustPaymentComponent,FooterIso9001PaymentComponent,FooterGelisteterPaymentComponent

@@ -1,0 +1,136 @@
+$contentCatalog=distrelec_FRContentCatalog
+$languages=fr, en
+$salesOrg=7900
+$priceList=11
+$userTaxGroup=SalesOrg_UTG_$salesOrg
+$userPriceGroup=SalesOrg_UPG_$salesOrg_$priceList
+
+INSERT_UPDATE Language;isocode[unique=true];name[lang=en];fallbackLanguages(isocode);active[default=true]
+                      ;fr_FR               ;French       ;fr,en                     ;
+                      ;en_FR               ;English      ;en                        ;
+
+#Create france content catalog
+INSERT_UPDATE ContentCatalog;id[unique=true] ;name[lang=en]                ;catalogLevelName[lang=en];defaultCatalog;superCatalog(id)
+                            ;$contentCatalog ;Distrelec Content Catalog FR ;                         ;false         ;distrelec_IntContentCatalog
+
+#Create dummy base store for france site
+INSERT_UPDATE BaseStore;uid[unique=true] ;name[lang=en];channel(code);defaultLanguage(isocode);languages(isocode);deliveryCountries(isocode);storelocatorDistanceUnit(code);currencies(isocode);catalogs(id)                                                                       ;net
+                       ;distrelec_FR_b2b ;Business     ;B2B          ;fr                      ;fr                ;FR                        ;km                            ;EUR                ;distrelecProductCatalog,distrelecCatalogPlusProductCatalog,DistrelecClassification ;true
+
+INSERT_UPDATE DistSalesOrg;code[unique=true];name[lang=en];country(isocode);erpSystem(code);brand(code);offlineRegistrationAllowed;registeringNewContactToExistingCustomerAllowed;adminManagingSubUsers;calibrationInfoDeactivated
+                          ;$salesOrg        ;Distrelec FR ;FR              ;SAP            ;distrelec  ;true                      ;true                                          ;true                 ;true
+
+#Create versions of france content catalog
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;languages(isocode);readPrincipals(uid)[mode=replace];writePrincipals(uid)[mode=replace];
+                            ;$contentCatalog         ;Staged              ;false ;$languages        ;employeegroup                    ;employeegroup                     ;
+                            ;$contentCatalog         ;Online              ;true  ;$languages        ;employeegroup                    ;admingroup                        ;
+
+INSERT_UPDATE UserTaxGroup;code[unique=true];
+                          ;$userTaxGroup    ;
+
+INSERT_UPDATE Tax;code[unique=true]   ;value
+                 ;TAX_1_SALESORG_7900 ;8
+                 ;TAX_2_SALESORG_7900 ;2.4
+
+INSERT_UPDATE TaxRow;ug(code)[unique=true];pg(code)[unique=true];tax(code)
+                    ;$userTaxGroup        ;0                    ;TAX_0
+                    ;$userTaxGroup        ;1                    ;TAX_1_SALESORG_7900
+                    ;$userTaxGroup        ;2                    ;TAX_2_SALESORG_7900
+
+INSERT_UPDATE UserPriceGroup;code[unique=true];name[lang=en]
+                            ;$userPriceGroup  ;Price Group 7900_11
+
+INSERT_UPDATE CMSSite;uid[unique=true];name[lang=en];stores(uid)      ;channel(code);salesOrg(code);fastWarehouses(code);userTaxGroup(code);userPriceGroup(code);contentCatalogs(id)                         ;defaultLanguage(isocode);country(isocode);defaultCatalog(id)      ;defaultCurrency(isocode);shippingOptionsEditable;paymentOptionsEditable;httpsOnly
+                     ;distrelec_FR    ;D4           ;distrelec_FR_b2b ;B2B          ;$salesOrg     ;7371                ;$userTaxGroup     ;$userPriceGroup     ;distrelec_IntContentCatalog,$contentCatalog ;fr                      ;FR              ;distrelecProductCatalog ;EUR                     ;true                   ;true                  ;true
+
+UPDATE CMSSite;uid[unique=true];hidden
+              ;distrelec_FR    ;true
+
+UPDATE CMSSite;uid[unique=true];previewURL          ;
+              ;distrelec_FR    ;/?site=distrelec-fr ;
+
+UPDATE CMSSite;uid[unique=true];urlPatterns
+              ;distrelec_FR    ;(?i)^https?://[^/]+(/[^?]*)?\?(.*\&)?(site=distrelec-fr)(|\&.*)$,(?i)^https?://distrelec-fr\.[^/]+(|/.*|\?.*)$(|\&.*)$,(?i)^https?://[^/]+\.d4-?online\.fr(|/.*|\?.*)$(|\&.*)$,(?i)^https?://[^/]+\.d4online\.com(|/.*|\?.*)$(|\&.*)$
+
+UPDATE CMSSite;uid[unique=true];fastDeliveryTime[lang=en];fastDeliveryTime[lang=fr]
+              ;distrelec_FR    ;24 h                     ;24 h ;
+
+UPDATE CMSSite;uid[unique=true];productUrlPattern
+              ;distrelec_FR    ;"/{language}/{product-name}-{manufacturer-name}-{product-type}/p/{product-code}"
+
+UPDATE CMSSite;uid[unique=true];catalogPlusProductUrlPattern
+              ;distrelec_FR    ;"/{language}/{product-name}-{manufacturer-name}-{product-type}-{supplierAID}/p/serviceplus/{product-code}"
+
+UPDATE CMSSite;uid[unique=true];categoryUrlPattern
+              ;distrelec_FR    ;"/{language}/{category-path}/c/{category-code}"
+
+UPDATE CMSSite;uid[unique=true];contentUrlPattern
+              ;distrelec_FR    ;"/{language}/{page-title}/cms/{page-label}"
+
+UPDATE CMSSite;uid[unique=true];cxConfig(code)[default=defaultPersonalizationConfig]
+              ;distrelec_FR    ;
+
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+INSERT_UPDATE CxCustomizationsGroup;code                      ;$contentCV[unique=true];&ref
+                                   ;defaultCustomizationGroup ;                       ;dcg_FR
+
+INSERT_UPDATE CxCustomization;code[unique=true]    ;name                  ;$contentCV[unique=true];status(code)[default=ENABLED];group(&ref)
+                             ;defaultCustomization ;Default Customization ;                       ;                             ;dcg_FR
+
+INSERT_UPDATE CxVariation;code[unique=true];$contentCV[unique=true];name            ;customization(code, $contentCV)
+                         ;defaultVariation ;                       ;User Registered ;defaultCustomization
+
+INSERT_UPDATE CxSegmentTrigger;code[unique=true];variation(code, $contentCV)[unique=true];$contentCV[unique=true];segments(code)  ;groupBy(code)[default='OR'];
+                              ;defaultTrigger   ;defaultVariation                        ;                       ;USER_REGISTERED ;AND
+
+$syncJob=sync $contentCatalog:Staged->Online
+INSERT_UPDATE DistCatalogVersionSyncJob;code[unique=true];active[default=true];sourceVersion(catalog(id), version)[unique=true];targetVersion(catalog(id), version)[unique=true];rootTypes(code)                                                                                                                                                                                              ;errorMode(code);logLevelDatabase(code)
+                                       ;$syncJob         ;                    ;$contentCatalog:Staged                          ;$contentCatalog:Online                          ;Category,MessageResourceTableEntry,Product,Media,Keyword,TaxRow,PriceRow,DiscountRow,MediaContainer,CMSItem,CMSRelation,CxCustomizationsGroup,CxCustomization,CxVariation,CxAbstractTrigger,CxAbstractAction ;IGNORE         ;WARNING
+
+INSERT_UPDATE SyncAttributeDescriptorConfig;syncJob(code)[default=synjobName][unique=true][path-delimiter=!];attributeDescriptor(enclosingType(code), qualifier)[unique=true];includedInSync;copyByValue[default=false];presetValue;translateValue[default=false];untranslatable[default=false]
+                                           ;$syncJob                                                        ;AbstractPage:originalPage                                       ;true
+                                           ;$syncJob                                                        ;AbstractPage:localizedPages                                     ;false
+                                           ;$syncJob                                                        ;AbstractCMSComponent:slots                                      ;false
+                                           ;$syncJob                                                        ;AbstractRestriction:pages                                       ;false
+
+INSERT_UPDATE DistFactFinderExportChannel;code[unique=true]         ;channel                   ;cmsSite(uid) ;language(isocode);catalogVersion(catalog(id), version)[default='distrelecProductCatalog:Online']
+                                         ;distrelec_$salesOrg_fr_fr ;distrelec_$salesOrg_fr_fr ;distrelec_FR ;fr
+
+# fact finder export jobs
+
+INSERT_UPDATE DistFactFinderExportCronJob;code[unique=true]           ;channel(code)        ;sessionLanguage(isocode);job(code)[default='distff.factFinderExportJob'];sessionUser(uid)[default='techUserFactFinderExportJobs'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='ERROR'];mediaPrefix[default='export.'];nodeID[default=0]
+                                         ;distrelec_7900_fr_fr_export ;distrelec_7900_fr_fr ;fr                      ;
+
+INSERT_UPDATE DistFactFinderExportCronJob;code[unique=true]                      ;channel(code)        ;sessionLanguage(isocode);job(code)[default='distff.factFinderAttributeExportJob'];sessionUser(uid)[default='techUserFactFinderExportJobs'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING'];mediaPrefix[default='export.attributes.'];nodeID[default=0]
+                                         ;distrelec_7900_fr_fr_export_attributes ;distrelec_7900_fr_fr ;fr                      ;
+
+INSERT_UPDATE DistFactFinderExportCronJob;code[unique=true]                 ;channel(code)        ;sessionLanguage(isocode);job(code)[default='distff.factFinderUnitExportJob'];sessionUser(uid)[default='techUserFactFinderExportJobs'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING'];mediaPrefix[default='export.units.'];nodeID[default=0]
+                                         ;distrelec_7900_fr_fr_export_units ;distrelec_7900_fr_fr ;fr                      ;
+
+INSERT_UPDATE DistCategoryStructureExportCronJob;code[unique=true]                      ;channel(code)        ;sessionLanguage(isocode);job(code)[default='distff.categoryStructureExportJob'];sessionUser(uid)[default='techUserFactFinderExportJobs'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='ERROR'];mediaPrefix[default='export.category.structure.'];nodeID[default=0]
+                                                ;distrelec_7900_fr_fr_export_categories ;distrelec_7900_fr_fr ;fr                      ;
+
+INSERT_UPDATE CompositeEntry;code[unique=true]                      ;executableCronJob(code)
+                            ;distrelec_7900_fr_fr_export_categories ;distrelec_7900_fr_fr_export_categories
+                            ;distrelec_7900_fr_fr_export_attributes ;distrelec_7900_fr_fr_export_attributes
+                            ;distrelec_7900_fr_fr_export_units      ;distrelec_7900_fr_fr_export_units
+                            ;distrelec_7900_fr_fr_export            ;distrelec_7900_fr_fr_export
+
+INSERT_UPDATE CompositeCronJob;code[unique=true]                            ;compositeEntries(code)[mode=append];
+                              ;distFACTFinderExportCronJob                  ;distrelec_7900_fr_fr_export,distrelec_7900_fr_fr_export_units,distrelec_7900_fr_fr_export_attributes
+                              ;distFACTFinderCategoryStructureExportCronJob ;distrelec_7900_fr_fr_export_categories
+
+UPDATE DistDeliveryMode;code[unique=true];name[lang=fr_FR]                          ;name[lang=en_FR]
+                       ;SAP_E1           ;Livraison Economique, 2-4 jours           ;Economy delivery, 2-4 Days
+                       ;SAP_N1           ;Livraison Express, 1-2 jours              ;Express delivery, 1-2 Days
+                       ;SAP_N2           ;Livraison Express à la demande, 1-2 jours ;Express on-demand 1-2 Days
+
+INSERT_UPDATE DistWebSitemapCronJob;code[unique=true]    ;sessionLanguage(isocode);job(code)[default='webSitemapJob'];sessionUser(uid)[default='technicalExportUser'];sessionCurrency(isocode)[default='EUR'];sites(uid);sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING'];nodeID[default=0]
+                                   ;distWebSitemapJob_FR ;en                      ;                                  ;                                               ;EUR                                    ;distrelec_FR
+
+INSERT_UPDATE CompositeEntry;code[unique=true]          ;executableCronJob(code)
+                            ;distWebSitemapJob_FR_Entry ;distWebSitemapJob_FR
+
+UPDATE CompositeCronJob;code[unique=true]           ;compositeEntries(code)[mode=append]
+                       ;distWebSitemapExportCronJob ;distWebSitemapJob_FR_Entry

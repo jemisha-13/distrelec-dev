@@ -1,0 +1,30 @@
+<ng-template
+  *ngIf="templateName$ | async as layoutName"
+  [cxPageTemplateStyle]="layoutName"
+  [cxOutlet]="layoutName"
+  [cxOutletContext]="{ templateName$: templateName$, slots$: slots$ }"
+>
+  <div class="container showing-results-labels">
+    <app-page-title id="category-page-title" [title]="(categoryData$ | async)?.sourceCategory?.name"></app-page-title>
+    <ng-container *ngIf="isProductListView$ | async">
+      <cx-page-slot position="ProductListTitle"></cx-page-slot>
+      <cx-page-slot position="ProductListPagination"></cx-page-slot>
+    </ng-container>
+  </div>
+  <div class="container">
+    <app-category-description
+      id="category-description"
+      [categoryData]="categoryData$ | async"
+    ></app-category-description>
+  </div>
+
+  <ng-container *ngIf="isProductListView$ | async; else categoryThumbnails">
+    <cx-page-slot position="ProductListFilters"></cx-page-slot>
+    <cx-page-slot position="ProductListMain"></cx-page-slot>
+  </ng-container>
+
+  <ng-template #categoryThumbnails>
+    <cx-page-slot position="Content"></cx-page-slot>
+    <cx-page-slot position="category-relatedData"></cx-page-slot>
+  </ng-template>
+</ng-template>

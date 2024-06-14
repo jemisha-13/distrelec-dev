@@ -1,0 +1,11 @@
+$contentCatalog = distrelec_IntContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+INSERT_UPDATE DistCategoryThumbsComponent; uid[unique = true]                   ; $contentCV[unique = true]; name
+                                         ; InternationalCategoryThumbsComponent ;                          ; International Default Category Thumbs Component
+
+INSERT_UPDATE ContentSlot; uid[unique = true]                   ; $contentCV[unique = true]; name                                                 ; cmsComponents(uid, $contentCV)
+                         ; InternationalCategoryPageContentSlot ;                          ; International Content Slot for CategoryPage Template ; InternationalCategoryThumbsComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]           ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); contentSlot(uid, $contentCV)         ; position
+                                    ; Content-CategoryPageTemplate ;                          ; CategoryPageTemplate         ; InternationalCategoryPageContentSlot ; Content

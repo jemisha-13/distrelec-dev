@@ -1,0 +1,45 @@
+<div class="add-to-cart app-min-order-quantity-popup-container">
+  <div class="add-to-cart__calculation">
+    <div class="add-to-cart__calculation--stepper">
+      <app-numeric-stepper
+        [ids]="numericStepperID"
+        [minimumQuantity]="minQuantity"
+        [quantityStep]="quantityStep"
+        [productCode]="productCode"
+        [control]="control"
+        [availabilityData]="availabilityData"
+        [salesStatus]="salesStatus"
+        [inputDelay]="inputDelay"
+      ></app-numeric-stepper>
+    </div>
+    <div *ngIf="(isPlpActive$ | async) === false" class="add-to-cart__calculation--container">
+      <div *ngIf="minQuantity >= 1" class="add-to-cart__calculation--min-order" [id]="pageType + '_atc_calc_min'">
+        <span>
+          {{ 'product.product_info.min_order' | cxTranslate: { quantity: minQuantity } }}
+        </span>
+      </div>
+      <div
+        *ngIf="quantityStep > 1"
+        class="add-to-cart__calculation--min-order"
+        [id]="pageType + '_atc_calc_order_quantity'"
+      >
+        <span>
+          {{ 'product.product_info.order_quantity' | cxTranslate: { quantity: quantityStep } }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="add-to-cart__button">
+    <app-atc-button
+      [shouldOpenFlyout]="true"
+      [id]="cartButtonId"
+      [productCode]="productCode"
+      [availabilityData]="availabilityData"
+      [salesStatus]="salesStatus"
+      [minimumQuantity]="minQuantity"
+      [quantityStep]="quantityStep"
+      [control]="control"
+    ></app-atc-button>
+  </div>
+</div>

@@ -1,0 +1,160 @@
+@import 'global-utilities';
+
+:host {
+  $item-padding: 8px;
+  $button-height-small: 32px;
+  $button-default-height: 40px;
+
+  .contents {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .man {
+    &__a-z-wrapper {
+      gap: $item-padding;
+      padding-bottom: $item-padding;
+      text-align: center;
+    }
+
+    &__main-wrapper {
+      border-bottom: 1px solid $ux-light-grey;
+      height: 45vh;
+      overflow: auto;
+
+      @include desktop {
+        height: 48vh;
+      }
+
+      @include hide-scrollbar;
+
+      &__group {
+        align-items: flex-start;
+        border-bottom: 1px solid $ux-light-grey;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 4px;
+        overflow: hidden;
+        padding: $item-padding 0px ($item-padding * 2);
+
+        &__heading {
+          @include typography-display-xxxl();
+          font-weight: $font-weight-semiBold;
+          margin-bottom: 0;
+        }
+
+        &__wrapper {
+          gap: 4px;
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+
+    &__featured {
+      flex-wrap: nowrap;
+      float: left;
+      gap: $item-padding;
+      overflow: hidden;
+      padding-top: ($spacing-unit * 5);
+      position: relative;
+      width: 100%;
+
+      &__item {
+        float: left;
+        overflow: hidden;
+        width: 16.66%;
+
+        &__link {
+          float: left;
+        }
+
+        &__img {
+          border-radius: 2px;
+          height: auto;
+          max-width: 100%;
+        }
+      }
+    }
+  }
+
+  .data-loading {
+    align-content: center;
+    display: flex;
+    height: 100px;
+    justify-content: center;
+  }
+
+  a {
+    align-items: center;
+    border-radius: 4px;
+    border-width: 0;
+    color: $colour-white;
+    display: flex;
+    flex-direction: row;
+    font-weight: $font-weight-semiBold;
+    justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.25s linear;
+    white-space: nowrap;
+    @include typography-ui-sm();
+
+    &.has-icon {
+      .btn-text {
+        display: none;
+
+        @include tablet {
+          display: block;
+        }
+      }
+
+      fa-icon {
+        display: block;
+
+        @include tablet {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .man_nav {
+    &_name {
+      height: $button-height-small;
+      padding: 0px ($ux-spacing-unit * 4);
+      width: 100%;
+    }
+
+    &_a-z {
+      height: $button-default-height;
+      padding: 0px ($ux-spacing-unit * 4);
+      width: inherit;
+    }
+
+    &_letter {
+      width: 40px;
+    }
+
+    &_border {
+      background-color: inherit;
+      border: 1px solid $ux-outline;
+      color: $ux-outline-text;
+
+      &:focus {
+        border-color: $ux-outline-focus;
+      }
+
+      &:hover {
+        border-color: $ux-outline-hover;
+        text-decoration: none;
+      }
+    }
+  }
+}

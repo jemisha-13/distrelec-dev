@@ -1,0 +1,446 @@
+<article *ngIf="cartItem" class="cart-product-item p-relative" [class.cart-product-item__single]="!groupedEntry">
+  <ng-container>
+    <ul class="cart-product-info__item is-delivery-msg">
+      <ng-container *ngIf="cartData.creditBlocked; else noCreditBlock">
+        <ng-container *ngIf="pendingQuantity > 0">
+          <li class="cart-product-info__delivery-msg is-backorder">
+            <div class="cart-product-info__delivery-msg__icon" [id]="'credit-blocked_' + entryNumber">
+              <fa-icon [icon]="faInfoCircle"></fa-icon>
+            </div>
+            <div class="cart-product-info__delivery-msg__text" [id]="'cart.credit_blocked_' + entryNumber">
+              {{
+                'cart.list.backorder.creditBlocked.label'
+                  | cxTranslate
+                    : {
+                        quantity: pendingQuantity
+                      }
+              }}
+            </div>
+          </li>
+        </ng-container>
+      </ng-container>
+
+      <ng-template #noCreditBlock>
+        <ng-container *ngIf="cartItem?.availabilities?.length; else noAvailabilities">
+          <ng-container *ngIf="!cartItem.isBackOrder; else isBackorderItem">
+            <li
+              *ngFor="let deliveryTime of cartItem?.availabilities; let deliveryMessageIndex = index"
+              class="cart-product-info__delivery-msg"
+              [id]="'cart.delivery_in_stock_' + entryNumber"
+            >
+              <div
+                class="cart-product-info__delivery-msg__icon"
+                [id]="'delivery-icon-' + entryNumber + '_' + deliveryMessageIndex"
+              >
+                <fa-icon [icon]="faTruck"></fa-icon>
+              </div>
+              <div
+                class="cart-product-info__delivery-msg__text"
+                [id]="'cart.delivery_in_stock_' + entryNumber + '_' + deliveryMessageIndex"
+              >
+                {{
+                  'cart.delivery_in_stock'
+                    | cxTranslate
+                      : {
+                          stock: deliveryTime.quantity,
+                          date: deliveryTime.estimatedDate | cxDate: 'fullDate'
+                        }
+                }}
+              </div>
+            </li>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #noAvailabilities>
+          <li class="cart-product-info__delivery-msg" [id]="'cart.delivery_in_stock_' + entryNumber">
+            <div class="cart-product-info__delivery-msg__icon" [id]="'delivery-icon-' + entryNumber">
+              <fa-icon [icon]="faTruck"></fa-icon>
+            </div>
+            <div class="cart-product-info__delivery-msg__text" [id]="'cart.delivery_in_stock_' + entryNumber">
+              {{ 'cart.noStockDate' | cxTranslate }}
+            </div>
+          </li>
+        </ng-template>
+
+        <ng-template #isBackorderItem>
+          <ng-container
+            *ngFor="let availability of cartItem?.availabilities; let availabilityIndex = index; last as isLast"
+          >
+            <li *ngIf="!isLast" class="cart-product-info__delivery-msg" [id]="'cart.delivery_in_stock_' + entryNumber">
+              <div
+                class="cart-product-info__delivery-msg__icon"
+                [id]="'delivery-icon-' + entryNumber + '_' + availabilityIndex"
+              >
+                <fa-icon [icon]="faTruck"></fa-icon>
+              </div>
+              <div
+                class="cart-product-info__delivery-msg__text"
+                [id]="'cart.delivery_in_stock_' + entryNumber + '_' + availabilityIndex"
+              >
+                {{
+                  'cart.delivery_in_stock'
+                    | cxTranslate
+                      : {
+                          stock: availability.quantity,
+                          date: availability.estimatedDate | cxDate: 'fullDate'
+                        }
+                }}
+              </div>
+            </li>
+            <li *ngIf="isLast" class="cart-product-info__delivery-msg is-backorder">
+              <div class="cart-product-info__delivery-msg__icon" [id]="'backorder-icon_' + entryNumber">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+              </div>
+              <div class="cart-product-info__delivery-msg__text" [id]="'cart.backorder_text_' + entryNumber">
+                {{
+                  'cart.backorder_text'
+                    | cxTranslate
+                      : {
+                          stock: availability.quantity,
+                          date: availability.estimatedDate | cxDate: 'fullDate'
+                        }
+                }}
+              </div>
+            </li>
+          </ng-container>
+        </ng-template>
+      </ng-template>
+    </ul>
+
+    <div class="cart-product-info">
+      <h2
+        class="productName is-mobile"
+        [id]="'cart-product-details-mobile-name-' + entryNumber"
+        [title]="cartItem.product?.name"
+      >
+        <a
+          [id]="'cart-product-details-mobile-name-link-' + entryNumber"
+          [innerHTML]="cartItem.product?.name"
+          [routerLink]="cartItem.product?.url"
+          [queryParams]="{ itemList: itemListEntity.CART }"
+          (click)="trackProductClick(cartItem, entryNumber)"
+        ></a>
+      </h2>
+
+      <div class="cart-product-info__item is-image">
+        <div class="image-wrap" [id]="'cart-product-image-' + entryNumber">
+          <a
+            [routerLink]="cartItem.product?.url"
+            [queryParams]="{ itemList: itemListEntity.CART }"
+            (click)="trackProductClick(cartItem, entryNumber)"
+          >
+            <picture>
+              <source
+                [srcset]="
+                  cartItem.product?.images?.length > 0
+                    ? useWebpImg('landscape_small_webp', cartItem.product?.images, cartItem.product?.images[0])
+                    : missingImgSrc
+                "
+              />
+              <img
+                [src]="cartItem.product?.images?.length > 0 ? cartItem.product?.images[0]?.url : missingImgSrc"
+                [alt]="cartItem.product?.name"
+                width="65"
+                height="65"
+              />
+            </picture>
+          </a>
+        </div>
+
+        <div *ngIf="cartItem.product?.energyEfficiency">
+          <app-energy-efficiency-label
+            [id]="cartItem.product?.code + '-energy-efficiency-label'"
+            [energyEfficiency]="cartItem.product?.energyEfficiency"
+            [energyEfficiencyLabelImageUrl]="energyEfficiencyLabelImageUrl"
+          ></app-energy-efficiency-label>
+        </div>
+      </div>
+
+      <div class="cart-product-info__item is-info">
+        <h2 class="productName is-desktop" [id]="'cart-product-details-name-' + entryNumber">
+          <a
+            [id]="'cart-product-details-name-link-' + entryNumber"
+            [innerHTML]="cartItem.product?.name"
+            [routerLink]="cartItem.product?.url"
+            [queryParams]="{ itemList: itemListEntity.CART }"
+            (click)="trackProductClick(cartItem, entryNumber)"
+          ></a>
+        </h2>
+
+        <div class="cell-info-table">
+          <div
+            *ngIf="cartItem.product?.codeErpRelevant"
+            class="cell-info-cell"
+            [id]="'cart-product-details-artNr-' + entryNumber"
+          >
+            <div class="hd" [id]="'cart.artNr-' + entryNumber">
+              {{ 'cart.artNr' | cxTranslate }}
+            </div>
+
+            <div
+              class="bd ellipsis js-product-code"
+              [id]="'cart-product-code-' + entryNumber"
+              [title]="cartItem.product?.codeErpRelevant"
+            >
+              {{ cartItem.product?.codeErpRelevant | articleNumber: cartItem.product?.codeErpRelevant }}
+            </div>
+          </div>
+
+          <div
+            *ngIf="cartItem.product?.typeName"
+            class="cell-info-cell"
+            [id]="'cart-product-details-mpn-' + entryNumber"
+          >
+            <div class="hd" [id]="'homepage.mpn-' + entryNumber">
+              {{ 'homepage.mpn' | cxTranslate }}
+            </div>
+
+            <div
+              class="bd ellipsis"
+              [id]="'cart-product-type-name-' + entryNumber"
+              [title]="cartItem.product?.typeName"
+            >
+              {{ cartItem.product?.typeName }}
+            </div>
+          </div>
+
+          <div
+            *ngIf="cartItem.product?.distManufacturer"
+            class="cell-info-cell"
+            [id]="'cart-product-details-manufacturer-' + entryNumber"
+          >
+            <div class="hd" [id]="'homepage.manufacturer_' + entryNumber">
+              {{ 'homepage.manufacturer' | cxTranslate }}
+            </div>
+
+            <div
+              *ngIf="cartItem.product?.distManufacturer"
+              class="bd ellipsis"
+              [id]="'cart-product-manufact-name-' + entryNumber"
+              [title]="cartItem.product?.distManufacturer.name"
+            >
+              {{ cartItem.product?.distManufacturer.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="isRsProduct"
+        class="cart-product-info__item is-rs-message is-mobile"
+        [id]="'cart-product-details-rs-message_mobile_' + entryNumber"
+      >
+        <app-icon class="" iconName="bookmark" iconType="svg" iconAltText="Bookmark icon"></app-icon>
+        {{ 'cart.rs.delivery.information' | cxTranslate }}
+      </div>
+
+      @if (availability$ | async; as availabilityData) {
+        <div class="cart-product-info__item is-availability">
+          <app-cart-product-availability
+            [cartItem]="cartItem"
+            [productAvailability]="availabilityData"
+          ></app-cart-product-availability>
+        </div>
+
+        @if (quantityChangeable) {
+          <div class="cart-product-info__item is-numeric-stepper-mobile" [formGroup]="addToCartForm">
+            <app-numeric-stepper
+              [ids]="numericStepperID"
+              [minimumQuantity]="cartItem.product?.orderQuantityMinimum"
+              [quantityStep]="cartItem.product?.orderQuantityStep"
+              [productCode]="cartItem.product?.code"
+              [entryNumber]="cartItem.entryNumber"
+              [control]="addToCartForm.get('quantity')"
+              [availabilityData]="availabilityData"
+              [salesStatus]="cartItem.product.salesStatus"
+              [isCart]="true"
+              [disabled]="(isContinueDisabled_ | async) || (isRecalculateInProgress_ | async)"
+              [inputDelay]="inputDelay"
+            ></app-numeric-stepper>
+          </div>
+        }
+      }
+      <hr class="is-mobile-divider" />
+
+      <div class="cart-product-info__item is-price">
+        <ng-container *ngIf="cartItem.totalPrice?.value !== 0">
+          <strong class="is-mobile-label" [id]="'cart-product-prices-span-mobile-' + entryNumber">
+            {{ 'cart.price' | cxTranslate }}
+          </strong>
+
+          <span class="price" [id]="'cart-product-prices-span-' + entryNumber">
+            {{ cartItem.basePrice?.currencyIso }}
+            {{ cartItem.basePrice?.value | price }}
+          </span>
+
+          <span *ngIf="isDiscount" class="price discounted" [id]="'cart-product-discounted-prices-span-' + entryNumber">
+            {{ cartItem.baseListPrice?.currencyIso }}
+            {{ cartItem.baseListPrice.value | price }}
+          </span>
+        </ng-container>
+      </div>
+
+      <div class="cart-product-info__item is-price is-price--total">
+        <ng-container *ngIf="cartItem.totalPrice?.value !== 0">
+          <strong class="is-mobile-label" [id]="'cart-product-total-prices-span-mobile-' + entryNumber">
+            {{ 'cart.subtotal' | cxTranslate }}
+          </strong>
+
+          <div>
+            <span class="price" [id]="'cart-product-total-prices-span-' + entryNumber">
+              {{ cartItem.totalPrice?.currencyIso }}
+              {{ cartItem.totalPrice?.value | price }}
+            </span>
+
+            <span
+              *ngIf="isDiscount"
+              class="price discounted"
+              [id]="'cart-product-total-discounted-prices-span-' + entryNumber"
+            >
+              {{ cartItem.totalListPrice?.currencyIso }}
+              {{ cartItem.totalListPrice.value | price }}
+            </span>
+          </div>
+          <div
+            *ngIf="!quantityChangeable"
+            class="cart-product-info__item__quantity"
+            [id]="'cart-product-item-qty-' + entryNumber"
+          >
+            {{ 'basket.page.quantity' | cxTranslate }} {{ cartItem.quantity }}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div
+      *ngIf="isRsProduct"
+      class="cart-product-info__item is-rs-message is-desktop"
+      [id]="'cart-product-details-rs-message_desktop_' + entryNumber"
+    >
+      <app-icon class="" iconName="bookmark" iconType="svg" iconAltText="Bookmark icon"></app-icon>
+      {{ 'cart.rs.delivery.information' | cxTranslate }}
+    </div>
+
+    <div *ngIf="cartItem.product?.calibrationService" class="item-cart__holder__calibration">
+      <div class="item-cart__holder__calibration-service">
+        <div class="item-cart__holder__calibration-service--title" [id]="'calibration-title_' + entryNumber">
+          {{ 'cart.calibration_title' | cxTranslate }}
+        </div>
+
+        <div class="item-cart__holder__calibration-service--context" [id]="'calibration-text_' + entryNumber">
+          {{ 'cart.calibration_text' | cxTranslate }}
+          <a
+            class="link"
+            [id]="'calibration-text-link_' + entryNumber"
+            routerLink="/cms/1629-calibration-service"
+            target="_blank"
+          >
+            {{ 'cart.calibration_cta_text' | cxTranslate }}
+          </a>
+        </div>
+
+        <div class="radio-button-holder" [id]="'calibration-radio-buttons_' + entryNumber">
+          <button
+            class="btn form-check"
+            [id]="'cart-product-nocalibration-' + entryNumber"
+            [disabled]="isCalibrationLoading"
+            (click)="
+              onCalibrationSelect(cartItem.product?.code, cartItem.product?.calibrationItemArtNo, cartItem.quantity)
+            "
+          >
+            <input
+              class="custom-control-input"
+              [id]="'withoutCalibration-' + entryNumber"
+              [checked]="!cartItem.product?.calibrated"
+              type="radio"
+            />
+            <label [id]="'cart-product-nocalibration-label-' + entryNumber">
+              {{ 'cart.calibration_no' | cxTranslate }}
+            </label>
+          </button>
+
+          <button
+            class="btn form-check"
+            [id]="'cart-product-withcalibration-' + entryNumber"
+            [disabled]="isCalibrationLoading"
+            (click)="
+              onCalibrationSelect(
+                cartItem.product?.code,
+                cartItem.product?.calibrationItemArtNo,
+                entryNumber,
+                cartItem.quantity
+              )
+            "
+          >
+            <input
+              class="custom-control-input"
+              [id]="'withCalibration_' + entryNumber"
+              [checked]="cartItem.product?.calibrated"
+              type="radio"
+            />
+            <label [id]="'cart-product-withcalibration-label-' + entryNumber">
+              {{ 'cart.calibration_yes' | cxTranslate }}
+            </label>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="removable || referenceEditable" class="cart-product-info__item is-footer">
+      <div class="is-left">
+        <div *ngIf="removable" class="toolbar">
+          <button
+            class="btn btn-numeric-remove"
+            [id]="'cart-product-remove-button-' + entryNumber"
+            [disabled]="isRecalculateInProgress_ | async"
+            (click)="removeProduct()"
+          >
+            {{ 'cart.remove_from_cart' | cxTranslate }}
+          </button>
+        </div>
+
+        <div
+          *ngIf="referenceEditable"
+          class="cart-reference"
+          [id]="'cart-product-reference-' + entryNumber"
+          [class]="'js-cart-reference_' + entryNumber"
+        >
+          <form [formGroup]="cartProductReferenceForm">
+            <app-reference-input
+              [control]="cartProductReferenceForm.get('cartProductReference')"
+              [id]="'cartProductReferenceInput_' + entryNumber"
+              [value]="cartItem.customerReference ?? ''"
+              (onPaste)="onPasteProductRef($event)"
+              labelText="{{ 'cart.your_reference' | cxTranslate }}"
+              labelInfoText="({{ 'cart.your_reference_optional' | cxTranslate }})"
+            ></app-reference-input>
+          </form>
+        </div>
+      </div>
+
+      @if (availability$ | async; as availabilityData) {
+        <div *ngIf="quantityChangeable" class="is-right">
+          <div class="btn-wrapper" [id]="'cart-product-add-button-' + entryNumber">
+            <form [formGroup]="addToCartForm">
+              <app-numeric-stepper
+                [ids]="numericStepperID"
+                [minimumQuantity]="cartItem.product?.orderQuantityMinimum"
+                [quantityStep]="cartItem.product?.orderQuantityStep"
+                [productCode]="cartItem.product?.code"
+                [entryNumber]="cartItem.entryNumber"
+                [control]="addToCartForm.get('quantity')"
+                [availabilityData]="availabilityData"
+                [salesStatus]="cartItem.product.salesStatus"
+                [isCart]="true"
+                [disabled]="isRecalculateInProgress_ | async"
+                [inputDelay]="inputDelay"
+              ></app-numeric-stepper>
+            </form>
+          </div>
+        </div>
+      }
+    </div>
+  </ng-container>
+
+  <app-component-loading-spinner *ngIf="(isLoading_ | async) && isThisProductLoading"></app-component-loading-spinner>
+</article>

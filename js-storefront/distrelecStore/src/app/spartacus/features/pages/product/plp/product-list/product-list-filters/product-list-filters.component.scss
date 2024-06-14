@@ -1,0 +1,119 @@
+@import 'global-utilities';
+
+:host {
+  background: $colour-pale-grey;
+  display: block;
+}
+
+.plp-filters {
+  background: $colour-white;
+  position: relative;
+  border: 1px solid $leadTime-border;
+  border-radius: 5px;
+  padding: ($ux-spacing-unit * 5) 0 0 ($ux-spacing-unit * 5);
+
+  @include tabletPlus {
+    margin-bottom: 32px;
+  }
+
+  .no-selected-filters-box {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    margin-left: $spacing-unit * 2;
+    margin-right: $spacing-unit * 2;
+  }
+
+  .filter-category {
+    align-items: flex-start;
+    border-bottom: 1px solid $leadTime-border;
+    padding-bottom: ($spacing-unit * 4);
+    gap: 16px;
+
+    @include mobileOnly {
+      padding-left: 0px;
+    }
+
+    @include tabletPlus {
+      align-items: center;
+    }
+
+    .category-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .category-link {
+      @include typography-ui-sm();
+      color: $ux-text-default;
+      font-weight: $font-weight-normal;
+
+      &:hover {
+        color: $colour-link-blue;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+
+    .category-title {
+      @include typography-text-lg();
+      font-weight: $font-weight-medium;
+      color: $ux-text-default;
+    }
+  }
+
+  .filter-group-list-button-container {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    max-width: 100%;
+    padding: 24px 20px 24px 0;
+  }
+
+  .minimise-filters-button {
+    @include font-size(14px);
+    position: absolute;
+    left: 50%;
+    bottom: -20px;
+    transform: translateX(-50%);
+    padding: ($spacing-unit * 2) ($spacing-unit * 6);
+    z-index: 99;
+    background-color: $colour-dark-grey;
+    border: none;
+    border-radius: 20px;
+    color: $colour-white;
+    font-weight: $font-weight-bold;
+  }
+
+  label {
+    margin: 0;
+  }
+
+  .m-btn {
+    gap: 20px;
+
+    button {
+      border: 1px solid $colour-pale-grey;
+      flex-grow: 1;
+    }
+  }
+}
+
+.m-filters,
+.m-sort {
+  @include transition(transform 0.3s ease);
+
+  &.active {
+    transform: translateX(0);
+    height: 100%;
+  }
+}
+
+.m-filters {
+  transform: translateX(100vw);
+}
+
+.m-sort {
+  transform: translateX(-100%);
+}

@@ -1,0 +1,98 @@
+@import 'global-utilities';
+
+.checkbox {
+  margin-bottom: 0;
+  cursor: pointer;
+
+  &-input {
+    // Set wanted appearance
+    position: relative;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+
+    /* Adjusts the position of the checkboxes on the text baseline */
+    vertical-align: bottom;
+
+    // Unset the default appearance so that we can style it ourselves
+    appearance: none;
+    background-color: $colour-white;
+    border: 1px solid $colour-redesign-light-grey;
+    border-radius: 2px;
+
+    &::before {
+      position: absolute;
+      top: 2px;
+      left: 1px;
+      color: $ux-text-default;
+      visibility: hidden;
+      content: url('/app/spartacus/assets/media/icons/icon/check-large.svg');
+    }
+
+    &:checked::before {
+      visibility: visible;
+    }
+
+    &.small {
+      width: 20px;
+      height: 20px;
+
+      &:checked::before {
+        top: 1px;
+        left: 0;
+        content: url('/app/spartacus/assets/media/icons/icon/check-small.svg');
+      }
+    }
+
+    &.disabled {
+      cursor: not-allowed;
+      background: $ux-button-disabled;
+      border: none;
+    }
+
+    &.disabled::before {
+      content: '';
+    }
+
+    &:hover:not(&:checked, .disabled) {
+      border: 2px solid $colour-redesign-light-grey;
+    }
+  }
+
+  .labels {
+    .primary-label {
+      flex-basis: 100%;
+
+      @include typography-text-sm;
+
+      font-weight: $font-weight-medium;
+      color: $ux-text-default;
+      margin-bottom: 0;
+
+      &.small {
+        @include typography-text-xs();
+      }
+    }
+
+    .secondary-label {
+      @include typography-text-xs;
+
+      color: $ux-grey;
+      margin-bottom: 0;
+    }
+
+    .primary-label-disabled {
+      flex-basis: 100%;
+      font-weight: $font-weight-medium;
+      color: $ux-label-disabled;
+
+      @include typography-text-sm;
+    }
+
+    .secondary-label-disabled {
+      @include typography-text-xs;
+
+      color: $ux-label-disabled;
+    }
+  }
+}

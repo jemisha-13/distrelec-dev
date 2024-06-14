@@ -1,0 +1,17 @@
+<ng-container *ngIf="userId$ | async as userId">
+  <div class="my-lists-holder" (click)="displayLoginModule(userId, $event)">
+    <button class="btn">
+      <app-icon iconName="list" iconType="svg" width="20" height="20"></app-icon>
+      <span class="mylists-label" id="header-mylists-label">{{ 'metahd.mylists' | cxTranslate }}</span>
+    </button>
+  </div>
+
+  <app-dist-slide-drawer [title]="'login.login_register' | cxTranslate" direction="RIGHT" uid="list-drawer-uid">
+    <div class="alert-banner">
+      <app-alert-banner bannerType="general" alertType="regular-alert">
+        {{ 'form.signin_use_feature' | cxTranslate }}
+      </app-alert-banner>
+    </div>
+    <app-header-login-form *ngIf="userId === 'anonymous'" redirectTo="shopping"></app-header-login-form>
+  </app-dist-slide-drawer>
+</ng-container>

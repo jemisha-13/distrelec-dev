@@ -1,0 +1,58 @@
+#
+# Import the CMS content for the Distrelec site emails
+#
+# Localization en
+#
+$contentMasterCatalog=distrelecContentCatalog
+$contentCatalog=distrelec_SEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$emailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/emails
+$cmsSiteUID=distrelec_SE
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+# Email page Template
+INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;active;frontendTemplateName;subject(code);htmlTemplate(code);restrictedPageTypes(code)
+;;QuoteEmailTemplate;Quote Email Template;true;QuoteEmail;$cmsSiteUID-Email_Quote_Email_Subject;$cmsSiteUID-Email_Quote_Email_Body;EmailPage
+
+# Templates for CMS Cockpit Page Edit
+UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;QuoteEmailTemplate;$jarResourceCms/structure-view/structure_quoteEmailTemplate.vm
+
+# Language
+$lang=en
+# Email Pages
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang];masterTemplate(uid,$contentCV)
+;;QuoteEmail;customerservices@distrelec.com;"Distrelec Kunde";QuoteEmailTemplate
+
+# Email velocity templates
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];rendererType(code)[default='velocity'];
+ ;$cmsSiteUID-Email_Quote_Email_Subject;E-Mail-Subject Quote Email;$emailResource/email-quoteEmailSubject.vm;;com.namics.distrelec.b2b.facades.process.email.context.DistQuoteEmailContext
+ ;$cmsSiteUID-Email_Quote_Email_Body;E-Mail Quote Email;$emailResource/email-quoteEmailBody.vm;;com.namics.distrelec.b2b.facades.process.email.context.DistQuoteEmailContext
+
+
+# Language
+$lang=sv
+
+# Email Pages
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang];masterTemplate(uid,$contentCV)
+ ;;QuoteEmail;customerservices@distrelec.com;"Distrelec Customer";QuoteEmailTemplate
+
+# Email velocity templates
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];rendererType(code)[default='velocity'];contextClass
+ ;$cmsSiteUID-Email_Quote_Email_Body;E-Mail Quote Email;$emailResource/email-quoteEmailBody.vm;;com.namics.distrelec.b2b.facades.process.email.context.DistQuoteEmailContext
+ ;$cmsSiteUID-Email_Quote_Email_Subject;E-Mail-Subject Quote Email;$emailResource/email-quoteEmailSubject.vm;;com.namics.distrelec.b2b.facades.process.email.context.DistQuoteEmailContext
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='QuoteEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='QuoteEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-QuoteEmail;Logo;;EmailLogoSlot;true
+
+
+############################################################################################
+# Quote Email Template
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;QuoteEmail;Quote Email Template;QuoteEmailTemplate;true

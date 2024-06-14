@@ -1,0 +1,29 @@
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(uid,$contentCV)
+;;FreeFreightMessageSlot;LogoComponent
+
+
+INSERT_UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];name;title[lang=en];parent(uid,$contentCV);children(uid,$contentCV)
+
+## Popular Search Terms
+;;PopularNavNode;Popular Navigation Node;Popular;FooterNavNode;
+;;PopularNavNode_L2D_1;Popular L2D 1;&nbsp;PopularNavNode;
+;;PopularNavNode_L2D_2;Popular L2D 2;&nbsp;PopularNavNode;
+;;PopularNavNode_L2D_3;Popular L2D 3;&nbsp;PopularNavNode;
+;;PopularNavNode_L2D_4;Popular L2D 4;&nbsp;PopularNavNode;
+;;PopularNavNode_L2D_5;Popular L2D 5;&nbsp;PopularNavNode;
+;;PopularNavNode_L2D_6;Popular L2D 6;&nbsp;PopularNavNode;
+;;PopularNavNode_L2D_7;Popular L2D 7;&nbsp;PopularNavNode;
+;;PopularNavNode_L2D_8;Popular L2D 8;&nbsp;PopularNavNode;
+
+## Update Navigation node's children
+UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];children(uid,$contentCV)
+;;PopularNavNode;PopularNavNode_L2D_1,PopularNavNode_L2D_2,PopularNavNode_L2D_3,PopularNavNode_L2D_4,PopularNavNode_L2D_5,PopularNavNode_L2D_6,PopularNavNode_L2D_7,PopularNavNode_L2D_8
+
+# CMS Footer Component
+UPDATE DistFooterComponent;$contentCV[unique=true];uid[unique=true];navigationNodes(uid,$contentCV);
+;;DistFooterComponent;SupportAndServicesNavNode,InfoCenterNavNode,ManufacturerStoresNavNode,ToolsNavNode,PopularNavNode

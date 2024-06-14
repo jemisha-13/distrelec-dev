@@ -1,0 +1,40 @@
+<ng-container *ngIf="compareProducts$ | async as compareProducts">
+  <div class="tableGrid__additional" id="specification-column">
+    <ul>
+      <div class="blank" [class.extra-height]="isEnergyLabel"></div>
+      <div class="table-primary" id="product.information.title">
+        {{ 'product.information.title' | cxTranslate }}
+      </div>
+      <div class="items items__price" id="cart.price">
+        {{ 'cart.compare_price' | cxTranslate }}
+      </div>
+      <div class="items items__stock" id="cart.availability">
+        {{ 'cart.compare_availability' | cxTranslate }}
+      </div>
+      <div class="items items__dataSheet" id="product.compare.data_pdf">
+        {{ 'product.compare.data_pdf' | cxTranslate }}
+      </div>
+      <div class="table-primary" id="product.compare.attributes_title">
+        {{ 'product.compare.attributes_title' | cxTranslate }}
+      </div>
+      <div
+        *ngFor="let attribute of attributes; let attributeIndex = index"
+        class="items items__attributes"
+        [id]="'product.compare.attribute_' + attributeIndex"
+      >
+        {{ attribute.name }}
+      </div>
+    </ul>
+  </div>
+  <div class="compare-list" id="compare-list">
+    <div *ngFor="let product of compareProducts; let productIndex = index" class="compare-list__item">
+      <app-compare-list-item
+        [product]="product"
+        [index]="productIndex"
+        [isEnergyLabelPresent]="isEnergyLabel"
+        [attributes]="attributes"
+      ></app-compare-list-item>
+    </div>
+  </div>
+  <app-print-compare></app-print-compare>
+</ng-container>

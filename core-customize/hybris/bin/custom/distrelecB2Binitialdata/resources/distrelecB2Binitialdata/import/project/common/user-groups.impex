@@ -1,0 +1,61 @@
+#
+# Import Sample Customers, User Groups and BackOffice Users
+#
+
+$customergroup=customergroup
+ 
+$passwordEncoding=md5
+
+
+$defaultUserPassword=12341234
+$defaultAdminPassword=d1str313c!
+$defaultNamicsPassword=namics1234
+$defaultDistrelecPassword=distrelec1234
+$defaultCognizantPassword=cognizant1234
+$defaultTempPassword=temp1234
+
+$setPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultUserPassword']
+$setAdminPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultAdminPassword']
+$setNamicsPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultNamicsPassword']
+$setDistrelecPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultDistrelecPassword']
+$setCognizantPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$$defaultCognizantPassword']
+$setTempPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultTempPassword']
+
+
+# Distrelec Employee
+INSERT_UPDATE Employee;UID[unique=true];$setDistrelecPassword;description;name;groups(uid);sessionLanguage(isocode);sessionCurrency(isocode)
+;nabil.benothman;;"Nabil Benothman, Distrelec";"Nabil Benothman";admingroup,employeegroup,cockpitgroup;en;CHF
+;ruben.diaz;;"Ruben Diaz Roman, Distrelec";"Ruben Diaz Roman";admingroup,employeegroup,cockpitgroup;en;CHF
+;erik.fries;;"Erik Fries, Distrelec";"Erik Fries";admingroup,employeegroup,cockpitgroup;en;CHF
+;neeraj.shandilya;;"Neeraj Shandilya, Distrelec";"Neeraj Shandilya";admingroup,employeegroup,cockpitgroup;en;CHF
+;will.spalinger;;"Will Spalinger, Distrelec";"Will Spalinger";admingroup,employeegroup,cockpitgroup;en;CHF
+;aditya.bhavaraju;;”Aditya Bhavaraju, Distrelec";"Aditya Bhavaraju";admingroup,employeegroup,cockpitgroup;en;CHF
+
+# Temp Employee
+INSERT_UPDATE Employee;UID[unique=true];$setTempPassword;description;name;groups(uid);sessionLanguage(isocode);sessionCurrency(isocode)
+;thomas.pschill;;"Thomas Pschill, Fyayc";"Thomas Pschill";admingroup,employeegroup,cockpitgroup;en;CHF
+;didier.leimbach;;"Didier Leimbach, Fyayc";"Florian Bühler";admingroup,employeegroup,cockpitgroup;en;CHF
+
+
+# Cognizant Employee
+INSERT_UPDATE Employee;UID[unique=true];$setCognizantPassword;description;name;groups(uid);sessionLanguage(isocode);sessionCurrency(isocode)
+;akshay.agrawal;;"Akshay Agrawal, Cognizant";"Akshay Agrawal";admingroup,employeegroup,cockpitgroup;en;CHF
+
+# Distrelec call center user group
+INSERT_UPDATE Employee;UID[unique=true];$setPassword;description;name;groups(uid);sessionLanguage(isocode);sessionCurrency(isocode)
+;callcenter.NL;;"Call center for NL";"Call Center NL";distCallcenterUserGroup_NL;en;EUR
+;callcenter.PL;;"Call center for PL";"Call Center PL";distCallcenterUserGroup_PL;en;PLN
+;callcenter.EE;;"Call center for EE";"Call Center EE";distCallcenterUserGroup_EE;en;EUR
+;callcenter.DK;;"Call center for DK";"Call Center DK";distCallcenterUserGroup_DK;en;DKK
+;callcenter.LV;;"Call center for LV";"Call Center LV";distCallcenterUserGroup_LV;en;EUR
+;callcenter.EXP;;"Call center for EXP";"Call Center EXP";distCallcenterUserGroup_EXP;en;EUR
+;callcenter.SE;;"Call center for SE";"Call Center SE";distCallcenterUserGroup_SE;en;SEK
+;callcenter.NO;;"Call center for NO";"Call Center NO";distCallcenterUserGroup_NO;en;NOK
+;callcenter.FI;;"Call center for FI";"Call Center FI";distCallcenterUserGroup_FI;en;EUR
+
+# Distrelec content manager group
+INSERT_UPDATE Employee;UID[unique=true];$setDistrelecPassword;description;name;groups(uid);sessionLanguage(isocode);sessionCurrency(isocode)
+;laura.latacz;;"Latacz, Laura, Distrelec";"Latacz, Laura";distContentManagerGroup;en;CHF
+;jordan.schorno;;"Jordan Schorno, Distrelec";"Jordan Schorno";distContentManagerGroup;en;CHF
+;angel.munoz;;"Munoz Zurdo, Angel Jose, Distrelec";"Munoz Zurdo, Angel Jose";distContentManagerGroup;en;CHF
+

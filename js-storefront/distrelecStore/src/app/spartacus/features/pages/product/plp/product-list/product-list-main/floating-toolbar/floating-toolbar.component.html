@@ -1,0 +1,29 @@
+<div
+  *ngIf="(event | async) !== null"
+  class="floating-toolbar js-floating-toolbar"
+  id="floating-toolbar"
+  [class.no-floating]="!isFloating"
+>
+  <div *ngIf="currentState === floatingToolbarEvents.ITEM_ADDED" class="toolbar toolbar-item-added">
+    {{ 'plp.toolbar.item_added' | cxTranslate }}
+  </div>
+
+  <div *ngIf="currentState === floatingToolbarEvents.ITEM_REMOVED" class="toolbar toolbar-item-removed">
+    {{ 'plp.toolbar.item_removed' | cxTranslate }}
+  </div>
+
+  <div *ngIf="currentState === floatingToolbarEvents.DEFAULT" class="toolbar">
+    <span id="plp-toolbar-selected-items">( {{ selectedItems }} {{ 'text.selected' | cxTranslate }} )</span>
+    <a class="link link-icon" id="plp-toolbar-compare" (click)="trackCompare()" routerLink="/compare">
+      <fa-icon [icon]="faExchangeAlt"></fa-icon>
+      <span>{{ 'plp.facet_buttons_and_headers.compare' | cxTranslate }}</span>
+    </a>
+    <span class="link link-icon" id="plp-toolbar-selection" (click)="scrollToTop()">
+      <fa-icon [icon]="faArrowUp"></fa-icon>
+      <span>{{ 'plp.toolbar.selection_to_top' | cxTranslate }}</span>
+    </span>
+    <span class="link" id="plp-toolbar-clear-all" (click)="clearAllProductCookies('compareProductCodes')">
+      {{ 'text.clear.all' | cxTranslate }}
+    </span>
+  </div>
+</div>

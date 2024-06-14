@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2011 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util.xsd">
+           
+<!--     <bean id="GeoTargetingRedirectServletFilterBean" class="com.namics.distrelec.b2c.storefront.filters.NamicsGeoTargetingRedirectServletFilter"> -->
+<!--     	<property name="geoTargetingRedirectService" ref="geoTargetingRedirectService" /> -->
+<!--     	<property name="geoTargetingLookupService" ref="geoTargetingLookupService" /> -->
+<!--     	<property name="configurationService" ref="configurationService" /> -->
+<!--     	<property name="useRequestHeaderForIpDedection" value="#{configurationService.configuration.getProperty('namshop.geotargeting.useRequestHeaderForIpDedection')}" /> -->
+<!--     	<property name="requestHeaderName" value="fakedIpAddress,X-Forwarded-For" /> -->
+<!--     </bean> -->
+    
+<!--     <bean id="contentSearchBreadcrumbBuilder" class="com.namics.distrelec.b2c.storefront.breadcrumb.impl.NamicsContentSearchBreadcrumbBuilder"> -->
+<!-- 		<property name="contentSearchQueryDataUrlResolver" ref="contentSearchQueryDataUrlResolver"/> -->
+<!-- 	</bean> -->
+	
+	<bean id="NamicsSwitchTerrificViewHandlerInterceptorAdapter" class="com.namics.distrelec.b2b.storefront.interceptors.NamicsSwitchTerrificViewHandlerInterceptorAdapter" />
+    <bean id="digitalDatalayerHandlerInterceptorAdapter" class="com.namics.distrelec.b2b.storefront.interceptors.DigitalDatalayerHandlerInterceptorAdapter" />
+    
+    <!-- JSP rendering time monitor -->
+	<mvc:interceptors>
+		<!-- Here intercepts will intercept all URLs -->
+		
+		<!-- Here interceptors will intercept only specific URLs -->
+		<!-- Rendering time handler interceptor -->
+		<mvc:interceptor>
+			<mvc:mapping path="/search" />
+			<mvc:mapping path="/*/search" />
+			<mvc:mapping path="/*/c/*" />
+			<mvc:mapping path="/*/p/*" />
+			<mvc:mapping path="/*/productinfo/*" />
+			<bean id="renderingTimeHandlerInterceptor" class="com.namics.distrelec.b2b.storefront.handlerinterceptors.impl.RenderingTimeHandlerInterceptor" />
+		</mvc:interceptor>
+		<!-- Model analysis handler interceptor -->
+		<!-- <mvc:interceptor>
+			<mvc:mapping path="/search" />
+			<mvc:mapping path="/*/search" />
+			<mvc:mapping path="/*/c/*" />
+			<mvc:mapping path="/*/p/*" />
+			<mvc:mapping path="/*/productinfo/*" />
+			<bean id="analysingModelHandlerInterceptor" class="com.namics.distrelec.b2b.storefront.handlerinterceptors.impl.AnalysingModelHandlerInterceptor" />
+		</mvc:interceptor> -->
+	</mvc:interceptors>
+           
+</beans>

@@ -1,0 +1,40 @@
+# Import config properties into impex macros
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+
+UPDATE CMSSite; uid[unique = true]; previewURL
+              ; distrelec         ; $config-website.distrelec_Int.https
+              ; distrelec_AT      ; $config-website.distrelec_AT.https
+              ; distrelec_BE      ; $config-website.distrelec_BE.https
+              ; distrelec_CH      ; $config-website.distrelec_CH.https
+              ; distrelec_CZ      ; $config-website.distrelec_CZ.https
+              ; distrelec_DE      ; $config-website.distrelec_DE.https
+              ; distrelec_DK      ; $config-website.distrelec_DK.https
+              ; distrelec_EE      ; $config-website.distrelec_EE.https
+              ; distrelec_EX      ; $config-website.distrelec_EX.https
+              ; distrelec_FI      ; $config-website.distrelec_FI.https
+              ; distrelec_FR      ; $config-website.distrelec_FR.https
+              ; distrelec_HU      ; $config-website.distrelec_HU.https
+              ; distrelec_IT      ; $config-website.distrelec_IT.https
+              ; distrelec_LT      ; $config-website.distrelec_LT.https
+              ; distrelec_LV      ; $config-website.distrelec_LV.https
+              ; distrelec_NL      ; $config-website.distrelec_NL.https
+              ; distrelec_NO      ; $config-website.distrelec_NO.https
+              ; distrelec_PL      ; $config-website.distrelec_PL.https
+              ; distrelec_RO      ; $config-website.distrelec_RO.https
+              ; distrelec_SE      ; $config-website.distrelec_SE.https
+              ; distrelec_SK      ; $config-website.distrelec_SK.https
+              ; distrelec_TR      ; $config-website.distrelec_TR.https
+
+UPDATE CMSSite; uid[unique = true]; urlPatterns[mode = append]
+              ; distrelec         ; (?i)^https?://distrelec-int\.[^/]+(|/.*|\?.*)$
+              ; distrelec         ; https?://.*int\.distrelec\.com.*
+
+UPDATE CMSSite; uid[unique = true]; registrationCurrencies(isocode); defaultCurrency(isocode)
+              ; distrelec         ; CHF                            ; CHF
+
+UPDATE BaseStore; uid[unique = true]        ; currencies(isocode); defaultCurrency(isocode)
+                ; internationalB2CBaseStore ; CHF                ; CHF
+                ; internationalB2BBaseStore ; CHF                ; CHF
+
+UPDATE SmarteditConfiguration; key[unique = true]     ; value
+                             ; storefrontPreviewRoute ; cx-preview

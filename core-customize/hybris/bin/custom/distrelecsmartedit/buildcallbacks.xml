@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+ Copyright (c) 2022 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<project name="distrelecsmartedit_buildcallbacks">
+  <patternset id="extension.distrelecsmartedit.binary.filter">
+    <patternset refid="extension.binary.filter"/>
+    <exclude name="build/"/>
+    <exclude name="**/node_modules/"/>
+    <exclude name="jsTarget/"/>
+    <exclude name="apps/**/.angular/"/>
+    <exclude name="apps/**/.rush/"/>
+    <exclude name="apps/**/.temp/"/>
+    <exclude name="apps/**/junit/"/>
+  </patternset>
+  <patternset id="extension.distrelecsmartedit.source.filter">
+    <patternset refid="extension.source.filter"/>
+    <exclude name="build/"/>
+    <exclude name="**/node_modules/"/>
+    <exclude name="jsTarget/"/>
+    <exclude name="apps/**/.angular/"/>
+    <exclude name="apps/**/.rush/"/>
+    <exclude name="apps/**/.temp/"/>
+    <exclude name="apps/**/junit/"/>
+  </patternset>
+  <patternset id="extension.distrelecsmartedit.production.filter">
+    <patternset refid="extension.production.filter"/>
+    <exclude name="build/"/>
+    <exclude name="**/node_modules/"/>
+    <exclude name="jsTarget/"/>
+    <exclude name="apps/**/.angular/"/>
+    <exclude name="apps/**/.rush/"/>
+    <exclude name="apps/**/.temp/"/>
+    <exclude name="apps/**/junit/"/>
+  </patternset>
+  <macrodef name="distrelecsmartedit_before_clean">
+    <sequential>
+      <!--            <invokeRush arguments="purge" path="${ext.smartedit.path}/apps/smartedit-commons" failonerror="false" />-->
+      <delete dir="${ext.smartedit.path}/apps/smartedit-commons/.rush"/>
+    </sequential>
+  </macrodef>
+  <macrodef name="distrelecsmartedit_before_build">
+    <sequential>
+      <build_smartedit_extension appNames="distrelecsmarteditcommons,distrelecsmarteditContainer,distrelecsmartedit" extensionName="distrelecsmartedit"/>
+    </sequential>
+  </macrodef>
+  <macrodef name="distrelecsmartedit_before_yunit">
+    <sequential>
+      <if>
+        <istrue value="${testclasses.web}"/>
+        <then>
+          <test_smartedit_extension appNames="distrelecsmarteditcommons,distrelecsmarteditContainer,distrelecsmartedit" extensionName="distrelecsmartedit"/>
+        </then>
+      </if>
+    </sequential>
+  </macrodef>
+  <!-- Please find details in https://cxjira.sap.com/browse/CMSX-10210
+   that why we can use 'web' property to ensure our frontend UT only execute once in team & commerce-suite pipeline -->
+  <!--
+        How-to run unit tests in the extension:
+        1- Execute the command "ant allwebtests" within "platform" folder (will execute tests for ALL extensions).
+        2- OR Execute the command "npm run test" or "npm run test:dev" in each apps/*/* folder individually.
+        3- OR Execute the command "ant test_distrelecsmartedit"
+    -->
+  <target name="test_distrelecsmartedit">
+    <test_smartedit_extension appNames="distrelecsmarteditcommons,distrelecsmarteditContainer,distrelecsmartedit" extensionName="distrelecsmartedit"/>
+  </target>
+</project>

@@ -1,0 +1,175 @@
+<div class="container">
+  <app-alert-banner *ngIf="isAlertBannerVisible" [bannerType]="'warning'">
+    <span
+      [innerHTML]="'search.product.error.punchout' | cxTranslate: { '0': punchedOutProductCodes?.join(', ') }"
+    ></span>
+  </app-alert-banner>
+  <div class="row">
+    <div class="col-sm-12 col-lg-9 shopping-list-main">
+      <ng-container *ngIf="shoppingList_ | async as shoppingList">
+        <div id="js-list-id" [attr.data-js-list-id]="shoppingList?.uniqueId"></div>
+        <div class="row">
+          <div class="col-md-6">
+            <h1 class="shopping-page-title" id="shoppingList_page_title">
+              {{
+                shoppingList?.name !== 'Shopping List'
+                  ? shoppingList?.name
+                  : ('shoppingList.shoppinglist_list_title' | cxTranslate)
+              }}
+            </h1>
+          </div>
+          <div class="col-sm-6">
+            <div class="btn-cart">
+              <app-atc-button
+                [id]="'shoppingList_add_to_cart_btn'"
+                [shouldOpenFlyout]="true"
+                [pageTrackingType]="itemListEntity.SHOPPING"
+                [getBulkItems]="shoppingListCart.bind(this)"
+                [disabled]="isNoProductSelected()"
+                (added)="onAddedToCart()"
+                buttonId="shoppingList_add_to_cart_btn"
+              ></app-atc-button>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div *ngIf="!isDisabled(shoppingList?.entries?.length)" class="toolbar-section">
+              <p class="productlist_tools_download" id="productlist_tools_download">
+                <span id="shoppingList_download_label">{{ 'shoppingList.download' | cxTranslate }}:&nbsp;</span>
+                <a
+                  id="shoppingList_download_csv"
+                  (click)="downloadProducts($event, shoppingList?.name, 'csv')"
+                  title="Download as CSV"
+                >
+                  CSV
+                </a>
+                <span>&nbsp;/&nbsp;</span>
+                <a
+                  id="shoppingList_download_xls"
+                  (click)="downloadProducts($event, shoppingList?.name, 'xls')"
+                  title="Download as XLS"
+                >
+                  XLS
+                </a>
+              </p>
+              <fa-icon
+                class="fa-print"
+                id="shoppingList_print_btn"
+                [icon]="faPrint"
+                (click)="print()"
+                title="Print Cart"
+              ></fa-icon>
+            </div>
+            <div
+              class="col-sm-12 select-all-wrapper"
+              [ngClass]="{ disabled: isDisabled(shoppingList?.entries?.length) }"
+            >
+              <form class="select-all-form" title="Select All">
+                <input #selectAllEl id="shoppingList_select-all" (change)="selectAll($event)" type="checkbox" />
+                <label class="select-all" id="shoppingList_select_all_label" for="shoppingList_select-all">
+                  {{ 'shoppingList.shoppinglist_products_selectall' | cxTranslate }}
+                </label>
+              </form>
+
+              <app-shopping-list-sort-by
+                [entries]="shoppingList.entries"
+                (sortByClick)="onSortByClick($event)"
+              ></app-shopping-list-sort-by>
+            </div>
+            <div *ngIf="isDisabled(shoppingList?.entries?.length)" class="empty-list">
+              <p class="empty-list-text" id="shoppingList_empty_text">
+                {{ 'shoppingList.shoppinglist_shopping_noProducts' | cxTranslate }}
+              </p>
+            </div>
+
+            <ul *ngIf="shoppingList.entries?.length" class="shopping-list">
+              <ng-container *ngFor="let entry of shoppingList?.entries; let i = index">
+                <li *ngIf="entry.priceObject" class="shopping-list-item" [id]="'shoppingList_entry_item' + i">
+                  <app-shopping-list-item
+                    [item]="entry"
+                    [itemIndex]="i"
+                    [listId]="shoppingList?.uniqueId"
+                    [prices]="{
+                      price: entry.priceObject.price,
+                      volumePrices: entry.priceObject.volumePrices,
+                      volumePricesMap: entry.priceObject.volumePricesMap
+                    }"
+                    (quantityChanged)="onQuantityChange($event)"
+                    (removeProduct)="remove($event)"
+                    (selectProduct)="onSelected($event)"
+                  ></app-shopping-list-item>
+                </li>
+              </ng-container>
+            </ul>
+
+            <ng-container *ngIf="!isDisabled(shoppingList?.entries?.length)">
+              <div class="calculate-wrapper">
+                <div class="calc-box">
+                  <table class="calc-box__table">
+                    <tbody>
+                      <tr>
+                        <td id="shoppingList_calculate_sub_total_label">
+                          {{ 'shoppingList.calculate_SubTotal' | cxTranslate }}
+                        </td>
+                        <td id="shoppingList_calculate_sub_total_iso">
+                          {{ shoppingList?.subTotal?.currencyIso }}
+                        </td>
+                        <td class="js-subTotalPrice" id="shoppingList_calculate_sub_total_price">
+                          {{ shoppingList?.subTotal?.value | price }}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td id="shoppingList_calculate_total_tax_label">
+                          {{ 'shoppingList.calculate_Tax' | cxTranslate }}
+                        </td>
+                        <td id="shoppingList_calculate_total_tax">
+                          {{ shoppingList?.totalTax?.currencyIso }}
+                        </td>
+                        <td class="js-totalTax" id="shoppingList_calculate_total_tax_price">
+                          {{ shoppingList?.totalTax?.value | price }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <strong id="shoppingList_calculate_total_label">
+                            {{ 'shoppingList.calculate_Total' | cxTranslate }}
+                          </strong>
+                        </td>
+                        <td>
+                          <strong id="shoppingList_calculate_total_iso">
+                            {{ shoppingList?.totalPrice?.currencyIso }}
+                          </strong>
+                        </td>
+                        <td>
+                          <strong class="js-totalPrice" id="shoppingList_calculate_total_value">
+                            {{ shoppingList?.totalPrice?.value | price }}
+                          </strong>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="recalculate-box" id="js-recalc-box" [ngClass]="{ active: !shoppingList.calculated }">
+                  <div class="recalculate-layer-shopping"></div>
+                  <div class="recalculate-btn-wrap">
+                    <button
+                      class="btn-primary btn-recalculate-shopping"
+                      id="shoppingList_calculate_btn"
+                      (click)="calculate()"
+                    >
+                      <span id="shoppingList_calculate_btn_text">{{ 'shoppingList.recalculate' | cxTranslate }}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="col-sm-12 col-lg-3">
+      <app-shopping-list-sidebar (changeList)="onChangeList($event)"></app-shopping-list-sidebar>
+    </div>
+  </div>
+</div>

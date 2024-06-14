@@ -1,0 +1,849 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions 
+date:		23.01.2012
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-build" default="verify" basedir=".">
+
+	<property name="project.home" location="../" />
+	
+	<import file="properties-config.xml" />
+	<import file="tasks/library-import.xml" />
+	<import file="tasks/util.xml" />
+	<import file="tasks/tasks.xml" />
+	<import file="tasks/distrelec-release.xml" />
+	<import file="tasks/distrelec-deployment.xml" />
+	<import file="tasks/distrelec-build-frontend.xml" />
+	<import file="build-checkout-application.xml" />
+
+
+	<!--
+	*********************************
+	*** TOC (Table of content)
+	*********************************
+  * (type "ant -p" in your console for a list of targets and its description)
+  *
+  *  - Basic Tasks                     (clean, build, all, ...)
+  *  - Setup tasks                    (updateHybrisPlatformAndExtensions, ...)
+  *  - Type system tasks              (initialize, update, ...)   
+  *  - Configuration Tasks            (configure, updateCerts, ...) 
+  *  - Testing Tasks                  (testinit,checkinTest, ...)
+  *  - Continous Integration tasks 
+  *  - Subversion (SVN) tasks         (branch, tag, setingnorelist, ...) 
+  *  - Deployment Tasks
+  *  - Other            
+  *            	
+	*********************************
+	-->
+
+
+	<!-- 
+	==============================================================
+	===== Basic Tasks
+	============================================================== 
+	-->
+
+	<!--
+	*********************************
+	target: clean
+	*********************************
+	-->
+	<target name="clean" description="hybris:clean. Cleans all the generated source files and the compiled class files.">
+		<clean />
+	</target>
+	
+	<!--
+	*********************************
+	target: customize
+	*********************************
+	-->
+	<target name="customize" description="hybris:customize. Copies all files from '/config/customize' folder to '/bin' folder recursively.">
+		<customize />
+	</target>
+
+	<!--
+	*********************************
+	target: build
+	*********************************
+	-->
+	<target name="build" description="hybris:build. Build the application, but doesn't deploy the tomcat files and doesn't restart tomcat.">
+		<build />
+		<buildFrontend />
+		<getgitinfo />
+	</target>
+
+	<!--
+	*********************************
+	target: all
+	*********************************
+	-->
+	<target name="all" description="hybris:all. Build the application and restart tomcat application server.">
+		<allHybris />
+		<buildFrontend />
+		<getgitinfo />
+	</target>
+	
+	
+	<!--
+	*********************************
+	target: buildFrontend
+	*********************************
+	-->
+	<target name="buildFrontend" description="Build frontend">
+		<buildFrontend />
+	</target>
+
+	<!--
+	*********************************
+	target: allHybris
+	*********************************
+	-->
+	<target name="allHybris" description="hybris:all. Build the application and restart tomcat application server.">
+		<allHybris />
+	</target>
+	
+	<!--
+	*********************************
+	target: server
+	*********************************
+	-->
+	<target name="server" description="hybris:server. Configures hybris Server and restart if running.">
+		<server />
+	</target>
+
+	<!-- 
+	==============================================================
+	===== Hybris Workarounds 
+	============================================================== 
+	-->
+	
+	<target name="revertpom" description="Reverts all the deleted pom.xml files. Hybris delets in the clean target all pom.xml.">
+		<echo message="Hybris delets in the clean target all pom.xml files. Because they are in subversion, we revert this delete on the file after the clean." />
+		<revertpom />
+	</target>
+	
+	<!-- 
+	==============================================================
+	===== Setup tasks 
+	============================================================== 
+	-->
+
+	<!--
+	*********************************
+	target: updateHybrisPlatformAndExtensions
+	*********************************
+	-->
+	<target name="updateHybrisPlatformAndExtensions" description="Download hybris platform and all hybris extenions. The build-checkout-application.xml determines which versions of the extensions should be downloaded.">
+		<updateHybrisPlatformAndExtensions />
+	</target>
+
+	<!--
+	*********************************
+	target: updateHybrisPlatformAndExtensionsWithCredentialsInput
+	*********************************
+	-->
+	<target name="updateHybrisPlatformAndExtensionsWithCredentialsInput" description="Download hybris platform and all hybris extenions. The build-checkout-application.xml determines which versions of the extensions should be downloaded. Give the possibility to enter the hybris account credentials.">
+		<input message="Please enter your hybris repository user?" addproperty="hybrisRepositoryUsername" />
+		<yainput message="Please enter your hybris repository password?" outputproperty="hybrisRepositoryPassword" password="true" />
+		<updateHybrisPlatformAndExtensions />
+	</target>
+
+	
+	<!--
+	*********************************
+	target: installAnt
+	*********************************
+	-->
+    <target name="installAnt" description="Install a external version of apache ant.">
+    	<if>
+			<equals arg1="${skip.antInstall}" arg2="false" />
+			<then>		
+				<downloadAndExtractZipFile downloadurl="${ant.external.download.url}" targetlocation="${ant.external.target.location}"/>
+				<copy todir="${ant.external.target.location}/${ant.external.filename}/lib">
+					<fileset refid="ant.additional.libs"/>
+				</copy>
+			</then>
+			<else>
+				<echo message="Ant installation will be skipped, because installation is disabled in poperties-config.xml! Look for 'skip.antInstall' property." />
+			</else>
+		</if>
+    </target>
+	
+	<!--
+	*********************************
+	target: installSampleData
+	*********************************
+	-->
+    <target name="installSampleData" description="Install sample data like medias or a VMImage with database.">
+        <downloadAndExtractZipFile downloadurl="${db.external.download.url}" targetlocation="${db.external.target.location}"/>
+        <downloadAndExtractZipFile downloadurl="${media.external.download.url}" targetlocation="${media.external.target.location}"/>
+    </target>
+	
+	<!--
+	*********************************
+	target: setupCompleteProject 
+	*********************************
+	-->
+	<target name="setupCompleteProject"  description="Get the whole project (hybris,extensions,initialization) from scratch to your local machine.">
+		<setupCompleteProject />
+	</target>
+	
+	<!--
+	=================================
+	target: updateScriptsFromEnvironment
+	=================================
+	-->
+	<target name="updateScriptsFromEnvironment" description="Copies all scripts from environment folder to the project home.">
+		<setupOSExecutionScripts/>
+	</target>
+	
+	<!--
+	*********************************
+	target: checkout
+	*********************************
+	-->
+	<target name="checkout" description="Checkout all custom extenions to ${project.home}. The build-checkout-application.xml determines which versions of the extensions should be checked out.">
+		<checkout />
+		<getgitinfo />
+	</target>
+	
+	<!--
+	*********************************
+	target: checkoutSecondaryExtensions
+	*********************************
+	-->
+	<target name="checkoutSecondaryExtensions" description="Checkout all secondary extenions to ${hybris.second.extensions.home}. The build-checkout-application.xml determines which versions of the extensions should be checked out.">
+		<checkoutSecondaryExtensions />
+	</target>
+
+	<!--
+	=================================
+	target: morningBuild
+	=================================
+	-->
+	<target name="morningBuild" description="Calls all target which must be run before you start work in the morning." depends="configure,updateScriptsFromEnvironment,all,updatesystem" />
+	
+	
+	<!--
+	=================================
+	target: morningBuildInitialize
+	=================================
+	-->
+	<target name="morningBuildInitialize" description="Calls all target which must be run before you start work in the morning. Initialize the system instead of updating it." depends="checkout,configure,updateScriptsFromEnvironment,clean,configure,build,initializemaster,testinit" />
+
+
+
+
+	<!-- 
+	==============================================================
+	===== Type system tasks
+	============================================================== 
+	-->
+
+
+
+	<!--
+	*********************************
+	target: initializemaster
+	*********************************
+	-->
+	<target name="initializemaster" description="hybris:initialize. Initializes the master tenant.">
+		<initializemaster />
+	</target>
+
+	<!--
+	*********************************
+	target: initializejunit
+	*********************************
+	-->
+	<target name="initializejunit" description="hybris:testinig. Initializes the junit tenant.">
+		<initializejunit />
+	</target>
+
+	<!--
+	*********************************
+	target: updatemaster
+	*********************************
+	-->
+	<target name="updatemaster" description="hybris:updatesystem. Updates the master tenant.">
+		<updatemaster />
+	</target>
+	
+	<!--
+	*********************************
+	target: updatejunit
+	*********************************
+	-->
+	<target name="updatejunit" description="hybris:testinig. Updates the junit tenant.">
+		<updatejunit />
+	</target>
+
+	<!--
+	*********************************
+	target: updatesystem
+	*********************************
+	-->
+	<target name="updatesystem" description="hybris:updatesystem. Updates the master and junit tenant.">
+		<updatemaster />
+		<updatejunit />
+	</target>
+	
+	
+
+
+
+
+
+
+	<!-- 
+	==============================================================
+	===== Configuration Tasks
+	============================================================== 
+	-->
+
+	<!--
+	*********************************
+	target: configure
+	*********************************
+	-->
+	<target name="configure" description="Copies all environment-specific files into hybris. This target will override the hybris platform config files with environment specific config files. Additionally, overlayed files will be copied into the hybris folder (never change files in the hybris folder).">
+		<configure />
+	</target>
+	
+	<!--
+	*********************************
+	target: configureHybrisServer
+	*********************************
+	-->
+	<target name="configureHybrisServer" description="Calls configure with the hybris server as target home.">
+		<configureHybrisServer />
+	</target>
+
+	
+	<!-- 
+	==============================================================
+	===== Java 
+	============================================================== 
+	-->
+
+	<!--
+	*********************************
+	target: hotswap
+	*********************************
+	-->
+	<target name="hotswap" description="Loads all modified java classes into the project during the server is running.">
+		<hybrisjavahotswap />
+	</target>
+	
+
+	<!-- 
+	==============================================================
+	===== Testing Tasks
+	============================================================== 
+	-->
+  
+	<!--
+	=================================
+	target: eveningTest
+	=================================
+	-->
+	<target name="eveningTest" description="Calls all target which must be run before I can check in to subversion." depends="checkInTest" />
+
+	<!--
+	*********************************
+	target: checkInTest
+	*********************************
+	-->
+	<target name="checkInTest" description="Calls all target which must be run before I can check in to subversion." depends="checkout,clean,configure,build,updatesystem,testinit,test,webtestlight" >
+		<checkInTest />
+	</target>
+
+	<!--
+	*********************************
+	target: test
+	*********************************
+	-->
+	<target name="test" description="hybris:yunit. Calls the hybris platform junit tests (yunit).">
+		<test />
+	</target>
+
+	<!--
+	*********************************
+	target: webtest
+	*********************************
+	-->
+	<target name="webtest" description="hybris:yunitweb. Calls the hybris platform junit web tests (yunitweb).">
+		<webtest />
+	</target>
+
+	<!--
+	*********************************
+	target: webtestlight
+	*********************************
+	-->
+	<target name="webtestlight" description="hybris:yunitweb. Calls the hybris platform junit web tests without building etc. (yunitweb).">
+		<webtestlight />
+	</target>
+
+	<!--
+	*********************************
+	target: testinit
+	*********************************
+	-->
+	<target name="testinit" description="hybris:yunitinit. Calls the hybris platform junit initialization (yunitinit).">
+		<testinit />
+	</target>
+
+	<!--
+	*********************************
+	target: excludeplatformtests
+	*********************************
+	-->
+	<target name="excludeplatformtests" description="Rename the testsrc folders so that the platform-tests aren't executed.">
+		<excludeplatformtests />
+	</target>
+
+	<!--
+	*********************************
+	target: includeplatformtests
+	*********************************
+	-->
+	<target name="includeplatformtests" description="Rename the testsrc folders to its original name so that the platform-tests are executed.">
+		<includeplatformtests />
+	</target>
+	
+
+	<!-- 
+	==============================================================
+	===== Testing Tasks - Specification Testing (Agile Acceptance Testing) 
+	============================================================== 
+	-->
+
+	<!--
+	*********************************
+	target: frontend
+	*********************************
+	-->
+	<target name="frontendtest" description="Runs all the agile acceptance tests (frontend tests) in the 'testfrontend' folder. This target is independent from hybris.">
+		<frontendtest />
+	</target>
+	
+
+	<!-- 
+	==============================================================
+	===== Continous Integration tasks 
+	============================================================== 
+	-->
+
+
+	<!--
+	*********************************
+	target: copyTestReportsToBambooHome
+	*********************************
+	-->
+	<target name="copyTestReportsToBambooHome" description="Copy test-reports to bamboo home.">
+		<copyTestReportsToBambooHome />
+	</target>
+
+	<!--
+	*********************************
+	target: continousintegrationtest
+	*********************************
+	-->
+	<target name="continousintegrationtest" description="Calls all targets to update the platform and run the tests (configure,build,updatesystem, testinit,test4continousintegration).">
+		<continousintegrationtest />
+	</target>
+
+	<!--
+	*********************************
+	target: test4continousintegration
+	*********************************
+	-->
+	<target name="test4continousintegration" description="Runs the junit tests (yunit) via external cmd command. Hence, this target will NEVER fail. Do only use this target in a bamboo plan.">
+		<test4continousintegration />
+	</target>
+	
+	<!--
+	*********************************
+	target: waitforurl
+	*********************************
+	-->
+	<target name="waitforurl" description="Wait for an URL is accessible. Use this target to wait for a deployment to be finished.">
+		<waitforurl url="${waitforurl}" timeout="${maxwaitforseconds}"/>
+	</target>
+	
+	
+	<!-- 
+	==============================================================
+	===== Subversion (SVN) tasks
+	============================================================== 
+	-->
+
+	<!--
+	*********************************
+	target: getgitinfo
+	*********************************
+	-->
+	<target name="getgitinfo" description="Query the current svn revision and date and write it to the properties file in the resource folder of the extension">
+		<getgitinfo />
+	</target>
+	
+
+	<!--
+	*********************************
+	target: tag
+	*********************************
+	-->
+	<target name="tag" description="Creates a subversion tag of each extensions.">
+		<tag />
+	</target>
+
+	<!--
+	*********************************
+	target: tagOfTrunk
+	*********************************
+	-->
+	<target name="tagOfTrunk" description="Creates a subversion tag of each extensions trunk head revisions.">
+		<tagOfTrunk />
+	</target>
+
+	<!--
+	*********************************
+	target: branch
+	*********************************
+	-->
+	<target name="branch" description="Creates a subversion branch of each extensions trunk head revisions.">
+		<branch />
+	</target>
+
+	<!--
+	*********************************
+	target: binarytag
+	*********************************
+	-->
+
+	<target name="tagbinary" description="Creates for each extension a tag with the extension but in binary form, without any sourcecode. Useful for production (protection of sourcecode) and for eclipse (faster compiling).">
+		<tagbinary />
+	</target>
+
+	<!--
+	*********************************
+	target: setignorelist
+	*********************************
+	-->
+	<target name="setignorelist" description="Sets the default svn:ignore property to all extensions.">
+		<setignorelist />
+	</target>
+
+	<!--
+	*********************************
+	target: setignorelistbinary
+	*********************************
+	-->
+	<target name="setignorelistbinary" description="Sets the default svn:ignore property to all extensions. Use this target, when the extensions are as binary in the working copy (see tagbinary target).">
+		<setignorelistbinary />
+	</target>
+
+
+
+
+	<!-- 
+	==============================================================
+	===== Deployment Tasks
+	============================================================== 
+	-->
+
+	<!--
+	=================================
+	target: setupDeploymentScript
+	=================================
+	-->
+	<target name="setupDeploymentScript" description="Update the intial build script build-deployment.xml from subversion. Set up the intial build script to create and install deployments. These scirpts are separated from environment, to replace the environment with another one (tags). ">
+		<setupDeploymentScript />
+	</target>
+
+	<!--
+	*********************************
+	target: createproduction 
+	*********************************
+	-->
+	<target name="createproduction" description="hybris:production. Calls within the hybris platform the hybris-target production">
+		<createproduction />
+	</target>
+	
+	<!--
+	*********************************
+	target: createServerEnvironmentZip 
+	*********************************
+	-->
+	<target name="createServerEnvironmentZip" description="Creates a dedicated ZIP file including the environment specific properties and ant scripts for installing a release on the server.">
+		<createServerEnvironmentZip />
+	</target>
+	
+
+	<!--
+	*********************************
+	target: extractProductionZip
+	*********************************
+	-->
+	<target name="extractProductionZip" description="Extract the zip file for the production environment.">
+		<extractProductionZip frompath="${fromPath}" />
+	</target>
+
+	<!--
+	*********************************
+	target: copyConfigToProduction
+	*********************************
+	-->
+	<target name="copyConfigToProduction" description="Copy environment-specific configuration to the production environment.">
+		<copyConfigToProduction />
+
+	</target>
+
+	<!--
+	*********************************
+	target: rebuildProduction
+	*********************************
+	-->
+	<target name="rebuildProduction" description="Rebuild the production environment.">
+		<rebuildProduction />
+	</target>
+	
+	<!--
+	*********************************
+	target: installRelease
+	*********************************
+	-->
+	<target name="installRelease" description="Install a production release from SVN Sourcecode.">
+		<installRelease />
+	</target>
+	
+	<!--
+	*********************************
+	target: createDeploymentUnit
+	*********************************
+	-->
+	<target name="createDeploymentUnit" description="Create a deployment unit in FTP, SVN or SCP. If the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk." depends="createDeploymentUnitInScp">
+		<!-- with depend, you can decide, if you want to use deployment over FTP, SVN or SCP. Default is to use SCP. --> 
+	</target>
+	
+	<!--
+	*********************************
+	target: installDeploymentUnit
+	*********************************
+	-->
+	<target name="installDeploymentUnit" description="Install a deployment unit from FTP, SVN or SCP. If the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk." >
+		<!-- with depend, you can decide, if you want to use deployment over FTP, SVN or SCP. Default is to use SCP. -->
+		<installDeploymentUnitDistrelec />
+	</target>
+
+	
+	
+	<!--
+	==============================================================
+	===== Deployment Tasks for FTP 
+	============================================================== 
+	-->
+
+	<!--
+	*********************************
+	target: createDeploymentUnitInFtp (client part)
+	*********************************
+	-->
+	<target name="createDeploymentUnitInFtp" description="Create a deployment unit in FTP. if the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk.">
+		<createDeploymentUnitInFtp />
+	</target>
+
+	<!--
+	*********************************
+	target: uploadDeploymentUnitToFtp (client part)
+	*********************************
+	-->
+	<target name="uploadDeploymentUnitToFtp" description="Upload the production zip file to FTP. if the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk.">
+		<uploadDeploymentUnitToFtp />
+	</target>
+
+	<!--
+	*********************************
+	target: installDeploymentUnitFromFtp (server part)
+	*********************************
+	-->
+	<target name="installDeploymentUnitFromFtp" description="Install a deployment unit, previously created with ant target 'createDeploymentUnitInFtp', from FTP on a server. if the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk.">
+		<installDeploymentUnitFromFtp />
+	</target>
+
+	<!--
+	*********************************
+	target: downloadDeploymentUnitFromFtp (server part)
+	*********************************
+	-->
+	<target name="downloadDeploymentUnitFromFtp" description="Download the zip file from FTP">
+		<downloadDeploymentUnitFromFtp/>
+	</target>
+	
+	
+	
+	<!--
+	==============================================================
+	===== Deployment Tasks for SCP 
+	============================================================== 
+	-->
+
+	<!--
+	*********************************
+	target: createDeploymentUnitInScp (client part)
+	*********************************
+	-->
+	<target name="createDeploymentUnitInScp" description="Create a deployment unit in SCP. If the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk.">
+		<input message="Release? example: v1.0.0 or v1.0-rc1" addproperty="releaseToInstall" />
+		<fail message="Attribute 'releaseToInstall' was not set. Release example: v1.0.0 or v1.0-rc1" unless="releaseToInstall"/>
+		<detectDeploymentRelease />
+		<createDeploymentUnitInScp />
+	</target>
+
+	<!--
+	*********************************
+	target: uploadDeploymentUnitToScpHost (client part)
+	*********************************
+	-->
+	<target name="uploadDeploymentUnitToScpHost" description="Upload the production zip file to SCP host. If the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk.">
+		<uploadDeploymentUnitToScpHost />
+	</target>
+
+	<!--
+	*********************************
+	target: installDeploymentUnitFromScp (server part)
+	*********************************
+	-->
+	<target name="installDeploymentUnitFromScp" description="Install a deployment unit, previously created with ant target 'createDeploymentUnitInScp', from SCP host on a server. If the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk.">
+		<installDeploymentUnitFromScp />
+	</target>
+
+	<!--
+	*********************************
+	target: downloadDeploymentUnitFromScp (server part)
+	*********************************
+	-->
+	<target name="downloadDeploymentUnitFromScp" description="Download the zip file from SCP host">
+		<downloadDeploymentUnitFromScp />
+	</target>
+	
+	
+	
+	<!-- 
+	==============================================================
+	===== Documentation tasks 
+	============================================================== 
+	-->
+
+	<!--
+	*********************************
+	target: listextensions
+	*********************************
+	-->
+	<target name="listextensions" description="Lists all extensions of this project.">
+		<listextensions />
+	</target>
+	
+	<!--
+	*********************************
+	target: createapi
+	*********************************
+	-->
+	<target name="createapi" description="hybris:createapi. Creates for each extension the API Javadoc">
+		<createapi />
+	</target>
+
+	<!--
+	*********************************
+	target: createuml
+	*********************************
+	-->
+	<target name="createuml" description="hybris:createuml. Creates for each extension an XMI file.">
+		<createuml />
+	</target>
+
+	
+	
+	<!-- 
+	==============================================================
+	===== Other
+	============================================================== 
+	-->
+
+	<!--
+	*********************************
+	target: restartHybrisService
+	*********************************
+	-->
+	<target name="restartHybrisService" description="Restarts hybris as service (win) or as deamon (unix).">
+		<restartHybrisService />
+	</target>
+	
+	<!--
+	*********************************
+	target: startHybrisService
+	*********************************
+	-->
+	<target name="startHybrisService" description="Starts hybris as service (win) or as deamon (unix).">
+		<startHybrisService />
+	</target>
+	
+	<!--
+	*********************************
+	target: stopHybrisService
+	*********************************
+	-->
+	<target name="stopHybrisService" description="Stop hybris service (win) or deamon (unix).">
+		<stopHybrisService />
+	</target>
+	
+	<!--
+	*********************************
+	target: installHybrisService
+	*********************************
+	-->
+	<target name="installHybrisService" description="Installs hybris as service (win) or as deamon (unix).">
+		<installHybrisService />
+	</target>
+	
+	<!--
+	*********************************
+	target: uninstallHybrisService
+	*********************************
+	-->
+	<target name="uninstallHybrisService" description="Uninstalls hybris service (win) or deamon (unix).">
+		<uninstallHybrisService />
+	</target>
+
+
+	<!--
+	*********************************
+	target: createextension
+	*********************************
+	-->
+	<target name="createextension" description="Creates a new namics-hybris extension.">
+		<createextension />
+	</target>
+
+	
+
+	<!--
+	*********************************
+	target: releasenotes
+	*********************************
+	-->
+	<target name="releasenotes" description="Generate Release Notes">
+		<generateReleaseNotes />
+	</target>
+	
+
+</project>
+

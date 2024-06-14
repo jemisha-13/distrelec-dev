@@ -1,0 +1,13 @@
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecpatches/releases/releaser1_4/patch_patch_28970/global/images
+$contentCatalog = distrelec_EXContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+$defaultContentCV = catalogVersion(catalog(id[default='Default']), version[default='Staged'])
+
+INSERT_UPDATE Media; code[unique = true]             ; $defaultContentCV[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = image/png]; altText
+                   ; checkout-footer-logo-amex       ;                                 ; $siteResource/checkout-footer-logo-amex.png                                 ;                          ; Amex
+
+INSERT_UPDATE DistPaymentMethodComponent; uid[unique = true]                       ; $contentCV[unique = true]; icon(code, $defaultContentCV)   ; name
+                                        ; CheckoutFooterAmexPaymentComponent       ;                          ; checkout-footer-logo-amex       ; Checkout Footer Amex Payment Component
+
+UPDATE DistFooterComponent; uid[unique = true]          ; name                      ; $contentCV[unique = true]; paymentMethods(uid, $contentCV)
+                          ; DistFooterComponentCheckout ; Checkout Footer Component ;                          ; CheckoutFooterMastercardPaymentComponent, CheckoutFooterVisaPaymentComponent, CheckoutFooterPaypalPaymentComponent, CheckoutFooterAmexPaymentComponent

@@ -1,0 +1,175 @@
+import java.util.*;
+import de.hybris.platform.servicelayer.search.*;
+import de.hybris.platform.servicelayer.search.impl.*;
+import de.hybris.platform.b2b.model.*;
+import de.hybris.platform.core.*;
+import de.hybris.platform.jalo.*;
+import de.hybris.platform.jalo.user.*;
+import de.hybris.platform.jalo.flexiblesearch.*;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import de.hybris.platform.servicelayer.model.ModelService;
+import java.util.Locale;
+import de.hybris.platform.core.model.c2l.LanguageModel;
+import de.hybris.platform.servicelayer.i18n.*;
+
+  
+if (!Registry.hasCurrentTenant()) {
+    Registry.activateMasterTenant();
+}
+
+JaloSession.getCurrentSession().setUser(UserManager.getInstance().getUserByLogin("admin"));
+modelService = (ModelService) SpringUtil.getBean("modelService");
+flexibleSearchService = (FlexibleSearchService) SpringUtil.getBean("flexibleSearchService");
+commonI18NService = (CommonI18NService) SpringUtil.getBean("commonI18NService");
+
+synchronized replaceDots(String lang, String fieldName)
+{
+	
+	language = commonI18NService.getLanguage(lang);
+	locale = commonI18NService.getLocaleForLanguage(language);
+	
+	print("lang: " + language + " locale: " + locale);
+
+	query = "select {p.pk} from {Product as p} where {p." + fieldName + "[" + lang + "]} like '%. . .%'";
+	print(query);
+	
+	products = flexibleSearchService.search(query).getResult();
+	
+	for (product : products) {
+		if (product.getPimWebUse(locale) != null) {
+			product.setPimWebUse(product.getPimWebUse(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField01(locale) != null) {
+			product.setPimSearchField01(product.getPimSearchField01(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField02(locale) != null) {
+			product.setPimSearchField02(product.getPimSearchField02(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField03(locale) != null) {
+			product.setPimSearchField03(product.getPimSearchField03(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField04(locale) != null) {
+			product.setPimSearchField04(product.getPimSearchField04(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField05(locale) != null) {
+			product.setPimSearchField05(product.getPimSearchField05(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField06(locale) != null) {
+			product.setPimSearchField06(product.getPimSearchField06(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField07(locale) != null) {
+			product.setPimSearchField07(product.getPimSearchField07(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField08(locale) != null) {
+			product.setPimSearchField08(product.getPimSearchField08(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField09(locale) != null) {
+			product.setPimSearchField09(product.getPimSearchField09(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField10(locale) != null) {
+			product.setPimSearchField10(product.getPimSearchField10(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField11(locale) != null) {
+			product.setPimSearchField11(product.getPimSearchField11(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField12(locale) != null) {
+			product.setPimSearchField12(product.getPimSearchField12(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimSearchField13(locale) != null) {
+			product.setPimSearchField13(product.getPimSearchField13(locale).replace(". . .", "..."), locale);
+		}
+		
+		if (product.getPimWebUseA01(locale) != null) {
+			product.setPimWebUseA01(product.getPimWebUseA01(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimWebUseA02(locale) != null) {
+			product.setPimWebUseA02(product.getPimWebUseA02(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimWebUseA03(locale) != null) {
+			product.setPimWebUseA03(product.getPimWebUseA03(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimWebUseA04(locale) != null) {
+			product.setPimWebUseA04(product.getPimWebUseA04(locale).replace(". . .", "..."), locale);
+		}
+		
+		if (product.getPimWebUseB01(locale) != null) {
+			product.setPimWebUseB01(product.getPimWebUseB01(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimWebUseB02(locale) != null) {
+			product.setPimWebUseB02(product.getPimWebUseB02(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimWebUseB03(locale) != null) {
+			product.setPimWebUseB03(product.getPimWebUseB03(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimWebUseB04(locale) != null) {
+			product.setPimWebUseB04(product.getPimWebUseB04(locale).replace(". . .", "..."), locale);
+		}
+		
+		if (product.getPimWebUseC01(locale) != null) {
+			product.setPimWebUseC01(product.getPimWebUseC01(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimWebUseC02(locale) != null) {
+			product.setPimWebUseC02(product.getPimWebUseC02(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimWebUseC03(locale) != null) {
+			product.setPimWebUseC03(product.getPimWebUseC03(locale).replace(". . .", "..."), locale);
+		}
+		if (product.getPimWebUseC04(locale) != null) {
+			product.setPimWebUseC04(product.getPimWebUseC04(locale).replace(". . .", "..."), locale);
+		}
+		
+		modelService.save(product);
+   }
+
+}
+
+synchronized replace(String lang)
+{
+	replaceDots(lang, "PimSearchField01");
+	replaceDots(lang, "PimSearchField02");
+	replaceDots(lang, "PimSearchField03");
+	replaceDots(lang, "PimSearchField04");
+	replaceDots(lang, "PimSearchField05");
+	replaceDots(lang, "PimSearchField06");
+	replaceDots(lang, "PimSearchField07");
+	replaceDots(lang, "PimSearchField08");
+	replaceDots(lang, "PimSearchField09");
+	replaceDots(lang, "PimSearchField10");
+	replaceDots(lang, "PimSearchField11");
+	replaceDots(lang, "PimSearchField12");
+	replaceDots(lang, "PimSearchField13");
+	
+	replaceDots(lang, "PimWebUseA01");
+	replaceDots(lang, "PimWebUseA02");
+	replaceDots(lang, "PimWebUseA03");
+	replaceDots(lang, "PimWebUseA04");
+	
+	replaceDots(lang, "PimWebUseB01");
+	replaceDots(lang, "PimWebUseB02");
+	replaceDots(lang, "PimWebUseB03");
+	replaceDots(lang, "PimWebUseB04");
+	
+	replaceDots(lang, "PimWebUseC01");
+	replaceDots(lang, "PimWebUseC02");
+	replaceDots(lang, "PimWebUseC03");
+	replaceDots(lang, "PimWebUseC04");
+}
+
+	replace("de");
+	replace("en");
+	replace("fr");
+	replace("da");
+	replace("et");
+	replace("fi");
+	replace("fr");
+	replace("hu");
+	replace("it");
+	replace("lt");
+	replace("lv");
+	replace("nl");
+	replace("no");
+	replace("pl");
+	replace("ro");
+	replace("sk");
+	replace("sv");
+	replace("cs");

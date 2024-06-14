@@ -1,0 +1,159 @@
+<div *ngIf="userDetails_ | async as userDetails" class="ch__component">
+  <form [formGroup]="codiceForm">
+    <ng-container *ngIf="userDetails.vat4 || isDisplayCodiceDestinario">
+      <div class="ch__component__title">
+        <h2 id="codiceDestinarioTitle">Codice Destinatario</h2>
+      </div>
+
+      <div *ngIf="!userDetails.vat4" class="ch__component__details subtitle">
+        <span>
+          Questo codice composto da 6 o 7 caratteri maiuscoli viene utilizzato per trasmettere le fatture in formato XML
+          come da normative fiscali italiane (Cod. Univoco per i clienti P.A.).
+        </span>
+      </div>
+
+      <div *ngIf="isDisplayLegalEmail" class="ch__component__details subtitle">
+        <span>Questo \u00E8 usato per rendere disponibili le fatture, secondo i regolamenti italiani.</span>
+      </div>
+
+      <div class="ch__component__details ch__component__details--half">
+        <label class="ch__component__details--title" id="codiceDestinarioLabel">Codice Destinatario</label>
+        <div class="p-relative">
+          <input
+            class="ch__component__details--input js-validate"
+            id="legalEmailCheckout"
+            [class.is-correct]="isValidField('codiceDestinario')"
+            [class.is-invalid]="isInvalidField('codiceDestinario')"
+            type="text"
+            formControlName="codiceDestinario"
+            maxlength="7"
+          />
+
+          <fa-icon *ngIf="isValidField('codiceDestinario')" id="faCheckCodiceDest" [icon]="faCheck"></fa-icon>
+          <fa-icon *ngIf="isInvalidField('codiceDestinario')" id="faTimesCodiceDest" [icon]="faTimes"></fa-icon>
+        </div>
+      </div>
+
+      <ng-container *ngIf="!userDetails.vat4 && !userDetails.legalEmail && isDisplayCodiceDestinario">
+        <a class="ux-link" (click)="displayLegalEmail($event)">
+          Inserire in alternativa un indirizzo di Posta Elettronica Certificata.
+        </a>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="isDisplayLegalEmail">
+      <div class="ch__component__title">
+        <h2 id="postaElectronicaTitle">Posta elettronica certificata</h2>
+      </div>
+
+      <div *ngIf="isDisplayLegalEmail" class="ch__component__details subtitle">
+        <span>Questo è usato per rendere disponibili le fatture, secondo i regolamenti italiani.</span>
+      </div>
+
+      <div class="ch__component__details ch__component__details--half">
+        <label class="ch__component__details--title" id="postaElectronicaLabel">{{ 'form.email' | cxTranslate }}</label>
+        <div class="p-relative">
+          <input
+            class="ch__component__details--input"
+            id="legalEmailCheckout"
+            [class.is-correct]="isValidField('legalEmail')"
+            [class.is-invalid]="isInvalidField('legalEmail')"
+            type="text"
+            formControlName="legalEmail"
+          />
+
+          <fa-icon *ngIf="isValidField('legalEmail')" id="faCheckLegalEmail" [icon]="faCheck"></fa-icon>
+          <fa-icon *ngIf="isInvalidField('legalEmail')" id="faTimesCodiceDest" [icon]="faTimes"></fa-icon>
+
+          <small *ngIf="isInvalidField('legalEmail')" class="error-text" id="validations.enter_valid_field-codiceDest">
+            Immettere un indirizzo e-mail valido.
+          </small>
+        </div>
+      </div>
+
+      <a
+        *ngIf="!userDetails.vat4 && !userDetails.legalEmail && isDisplayLegalEmail"
+        class="ux-link"
+        (click)="displayCodiceDestinario($event)"
+      >
+        Inserire in alternativa un Codice Univoco.
+      </a>
+    </ng-container>
+
+    <div class="ch__component__details row">
+      <button class="btn extend-codice" id="extendCodiceFields" (click)="handleExtendedCodiceClick()">
+        <fa-icon *ngIf="!isCodiceExtended" id="iconDelivery" [icon]="faSquare"></fa-icon>
+        <fa-icon *ngIf="isCodiceExtended" id="iconDeliverySame" [icon]="faSquareCheck"></fa-icon>
+
+        <label class="ch__component__details--title help-text extend-codice--label" id="checkout.payment.extend_codice">
+          Ho anche un Codice CUP/Codice CIG.
+        </label>
+      </button>
+    </div>
+
+    <ng-container *ngIf="isCodiceExtended">
+      <div *ngIf="codiceCUP()" class="ch__component__details ch__component__details--half">
+        <div class="ch__component__details--flex">
+          <label class="ch__component__details--title" id="checkout.delivery.codice_CUP">
+            {{ 'checkout.delivery.codice_CUP' | cxTranslate }}
+          </label>
+          <label class="ch__component__details--title--optional" id="form.optional-codice">
+            {{ 'form.optional' | cxTranslate }}
+          </label>
+        </div>
+
+        <div class="p-relative">
+          <input
+            class="ch__component__details--input"
+            id="codiceCUPCheckout"
+            [class.is-correct]="isValidField('codiceCUP')"
+            [class.empty-field]="!codiceCUP().value"
+            [class.is-invalid]="isInvalidField('codiceCUP')"
+            type="text"
+            formControlName="codiceCUP"
+            maxlength="15"
+          />
+
+          <fa-icon *ngIf="isValidField('codiceCUP')" id="faCheckCodice" [icon]="faCheck"></fa-icon>
+          <fa-icon *ngIf="isInvalidField('codiceCUP')" id="faTimesCodice" [icon]="faTimes"></fa-icon>
+
+          <small *ngIf="isInvalidField('codiceCUP')" class="error-text" id="validations.enter_valid_field-codiceCUP-be">
+            Il tuo Codice CUP deve essere di 15 caratteri senza spazi.
+          </small>
+        </div>
+      </div>
+
+      <!-- CODICE CIG is not required -->
+      <div *ngIf="codiceCIG()" class="ch__component__details ch__component__details--half">
+        <div class="ch__component__details--flex">
+          <label class="ch__component__details--title" id="checkout.delivery.codice_CIG">
+            {{ 'checkout.delivery.codice_CIG' | cxTranslate }}
+          </label>
+          <label class="ch__component__details--title--optional" [id]="'form.optional-cig'">
+            {{ 'form.optional' | cxTranslate }}
+          </label>
+        </div>
+
+        <div class="p-relative">
+          <input
+            class="ch__component__details--input"
+            id="codiceCIGCheckout"
+            [class.is-correct]="isValidField('codiceCIG')"
+            [class.empty-field]="!codiceCIG().value"
+            [class.is-invalid]="isInvalidField('codiceCIG')"
+            type="text"
+            formControlName="codiceCIG"
+            maxlength="10"
+          />
+
+          <fa-icon *ngIf="isValidField('codiceCIG')" id="faCheckCIG" [icon]="faCheck"></fa-icon>
+          <fa-icon *ngIf="isInvalidField('codiceCIG')" id="faTimesCIG" [icon]="faTimes"></fa-icon>
+
+          <small *ngIf="isInvalidField('codiceCIG')" class="error-text" id="validations.enter_valid_field-codiceCIG-be">
+            Il tuo Codice CIG deve essere di 10 caratteri senza spazi.
+          </small>
+        </div>
+      </div>
+    </ng-container>
+  </form>
+</div>

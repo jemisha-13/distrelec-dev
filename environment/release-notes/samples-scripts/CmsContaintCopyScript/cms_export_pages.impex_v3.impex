@@ -1,0 +1,113 @@
+#@author:- Neeraj Shandilya & Francesco Bersani
+#@version:- 3.0
+#@instruction:- Goto HMC >> System >> Tools >> Export upload this file and then save and run the job
+# once the job is successfull download the zip and then read how_to_import_cms_containt file for further instruction
+$contentCatalog=distrelec_NLContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$lang=nl
+"#%
+impex.setLocale(new Locale(""en"",""DE""));
+java.lang.String catalogVersion = ""distrelec_NLContentCatalog"";
+java.lang.String pages = ""'offlineAddressChangeSuccessPage','page_0000144W','offlineAddressChangePage','page_000032CG','page_0000144Y','ShippingCostsPage','page_00002YHG','page_000013D0','page_0000144Q','eprocurementHomepage','page_000009A7','page_000009A3','FaqPage','page_000009A5','page_0000099Y','page_0000099F','support'""
+"
+#1.----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""SimpleBannerComponent_Media.csv"" );"
+INSERT_UPDATE Media;mediaFormat(qualifier);code[unique=true];mime[default='image/jpg'];$contentCV[unique=true];realfilename
+"#% impex.exportItemsFlexibleSearch(""select distinct {paragraph:media}	from {SimpleBannerComponent  as paragraph} where {paragraph:pk} in 	({{select {efs:target} from {ElementsForSlot as efs} where {efs:source} in 	({{SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }}) }}) }})"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+
+"#% impex.setTargetFile( ""DistLinkedImageTextComponent_Media.csv"" );"
+INSERT_UPDATE Media;mediaFormat(qualifier);code[unique=true];mime[default='image/jpg'];$contentCV[unique=true];realfilename
+"#% impex.exportItemsFlexibleSearch(""select distinct {paragraph:media}	from {DistLinkedImageTextComponent  as paragraph} where {paragraph:pk} in 	({{select {efs:target} from {ElementsForSlot as efs} where {efs:source} in 	({{SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }}) }}) }})"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+#2.----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""ContentPage.csv"", true, 1, -1 );"
+
+INSERT_UPDATE ContentPage;&Item;$contentCV[unique=true];uid[unique=true];name;title[lang=nl];title[lang=de];masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];
+"#% impex.exportItemsFlexibleSearch(""SELECT {page:pk} FROM {ContentPage as page join CatalogVersion as cv on {page:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+#verify that CmsComponentWidth is present
+
+#3a.----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""CMSParagraphComponent.csv"" );"
+insert_update CMSParagraphComponent;&Item;catalogVersion(catalog(id),version)[unique=true,allownull=true];containers(catalogVersion(catalog(id),version),uid);content[lang=nl];name;onlyOneRestrictionMustApply[allownull=true];restrictions(catalogVersion(catalog(id),version),uid);uid[unique=true,allownull=true];visible[allownull=true]
+"#% impex.exportItemsFlexibleSearch(""select {paragraph:pk}	from {CMSParagraphComponent  as paragraph} where {paragraph:pk} in 	({{select {efs:target} from {ElementsForSlot as efs} where {efs:source} in 	({{SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }}) }}) }})"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+#3b.----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""DistHeadlineComponent.csv"" );"
+insert_update DistHeadlineComponent;&Item;catalogVersion(catalog(id),version)[unique=true,allownull=true];containers(catalogVersion(catalog(id),version),uid);headline[lang=nl];name;onlyOneRestrictionMustApply[allownull=true];restrictions(catalogVersion(catalog(id),version),uid);uid[unique=true,allownull=true];visible[allownull=true]
+"#% impex.exportItemsFlexibleSearch(""select {paragraph:pk}	from {DistHeadlineComponent  as paragraph} where {paragraph:pk} in 	({{select {efs:target} from {ElementsForSlot as efs} where {efs:source} in 	({{SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }}) }}) }})"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+#3c.----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""DistLeadTextComponent.csv"" );"
+insert_update DistLeadTextComponent;&Item;catalogVersion(catalog(id),version)[unique=true,allownull=true];componentWidth(code,itemtype(code));containers(catalogVersion(catalog(id),version),uid);leadText[lang=nl];leadTitle[lang=nl];name;onlyOneRestrictionMustApply[allownull=true];restrictions(catalogVersion(catalog(id),version),uid);uid[unique=true,allownull=true];visible[allownull=true]
+"#% impex.exportItemsFlexibleSearch(""select {paragraph:pk}	from {DistLeadTextComponent  as paragraph} where {paragraph:pk} in 	({{select {efs:target} from {ElementsForSlot as efs} where {efs:source} in 	({{SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }}) }}) }})"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+#3d.----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""DistOptOutSuccessComponent.csv"" );"
+insert_update DistOptOutSuccessComponent;&Item;catalogVersion(catalog(id),version)[unique=true,allownull=true];containers(catalogVersion(catalog(id),version),uid);name;onlyOneRestrictionMustApply[allownull=true];restrictions(catalogVersion(catalog(id),version),uid);uid[unique=true,allownull=true];visible[allownull=true]
+"#% impex.exportItemsFlexibleSearch(""select {paragraph:pk}	from {DistOptOutSuccessComponent  as paragraph} where {paragraph:pk} in 	({{select {efs:target} from {ElementsForSlot as efs} where {efs:source} in 	({{SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }}) }}) }})"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+#3e.----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""SimpleBannerComponent.csv"" );"
+insert_update SimpleBannerComponent;&Item;catalogVersion(catalog(id),version)[unique=true,allownull=true];containers(catalogVersion(catalog(id),version),uid);external[allownull=true];localizedUrlLink[lang=nl];media(catalogVersion(catalog(id),version),code)[lang=nl];name;onlyOneRestrictionMustApply[allownull=true];restrictions(catalogVersion(catalog(id),version),uid);uid[unique=true,allownull=true];urlLink;visible[allownull=true];wtOnSiteLinkId
+"#% impex.exportItemsFlexibleSearch(""select {paragraph:pk}	from {SimpleBannerComponent  as paragraph} where {paragraph:pk} in 	({{select {efs:target} from {ElementsForSlot as efs} where {efs:source} in 	({{SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }}) }}) }})"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+#3f.----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""DistIframeComponent.csv"" );"
+insert_update DistIframeComponent;&Item;catalogVersion(catalog(id),version)[unique=true,allownull=true];height;linkToIframe[lang=nl];name;onlyOneRestrictionMustApply[allownull=true];parameterEncoding;title[lang=bg];title[lang=bs];uid[unique=true,allownull=true];visible[allownull=true];width
+"#% impex.exportItemsFlexibleSearch(""select {paragraph:pk}	from {DistIframeComponent  as paragraph} where {paragraph:pk} in 	({{select {efs:target} from {ElementsForSlot as efs} where {efs:source} in 	({{SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }}) }}) }})"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+#3g.----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""DistLinkedImageTextComponent.csv"" );"
+insert_update DistLinkedImageTextComponent;&Item;caption[lang=bg];catalogVersion(catalog(id),version)[unique=true,allownull=true];componentWidth(code,itemtype(code));contentText[lang=nl];external[allownull=true];imageWidth(code,itemtype(code));localizedUrlLink[lang=nl];media(catalogVersion(catalog(id),version),code)[lang=nl];name;onlyOneRestrictionMustApply[allownull=true];page(catalogVersion(catalog(id),version),uid);uid[unique=true,allownull=true];urlLink;visible[allownull=true]
+"#% impex.exportItemsFlexibleSearch(""select {paragraph:pk}	from {DistLinkedImageTextComponent  as paragraph} where {paragraph:pk} in 	({{select {efs:target} from {ElementsForSlot as efs} where {efs:source} in 	({{SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }}) }}) }})"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+#3h.1 ----------------------------------------------------------------------------------------------------
+"#% public static String[] getCMSLinkComponents() {
+
+            java.lang.String query = ""select {paragraph:pk}  from {DistLinkListComponent  as paragraph} where {paragraph:pk} in   ({{select {efs:target} from {ElementsForSlot as efs} where {efs:source} in   ({{SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }}) }}) }})"";
+                
+            flexibleSearchService = com.namics.hybris.toolbox.spring.SpringUtil.getBean(""flexibleSearchService"");
+                
+            java.util.List linkComponents = new java.util.ArrayList();
+
+
+            searchResult = flexibleSearchService.search(query);
+
+            components = searchResult.getResult();
+
+            if(org.apache.commons.collections.CollectionUtils.isNotEmpty(components)){ 
+             for(component: components){
+                 for(link: component.linkComponents){
+					linkComponents.add(link.getPk().toString());
+                 }
+            }
+            }
+
+            return linkComponents.toArray(new String[linkComponents.size()]);
+            //return linkComponents;
+}
+
+"
+#3h.1 ----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""CMSLinkComponent.csv"", true, 1, -1 );"
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name
+"#% impex.exportItems(getCMSLinkComponents());"
+
+#3h.2----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""DistLinkListComponent.csv"" );"
+insert_update DistLinkListComponent;&Item;catalogVersion(catalog(id),version)[unique=true,allownull=true];linkComponents(catalogVersion(catalog(id),version),uid);name;onlyOneRestrictionMustApply[allownull=true];title[lang=nl];uid[unique=true,allownull=true];visible[allownull=true]
+"#% impex.exportItemsFlexibleSearch(""select {paragraph:pk}	from {DistLinkListComponent  as paragraph} where {paragraph:pk} in 	({{select {efs:target} from {ElementsForSlot as efs} where {efs:source} in 	({{SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }}) }}) }})"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+
+#4 ----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""ContentSlot.csv"", true, 1, -1 );"
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(uid,$contentCV)
+"#% impex.exportItemsFlexibleSearch(""SELECT {slot:pk} from {ContentSlot as slot} where {slot:pk} in ({{SELECT {slotfp:contentSlot} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")  }})"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"
+
+
+#5 ----------------------------------------------------------------------------------------------------
+"#% impex.setTargetFile( ""ContentSlotForPage.csv"", true, 1, -1 );"
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+"#% impex.exportItemsFlexibleSearch(""SELECT {slotfp:pk} FROM {ContentSlotForPage as slotfp join CatalogVersion as cv on {slotfp:catalogVersion} = {cv:pk} join Catalog as c on {cv:catalog} = {c:pk} join ContentPage as page on {slotfp:page} = {page:pk}} WHERE {c:id} = '"" + catalogVersion + ""' and {cv:version} = 'Staged' AND {page:uid} IN ("" + pages + "")"", Collections.EMPTY_MAP, Collections.singletonList(Item.class), true, true, -1, -1);"

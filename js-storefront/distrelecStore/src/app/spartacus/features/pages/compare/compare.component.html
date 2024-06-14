@@ -1,0 +1,33 @@
+<div class="container compare-page">
+  <ng-container *ngIf="compareList$ | async as compareList">
+    <h1 class="compare-title" id="compare-title" [class.add-margin]="compareList.products.length > 0">
+      {{ 'product.compare.title' | cxTranslate }}
+    </h1>
+    <div class="row" [class.d-none]="compareList.products.length > 0">
+      <div class="col-sm-12" id="compare-subtitle-empty">
+        {{ 'product.compare.subtitle' | cxTranslate }}
+      </div>
+    </div>
+    <div *ngIf="compareList.products.length > 0" class="row">
+      <div class="tableGrid" id="compare-tableGrid">
+        <button
+          *ngIf="compareList.products.length > 4 || (isTabletDown && compareList.products.length > 2)"
+          class="animate-compare-left btn"
+          id="previous-compare-product"
+          (click)="prev()"
+        >
+          <fa-icon [icon]="faArrowLeft"></fa-icon>
+        </button>
+        <button
+          *ngIf="compareList.products.length > 4 || (isTabletDown && compareList.products.length > 2)"
+          class="animate-compare-right btn"
+          id="next-compare-product"
+          (click)="next()"
+        >
+          <fa-icon [icon]="faArrowRight"></fa-icon>
+        </button>
+        <app-compare-list [compareList$]="compareList$"></app-compare-list>
+      </div>
+    </div>
+  </ng-container>
+</div>

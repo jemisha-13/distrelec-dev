@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="fusionSearchService" class="com.distrelec.fusionsearch.impl.DefaultFusionSearchService">
+        <property name="fusionSearchRequestParamsConverter" ref="fusionSearchRequestParamsConverter"/>
+        <property name="fusionSearchResponseConverter" ref="fusionSearchResponseConverter"/>
+        <property name="productSearchPageConverter" ref="productSearchPageConverter"/>
+        <property name="restTemplate" ref="fusionRestTemplate"/>
+        <property name="searchRequestConverter" ref="distff.searchRequestConverter"/>
+        <property name="factFinderSearchQueryDataMapper" ref="factFinderSearchQueryDataMapper"/>
+    </bean>
+
+    <bean id="factFinderSearchQueryDataMapper" class="com.distrelec.fusionsearch.impl.FactFinderSearchQueryDataMapper" />
+
+    <bean id="fusionSearchRequestParamsConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="org.apache.commons.collections4.multimap.HashSetValuedHashMap"/>
+        <property name="populators">
+            <list>
+                <bean class="com.distrelec.fusionsearch.request.ChannelParamsPopulator"/>
+                <bean class="com.distrelec.fusionsearch.request.CountryParamsPopulator"/>
+                <bean class="com.distrelec.fusionsearch.request.FilterQueryParamsPopulator"/>
+                <bean class="com.distrelec.fusionsearch.request.LanguageParamsPopulator"/>
+                <bean class="com.distrelec.fusionsearch.request.PageableDataParamsPopulator"/>
+                <bean class="com.distrelec.fusionsearch.request.SearchQueryParamsPopulator"/>
+                <bean class="com.distrelec.fusionsearch.request.SessionParamsPopulator"/>
+                <bean class="com.distrelec.fusionsearch.request.SortParamsPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="fusionSearchResponseConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass" value="com.namics.hybris.ffsearch.data.facet.FactFinderProductSearchPageData"/>
+        <property name="populators">
+            <list>
+                <bean class="com.distrelec.fusionsearch.response.CategoryResponsePopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.FeedbackCampaingResponsePopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.FacetResponsePopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.FilterBadgesResponsePopulator">
+                    <property name="responseFilterBadgesPopulator" ref="distff.responseFilterBadgesPopulator"/>
+                </bean>
+                <bean class="com.distrelec.fusionsearch.response.KeywordRedirectUrlResponsePopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.PaginationResponsePopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.QueryResponsePopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.ResultsResponsePopulator">
+                    <property name="docToSearchResultConverter" ref="fusionDocToSearchResultConverter"/>
+                </bean>
+                <bean class="com.distrelec.fusionsearch.response.SearchQueryResponsePopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.SortingResponsePopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="fusionDocToSearchResultConverter" class="com.distrelec.fusionsearch.response.result.DocToSearchResultConverter">
+        <property name="populators">
+            <list>
+                <bean class="com.distrelec.fusionsearch.response.result.AdditionalImageUrlResultPopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.result.FactFinderColumnSearchResultPopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.result.FeaturesResultPopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.result.FusionToFFColumnResultPopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.result.PriceResultPopulator"/>
+                <bean class="com.distrelec.fusionsearch.response.result.PromotionLabelResultPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="enhanceSearchQueryStrategy" class="com.distrelec.fusionsearch.response.EnhanceSearchQueryStrategyImpl">
+        <property name="queryDataPopulator" ref="distff.responseQueryDataPopulator"/>
+    </bean>
+
+</beans>

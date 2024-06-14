@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		[y] hybris Platform Copyright (c) 2000-2010 hybris AG All rights reserved. This software is the confidential and proprietary information of hybris
+		("Confidential Information"). You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+		you entered into with hybris.
+	-->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+
+
+	<!--
+
+		Write a similar tag in your servlet application context file to use the message source But don't use the alias, it will not work!! NOT THIS WAY: <alias
+		alias="messageSource" name="namicsI18n.messageSource" />
+	-->
+
+	<!--
+		<bean id="namicsI18n.messageSource" class="com.namics.commons.i18n.DaoMessageSource"> <property name="messageSourceDao"
+		ref="hybrisFlexisearchMessageSourceDao" /> </bean>
+	-->
+
+	
+	<bean id="namicsI18n.uncached.messageSource" class="com.namics.hybris.i18n.UncachedDaoMessageSource" autowire-candidate="false" primary="false">
+		<property name="messageSourceDao" ref="hybrisFlexisearchMessageSourceDao" />
+	</bean>
+	 
+
+
+	<bean id="hybrisFlexisearchMessageSourceDao" class="com.namics.hybris.i18n.dao.HybrisFlexisearchMessageSourceDao">
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+		<property name="commonI18NService" ref="commonI18NService" />
+		<property name="returnKeyWhenFailing" value="false" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+
+	<!--
+		<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> <property name="basenames"> <list>
+		<value>/WEB-INF/messages</value> </list> </property> </bean>
+	-->
+
+
+</beans>

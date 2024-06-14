@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Setup Project
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+<project name="namics-hybris-tasks-setup-project" basedir=".">
+
+	<!--
+	=================================
+	macro: download ant extract zip file
+	=================================
+	-->
+
+	<macrodef name="downloadAndExtractZipFile">
+		<attribute name="downloadUrl" />
+		<attribute name="targetLocation" />
+		<sequential>
+			<mkdir dir="@{targetLocation}" />
+			<delete file="@{targetLocation}/download.part.zip" />
+
+			<echo message="Download zip file from @{downloadUrl}..." />
+			<get src="@{downloadUrl}" dest="@{targetLocation}/download.part.zip" />
+
+			<echo message="Extract zip file to @{targetLocation}..." />
+			<unzip dest="@{targetLocation}" overwrite="true">
+				<fileset dir="@{targetLocation}">
+					<include name="download.part.zip" />
+				</fileset>
+			</unzip>
+			<delete file="@{targetLocation}/download.part.zip" />
+
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: download file
+	=================================
+	-->
+
+	<macrodef name="downloadFile">
+		<attribute name="downloadUrl" />
+		<attribute name="targetLocation" />
+		<sequential>
+			<echo message="Download file from @{downloadUrl}..." />
+			<get src="@{downloadUrl}" dest="@{targetLocation}" />
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: download hybris files
+	=================================
+	-->
+
+	<macrodef name="downloadHybrisFiles">
+		<sequential>
+			<echo message="No hybris downloads are defined. Please specify them (e.g. in 'build-checkout-application.xml')." />
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: checkoutProject
+	=================================
+	-->
+	<macrodef name="checkoutProject" description="Checkout the desired version of all project extentsions and environment to ${project.home}.">
+		<sequential>
+
+			<condition property="release" value="${releaseToInstall}">
+				<isset property="releaseToInstall" />
+			</condition>
+			<condition property="release" value="${extension.mandant.version}">
+				<isset property="extension.mandant.version" />
+			</condition>
+
+			<fail message="Attribute 'releaseToInstall' was not set. Release example: v1.0.0 or v1.0-rc1" unless="release" />
+
+			<echo message="Checkout all project: ${release}" />
+
+			<exec executable="git" failonerror="true">
+				<arg value="fetch" />
+				<arg value="--tags" />
+			</exec>
+
+			<exec executable="git" failonerror="true">
+				<arg value="checkout" />
+				<arg value="tags/${release}" />
+			</exec>
+			<!-- check if the git release is clean (no changes present) -->
+			<echo message="WARNING: if the following step fails you repo is not clean: run git stauts + git diff" />
+			<exec executable="git" failonerror="true">
+				<arg value="diff" />
+				<arg value="--exit-code" />
+			</exec>
+
+			<echo message="Finished the project checkout" />
+		</sequential>
+	</macrodef>
+
+
+
+	<!--
+	=================================
+	macro: checkout
+	=================================
+	-->
+	<macrodef name="checkout" description="Checkout the desired version for environment and all project and secondary extentsions to ${project.home}.">
+		<sequential>
+			<checkoutProject />
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: setupCompleteProject 
+	=================================
+	-->
+	<macrodef name="setupCompleteProject" description="extracts all the files with .zip extension from vendor">
+		<sequential>
+			<!-- https://wiki.hybris.com/display/forum/Hybris+multichannel+suite+build+failure -->
+
+			<!-- do not skip hybris dowload for project setup -->
+			<property name="skip.download" value="false" />
+			<antcall target="updateHybrisPlatformAndExtensions" />
+			<antcall target="updateScriptsFromEnvironment" />
+			<antcall target="configure" />
+			<!-- zuerst den build ausführen, damit config folder und struktur von hybris angelegt wird. -->
+			<antcall target="all" />
+			<!-- hier nochmals build ausführen, um mit der neuen konfiguration zu builden -->
+			<echo message="Congrats dude, the hybris project setup is done, now run the hybris server by calling in the the project home: start-hybris.bat or start-hybris.sh and open the admin interface by calling the url http://localhost:9001/hac" />
+			<!--
+			<antcall target="initializemaster" />
+			-->
+			<echo message="run initializemaster if not upgrading from an existing installation" />
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: updateHybrisPlatformAndExtensions 
+	=================================
+	-->
+	<macrodef name="updateHybrisPlatformAndExtensions" description="download hybris and extracts all the files with .zip extension from vendor">
+		<sequential>
+			<condition property="hybrisRepositoryUsername" value="${hybris.account.user}" else="${hybrisRepositoryUsername}">
+				<not>
+					<isset property="hybrisRepositoryUsername" />
+				</not>
+			</condition>
+			<condition property="hybrisRepositoryPassword" value="${hybris.account.password}" else="${hybrisRepositoryPassword}">
+				<not>
+					<isset property="hybrisRepositoryPassword" />
+				</not>
+			</condition>
+
+			<if>
+				<equals arg1="${skip.download}" arg2="false" />
+				<then>
+					<echo message="Downloading hybris with user '${hybrisRepositoryUsername}' and password '********' " />
+					<downloadHybrisFiles />
+				</then>
+				<else>
+					<echo message="Downloading hybris skipped, because download is disabled in poperties-config.xml! Look for 'skip.download' property." />
+				</else>
+			</if>
+			<unzipHybrisFiles />
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: unzipHybrisFiles 
+	=================================
+	-->
+	<macrodef name="unzipHybrisFiles" description="extracts all the files with .zip extension from vendor">
+		<sequential>
+			<echo message="Delete old hybris version." />
+
+			<delete dir="${hybris.home}/bin/platform" />
+			<delete dir="${hybris.home}/bin/ext-hybris" />
+
+			<echo message="Extract new hybris version." />
+
+			<!--
+			<unzip dest="${project.home}" overwrite="false">
+				<fileset dir="${vendor.dir}">
+					<include name="**/*.zip" />
+				</fileset>
+			</unzip>
+			-->
+			
+			<untar src="${vendor.dir}/dist_hy62.tar.gz" dest="${project.home}" compression="gzip"/>
+			
+		</sequential>
+	</macrodef>
+
+	<macrodef name="setupOSExecutionScripts" description="This target will override the hybris platform config files with environment specific config files. Additionally, overlayed files will be copied into the hybris folder (never change files in the hybris folder).">
+		<sequential>
+			<echo message="Setting up the execution scripts for the current operating system" />
+			<echo message="Operating system is ${os.name}" />
+			<if>
+				<os family="unix" />
+				<then>
+					<setupUnixScripts />
+				</then>
+				<else>
+					<setupWindowsScripts />
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="setupWindowsScripts" description="">
+		<sequential>
+			<echo message="Copy common scripts..." />
+			<copy todir="${project.home}" overwrite="true" verbose="true" failonerror="true">
+				<fileset dir="${common.dir}/${environment.static.directoryname}/${environment.scripts.directoryname}">
+					<include name="*.bat" />
+				</fileset>
+			</copy>
+			<echo message="Copy common environment-specific scripts (${target.environment}-common)..." />
+			<copy todir="${project.home}" overwrite="true" verbose="true" failonerror="false">
+				<fileset dir="${environment.home}/${target.environment}-common/${environment.static.directoryname}/${environment.scripts.directoryname}">
+					<include name="*.bat" />
+				</fileset>
+			</copy>
+			<echo message="Copy environment-specific scripts (${target.environment}${target.environment.node})..." />
+			<copy todir="${project.home}" overwrite="true" verbose="true" failonerror="false">
+				<fileset dir="${environment.home}/${target.environment}${target.environment.node}/${environment.static.directoryname}/${environment.scripts.directoryname}">
+					<include name="*.bat" />
+				</fileset>
+			</copy>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="setupUnixScripts" description="">
+		<sequential>
+			<echo message="Copy common scripts..." />
+			<copy todir="${project.home}" overwrite="true" verbose="true" failonerror="true">
+				<fileset dir="${common.dir}/${environment.static.directoryname}/${environment.scripts.directoryname}">
+					<include name="*.sh" />
+				</fileset>
+			</copy>
+			<echo message="Copy common environment-specific scripts (${target.environment}-common)..." />
+			<copy todir="${project.home}" overwrite="true" verbose="true" failonerror="false">
+				<fileset dir="${environment.home}/${target.environment}-common/${environment.static.directoryname}/${environment.scripts.directoryname}">
+					<include name="*.sh" />
+				</fileset>
+			</copy>
+			<echo message="Copy environment-specific scripts (${target.environment}${target.environment.node})..." />
+			<copy todir="${project.home}" overwrite="true" verbose="true" failonerror="false">
+				<fileset dir="${environment.home}/${target.environment}${target.environment.node}/${environment.static.directoryname}/${environment.scripts.directoryname}">
+					<include name="*.sh" />
+				</fileset>
+			</copy>
+
+			<chmod perm="700">
+				<fileset dir="${project.home}">
+					<include name="*.sh" />
+				</fileset>
+			</chmod>
+		</sequential>
+	</macrodef>
+
+</project>
+

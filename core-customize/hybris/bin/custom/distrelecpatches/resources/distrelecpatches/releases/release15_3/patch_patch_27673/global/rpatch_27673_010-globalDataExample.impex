@@ -1,0 +1,13 @@
+UPDATE DistGenericSanityCheckCronJob;code[unique=true];checkQuery
+                                    ;distSanityCheckPictureCronJob;"
+SELECT
+  COUNT(*)
+FROM
+  {product} where {primaryImage} is NULL and {catalogVersion} = ({{SELECT
+  PK
+FROM
+  {catalogVersion}  where {version} = 'Online' and {catalog} = ({{SELECT
+  PK
+FROM
+  {catalog} where p_ID = 'distrelecProductCatalog'}}) }})
+"

@@ -1,0 +1,101 @@
+## messageSource=classpath:/distrelecB2Bcore/messages/$site/email-header_$lang.properties
+## messageSource=classpath:/distrelecB2Bcore/messages/email-customerRegistration_$lang.properties
+## messageSource=classpath:/distrelecB2Bcore/messages/email-customerRegistration_$site_$lang.properties
+#macro(genHtmlLink $url $label)
+<a style="color: #AA1936; text-decoration: underline;" href="$url" target="_blank"><span style="color: #AA1936;">$label</span></a>
+#end
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+<html>
+    <body style="padding: 0; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+        <table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="margin-top: 40px; border-spacing: 0;">
+            <tr>
+                <td align="center" valign="top">
+                    ## Start - Header
+
+                    <table border="0" width="602" cellpadding="0" cellspacing="0" style=" text-align:left; border-bottom: 1px solid #cccccc;">
+		<tr>
+                            <td height="66"
+                                style="border-spacing: 0; padding-top: 0;">
+                                <table width="602" height="60">
+                                    <tr>
+                                        <td align="center" width="319" height="60" style="padding-bottom: 40px;">
+                                            <a href="${ctx.messages.shopUrl}"> ${ctx.cmsSlotContents.Logo} </a>
+			</td>
+		</tr>
+                                </table>
+                            </td>
+		</tr>
+	</table>
+
+                    ## End - Header
+
+                    ## Start - Content
+
+                    <table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; padding: 40px; text-align: center;">
+                        <tr>
+                            <td>
+                                #if( $ctx.customerType=='B2B' && ($ctx.registrationType=='STANDALONE' || $ctx.registrationType=='STANDALONE_EXISTING') )
+                                    <h1 style="font-family: Helvetica Neue, Arial, sans-serif; color: #333333; font-size: 25px; font-weight: 400;">${ctx.messages.registerAccountH1ContentB2cStandalone}</h1>
+                                #elseif( $ctx.customerType=='B2B' && ( $ctx.registrationType=='CHECKOUT' ||  $ctx.registrationType=='CHECKOUT_EXISTING') )
+                                    <h1 style="font-family: Helvetica Neue, Arial, sans-serif; color: #333333; font-size: 25px; font-weight: 400;">${ctx.messages.registerAccountH1ContentB2cStandalone}</h1>
+                                #elseif( $ctx.customerType=='B2C' && (($ctx.registrationType=='STANDALONE' || $ctx.registrationType=='CHECKOUT') || $ctx.registrationType=='STANDALONE_EXISTING'))
+                                    <h1 style="font-family: Helvetica Neue, Arial, sans-serif; color: #333333; font-size: 25px; font-weight: 400;">${ctx.messages.registerAccountH1ContentB2cStandalone}</h1>
+                                #elseif( $ctx.customerType=='B2C' && $ctx.registrationType=='CHECKOUT_EXISTING' )
+                                    <h1 style="font-family: Helvetica Neue, Arial, sans-serif; color: #333333; font-size: 25px; font-weight: 400;">${ctx.messages.registerAccountH1ContentB2cCheckout}</h1>
+                                #end
+				<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-spacing: 0; border-collapse: collapse;">
+					<tr>
+                                        <td style="padding: 25px 0;" align="center">
+                                            <table border="0" width="522" cellpadding="0" cellspacing="0" style="border-spacing: 0; width: 50%; text-align: center;">
+								<tr>
+									<td style="border-collapse: collapse; background-color: #de1417; white-space:nowrap;" align="center">
+                                                        #if( $ctx.customerType=='B2B' )
+                                                            <a style="background-color: #de1417; width:90%; font-family: Helvetica Neue, Arial, sans-serif; font-weight: 400; color: #ffffff; font-size: 18px; display: inline-block; padding: 20px 25px; text-align: center; vertical-align: middle; text-decoration: none; border: 1px solid #de1417;" href="${ctx.b2CSuccesUrl}" target="_blank">${ctx.messages.loginNow}</a>
+                                                        #elseif( $ctx.customerType=='B2B' && $ctx.registrationType=='CHECKOUT' )
+                                                            <a style="background-color: #de1417; width:90%; font-family: Helvetica Neue, Arial, sans-serif; font-weight: 400; color: #ffffff; font-size: 18px; display: inline-block; padding: 20px 25px; text-align: center; vertical-align: middle; text-decoration: none; border: 1px solid #de1417;" href="${ctx.b2CSuccesUrl}" target="_blank">${ctx.messages.loginNow}</a>
+                                                        #elseif( $ctx.customerType=='B2C' && (($ctx.registrationType=='STANDALONE' || $ctx.registrationType=='CHECKOUT') || $ctx.registrationType=='STANDALONE_EXISTING') )
+                                                            <a style="background-color: #de1417; width:90%; font-family: Helvetica Neue, Arial, sans-serif; font-weight: 400; color: #ffffff; font-size: 18px; display: inline-block; padding: 20px 25px; text-align: center; vertical-align: middle; text-decoration: none; border: 1px solid #de1417;" href="${ctx.b2CSuccesUrl}" target="_blank">${ctx.messages.loginNow}</a>
+                                                        #elseif( $ctx.customerType=='B2C' && $ctx.registrationType=='CHECKOUT_EXISTING' )
+                                                            <a style="background-color: #de1417; width:90%; font-family: Helvetica Neue, Arial, sans-serif; font-weight: 400; color: #ffffff; font-size: 18px; display: inline-block; padding: 20px 25px; text-align: center; vertical-align: middle; text-decoration: none; border: 1px solid #de1417;" href="${ctx.b2CCheckoutSuccessUrl}" target="_blank">${ctx.messages.gotoCart}</a>
+                                                        #end
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+                                #if( $ctx.customerType=='B2B' )
+                                    <p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 13px; line-height: 24px; text-align: left;">${ctx.messages.b2cdontForgetThat}</p>
+                                    <ul>
+                                        <li style="font-size: 13px; line-height: 24px; text-align: left;">${ctx.messages.b2cdontForgetThatpoint1}</li>
+                                        <li style="font-size: 13px; line-height: 24px; text-align: left;">${ctx.messages.b2cdontForgetThatpoint2}</li>
+                                        <li style="font-size: 13px; line-height: 24px; text-align: left;">${ctx.messages.b2cdontForgetThatpoint3}</li>
+                                        <li style="font-size: 13px; line-height: 24px; text-align: left;">${ctx.messages.b2cdontForgetThatpoint4}</li>
+                                    </ul>
+                                #elseif( $ctx.customerType=='B2C' )
+                                    <p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 13px; line-height: 24px; text-align: left;">${ctx.messages.b2cdontForgetThat}</p>
+                                    <ul>
+                                        <li style="font-size: 13px; line-height: 24px; text-align: left;">${ctx.messages.b2cdontForgetThatpoint1}</li>
+                                        <li style="font-size: 13px; line-height: 24px; text-align: left;">${ctx.messages.b2cdontForgetThatpoint2}</li>
+                                        <li style="font-size: 13px; line-height: 24px; text-align: left;">${ctx.messages.b2cdontForgetThatpoint3}</li>
+                                        <li style="font-size: 13px; line-height: 24px; text-align: left;">${ctx.messages.b2cdontForgetThatpoint4}</li>
+                                    </ul>
+                                #end
+                                <p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 22px; padding: 20px 0; text-align: center;">${ctx.messages.ifYouHaveQuestions} <a href="mailto:${ctx.contactEmail}">${ctx.messages.ifYouHaveQuestionsLink}</a>.</p>
+			</td>
+		</tr>
+	</table>
+
+                    ## End - Content
+
+                    ## Start - Footer
+
+	${ctx.footer}
+
+                    ## End - Footer
+
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

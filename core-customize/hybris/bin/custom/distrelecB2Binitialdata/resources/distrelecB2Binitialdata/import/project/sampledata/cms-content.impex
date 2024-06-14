@@ -1,0 +1,137 @@
+$productCatalog=distrelecProductCatalog
+$productCV=CatalogVersion(catalog(id[default=$productCatalog]),version[default='Online'])
+$productProductCV=Product.catalogVersion(catalog(id[default=$productCatalog]),version[default='Online'])
+
+
+# Distrelect Hero Rotating Teaser Components
+INSERT_UPDATE DistHeroRotatingTeaserComponent;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];heroRotatingItems(Product.code,$productProductCV);autoplayTimeout;componentWidth(code);&componentRef
+;;HeroRotatingTeaser1;Hero Rotating Teaser 1 $countryCode;Hero Teaser;Hero Teaser;9301490_sample,9301491_sample,8500027_sample,8500035_sample,8500043_sample,8500050_sample,8706616_sample;4000;fullWidth;HeroRotatingTeaser1
+;;HeroRotatingTeaser2;Hero Rotating Teaser 2 $countryCode;Hero Teaser;Hero Teaser;9301490_sample,9301491_sample,8500027_sample,8500035_sample,8500043_sample,8500050_sample,8706616_sample;4000;twoThird;HeroRotatingTeaser2
+
+# Dist Product Carousel Components
+INSERT_UPDATE DistProductCarouselComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;TopProductsComponent;Top Products Component $countryCode;TopProductsComponent
+;;NewProductsComponent;New Products Component $countryCode;NewProductsComponent
+
+# Dist Category Carousel Component
+INSERT_UPDATE DistCategoryCarouselComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;TopCategoriesComponent;Top Categories Component $countryCode;TopCategoriesComponent
+
+# Dist Manufacturer Carousel Component
+INSERT_UPDATE DistManufacturerCarouselComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;TopManufacturersComponent;Top Manufacturers Component &countryCode;TopManufacturersComponent
+;;NewManufacturersComponent;New Manufacturers Component &countryCode;NewManufacturersComponent
+
+# Dist Product Cookie Carousel Components
+INSERT_UPDATE DistProductCookieCarouselComponent;$contentCV[unique=true];uid[unique=true];name;cookieName;&componentRef
+;;LastViewedProductsComponent;Last Viewed Products Component $countryCode;lastViewed;LastViewedProductsComponent
+
+# Dist Product Carpet Components
+INSERT_UPDATE DistProductCarpetComponent;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];products(code,$productCV);searchQuery;maxSearchResults;&componentRef
+;;ManualProductCarpetComponent;Manual Product Carpet Component $countryCode;Product Carpet;Produktteppich;9301490_sample,9301491_sample,8500027_sample,8500035_sample,8500043_sample;;;ManualProductCarpetComponent
+;;SearchProductCarpetComponent;Search Product Carpet Component $countryCode;Product Carpet;Produktteppich;;sample;5;SearchProductCarpetComponent
+
+# Dist Category Thumbs Components
+INSERT_UPDATE DistCategoryThumbsComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;DefaultCategoryThumbsComponent;Default Category Thumbs Component;DefaultCategoryThumbsComponent
+
+# Dist Link List Components
+INSERT_UPDATE DistLinkListComponent;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];linkComponents(uid,$contentCV);&componentRef
+;;PromotionsLinkListComponent;Promotion Link List Component;Promotion Link;Promotion Links;;PromotionsLinkListComponent
+
+# Dist Headline Components
+INSERT_UPDATE DistHeadlineComponent;$contentCV[unique=true];uid[unique=true];name;headline[lang=en];headline[lang=de];&componentRef
+;;HomeHeadlineComponent;Home Headline Component;Welcome Distrelec;Willkommen Distrelec;HomeHeadlineComponent
+
+# Dist Iframe Components
+INSERT_UPDATE DistIframeComponent;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];linkToIframe;parameterEncoding;width;height;&componentRef
+;;HomeIframeComponent;Home Iframe Component;Distrelec 1.0;Distrelec 1.0;http://www.distrelec.ch;;100%;100%;HomeIframeComponent
+
+# Dist Warning Components
+INSERT_UPDATE DistWarningComponent;$contentCV[unique=true];uid[unique=true];name;headline[lang=en];headline[lang=de];body[lang=en];body[lang=de];warningType(code);componentWidth(code);displayIcon;&componentRef
+;;PromotionWarningComponent;Promotion Warning Component;New Distrelec Shop;Neuer Distrelec Shop;Everything is new and better;Alles ist neu und besser;promotion;fullWidth;false;PromotionWarningComponent
+
+# Dist Content Teaser Components (for news and jobs pages)
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url[lang=en];url[lang=de];target(code)[default='sameWindow'];iconClass(code);&componentRef
+;;NewsDetailLinkComponent;News Detail Link Component;/newsDetail;/newsDetail;;;NewsDetailLinkComponent
+;;JobDetailLinkComponent;Job Detail Link Component;/jobDetail;/jobDetail;;;JobDetailLinkComponent
+
+INSERT_UPDATE DistContentTeaserComponent;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];subTitle[lang=en];subTitle[lang=de];text[lang=en];text[lang=de];link(uid,$contentCV);&componentRef
+;;NewsComponent;News Component;Clever und smart – Ladegenies für unterwegs;Clever und smart – Ladegenies für unterwegs;01.11.2012;01.11.2012;Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit. Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna ...;Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit. Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna ...;NewsDetailLinkComponent;NewsComponent
+;;JobsComponent;Jobs Component;E-Platform Project Manager (m/f);E-Platform Project Manager (m/f);Pensum 100%;Pensum 100%;Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit. Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna ...;Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit. Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna ...;JobDetailLinkComponent;JobsComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;ContentSlot-NewsPage;Content Slot for News Page;true;NewsComponent
+;;ContentSlot-JobsPage;Content Slot for Jobs Page;true;JobsComponent
+
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];name;content[lang=en];content[lang=de];&componentRef
+;;NewsDetailParagraphComponent;News Detail Paragraph Component;Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit. Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna ...;Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit. Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna ...;NewsDetailParagraphComponent
+;;JobDetailParagraphComponent;Job Detail Paragraph Component;Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit. Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna ...;Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit. Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna ...;JobDetailParagraphComponent
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;title[lang=en];title[lang=de];masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;NewsDetailPage;News Detail Page;News Details;News Details;NewsDetailPageTemplate;/newsDetail;;;;NewsDetailPage;
+;;JobDetailPage;Job Detail Page;Job Details;Job Details;JobDetailPageTemplate;/jobDetail;;;;JobDetailPage;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;ContentSlot-NewsDetailPage;Content Slot for News Detail Page;true;NewsDetailParagraphComponent
+;;ContentSlot-JobDetailPage;Content Slot for Job Detail Page;true;JobDetailParagraphComponent
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;Content-NewsDetailPage;Content;NewsDetailPage;ContentSlot-NewsDetailPage
+;;Content-JobDetailPage;Content;JobDetailPage;ContentSlot-JobDetailPage
+
+# CMS Paragrpah Components (for faq page)
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];name;content[lang=en];content[lang=de];&componentRef
+;;FaqParagraphComponent;FAQ Paragraph Component;<h3>Etiam porta sem malesuada magna mollis euismod.?</h3>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Curabitur blandit tempus porttitor. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor.<br/><br/>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Donec id elit non mi porta gravida at eget metus. Aenean lacinia bibendum nulla sed consectetur. Donec sed odio dui.;<h3>Etiam porta sem malesuada magna mollis euismod.?</h3>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Curabitur blandit tempus porttitor. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor.<br/><br/>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Donec id elit non mi porta gravida at eget metus. Aenean lacinia bibendum nulla sed consectetur. Donec sed odio dui.;FaqParagraphComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;ContentSlot-FaqPage;Content Slot for FAQ Page;true;FaqParagraphComponent
+
+
+# CMS Components (for Search Feedback Sent Page)
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];name;content[lang=en];content[lang=de];&componentRef
+;;SearchFeedbackSentParagraphComponent;Search Feedback Sent Paragraph Component;You will hear from us...;Sie werden in Kürze von uns hören...;SearchFeedbackSentParagraphComponent
+
+INSERT_UPDATE DistHeadlineComponent;$contentCV[unique=true];uid[unique=true];name;headline[lang=en];headline[lang=de];&componentRef
+;;SearchFeedbackSentHeadlineComponent;Search Feedback Sent Headline Component;Thanks for your feedback!;Danke für Ihre Rückmeldung;SearchFeedbackSentHeadlineComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;ContentSlot-SearchFeedbackSentPage;Content Slot for SearchFeedbackSentPage;true;SearchFeedbackSentHeadlineComponent,SearchFeedbackSentParagraphComponent
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='searchFeedbackSent'];contentSlot(uid,$contentCV)[unique=true]
+;;Content-SearchFeedbackSentPage;Content;;ContentSlot-SearchFeedbackSentPage
+
+
+# CMS Components (for Product EOL Page)
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];name;content[lang=en];content[lang=de];&componentRef
+;;ProductEolParagraphComponent;Product EOL Paragraph Component;Product EOL without replacement product...;Produkt abgelaufen ohne Nachfolger...;ProductEolParagraphComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;ContentSlot-ProductEolPage;Content Slot for Product EOL Page;true;ProductEolParagraphComponent
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;Content-ProductEolPage;Content;ProductEolPage;ContentSlot-ProductEolPage
+
+
+
+# Place Dist CMS Components on Test Homepage
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;ContentSlot-TestHomepage;Content Slot for TestHomepage;true;PromotionWarningComponent,HomeHeadlineComponent,HeroRotatingTeaser1,LastViewedProductsComponent,NewProductsComponent,ManualProductCarpetComponent,TopManufacturersComponent,HomeIframeComponent
+
+
+# Place Dist CMS Component on Default Category Page
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;ContentSlot-CategoryPage;Content Slot for CategoryPage;true;HeroRotatingTeaser2,DefaultCategoryThumbsComponent,TopCategoriesComponent
+;;TeaserContentSlot-CategoryPage;Teaser Content Slot for CategoryPage;true;PromotionsLinkListComponent
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='category'];contentSlot(uid,$contentCV)[unique=true]
+;;Content-CategoryPage;Content;;ContentSlot-CategoryPage
+;;TeaserContent-CategoryPage;TeaserContent;;TeaserContentSlot-CategoryPage
+
+
+
+#INSERT_UPDATE CategoryPage;$contentCV[unique=true];uid[unique=true];name;title[lang=de];title[lang=en];masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved'];previewImage(code, $contentCV)
+#;;SampleCategoryPage;Sample Category Page;Kategorie Beispielseite;Sample Category Page;CategoryPageTemplate;false;;defaultCategoryPagePreview
+
+#INSERT_UPDATE CMSCategoryRestriction;$contentCV[unique=true];uid[unique=true];name;pages(uid);categories(code)
+#;;SampleCategoryRestriction;Sample Category Restriction;SampleCategoryPage;cat-1_1_1

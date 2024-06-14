@@ -1,0 +1,36 @@
+            <Host
+                name="localhost"
+                unpackWARs="true"
+                autoDeploy="true">
+				<Valve className="org.apache.catalina.valves.rewrite.RewriteValve" />
+                <Valve
+                    className="org.apache.catalina.valves.ErrorReportValve"
+                    showReport="${ENV::ERROR_SHOW_REPORT}"
+                    showServerInfo="${ENV::ERROR_SHOW_SERVER_INFO}" />
+                <Valve
+                    className="de.hybris.tomcat.StoreJvmRouteAsContextParameterValve" />
+
+                <Valve className="de.hybris.ccv2.access.logs.StdoutAccessLogValve"
+                   pattern='{"origin":"access-log", "timeMillis":"%{msec}t", "responseTime":"%T", "responseTimeMillis":"%D", "thread":"%I", "remoteHost":"%h", "remoteUser":"%u", "requestLine":"%r", "distcrequest":"%U", "statusCode":%s, "bytesSent":%b, "processMillis":%D, "TTFB":%F, "connectionStatus":"%X", "userAgent":"%{User-Agent}i", "referer":"%{Referer}i", "serverName":"%v", "XForwardedFor":"%{X-Forwarded-For}i" }' />
+
+                <Valve
+                    className="org.apache.catalina.valves.RemoteIpValve"
+                    portHeader="x-forwarded-port"
+                    protocolHeader="x-forwarded-proto"
+                    internalProxies="${ENV::INTERNAL_PROXIES}"
+                    trustedProxies="${ENV::TRUSTED_PROXIES}" />
+
+                <Valve
+                    className="com.distrelec.tomcat.valves.HacRemoteAddrValve"
+                    allow="127\.\d+\.\d+\.\d+|93\.94\.66\.0|93\.94\.71\.94|195\.190\.81\.182|43\.252\.86\.30|115\.160\.212\.154|43\.227\.20\.174|100\.104\.28\.6|10\.169\.63\.254|193\.16\.224\.([1-9]|1[0-4]|3[3-9]|4[0-6])" />
+            </Host>
+
+            <Realm className="org.apache.catalina.realm.MemoryRealm">
+                <CredentialHandler
+                    className="org.apache.catalina.realm.MessageDigestCredentialHandler"
+                    algorithm="md5" />
+            </Realm>
+
+        </Engine>
+    </Service>
+</Server>

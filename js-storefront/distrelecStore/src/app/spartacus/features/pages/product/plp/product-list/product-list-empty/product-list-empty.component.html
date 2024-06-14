@@ -1,0 +1,113 @@
+<div class="container justify-content-center" id="no-search-results">
+  <ng-container *ngIf="(isB2CLayout$ | async) === false">
+    <h1 class="no-results-title" id="no-search-results-heading">
+      {{ 'searchResults.noResults.first' | cxTranslate }}
+      <span class="bold">'{{ title$ | async }}'</span>
+      {{ 'searchResults.noResults.last' | cxTranslate }}
+    </h1>
+    <h2 class="subtitle-question" id="no-search-results-subheading">{{ 'searchResults.tryAgain' | cxTranslate }}</h2>
+    <h3 class="search-tips" id="no-search-results-tips">{{ 'searchResults.tips.title' | cxTranslate }}</h3>
+    <ul class="list-of-tips">
+      <li id="no-search-results-tip-1">- {{ 'searchResults.tips.one' | cxTranslate }}</li>
+      <li id="no-search-results-tip-2">- {{ 'searchResults.tips.two' | cxTranslate }}</li>
+      <li id="no-search-results-tip-3">- {{ 'searchResults.tips.three' | cxTranslate }}</li>
+    </ul>
+    <p>
+      <a class="feedback-link" id="no-search-results-feedback-link" (click)="scrollTo(feedbackFormHeading)">
+        {{ 'searchResults.feedback' | cxTranslate }}
+      </a>
+    </p>
+  </ng-container>
+  <ng-container *ngIf="isB2CLayout$ | async">
+    <h1 class="no-results-title" id="no-search-results-heading">{{ 'article.business.only.error' | cxTranslate }}</h1>
+  </ng-container>
+  <app-product-list-empty-products></app-product-list-empty-products>
+  <h3 #feedbackFormHeading class="feedback-form-question" id="no-search-results-form-heading">
+    {{ 'feedback.emptySearch.heading' | cxTranslate }}
+  </h3>
+  <h4 class="instruction" id="no-search-results-form-subheading">
+    {{ 'feedback.emptySearch.subHeading' | cxTranslate }}
+  </h4>
+  <h5 class="search-term-subtitle" id="no-search-results-looking-for">
+    {{ 'feedback.emptySearch.lookingFor' | cxTranslate }}
+    <span class="search-term">"{{ title$ | async }}"</span>
+  </h5>
+  <form class="feedback-form" [formGroup]="feedbackForm" (ngSubmit)="onSubmit(feedbackForm)">
+    <label class="form-label" id="manufacturer-label" for="manufacturer-input">
+      {{ 'feedback.emptySearch.manufacturer' | cxTranslate }}
+    </label>
+    <select
+      class="select-manufacture"
+      id="manufacturer-input"
+      [class.error]="isControlInvalid('manufacturer')"
+      formControlName="manufacturer"
+    >
+      <option [selected]="true" [value]="'feedback.emptySearch.selectManufacturer' | cxTranslate">
+        {{ 'feedback.emptySearch.selectManufacturer' | cxTranslate }}
+      </option>
+      <option value="2000">
+        {{ 'product.manufacturer.other' | cxTranslate }}
+      </option>
+      <option *ngFor="let manufacture of manufactures" [value]="manufacture">
+        {{ manufacture }}
+      </option>
+    </select>
+    <div *ngIf="isControlInvalid('manufacturer')" class="error-msg" id="manufacturer-error-message">
+      <img class="error-icon" src="../../../../../../assets/media/validate-error.svg" alt="" />
+      {{ 'feedback.emptySearch.fieldRequired' | cxTranslate }}
+    </div>
+    <label class="form-label" id="manufacturer-identifier-label" for="manufacturerIdentifier-input">
+      {{ 'feedback.emptySearch.identifier' | cxTranslate }}
+    </label>
+    <input
+      class="input-field"
+      id="manufacturerIdentifier-input"
+      [class.error]="isControlInvalid('manufacturerIdentifier')"
+      type="text"
+      formControlName="manufacturerIdentifier"
+    />
+    <div
+      *ngIf="isControlInvalid('manufacturerIdentifier')"
+      class="error-msg"
+      id="manufacturer-identifier-error-message"
+    >
+      <img class="error-icon" src="../../../../../../assets/media/validate-error.svg" alt="" />
+      {{ 'feedback.emptySearch.fieldRequired' | cxTranslate }}
+    </div>
+    <label class="form-label" id="email-label" for="eMail-input">
+      {{ 'feedback.emptySearch.email' | cxTranslate }}
+    </label>
+    <input
+      class="input-field"
+      id="eMail-input"
+      [class.error]="isControlInvalid('eMail')"
+      type="email"
+      formControlName="eMail"
+    />
+    <div *ngIf="isControlInvalid('eMail')" class="error-msg" id="valid-email-error-message">
+      <img class="error-icon" src="../../../../../../assets/media/validate-error.svg" alt="" />
+      {{ 'feedback.emptySearch.emailRequired' | cxTranslate }}
+    </div>
+    <label class="form-label" id="tell-more-label" for="tellMore-input">
+      {{ 'feedback.emptySearch.more' | cxTranslate }}
+    </label>
+    <textarea
+      class="input-field"
+      id="tellMore-input"
+      [(ngModel)]="counter"
+      formControlName="tellMore"
+      minlength="0"
+      rows="4"
+    ></textarea>
+    <div *ngIf="isControlInvalid('tellMore')" class="error-msg" id="valid-more-error-message">
+      <img class="error-icon" src="../../../../../../assets/media/validate-error.svg" alt="" />
+      {{ 'feedback.emptySearch.limit' | cxTranslate }}
+    </div>
+    <div class="row">
+      <button class="btn btn-primary submit-button" id="form-submit" [disabled]="feedbackForm.invalid">
+        {{ 'feedback.emptySearch.send' | cxTranslate }}
+      </button>
+      <div class="counter" [class.error]="isControlInvalid('tellMore')">{{ counter.length }}/250</div>
+    </div>
+  </form>
+</div>

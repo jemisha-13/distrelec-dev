@@ -1,0 +1,77 @@
+<div class="modal" id="modalShippingTracking">
+  <div class="hd">
+    <div class="left">
+      <h3 class="title" id="ShippingTracking_modal_title">
+        Shipment
+        <span class="primary font-weight-normal">
+          {{ data?.deliveryDetails?.deliveryID }} ({{ data?.deliveryDetails?.handlingUnit[0].handlingUnitItem.length }})
+        </span>
+      </h3>
+      <label>
+        The following article(s) are included in this shipment from
+        {{ data?.deliveryDetails?.deliveryDate | date: 'dd/MM/yyyy' }}:
+      </label>
+    </div>
+    <div class="right">
+      <a class="btn btn-close" id="ShippingTracking_modal_btn_close" (click)="closeModal(false)">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-sm-12">
+      <ngb-accordion #acc="ngbAccordion" *ngFor="let delivery of data.deliveryDetails?.handlingUnit; let i = index">
+        <ngb-panel id="toggle-1" [title]="delivery.unitID">
+          <fa-icon [icon]="faAngleDown"></fa-icon>
+          <ng-template ngbPanelContent>
+            <div *ngFor="let unit of delivery?.handlingUnitItem">
+              <div class="row mb-2">
+                <div class="col-md-12 col-sm-12 text-red text-nowrap font-weight-normal">
+                  {{ unit.articleName }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3 col-sm-12 text-nowrap">
+                  <small>
+                    <strong>Art.Nr.</strong>
+                    <br />
+                    {{ unit.materialID }}
+                  </small>
+                </div>
+                <div class="col-md-3 col-sm-12 text-nowrap">
+                  <small>
+                    <strong>MPN</strong>
+                    <br />
+                    {{ unit.type }}
+                  </small>
+                </div>
+                <div class="col-md-3 col-sm-12 text-nowrap">
+                  <small>
+                    <strong>Manufacturer</strong>
+                    <br />
+                    {{ unit.manufacturer }}
+                  </small>
+                </div>
+                <div class="col-md-3 col-sm-12 text-nowrap">
+                  <small>
+                    <strong>Quantity</strong>
+                    <br />
+                    {{ unit.quantity }}
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-5">
+              <div class="col-md-12 col-sm-12 text-center">
+                <a class="btn btn-light distrelecLink cursor" target="_blank" href="{{ delivery.trackingURL }}">
+                  Click here to track this shipment online
+                </a>
+              </div>
+            </div>
+            <hr />
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+  </div>
+</div>

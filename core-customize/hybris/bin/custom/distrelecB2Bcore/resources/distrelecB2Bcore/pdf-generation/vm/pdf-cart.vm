@@ -1,0 +1,60 @@
+## messageSource=classpath:/distrelecB2Bcore/messages/$site/pdf-cart_$lang.properties
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<CART>
+    <CURRENT_SITE> ${currentSite} </CURRENT_SITE>
+    <HEADER>
+        <LOGO_URL>${logoUrl}</LOGO_URL>
+        <COMPANY_NAME>${messages.headerCompanyName}</COMPANY_NAME>
+        <SHOPPING_CART>${messages.shoppingCart}</SHOPPING_CART>
+        <ORDER_STATUS>${messages.orderStatus}</ORDER_STATUS>
+        <STREET>${messages.headerStreet}</STREET>
+        <CITY>${messages.headerCity}</CITY>
+        <TEL>${messages.headerTel}</TEL>
+        <URL>${messages.headerUrl}</URL>
+        <EMAIL>${messages.headerEmail}</EMAIL>
+        <VAT>${messages.vatNumber}</VAT>
+    </HEADER>
+    <TABLE_HEADER>
+        <ART_NUMBER>${messages.tableHeaderArticleNumber}</ART_NUMBER>
+        <DESCRIPTION>${messages.tableHeaderDescription}</DESCRIPTION>
+        <PIECES>${messages.tableHeaderPieces}</PIECES>
+        <UNIT_PRICE>${messages.tableHeaderUnitPrice}</UNIT_PRICE>
+        <TOTAL_PRICE>${messages.tableHeaderTotalPrice}</TOTAL_PRICE>
+    </TABLE_HEADER>
+    <CART_ENTRIES>
+        #foreach ($entry in ${cart.entries})
+            <CART_ENTRY>
+                <ART_NUMBER_LABEL>${messages.tableHeaderArticleNumber}</ART_NUMBER_LABEL>
+                <PRODUCT_CODE>$entry.product.code</PRODUCT_CODE>
+                <PRODUCT_NAME>$entry.product.name</PRODUCT_NAME>
+                <PRODUCT_IMAGE_URL>$entry.product.productImages[0].portrait_small.url</PRODUCT_IMAGE_URL>
+                <PRODUCT_MANUFACTURER>$entry.product.distManufacturer.name.replace("&","&amp;")</PRODUCT_MANUFACTURER>
+                <PRODUCT_REFERENCE>$!entry.customerReference</PRODUCT_REFERENCE>
+                <PIECES>$entry.quantity</PIECES>
+                <UNIT_PRICE>$formatHelper.formatPriceData($entry.basePrice)</UNIT_PRICE>
+                <TOTAL_PRICE>$formatHelper.formatPriceData($entry.totalPrice)</TOTAL_PRICE>
+            </CART_ENTRY>
+        #end
+        <SUBTOTAL_LABEL>${messages.subtotal}</SUBTOTAL_LABEL>
+        <DELIVERY_COST_LABEL>${messages.deliveryCost}</DELIVERY_COST_LABEL>
+        <DELIVERY_COST_NAME>$!{cart.deliveryMode.name}</DELIVERY_COST_NAME>
+        <PAYMENT_COST_LABEL>${messages.paymentCost}</PAYMENT_COST_LABEL>
+        <TOTAL_TAX_LABEL>${messages.totalTax}</TOTAL_TAX_LABEL>
+        <TOTAL_PRICE_LABEL>${messages.totalPrice}</TOTAL_PRICE_LABEL>
+        <SUBTOTAL>$formatHelper.formatPriceData($cart.subTotal)</SUBTOTAL>
+        <DELIVERY_COST>$formatHelper.formatPriceData($cart.deliveryCost)</DELIVERY_COST>
+        <PAYMENT_COST>$formatHelper.formatPriceData($cart.paymentCost)</PAYMENT_COST>
+        <TOTAL_TAX>$formatHelper.formatPriceData($cart.totalTax)</TOTAL_TAX>
+        <TOTAL_PRICE>$formatHelper.formatPriceData($cart.totalPrice)</TOTAL_PRICE>
+
+    </CART_ENTRIES>
+
+    <SIGNATURES>
+        <HEADERS>
+            <NAME>${messages.signatureName}</NAME>
+            <SIGNATURE>${messages.signatureSign}</SIGNATURE>
+            <DATE>${messages.date}</DATE>
+        </HEADERS>
+    </SIGNATURES>
+</CART>

@@ -1,0 +1,346 @@
+
+$contentMasterCatalog=distrelecContentCatalog
+$contentCatalog=distrelec_FIContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$siteResource=jar:com.namics.distrelec.b2b.initialdata.constants.Namb2bacceleratorInitialDataConstants&/distrelecB2Binitialdata/import/project/contentCatalogs/$contentMasterCatalog
+$jarResourceCms=jar:com.namics.distrelec.b2b.initialdata.constants.Namb2bacceleratorInitialDataConstants&/distrelecB2Binitialdata/import/project/cockpits/cmscockpit
+
+
+# Site Logo
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpg'];altText
+;;/images/theme/distrelec_logo.png;distrelec_logo.png;$siteResource/images/theme/distrelec_logo.png;image/png;Distrelec Logo
+;;/images/theme/logo-hybris.png;logo-hybris.png;$siteResource/images/theme/logo-hybris.png;image/png;hybris Accelerator
+
+
+# Site Logo Component
+INSERT_UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;LogoComponent;Logo Component;LogoComponent
+
+
+# Certification Logos
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpg'];altText
+;;/images/certlabels/logo-tuv.png;logo-tuv.png;$siteResource/images/certlabels/logo-tuv.png;image/png;Tüv Logo
+;;/images/certlabels/logo-ehi.png;logo-ehi.png;$siteResource/images/certlabels/logo-ehi.png;image/png;EHI Logo
+;;/images/certlabels/logo-trustedshops.png;logo-trustedshops.png;$siteResource/images/certlabels/logo-trustedshops.png;image/png;TrustedShops Logo
+
+
+# Site Certification Logos Component
+INSERT_UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;CertLabelTuvComponent;Certification Label Tüv Component;CertLabelTuvComponent
+;;CertLabelEhiComponent;Certification Label Ehi Component;CertLabelEhiComponent
+;;CertLabelTrustedShopsComponent;Certification Label TrustedShops Component;CertLabelTrustedShopsComponent
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;target(code)[default='sameWindow'];iconClass(code)
+;;HomepageNavLink;HomePageNavLink;HomepageNavLink
+;;FacebookLink;FacebookLink;FacebookLink;newWindow;FACEBOOK
+;;TwitterLink;TwitterLink;TwitterLink;newWindow;TWITTER
+;;GoogleLink;GooglePlusLink;GoogleLink;newWindow;GOOGLE
+
+
+# CMS Link Components to internal Content Pages
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;contentPage(uid,$contentCV[unique=true]);&componentRef;target(code)[default='sameWindow']
+;;ImportToolPageLink;Import Tool Page Link;;ImportToolPageLink
+;;ImpressumPageLink;Impressum Page Link;impressumPage;ImpressumPageLink
+;;DisclaimerPageLink;Disclaimer Page Link;disclaimerPage;DisclaimerPageLink
+
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);&nodeRef;
+;SiteRootNode;;SiteRootNode;;;SiteRootNode
+;MainNavNode;;Main Navigation;SiteRootNode;;MainNavNode
+;FooterNavNode;;Footer Navigation;SiteRootNode;;FooterNavNode
+##
+;SupportAndServicesNavNode;;Support and Services Navigation Node;FooterNavNode;;SupportAndServicesNavNode
+;SupportNavNode;;Support Navigation Node;SupportAndServicesNavNode;SupportNavEntry;SupportNavNode
+;TechnicalSupportNavNode;;Technical Support Navigation Node;;TechnicalSupportNavEntry;TechnicalSupportNavNode
+;CalibrationServiceNavNode;;Calibration Service Navigation Node;;CalibrationServiceNavEntry;CalibrationServiceNavNode
+;FaqNavNode;;FAQ Navigation Node;SupportAndServicesNavNode;FaqNavEntry;FaqNavNode
+;AddressChangeNavNode;;Address Change Navigation Node;SupportAndServicesNavNode;AddressChangeNavEntry;AddressChangeNavNode
+;SeminarRegistrationNavNode;;Seminar Registration Navigation Node;SupportAndServicesNavNode;SeminarRegistrationNavEntry;;SeminarRegistrationNavNode
+;CatalogOrderNavNode;;Catalog Order Navigation Node;SupportAndServicesNavNode;CatalogOrderNavEntry;CatalogOrderNavNode
+##
+;InfoCenterNavNode;;Info Center Navigation Node;FooterNavNode;;InfoCenterNavNode
+;AboutUsNavNode;;About us Navigation Node;InfoCenterNavNode;;AboutUsNavNode
+;SeminarsNavNode;;Seminars Navigation Node;InfoCenterNavNode;;SeminarsNavNode
+;NewsNavNode;;News Navigation Node;InfoCenterNavNode;;NewsNavNode
+;LegalsNavNode;;Legals Navigation Node;InfoCenterNavNode;;LegalsNavNode
+;ImprintNavNode;;Imprint Navigation Node;InfoCenterNavNode;;ImprintNavNode
+;PressNavNode;;Press Navigation Node;InfoCenterNavNode;;PressNavNode
+##
+;ManufacturerStoresNavNode;;Manufacturer Stores Navigation Node;FooterNavNode;ManufacturerStoresNavEntry;ManufacturerStoresNavNode
+;CiscoNavNode;;Cisco Navigation Node;ManufacturerStoresNavNode;;CiscoNavNode
+;SonyNavNode;;Sony Navigation Node;ManufacturerStoresNavNode;;SonyNavNode
+;AgilentNavNode;;Agilent Navigation Node;ManufacturerStoresNavNode;;AgilentNavNode
+;FlukeNavNode;;Fluke Navigation Node;ManufacturerStoresNavNode;;FlukeNavNode
+;AspNavNode;;ASP Navigation Node;ManufacturerStoresNavNode;;AspNavNode
+;AmprobeNavNode;;Amprobe Navigation Node;ManufacturerStoresNavNode;;AmprobeNavNode
+;BrotherNavNode;;Brother Navigation Node;ManufacturerStoresNavNode;;BrotherNavNode
+;PanasonicNavNode;;Panasonic Navigation Node;ManufacturerStoresNavNode;;PanasonicNavNode
+;KingstonNavNode;;Kingston Navigation Node;ManufacturerStoresNavNode;;KingstonNavNode
+;DevoloNavNode;;Devolo Navigation Node;ManufacturerStoresNavNode;;DevoloNavNode
+##
+;ToolsNavNode;;Tools Navigation Node;FooterNavNode;;ToolsNavNode
+;ListImportToolsNavNode;;List Import Tools Navigation Node;ToolsNavNode;;ListImportToolsNavNode
+;DirectOrderNavNode;;Direct Order Navigation Node;ToolsNavNode;;DirectOrderNavNode
+;IPhoneNavNode;;IPhone Navigation Node;ToolsNavNode;;IPhoneNavNode
+;DistrelecMobileAppsNavNode;;Distrelec Mobile Apps Navigation Node;ToolsNavNode;;DistrelecMobileAppsNavNode
+
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true];$contentCV[unique=true];name;item(&pageRef);&entryRef;
+##Footer
+;SupportNavEntry;;Support Navigation Entry;support;SupportNavEntry
+;TechnicalSupportNavEntry;;Technical Support Navigation Entry;technicalSupportPage;TechnicalSupportNavEntry
+;CalibrationServiceNavEntry;;Calibration Service Navigation Entry;calibrationServicePage;CalibrationServiceNavEntry
+;FaqNavEntry;;FAQ Navigation Entry;FaqPage;FaqNavEntry
+;ManufacturerStoresNavEntry;;Manufacturer Stores Navigation Entry;manufacturerStoresPage;ManufacturerStoresNavEntry
+;AddressChangeNavEntry;;Address Change Navigation Entry;offlineAddressChangePage;AddressChangeNavEntry
+;SeminarRegistrationNavEntry;;Seminar Registration Navigation Entry;seminarRegistrationPage;SeminarRegistrationNavEntry
+;CatalogOrderNavEntry;;CatalogOrder Navigation Entry;catalogOrderPage;CatalogOrderNavEntry
+
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+#Support and services
+;;support;Support Page;ContentPageWithNavigationTemplate;/support;;;;support;
+;;offlineAddressChangePage;Offline Address Change Page;OfflineAddressChangePageTemplate;address-change;;;;offlineAddressChangePage;
+;;seminarRegistrationPage;Seminar Registration Page;ContentPageWithNavigationTemplate;seminarRegistration;;;;seminarRegistrationPage;
+;;catalogOrderPage;Catalog Order Page;ContentPageWithNavigationTemplate;catalog-order;;;;catalogOrderPage;
+;;callbackServicePage;Callback Service Page;ContentPageWithNavigationTemplate;/callbackService;;;;callbackServicePage;
+;;technicalSupportPage;Technical Support Page;ContentPageWithNavigationTemplate;/technicalSupport;;;;technicalSupportPage;
+;;calibrationServicePage;Calibration Service Page;ContentPageWithNavigationTemplate;/calibrationService;;;;calibrationServicePage;
+;;FaqPage;FAQ Page;ContentPageWithNavigationTemplate;/faq;;;;FaqPage;
+#Manufacturer stores
+;;manufacturerStoresPage;Manufacturer Stores Page;ContentPageWithNavigationTemplate;/manufacturer;;;;manufacturerStoresPage
+#Tools
+;;directOrderPage;Direct order Page;ContentPageWithNavigationTemplate;/directorder;;;;directOrderPage
+#Impressum
+;;impressumPage;Impressum Page;ContentPageWithNavigationTemplate;/impressum;;;;impressumPage
+;;disclaimerPage;Disclaimer Page;ContentPageWithNavigationTemplate;/disclaimer;;;;disclaimerPage
+#E-Procurement
+;;eprocurementHomepage;Homepage for E-Procurement Customers;HomePageTemplate;homepage;false;;;eprocurementHomepage
+
+
+# Dist Main Navigation Component
+INSERT_UPDATE DistMainNavigationComponent;$contentCV[unique=true];uid[unique=true];name;rootNavigationNode(uid, $contentCV);&componentRef
+;;MainNavComponent;Main Navigation Component;MainNavNode;MainNavComponent
+
+
+# CMS Footer Component
+INSERT_UPDATE FooterComponent;$contentCV[unique=true];uid[unique=true];wrapAfter;name;&componentRef;navigationNodes(&nodeRef)
+;;FooterComponent;7;Footerlinks;FooterComponent;SupportAndServicesNavNode,InfoCenterNavNode,ManufacturerStoresNavNode,ToolsNavNode
+
+
+# CMS Headline Component
+INSERT_UPDATE DistHeadlineComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;OrderConfirmationHeadlineComponent;Order Confirmation Headline Component;OrderConfirmationHeadlineComponent
+;;OrderConfirmationPickupHeadlineComponent;Order Confirmation Pickup Headline Component;OrderConfirmationPickupHeadlineComponent
+;;OrderConfirmationApprovalHeadlineComponent;Order Confirmation Approval Headline Component;OrderConfirmationApprovalHeadlineComponent
+
+
+# CMS ProductReferences Components
+INSERT_UPDATE DistProductReferencesCarouselComponent;$contentCV[unique=true];uid[unique=true];name;referenceType(code);componentWidth(code)[default=fullWidth];&componentRef
+;;ConsistentWithProductReferencesComponent;Consistent with Product References Component;DIST_CONSISTENT_WITH;;ConsistentWithProductReferencesComponent
+
+INSERT_UPDATE DistProductFFCarouselComponent;$contentCV[unique=true];uid[unique=true];name;recommendationType(code);componentWidth(code)[default=fullWidth];&componentRef
+;;RecommendationProductFFComponent;Recommendation Product Fact Finder Component;Recommendation;;RecommendationProductFFComponent
+;;AlsoBoughtProductFFComponent;Also Bought Product Fact Finder Component;AlsoBought;;AlsoBoughtProductFFComponent 
+
+
+# Content Slots
+UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
+;;LogoSlot;LogoComponent
+;;ServiceNavSlot;ImportToolPageLink
+;;MainNavSlot;,MainNavComponent
+;;SwynSlot;FacebookLink,TwitterLink,GoogleLink
+;;FooterLinksSlot;FooterComponent
+;;CertLabelsSlot;CertLabelTuvComponent,CertLabelEhiComponent,CertLabelTrustedShopsComponent
+;;ImpressumSlot;ImpressumPageLink,DisclaimerPageLink
+;;ConsistentWithSlot;ConsistentWithProductReferencesComponent
+;;RecommendationSlot;RecommendationProductFFComponent
+;;AlsoBoughtSlot;AlsoBoughtProductFFComponent
+;;HeadlineSlot-OrderConfirmation;OrderConfirmationHeadlineComponent
+;;HeadlineSlot-OrderConfirmationPickup;OrderConfirmationPickupHeadlineComponent
+;;HeadlineSlot-OrderConfirmationApproval;OrderConfirmationApprovalHeadlineComponent
+
+
+# CMS User Group Restrictions
+INSERT_UPDATE CMSUserGroupRestriction;$contentCV[unique=true];uid[unique=true];name;userGroups(uid);includeSubgroups;components(&componentRef)
+;;eprocurementHomepageRestriction;E-Procurement Homepage Restriction;eProcurementGroup;true;;eprocurementHomepage
+
+
+###### Distrelec Search Results Page ######
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;TeaserContent-search;TeaserContent Slot for search;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='search'];contentSlot(uid,$contentCV)[unique=true]
+;;TeaserContent-search;TeaserContent;;TeaserContent-search
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;Content-searchEmpty;Content Slot for searchEmpty;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='searchEmpty'];contentSlot(uid,$contentCV)[unique=true]
+;;Content-searchEmpty;Content;;Content-searchEmpty
+
+
+###### Distrelec Cart Page ######
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;EmptyCartParagraphComponent;Empty Cart Paragraph Component;EmptyCartParagraphComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;EmptyCartContent-cartPage;Empty Cart Slot for cartPage;true;EmptyCartParagraphComponent
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='cartPage'];contentSlot(uid,$contentCV)[unique=true]
+;;EmptyCartContent-cartPage;EmptyCartContent;;EmptyCartContent-cartPage
+
+
+###### Distrelec MyAccount Page ######
+INSERT_UPDATE DistLeadTextComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;CompanyInformationLeadTextComponent;Company Information Paragraph Component;CompanyInformationLeadTextComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;TeaserContent-company-information;TeaserContent Slot;true;
+;;Content-company-information;Content Slot;true;CompanyInformationLeadTextComponent
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='company-information'];contentSlot(uid,$contentCV)[unique=true]
+;;TeaserContent-company-information;TeaserContent;;TeaserContent-company-information
+;;Content-company-information;Content;;Content-company-information
+
+
+###### Distrelec Checkout Paymnent ######
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;PaymentInfoParagraphComponent;Payment Info Paragraph Component;PaymentInfoParagraphComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;PaymentInfo-checkoutPaymentPage;Info Slot for checkoutPaymentPage;true;PaymentInfoParagraphComponent
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='checkoutPaymentPage'];contentSlot(uid,$contentCV)[unique=true]
+;;PaymentInfo-checkoutPaymentPage;PaymentInfoContent;;PaymentInfo-checkoutPaymentPage
+
+
+############################################################################################
+# Webtrekk Opt-Out Information Page
+############################################################################################
+
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;OptOutInformationText;Opt Out Information Text;optOutInformationText
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;ContentSlot-OptOutInformationPage;Content Slot for OptOutInformationPage;true;optOutInformationText
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;Content-OptOutInformationPage;Content;optOutInformationPage;ContentSlot-OptOutInformationPage
+
+############################################################################################
+# Webtrekk Opt-Out Success Page
+############################################################################################
+
+INSERT_UPDATE DistOptOutSuccessComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;DistOptOutSuccessComponent;Dist Opt Out Success Component;distOptOutSuccessComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef)
+;;ContentSlot-OptOutSuccessPage;Content Slot for OptOutSuccessPage;true;distOptOutSuccessComponent
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;Content-OptOutSuccessPage;Content;optOutSuccessPage;ContentSlot-OptOutSuccessPage
+
+############################################################################################
+# Webtrekk Opt-Out Cookie Notice
+############################################################################################
+
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;contentPage(uid,$contentCV);target(code)
+;;CookieNoticeMoreInfoLink;cookieNoticeMoreInformationLink;optOutInformationPage;sameWindow
+
+
+###### Preview Images for CMS Content Pages ######
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true]
+#;;accountPagePreview;text/png;AccountPage.png;$jarResourceCms/preview-images/powertools/AccountPage.png
+#;;addressBookPagePreview;text/png;AddressBook.png;$jarResourceCms/preview-images/powertools/AddressBookPage.png
+#;;cartPagePreview;text/png;CartPage.png;$jarResourceCms/preview-images/powertools/CartPage.png
+#;;addEditAddressPagePreview;text/png;AddEditAddressPage.png;$jarResourceCms/preview-images/powertools/AddEditAddressPage.png
+#;;checkoutSummaryPagePreview;text/png;CheckoutSummaryPage.png;$jarResourceCms/preview-images/powertools/CheckoutSummaryPage.png
+#;;checkoutLoginPagePreview;text/png;CheckoutLoginPage.png;$jarResourceCms/preview-images/powertools/CheckoutLoginPage.png
+#;;orderConfirmationPagePreview;text/png;OrderConfirmationPage.png;$jarResourceCms/preview-images/powertools/OrderConfirmationPage.png
+#;;forgottenPasswordPagePreview;text/png;ForgottenPasswordPage.png;$jarResourceCms/preview-images/powertools/ForgottenPasswordPage.png
+#;;homepagePreview;text/png;Homepage.png;$jarResourceCms/preview-images/powertools/Homepage.png
+#;;homepage2Preview;text/png;Homepage.png;$jarResourceCms/preview-images/powertools/Homepage.pn#g
+#;;notFoundPagePreview;text/png;NotFoundPage.png;$jarResourceCms/preview-images/powertools/NotFoundPage.png
+#;;orderHistoryPagePreview;text/png;OrderHistoryPage.png;$jarResourceCms/preview-images/powertools/OrderHistoryPage.png
+#;;profilePagePreview;text/png;ProfilePage.png;$jarResourceCms/preview-images/powertools/ProfilePage.png
+#;;loginPagePreview;text/png;LoginPage.png;$jarResourceCms/preview-images/powertools/LoginPage.png
+#;;storefinderPagePreview;text/png;StoreFinderPage.png;$jarResourceCms/preview-images/powertools/StoreFinderPage.png
+#;;searchResultsEmptyPagePreview;text/png;SearchResultsEmptyPage.png;$jarResourceCms/preview-images/powertools/SearchResultsEmptyPage.png
+#;;paymentDetailsPagePreview;text/png;PaymentDetailsPage.png;$jarResourceCms/preview-images/powertools/PaymentDetailsPage.png
+#;;mycompanyPagePreview;text/png;MyCompanyPage.png;$jarResourceCms/preview-images/powertools/MyCompanyPage.png
+#;;manageUnitsPagePreview;text/png;ManageUnitsPage.png;$jarResourceCms/preview-images/powertools/ManageUnitsPage.png
+#;;manageUserGroupsPagePreview;text/png;ManageUserGroupsPage.png;$jarResourceCms/preview-images/powertools/ManageUserGroupsPage.png
+#;;organizationManagementPagePreview;text/png;OrganizationManagementPage.png;$jarResourceCms/preview-images/powertools/OrganizationManagementPage.png
+#;;productDetailsPagePreview;text/png;ProductDetailsPage.png;$jarResourceCms/preview-images/powertools/ProductDetailsPage.png
+#;;productListPagePreview;text/png;ProductListPage.png;$jarResourceCms/preview-images/powertools/ProductListPage.png
+#;;searchPagePreview;text/png;SearchPage.png;$jarResourceCms/preview-images/powertools/SearchPage.png
+#;;myReplenishmentOrdersPagePreview;text/png;MyReplenishmentOrdersPage.png;$jarResourceCms/preview-images/powertools/MyReplenishmentOrdersPage.png
+#;;myQuotesPagePreview;text/png;MyQuotesPage.png;$jarResourceCms/preview-images/powertools/MyQuotesPage.png
+#;;orderApprovalDashboardPagePreview;text/png;OrderApprovalDashboardPage.png;$jarResourceCms/preview-images/powertools/OrderApprovalDashboardPage.png
+
+# Preview for Content Pages
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];previewImage(code,$contentCV)
+#;;checkoutSummaryPage;checkoutSummaryPagePreview:
+#;;orderConfirmationPage;orderConfirmationPagePreview:
+#;;cartPage;cartPagePreview:
+#;;search;searchPagePreview:
+#;;account;accountPagePreview:
+#;;profile;profilePagePreview:
+#;;address-book;addressBookPagePreview:
+#;;add-edit-address;addEditAddressPagePreview:
+#;;payment-details;paymentDetailsPagePreview:
+#;;order;orderDetailsPagePreview:
+#;;orders;orderHistoryPagePreview:
+#;;storefinderPage;storefinderPagePreview:
+#;;checkout-login;checkoutLoginPagePreview:
+#;;login;loginPagePreview:
+#;;notFound;notFoundPagePreview:
+#;;searchEmpty;searchResultsEmptyPagePreview:
+#;;forgottenPassword;forgottenPasswordPagePreview:
+#;;homepage;homepagePreview:
+#;;homepage2;homepage2Preview:
+#;;my-company;mycompanyPagePreview:
+#;;manageUnits;manageUnitsPagePreview:
+#;;manageUsergroups;manageUserGroupsPagePreview:
+#;;organizationManagement;organizationManagementPagePreview:
+#;;my-replenishment-orders;myReplenishmentOrdersPagePreview:
+#;;my-quotes;myQuotesPagePreview:
+#;;order-approval-dashboard;orderApprovalDashboardPagePreview:
+
+# Preview for Product Page
+UPDATE ProductPage;$contentCV[unique=true];uid[unique=true];previewImage(code,$contentCV)
+#;;productDetails;productDetailsPagePreview:
+
+# Preview for Category Page
+UPDATE CategoryPage;$contentCV[unique=true];uid[unique=true];previewImage(code,$contentCV)
+#;;productList;productListPagePreview:
+
+
+############################################################################################
+# Category Page
+############################################################################################
+
+INSERT_UPDATE DistCategoryThumbsComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;DefaultCategoryThumbsComponent;Default Category Thumbs Component;DefaultCategoryThumbsComponent
+
+INSERT_UPDATE DistProductCarouselComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;TopProductsComponent;Top Products Component;TopProductsComponent
+;;NewProductsComponent;New Products Component;NewProductsComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
+;;ContentSlot-CategoryPage;DefaultCategoryThumbsComponent,TopProductsComponent,NewProductsComponent
+
+
+
+############################################################################################
+# Payment Unknown Error Page
+############################################################################################
+
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
+;;CheckoutPaymentUnknownErrorParagraphComponent;CheckoutPaymentUnknownError Paragraph Component;CheckoutPaymentUnknownErrorParagraphComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
+;;ContentSlot-CheckoutPaymentUnknownErrorPage;CheckoutPaymentUnknownErrorParagraphComponent

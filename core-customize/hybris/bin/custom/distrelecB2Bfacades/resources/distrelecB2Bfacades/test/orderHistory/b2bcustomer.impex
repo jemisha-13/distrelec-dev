@@ -1,0 +1,27 @@
+$passwordEncoding = md5
+$defaultPassword = nimda
+$setPassword = @password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultPassword']
+
+INSERT_UPDATE B2BUnit; uid[unique = true]; groups(uid); active; approvalProcessCode; customerType(code); erpCustomerId;
+                     ; testUnit          ;            ; true  ; accApproval        ; B2B               ; 0001837645   ;
+
+INSERT_UPDATE Title; code[unique = true];
+                   ; mr                 ;
+
+INSERT_UPDATE Address; owner(B2BUnit.uid)[unique = true]; streetname[unique = true]; postalcode[unique = true]; duplicate[unique = true]; town   ; country(isocode); billingAddress; contactAddress; shippingAddress; unloadingAddress; firstname; lastname; email               ; gender(code); phone1           ; title(code); company
+                     ; testUnit                         ; Musterstrasse            ; 8000                     ; false                   ; Zürich ; CH              ; true          ; false         ; true           ; false           ; Hans     ; Muster  ; hans.muster@test.ch ; MALE        ; +41 44 123 45 67 ; mr         ; Test Company
+
+INSERT_UPDATE UserGroup; uid[unique = true];
+                       ; b2bgroup          ;
+                       ; b2bcustomergroup  ;
+                       ; b2badmingroup     ;
+                       ; b2beeshopgroup    ;
+
+
+INSERT_UPDATE Language; isocode[unique = true];
+                      ; de                    ;
+
+INSERT_UPDATE B2BCustomer; uid[unique = true]  ; $setPassword; Approvers(uid); active; email               ; loginDisabled; name        ; groups(uid)                             ; customerType(code); defaultB2bUnit(B2BUnit.uid); sessionCurrency(isocode)[default = 'CHF']; sessionLanguage(isocode); erpContactID; customerID
+                         ; hans.muster@test.ch ;             ;               ; true  ; hans.muster@test.ch ; false        ; Hans Muster ; testUnit,b2bcustomergroup,b2badmingroup ; B2B               ; testUnit                   ;                                          ; de                      ; 0001761481  ; customer123
+
+

@@ -1,0 +1,13 @@
+# HU
+$contentCatalog=distrelec_HUContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+
+$lang=hu
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;localizedUrl[lang=$lang];linkName[lang=$lang]
+;;QLLink;A termékek minősége és jogszabályai;A termékek minősége és jogszabályai;/cms/quality-and-legislation;A termékek minősége és jogszabályai
+
+UPDATE DistFooterComponent;UID[unique=true];impressumLinks(uid,$contentCV)[mode=append];$contentCV[unique=true]
+                                                                          ;DistFooterComponent;QLLink
+

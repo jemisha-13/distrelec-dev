@@ -1,0 +1,41 @@
+#
+# Import the CMS Site configuration for the Distrelec CH store
+#
+$productCatalog=testCatalog
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$defaultLanguage=de
+$storeUidB2C=distrelec_CH_b2c
+$storeUidB2B=distrelec_CH_b2b
+$siteUid=distrelec_CH
+$siteUrlBrand=distrelec
+$siteUrlCountry=ch
+$siteUrlPattern=$siteUrlBrand-$siteUrlCountry
+$salesOrgCode=7310
+$countryCode=CH
+$defaultCurrency=CHF
+$currencies=CHF
+
+# Load the storefront context root config param
+$storefrontContextRoot=$config-b2bStorefrontContextRoot
+
+INSERT_UPDATE SiteTheme;code[unique=true]
+;green
+
+# CMS Site
+INSERT_UPDATE CMSSite;uid[unique=true];country(isocode);defaultCurrency(isocode);registrationCurrencies(isocode);salesOrg(code);userPriceGroup(code);userTaxGroup(code);theme(code);channel(code);stores(uid);contentCatalogs(id);defaultCatalog(id);defaultLanguage(isoCode);urlPatterns;active;previewURL;startingPage(uid,$contentCV)
+;$siteUid;$countryCode;$defaultCurrency;$currencies;$salesOrgCode;SalesOrg_UPG_7310_01;SalesOrg_UTG_7310;green;B2B;$storeUidB2C,$storeUidB2B;$contentCatalog;$productCatalog;$defaultLanguage;(?i)^https?://[^/]+(/[^?]*)?\?(.*\&)?(site=$siteUrlPattern)(|\&.*)$,(?i)^https?://$siteUrlPattern\.[^/]+(|/.*|\?.*)$,https?://dev\.hybris\.$siteUrlBrand\.[^/]+(|/.*|\?.*)$,https?://dev\.$siteUrlBrand\.$siteUrlCountry\.$siteUrlBrand\.[^/]+(|/.*|\?.*)$,https?://test\.$siteUrlBrand\.$siteUrlCountry.*;true;$storefrontContextRoot/?site=$siteUrlPattern
+
+
+#
+UPDATE CMSSite;uid[unique=true];productUrlPattern
+;$siteUid;"/{language}/{product-name}-{manufacturer-name}-{product-type}/p/{product-code}"
+
+UPDATE CMSSite;uid[unique=true];categoryUrlPattern
+;$siteUid;"/{language}/{category-path}/c/{category-code}"
+
+UPDATE CMSSite;uid[unique=true];contentUrlPattern
+;$siteUid;"/{language}/{page-title}/cms/{page-label}"
+
+UPDATE CMSSite;uid[unique=true];pickupWarehouses(code)
+;distrelec_CH;7311

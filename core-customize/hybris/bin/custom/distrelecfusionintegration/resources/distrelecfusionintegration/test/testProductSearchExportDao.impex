@@ -1,0 +1,43 @@
+$catalogVersion=catalogVersion(catalog(id[default='productCatalog']),version[default='Online'])[unique=true,default='productCatalog:Online']
+
+INSERT_UPDATE ProductTaxGroup;code[unique=true];name[lang=en]
+                             ;99;"Deprecated"
+
+INSERT_UPDATE Catalog;id[unique=true]
+                     ;productCatalog
+
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true]
+                            ;productCatalog;Online
+
+INSERT_UPDATE Product;$catalogVersion[unique=true];code[unique=true];approvalstatus(code)[default='approved'];producthierarchy[default='999777']
+                     ;;8500027_sample;;
+                     ;;8500043_sample;;
+                     ;;8500035_sample;;
+
+INSERT_UPDATE DistSalesOrgProduct;salesOrg(code)[unique=true];product(code,$catalogVersion)[unique=true];salesStatus(code)[unique=true];productTaxGroup(code)
+                                 ;7310;8500027_sample;30;1
+                                 ;7310;8500043_sample;30;99
+
+INSERT_UPDATE ProductCountry;country(isocode)[unique=true];product(code,$catalogVersion)[unique=true];
+                            ;CH;8500027_sample
+                            ;CH;8500043_sample
+
+INSERT_UPDATE Vendor;code[unique=true]
+                    ;Distrelec
+
+INSERT_UPDATE Warehouse;code[unique=true];stockManagementSystem(code);vendor(code)
+                       ;7171;SAP;Distrelec
+
+UPDATE CMSSite;uid[unique = true]; deliveryWarehouses(code); pickupWarehouses(code)
+              ;distrelec_CH; 7171; 7311
+
+INSERT_UPDATE StockLevel;productCode[unique=true];available;warehouse(code)[unique=true];maxPreOrder[default=0];maxStockLevelHistoryCount[default=0];overSelling[default=0];preOrder[default=0];reserved;
+                        ;8500027_sample;100;7171
+                        ;8500027_sample;200;7311
+                        ;8500043_sample;400;7171
+
+INSERT_UPDATE DistCOPunchOutFilter;salesOrg(code)[unique=true];country(isocode)[unique=true];product(code)[unique=true];productHierarchy;validFromDate[dateformat=yyyy-MM-dd hh:mm:ss];validUntilDate[dateformat=yyyy-MM-dd hh:mm:ss];lastModifiedErp[dateformat=yyyyMMddhhmmss]
+                                  ;7310;CH;8500043_sample;;2000-01-01 00:00:00;9999-12-31 00:00:00;20131106100000
+
+INSERT_UPDATE DistCTPunchOutFilter;customerType(code)[unique=true];product(code)[unique=true];validFromDate[dateformat=yyyy-MM-dd hh:mm:ss];validUntilDate[dateformat=yyyy-MM-dd hh:mm:ss];lastModifiedErp[dateformat=yyyyMMddhhmmss]
+                                  ;B2B;8500043_sample;2000-01-01 00:00:00;9999-12-31 00:00:00;20131106100000

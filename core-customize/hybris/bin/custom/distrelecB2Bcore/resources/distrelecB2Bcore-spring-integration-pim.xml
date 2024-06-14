@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+
+<beans profile="adm"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:file="http://www.springframework.org/schema/integration/file"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		
+	<bean id="productFamilyPimExportParser" class="com.namics.distrelec.b2b.core.inout.pim.families.ProductFamilyPimExportParser" />
+
+	<bean id="productFamilyCompositeEntry" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.composite.RegexCompositeParserEntry">
+		<constructor-arg name="order" value="0" />
+		<constructor-arg name="supports" value="Family-.+\.xml$" />
+		<constructor-arg name="parser" ref="productFamilyPimExportParser" />
+	</bean>
+	
+	<bean id="distPimCleanupHelper" class="com.namics.distrelec.b2b.core.dataimport.batch.task.DistCleanupHelper">
+		<property name="timeStampFormat" value="yyyyMMddHHmmssSSS" />
+		<property name="cleanupTransformedFiles" value="false" />
+		<property name="cleanupRemoteFolder" value="#{azureHotfolderRemotePath}/${import.pim.incremental.folder}" />
+		<property name="cleanupAzureBlobSessionFactory" ref="azureBlobSessionFactory" />
+	</bean>
+	
+	<bean id="elementHandlerFactory" class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">
+		<property name="serviceLocatorInterface" value="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.PimImportElementHandlerFactory" />
+	</bean>
+	
+	<!-- dom4j Element Handler -->
+	<bean id="rootElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.RootElementHandler" scope="prototype" />
+	<bean id="unitElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.UnitElementHandler" scope="prototype">
+		<property name="pimImportElementConverter" ref="unitElementConverter" />
+	</bean>
+	<bean id="attributeLinkElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.AttributeLinkElementHandler" scope="prototype">
+		<property name="attributeLinkElementConverter" ref="attributeLinkElementConverter" />
+	</bean>
+	<bean id="productManufacturerElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.ProductManufacturerElementHandler" scope="prototype">
+		<property name="pimImportElementConverter" ref="productManufacturerElementConverter" />
+	</bean>
+	<bean id="productFamilyElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.ProductFamilyElementHandler" scope="prototype">
+		<property name="pimImportElementConverter" ref="productFamilyElementConverter" />
+	</bean>
+	<bean id="productFamilyImageAssetHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.ImageAssetElementHandler" scope="prototype">
+		<property name="pimImportElementConverter" ref="productFamilyImageAssetConverter" />
+	</bean>
+	<bean id="productFamilyVideoAssetHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.ImageAssetElementHandler" scope="prototype">
+		<property name="pimImportElementConverter" ref="productFamilyVideoAssetConverter" />
+	</bean>
+	<bean id="productImage360Handler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.ProductImage360ElementHandler" scope="prototype">
+		<property name="pimImportElementConverter" ref="productImage360ElementConverter" />
+	</bean>
+
+	<bean id="classificationReferenceElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.ClassificationReferenceElementHandler" scope="prototype">
+		<property name="classificationReferenceElementConverter" ref="classificationReferenceElementConverter" />
+	</bean>
+	<bean id="audioAssetElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.AudioAssetElementHandler" scope="prototype">
+		<property name="pimImportElementConverter" ref="audioAssetElementConverter"/>
+	</bean>
+	<bean id="imageAssetElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.ImageAssetElementHandler" scope="prototype">
+		<property name="pimImportElementConverter" ref="imageAssetElementConverter" />
+	</bean>
+	<bean id="videoAssetElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.VideoAssetElementHandler" scope="prototype">
+		<property name="pimImportElementConverter" ref="videoAssetElementConverter" />
+	</bean>
+
+	<!-- dom4j Element-to-Model Converter -->
+	<bean id="unitElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.UnitElementConverter" />
+	<bean id="attributeLinkElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.AttributeLinkElementConverter" />
+	<bean id="productManufacturerElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ProductManufacturerElementConverter" />
+	<bean id="productFamilyElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ProductFamilyElementConverter" />
+	<bean id="productImage360ElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ProductImage360ElementConverter" />
+	<bean id="ffAdditionalDataGenerator" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.FFAdditionalDataGenerator">
+		<property name="distClassificationService" ref="distClassificationService"/>
+	</bean>
+	<bean id="classificationReferenceElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ClassificationReferenceElementConverter" />
+	<bean id="audioAssetElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.AudioAssetElementConverter" />
+	<bean id="imageAssetElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ImageAssetElementConverter" />
+	<bean id="videoAssetElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.VideoAssetElementConverter" />
+	<bean id="multiCountryMultiLanguageMultiValueConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.MultiCountryMultiLanguageMultiValueConverter" />
+	<bean id="multiCountryMultiLanguageSingleValueConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.MultiCountryMultiLanguageSingleValueConverter" />
+	<bean id="multiCountrySingleValueConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.MultiCountrySingleValueConverter" />
+	<bean id="productCountryElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ProductCountryElementConverter" />
+	<bean id="productCOPunchOutFilterElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ProductCOPunchOutFilterElementConverter" />
+	<bean id="productLineCountryElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ProductLineCountryElementConverter" />
+	<bean id="productFamilyImageAssetConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ProductFamilyImageAssetConverter" />
+	<bean id="productFamilyVideoAssetConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ProductFamilyVideoAssetConverter" />
+
+	<!-- Helpers -->
+	<bean id="pimExportParserHelper" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.PimExportParserHelper">
+		<property name="blacklistedProductFeaturesTextFile" value="distrelecB2Bcore/pim/blacklistedProductFeatures.txt" />
+		<property name="whitelistedCategoriesTextFile" value="distrelecB2Bcore/pim/whitelistedCategories.txt" />
+		<property name="whitelistedRootProductFeaturesTextFile" value="distrelecB2Bcore/pim/whitelistedRootProductFeatures.txt" />
+		<property name="nonLocalizedProductFeaturesTextFile" value="distrelecB2Bcore/pim/nonLocalizedProductFeatures.txt" />
+	</bean>
+	<bean id="classAttributeAssignmentInitializer" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.util.impl.ClassAttributeAssignmentInitializer" />
+	<bean id="productReferenceCreator" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.util.impl.ProductReferenceCreatorImpl" />
+
+
+	<!-- incremental pim import -->
+	<bean id="pimIncImportBaseDirectory" class="java.lang.String">
+		<constructor-arg value="#{azureHotfolderRemotePath}/${import.pim.incremental.folder}" />
+	</bean>
+
+	<bean id="pimIncImportProcessingDirectory" class="java.lang.String">
+		<constructor-arg value="#{pimIncImportBaseDirectory}/processing" />
+	</bean>
+
+	<bean id="disAzureBlobInboundSynchronizer"
+	      class="de.hybris.platform.cloud.azure.hotfolder.remote.inbound.AzureBlobInboundSynchronizer">
+		<constructor-arg name="sessionFactory" ref="azureBlobSessionFactory"/>
+		<property name="remoteDirectory" value="#{pimIncImportBaseDirectory}"/>
+		<property name="moveToRemoteDirectory" value="#{pimIncImportProcessingDirectory}"/>
+		<property name="deleteRemoteFiles" value="${azure.hotfolder.storage.delete.remote.files}"/>
+		<property name="preserveTimestamp" value="true"/>
+		<property name="filter" ref="azureHotfolderFileFilter"/>
+		<property name="comparator" ref="azureHotFolderFileComparator"/>
+	</bean>
+
+	<bean id="disAzureBlobSynchronizingMessageSource"
+	      class="de.hybris.platform.cloud.azure.hotfolder.remote.inbound.AzureBlobSynchronizingMessageSource">
+		<constructor-arg name="synchronizer" ref="disAzureBlobInboundSynchronizer"/>
+		<property name="autoCreateLocalDirectory" value="true"/>
+		<property name="localDirectory"
+		          value="#{azureHotfolderLocalDirectoryBase}/#{pimIncImportBaseDirectory}"/>
+		<property name="maxFetchSize" value="${azure.hotfolder.storage.polling.fetch.batch-size}"/>
+	</bean>
+
+	<int:inbound-channel-adapter id="disAzureInboundChannelAdapter"
+	                             auto-startup="false"
+	                             role="${cloud.hotfolder.storage.services.role}"
+	                             phase="50"
+	                             ref="disAzureBlobSynchronizingMessageSource"
+	                             channel="hotfolderInboundFileHeaderEnricherChannel">
+		<int:poller fixed-rate="${azure.hotfolder.storage.polling.fixed.rate}"
+		            task-executor="disAzureChannelAdapterTaskExecutor"
+		            max-messages-per-poll="${azure.hotfolder.storage.polling.fetch.batch-size}"/>
+	</int:inbound-channel-adapter>
+
+	<bean id="disAzureChannelAdapterTaskExecutor"
+	      class="de.hybris.platform.cloud.commons.scheduling.HybrisAwareThreadPoolTaskExecutor">
+		<property name="waitForTasksToCompleteOnShutdown" value="true"/>
+		<property name="threadNamePrefix" value="pimAzureIntegrationTaskExecutorThread-${tenantId}-"/>
+		<property name="threadGroupName" value="pimAzureIntegrationTaskExecutor-${tenantId}"/>
+        <property name="corePoolSize" value="${azure.hotfolder.storage.polling.core-pool-size}"/>
+        <property name="maxPoolSize" value="${azure.hotfolder.storage.polling.max-pool-size}"/>
+		<property name="queueCapacity" value="-1"/>
+		<property name="keepAliveSeconds" value="60"/>
+		<property name="rejectedExecutionHandler">
+			<bean class="java.util.concurrent.ThreadPoolExecutor$DiscardPolicy"/>
+		</property>
+		<property name="role" value="integration"/>
+		<property name="autoStartup" value="false"/>
+		<property name="phase" value="10"/>
+		<property name="awaitTerminationSeconds" value="60"/>
+	</bean>
+
+    <!-- Map files to channel based on name pattern -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="hotfolderInboundFileChannelMappings"/>
+        <property name="targetMethod" value="put"/>
+        <property name="arguments">
+            <list>
+                <bean class="java.util.regex.Pattern" factory-method="compile">
+                    <constructor-arg value=".+\.xml" />
+                </bean>
+                <ref bean="pimIncXmlFilesProc"/>
+            </list>
+        </property>
+    </bean>
+
+    <int:channel id="pimIncXmlFilesProc"/>
+    <int:service-activator input-channel="pimIncXmlFilesProc" ref="pimIncImportTask" method="execute" />
+
+	<!--<alias name="distAzureBlobPersistentAcceptOnceListFilter" alias="azureBlobPersistentAcceptOnceListFilter"/>
+    <bean id="distAzureBlobPersistentAcceptOnceListFilter"
+          class="de.hybris.platform.cloud.azure.hotfolder.remote.file.filters.AzureBlobPersistentAcceptOnceListFilter">
+        <constructor-arg name="store" ref="persistenHotfolderMetadataStore"/>
+        <constructor-arg name="prefix" value="${azure.hotfolder.storage.metadatastore.prefix}"/>
+    </bean>-->
+
+	<!-- PIM Importer -->
+
+	<bean id="generalIncCompositeEntry" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.composite.RegexCompositeParserEntry">
+		<constructor-arg name="order" value="100" />
+		<constructor-arg name="supports" value=".+\.xml$" />
+		<constructor-arg name="parser" ref="serviceLayerPimIncExportParser" />
+	</bean>
+
+	<util:list id="compositeParserIncEntries" >
+		<ref bean="productFamilyCompositeEntry" />
+		<ref bean="generalIncCompositeEntry" />
+	</util:list>
+
+	<bean id="pimExportParserComposite" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.composite.PimExportParserComposite" >
+		<property name="entries" ref="compositeParserIncEntries" />
+	</bean>
+
+	<bean id="pimIncImportTask" class="com.namics.distrelec.b2b.core.inout.pim.PimImportTask">
+		<property name="cleanupHelper" ref="distPimCleanupHelper" />
+		<property name="pimExportParserComposite" ref="pimExportParserComposite" />
+	</bean>
+
+	<bean id="serviceLayerPimIncExportParser" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.ServiceLayerPimExportParser" />
+
+    <bean id="productLineElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.ProductLineElementHandler" scope="prototype">
+        <property name="pimImportCategoryElementConverter" ref="defaultCategoryElementConverter" />
+    </bean>
+
+    <bean id="productElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.ProductElementHandler" scope="prototype">
+		<property name="pimImportElementConverter" ref="productElementConverter" />
+		<property name="pimImportProductFeatureElementConverter" ref="productFeatureElementConverter" />
+	</bean>
+
+	<bean id="productElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ProductElementConverter" />
+
+	<bean id="defaultCategoryElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.DefaultCategoryElementHandler" scope="prototype">
+		<property name="pimImportCategoryElementConverter" ref="defaultCategoryElementConverter" />
+	</bean>
+
+	<bean id="defaultCategoryElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.DefaultCategoryElementConverter" />
+
+	<bean id="productFeatureElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.ProductFeatureElementConverter" />
+
+	<bean id="dataSheetAssetElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.DataSheetAssetElementHandler" scope="prototype">
+		<property name="pimImportElementConverter" ref="dataSheetAssetElementConverter" />
+	</bean>
+
+	<bean id="dataSheetAssetElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.DataSheetAssetElementConverter" />
+
+	<bean id="attributeElementHandler" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.handler.AttributeElementHandler" scope="prototype">
+		<property name="attributeElementConverter" ref="attributeElementConverter" />
+	</bean>
+	<bean id="attributeElementConverter" class="com.namics.distrelec.b2b.core.inout.pim.servicelayer.converter.AttributeElementConverter" />
+
+</beans>

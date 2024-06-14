@@ -1,0 +1,740 @@
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+
+#
+# Import the core CMS content for the Distrelec AT site
+#
+
+$contentCatalog=distrelec_ATContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec BE site
+#
+
+$contentCatalog=distrelec_BEContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec CH site
+#
+
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec CZ site
+#
+
+$contentCatalog=distrelec_CZContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+#
+# Import the core CMS content for the Distrelec DE site
+#
+
+$contentCatalog=distrelec_DEContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec DK site
+#
+
+$contentCatalog=distrelec_DKContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec EE site
+#
+
+$contentCatalog=distrelec_EEContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec EX site
+#
+
+$contentCatalog=distrelec_EXContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec FI site
+#
+
+$contentCatalog=distrelec_FIContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec HU site
+#
+
+$contentCatalog=distrelec_HUContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec IT site
+#
+
+$contentCatalog=distrelec_ITContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec LT site
+#
+
+$contentCatalog=distrelec_LTContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec LV site
+#
+
+$contentCatalog=distrelec_LVContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec NL site
+#
+
+$contentCatalog=distrelec_NLContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+# Add Velocity templates that are in the CMS Cockpit. These give a better layout for editing pages
+# The FileLoaderValueTranslator loads a File into a String property. The templates could also be inserted in-line in this file.
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec NO site
+#
+
+$contentCatalog=distrelec_NOContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec PL site
+#
+
+$contentCatalog=distrelec_PLContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec RO site
+#
+
+$contentCatalog=distrelec_ROContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec SE site
+#
+
+$contentCatalog=distrelec_SEContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec SK site
+#
+
+$contentCatalog=distrelec_SKContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false
+
+
+#
+# Import the core CMS content for the Distrelec TR site
+#
+
+$contentCatalog=distrelec_TRContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;TabedContentPageWithoutNavigationTemplate;Tabed Content Page Without Navigation Template;layout/tabedContentPageWithoutNavigation;ContentPage
+
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;TabedContentPageWithoutNavigationTemplate	;$jarResourceCms/structure-view/structure_tabedContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;Content;;$distContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='TabedContentPageWithoutNavigationTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-TabedContentPageWithoutNavigationTemplate;Logo;;LogoSlot;false
+;;ServiceNav-TabedContentPageWithoutNavigationTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-TabedContentPageWithoutNavigationTemplate;MainNav;;MainNavSlot;false
+;;Swyn-TabedContentPageWithoutNavigationTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-TabedContentPageWithoutNavigationTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-TabedContentPageWithoutNavigationTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-TabedContentPageWithoutNavigationTemplate;Impressum;;ImpressumSlot;false
+;;MainCategoryNav-TabedContentPageWithoutNavigationTemplate;MainCategoryNav;;MainCategoryNavSlot;false

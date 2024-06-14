@@ -1,0 +1,115 @@
+<ng-container *ngIf="pageTemplate$ | async as pageTemplate">
+  <ng-container *ngIf="pageTemplate?.template !== 'OrderConfirmationPageTemplate'">
+    <ng-container *ngIf="node$ | async as node">
+      <ng-container *ngIf="node.title === 'Category Main Navigation Component'">
+        <app-category-nav [categoryNavData]="node"></app-category-nav>
+      </ng-container>
+
+      <ng-container *ngIf="node.title === 'Main Manufacturer Navigation Component'">
+        <nav class="bottom-header">
+          <ul class="l1 cf">
+            <ng-container *ngIf="navigationTypes_ | async as navigationTypes">
+              <li *ngFor="let item of navigationTypes; let i = index" [ngClass]="'e1 count_e1_' + i">
+                <a
+                  class="a1"
+                  [attr.data-link-value]="item.title"
+                  [id]="'top_navigation_manufacturer_link_' + i"
+                  [title]="item?.title"
+                  (click)="openPanelAndDispatchEvent($event, item.uid, item)"
+                  data-aainteraction="navigation"
+                  data-location="top nav"
+                  data-parent-link="main top navigation"
+                >
+                  <div class="level1nodeTitle" [attr.data-entitle]="item?.name" [id]="'main_nav_entitle_' + item?.name">
+                    {{ item?.title.toUpperCase() }}
+                    <fa-icon [icon]="faAngleDown"></fa-icon>
+                  </div>
+                </a>
+
+                <ng-container *ngIf="item.uid === 'NavNode_L1D_Manufacturers'">
+                  <app-dist-slide-drawer [title]="item.title" [uid]="item.uid" direction="TOP">
+                    <app-manufacturers [manufacturerLogos]="mainNav"></app-manufacturers>
+                  </app-dist-slide-drawer>
+                </ng-container>
+              </li>
+            </ng-container>
+          </ul>
+        </nav>
+      </ng-container>
+
+      <!--TOP HEADER-->
+      <div
+        *ngIf="node.title === 'Main Top Navigation Component' || node.title === 'Main Top Navigation'"
+        class="top-header"
+        [ngClass]="(isMobile | async) ? 'container-md' : 'container'"
+      >
+        <nav class="top-header--left">
+          <ul class="list">
+            <ng-container *ngIf="navigationTypes_ | async as navigationTypes">
+              <ng-container *ngFor="let item of navigationTypes; let i = index">
+                <li
+                  class="list__item"
+                  [attr.data-link-value]="item.title"
+                  [id]="'top_navigation_link_' + i"
+                  [title]="item?.title"
+                  (click)="handleClick($event, item.uid, item)"
+                  data-aainteraction="navigation"
+                  data-location="top nav"
+                  data-parent-link="main top navigation"
+                >
+                  <span [attr.data-entitle]="item?.name" [id]="'main_nav_entitle_' + item?.name">
+                    {{ item?.title }}
+                  </span>
+                  <ng-container *ngIf="item?.name !== 'KnowHow'">
+                    <fa-icon class="list__item__icon" [icon]="faCaretDown"></fa-icon>
+                  </ng-container>
+
+                  <ng-container *ngIf="item.uid !== 'NavNode_L1D_Manufacturers' && item?.name !== 'KnowHow'">
+                    <app-dist-slide-drawer [title]="item.title" [uid]="item.uid" direction="LEFT">
+                      <ul class="flyout-list">
+                        <li
+                          *ngFor="let child of item?.children; let j = index"
+                          class="flyout-list__row"
+                          [ngClass]="(isMobile | async) ? 'touch' : 'no-touch'"
+                        >
+                          <a
+                            *ngIf="isAbsoluteUrl(child?.entries[0]?.localizedUrl)"
+                            class="flyout-list__row__label text-decoration-none"
+                            [id]="'sub_top_navigation_link_' + i + '_' + j"
+                            [externalRouterLink]="
+                              addQueryParamsToUrl(child?.entries?.[0]?.localizedUrl, { dataLinkValue: child?.uid })
+                            "
+                            [title]="item?.localizedTitle"
+                            (click)="onServicesClick()"
+                          >
+                            {{ child?.localizedTitle }}
+                          </a>
+                          <a
+                            *ngIf="!isAbsoluteUrl(child?.entries?.[0]?.localizedUrl)"
+                            class="flyout-list__row__label text-decoration-none"
+                            [id]="'sub_top_navigation_link_' + i + '_' + j"
+                            [routerLink]="child?.entries?.[0]?.localizedUrl"
+                            [queryParams]="{ dataLinkValue: child.uid }"
+                            [title]="item.title"
+                            (click)="handleNavigation($event, item, child?.entries?.[0]?.localizedUrl)"
+                          >
+                            {{ child.localizedTitle }}
+                          </a>
+                        </li>
+                      </ul>
+                    </app-dist-slide-drawer>
+                  </ng-container>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ul>
+        </nav>
+
+        <div class="top-header--right">
+          <app-channel-switcher *ngIf="showChannelSwitcher | async"></app-channel-switcher>
+          <app-site-settings></app-site-settings>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>

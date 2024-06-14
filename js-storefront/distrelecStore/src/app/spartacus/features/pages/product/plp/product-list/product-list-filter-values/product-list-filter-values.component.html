@@ -1,0 +1,86 @@
+<div class="filter-group-list-search">
+  <input
+    #searchFilterInput
+    class="facet-group-input"
+    [placeholder]="'plp.facet_search_placeholder.placeholder' | cxTranslate"
+    (keyup)="(0)"
+    type="text"
+  />
+  <button class="btn-search" (click)="(0)" aria-label="Search For Values">
+    <app-icon class="icon-search" [icon]="iconSearch" color="#fff"></app-icon>
+  </button>
+</div>
+
+<app-dist-scroll-bar scrollAxis="y">
+  <ul #listContainer class="filters">
+    <ng-container *ngIf="facet.values | optionFilter: searchFilterInput.value as filters">
+      <li *ngIf="filters.length === 0" class="no-filters">
+        {{ 'plp.facets.no_available' | cxTranslate }}
+      </li>
+
+      <li *ngFor="let filter of filters; let j = index" class="filter">
+        <app-checkbox
+          [checkboxID]="'checkbox' + index + '_' + j"
+          [checked]="filter.checked"
+          [primaryLabel]="
+            hasLocalizedName
+              ? ('plp.facets.' + filter.name | cxTranslate) + ' (' + filter.count + ')'
+              : filter.name + ' (' + filter.count + ')'
+          "
+          (change)="onCheckboxChange($event, filter, facet)"
+          size="small"
+        ></app-checkbox>
+      </li>
+    </ng-container>
+  </ul>
+</app-dist-scroll-bar>
+
+<div *ngIf="expandable && facet.values?.length > 5" id="plp-show-more-less-{{ index }}">
+  <span class="show-more-less" (click)="showFilterToggle(listContainer)">
+    {{
+      (isExpanded ? 'plp.facet_buttons_and_headers.show_less' : 'plp.facet_buttons_and_headers.show_more') | cxTranslate
+    }}
+  </span>
+</div>
+
+<div class="filters-button-container" [class.has-min-max]="facet.hasMinMaxFilters">
+  <button
+    *ngIf="!isResetBtnDisabled(facet)"
+    class="pull-left facet-reset btn-reset flex-grow-1"
+    [class.reset-only]="!facet.hasMinMaxFilters"
+    (click)="onResetClick(facet)"
+    type="button"
+  >
+    {{ 'plp.facet_buttons_and_headers.reset' | cxTranslate }}
+  </button>
+
+  <ng-container *ngIf="facet.hasMinMaxFilters">
+    <select #selectMin [id]="'select-min-' + index" (change)="onSelectChange(facet, 'min')" name="min">
+      <option disabled selected>Min</option>
+      <option *ngFor="let filter of facet.values" [value]="filter.code" [selected]="filter.code === facet.minValue">
+        <label *ngIf="hasLocalizedName; else defaultLabel">
+          {{ 'plp.facets.' + filter.name | cxTranslate }}
+        </label>
+        <ng-template #defaultLabel>
+          <label>
+            {{ filter.name }}
+          </label>
+        </ng-template>
+      </option>
+    </select>
+
+    <select #selectMax [id]="'select-max-' + index" (change)="onSelectChange(facet, 'max')" name="max">
+      <option disabled selected>Max</option>
+      <option *ngFor="let filter of facet.values" [value]="filter.code" [selected]="filter.code === facet.maxValue">
+        <label *ngIf="hasLocalizedName; else defaultLabel">
+          {{ 'plp.facets.' + filter.name | cxTranslate }}
+        </label>
+        <ng-template #defaultLabel>
+          <label>
+            {{ filter.name }}
+          </label>
+        </ng-template>
+      </option>
+    </select>
+  </ng-container>
+</div>

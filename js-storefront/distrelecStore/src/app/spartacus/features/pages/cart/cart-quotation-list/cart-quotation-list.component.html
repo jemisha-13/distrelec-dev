@@ -1,0 +1,100 @@
+<div class="cart-product-item__quote">
+  <div class="cart-product-info__item is-image">
+    <div class="image-wrap" [id]="'cart-product-quote-image'">
+      <a>
+        <picture>
+          <source [src]="missingImgSrc" />
+          <img [src]="missingImgSrc" width="65" height="65" />
+        </picture>
+      </a>
+    </div>
+  </div>
+
+  <div class="cart-product-info__item is-info">
+    <div class="productQuoteName">
+      <strong [id]="'cart-product-quote-title-' + quotationId">{{ 'form.quote_title' | cxTranslate }}</strong>
+    </div>
+
+    <div class="cell-info-table">
+      <div class="cell-info-cell">
+        <div class="hd" [id]="'cart-product-quote-id-title-' + quotationId">
+          {{ 'form.quote_number' | cxTranslate }}
+        </div>
+
+        <div class="bd" [id]="'cart-product-quote-id-' + quotationId">
+          {{ quotationId }}
+        </div>
+      </div>
+
+      <div *ngIf="quotationReference" class="cell-info-cell">
+        <div class="hd" [id]="'cart-product-quote-reference-title-' + quotationId">
+          {{ 'form.quote_reference' | cxTranslate }}
+        </div>
+
+        <div class="bd">
+          {{ quotationReference }}
+        </div>
+      </div>
+
+      <div class="cell-info-cell is-quote-includes" [id]="'cart-product-quote-reference-' + quotationId">
+        {{ 'form.quote_includes' | cxTranslate }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<ul class="o-cart-list__list" [id]="'cart-product-quote-items-list-' + quotationId">
+  <ng-container *ngFor="let item of items">
+    <li class="o-cart-list__item" [id]="'cart-product-quote-' + quotationId + '-item-' + item.entryNumber">
+      <app-cart-product
+        [cartItem]="item"
+        [cartData]="cartData"
+        [quantityChangeable]="false"
+        [referenceEditable]="false"
+        [removable]="false"
+        [groupedEntry]="true"
+      ></app-cart-product>
+    </li>
+  </ng-container>
+</ul>
+
+<div class="cart-product-info__item is-footer">
+  <div class="is-left">
+    <div class="toolbar">
+      <button
+        class="btn btn-numeric-remove"
+        [id]="'cart-product-remove-button-' + quotationId"
+        (click)="removeQuotation()"
+      >
+        {{ 'cart.remove_from_cart' | cxTranslate }}
+      </button>
+    </div>
+
+    <div
+      class="cart-reference"
+      [id]="'cart-quotation-reference-' + quotationId"
+      [class]="'js-cart-reference_' + quotationId"
+      [class.is-open]="cartReferenceCodeToggleState[quotationId]"
+    >
+      <form [formGroup]="cartQuotationReferenceForm">
+        <div class="cart-reference__info">
+          <span class="cart-reference__info-text">{{ 'cart.your_reference' | cxTranslate }}</span>
+          <span>{{ 'cart.your_reference_optional' | cxTranslate }}</span>
+        </div>
+        <div class="cart-reference__item">
+          <input
+            #quoteRefInput
+            class="cart-reference--input"
+            [id]="'cart-quote-reference-input-' + quotationId"
+            [value]="customerReference ?? ''"
+            (paste)="onPasteQuoteRef($event)"
+            formControlName="cartQuotationReference"
+            maxlength="35"
+            type="text"
+          />
+        </div>
+        <div class="cart-reference__count text-right">{{ getCartQuotationReferenceLength() }}/35</div>
+      </form>
+    </div>
+  </div>
+</div>

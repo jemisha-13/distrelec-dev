@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions 
+topic:	Bamboo build server
+date:		13.09.2011
+author:		jweiss
+
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-bamboo" basedir=".">
+
+	<!--
+		=================================
+		macro: copyTestReportsToBambooHome
+		=================================
+	-->
+	<macrodef name="copyTestReportsToBambooHome">
+		<sequential>
+			<echo message="------------------------[copy test reports to bamboo home]" />
+			<!-- copy test results to bamboo home -->
+			<copy todir="${bamboo.home.plan}/test-reports" overwrite="true" verbose="false">
+				<fileset dir="../hybris/log/junit">
+					<include name="*.xml" />
+				</fileset>
+			</copy>
+		</sequential>
+	</macrodef>
+</project>

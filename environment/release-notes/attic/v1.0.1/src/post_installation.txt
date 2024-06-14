@@ -1,0 +1,78 @@
+
+<H3> post installation for PROD </H3>
+do post installations from release: v0.5.10, v0.5.11, v1.0.0
+
+<H3> post installation for QA & PROD </H3>
+
+<h4>Hybris Update:</h4>
+http://<app-node-0>:9001/hac/platform/update (deselect all options only activate cockpit from core)
+
+<h4>System Updates:</h4>
+- nothing to do
+
+<h4>Blog entries:</h4>
+- nothing to do
+
+<h4>Misc:</h4>
+- nothing to do
+
+<h4>Run Impex:</h4>
+
+
+Please run the following Impex script: 
+
+# 
+# Import of CMS Site configurations used to redirect to external shops (either iShop/ELFA shops or distributor shops). 
+# This can be achieved using a CMSSite with a configured redirectURL. 
+# UPG and UTG are not relevant, but mandatory. Use a dummy value. 
+# A distrelec SalesOrg must be used (where brand is equal to "distrelec"). 
+# 
+
+$distributorSalesOrgCode=7310 
+$distributorUPG=SalesOrg_UPG_$distributorSalesOrgCode_01 
+$distributorUTG=SalesOrg_UTG_$distributorSalesOrgCode 
+
+$dummySalesOrgCode=7310 
+$dummyUPG=SalesOrg_UPG_$dummySalesOrgCode_01 
+$dummyUTG=SalesOrg_UTG_$dummySalesOrgCode 
+
+# CMS Site 
+INSERT_UPDATE CMSSite;uid[unique=true];country(isocode);salesOrg(code);userPriceGroup(code);userTaxGroup(code);redirectURL 
+;distrelec_AE;AE;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.eurotech.ae 
+;distrelec_BA;BA;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.apptech.ba 
+;distrelec_BE;BE;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.elfa.se/elfa3~eu_en/elfa/init.do?init=1&shop=ELFA_EU-EN 
+;distrelec_BG;BG;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.com/ishopWebFront/home.do/para/language/is/en/and/shop/is/BG.html 
+;distrelec_BY;BY;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.shpat.com 
+;distrelec_CH;CH;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.ch/home 
+;distrelec_CZ;CZ;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.cz/ishopWebFront/home.do?language=cz&shop=CZ 
+;distrelec_DE;DE;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.de/home 
+;distrelec_DK;DK;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.elfaelektronik.dk/elfa3~dk_da/elfa/init.do?init=1&shop=ELFA_DK-DA 
+;distrelec_EE;EE;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.elfa.se/elfa3~ee_et/elfa/init.do?init=1&shop=ELFA_EE-ET 
+;distrelec_FI;FI;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.elfaelektroniikka.fi/elfa3~fi_fi/elfa/init.do?init=1&shop=ELFA_FI-FI 
+;distrelec_GR;GR;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.sunelectronics.gr 
+;distrelec_HK;HK;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.chip1stop.com/web/HKG/en/ 
+;distrelec_HR;HR;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.com/ishopWebFront/home.do/para/language/is/en/and/shop/is/HR.html 
+;distrelec_HU;HU;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.hu 
+;distrelec_IS;IS;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.ihlutir.is 
+;distrelec_IT;IT;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.ch/home 
+;distrelec_JP;JP;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.chip1stop.com 
+;distrelec_KR;KR;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.sltco.co.kr 
+;distrelec_LT;LT;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.elfa.se/elfa3~lt_lt/elfa/init.do?init=1&shop=ELFA_LT-LT 
+;distrelec_LU;LU;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.ramirez.lu 
+;distrelec_LV;LV;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.elfa.se/elfa3~lv_lv/elfa/init.do?init=1&shop=ELFA_LV-LV 
+;distrelec_ME;ME;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.apptech.ba 
+;distrelec_MT;MT;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.fabian.com.mt 
+;distrelec_NL;NL;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.nl/elfa3~nl_nl/elfa/init.do?init=1&shop=ELFA_NL-NL 
+;distrelec_NO;NO;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.elfaelektronikk.no/elfa3~no_no/elfa/init.do?init=1&shop=ELFA_NO-NO 
+;distrelec_PK;PK;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.eminencesystems.com 
+;distrelec_PL;PL;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.elfaelektronika.pl/elfa3~pl_pl/elfa/init.do?init=1&shop=ELFA_PL-PL 
+;distrelec_PT;PT;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://dce-unipessoal.pt 
+;distrelec_RO;RO;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.com/ishopWebFront/home.do/para/language/is/en/and/shop/is/RO.html 
+;distrelec_RS;RS;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.com/ishopWebFront/home.do/para/language/is/en/and/shop/is/CS.html 
+;distrelec_RU;RU;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.elfa.se/elfa3~ru_ru/elfa/init.do?init=1&shop=ELFA_RU-RU 
+;distrelec_SE;SE;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.elfa.se/elfa3~se_sv/elfa/init.do?init=1&shop=ELFA_SE-SV 
+;distrelec_SI;SI;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.com/ishopWebFront/home.do/para/language/is/en/and/shop/is/SI.html 
+;distrelec_SK;SK;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.distrelec.sk/ishopWebFront/home.do?language=sk&shop=SK 
+;distrelec_TR;TR;$dummySalesOrgCode;$dummyUPG;$dummyUTG;https://www.elfa.se/elfa3~tr_en/elfa/init.do?init=1&shop=ELFA_TR-EN 
+;distrelec_UA;UA;$distributorSalesOrgCode;$distributorUPG;$distributorUTG;http://www.online-electronics.com.ua/ 
+;distrelec_ALL_OTHER_COUNTRIES;ALL_OTHER_COUNTRIES;$dummySalesOrgCode;$dummyUPG;$dummyUTG;http://www.elfaelectronics.com/elfa3~ex_en/elfa/init.do?init=1&shop=ELFA_EX-EN

@@ -1,0 +1,425 @@
+/* stylelint-disable selector-max-id, selector-class-pattern  */
+
+@import 'global-utilities';
+
+$header-border-height: 4px;
+
+@keyframes smoothScroll {
+  0% {
+    transform: translateY(-40px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+#cx-header {
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  background-color: $colour-dark-grey;
+
+  &.sticky {
+    position: fixed;
+    transition: top 0.3s linear;
+    top: -$ux-header-xxl-height;
+    z-index: ($zindex-modal-backdrop + 1);
+
+    @include mobilePlusDown {
+      top: -$ux-header-sm-height;
+    }
+
+    &.off-screen {
+      top: -($ux-header-xxl-height * 2);
+
+      @include mobilePlusDown {
+        top: -($ux-header-sm-height * 2);
+      }
+
+      &.warning {
+        top: -($ux-header-xxl-height-warning-message * 2);
+
+        @include mobilePlusDown {
+          top: -($ux-header-sm-height-warning-message * 2);
+        }
+      }
+    }
+  }
+
+  .mobileHeader {
+    background-color: $colour-white;
+    display: block;
+    height: 54px;
+  }
+
+  .MobileHeader {
+    height: inherit;
+    display: flex;
+    align-items: center;
+    gap: ($ux-spacing-unit * 4);
+
+    app-simple-banner {
+      width: 142px;
+      height: 30px;
+
+      img {
+        width: 142px;
+        height: 30px;
+      }
+    }
+  }
+
+  .WarningSlot,
+  .TitleContent {
+    .app-disruption-message {
+      &.WARNING {
+        background-color: $ux-banner-warning-bg;
+        color: $ux-text-default;
+      }
+
+      &.SUCCESS {
+        background-color: $colour-pale-green;
+        color: $colour-green;
+      }
+
+      &.ERROR {
+        background-color: $colour-error-bg;
+        color: $colour-error-text;
+      }
+    }
+  }
+
+  .TopHeader {
+    background-color: $ux-top-header-color;
+  }
+
+  &.fixed {
+    z-index: $zindex-modal;
+  }
+
+  .navigation {
+    @include transition(all 0.3s ease-in-out 0.1s);
+    display: block;
+    height: 62px;
+    margin: 0 auto;
+    width: 100%;
+
+    @include mobilePlusDown {
+      height: 48px;
+      display: flex;
+      align-items: center;
+
+      .SearchBox {
+        width: 100%;
+      }
+    }
+
+    .BottomHeader {
+      align-items: center;
+      display: none;
+      height: 62px;
+
+      @include tablet {
+        display: flex;
+      }
+
+      app-main-nav:nth-child(2) {
+        .bottom-header,
+        .l1 {
+          width: 100%;
+        }
+      }
+    }
+
+    app-main-nav:nth-child(1) {
+      margin-right: ($ux-spacing-unit * 4);
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+
+    app-main-nav:nth-child(2) {
+      padding-left: 0px;
+
+      .mainnav,
+      .l1 {
+        max-width: 100%;
+      }
+      .e1 {
+        margin: 0px;
+      }
+    }
+
+    @include tabletOnly {
+      app-search {
+        width: 362px;
+      }
+
+      app-main-nav:nth-child(1) {
+        flex: 0 0 25%;
+        max-width: 25%;
+        margin: 0px;
+      }
+    }
+
+    @include tabletPlusOnly {
+      app-search {
+        width: 362px;
+      }
+
+      app-main-nav:nth-child(2) {
+        flex: 0 0 16.67%;
+        max-width: 16.67%;
+        margin-right: 16px;
+      }
+    }
+
+    @include desktop {
+      app-search {
+        width: 456px;
+      }
+
+      app-main-nav {
+        flex: 0 0 8.3%;
+        max-width: 8.3%;
+      }
+
+      app-main-nav:nth-child(2) {
+        flex: 0 0 21%;
+        max-width: 100%;
+      }
+    }
+
+    @include desktopPlus {
+      app-search {
+        width: 636px;
+      }
+
+      app-main-nav:nth-child(2) {
+        flex: 0 0 16.67%;
+        max-width: 16.67%;
+      }
+    }
+  }
+
+  .header {
+    display: flex;
+    position: relative;
+    justify-content: space-around;
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-bottom: 0;
+    z-index: $zindex-fixed;
+    background: $colour-white;
+    border-top: $header-border-height solid $colour-orange;
+
+    @media #{$ipad-landscape} {
+      padding: 10px 28px;
+    }
+
+    @media #{$desktop} {
+      padding: 10px 0;
+    }
+
+    &::before,
+    &::after {
+      content: '';
+      display: block;
+      height: 0;
+      position: absolute;
+      top: -#{$header-border-height};
+      z-index: 1;
+    }
+
+    &::before {
+      border-top: $header-border-height solid $colour-red;
+      right: 0;
+      width: 34%;
+    }
+
+    &::after {
+      border-top: $header-border-height solid $colour-dark-red;
+      left: 33%;
+      width: 33.33%;
+    }
+
+    // Banner layout overrides for logo component
+    app-simple-banner {
+      margin-left: 0;
+      border: 0;
+      border-top: 1px solid $colour-pale-grey;
+      border-left: 1px solid $colour-pale-grey;
+      text-align: center;
+
+      // Set a fixed logo size for the header, also applies to the 404 page
+      img {
+        height: 40px;
+      }
+
+      .simple-banner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+
+        @include tablet {
+          justify-content: flex-start;
+        }
+      }
+
+      @media #{$ipad-landscape} {
+        height: auto;
+        display: flex;
+        position: relative;
+        align-items: center;
+        top: 10px;
+        width: auto;
+        margin-top: -($spacing-unit * 4) !important;
+        margin-right: $spacing-unit * 3;
+        border: none;
+        text-align: left;
+      }
+
+      @media #{$desktop} {
+        margin-right: $spacing-unit * 2;
+      }
+    }
+  }
+
+  .HeaderCheckoutWrapper {
+    width: 100%;
+    max-width: map-get($container-max-widths, 'xl');
+    padding: ($spacing-unit * 3) ($spacing-unit * 2);
+
+    @include tablet {
+      display: flex;
+      align-items: center;
+      padding: ($spacing-unit * 6) ($spacing-unit * 2 + 2) ($spacing-unit * 2);
+    }
+
+    app-simple-banner {
+      text-align: left;
+
+      @include tablet {
+        width: 25%;
+        padding-right: $spacing-unit * 4;
+      }
+
+      .simple-banner {
+        margin-bottom: $spacing-unit * 3;
+
+        @include tablet {
+          margin-bottom: 0;
+        }
+
+        @include mobilePlusDown {
+          height: auto;
+        }
+
+        &,
+        &__link,
+        &__img {
+          width: 100%;
+        }
+
+        &__link {
+          display: block;
+          max-width: 200px;
+          margin: auto;
+
+          @include tablet {
+            margin: 0;
+          }
+        }
+
+        &__img {
+          height: auto;
+        }
+      }
+    }
+
+    app-progress-bar {
+      width: 75%;
+
+      @include tablet {
+        padding-left: $spacing-unit;
+      }
+    }
+  }
+
+  .Logo {
+    background: $colour-white;
+    display: flex;
+    justify-content: space-around;
+    margin-right: auto;
+    margin-left: auto;
+    padding: ($ux-spacing-unit * 3) 0px;
+    position: relative;
+    width: 100%;
+    height: auto;
+
+    img {
+      // Fixed width for CLS
+      width: 190px;
+      height: 40px;
+    }
+  }
+
+  .TopHeader {
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
+  .logo-layout-desktop {
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
+  .mobile-header-wrapper {
+    display: block;
+
+    @include tablet {
+      display: none;
+    }
+  }
+
+  .SearchBox {
+    display: block;
+
+    @include tablet {
+      display: none;
+    }
+  }
+}
+
+// Sticky header overrides
+cx-storefront.sticky {
+  header {
+    .header {
+      @media #{$ipad-landscape} {
+        position: fixed !important;
+        top: 0;
+        width: 100%;
+        z-index: $zindex-fixed;
+        box-shadow: 0 ($spacing-unit) ($spacing-unit) rgba(0, 0, 0, 0.1);
+        animation: smoothScroll 0.2s forwards;
+
+        &::after,
+        &::before {
+          top: -#{$header-border-height};
+        }
+      }
+    }
+  }
+}
+
+cx-skip-link {
+  display: none;
+}

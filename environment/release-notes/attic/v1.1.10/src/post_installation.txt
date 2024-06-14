@@ -1,0 +1,58 @@
+<h3>post installations for QA & PROD </h3>
+
+<h4>Hybris Update:</h4>
+http://[app-node-0]:9001/hac/platform/update
+
+<h4>System Updates:</h4>
+- nothing to do
+
+<h4>Run Impex:</h4>
+- Update message properties for availability
+$contentCatalog=distrelec_ATContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE MessageResourceTableEntry;code[unique=true];$contentCV[unique=true]
+;product.shipping.available;
+
+INSERT_UPDATE MessageResourceTableEntry;code[unique=true];message[lang=en];message[lang=de];message[lang=fr];message[lang=it];$contentCV[unique=true]
+;product.shipping.availability;"Availability";"Verfügbarkeit";"Disponibilité";"Disponibilità"
+
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE MessageResourceTableEntry;code[unique=true];$contentCV[unique=true]
+;product.shipping.available;
+
+INSERT_UPDATE MessageResourceTableEntry;code[unique=true];message[lang=en];message[lang=de];message[lang=fr];message[lang=it];$contentCV[unique=true]
+;product.shipping.availability;"Availability";"Verfügbarkeit";"Disponibilité";"Disponibilità"
+
+$contentCatalog=distrelec_ITContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+REMOVE MessageResourceTableEntry;code[unique=true];$contentCV[unique=true]
+;product.shipping.available;
+
+INSERT_UPDATE MessageResourceTableEntry;code[unique=true];message[lang=en];message[lang=de];message[lang=fr];message[lang=it];$contentCV[unique=true]
+;product.shipping.availability;"Availability";"Verfügbarkeit";"Disponibilité";"Disponibilità"
+
+
+- Update mail template for order confirmation mail
+/distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ATContentCatalog/email-content_de.impex
+/distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ATContentCatalog/email-content_en.impex
+
+/distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_CHContentCatalog/email-content_de.impex
+/distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_CHContentCatalog/email-content_en.impex
+/distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_CHContentCatalog/email-content_fr.impex
+
+/distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ITContentCatalog/email-content_de.impex
+/distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ITContentCatalog/email-content_en.impex
+/distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ITContentCatalog/email-content_it.impex
+
+<h4>Blog entries:</h4>
+- Do again <a href="https://wiki.namics.com/display/distrelint/2014/03/11/Product+Availability" target="_blank">https://wiki.namics.com/display/distrelint/2014/03/11/Product+Availability</a> because of changes in the availability labels
+
+<h4>Misc:</h4>
+- nothing to do
+
+<h4>Synchronization:</h4>
+- synchronize content catalog

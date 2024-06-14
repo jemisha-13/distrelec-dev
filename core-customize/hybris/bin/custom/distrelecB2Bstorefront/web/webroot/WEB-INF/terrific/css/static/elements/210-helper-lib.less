@@ -1,0 +1,117 @@
+/*
+ * Helper Library
+ */
+
+/**
+ * Centering Element
+ */
+.center() {
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+/**
+ * Clear
+ */
+.clear {
+	clear: both;
+	overflow: hidden;
+}
+
+/**
+ * inline-block,  IE compatible
+ *   Not needed for elements that are natively display: inline.
+ */
+.ib() {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+}
+
+/**
+ * Make elements reponsive, ie. images
+ */
+.flex {
+	max-width: 100%;
+	width: auto; //fix for ie
+	height: auto;
+	image-rendering: optimizeQuality;
+	-ms-interpolation-mode: bicubic;
+}
+
+/////
+// Box-Sizing
+.box-sizing(@boundaries: border-box) {
+	-webkit-box-sizing: @boundaries;
+	-moz-box-sizing: @boundaries;
+	box-sizing: @boundaries;
+}
+
+/////
+// Image replacement for buttons
+.ir-btn() {
+	border: 0;
+	font: 0/0 a;
+	text-shadow: none;
+	color: transparent;
+	background-color: transparent;
+}
+
+/////
+// RGBA Background and Fallback
+.rgba-bg-fallback(@rgba-color) {
+	.rgba2rgb-bg(@rgba-color);
+	background-color: @rgba-color;
+}
+
+/////
+// Convert RGBA back to RGB background
+.rgba2rgb-bg(@rgba-color) {
+	@_alpha: alpha(@rgba-color);
+	@_rgb: fade(@rgba-color, 100%);
+	//background-color: lighten(@_rgb, ((1 - @_alpha) * 80)); // don't know how to convet transparency to color
+
+	background-color: @_rgb;
+}
+
+/////
+ // Hex to RGBA Background and Fallback
+.hex2rgba-bg-fallback(@color, @transparency) {
+	@_rgba: fade(@color, @transparency);
+	.rgba-bg-fallback(@_rgba);
+}
+
+.opacity(@opacity: 0.5) {
+	-webkit-opacity: @opacity;
+	-moz-opacity:    @opacity;
+	opacity:         @opacity;
+}
+
+.animation(@name, @duration: 300ms, @delay: 0, @ease: ease) {
+	-webkit-animation: @name @duration @delay @ease;
+	-moz-animation:    @name @duration @delay @ease;
+	-ms-animation:     @name @duration @delay @ease;
+}
+
+.transition(@transition) {
+	-webkit-transition: @transition;
+	-moz-transition:    @transition;
+	-ms-transition:     @transition;
+	-o-transition:      @transition;
+}
+
+.font-size(@size) {
+	@remSize: @size / 16px;
+	@remSizeFinal: @remSize * 1rem;
+
+	font-size: @size;
+	font-size: @remSizeFinal;
+}
+
+.line-height(@size) {
+	@remSize: @size / 16px;
+	@remSizeFinal: @remSize * 1rem;
+
+	line-height: @size;
+	line-height: @remSizeFinal;
+}

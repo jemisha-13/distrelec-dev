@@ -1,0 +1,20 @@
+$contentMasterCatalog = distrelecContentCatalog
+$translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator
+$commonEmailResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/emails
+
+########## Email Page for distrelec_ATContentCatalog ##########
+$contentCatalog=distrelec_BEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$cmsSiteUID=distrelec_BE
+
+$lang = en
+UPDATE RendererTemplate;code[unique=true]        ;templateScript[lang = $lang, translator = $translator]
+                       ;$cmsSiteUID-Email_Footer ;$commonEmailResource/email-footer.vm
+
+$lang = nl
+UPDATE RendererTemplate;code[unique=true]        ;templateScript[lang = $lang, translator = $translator]
+                       ;$cmsSiteUID-Email_Footer ;$commonEmailResource/email-footer.vm
+
+$lang = fr
+UPDATE RendererTemplate;code[unique=true]        ;templateScript[lang = $lang, translator = $translator]
+                       ;$cmsSiteUID-Email_Footer ;$commonEmailResource/email-footer.vm

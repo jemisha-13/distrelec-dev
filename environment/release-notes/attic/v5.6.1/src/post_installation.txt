@@ -1,0 +1,33 @@
+<h3>Post installations for QA & PROD</h3>
+
+
+
+<h4>Hybris Update:</h4>
+http://[app-node-0]:9001/hac/platform/update
+
+
+
+<h4>System Update:</h4>
+- nothing to do
+
+
+
+<h4>Run Impex:</h4>
+- nothing to do
+
+
+<h4>Blog entries:</h4>
+- nothing to do
+
+
+<h4>Misc:</h4>
+- Run the following direct SQL query:
+update users u set u.p_showproductbox = 1 where u.PK IN (
+         SELECT item_t0.PK FROM users item_t0 JOIN enumerationvalues item_t1 ON  item_t0.p_customertype = item_t1.PK 
+            WHERE item_t1.Code  != 'GUEST'
+);
+commit;
+
+
+<h4>Synchronization:</h4>
+- synchronize content catalog

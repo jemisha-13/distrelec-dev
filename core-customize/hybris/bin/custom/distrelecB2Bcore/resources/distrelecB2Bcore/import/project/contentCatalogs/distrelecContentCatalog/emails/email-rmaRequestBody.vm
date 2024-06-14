@@ -1,0 +1,198 @@
+## messageSource=classpath:/distrelecB2Bcore/messages/email-rmaRequest_en.properties
+#macro(genHtmlLink $url $label)
+<a style="color: #AA1936; text-decoration: underline;" href="$url" target="_blank"><span style="color: #AA1936;">$label</span></a>
+#end
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+#set($siteUID=${ctx.siteUID})
+#set($messages=${ctx.messages})
+
+<html>
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body style="padding: 0; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+
+		## MOOD IMAGE
+		<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+			<tr>
+				<td style="border-left: 1px solid #cccccc; border-right: 1px solid #cccccc;">
+					${ctx.cmsSlotContents.MoodImage}
+				</td>
+			</tr>
+			<tr>
+				<td height="5" bgcolor="#AA1936"style="border-right: 1px solid #cccccc; border-left: 1px solid #cccccc;"></td>
+			</tr>
+		</table>
+	
+		## CONTENT
+		
+		#if($ctx.guest)
+			
+			
+			## Guest User
+			<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+			<tr>
+				<td style="border-collapse: collapse; border-right: 1px solid #cccccc; border-left: 1px solid #cccccc; padding: 20px;">
+				
+					## title
+					<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 30px;">${messages.emailSubjectGuest}</p>
+	
+					<table border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0;">
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.customerName}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.guestEntry.customerName})</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.customerEmail}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.guestEntry.emailAddress})</p></td>
+						</tr>
+						
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.phoneNumber}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.guestEntry.phoneNumber})</p></td>
+						</tr>
+						
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.returnDate}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.createdAt})</p></td>
+						</tr>
+						
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.orderCode}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.orderCode})</p></td>
+						</tr>
+
+						#if($ctx.entries)
+							<tr>
+								<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.productNumber}: </p></td>
+								<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml($ctx.entries[0].productNumber)</td>
+							</tr>
+							<tr>
+								<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.amount}: </p></td>
+								<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml($ctx.entries[0].amount)</td>
+							</tr>
+							<tr>
+								<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.returnReason}: </p></td>
+								<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${messages["returnReason-${ctx.entries[0].returnReason}"]})</td>
+							</tr>
+							<tr>
+								<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.comment}: </p></td>
+								<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml($ctx.entries[0].comment)</td>
+							</tr>
+						#end
+
+					</table>
+				</td>
+			</tr>
+			</table>
+
+		#else
+
+			## Registered User
+			<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+			<tr>
+				<td style="border-collapse: collapse; border-right: 1px solid #cccccc; border-left: 1px solid #cccccc; padding: 20px;">
+					## title
+					<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 30px;">${messages.infoText}</p>
+
+					<table border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0;">
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.customerContact}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml("${ctx.customer.contactId}")</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.customerNumber}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml("${ctx.customerNumber}")</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.customerName}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml("${ctx.customer.firstName} ${ctx.customer.lastName}")</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.customerEmail}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.email})</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.phone1}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.contactAddress.phone1})</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.phone2}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.contactAddress.phone2})</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.mobilePhone}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.contactAddress.mobilePhone})</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.orderDate}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.orderDate})</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.requestAssistenceDate}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.createdAt})</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.reqCode}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.rmaCode})</p></td>
+						</tr>
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.orderCode}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.orderCode})</p></td>
+						</tr>
+						<tr><td colspan="2">&nbsp;</td></tr>
+						<tr>
+							<td colspan="2"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; font-weight: bold; line-height: 18px;">${messages.returnedProducts}</p></td>
+						</tr>
+						<tr>
+							<td colspan="2" style="padding-left: 10px;">
+								<table border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0;">
+								#foreach( $entry in $ctx.entries )
+								<tr>
+								<td>
+									<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.productNumber}: $!StringEscapeUtils.escapeHtml(${entry.productNumber})</p>
+									<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.productName}: $!StringEscapeUtils.escapeHtml(${entry.productName})</p>
+									<ul>
+										<li><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.amount}: $!StringEscapeUtils.escapeHtml(${entry.amount})</p></li>
+										<li><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.returnReason}: $!StringEscapeUtils.escapeHtml(${messages["returnReason-${entry.returnReason}"]})</p></li>
+										#if( $entry.replacement && ($entry.returnReason == "002" || $entry.returnReason == "005" || $entry.returnReason == "006" || $entry.returnReason == "019") )
+											#if ( $entry.replacement == "1")
+												<li><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.replacement}: $!StringEscapeUtils.escapeHtml(${messages.newItem})</p></li>
+											#else
+												<li><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.replacement}: $!StringEscapeUtils.escapeHtml(${messages.credit})</p></li>
+											#end
+										#end
+										<li><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.comment}: $!StringEscapeUtils.escapeHtml(${entry.comment})</p></li>
+									</ul>
+								</td>
+								</tr>
+								#end
+								</table>
+							</td>
+						</tr>
+
+						<tr>
+							<td colspan="2"><p>&#160;<br/><br/>&#160;</p></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+
+		#end
+		
+		## FOOTER include
+		${ctx.footer}
+	</body>
+</html>

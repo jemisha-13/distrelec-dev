@@ -1,0 +1,330 @@
+$contentCatalog = distrelec_IntContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$atContentCatalog = distrelec_ATContentCatalog
+$atContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $atContentCatalog]), CatalogVersion.version[default = Online])[default = $atContentCatalog:Online]
+
+$beContentCatalog = distrelec_BEContentCatalog
+$beContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $beContentCatalog]), CatalogVersion.version[default = Online])[default = $beContentCatalog:Online]
+
+$chContentCatalog = distrelec_CHContentCatalog
+$chContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $chContentCatalog]), CatalogVersion.version[default = Online])[default = $chContentCatalog:Online]
+
+$czContentCatalog = distrelec_CZContentCatalog
+$czContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $czContentCatalog]), CatalogVersion.version[default = Online])[default = $czContentCatalog:Online]
+
+$deContentCatalog = distrelec_DEContentCatalog
+$deContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $deContentCatalog]), CatalogVersion.version[default = Online])[default = $deContentCatalog:Online]
+
+$dkContentCatalog = distrelec_DKContentCatalog
+$dkContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $dkContentCatalog]), CatalogVersion.version[default = Online])[default = $dkContentCatalog:Online]
+
+$eeContentCatalog = distrelec_EEContentCatalog
+$eeContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $eeContentCatalog]), CatalogVersion.version[default = Online])[default = $eeContentCatalog:Online]
+
+$exContentCatalog = distrelec_EXContentCatalog
+$exContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $exContentCatalog]), CatalogVersion.version[default = Online])[default = $exContentCatalog:Online]
+
+$fiContentCatalog = distrelec_FIContentCatalog
+$fiContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $fiContentCatalog]), CatalogVersion.version[default = Online])[default = $fiContentCatalog:Online]
+
+$huContentCatalog = distrelec_HUContentCatalog
+$huContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $huContentCatalog]), CatalogVersion.version[default = Online])[default = $huContentCatalog:Online]
+
+$itContentCatalog = distrelec_ITContentCatalog
+$itContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $itContentCatalog]), CatalogVersion.version[default = Online])[default = $itContentCatalog:Online]
+
+$ltContentCatalog = distrelec_LTContentCatalog
+$ltContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $ltContentCatalog]), CatalogVersion.version[default = Online])[default = $ltContentCatalog:Online]
+
+$lvContentCatalog = distrelec_LVContentCatalog
+$lvContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $lvContentCatalog]), CatalogVersion.version[default = Online])[default = $lvContentCatalog:Online]
+
+$nlContentCatalog = distrelec_NLContentCatalog
+$nlContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $nlContentCatalog]), CatalogVersion.version[default = Online])[default = $nlContentCatalog:Online]
+
+$noContentCatalog = distrelec_NOContentCatalog
+$noContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $noContentCatalog]), CatalogVersion.version[default = Online])[default = $noContentCatalog:Online]
+
+$plContentCatalog = distrelec_PLContentCatalog
+$plContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $plContentCatalog]), CatalogVersion.version[default = Online])[default = $plContentCatalog:Online]
+
+$roContentCatalog = distrelec_ROContentCatalog
+$roContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $roContentCatalog]), CatalogVersion.version[default = Online])[default = $roContentCatalog:Online]
+
+$seContentCatalog = distrelec_SEContentCatalog
+$seContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $seContentCatalog]), CatalogVersion.version[default = Online])[default = $seContentCatalog:Online]
+
+$skContentCatalog = distrelec_SKContentCatalog
+$skContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $skContentCatalog]), CatalogVersion.version[default = Online])[default = $skContentCatalog:Online]
+
+#PropositionalBannerSlot - Proposition
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)
+                             ; Proposition        ;                                                                                 ; DistFallbackComponentContainer,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlot; uid[unique = true]                   ; $contentCV[unique = true]; name                                    ; cmsComponents(uid, $contentCV)
+                         ; InternationalPropositionalBannerSlot ;                          ; International Propositional Banner Slot ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]              ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position    ; contentSlot(uid, $contentCV)
+                                    ; Proposition-ProductPageTemplate ;                          ; ProductDetailsPageTemplate   ; Proposition ; InternationalPropositionalBannerSlot
+
+#AlsoBoughtSlot - AlsoBought
+INSERT_UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; name                                                    ; recommendationType(code)
+                                            ; InternationalAlsoBoughtProductFFComponent ;                          ; International Also Bought Product Fact Finder Component ; AlsoBought
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = de]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Kunden kauften auch
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = fr]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Nos clients achètent aussi
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = nl]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Klanten kochten ook
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = en]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Customers also bought
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = cs]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Naši zákazníci také koupili
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = da]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Kunder har også købt
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = et]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Kliendid on ostnud ka
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = fi]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Asiakkaat ostivat myös
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = sv]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Andra kunder köpte också
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = hu]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Mások által vásárolt termékek
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = it]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; I clienti hanno anche comprato
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = lt]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Klientai taip pat įsigijo
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = lv]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Klienti arī pērk
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = no]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Kunder har også kjøpt
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = pl]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Klienci kupili także
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = ro]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Clienţii, de asemenea, au cumparat
+
+UPDATE DistProductFFCarouselComponent; uid[unique = true]                        ; $contentCV[unique = true]; title[lang = sk]
+                                     ; InternationalAlsoBoughtProductFFComponent ;                          ; Naši zákazníci tiež kúpili
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)
+                             ; AlsoBought         ;                                                                                 ; DistProductFFCarouselComponent
+
+INSERT_UPDATE ContentSlot; uid[unique = true]          ; $contentCV[unique = true]; name                           ; cmsComponents(uid, $contentCV)
+                         ; InternationalAlsoBoughtSlot ;                          ; International Also Bought Slot ; InternationalAlsoBoughtProductFFComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]             ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position   ; contentSlot(uid, $contentCV)
+                                    ; AlsoBought-ProductPageTemplate ;                          ; ProductDetailsPageTemplate   ; AlsoBought ; InternationalAlsoBoughtSlot
+
+#ConsistentWithSlot - ConsistentWith
+INSERT_UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; name                                                       ; referenceType(code)
+                                                    ; InternationalConsistentWithProductReferencesComponent ;                          ; International Consistent with Product References Component ; DIST_CONSISTENT_WITH
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = de]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Kompatibel mit
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = fr]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Compatible avec
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = nl]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Compatibel met
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = en]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Compatible with
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = cs]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Kompatibilní s
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = da]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Kompatibel med
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = et]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Ühilduvus
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = fi]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Yhteensopivuus:
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = sv]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Kompatibel med
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = hu]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Kompatibilis ezzel:
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = it]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Compatibile con
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = lt]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Savietojams ar
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = lv]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Savietojams ar
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = no]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Kompatibel med
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = pl]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Zgodność z
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = ro]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Compatibil cu
+
+UPDATE DistProductReferencesCarouselComponent; uid[unique = true]                                    ; $contentCV[unique = true]; title[lang = sk]
+                                             ; InternationalConsistentWithProductReferencesComponent ;                          ; Kompatibilné s
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)
+                             ; ConsistentWith     ;                                                                                 ; DistProductReferencesCarouselComponent
+
+INSERT_UPDATE ContentSlot; uid[unique = true]              ; $contentCV[unique = true]; name                               ; cmsComponents(uid, $contentCV)
+                         ; InternationalConsistentWithSlot ;                          ; International Consistent With Slot ; InternationalConsistentWithProductReferencesComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                 ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position       ; contentSlot(uid, $contentCV)
+                                    ; ConsistentWith-ProductPageTemplate ;                          ; ProductDetailsPageTemplate   ; ConsistentWith ; InternationalConsistentWithSlot
+
+#BottomContentSlot - BottomContent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; name
+                                                      ; InternationalPDPTopBrandsContainer ;                          ; International PDP Top Brands Container
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $atContentCatalog)
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $beContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $chContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $czContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $deContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $dkContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $eeContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $exContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $fiContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $huContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $itContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $ltContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $lvContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $nlContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $noContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $plContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $roContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $seContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; applicableComponents(uid, $skContentCatalog)[mode = append]
+                                               ; InternationalPDPTopBrandsContainer ;                          ; pdpTopBrandsComponent
+
+INSERT_UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; name
+                                                      ; InternationalPDPWeMakeItHappenContainer ;                          ; International PDP We Make It Happen Container
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $atContentCatalog)
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $beContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $chContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $czContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $deContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $dkContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $eeContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $exContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $fiContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $huContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $itContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $ltContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $lvContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $nlContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $noContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $plContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $roContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $seContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $skContentCatalog)[mode = append]
+                                               ; InternationalPDPWeMakeItHappenContainer ;                          ; pdpWeMakeItHappenComponent
+
+INSERT_UPDATE ContentSlot; uid[unique = true]                ; $contentCV[unique = true]; name                                  ; cmsComponents(uid, $contentCV)
+                         ; InternationalPDPBottomContentSlot ;                          ; International PDP Bottom Content Slot ; InternationalPDPTopBrandsContainer,InternationalPDPWeMakeItHappenContainer
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)
+                                    ; BottomContent-ProductPageTemplate ;                          ; ProductDetailsPageTemplate   ; BottomContent ; InternationalPDPBottomContentSlot

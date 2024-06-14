@@ -1,0 +1,13 @@
+$contentCatalog=distrelec_IntContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$frContentCatalog=distrelec_FRContentCatalog
+$frStagedContentCatalog=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $frContentCatalog]), CatalogVersion.version[default = Staged])[default = $frContentCatalog:Staged]
+$frOnlineContentCatalog=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $frContentCatalog]), CatalogVersion.version[default = Online])[default = $frContentCatalog:Online]
+
+# CH
+INSERT_UPDATE DistLocalCatalogFilterComponentContainer;uid[unique=true]                      ;$contentCV[unique=true];name                                    ;applicableComponents(uid, $frStagedContentCatalog)[mode=append]
+                                                      ;InternationalCategoryMainNavContainer ;                       ;International CategoryMainNav Container ;CategoryMainNavComponent
+
+INSERT_UPDATE DistLocalCatalogFilterComponentContainer;uid[unique=true]                      ;$contentCV[unique=true];name                                    ;applicableComponents(uid, $frOnlineContentCatalog)[mode=append]
+                                                      ;InternationalCategoryMainNavContainer ;                       ;International CategoryMainNav Container ;CategoryMainNavComponent

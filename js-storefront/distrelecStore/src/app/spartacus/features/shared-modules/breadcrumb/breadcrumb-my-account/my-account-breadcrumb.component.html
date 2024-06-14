@@ -1,0 +1,62 @@
+<ol class="breadcrumb pl-0 mt-3" id="my-account-breadcrumb-main">
+  <li class="linkcursor" id="my-account-breadcrumb-home" routerLink="/">
+    <span>{{ 'breadcrumb.home' | cxTranslate }}</span>
+    <span class="mt-2 ml-2">></span>
+  </li>
+
+  <li *ngFor="let breadcrumb of breadcrumbs" id="my-account-breadcrumb-list">
+    <ng-container *ngFor="let parent of breadcrumb.parent; let l = count; let i = index; let isLast = last">
+      <span
+        *ngIf="breadcrumb.isChild && !parent?.key"
+        class="mt-2 ml-2 defaultcursor"
+        [id]="'my-account-breadcrumb-main-' + getParamId(parent?.label)"
+        [ngClass]="{ linkcursor: parent?.parentUrl }"
+        [routerLink]="parent?.parentUrl ? '/' + parent?.parentUrl : null"
+        routerLinkActive="router-link-active"
+      >
+        {{ parent?.label | cxTranslate }}
+      </span>
+      <span
+        *ngIf="breadcrumb.isChild && !parent?.key && parent.type === 'param'"
+        class="mt-2 ml-2 linkcursor"
+        [id]="'my-account-breadcrumb-main-' + getParamId(parent.param)"
+        (click)="goTo(parent)"
+        routerLinkActive="router-link-active"
+      >
+        {{ parent?.prefix | cxTranslate }} {{ getParamLabel(parent.param) }}
+      </span>
+      <span *ngIf="!(isLast && breadcrumb.hideLastLabel)" class="mt-2 ml-2">></span>
+      <span
+        *ngIf="breadcrumb.isChild && parents?.parent?.key"
+        class="mt-2 ml-2"
+        [routerLink]="'/' + parent?.parentUrl"
+        routerLinkActive="router-link-active"
+      >
+        {{ parent?.key | cxTranslate }}
+      </span>
+    </ng-container>
+    <ng-container *ngIf="!breadcrumb.hideLastLabel">
+      <span
+        *ngIf="!breadcrumb.key && !breadcrumb.selectedParam"
+        class="mt-2 ml-2 defaultcursor"
+        [id]="'my-account-breadcrumb-sub-' + getParamId(breadcrumb.label)"
+      >
+        {{ breadcrumb.label }}
+      </span>
+      <span
+        *ngIf="breadcrumb.selectedParam"
+        class="mt-2 ml-2 defaultcursor"
+        [id]="'my-account-breadcrumb-sub-' + getParamId(getSelectedParam(breadcrumb.selectedParam))"
+      >
+        {{ getSelectedParam(breadcrumb.selectedParam) }}
+      </span>
+      <span
+        *ngIf="breadcrumb.key"
+        class="mt-2 ml-2 defaultcursor"
+        [id]="'my-account-breadcrumb-sub-' + getParamId(breadcrumb.key)"
+      >
+        {{ breadcrumb.key | cxTranslate }}
+      </span>
+    </ng-container>
+  </li>
+</ol>

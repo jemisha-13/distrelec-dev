@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- [y] hybris Platform Copyright (c) 2000-2016 SAP SE or an SAP affiliate 
+	company. All rights reserved. This software is the confidential and proprietary 
+	information of SAP ("Confidential Information"). You shall not disclose such 
+	Confidential Information and shall use it only in accordance with the terms 
+	of the license agreement you entered into with SAP. -->
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="beans.xsd">
+
+    <!-- For Net promoter Score count [Start] -->
+    <bean
+            class="de.hybris.platform.distrelecB2BCore.netPromoterScore.data.NetPromoterScoreCountResult">
+        <property name="salesOrganization" type="java.lang.String">
+            <description>The Base Site Domain Name</description>
+        </property>
+        <property name="count" type="java.lang.Integer">
+            <description>The count of the NPS</description>
+        </property>
+    </bean>
+
+    <bean
+            class="de.hybris.platform.distrelecB2BCore.netPromoterScore.data.NetPromoterScoreCountEmailData">
+        <property name="netPromoterScoreCountResult"
+                  type="java.util.List&lt;de.hybris.platform.distrelecB2BCore.netPromoterScore.data.NetPromoterScoreCountResult>">
+            <description>The Base Site Domain Name</description>
+        </property>
+        <property name="totalCount" type="java.lang.Integer">
+            <description>The count of the NPS</description>
+        </property>
+    </bean>
+    <!-- For Net promoter Score count [End] -->
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.rma.data.CreateRMAResponseItemData">
+        <property name="rmaItemNumber" type="String">
+            <description>RMA ITem Number</description>
+        </property>
+        <property name="rmaItemStatus" type="String">
+            <description>RMA Item Status</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.rma.data.CreateRMAResponseData">
+        <property name="rmaNumber" type="String">
+            <description>RMA Number</description>
+        </property>
+        <property name="rmaHeaderStatus" type="String">
+            <description>RMA Header Status</description>
+        </property>
+        <property name="officeAddress" type="String">
+            <description>Office Address</description>
+        </property>
+        <property name="orderItems"
+                  type="java.util.List&lt;CreateRMAResponseItemData>">
+            <description>List of Order Entries</description>
+        </property>
+    </bean>
+
+    <bean
+            class="de.hybris.platform.commercefacades.order.data.DistRMAEntryData">
+        <property name="notAllowed" type="boolean">
+            <description>Is item can be returned</description>
+        </property>
+        <property name="notAllowedDesc" type="String">
+            <description>RMA not allowed description</description>
+        </property>
+        <property name="remainingReturnQty" type="Long">
+            <description>Item quantity that can be returned</description>
+        </property>
+        <property name="rmas"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.RMAData>">
+            <description>RMA Details for an order entry</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.Command">
+        <property name="name" type="String">
+            <description>Command Name</description>
+        </property>
+        <property name="command_id" type="String">
+            <description>Command Id</description>
+        </property>
+        <property name="data"
+                  type="com.namics.distrelec.b2b.core.service.bloomreach.data.Data">
+            <description>Command Data to be passed.</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.CustomerIds">
+        <property name="email_id" type="String">
+            <description>Email Id</description>
+        </property>
+        <property name="erp_contact_id" type="String">
+            <description>Erp Contact Id</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.Data">
+        <property name="customer_ids"
+                  type="com.namics.distrelec.b2b.core.service.bloomreach.data.CustomerIds">
+            <description>Bloomreach Id's</description>
+        </property>
+        <property name="properties"
+                  type="com.namics.distrelec.b2b.core.service.bloomreach.data.Properties">
+            <description>Properties for Request</description>
+        </property>
+        <property name="event_type" type="String">
+            <description>Event Type</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.Properties">
+        <property name="email" type="String">
+            <description>email</description>
+        </property>
+        <property name="web_store_url" type="String">
+            <description>web store url</description>
+        </property>
+        <property name="language" type="String">
+            <description>language</description>
+        </property>
+        <property name="placement" type="String">
+            <description>placement</description>
+        </property>
+
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.ConsentConfirmationProperties"
+            extends="com.namics.distrelec.b2b.core.service.bloomreach.data.CustomerProperties">
+        <property name="consent_list"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.core.service.bloomreach.data.DoubleOptinConsent&gt;">
+            <description>Double Optin Consent List</description>
+        </property>
+        <property name="action" type="String">
+            <description>action</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.CustomerProperties"
+            extends="com.namics.distrelec.b2b.core.service.bloomreach.data.Properties">
+        <property name="first_name" type="String">
+            <description>first name</description>
+        </property>
+        <property name="last_name" type="String">
+            <description>last name</description>
+        </property>
+        <property name="title" type="String">
+            <description>title</description>
+        </property>
+        <property name="phone" type="String">
+            <description>phone</description>
+        </property>
+        <property name="mobile" type="String">
+            <description>mobile</description>
+        </property>
+        <property name="country" type="String">
+            <description>country</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.ConsentProperties"
+            extends="com.namics.distrelec.b2b.core.service.bloomreach.data.CustomerProperties">
+        <property name="action" type="String">
+            <description>action</description>
+        </property>
+        <property name="category" type="String">
+            <description>category</description>
+        </property>
+        <property name="valid_until" type="String">
+            <description>valid until</description>
+        </property>
+        <property name="message" type="String">
+            <description>message</description>
+        </property>
+        <property name="source" type="String">
+            <description>source</description>
+        </property>
+
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.DoubleOptinConsent">
+        <property name="valid_until" type="String">
+            <description>valid until</description>
+        </property>
+        <property name="action" type="String">
+            <description>action</description>
+        </property>
+        <property name="category" type="String">
+            <description>category</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.Root">
+        <property name="commands"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.core.service.bloomreach.data.Command&gt;">
+            <description>List of commands</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.SoftCustomerIds">
+        <property name="email_id" type="String">
+            <description>Email Id</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.ExportConsentsRoot">
+        <property name="customer_ids"
+                  type="com.namics.distrelec.b2b.core.service.bloomreach.data.SoftCustomerIds">
+            <description>Bloomreach Id's</description>
+        </property>
+        <property name="attributes"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.core.service.bloomreach.data.CustomerAttributeData&gt;">
+            <description>List of attributes</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.CustomerAttributeData">
+        <property name="type" type="String">
+            <description>Type</description>
+        </property>
+        <property name="category" type="String">
+            <description>Category name</description>
+        </property>
+        <property name="mode" type="String">
+            <description>Consent information</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.ExportConsentsResponseData">
+        <property name="results"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.core.service.bloomreach.data.ExportConsentsResponseItemData&gt;">
+            <description>Consent status</description>
+        </property>
+        <property name="success" type="boolean">
+            <description>Success flag</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.service.bloomreach.data.ExportConsentsResponseItemData">
+        <property name="success" type="boolean">
+            <description>Success flag</description>
+        </property>
+        <property name="value" type="boolean">
+            <description>Consent status</description>
+        </property>
+    </bean>
+
+    <enum
+            class="de.hybris.platform.commercefacades.order.data.RMAStatus">
+        <value>IN_PROGRESS</value>
+        <value>APPROVED</value>
+        <value>REJECTED</value>
+    </enum>
+
+    <bean
+            class="de.hybris.platform.commercefacades.order.data.RMAData">
+        <property name="rmaNumber" type="String">
+            <description>RMA Number</description>
+        </property>
+        <property name="rmaItemStatus"
+                  type="de.hybris.platform.commercefacades.order.data.RMAStatus">
+            <description>RMA Status</description>
+        </property>
+        <property name="officeAddress" type="String">
+            <description>Return Address</description>
+        </property>
+
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.OrderData">
+        <property name="returnReason"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.DistMainReasonData&gt;"/>
+        <property name="returnSubReason"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.DistSubReasonData&gt;"/>
+        <property name="exceededBudgetPrice" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.facades.order.data.SubOrderEntryData">
+        <property name="materialNumber" type="java.lang.String"/>
+        <property name="materialName" type="java.lang.String"/>
+        <property name="imageUrl" type="java.lang.String"/>
+        <property name="orderQuantity" type="int"/>
+        <property name="product"
+                  type="de.hybris.platform.commercefacades.product.data.ProductData"/>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.facades.order.data.DistAvailabilityData">
+        <property name="estimatedDate" type="java.util.Date"/>
+        <property name="formattedEstimatedDate"
+                  type="java.lang.String"/>
+        <property name="quantity" type="java.lang.Long"/>
+    </bean>
+
+    <bean
+            class="de.hybris.platform.commercefacades.order.data.OrderEntryData">
+        <property name="rmaData"
+                  type="de.hybris.platform.commercefacades.order.data.DistRMAEntryData">
+            <description>RMA Order Entry Level Details</description>
+        </property>
+        <property name="itemPosition" type="String">
+            <description>Order Entry position</description>
+        </property>
+        <property name="discountAmount"
+                  type="de.hybris.platform.commercefacades.product.data.PriceData">
+            <description>Discount for ordered item</description>
+        </property>
+        <property name="totalAfterDiscountPrice"
+                  type="de.hybris.platform.commercefacades.product.data.PriceData">
+            <description>Total price after discount</description>
+        </property>
+        <property name="isBackOrder" type="boolean"/>
+        <property name="customerReference" type="java.lang.String"/>
+        <property name="baseListPrice"
+                  type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="totalListPrice"
+                  type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="taxValue" type="java.lang.Double"/>
+        <property name="availabilities"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.order.data.DistAvailabilityData&gt;"/>
+        <property name="searchQuery" type="java.lang.String"/>
+        <property name="requestedDeliveryDateItemLevel"
+                  type="java.util.Date"/>
+        <property name="bom" type="boolean"/>
+        <property name="subOrderEntryData"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.order.data.SubOrderEntryData&gt;"/>
+        <property name="deliveryDate" type="java.util.Date"/>
+        <property name="isQuotation" type="boolean"/>
+        <property name="quotationId" type="java.lang.String"/>
+        <property name="lineNumber" type="java.lang.String"/>
+        <property name="quotationReference" type="java.lang.String"/>
+        <property name="articleDescription" type="java.lang.String"/>
+        <property name="dummyItem" type="boolean"/>
+        <property name="mandatoryItem" type="boolean"/>
+        <property name="quoteModificationType"
+                  type="com.namics.distrelec.b2b.core.enums.QuoteModificationType"/>
+        <property name="deliveryId" type="java.lang.String"/>
+        <property name="deliveryTrackingUrl" type="java.lang.String"/>
+        <property name="deliveryQuantity" type="long"/>
+        <property name="pendingQuantity" type="long"/>
+        <property name="invoiceId" type="java.lang.String"/>
+        <property name="backOrderProfitable" type="boolean"/>
+        <property name="backOrderedQuantity" type="long"/>
+        <property name="alternateAvailable" type="boolean"/>
+        <property name="alternateQuantity" type="long"/>
+        <property name="typeName" type="java.lang.String"/>
+        <property name="mview" type="java.lang.String"/>
+    </bean>
+
+    <bean
+            class="de.hybris.platform.commercefacades.order.data.DistReturnReasonData">
+        <property name="returnReasonId" type="String">
+            <description>Return ID at order level</description>
+        </property>
+        <property name="returnReasonDesc" type="String">
+            <description>Return reason description</description>
+        </property>
+    </bean>
+    <bean
+            class="de.hybris.platform.commercefacades.order.data.DistMainReasonData">
+        <property name="mainReasonId" type="String"/>
+        <property name="mainReasonText" type="String"/>
+        <property name="defaultSubReasonId" type="String">
+            <description>Used in case when main reason shouldn't show any sub reasons</description>
+        </property>
+        <property name="subReasons"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.DistSubReasonData&gt;"/>
+    </bean>
+    <bean
+            class="de.hybris.platform.commercefacades.order.data.DistSubReasonData">
+        <property name="subReasonId" type="String">
+            <description>Main RMA Reason</description>
+        </property>
+        <property name="subReasonMessages"
+                  type="java.util.List&lt;String&gt;">
+            <description>Main Reason Text</description>
+        </property>
+    </bean>
+    <bean
+            class="de.hybris.platform.commerceservices.service.data.CommerceCheckoutParameter">
+        <property name="recalculate" type="boolean">
+            <description>Should cart be calculated or recalculated</description>
+        </property>
+    </bean>
+
+
+    <!-- For Stock Notification [Start] -->
+    <bean
+            class="de.hybris.platform.distrelecB2BCore.stockNotification.data.StockNotificationProductResult">
+        <property name="productImageUrl" type="java.lang.String">
+            <description>Product Image</description>
+        </property>
+        <property name="productDescription" type="java.lang.String">
+            <description>Product Description</description>
+        </property>
+        <property name="productStock" type="java.lang.String">
+            <description>Current Available Stock</description>
+        </property>
+        <property name="productPrice" type="java.lang.String">
+            <description>Product Base Price</description>
+        </property>
+        <property name="currency" type="java.lang.String">
+            <description>Currency Code</description>
+        </property>
+        <property name="productPageUrl" type="java.lang.String">
+            <description>Product Page url for customer</description>
+        </property>
+        <property name="productCode" type="java.lang.String">
+            <description>Product Article Number</description>
+        </property>
+        <property name="customerEmail" type="java.lang.String">
+            <description>Customer Email ID</description>
+        </property>
+        <property name="language" type="java.lang.String">
+            <description>Locale Language</description>
+        </property>
+        <property name="manufacturer" type="java.lang.String">
+            <description>Product Manufacturer</description>
+        </property>
+    </bean>
+
+    <bean
+            class="com.namics.distrelec.b2b.core.bomtool.data.BomToolImportEntryData">
+        <property name="code" type="java.lang.String"/>
+        <property name="customerReference" type="java.lang.String"/>
+        <property name="productCode" type="java.lang.String"/>
+        <property name="quantity" type="long"/>
+        <property name="position" type="int"/>
+    </bean>
+
+    <!-- For Stock Notification [End] -->
+
+    <bean class="com.distrelec.b2b.core.search.data.Unit">
+        <property name="code" type="String"/>
+        <property name="symbol" type="String"/>
+        <property name="conversionFactor" type="Double"/>
+        <property name="baseUnitSymbol" type="String"/>
+        <property name="unitType" type="String"/>
+    </bean>
+
+    <bean class="com.distrelec.b2b.core.search.data.PimWebUseField">
+        <property name="code" type="String"/>
+        <property name="attributeName" type="String"/>
+        <property name="value" type="String"/>
+        <property name="unit" type="String"/>
+        <property name="fieldType" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.order.data.AddToCartParams">
+        <property name="searchQuery" type="String"/>
+        <property name="recalculate" type="Boolean"/>
+        <property name="reference" type="String"/>
+        <property name="addedFrom" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commerceservices.service.data.CommerceCartParameter">
+        <property name="searchQuery" type="String"/>
+        <property name="reference" type="String"/>
+        <property name="addedFrom" type="String"/>
+    </bean>
+	<bean class="com.distrelec.b2b.core.basesite.data.CSPData">
+		<property name="cspReport"
+			type="com.distrelec.b2b.core.basesite.data.CSPReportData" />
+	</bean>
+	<bean class="com.distrelec.b2b.core.basesite.data.CSPReportData">
+		<property name="documentUri" type="String" />
+		<property name="effectiveDirective" type="String" />
+		<property name="disposition" type="String" />
+		<property name="statusCode" type="String" />
+		<property name="blockedUri" type="String" />
+		<property name="referrer" type="String" />
+		<property name="violatedDirective" type="String" />
+		<property name="originalPolicy" type="String" />
+		<property name="sourceFile" type="String" />
+		<property name="scriptSample" type="String" />
+	</bean>
+
+	<bean
+		class="com.namics.distrelec.b2b.core.service.radware.data.Authentication">
+		<property name="username" type="String">
+			<description>Authentication Username</description>
+		</property>
+		<property name="password" type="String">
+			<description>Authentication Password</description>
+		</property>
+		<property name="options" type="AuthenticationOptions">
+			<description>options</description>
+		</property>
+	</bean>
+
+	<bean
+		class="com.namics.distrelec.b2b.core.service.radware.data.AuthenticationOptions">
+		<property name="multiOptionalFactorEnroll" type="Boolean">
+			<description>multiOptionalFactorEnroll</description>
+		</property>
+		<property name="warnBeforePasswordExpired" type="Boolean">
+			<description>warnBeforePasswordExpired</description>
+		</property>
+
+	</bean>
+
+	<bean
+		class="com.namics.distrelec.b2b.core.service.radware.data.AuthenticationResponse">
+		<property name="sessionToken" type="String">
+			<description>Session Token</description>
+		</property>
+		<property name="status" type="String">
+			<description>Status</description>
+		</property>
+	</bean>
+
+	<bean
+		class="com.namics.distrelec.b2b.core.service.radware.data.RadwareAppListResponse">
+		<property name="content" type="java.util.List&lt;com.namics.distrelec.b2b.core.service.radware.data.RadwareApp&gt;">
+			<description>Radware App Response</description>
+		</property>
+	</bean>
+
+	<bean
+		class="com.namics.distrelec.b2b.core.service.radware.data.RadwareApp">
+		<property name="id" type="String">
+			<description>Application ID</description>
+		</property>
+		<property name="name" type="String">
+			<description>Application Name</description>
+		</property>
+	</bean>
+</beans>

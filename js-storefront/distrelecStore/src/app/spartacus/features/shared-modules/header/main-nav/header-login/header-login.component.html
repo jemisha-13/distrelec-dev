@@ -1,0 +1,41 @@
+<ng-container *ngIf="isBrowser">
+  <ng-container *ngIf="userType$ | async as userType">
+    <div class="menuitem-wrapper" (click)="openPanel($event, loginRegisterDrawerUid, userType)">
+      <div class="menuitem">
+        <span class="label eproc-hide">
+          <div class="desktop-holder">
+            <button class="btn">
+              @if (isMobileBreakpoint$ | async) {
+                <app-icon iconName="signIn-alt" iconType="svg" width="20" height="20"></app-icon>
+              } @else {
+                <app-icon iconName="signIn" iconType="svg" width="20" height="20"></app-icon>
+              }
+
+              <span *ngIf="userType === 'current'" class="icon-label" [id]="headerCurrentHtmlId">
+                {{ 'form.my_account' | cxTranslate }}
+              </span>
+              <span *ngIf="userType === 'guest'" class="icon-label" [id]="headerGuestHtmlId">
+                {{ 'login.signout' | cxTranslate }}
+              </span>
+              <span *ngIf="userType === 'anonymous'" class="icon-label" [id]="headerSignInHtmlId">
+                {{ 'login.login' | cxTranslate }}
+              </span>
+            </button>
+          </div>
+        </span>
+      </div>
+    </div>
+
+    <app-dist-slide-drawer
+      [title]="sliderTitle(userType) | cxTranslate"
+      [uid]="loginRegisterDrawerUid"
+      direction="RIGHT"
+    >
+      <app-header-login-form *ngIf="userType === 'anonymous'"></app-header-login-form>
+      <app-header-account-information
+        *ngIf="userType === 'current'"
+        (logoutEvent)="handleLogout()"
+      ></app-header-account-information>
+    </app-dist-slide-drawer>
+  </ng-container>
+</ng-container>

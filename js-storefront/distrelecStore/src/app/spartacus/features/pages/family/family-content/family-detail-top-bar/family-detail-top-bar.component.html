@@ -1,0 +1,181 @@
+<ng-container *ngIf="familyData$ | async as familyData">
+  <div class="family-detail-top-bar">
+    <div class="container d-flex">
+      <div class="box wrapper">
+        <div class="right-side" id="product-family-side">
+          <ng-container *ngIf="isBrowser && familyImage">
+            <div class="right-side img-container" id="product-family-gallery">
+              <picture (click)="onImageClick(familyImageLarge)" draggable>
+                <source [srcset]="familyImage" />
+                <img id="pfp-img" [src]="familyImage" draggable />
+              </picture>
+            </div>
+            <ng-container *ngIf="displayPreview$ | async">
+              <app-gallery-preview
+                [images]="[{ url: familyImageLarge }]"
+                [showCount]="false"
+                [imageClick$]="displayPreview$"
+              ></app-gallery-preview>
+            </ng-container>
+          </ng-container>
+          <div
+            class="right-side listing"
+            id="product-family-listing"
+            (click)="jumpTo('plp-main')"
+            data-aainteraction="family menu click"
+          >
+            <span>{{ 'product.family.listing' | cxTranslate }}</span>
+          </div>
+        </div>
+        <div class="left-side">
+          <div class="left-side top" id="product-family-section-top">
+            <ng-template #manufacturerImages>
+              <ng-container *ngFor="let image of familyData?.familyManufacturerImage">
+                <ng-container *ngIf="image?.key === 'brand_logo'">
+                  <img class="manufacturer-image" [src]="image?.value.url" />
+                </ng-container>
+              </ng-container>
+            </ng-template>
+
+            <ng-container *ngIf="manufacturerUrl$ | async as manufacturerUrl; else noManufacturerUrl">
+              <a [absoluteRouterLink]="manufacturerUrl">
+                <ng-container *ngTemplateOutlet="manufacturerImages"></ng-container>
+              </a>
+            </ng-container>
+
+            <ng-template #noManufacturerUrl>
+              <ng-container *ngTemplateOutlet="manufacturerImages"></ng-container>
+            </ng-template>
+
+            <app-page-title id="product-family-page-title" [title]="familyData?.name"></app-page-title>
+          </div>
+          <section class="left-side jump-to" id="product-family-jump-to">
+            <span class="left-side jump-to__text" id="product-family-jump-to-text">
+              {{ 'product.family.jump' | cxTranslate }}:
+            </span>
+            <ng-container *ngIf="familyData?.familyBullets && familyData?.familyBullets.length">
+              <span
+                class="left-side jump-to__link"
+                id="Features"
+                (click)="jumpTo('product-family-features')"
+                data-aainteraction="family menu click"
+              >
+                {{ 'product.family.features' | cxTranslate }}
+              </span>
+              <span class="left-side jump-to__seperator">|</span>
+            </ng-container>
+            <ng-container *ngIf="familyData?.familyApplications && familyData?.familyApplications.length">
+              <span
+                class="left-side jump-to__link"
+                id="Applitcations"
+                (click)="jumpTo('product-family-applications')"
+                data-aainteraction="family menu click"
+              >
+                {{ 'product.family.applications' | cxTranslate }}
+              </span>
+              <span class="left-side jump-to__seperator">|</span>
+            </ng-container>
+            <ng-container
+              *ngIf="
+                (familyData?.familyVideo && familyData?.familyVideo.length) ||
+                (familyData?.familyMedia && familyData?.familyMedia.length)
+              "
+            >
+              <span
+                class="left-side jump-to__link"
+                id="Additional information"
+                (click)="jumpTo('additional-text')"
+                data-aainteraction="family menu click"
+              >
+                {{ 'product.family.schematics' | cxTranslate }}
+              </span>
+              <span class="left-side jump-to__seperator">|</span>
+            </ng-container>
+            <span
+              class="left-side jump-to__link"
+              id="Product listing"
+              (click)="jumpTo('plp-main')"
+              data-aainteraction="family menu click"
+            >
+              {{ 'product.family.listing' | cxTranslate }}
+            </span>
+          </section>
+          <section *ngIf="familyData?.introText" class="left-side description" id="product-family-description">
+            <p class="left-side description__text">{{ familyData?.introText }}</p>
+          </section>
+          <section *ngIf="familyData?.familyBullets.length" class="left-side bullet-list" id="product-family-features">
+            <span class="left-side heading" id="features-text">{{ 'product.family.features' | cxTranslate }}</span>
+            <ul>
+              <li *ngFor="let bullet of familyData?.familyBullets">
+                {{ bullet.value }}
+              </li>
+            </ul>
+          </section>
+          <div *ngIf="familyData?.familyDatasheet && familyData?.familyDatasheet.length" id="product-family-datasheet">
+            <a
+              class="left-side datasheet"
+              [href]="familyData?.familyDatasheet[0]?.value?.url"
+              data-aainteraction="file download"
+              data-file-name="{{ pdfTitle }}"
+              title="{{ pdfTitle }}"
+              target="_blank"
+            >
+              {{ 'product.family.datasheet' | cxTranslate }}
+            </a>
+          </div>
+          <section
+            *ngIf="familyData?.familyApplications.length"
+            class="left-side bullet-list"
+            id="product-family-applications"
+          >
+            <span class="left-side heading" id="applications-text">
+              {{ 'product.family.applications' | cxTranslate }}
+            </span>
+            <ul>
+              <li *ngFor="let application of familyData?.familyApplications">
+                {{ application }}
+              </li>
+            </ul>
+          </section>
+          <section
+            *ngIf="
+              (familyData?.familyVideo && familyData?.familyVideo.length) ||
+              (familyData?.familyMedia && familyData?.familyMedia.length)
+            "
+            class="left-side additional"
+          >
+            <span class="left-side heading" id="additional-text">{{ 'product.family.schematics' | cxTranslate }}</span>
+            <div
+              *ngIf="familyData?.familyMedia && familyData?.familyMedia.length"
+              class="left-side additional__container"
+              id="product-family-media"
+            >
+              <div class="left-side additional__container__media">
+                <img [src]="familyMedia" />
+              </div>
+            </div>
+            <div
+              *ngIf="familyData?.familyVideo && familyData?.familyVideo.length"
+              class="left-side additional__container"
+              id="product-family-videos"
+            >
+              <div class="left-side additional__container__videos">
+                <ng-container *ngFor="let video of videoUrls">
+                  <div class="left-side additional__container__videos__wrapper">
+                    <iframe
+                      [src]="video | sanitizeUrl"
+                      width="480"
+                      height="310"
+                      frameborder="0"
+                      allowfullscreen
+                    ></iframe>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

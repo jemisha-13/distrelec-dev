@@ -1,0 +1,65 @@
+$contentMasterCatalog=distrelecContentCatalog
+$contentCatalog=distrelec_NLContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/categoryPage_redesign/images
+
+INSERT_UPDATE CategoryPage		;$contentCV[unique=true]		;uid[unique=true]		;name					;masterTemplate(uid,$contentCV)			;defaultPage		;approvalStatus(code)[default='approved']
+								;								;category				;Default Category Page	;CategoryPageTemplate					;true				;
+
+INSERT_UPDATE ContentSlot	;$contentCV[unique=true]	;uid[unique=true]				;name									;active
+							;							;ContentSlot-CategoryPage		;Content Slot for CategoryPage			;true
+							;							;TeaserContentSlot-CategoryPage	;Teaser Content Slot for CategoryPage	;true
+
+INSERT_UPDATE ContentSlotForPage	;$contentCV[unique=true]	;uid[unique=true]				;position[unique=true]	;page(uid,$contentCV)[unique=true][default='category']	;contentSlot(uid,$contentCV)[unique=true]
+									;							;Content-CategoryPage			;Content				;														;ContentSlot-CategoryPage
+									;							;TeaserContent-CategoryPage		;TeaserContent			;														;TeaserContentSlot-CategoryPage
+
+
+
+INSERT_UPDATE DistCategoryThumbsComponent;$contentCV[unique=true];uid[unique=true]                ;name                               ;&componentRef
+                                         ;                       ;DefaultCategoryThumbsComponent  ;Default Category Thumbs Component  ;DefaultCategoryThumbsComponent
+
+INSERT_UPDATE DistProductCarouselComponent	;$contentCV[unique=true]	;uid[unique=true]			;name					;&componentRef
+											;							;TopProductsComponent		;Top Products Component	;TopProductsComponent
+											;							;NewProductsComponent		;New Products Component	;NewProductsComponent
+
+
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true] ;&componentRef  		; $contentCV[unique = true]; localizedUrlLink[lang = nl]                                                ; localizedUrlLink[lang = en]                                         ; media(code, $contentCV)	; mode(code[default = NORMAL])
+                                 ; categoryPageBrand1 ; categoryPageBrand1  ;                          ; /nl/manufacturer/3m/man_mmm?queryFromSuggest=true                          ; /en/manufacturer/3m/man_mmm?queryFromSuggest=true                   ; categorybrand1          ;                             
+                                 ; categoryPageBrand2 ; categoryPageBrand2  ;                          ; /nl/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ; /en/manufacturer/alpha-wire/man_alw?queryFromSuggest=true           ; categorybrand2          ;                             
+                                 ; categoryPageBrand3 ; categoryPageBrand3  ;                          ; /nl/manufacturer/arduino/man_aio?queryFromSuggest=true                     ; /en/manufacturer/arduino/man_aio?queryFromSuggest=true              ; categorybrand3          ;                             
+                                 ; categoryPageBrand4 ; categoryPageBrand4  ;                          ; /nl/manufacturer/fluke/man_flu?queryFromSuggest=true                       ; /en/manufacturer/fluke/man_flu?queryFromSuggest=true                ; categorybrand4          ;                             
+                                 ; categoryPageBrand5 ; categoryPageBrand5  ;                          ; /nl/manufacturer/harting/man_har?queryFromSuggest=true                     ; /en/manufacturer/harting/man_har?queryFromSuggest=true              ; categorybrand5          ;                             
+                                 ; categoryPageBrand6 ; categoryPageBrand6  ;                          ; /nl/manufacturer/kemet/man_kem?queryFromSuggest=true                       ; /en/manufacturer/kemet/man_kem?queryFromSuggest=true                ; categorybrand6          ;                             
+								 
+INSERT_UPDATE SimpleBannerComponent	; uid[unique = true]  ;&componentRef 		; $contentCV[unique = true]; localizedUrlLink[lang = nl]								; localizedUrlLink[lang = en]       						; media(code, $contentCV)[lang = nl]	; media(code, $contentCV)[lang = en]
+                                 	; categoryPageBanner1  ; categoryPageBanner1 ;                          ; /search?q=rnd&int_cid=1914categories.hero-RNDHeader	    ;/search?q=rnd&int_cid=1914categories.hero-RNDHeader	    ; RND-Cat-Generic-NL					; RND-Cat-Generic-EN					                           
+
+INSERT_UPDATE SimpleBannerComponent	; $contentCV[unique=true]	; uid[unique=true]	; media(code, $contentCV)	; localizedUrlLink[lang = en] 	;localizedUrlLink[lang = nl] 	
+									; 							; mvtComponent1		; mvtImage					; /								;/								
+									; 							; mvtComponent2		; mvtImage					; /								;/								
+									; 							; mvtComponent3		; mvtImage					; /								;/								
+								 
+INSERT_UPDATE DistComponentGroup; uid[unique = true]     ;&componentRef             ; name                              ; $contentCV[unique = true]	; htmlClasses           ; title[lang = en]           ; title[lang = nl]               		; itemHtmlClasses	; backgroundImage(code, $contentCV)	; components(uid, $contentCV)																									; topLinkDataAttributes[map-delimiter = |]; bottomLinkDataAttributes[map-delimiter = |]
+                                ; categorypageTopBrands  ;categorypageTopBrands     ; Category Top Brands               ;                          	; top-brands            ; Shop by Manufacturer       ; Koop op basis van fabrikant    		; col-md-2 			; 									; categoryPageBrand1, categoryPageBrand2, categoryPageBrand3, categoryPageBrand4, categoryPageBrand5, categoryPageBrand6		; aaSectionPos->c1r5 | aaSectionTitle->Top brands | aaLinkText->View all manufacturers | aaType->homepage-interaction ;
+								; mvtImageComponent		 ; mvtImageComponent		; MVT Image Component				;							; offers-and-promotions	; Latest Offers & Promotions ; Laatste aanbiedingen en promoties	; col-md-4         	;                                   ; mvtComponent1, mvtComponent2, mvtComponent3																					;                              
+								 
+INSERT_UPDATE ContentSlot	;$contentCV[unique=true]	;uid[unique=true]			;cmsComponents(&componentRef)
+							;							;ContentSlot-CategoryPage	;categoryPageBanner1,DefaultCategoryThumbsComponent,TopProductsComponent,NewProductsComponent,categorypageTopBrands, mvtImageComponent
+							
+							
+# Category Page Brand images
+INSERT_UPDATE Media; code[unique = true]	; $contentCV[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = image/jpeg];
+                   ; categorybrand1        	;                          ; $siteResource/brands/3m.jpg
+                   ; categorybrand2        	;                          ; $siteResource/brands/alphawire.jpg
+                   ; categorybrand3        	;                          ; $siteResource/brands/arduino.jpg
+                   ; categorybrand4        	;                          ; $siteResource/brands/fluke.jpg
+                   ; categorybrand5        	;                          ; $siteResource/brands/harting.jpg
+                   ; categorybrand6        	;                          ; $siteResource/brands/kemet.jpg
+				   
+INSERT_UPDATE Media	; code[unique = true]         	  ; $contentCV[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = image/png];	
+					; RND-Cat-Generic-NL       		  ;                          ; $siteResource/banners/RND-Cat-Generic-NL.png		   
+					; RND-Cat-Generic-EN       		  ;                          ; $siteResource/banners/RND-Cat-Generic-EN.png		   
+					; mvtImage		       		  	  ;                          ; $siteResource/mvtImage.png
+							

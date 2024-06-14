@@ -1,0 +1,82 @@
+## messageSource=classpath:/distrelecB2Bcore/messages/email-requestInvoicePaymentMode_en.properties
+#macro(genHtmlLink $url $label)
+<a style="color: #AA1936; text-decoration: underline;" href="$url" target="_blank"><span style="color: #AA1936;">$label</span></a>
+#end
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+#set($siteUID=${ctx.siteUID})
+#set($messages=${ctx.messages})
+
+<html>
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body style="padding: 0; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+
+		## HEADER include
+		${ctx.header}
+
+		## MOOD IMAGE
+		<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+			<tr>
+				<td style="border-left: 1px solid #cccccc; border-right: 1px solid #cccccc;">
+					${ctx.cmsSlotContents.MoodImage}
+				</td>
+			</tr>
+			<tr>
+				<td height="5" bgcolor="#AA1936"style="border-right: 1px solid #cccccc; border-left: 1px solid #cccccc;"></td>
+			</tr>
+		</table>
+
+		## CONTENT
+
+		## Registered User
+		<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+			<tr>
+				<td style="border-collapse: collapse; border-right: 1px solid #cccccc; border-left: 1px solid #cccccc; padding: 20px;">
+					## title
+					<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 30px;">${messages.infoText}</p>
+
+					<table border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0;">
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.customerNumber}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml("${ctx.customer.unit.erpCustomerId}")</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.customerName}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml("${ctx.customer.firstName} ${ctx.customer.lastName}")</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.customerEmail}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.email})</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.phone1}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.contactAddress.phone1})</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.phone2}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.contactAddress.phone2})</p></td>
+						</tr>
+
+						<tr>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${messages.mobilePhone}: </p></td>
+							<td><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; padding-left: 20px;">$!StringEscapeUtils.escapeHtml(${ctx.customer.contactAddress.mobilePhone})</p></td>
+						</tr>
+
+						<tr>
+							<td colspan="2"><p>&#160;<br/><br/>&#160;</p></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+
+		## FOOTER include
+		${ctx.footer}
+	</body>
+</html>

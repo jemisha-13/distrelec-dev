@@ -1,0 +1,26 @@
+INSERT_UPDATE ClassificationSystem;id[unique=true];
+;Classification;
+
+INSERT_UPDATE ClassificationSystemVersion;version[unique=true];catalog(id);
+;classificationVersion;Classification
+
+
+
+
+INSERT_UPDATE Category;code[unique=true];name[lang=de];catalogVersion(catalog(id),version)
+;myTestCategory1;hallo category;testCatalog:Online
+;myTestCategory2;hallo category;testCatalog:Online
+
+INSERT_UPDATE ClassificationClass;code[unique=true];name[lang=de];catalogVersion(catalog(id),version)
+;myTestClassificationClass1;hallo classification class;Classification:classificationVersion
+;myTestClassificationClass2;hallo classification class;Classification:classificationVersion
+
+
+INSERT_UPDATE Product;code[unique=true];name[lang=de];catalogVersion(catalog(id),version)
+;myTestProduct;hallo test;testCatalog:Online
+
+INSERT_UPDATE Product;code[unique=true];supercategories(code,catalogVersion(catalog(id),version))[mode=append];catalogVersion(catalog(id),version)
+;myTestProduct;myTestCategory1:testCatalog:Online,myTestCategory2:testCatalog:Online,myTestClassificationClass1:Classification:classificationVersion,myTestClassificationClass2:Classification:classificationVersion;testCatalog:Online
+
+INSERT_UPDATE Product;code[unique=true];supercategories(code,catalogVersion(catalog(id),version))[translator=com.namics.hybris.toolbox.impex.collection.RemoveCertainTypeValueTranslator][itemtype=Category][mode=append];catalogVersion(catalog(id),version)
+;myTestProduct;myTestCategory1:testCatalog:Online;testCatalog:Online

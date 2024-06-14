@@ -1,0 +1,22 @@
+$contentCatalog = distrelec_ROContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.patches.setup.DistrelecpatchesSystemSetup&/distrelecpatches/releases/release16_3/patch_patch_29055/global/images
+
+$internationalContentCatalog = distrelec_IntContentCatalog
+$internationalContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $internationalContentCatalog]), CatalogVersion.version[default = Staged])[default = $internationalContentCatalog:Staged]
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true]	;uid[unique=true]					    ;cmsComponents(uid, $internationalContentCV)
+                         ;						    ;Homepage2018-BannerContentSlot-Hero1	;heroBannerComponentFirst
+                         ;						    ;Homepage2018-BannerContentSlot-Hero2	;heroBannerComponentSecond
+
+UPDATE ContentSlot;$contentCV[unique=true]	        ;uid[unique=true]					    ;cmsComponents(uid, $internationalContentCV)
+                  ;                                 ;Homepage2018-BannerContentSlot         ;heroBannerComponentMain
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                    ; $contentCV[unique = true]; contentSlot(uid, $contentCV)           ; page(uid, $contentCV)[unique = true]; position
+                                ; Homepage2018-BannerContentSlot-Hero1  ;                          ; Homepage2018-BannerContentSlot-Hero1   ; homepage2018                        ; BannerContentSlot-Hero1
+                                ; Homepage2018-BannerContentSlot-Hero2  ;                          ; Homepage2018-BannerContentSlot-Hero2   ; homepage2018                        ; BannerContentSlot-Hero2
+
+
+UPDATE ContentPage; uid[unique=true];$contentCV[unique=true];approvalStatus(code)[default='approved']
+                  ; homepage2018

@@ -1,0 +1,14 @@
+<span [appJsonLd]="schema$ | async"></span>
+<ng-container *ngIf="breadcrumb$ | async as breadcrumb">
+  <div class="container breadcrumb-wrapper" [class.breadcrumbs-spacing]="(isPDP$ | async) === false">
+    <app-breadcrumbs
+      [breadcrumbsArray]="breadcrumb"
+      crumbNameID="breadcrumb-name-"
+      crumbLinkID="breadcrumb-"
+    ></app-breadcrumbs>
+    <div *ngIf="hasSearchQueryParam$ | async" class="back-button" id="back_to_search_button" (click)="onNavigateBack()">
+      <app-icon [icon]="caretLeft" size="md"></app-icon>
+      <a>{{ 'breadcrumb.customFilter' | cxTranslate }}</a>
+    </div>
+  </div>
+</ng-container>

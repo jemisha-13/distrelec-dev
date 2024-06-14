@@ -1,0 +1,104 @@
+<form [formGroup]="deliveryDetails">
+  <ng-container *ngIf="setDeliveryAddressId_ | async as setDeliveryAddressId">
+    <div
+      class="ch__component__selections__item"
+      [id]="'deliveryDetailsContainer_' + address.id"
+      [class.selected]="setDeliveryAddressId === address.id"
+    >
+      <div class="ch__component__selections__item--row is-align-center">
+        <button
+          class="btn ch__component__selections__item__radio"
+          [id]="'selectDeliveryAddressBtn_' + address.id"
+          [class.is-checked]="setDeliveryAddressId === address.id"
+          (click)="setDeliveryAddress(address)"
+        >
+          <input
+            class="custom-control-input"
+            [id]="'selectDeliveryAddressInput_' + address.id"
+            [value]="deliveryDetails.value.id"
+            type="radio"
+            formControlName="id"
+          />
+        </button>
+
+        <div
+          class="ch__component__selections__item__radio-icon"
+          [class.is-checked]="setDeliveryAddressId === address.id"
+        ></div>
+
+        <fa-icon class="visible-mobile-plus-up" [icon]="faLocationDot"></fa-icon>
+
+        <div class="ch__component__selections__item__info">
+          <div>
+            <span
+              *ngIf="address.firstName && address.lastName"
+              class="ch__component__selections__item__info--address"
+              id="nameLineDelivery"
+            >
+              {{ 'form.' + address.titleCode | cxTranslate }} {{ address.firstName }} {{ address.lastName }},
+            </span>
+            <span class="ch__component__selections__item__info--address" id="firstLineDelivery">
+              {{ address.companyName }} {{ address.line1 }} {{ address.line2 }},
+            </span>
+            <span class="ch__component__selections__item__info--address" id="secondLineDelivery">
+              {{ address.postalCode }} {{ address.town }},
+              <ng-container *ngIf="address.region">{{ address.region?.name }},</ng-container>
+              {{ address.country.name }}
+              {{ address.cellphone ?? address.phone }}
+            </span>
+          </div>
+
+          <div>
+            <div class="ch__component__selections__item__cta" [class.is-default]="address.defaultShipping">
+              <ng-container *ngIf="!address.defaultShipping">
+                <button
+                  class="btn link is-set-default"
+                  id="checkout.delivery.set_default"
+                  (click)="setDeliveryDefault()"
+                >
+                  {{ 'checkout.delivery.set_default' | cxTranslate }}
+                </button>
+              </ng-container>
+            </div>
+            <!-- Address is editable only if it is not billing -->
+            <div *ngIf="!address.billingAddress" class="ch__component__selections__item__cta">
+              <button class="btn link" id="checkout.delivery.edit" (click)="editSpecificAddress(address)">
+                {{ 'checkout.delivery.edit' | cxTranslate }}
+              </button>
+              <button class="btn link" id="checkout.remove" (click)="isDelete = true">
+                {{ 'checkout.remove' | cxTranslate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <div *ngIf="isDelete" class="ch__component__error">
+    <div class="is-icon">
+      <fa-icon id="faExclamationTriangeDelivery" [icon]="faExclamationTriange"></fa-icon>
+    </div>
+
+    <div class="is-content">
+      <div>
+        <strong id="checkout.delivery.delete_address_q">
+          {{ 'checkout.delivery.delete_address_q' | cxTranslate }}
+        </strong>
+        {{ 'checkout.delivery.delete_help_text' | cxTranslate }}
+      </div>
+
+      <div>
+        <div class="confirm-removal" (click)="isDelete = false">
+          <button class="btn" id="checkout.delivery.confirm" (click)="removeAddress(address.id)">
+            {{ 'checkout.delivery.confirm' | cxTranslate }}
+          </button>
+
+          <button class="btn">
+            <img src="app/spartacus/assets/media/checkout/Cross-red.svg" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

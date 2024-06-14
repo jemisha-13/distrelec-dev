@@ -1,0 +1,1102 @@
+###########
+# AUSTRIA #
+###########
+
+$contentCatalog = distrelec_ATContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = de]; localizedUrlLink[lang = de]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; /de/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; /de/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; /de/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; /de/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; /de/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; /de/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; /de/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; /de/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; /de/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; /de/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; /de/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; /de/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = de]      ;
+                                ; pdpTopBrandsComponent      ;                          ; Top-Marken            ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Wir machen es möglich ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = de]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /de/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.at/de/services/cms/services      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = de]                                      ;
+                                ; pdpTopBrandsComponent      ;                          ; Alle Hersteller anzeigen                                    ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Lesen Sie mehr darüber, wie Distrelec Sie unterstützen kann ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+###########
+# BELGIUM #
+###########
+
+$contentCatalog = distrelec_BEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = fr]; media(code, $contentCV)[lang = nl]; localizedUrlLink[lang = nl]                                                ; localizedUrlLink[lang = fr]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; brandImage1                       ; /nl/manufacturer/3m/man_mmm?queryFromSuggest=true                          ; /fr/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; brandImage2                       ; /nl/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ; /fr/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; brandImage3                       ; /nl/manufacturer/arduino/man_aio?queryFromSuggest=true                     ; /fr/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; brandImage4                       ; /nl/manufacturer/fluke/man_flu?queryFromSuggest=true                       ; /fr/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; brandImage5                       ; /nl/manufacturer/harting/man_har?queryFromSuggest=true                     ; /fr/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; brandImage6                       ; /nl/manufacturer/kemet/man_kem?queryFromSuggest=true                       ; /fr/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; brandImage7                       ; /nl/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ; /fr/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; brandImage8                       ; /nl/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ; /fr/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; brandImage9                       ; /nl/manufacturer/siemens/man_sie?queryFromSuggest=true                     ; /fr/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; brandImage10                      ; /nl/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ; /fr/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; brandImage11                      ; /nl/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ; /fr/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; brandImage12                      ; /nl/manufacturer/weller/man_wel?queryFromSuggest=true                      ; /fr/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = fr]              ; title[lang = nl]  ;
+                                ; pdpTopBrandsComponent      ;                          ; Meilleures marques            ; Topmerken         ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Nous avons ce qu'il vous faut ; Wij zorgen ervoor ;
+
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = fr]                                  ; topLinkUrl[lang = nl]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /fr/manufacturer-stores/cms/manufacturer?no-cache=true ; /nl/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.be/fr/services/cms/services      ; https://www.distrelec.be/nl/services/cms/services      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = fr]                                                                  ; topLinkText[lang = nl]                               ;
+                                ; pdpTopBrandsComponent      ;                          ; Afficher tous les fabricants                                                            ; Bekijk alle fabrikanten                              ;
+                                ; pdpWeMakeItHappenComponent ;                          ; En savoir plus sur la manière dont Distrelec participe au développement des entreprises ; Lees meer over hoe Distrelec bedrijven vooruit helpt ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+###############
+# SWITZERLAND #
+###############
+
+$contentCatalog = distrelec_CHContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = en]; media(code, $contentCV)[lang = de]; media(code, $contentCV)[lang = fr]; localizedUrlLink[lang = de]                                                ; localizedUrlLink[lang = en]                                                ; localizedUrlLink[lang = fr]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; brandImage1                       ; brandImage1                       ; /de/manufacturer/3m/man_mmm?queryFromSuggest=true                          ; /en/manufacturer/3m/man_mmm?queryFromSuggest=true                          ; /fr/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; brandImage2                       ; brandImage2                       ; /de/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ; /en/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ; /fr/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; brandImage3                       ; brandImage3                       ; /de/manufacturer/arduino/man_aio?queryFromSuggest=true                     ; /en/manufacturer/arduino/man_aio?queryFromSuggest=true                     ; /fr/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; brandImage4                       ; brandImage4                       ; /de/manufacturer/fluke/man_flu?queryFromSuggest=true                       ; /en/manufacturer/fluke/man_flu?queryFromSuggest=true                       ; /fr/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; brandImage5                       ; brandImage5                       ; /de/manufacturer/harting/man_har?queryFromSuggest=true                     ; /en/manufacturer/harting/man_har?queryFromSuggest=true                     ; /fr/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; brandImage6                       ; brandImage6                       ; /de/manufacturer/kemet/man_kem?queryFromSuggest=true                       ; /en/manufacturer/kemet/man_kem?queryFromSuggest=true                       ; /fr/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; brandImage7                       ; brandImage7                       ; /de/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ; /en/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ; /fr/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; brandImage8                       ; brandImage8                       ; /de/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ; /en/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ; /fr/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; brandImage9                       ; brandImage9                       ; /de/manufacturer/siemens/man_sie?queryFromSuggest=true                     ; /en/manufacturer/siemens/man_sie?queryFromSuggest=true                     ; /fr/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; brandImage10                      ; brandImage10                      ; /de/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ; /en/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ; /fr/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; brandImage11                      ; brandImage11                      ; /de/manufacturer/traco-power/man_tpp?queryFromSuggest=true                 ; /en/manufacturer/traco-power/man_tpp?queryFromSuggest=true                 ; /fr/manufacturer/traco-power/man_tpp?queryFromSuggest=true                 ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; brandImage12                      ; brandImage12                      ; /de/manufacturer/weller/man_wel?queryFromSuggest=true                      ; /en/manufacturer/weller/man_wel?queryFromSuggest=true                      ; /fr/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = en]  ; title[lang = de]      ; title[lang = fr]              ;
+                                ; pdpTopBrandsComponent      ;                          ; Top Brands        ; Top-Marken            ; Meilleures marques            ;
+                                ; pdpWeMakeItHappenComponent ;                          ; We make it happen ; Wir machen es möglich ; Nous avons ce qu'il vous faut ;
+
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = en]                                  ; topLinkUrl[lang = de]                                  ; topLinkUrl[lang = fr]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /en/manufacturer-stores/cms/manufacturer?no-cache=true ; /de/manufacturer-stores/cms/manufacturer?no-cache=true ; /fr/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.ch/en/services/cms/services      ; https://www.distrelec.ch/de/services/cms/services      ; https://www.distrelec.ch/fr/services/cms/services      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = en]                            ; topLinkText[lang = de]                                      ; topLinkText[lang = fr]                                                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; View All Manufacturers                            ; Alle Hersteller anzeigen                                    ; Afficher tous les fabricants                                                            ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Read more about how Distrelec help drive business ; Lesen Sie mehr darüber, wie Distrelec Sie unterstützen kann ; En savoir plus sur la manière dont Distrelec participe au développement des entreprises ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+#########
+# CZECH #
+#########
+
+$contentCatalog = distrelec_CZContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = cs]; localizedUrlLink[lang = cs]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; /cs/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; /cs/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; /cs/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; /cs/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; /cs/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; /cs/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; /cs/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; /cs/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; /cs/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; /cs/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; /cs/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; /cs/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = cs];
+                                ; pdpTopBrandsComponent      ;                          ; Přední značky   ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Dokážeme to     ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = cs]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /cs/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.cz/cs/sluzby/cms/services        ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = cs]                                    ;
+                                ; pdpTopBrandsComponent      ;                          ; Zobrazit všechny výrobce                                  ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Přečtěte si, jak společnost Distrelec podporuje podnikání ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+###########
+# GERMANY #
+###########
+
+$contentCatalog = distrelec_DEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = en]; media(code, $contentCV)[lang = de]; localizedUrlLink[lang = en]                                                ; localizedUrlLink[lang = de]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; brandImage1                       ; /en/manufacturer/3m/man_mmm?queryFromSuggest=true                          ; /de/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; brandImage2                       ; /en/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ; /de/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; brandImage3                       ; /en/manufacturer/arduino/man_aio?queryFromSuggest=true                     ; /de/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; brandImage4                       ; /en/manufacturer/fluke/man_flu?queryFromSuggest=true                       ; /de/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; brandImage5                       ; /en/manufacturer/harting/man_har?queryFromSuggest=true                     ; /de/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; brandImage6                       ; /en/manufacturer/kemet/man_kem?queryFromSuggest=true                       ; /de/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; brandImage7                       ; /en/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ; /de/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; brandImage8                       ; /en/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ; /de/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; brandImage9                       ; /en/manufacturer/siemens/man_sie?queryFromSuggest=true                     ; /de/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; brandImage10                      ; /en/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ; /de/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; brandImage11                      ; /en/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ; /de/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; brandImage12                      ; /en/manufacturer/weller/man_wel?queryFromSuggest=true                      ; /de/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = en]  ; title[lang = de]      ;
+                                ; pdpTopBrandsComponent      ;                          ; Top Brands        ; Top-Marken            ;
+                                ; pdpWeMakeItHappenComponent ;                          ; We make it happen ; Wir machen es möglich ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = en]                                  ; topLinkUrl[lang = de]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /en/manufacturer-stores/cms/manufacturer?no-cache=true ; /de/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.de/en/services/cms/services      ; https://www.distrelec.de/de/services/cms/services      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = en]                            ; topLinkText[lang = de]                                      ;
+                                ; pdpTopBrandsComponent      ;                          ; View All Manufacturers                            ; Alle Hersteller anzeigen                                    ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Read more about how Distrelec help drive business ; Lesen Sie mehr darüber, wie Distrelec Sie unterstützen kann ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+###########
+# DENMARK #
+###########
+
+$contentCatalog = distrelec_DKContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = en]; media(code, $contentCV)[lang = da]; localizedUrlLink[lang = en]                                                ; localizedUrlLink[lang = da]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; brandImage1                       ; /en/manufacturer/3m/man_mmm?queryFromSuggest=true                          ; /da/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; brandImage2                       ; /en/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ; /da/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; brandImage3                       ; /en/manufacturer/arduino/man_aio?queryFromSuggest=true                     ; /da/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; brandImage4                       ; /en/manufacturer/fluke/man_flu?queryFromSuggest=true                       ; /da/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; brandImage5                       ; /en/manufacturer/harting/man_har?queryFromSuggest=true                     ; /da/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; brandImage6                       ; /en/manufacturer/kemet/man_kem?queryFromSuggest=true                       ; /da/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; brandImage7                       ; /en/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ; /da/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; brandImage8                       ; /en/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ; /da/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; brandImage9                       ; /en/manufacturer/siemens/man_sie?queryFromSuggest=true                     ; /da/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; brandImage10                      ; /en/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ; /da/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; brandImage11                      ; /en/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ; /da/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; brandImage12                      ; /en/manufacturer/weller/man_wel?queryFromSuggest=true                      ; /da/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = en]  ; title[lang = da]      ;
+                                ; pdpTopBrandsComponent      ;                          ; Top Brands        ; Førende mærker        ;
+                                ; pdpWeMakeItHappenComponent ;                          ; We make it happen ; Vi får det til at ske ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = en]                                  ; topLinkUrl[lang = da]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /en/manufacturer-stores/cms/manufacturer?no-cache=true ; /da/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.elfadistrelec.dk/en/services/cms/services  ; https://www.elfadistrelec.dk/da/services/cms/services  ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = en]                            ; topLinkText[lang = da]                              ;
+                                ; pdpTopBrandsComponent      ;                          ; View All Manufacturers                            ; Se alle producenter                                 ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Read more about how Distrelec help drive business ; Læs mere om, hvordan Distrelec hjælper virksomheder ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+###########
+# ESTONIA #
+###########
+
+$contentCatalog = distrelec_EEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = et]; localizedUrlLink[lang = et]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; /et/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; /et/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; /et/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; /et/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; /et/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; /et/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; /et/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; /et/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; /et/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; /et/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; /et/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; /et/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = et]        ;
+                                ; pdpTopBrandsComponent      ;                          ; Parimad kaubamärgid     ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Me paneme asjad toimima ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = et]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /et/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.elfadistrelec.ee/et/teenused/cms/services  ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = et]                                           ;
+                                ; pdpTopBrandsComponent      ;                          ; Kuva kõik tootjad                                                ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Uurige lähemalt, kuidas aitab Elfa Distrelec äritegevust juhtida ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+##########
+# EXPORT #
+##########
+
+$contentCatalog = distrelec_EXContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = en]; localizedUrlLink[lang = en]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; /en/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; /en/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; /en/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; /en/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; /en/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; /en/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; /en/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; /en/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; /en/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; /en/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; /en/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; /en/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = en]  ;
+                                ; pdpTopBrandsComponent      ;                          ; Top Brands        ;
+                                ; pdpWeMakeItHappenComponent ;                          ; We make it happen ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = en]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /en/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.biz/en/services/cms/services     ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = en]                            ;
+                                ; pdpTopBrandsComponent      ;                          ; View All Manufacturers                            ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Read more about how Distrelec help drive business ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+###########
+# FINLAND #
+###########
+
+$contentCatalog = distrelec_FIContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = fi]; media(code, $contentCV)[lang = sv]; localizedUrlLink[lang = fi]                                                ; localizedUrlLink[lang = sv]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; brandImage1                       ; /fi/manufacturer/3m/man_mmm?queryFromSuggest=true                          ; /sv/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; brandImage2                       ; /fi/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ; /sv/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; brandImage3                       ; /fi/manufacturer/arduino/man_aio?queryFromSuggest=true                     ; /sv/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; brandImage4                       ; /fi/manufacturer/fluke/man_flu?queryFromSuggest=true                       ; /sv/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; brandImage5                       ; /fi/manufacturer/harting/man_har?queryFromSuggest=true                     ; /sv/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; brandImage6                       ; /fi/manufacturer/kemet/man_kem?queryFromSuggest=true                       ; /sv/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; brandImage7                       ; /fi/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ; /sv/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; brandImage8                       ; /fi/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ; /sv/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; brandImage9                       ; /fi/manufacturer/siemens/man_sie?queryFromSuggest=true                     ; /sv/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; brandImage10                      ; /fi/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ; /sv/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; brandImage11                      ; /fi/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ; /sv/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; brandImage12                      ; /fi/manufacturer/weller/man_wel?queryFromSuggest=true                      ; /sv/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = fi]         ; title[lang = sv]     ;
+                                ; pdpTopBrandsComponent      ;                          ; Suosituimmat merkit      ; Ledande märken       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Ratkaisuja juuri sinulle ; Vi får det att hända ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = fi]                                  ; topLinkUrl[lang = sv]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /fi/manufacturer-stores/cms/manufacturer?no-cache=true ; /sv/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.elfadistrelec.fi/fi/palvelut/cms/services  ; https://www.elfadistrelec.fi/sv/tj-nster/cms/services  ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = fi]                                                 ; topLinkText[lang = sv]                                ;
+                                ; pdpTopBrandsComponent      ;                          ; Näytä kaikki valmistajat                                               ; Visa alla tillverkare                                 ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Lue lisää siitä, miten Elfa Distrelec auttaa edistämään liiketoimintaa ; Läs mer om hur Elfa Distrelec kan hjälpa ditt företag ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+###########
+# HUNGARY #
+###########
+
+$contentCatalog = distrelec_HUContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = hu]; localizedUrlLink[lang = hu]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; /hu/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; /hu/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; /hu/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; /hu/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; /hu/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; /hu/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; /hu/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; /hu/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; /hu/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; /hu/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; /hu/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; /hu/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = hu];
+                                ; pdpTopBrandsComponent      ;                          ; Vezető márkák   ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Mi megoldjuk    ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = hu]                                   ;
+                                ; pdpTopBrandsComponent      ;                          ; /hu/manufacturer-stores/cms/manufacturer?no-cache=true  ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.hu/hu/szolgaltatasok/cms/services ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = hu]                                             ;
+                                ; pdpTopBrandsComponent      ;                          ; Összes gyártó megtekintése                                         ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Tudja meg, hogyan támogatja a Distrelec a vállalkozások fejlődését ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+#########
+# ITALY #
+#########
+
+$contentCatalog = distrelec_ITContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = it]; localizedUrlLink[lang = it]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; /it/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; /it/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; /it/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; /it/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; /it/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; /it/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; /it/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; /it/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; /it/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; /it/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; /it/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; /it/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = it]                     ;
+                                ; pdpTopBrandsComponent      ;                          ; Marchi popolari                      ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Con noi le tue idee diventano realtà ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = it]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /it/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.it/it/servizi/cms/services       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = it]                                   ;
+                                ; pdpTopBrandsComponent      ;                          ; Visualizza tutti i produttori                            ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Maggiori informazioni su come Distrelec aiuta le aziende ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+#############
+# LITHUANIA #
+#############
+
+$contentCatalog = distrelec_LTContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = lt]; localizedUrlLink[lang = lt]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; /lt/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; /lt/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; /lt/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; /lt/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; /lt/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; /lt/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; /lt/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; /lt/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; /lt/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; /lt/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; /lt/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; /lt/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = lt]         ;
+                                ; pdpTopBrandsComponent      ;                          ; Geriausi prekės ženklai  ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Mes padarome tai įmanoma ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = lt]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /lt/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.lt/lt/aptarnavimas/cms/services  ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = lt]                                      ;
+                                ; pdpTopBrandsComponent      ;                          ; Peržiūrėti visus gamintojus                                 ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Skaitykite daugiau, kaip „Distrelec“ padeda plėstis verslui ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+##########
+# LATVIA #
+##########
+
+$contentCatalog = distrelec_LVContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = lv]; localizedUrlLink[lang = lv]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; /lv/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; /lv/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; /lv/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; /lv/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; /lv/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; /lv/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; /lv/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; /lv/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; /lv/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; /lv/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; /lv/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; /lv/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = lv]   ;
+                                ; pdpTopBrandsComponent      ;                          ; Populārākie zīmoli ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Tas ir mūsu spēkos ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = lv]                                    ;
+                                ; pdpTopBrandsComponent      ;                          ; /lt/manufacturer-stores/cms/manufacturer?no-cache=true   ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.elfadistrelec.lv/lv/pakalpojumi/cms/services ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = lv]                                            ;
+                                ; pdpTopBrandsComponent      ;                          ; Skatīt visus ražotājus                                            ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Lasiet vairāk par to, kā Elfa Distrelec veicina biznesa attīstību ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+###############
+# NETHERLANDS #
+###############
+
+$contentCatalog = distrelec_NLContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = en]; media(code, $contentCV)[lang = nl]; localizedUrlLink[lang = en]                                                ; localizedUrlLink[lang = nl]
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; brandImage1                       ; /en/manufacturer/3m/man_mmm?queryFromSuggest=true                          ; /nl/manufacturer/3m/man_mmm?queryFromSuggest=true
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; brandImage2                       ; /en/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ; /nl/manufacturer/alpha-wire/man_alw?queryFromSuggest=true
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; brandImage3                       ; /en/manufacturer/arduino/man_aio?queryFromSuggest=true                     ; /nl/manufacturer/arduino/man_aio?queryFromSuggest=true
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; brandImage4                       ; /en/manufacturer/fluke/man_flu?queryFromSuggest=true                       ; /nl/manufacturer/fluke/man_flu?queryFromSuggest=true
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; brandImage5                       ; /en/manufacturer/harting/man_har?queryFromSuggest=true                     ; /nl/manufacturer/harting/man_har?queryFromSuggest=true
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; brandImage6                       ; /en/manufacturer/kemet/man_kem?queryFromSuggest=true                       ; /nl/manufacturer/kemet/man_kem?queryFromSuggest=true
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; brandImage7                       ; /en/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ; /nl/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; brandImage8                       ; /en/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ; /nl/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; brandImage9                       ; /en/manufacturer/siemens/man_sie?queryFromSuggest=true                     ; /nl/manufacturer/siemens/man_sie?queryFromSuggest=true
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; brandImage10                      ; /en/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ; /nl/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; brandImage11                      ; /en/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ; /nl/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; brandImage12                      ; /en/manufacturer/weller/man_wel?queryFromSuggest=true                      ; /nl/manufacturer/weller/man_wel?queryFromSuggest=true
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = en]  ; title[lang = nl] ;
+                                ; pdpTopBrandsComponent      ;                          ; Top Brands        ; Topmerken        ;
+                                ; pdpWeMakeItHappenComponent ;                          ; We make it happen ; Wij zorgen ervoo ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = en]                                  ; topLinkUrl[lang = nl]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /en/manufacturer-stores/cms/manufacturer?no-cache=true ; /nl/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.nl/en/service/cms/services       ; https://www.distrelec.nl/nl/service/cms/services       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = en]                            ; topLinkText[lang = nl]                               ;
+                                ; pdpTopBrandsComponent      ;                          ; View All Manufacturers                            ; Bekijk alle fabrikanten                              ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Read more about how Distrelec help drive business ; Lees meer over hoe Distrelec bedrijven vooruit helpt ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+##########
+# NORWAY #
+##########
+
+$contentCatalog = distrelec_NOContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = en]; media(code, $contentCV)[lang = no]; localizedUrlLink[lang = en]                                                ; localizedUrlLink[lang = no]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; brandImage1                       ; /en/manufacturer/3m/man_mmm?queryFromSuggest=true                          ; /no/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; brandImage2                       ; /en/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ; /no/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; brandImage3                       ; /en/manufacturer/arduino/man_aio?queryFromSuggest=true                     ; /no/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; brandImage4                       ; /en/manufacturer/fluke/man_flu?queryFromSuggest=true                       ; /no/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; brandImage5                       ; /en/manufacturer/harting/man_har?queryFromSuggest=true                     ; /no/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; brandImage6                       ; /en/manufacturer/kemet/man_kem?queryFromSuggest=true                       ; /no/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; brandImage7                       ; /en/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ; /no/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; brandImage8                       ; /en/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ; /no/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; brandImage9                       ; /en/manufacturer/siemens/man_sie?queryFromSuggest=true                     ; /no/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; brandImage10                      ; /en/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ; /no/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; brandImage11                      ; /en/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ; /no/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; brandImage12                      ; /en/manufacturer/weller/man_wel?queryFromSuggest=true                      ; /no/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = en]  ; title[lang = no]      ;
+                                ; pdpTopBrandsComponent      ;                          ; Top Brands        ; Toppmerker            ;
+                                ; pdpWeMakeItHappenComponent ;                          ; We make it happen ; Vi får det til å skje ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = en]                                  ; topLinkUrl[lang = no]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /en/manufacturer-stores/cms/manufacturer?no-cache=true ; /no/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.elfadistrelec.no/en/services/cms/services  ; https://www.elfadistrelec.no/no/tjenester/cms/services ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = en]                            ; topLinkText[lang = no]                                                     ;
+                                ; pdpTopBrandsComponent      ;                          ; View All Manufacturers                            ; Vis alle produsenter                                                       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Read more about how Distrelec help drive business ; Les mer om hvordan Elfa Distrelec bidrar til å drive virksomheten fremover ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+##########
+# POLAND #
+##########
+
+$contentCatalog = distrelec_PLContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = en]; media(code, $contentCV)[lang = pl]; localizedUrlLink[lang = en]                                                ; localizedUrlLink[lang = pl]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; brandImage1                       ; /en/manufacturer/3m/man_mmm?queryFromSuggest=true                          ; /pl/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; brandImage2                       ; /en/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ; /pl/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; brandImage3                       ; /en/manufacturer/arduino/man_aio?queryFromSuggest=true                     ; /pl/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; brandImage4                       ; /en/manufacturer/fluke/man_flu?queryFromSuggest=true                       ; /pl/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; brandImage5                       ; /en/manufacturer/harting/man_har?queryFromSuggest=true                     ; /pl/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; brandImage6                       ; /en/manufacturer/kemet/man_kem?queryFromSuggest=true                       ; /pl/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; brandImage7                       ; /en/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ; /pl/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; brandImage8                       ; /en/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ; /pl/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; brandImage9                       ; /en/manufacturer/siemens/man_sie?queryFromSuggest=true                     ; /pl/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; brandImage10                      ; /en/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ; /pl/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; brandImage11                      ; /en/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ; /pl/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; brandImage12                      ; /en/manufacturer/weller/man_wel?queryFromSuggest=true                      ; /pl/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = en]  ; title[lang = pl]         ;
+                                ; pdpTopBrandsComponent      ;                          ; Top Brands        ; Najlepsze marki          ;
+                                ; pdpWeMakeItHappenComponent ;                          ; We make it happen ; Z nami osiągniesz sukces ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = en]                                  ; topLinkUrl[lang = pl]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /en/manufacturer-stores/cms/manufacturer?no-cache=true ; /pl/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.elfadistrelec.pl/en/services/cms/services  ; https://www.elfadistrelec.pl/pl/us-ugi/cms/services    ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = en]                            ; topLinkText[lang = pl]                                               ;
+                                ; pdpTopBrandsComponent      ;                          ; View All Manufacturers                            ; Wyświetl wszystkich producentów                                      ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Read more about how Distrelec help drive business ; Dowiedz się więcej o tym, jak Distrelec pomaga w prowadzeniu biznesu ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+
+###########
+# ROMANIA #
+###########
+
+$contentCatalog = distrelec_ROContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = ro]; localizedUrlLink[lang = ro]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; /ro/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; /ro/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; /ro/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; /ro/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; /ro/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; /ro/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; /ro/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; /ro/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; /ro/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; /ro/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; /ro/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; /ro/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = ro]                      ;
+                                ; pdpTopBrandsComponent      ;                          ; Mărci de top                          ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Vă ajutăm să realizaţi ceea ce doriţi ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = ro]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /ro/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.ro/ro/servicii/cms/services      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = ro]                                                            ;
+                                ; pdpTopBrandsComponent      ;                          ; Vizualizare toţi producătorii                                                     ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Citiţi mai multe despre modul în care Distrelec ajută la impulsionarea afacerilor ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+##########
+# SWEDEN #
+##########
+
+$contentCatalog = distrelec_SEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = en]; media(code, $contentCV)[lang = sv]; localizedUrlLink[lang = en]                                                ; localizedUrlLink[lang = sv]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; brandImage1                       ; /en/manufacturer/3m/man_mmm?queryFromSuggest=true                          ; /sv/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; brandImage2                       ; /en/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ; /sv/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; brandImage3                       ; /en/manufacturer/arduino/man_aio?queryFromSuggest=true                     ; /sv/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; brandImage4                       ; /en/manufacturer/fluke/man_flu?queryFromSuggest=true                       ; /sv/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; brandImage5                       ; /en/manufacturer/harting/man_har?queryFromSuggest=true                     ; /sv/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; brandImage6                       ; /en/manufacturer/kemet/man_kem?queryFromSuggest=true                       ; /sv/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; brandImage7                       ; /en/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ; /sv/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; brandImage8                       ; /en/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ; /sv/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; brandImage9                       ; /en/manufacturer/siemens/man_sie?queryFromSuggest=true                     ; /sv/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; brandImage10                      ; /en/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ; /sv/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; brandImage11                      ; /en/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ; /sv/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; brandImage12                      ; /en/manufacturer/weller/man_wel?queryFromSuggest=true                      ; /sv/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = en]  ; title[lang = sv]     ;
+                                ; pdpTopBrandsComponent      ;                          ; Top Brands        ; Ledande märken       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; We make it happen ; Vi får det att hända ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = en]                                  ; topLinkUrl[lang = sv]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /en/manufacturer-stores/cms/manufacturer?no-cache=true ; /sv/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.elfa.se/en/services/cms/services           ; https://www.elfa.se/sv/tj-nster/cms/services           ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = en]                            ; topLinkText[lang = sv]                                ;
+                                ; pdpTopBrandsComponent      ;                          ; View All Manufacturers                            ; Visa alla tillverkare                                 ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Read more about how Distrelec help drive business ; Läs mer om hur Elfa Distrelec kan hjälpa ditt företag ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;
+
+
+############
+# SLOVAKIA #
+############
+
+$contentCatalog = distrelec_SKContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/homepage_redesign/images
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]         ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];
+                   ;                          ; ProductDetailsPageTemplate ; $jarResourceCms/structure-view/structure_productDetailsPageTemplate.vm                                 ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append];
+                             ; BottomContent      ;                                                                                 ; DistComponentGroup                      ;
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true]; $contentCV[unique = true]; mode(code[default = NORMAL]); name             ; media(code, $contentCV)[lang = sk]; localizedUrlLink[lang = sk]                                                ;
+                                 ; pbpTopBrand1      ;                          ;                             ; PDP Top Brand 1  ; brandImage1                       ; /sk/manufacturer/3m/man_mmm?queryFromSuggest=true                          ;
+                                 ; pbpTopBrand2      ;                          ;                             ; PDP Top Brand 2  ; brandImage2                       ; /sk/manufacturer/alpha-wire/man_alw?queryFromSuggest=true                  ;
+                                 ; pbpTopBrand3      ;                          ;                             ; PDP Top Brand 3  ; brandImage3                       ; /sk/manufacturer/arduino/man_aio?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand4      ;                          ;                             ; PDP Top Brand 4  ; brandImage4                       ; /sk/manufacturer/fluke/man_flu?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand5      ;                          ;                             ; PDP Top Brand 5  ; brandImage5                       ; /sk/manufacturer/harting/man_har?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand6      ;                          ;                             ; PDP Top Brand 6  ; brandImage6                       ; /sk/manufacturer/kemet/man_kem?queryFromSuggest=true                       ;
+                                 ; pbpTopBrand7      ;                          ;                             ; PDP Top Brand 7  ; brandImage7                       ; /sk/manufacturer/omron-industrial-automation/man_omr?queryFromSuggest=true ;
+                                 ; pbpTopBrand8      ;                          ;                             ; PDP Top Brand 8  ; brandImage8                       ; /sk/manufacturer/raspberry-pi/man_rpi?queryFromSuggest=true                ;
+                                 ; pbpTopBrand9      ;                          ;                             ; PDP Top Brand 9  ; brandImage9                       ; /sk/manufacturer/siemens/man_sie?queryFromSuggest=true                     ;
+                                 ; pbpTopBrand10     ;                          ;                             ; PDP Top Brand 10 ; brandImage10                      ; /sk/manufacturer/tektronix/man_tek?q=tektronix&no-cache=true               ;
+                                 ; pbpTopBrand11     ;                          ;                             ; PDP Top Brand 11 ; brandImage11                      ; /sk/manufacturer/traco-power/man_tpp?queryFromSuggest=trueh                ;
+                                 ; pbpTopBrand12     ;                          ;                             ; PDP Top Brand 12 ; brandImage12                      ; /sk/manufacturer/weller/man_wel?queryFromSuggest=true                      ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; name                  ; $contentCV[unique = true]; htmlClasses       ; components(uid, $contentCV)
+                                ; pdpTopBrandsComponent      ; PDP Top Brands        ;                          ; top-brands        ; pbpTopBrand1,pbpTopBrand2,pbpTopBrand3,pbpTopBrand4,pbpTopBrand5,pbpTopBrand6,pbpTopBrand7,pbpTopBrand8,pbpTopBrand9,pbpTopBrand10,pbpTopBrand11,pbpTopBrand12
+                                ; pdpWeMakeItHappenComponent ; PDP We Make It Happen ;                          ; we-make-it-happen ; homepageDistrelecReturnsServices,homepageDistrelecOnlineInvoiceServices,homepageDistrelecTechnicalSupportServices
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; title[lang = sk] ;
+                                ; pdpTopBrandsComponent      ;                          ; Najlepšie značky ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Uskutočnite to   ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; itemHtmlClasses;
+                                ; pdpTopBrandsComponent      ;                          ; col-md-2       ;
+                                ; pdpWeMakeItHappenComponent ;                          ; col-md-4       ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkUrl[lang = sk]                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; /sk/manufacturer-stores/cms/manufacturer?no-cache=true ;
+                                ; pdpWeMakeItHappenComponent ;                          ; https://www.distrelec.sk/sk/sluzba/cms/services        ;
+
+INSERT_UPDATE DistComponentGroup; uid[unique = true]         ; $contentCV[unique = true]; topLinkText[lang = sk]                                                  ;
+                                ; pdpTopBrandsComponent      ;                          ; Zobraziť všetkých výrobcov                                              ;
+                                ; pdpWeMakeItHappenComponent ;                          ; Prečítajte si viac o tom, ako spoločnosť Distrelec podporuje podnikanie ;
+
+
+INSERT_UPDATE ContentSlot; uid[unique = true]    ; name                    ; $contentCV[unique = true]; cmsComponents(uid, $contentCV)                   ;
+                         ; PDP-BottomContentSlot ; PDP Bottom Content Slot ;                          ; pdpTopBrandsComponent,pdpWeMakeItHappenComponent ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; $contentCV[unique = true]; contentSlot(uid, $contentCV); pageTemplate(uid, $contentCV)[unique = true]; position      ;
+                                    ; ProductDetailsPageTemplate-BottomContent ;                          ; PDP-BottomContentSlot       ; ProductDetailsPageTemplate                  ; BottomContent ;

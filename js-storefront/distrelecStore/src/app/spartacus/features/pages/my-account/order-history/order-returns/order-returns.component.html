@@ -1,0 +1,277 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-9">
+      <ng-container class="account-information-main">
+        <div class="order-return-wrapper">
+          <div class="row mt-4">
+            <div class="col-md-8 col-sm-12">
+              <h1 id="order_returns_page_title">
+                {{ 'form.return_items' | cxTranslate }}
+              </h1>
+            </div>
+            <div class="col-md-4 col-sm-12 float-md-right">
+              {{ 'rma.returns.contact.text' | cxTranslate }}
+              <a class="text-danger" routerLink="/cms/returnorrepair">{{ 'rma.returns.contact.link' | cxTranslate }}</a>
+            </div>
+          </div>
+          <div class="row mt-1">
+            <div class="col-md-12">
+              <app-action-message
+                id="orderDetails"
+                [type]="responseType"
+                [message]="responseMessage"
+              ></app-action-message>
+            </div>
+          </div>
+          <div class="row mt-5">
+            <div class="col-md-4 col-sm-12">
+              <button
+                class="btn btn-secondary btn-gray back-button"
+                id="myAccount-orderReturn-backButtonSecondary"
+                (click)="goBack()"
+              >
+                <div class="float-sm-left mr-3 d-inherit">
+                  <fa-icon [icon]="faAngleLeft"></fa-icon>
+                </div>
+                {{ 'text.account.orderHistory.orderDetails.returnItems.cancel' | cxTranslate }}
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="loadedOrderDetails; else loadingOrderDetails">
+            <div *ngFor="let entry of orderDetails.entries; let i = index">
+              <div class="row mt-4 border-top mb-4">
+                <div class="col-sm-12 col-md-6">
+                  <div class="row mt-4 mb-3">
+                    <div class="col-md-2 col-sm-12">
+                      <div class="cell">
+                        <div class="wrap-image">
+                          <img
+                            class="img-thumbnail"
+                            id="orderReturn-productImage"
+                            src="{{
+                              entry?.product?.images &&
+                              entry?.product?.images.length > 0 &&
+                              entry?.product?.images[0].url
+                                ? entry?.product?.images[0].url
+                                : '/app/spartacus/assets/media/img/missing_portrait_small.png'
+                            }}"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div class="col-md-12">
+                        <strong class="redFont">
+                          <a
+                            class="editLink"
+                            id="orderReturn-productName"
+                            [routerLink]="entry?.product?.url"
+                            [innerHTML]="entry?.product?.name"
+                          ></a>
+                        </strong>
+                      </div>
+                      <div class="col-sm-4 d-md-inline-block mt-3">
+                        <strong class="fs-small">{{ 'form.art_nr' | cxTranslate }}</strong>
+                        <br />
+                        <label class="fs-small">
+                          {{ entry?.product?.codeErpRelevant }}
+                        </label>
+                      </div>
+                      <span *ngIf="entry?.product?.typeName || entry?.product?.distManufacturer?.name">
+                        <div class="col-sm-4 d-md-inline-block mt-3">
+                          <strong class="fs-small" id="orderReturn-MPN">{{ 'form.mpn' | cxTranslate }}</strong>
+                          <br />
+                          <label class="fs-small" id="orderReturn-nArticleNumber" [title]="entry?.product?.typeName">
+                            {{ entry?.product?.typeName | slice: 0 : 10 }}..
+                          </label>
+                        </div>
+                        <div class="col-sm-4 d-md-inline-block mt-3">
+                          <strong class="fs-small" id="orderReturn-manufacturer">
+                            {{ 'form.manufacturer' | cxTranslate }}
+                          </strong>
+                          <br />
+                          <label class="fs-e-small" id="orderReturn-manufacturer-value">
+                            {{ entry?.product?.distManufacturer?.name }}
+                          </label>
+                        </div>
+                      </span>
+                      <div class="col-md-12 fs-small">
+                        <strong id="orderReturn-your-reference">{{ 'form.your_reference' | cxTranslate }}:</strong>
+                        {{ entry?.customerReference }}
+                      </div>
+                      <div class="col-md-12 fs-small">
+                        <strong id="orderReturn-qtyOrdered">{{ 'form.qty_ordered' | cxTranslate }}:</strong>
+                        {{ entry?.quantity }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-5 mt-3">
+                  <div *ngIf="entry?.rmaData.rmas.length > 0">
+                    <label id="orderReturnAlreadyCreated">{{ 'rma.returnAlreadySubmitted' | cxTranslate }}</label>
+                    <br />
+                    <p *ngFor="let return of entry?.rmaData.rmas" id="orderReturn.returnAlreadySubmitted">
+                      <strong>
+                        {{ 'rma.returnID' | cxTranslate }}
+                        {{ return.rmaNumber }} ({{ 'rma.status.' + return.rmaItemStatus | cxTranslate }})
+                      </strong>
+                    </p>
+                    <br />
+                  </div>
+
+                  <ng-container
+                    *ngIf="entry?.rmaData.notAllowed || !orderDetails?.validForReturn; else displayReturnReasons"
+                  >
+                    <p
+                      *ngIf="entry?.rmaData.rmas.length === 0"
+                      class="editLink"
+                      [innerHtml]="'rma.returnDateIssue' | cxTranslate: { '0': contactSupport }"
+                    ></p>
+                  </ng-container>
+
+                  <ng-template #displayReturnReasons>
+                    <div>
+                      <strong class="fs-small">{{ 'form.return_reason' | cxTranslate }} *</strong>
+                      <ng-select
+                        class="mb-2 mt-2 fs-small"
+                        id="{{ 'mainReason' + i }}"
+                        [ngModel]="returnRequest[i]?.mainReasonId ? returnRequest[i]?.mainReasonId : '0'"
+                        (change)="onMainReasonChange($event, i, entry)"
+                      >
+                        <ng-option id="0" value="0" selected>{{ 'form.return_reason_ps' | cxTranslate }}</ng-option>
+                        <ng-option
+                          *ngFor="let mainReason of orderDetails.returnReason"
+                          [value]="mainReason"
+                          [id]="mainReason.mainReasonId"
+                        >
+                          {{ mainReason.mainReasonText | cxTranslate }}
+                        </ng-option>
+                      </ng-select>
+                      <ng-select
+                        *ngIf="
+                          returnRequest[i]?.mainReason?.mainReasonId &&
+                          returnRequest[i]?.mainReason?.subReasons.length > 0
+                        "
+                        class="mt-2 fs-small"
+                        id="{{ 'subReason' + i }}"
+                        [ngModel]="returnRequest[i]?.subReason"
+                        (change)="onSubReasonChange($event, i, entry); validatePostBtn()"
+                        (ngModelChange)="returnRequest[i].subReason = $event"
+                        name="{{ 'subReason' + i }}"
+                      >
+                        <ng-option id="" value="" selected>{{ 'form.return_reason_ps' | cxTranslate }}</ng-option>
+                        <ng-option
+                          *ngFor="let subReason of returnRequest[i]?.mainReason.subReasons"
+                          [value]="subReason.subReasonId + '|' + (subReason.subReasonMessages[0] | cxTranslate)"
+                          [id]="subReason.subReasonId"
+                        >
+                          {{ subReason.subReasonMessages[0] | cxTranslate }}
+                        </ng-option>
+                      </ng-select>
+                      <br />
+                      <div *ngIf="returnRequest[i]?.subReason">
+                        <strong class="fs-small">{{ 'form.quantity' | cxTranslate }} *</strong>
+                        <div class="row">
+                          <div class="col-sm-12 col-md-4 mt-3">
+                            <input
+                              class="form-control"
+                              [value]="returnRequest[i].quantity"
+                              (input)="setQuantity($event, i, entry?.rmaData?.remainingReturnQty)"
+                              type="number"
+                              min="1"
+                              max="{{ entry?.rmaData?.remainingReturnQty }}"
+                              requried
+                            />
+                          </div>
+                          <div class="col-sm-12 col-md-6 mt-3">
+                            <label id="orderReturnQuantity">
+                              <strong>/{{ entry?.rmaData?.remainingReturnQty }}</strong>
+                              <span
+                                class="distrelecLink cursor"
+                                (click)="setMaxQuantity(i, entry?.rmaData?.remainingReturnQty)"
+                              >
+                                {{ 'form.select_max' | cxTranslate }}
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <br />
+                      <div *ngIf="returnRequest[i]?.subReason">
+                        <strong class="fs-small">{{ 'form.comments' | cxTranslate }}</strong>
+                        <textarea
+                          class="form-control form__textarea-box"
+                          [ngModel]="returnRequest[i]?.customerComment"
+                          (ngModelChange)="setComment(i, $event)"
+                          maxlength="50"
+                        ></textarea>
+                        <label class="float-right fs-small" id="returnOrder-customer-comment">
+                          {{ returnRequest[i]?.customerComment.length }} / 50
+                        </label>
+                      </div>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-md-6 col-sm-12 mt-4">
+                <button
+                  class="btn btn-secondary btn-gray back-button"
+                  id="myAccount-orderReturn-backButton"
+                  (click)="goBack()"
+                >
+                  <div class="mr-3 d-inherit">
+                    <fa-icon [icon]="faAngleLeft"></fa-icon>
+                  </div>
+                  {{ 'text.account.orderHistory.orderDetails.returnItems.cancel' | cxTranslate }}
+                </button>
+              </div>
+              <div *ngIf="hasAnyRmaAllowedEntry()" class="col-md-6 col-sm-12 mt-4 text-md-right">
+                <img
+                  *ngIf="submitting"
+                  class="min-width"
+                  id="orderReturn-loadingContinue"
+                  src="app/spartacus/assets/media/spinner.gif"
+                />
+                <button
+                  *ngIf="!submitting"
+                  class="btn btn-secondary btn-distrelec"
+                  id="orderReturn-continueButton"
+                  [disabled]="enablePostButton ? null : 'disabled'"
+                  (click)="postOrderReturns()"
+                >
+                  {{ 'text.account.orderHistory.orderDetails.returnItems.continue' | cxTranslate }}
+                  <div class="d-inherit">
+                    <fa-icon [icon]="faAngleRight"></fa-icon>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #loadingOrderDetails>
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+              <img id="orderReturn-LoadingOrderDetails" src="app/spartacus/assets/media/spinner.gif" />
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

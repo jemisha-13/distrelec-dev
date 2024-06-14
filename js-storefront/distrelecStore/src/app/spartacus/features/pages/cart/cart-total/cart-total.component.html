@@ -1,0 +1,175 @@
+<ng-container *ngIf="cartData$ | async as cartData">
+  <div
+    *ngIf="userId$ | async as userId"
+    class="calc-wrapper"
+    id="cart-total"
+    [formGroup]="cartForm"
+    [class.is-totals-open]="mobileCartTotalsOpened"
+  >
+    <ng-container *ngIf="updateCart_ | async">
+      <div class="overlay">
+        <div class="bd-cart-recalculate-layer"></div>
+
+        <div class="btn-recalculate-wrap">
+          <button
+            class="btn btn-recalculate"
+            id="cart-total-recalc-button"
+            [disabled]="isRecalculateInProgress_ | async"
+            (click)="triggerRecalculateCart(userId)"
+          >
+            <ng-container *ngIf="!isLoading" id="cart.recalculate">
+              {{ 'cart.recalculate' | cxTranslate }}
+            </ng-container>
+
+            <ng-container *ngIf="isLoading">
+              <fa-icon [icon]="faSync" spin="true"></fa-icon>
+            </ng-container>
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="calc-box">
+      <div class="calc-row calc-row-subtotal">
+        <div class="calc-cell nth-1" id="cart.subtotal">
+          {{ 'cart.subtotal' | cxTranslate }}
+        </div>
+
+        <div class="calc-cell nth-2" id="cart-subtotal-price">
+          <span class="currency">{{ cartData?.subTotal?.currencyIso }}</span>
+        </div>
+
+        <div class="calc-cell nth-3">{{ cartData?.subTotal?.value | price }}</div>
+      </div>
+
+      <div *ngIf="cartData.totalDiscounts?.value > 0" class="calc-row calc-row-discount">
+        <div class="calc-cell nth-1" id="cart.discount">
+          {{ 'form.discount' | cxTranslate }}
+        </div>
+
+        <div class="calc-cell nth-2" id="cart-discount-price">
+          <span class="currency">{{ cartData.totalDiscounts.currencyIso }}</span>
+        </div>
+
+        <div class="calc-cell nth-3">- {{ cartData.totalDiscounts.value | price }}</div>
+      </div>
+
+      <div *ngIf="cartData?.deliveryMode" class="calc-row calc-row-shipping" id="cart-shipping-price">
+        <div class="calc-cell nth-1" id="cart.shipping">
+          {{ 'cart.shipping' | cxTranslate }}
+          <span class="delivery-name" id="cart-shipping-delivery-info">
+            {{ cartData?.deliveryMode.name }}
+            <ng-container *ngIf="cartData?.deliveryMode.description">
+              ({{ cartData.deliveryMode.description }})
+            </ng-container>
+          </span>
+        </div>
+
+        <div class="calc-cell nth-2" id="cart-shipping-delivery-currency">
+          <span class="currency">{{ cartData?.deliveryCost.currencyIso }}</span>
+        </div>
+
+        <div class="calc-cell nth-3" id="cart-shipping-delivery-price">
+          <ngContainer *ngIf="cartData?.deliveryCost.value > 0; else freeText">
+            {{ cartData?.deliveryCost.value | price }}
+          </ngContainer>
+
+          <ng-template #freeText>
+            {{ 'cart.free' | cxTranslate }}
+          </ng-template>
+        </div>
+      </div>
+
+      <div *ngIf="cartData?.erpVoucherInfoData" class="calc-row calc-row-voucher">
+        <div class="calc-cell nth-1" id="cart.voucher_title">
+          {{ 'cart.voucher_title' | cxTranslate }}
+        </div>
+
+        <div class="calc-cell nth-2" id="cart-voucher-currency">
+          <span class="currency">{{ cartData?.totalPrice?.currencyIso }}</span>
+        </div>
+
+        <div class="calc-cell nth-3" id="cart-voucher-price">
+          - {{ cartData?.erpVoucherInfoData.fixedValue.value | price }}
+        </div>
+      </div>
+
+      <div class="calc-row calc-row-tax">
+        <div class="calc-cell nth-1" id="cart.tax_title">
+          {{ 'cart.tax_title' | cxTranslate }}
+        </div>
+
+        <div class="calc-cell nth-2" id="cart-tax-currency">
+          <span class="currency">{{ cartData?.totalTax?.currencyIso }}</span>
+        </div>
+
+        <div class="calc-cell nth-3" id="cart-tax-price">
+          {{ cartData?.totalTax?.value | price }}
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-box calc-box-total">
+      <div class="calc-row calc-row-total">
+        <div class="calc-cell nth-1" id="cart.total">
+          {{ 'cart.total' | cxTranslate }}
+
+          <span *ngIf="cartData.deliveryCostExcluded" class="delivery-name" id="cart-exclude-delivery-info">
+            {{ 'cart.pricebox.excluded.shipping.cost' | cxTranslate }}
+          </span>
+        </div>
+
+        <div class="calc-cell nth-2">
+          <span class="currency" id="cart-total-currency">{{ cartData?.totalPrice?.currencyIso }}</span>
+        </div>
+
+        <div class="calc-cell nth-3" id="cart-total-totalPriceWithTax">
+          {{ cartData?.totalPrice?.value | price }}
+        </div>
+      </div>
+
+      <div class="is-show-total-mobile">
+        <button (click)="mobileCartTotalsOpened = !mobileCartTotalsOpened" type="button">
+          {{ 'cart.pricecalcbox.total.show' | cxTranslate }}
+        </button>
+      </div>
+    </div>
+
+    <app-cart-voucher
+      [cartForm]="cartForm"
+      [isVoucherError_]="isVoucherError_"
+      [isVoucherSuccess_]="isVoucherSuccess_"
+      [erpVoucherInfoData]="cartData?.erpVoucherInfoData"
+    ></app-cart-voucher>
+
+    <app-cart-reevoo-checkbox [cartData]="cartData"></app-cart-reevoo-checkbox>
+
+    <ng-container *ngIf="!cartData?.creditBlocked">
+      <div class="delivery-mode" id="cart-total-delivery-message">
+        <ng-container *ngIf="cartData?.deliveryMode?.defaultDeliveryMode">
+          * {{ 'cart.default_delivery' | cxTranslate }}
+        </ng-container>
+
+        <ng-container *ngIf="!cartData?.deliveryMode?.defaultDeliveryMode || userId === 'anonymous'">
+          * {{ 'cart.standard_delivery' | cxTranslate }}
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <div class="checkout-proceed">
+      <button
+        class="btn mat-button mat-button--action-green"
+        id="cart-total-proceed-button"
+        [class.overlayed]="updateCart_ | async"
+        [disabled]="isProceedToCheckoutDisabled$ | async"
+        (click)="onCheckout(userId, cartData)"
+      >
+        {{ 'cart.proceed_checkout' | cxTranslate }}
+      </button>
+    </div>
+
+    <app-cart-quotation></app-cart-quotation>
+
+    <app-component-loading-spinner *ngIf="isCartLoading_ | async"></app-component-loading-spinner>
+  </div>
+</ng-container>

@@ -1,0 +1,259 @@
+$contentCatalog = distrelec_IntContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+$atContentCatalog = distrelec_ATContentCatalog
+$atContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $atContentCatalog]), CatalogVersion.version[default = Online])[default = $atContentCatalog:Online]
+
+$beContentCatalog = distrelec_BEContentCatalog
+$beContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $beContentCatalog]), CatalogVersion.version[default = Online])[default = $beContentCatalog:Online]
+
+$chContentCatalog = distrelec_CHContentCatalog
+$chContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $chContentCatalog]), CatalogVersion.version[default = Online])[default = $chContentCatalog:Online]
+
+$czContentCatalog = distrelec_CZContentCatalog
+$czContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $czContentCatalog]), CatalogVersion.version[default = Online])[default = $czContentCatalog:Online]
+
+$deContentCatalog = distrelec_DEContentCatalog
+$deContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $deContentCatalog]), CatalogVersion.version[default = Online])[default = $deContentCatalog:Online]
+
+$dkContentCatalog = distrelec_DKContentCatalog
+$dkContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $dkContentCatalog]), CatalogVersion.version[default = Online])[default = $dkContentCatalog:Online]
+
+$eeContentCatalog = distrelec_EEContentCatalog
+$eeContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $eeContentCatalog]), CatalogVersion.version[default = Online])[default = $eeContentCatalog:Online]
+
+$exContentCatalog = distrelec_EXContentCatalog
+$exContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $exContentCatalog]), CatalogVersion.version[default = Online])[default = $exContentCatalog:Online]
+
+$fiContentCatalog = distrelec_FIContentCatalog
+$fiContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $fiContentCatalog]), CatalogVersion.version[default = Online])[default = $fiContentCatalog:Online]
+
+$huContentCatalog = distrelec_HUContentCatalog
+$huContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $huContentCatalog]), CatalogVersion.version[default = Online])[default = $huContentCatalog:Online]
+
+$itContentCatalog = distrelec_ITContentCatalog
+$itContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $itContentCatalog]), CatalogVersion.version[default = Online])[default = $itContentCatalog:Online]
+
+$ltContentCatalog = distrelec_LTContentCatalog
+$ltContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $ltContentCatalog]), CatalogVersion.version[default = Online])[default = $ltContentCatalog:Online]
+
+$lvContentCatalog = distrelec_LVContentCatalog
+$lvContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $lvContentCatalog]), CatalogVersion.version[default = Online])[default = $lvContentCatalog:Online]
+
+$nlContentCatalog = distrelec_NLContentCatalog
+$nlContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $nlContentCatalog]), CatalogVersion.version[default = Online])[default = $nlContentCatalog:Online]
+
+$noContentCatalog = distrelec_NOContentCatalog
+$noContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $noContentCatalog]), CatalogVersion.version[default = Online])[default = $noContentCatalog:Online]
+
+$plContentCatalog = distrelec_PLContentCatalog
+$plContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $plContentCatalog]), CatalogVersion.version[default = Online])[default = $plContentCatalog:Online]
+
+$roContentCatalog = distrelec_ROContentCatalog
+$roContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $roContentCatalog]), CatalogVersion.version[default = Online])[default = $roContentCatalog:Online]
+
+$seContentCatalog = distrelec_SEContentCatalog
+$seContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $seContentCatalog]), CatalogVersion.version[default = Online])[default = $seContentCatalog:Online]
+
+$skContentCatalog = distrelec_SKContentCatalog
+$skContentCatalog = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $skContentCatalog]), CatalogVersion.version[default = Online])[default = $skContentCatalog:Online]
+
+
+INSERT_UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                 ; $contentCV[unique = true]; name
+                                                      ; InternationalHeaderFilterContainer ;                          ; International HomePage Catalog Filter Container
+
+INSERT_UPDATE ContentSlot; uid[unique = true]                ; $contentCV[unique = true]; name                                  ; cmsComponents(uid, $contentCV)
+                         ; InternationalHeaderContentSlot ;                          ; International Header Content Slot ; InternationalHeaderFilterContainer
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'Brand1Template']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CategoryPageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'CMS3PageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ContentPageFullWidthWithoutNavigationTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ContentPageWithNavigationTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ContentPageWithoutNavigationTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'HomePage2018Template']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'HomePageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'JobDetailPageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ManufacturerStoreDetailPageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'NewsDetailPageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductDetailsPageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductFinderPageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductFinderResultPageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ProductListPageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'RequestInvoicePaymentModeEmailTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ResponsiveContentPageFullWidthWithoutNavigation']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ResponsiveContentPageWithNavigation']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'ResponsiveContentPageWithoutNavigation']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SearchFeedbackSentPageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'StorePageTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'TabedContentPageWithoutNavigationTemplate']; validComponentTypes(code)[mode = append]
+                             ; HeaderWrapperSlot      ;                                                                                 ; DistComponentGroup,DistLocalCatalogFilterComponentContainer
+
+
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-Brand1Template;;Brand1Template   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-CategoryPageTemplate;;CategoryPageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-CMS3PageTemplate;;CMS3PageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-ContentPageFullWidthWithoutNavigationTemplate;;ContentPageFullWidthWithoutNavigationTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-ContentPageWithNavigationTemplate;;ContentPageWithNavigationTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-ContentPageWithoutNavigationTemplate;;ContentPageWithoutNavigationTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-HomePage2018Template;;HomePage2018Template   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-HomePageTemplate;;HomePageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-JobDetailPageTemplate;;JobDetailPageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-ManufacturerStoreDetailPageTemplate;;ManufacturerStoreDetailPageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-NewsDetailPageTemplate;;NewsDetailPageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-ProductDetailsPageTemplate;;ProductDetailsPageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-ProductFinderPageTemplate;;ProductFinderPageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-ProductFinderResultPageTemplate;;ProductFinderResultPageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-ProductListPageTemplate;;ProductListPageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-RequestInvoicePaymentModeEmailTemplate;;RequestInvoicePaymentModeEmailTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-ResponsiveContentPageFullWidthWithoutNavigation;;ResponsiveContentPageFullWidthWithoutNavigation   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-ResponsiveContentPageWithNavigation;;ResponsiveContentPageWithNavigation   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-ResponsiveContentPageWithoutNavigation;;ResponsiveContentPageWithoutNavigation   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-SearchFeedbackSentPageTemplate;;SearchFeedbackSentPageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-StorePageTemplate;;StorePageTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]               ; $contentCV[unique = true]; pageTemplate(uid, $contentCV); position      ; contentSlot(uid, $contentCV)[mode = append]
+                                    ; HeaderWrapper-TabedContentPageWithoutNavigationTemplate;;TabedContentPageWithoutNavigationTemplate   ; HeaderWrapper ; InternationalHeaderContentSlot
+
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $atContentCatalog)
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $beContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $chContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $czContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $deContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $dkContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $eeContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $exContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $fiContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $huContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $itContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $ltContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $lvContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $nlContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $noContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $plContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $roContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $seContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent
+
+UPDATE DistLocalCatalogFilterComponentContainer; uid[unique = true]                      ; $contentCV[unique = true]; applicableComponents(uid, $skContentCatalog)[mode = append]
+                                               ; InternationalHeaderFilterContainer ;                          ; LogoComponent,CategoryMainNavComponent,HeaderLoginComponent,MiniCartComponent,SearchBoxComponent

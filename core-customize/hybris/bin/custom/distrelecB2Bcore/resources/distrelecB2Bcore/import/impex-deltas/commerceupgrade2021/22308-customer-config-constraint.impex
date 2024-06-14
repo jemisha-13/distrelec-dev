@@ -1,0 +1,9 @@
+UPDATE DynamicConstraint;id[unique=true]                    ;expression;
+                        ;DistCustomerConfigUniqueConstraint ;"
+searchService=ctx.getBean(""flexibleSearchService"");
+paramMap=new HashMap();
+paramMap.put(""company"", ref.company);
+paramMap.put(""pk"", ref.pk);
+searchResult=searchService.search(""SELECT {pk} FROM {DistCustomerConfig} WHERE {company}=?company AND {pk}!=?pk"", paramMap);
+return searchResult.getCount()==0;
+"

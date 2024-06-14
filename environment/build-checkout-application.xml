@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+====================================================================== 
+project: Distrelec Relaunch 2012
+date:    12.02.2013 
+author:  rmeier
+======================================================================
+
+	************  Attention: new modules must be inserted always twice. ************
+-->
+
+<project name="hybris" basedir=".">
+	<!--
+	=================================
+	macro: download hybris files
+	=================================
+	-->
+
+	<macrodef name="downloadHybrisFiles">
+		<sequential>
+			<delete dir="${vendor.dir}" />
+			<mkdir dir="${vendor.dir}" />
+
+			<echo message="Download all hybris extensions to ${vendor.dir}." />
+
+			<!--
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-platform-4.8.1.zip" dest="${vendor.dir}/hybris-platform.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-multichannel-suite-4.8.1.zip" dest="${vendor.dir}/hybris-multichannel-suite.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-sampledata-4.8.0.zip" dest="${vendor.dir}/hybris-sampledata.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-commerce-frontend-templates-4.8.0.zip" dest="${vendor.dir}/hybris-commerce-frontend-templates.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-technology-templates-4.8.0.zip" dest="${vendor.dir}/hybris-technology-templates.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-multichannel-accelerator-4.8.0.zip" dest="${vendor.dir}/hybris-multichannel-accelerator.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-b2b-multichannel-accelerator-4.8.0.zip" dest="${vendor.dir}/hybris-b2b-multichannel-accelerator.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-telco-accelerator-4.8.0.zip" dest="${vendor.dir}/hybris-telco-accelerator.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-import-cockpit-module-4.8.0.zip" dest="${vendor.dir}/hybris-import-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-productcockpit-module-4.8.0.zip" dest="${vendor.dir}/hybris-productcockpit-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-classification-module-4.8.0.zip" dest="${vendor.dir}/hybris-classification-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-bmecat-module-4.8.0.zip" dest="${vendor.dir}/hybris-bmecat-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-dam-module-4.8.0.zip" dest="${vendor.dir}/hybris-dam-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-advanced-personalization-module-4.8.0.zip" dest="${vendor.dir}/hybris-advanced-personalization-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-b2b-commerce-module-4.8.0.zip" dest="${vendor.dir}/hybris-b2b-commerce-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-voucher-module-4.8.0.zip" dest="${vendor.dir}/hybris-voucher-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-social-commerce-module-4.8.0.zip" dest="${vendor.dir}/hybris-social-commerce-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-payment-module-4.8.0.zip" dest="${vendor.dir}/hybris-payment-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-search-and-nav-module-4.8.0.zip" dest="${vendor.dir}/hybris-search-and-nav-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-promotion-module-4.8.0.zip" dest="${vendor.dir}/hybris-promotion-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-order-management-module-4.8.0.zip" dest="${vendor.dir}/hybris-order-management-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-oci-module-4.8.0.zip" dest="${vendor.dir}/hybris-oci-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-customer-service-module-4.8.0.zip" dest="${vendor.dir}/hybris-customer-service-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-wcms-module-4.8.0.zip" dest="${vendor.dir}/hybris-wcms-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-mobile-module-4.8.0.zip" dest="${vendor.dir}/hybris-mobile-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-print-module-4.8.0.zip" dest="${vendor.dir}/hybris-print-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+
+			<get src="https://download.hybris.com/resources/releases/4.8/hybris-reporting-module-4.8.0.zip" dest="${vendor.dir}/hybris-reporting-module.zip" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" />
+
+			-->
+            <get src="http://devops.distrelec.com/hybris/dist_hy62.tar.gz" dest="${vendor.dir}/dist_hy62.tar.gz" username="${hybrisRepositoryUsername}" password="${hybrisRepositoryPassword}" verbose="false" />
+          
+		</sequential>
+	</macrodef>
+
+</project>

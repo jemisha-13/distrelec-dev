@@ -1,0 +1,189 @@
+<div
+  #productCard
+  [class]="'product_card ' + orientation.toLowerCase()"
+  [id]="'product_card_' + productCode"
+  [class.hasCampaign]="hasCampaign"
+>
+  @if(orientation.toLowerCase() === 'portrait') {
+    <div
+      class="d-flex align-items-center brand"
+      [ngClass]="{ 'justify-content-end': labelDisplay === 'false' || getPromotionText(productData) === '' }"
+    >
+      @if(topDisplay === 'true') {
+        @if(labelDisplay === 'true') {
+          <app-label
+            *ngIf="getPromotionText(productData) !== ''"
+            [text]="getPromotionText(productData)"
+            [color]="getLabelColor(productData.activePromotionLabels[0].code)"
+            [style]="'fill'"
+            size="medium"
+          ></app-label>
+        }
+        @if(brandLogo === 'true') {
+          @if(manufacturerImage) {
+            <div class="brand-manufacturer" [class]="manufacturerImageClass">
+              @if(manufacturerImage.isText) {
+                <span class="alternate-text">
+                  {{ manufacturerImage.value }}
+                </span>
+              } @else {
+                <img
+                  [src]="manufacturerImage.value"
+                  [alt]="brandAlternateText ?? productData.distManufacturer.name"
+                />
+              }
+            </div>
+          }
+        }
+      }
+    </div>
+  }
+
+  <a [routerLink]="productData.url" [queryParams]="{ int_cid: promotionParameter }" queryParamsHandling="merge">
+    @if(isImage !== 'false') {
+      <div class="product_card-image" id="product_card_image">
+        <img
+          [ngClass]="{ 'landscape-image': orientation.toLocaleLowerCase() === 'landscape' }"
+          [src]="productImage$ | async"
+          [title]="productData.name"
+          [alt]="productData.name"
+          [height]="hasCampaign ? 180 : 210"
+          width="335"
+        />
+      </div>
+    }
+  </a>
+
+  <div class="product-info">
+    @if (orientation.toLowerCase() === 'landscape' && topDisplay === 'true') {
+      <div
+        class="d-flex mt-n2 align-items-center m-0 mb-1 brand"
+        [ngClass]="{ 'justify-content-end': labelDisplay === 'false' || getPromotionText(productData) === '' }"
+      >
+        @if(labelDisplay === 'true') {
+          <app-label
+            *ngIf="getPromotionText(productData) !== ''"
+            [text]="getPromotionText(productData)"
+            [color]="getLabelColor(getPromotionText(productData))"
+            [style]="'fill'"
+            size="medium"
+          ></app-label>
+        }
+
+        @if(brandLogo === 'true') {
+          <img
+            [src]="manufacturerImage"
+            [alt]="brandAlternateText ?? productData.distManufacturer.name"
+          />
+        }
+      </div>
+    }
+
+    <a [routerLink]="productData.url" [queryParams]="{ int_cid: promotionParameter }" queryParamsHandling="merge">
+      @if(isTitle !== 'false') {
+        <span class="product_card-title" id="product_card_title">
+          {{ customTitle ?? productData.name }}
+        </span>
+      }
+    </a>
+
+    @if(hasCampaign) {
+      <span class="product_card-manufacturer-name">
+        {{ brandAlternateText ?? productData.distManufacturer.name }}
+      </span>
+    }
+
+    @if(isArticle !== 'false') {
+      <div class="product_card-details" id="product_card_artNr_mpn">
+        @if(copiedState$ | async; as copiedState) {
+          <div class="product-number">
+            <app-dist-product-number
+              [title]="artNrText"
+              [type]="{ artNr: productData.code }"
+              (copyClick)="handleCopy($event, 'article')"
+              artNrId="product-card__artNr"
+            ></app-dist-product-number>
+            @if(copiedState['article_' + productCode]) {
+              <app-tooltip
+                class="product-tooltip d-lg-block"
+                [position]="'top-left'"
+                [tooltipID]="'product_card_article_number-' + productData.code"
+              >
+                {{ productData.code }} {{ copiedText }}
+              </app-tooltip>
+            }
+          </div>
+
+          <div class="manufacturer-number">
+            @if (productData.typeName) {
+              <app-dist-product-number
+                [title]="mpnText"
+                [type]="{ MPN: productData.typeName }"
+                (copyClick)="handleCopy($event, 'manufacturer')"
+                mpnId="product-card__mpnId"
+              ></app-dist-product-number>
+            }
+            @if (copiedState['manufacturer_' + productCode]) {
+              <app-tooltip
+                class="product-tooltip__mpn d-lg-block"
+                [position]="'top-left'"
+                [tooltipID]="'product_card_manufacturer_number-' + productData.code"
+              >
+                {{ productData.typeName }} {{ copiedText }}
+              </app-tooltip>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (snippet === 'true' && customDescription !== '') {
+      <span
+        class="product_card-description"
+        id="product_card_description"
+      >
+      {{ customDescription }}
+    </span>
+    }
+
+    @if (priceData && isPrice === 'true') {
+      <div class="product_card-price" id="product_card_price">
+        <app-dist-single-price
+          [price]="isB2B() && !hasCampaign ? priceData.price?.basePrice : priceData.price?.value"
+          [currency]="priceData.price?.currencyIso"
+          [currentChannel]="channelData"
+          [componentId]="'product_card_price-' + productCode"
+          [priceLabel]="isB2B() ? excVatText : incVatText"
+          [toDecimalPlaces]="2"
+        ></app-dist-single-price>
+      </div>
+    }
+
+    @if (buttonType.toLowerCase() === 'add_to_cart') {
+      <div class="product_card-add-to-cart">
+        @if(availability$ | async; as availabilityData) {
+          <app-numeric-stepper
+            [ids]="numericStepperID"
+            [minimumQuantity]="productData.orderQuantityMinimum"
+            [quantityStep]="productData.orderQuantityStep"
+            [productCode]="productCode"
+            [control]="addToCartForm.get('quantity')"
+            [availabilityData]="availabilityData"
+            [salesStatus]="productData.salesStatus"
+          ></app-numeric-stepper>
+
+          <div class="product_card-add-to-cart-btn">
+            <app-atc-button
+              [productCode]="productCode"
+              [control]="addToCartForm.get('quantity')"
+              [shouldOpenFlyout]="true"
+              [id]="'product_card_add_to_cart_button_' + productCode"
+              [minimumQuantity]="productData.orderQuantityMinimum"
+              [availabilityData]="availabilityData"
+            ></app-atc-button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

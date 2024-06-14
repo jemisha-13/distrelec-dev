@@ -1,0 +1,18 @@
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+$lang=en
+
+############################################################################################
+# NPS Content Page
+############################################################################################
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;title[lang=$lang];defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];previewImage(code, $contentCV)[default='ContentPageModel_function_preview']
+;;categoryIndexPage;"Category Index Page";ContentPageWithoutNavigationTemplate;categoryIndexPage;"Categories index"
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;MoodImageSlot-CategoryIndexPage;Mood Image Content Slot for CategoryIndexPage;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='categoryIndexPage'];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-CategoryIndexPage;MoodImage;;MoodImageSlot-CategoryIndexPage

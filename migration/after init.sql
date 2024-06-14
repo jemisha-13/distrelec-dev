@@ -1,0 +1,1 @@
+ALTER TABLE distcodelistlp ALTER COLUMN p_description nvarchar(max);

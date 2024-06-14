@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Util
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-util" basedir=".">
+
+	<macrodef name="callback" description="Tries to call a macro defined in macroname. If the macro is not found, NO error is thrown.">
+		<attribute name="macroname" />
+		<sequential>
+			<trycatch property="e@{macroname}" reference="eref@{macroname}">
+				<try>
+					<ycallmacro name="@{macroname}" />
+				</try>
+				<catch>
+					<if>
+						<not>
+							<contains string="${e@{macroname}}" substring="macro not found" />
+						</not>
+						<then>
+							<throw refid="eref@{macroname}" />
+						</then>
+					</if>
+				</catch>
+			</trycatch>
+		</sequential>
+	</macrodef>
+
+</project>
+

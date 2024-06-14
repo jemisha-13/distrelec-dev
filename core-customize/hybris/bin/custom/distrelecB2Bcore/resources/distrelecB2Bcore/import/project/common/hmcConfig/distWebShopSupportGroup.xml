@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration xmlns="hybris.de/schemas/hmc/generic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="hybris.de/schemas/hmc/generic hmc.xsd"> 
+	<type name="B2BUnit"  mode="append">
+		<organizer>
+			<search mode = "replace">
+				<condition attribute="uid" operator="contains"/>
+				<condition attribute="name" operator="contains"/>
+				<condition attribute="erpCustomerId" operator="contains"/>
+				<condition attribute="ishopCustomerId" operator="contains"/>
+			</search>
+		</organizer>
+	</type>		
+	<type name="B2BCustomer"  mode="append">
+		<organizer>
+			<search mode = "append">
+				<condition attribute="uid" operator="contains"/>
+				<condition attribute="name" operator="contains"/>
+				<condition attribute="contactEmail" operator="contains"/>
+			</search>
+		</organizer>
+	</type>
+	<type name="Address"  mode="append">
+		<organizer>
+			<search mode = "replace">
+				<condition attribute="firstname" operator="contains"/>
+				<condition attribute="lastname" operator="contains"/>
+				<condition attribute="streetnumber" operator="contains"/>
+				<condition attribute="streetname" operator="contains"/>
+				<condition attribute="town" operator="contains"/>
+				<condition attribute="country" operator="contains"/>
+			</search>
+		</organizer>
+	</type>
+	<explorertree>
+		<!-- /Inbox -->
+		<typeref type="InboxView" mode="delete" />
+	
+		<!-- /System -->
+		<group name="system" mode="delete"  />
+
+		<!-- /Catalog -->
+		<group name="catalog" >
+			<typeref type="VariantType" mode="delete" description="Product Variant Types" />
+			<group name="catalogviews" mode="delete" description="Catalog Management Tools" />
+			<group name="classificationgroup" mode="delete" description="Classification Systems"/>
+		</group>
+
+		<!-- /Multimedia -->
+		<group name="medias">
+			<typeref type="MediaContext" mode="delete" description="Media Contexts" />
+		</group>
+		
+		<!-- /User -->
+		<group name="user" >
+			<typeref type="B2BReportingSet" mode="delete" description="B2B Reporting Set" />
+			<typeref type="B2BMerchantCheck" mode="delete" description="B2B Merchant Check" />
+		</group>
+	
+		<!-- /Order -->
+		<group name="order">
+			<typeref type="Consignment" mode="delete" description="Consignment"/>
+			<typeref type="ConsignmentEntry" mode="delete" description="Consignment Entry"/>
+			<typeref type="FraudReport" mode="delete" description="Fraud reports"/>
+			<typeref type="B2BBookingLineEntry" mode="delete" description="B2B Booking Entry"/>
+		</group>
+		
+		<!-- /Marketing -->
+		<group name="marketing">
+			<typeref type="Voucher" mode="delete" description="Voucher"/>
+			<typeref type="PromotionGroup" mode="delete" description="Promotion Groups"/>
+			<typeref type="AbstractPromotion" mode="delete" description="Promotions"/>
+			<typeref type="CustomerReview" mode="delete" description="Product Reviews"/>
+			<typeref type="BTGConfig" mode="delete" description="BTG Config"/>
+		</group>
+		
+		<!-- /Cockpit -->
+		<group name="Cockpit" mode="delete" />
+		
+		<!-- /Base Commerce -->
+		<group name="group.basecommerce" >
+			<typeref type="OrderCancelConfig" mode="delete" description="Order Cancel Configuration" />
+		</group>
+		
+		<!-- /B2B Approval Process -->
+		<group name="b2bapprovalprocessgroup" mode="delete" />
+				
+		<!-- /Product Finder -->
+		<group name="group.distrelecb2bcore.productfinder.name" mode="delete" />
+
+		<!-- /FactFinder -->
+		<group name="group.distrelecfactfindersearch.factfinder.name" >
+			<typeref type="DistFactFinderExportChannel" mode="delete" description="Channels" />
+		</group>
+		
+		<!-- /Migration -->
+		<group name="group.distrelecmigration.name" mode="delete" />				
+	
+		
+	</explorertree>
+</configuration>

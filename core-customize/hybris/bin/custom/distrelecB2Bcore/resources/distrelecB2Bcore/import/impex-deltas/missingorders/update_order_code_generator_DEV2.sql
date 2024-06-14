@@ -1,0 +1,1 @@
+UPDATE NumberSeries SET template = 'D2$' WHERE serieskey='order_code'

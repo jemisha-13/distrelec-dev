@@ -1,0 +1,742 @@
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+$contentCatalog = distrelec_ATContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_BEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_CHContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_CZContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_DEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_DKContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_EEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_EXContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_FIContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_HUContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_ITContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_LTContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_LVContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_NLContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_NOContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_PLContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_ROContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_SEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+$contentCatalog = distrelec_SKContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE PageTemplate; uid[unique = true]                     ; $contentCV[unique = true]; name                                                ; active[default = true]; frontendTemplateName;
+                          ; ResponsiveContentPageWithNavigation    ;                          ; Responsive Content Page With Navigation Template    ;                       ; layout/responsiveContentPageWithNavigation
+                          ; ResponsiveContentPageWithoutNavigation ;                          ; Responsive Content Page Without Navigation Template ;                       ; layout/responsiveContentPageWithoutNavigation
+
+UPDATE PageTemplate; $contentCV[unique = true]; uid[unique = true]                     ; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; restrictedPageTypes(code[default = ContentPage])
+                   ;                          ; ResponsiveContentPageWithNavigation    ; $jarResourceCms/structure-view/structure_responsiveContentPageWithNavigationTemplate.vm
+                   ;                          ; ResponsiveContentPageWithoutNavigation ; $jarResourceCms/structure-view/structure_responsiveContentPageWithoutNavigationTemplate.vm
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                        ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                        ; CMSLinkComponent
+                             ; MainNav            ;                                                                                        ; DistMainNavigationComponent
+                             ; LeftSideContent    ;                                                                                        ; DistLinkListComponent,DistLinkedImageComponent,DistBannerComponent,SimpleBannerComponent,CMSParagraphComponent
+                             ; Content            ;                                                                                        ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                        ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                              ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)[unique = true]; validComponentTypes(code)
+                             ; Logo               ;                                                                                           ; SimpleBannerComponent
+                             ; ServiceNav         ;                                                                                           ; CMSLinkComponent
+                             ; MainNav            ;                                                                                           ; DistMainNavigationComponent
+                             ; Content            ;                                                                                           ; SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent,DistBannerComponent,DistComponentGroup
+                             ; FooterLinks        ;                                                                                           ; FooterComponent,DistFooterComponent
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                 ; $contentCV[unique = true]; contentSlot(uid, $contentCV); position    ; pageTemplate(uid[default = ResponsiveContentPageWithoutNavigation], $contentCV)
+                                    ; Logo-ResponsiveContentPageWithoutNavigation        ;                          ; LogoSlot                    ; Logo        ;
+                                    ; ServiceNav-ResponsiveContentPageWithoutNavigation  ;                          ; ServiceNavSlot              ; ServiceNav  ;
+                                    ; MainNav-ResponsiveContentPageWithoutNavigation     ;                          ; MainNavSlot                 ; MainNav     ;
+                                    ; FooterLinks-ResponsiveContentPageWithoutNavigation ;                          ; FooterLinksSlot             ; FooterLinks ;

@@ -1,0 +1,172 @@
+<ng-container *ngIf="mode">
+  <div
+    class="ch__component__selections__item"
+    [id]="'selectDeliveryBtn' + mode.code"
+    [class.selected]="checkIfModeIsSelected()"
+    [class.pickup]="isModePickup"
+    (click)="mode.code !== billingForm.value.delivery.code && onDeliverySelection(mode)"
+  >
+    <div class="ch__component__selections__item--row">
+      <div class="ch__component__selections__item__radio-icon" [class.is-checked]="checkIfModeIsSelected()"></div>
+
+      <img
+        [class]="'delivery-mode-icon ' + deliveryModeIconClass"
+        [src]="'app/spartacus/assets/media/checkout/delivery/' + deliveryModeIconName"
+        alt="Delivery mode icon"
+      />
+
+      <div class="ch__component__selections__item__content">
+        <div class="ch__component__selections__item__content--title" [id]="mode.code + 'translation'">
+          {{ mode.name }}
+        </div>
+
+        <ng-container *ngIf="isModePickup; else notPickupCollection">
+          <ng-container *ngIf="deliveryModesWarehouses.length > 0">
+            <div class="ch__component__selections__item__content--subtitle" [id]="mode.code + 'subtitle'">
+              {{ deliveryModesWarehouses[0].streetName }} {{ deliveryModesWarehouses[0].streetNumber }},
+              {{ deliveryModesWarehouses[0].town }}.
+            </div>
+
+            <ng-container *ngIf="checkIfModeIsSelected()">
+              <div class="ch__component__selections__item__content--phone" [id]="mode.code + 'phone'">
+                <div class="row">
+                  <div class="col-md-6">
+                    <strong id="checkout.address.phone">{{ 'checkout.address.phone' | cxTranslate }}:</strong>
+                  </div>
+
+                  <div class="col-md-6 fw-m" id="deliveryWarehousePhone">
+                    {{ deliveryModesWarehouses[0].phone }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="ch__component__selections__item__content--collection" [id]="mode.code + 'collection'">
+                <div class="row">
+                  <div class="col-md-6">
+                    <strong id="checkout.delivery.collection">
+                      {{ 'checkout.delivery.collection' | cxTranslate }}:
+                    </strong>
+                  </div>
+
+                  <div class="col-md-6 fw-m">
+                    <div *ngIf="deliveryModesWarehouses[0].openingsHourMoFr" class="mb-2">
+                      <span id="checkout.delivery.monFri">
+                        {{ 'checkout.delivery.monFri' | cxTranslate }}
+                      </span>
+                      <span id="openingsHourMoFr">
+                        <br />
+                        {{ deliveryModesWarehouses[0].openingsHourMoFr }}
+                      </span>
+                    </div>
+
+                    <div *ngIf="deliveryModesWarehouses[0].openingsHourSa">
+                      <span id="checkout.delivery.sat">
+                        {{ 'checkout.delivery.sat' | cxTranslate }}
+                      </span>
+                      <span id="openingsHourSa">
+                        <br />
+                        {{ deliveryModesWarehouses[0].openingsHourSa }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #notPickupCollection>
+          <div class="ch__component__selections__item__content--subtitle" [id]="mode.code + 'description'">
+            {{ mode.description }}
+            <ng-container *ngIf="isModeExpress">
+              {{ 'checkout.express_delivery.description' | cxTranslate }}
+            </ng-container>
+          </div>
+        </ng-template>
+      </div>
+
+      <ng-container *ngIf="mode.shippingCost && (showDeliveryModePrice$ | async)">
+        <div class="ch__component__selections__item__pricing is-align-center">
+          <div [id]="mode.code + 'price'">
+            <ng-container *ngIf="mode.shippingCost.value > 0; else free">
+              {{ mode.shippingCost.currencyIso }} {{ mode.shippingCost.value | price }}
+            </ng-container>
+
+            <ng-template #free>
+              {{ 'checkout.price_free' | cxTranslate }}
+            </ng-template>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <ng-container *ngIf="checkIfModeIsSelected()">
+      <ng-container *ngIf="isModePickupToPlace && isFranceSite">
+        <div class="ch__component__info-message" id="pickupInfoTextFR">
+          <img src="app/spartacus/assets/media/checkout/delivery/Info-circle.svg" />
+
+          <div class="ch__component__info-message__content">
+            {{ 'checkout.delivery.normal_pickup_info' | cxTranslate }}
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isModePickup && deliveryModesWarehouses[0].code === '7374'">
+        <div class="ch__component__info-message" id="pickupInfo">
+          <img src="app/spartacus/assets/media/checkout/delivery/Info-circle.svg" />
+
+          <ng-container *ngIf="availableForImmediatePickup; else notAvailableForImmediatePickup">
+            <div class="ch__component__info-message__content">
+              <div id="checkout.delivery.pickup_immediate">
+                {{ 'checkout.delivery.pickup_immediate' | cxTranslate: { date: pickUpDate | date: dateFormat } }}
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-template #notAvailableForImmediatePickup>
+            <div class="ch__component__info-message__content">
+              <div id="checkout.delivery.pickup_date">
+                {{
+                  'checkout.delivery.pickup_date'
+                    | cxTranslate
+                      : {
+                          date: pickUpDate | date: dateFormat,
+                          town: deliveryModesWarehouses[0].town
+                        }
+                }}
+              </div>
+
+              <ul>
+                <li id="checkout.delivery.pickup_date_line1">
+                  {{
+                    'checkout.delivery.pickup_date_line1'
+                      | cxTranslate
+                        : {
+                            date: pickUpDate | date: dateFormat
+                          }
+                  }}
+                </li>
+
+                <li id="checkout.delivery.pickup_date_line2">
+                  {{ 'checkout.delivery.pickup_date_line2' | cxTranslate }}
+                </li>
+              </ul>
+            </div>
+          </ng-template>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isModeExpress">
+        <div class="ch__component__info-message">
+          <fa-icon id="faCircleInfo" [icon]="faCircleInfo"></fa-icon>
+
+          <div class="ch__component__info-message__content">
+            <span id="checkout.delivery.express_help_text">
+              {{ 'checkout.delivery.express_help_text' | cxTranslate }}
+            </span>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-container>

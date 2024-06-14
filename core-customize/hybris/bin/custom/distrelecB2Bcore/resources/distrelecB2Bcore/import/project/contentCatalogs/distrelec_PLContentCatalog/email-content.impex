@@ -1,0 +1,619 @@
+#
+# Import the CMS content for the Distrelec site emails
+#
+$contentCatalog=distrelec_PLContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_PL
+
+# Email page Template
+INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;active;frontendTemplateName;subject(code);htmlTemplate(code);restrictedPageTypes(code)
+;;CustomerRegistrationEmailTemplate;Customer Registration Email Template;true;customerRegistrationEmail;$cmsSiteUID-Email_Customer_Registration_Subject;$cmsSiteUID-Email_Customer_Registration_Body;EmailPage
+;;ForgottenPasswordEmailTemplate;Forgotten Password Email Template;true;forgottenPasswordEmail;$cmsSiteUID-Email_Forgotten_Password_Subject;$cmsSiteUID-Email_Forgotten_Password_Body;EmailPage
+;;SendToFriendEmailTemplate;Send To Friend Email Template;true;sendToFriendEmail;$cmsSiteUID-Email_Send_To_Friend_Subject;$cmsSiteUID-Email_Send_To_Friend_Body;EmailPage
+;;FeedbackEmailTemplate;Feedback Email Template;true;feedbackEmail;$cmsSiteUID-Email_Feedback_Subject;$cmsSiteUID-Email_Feedback_Body;EmailPage
+;;SupportEmailTemplate;Support Email Template;true;supportEmail;$cmsSiteUID-Email_Support_Subject;$cmsSiteUID-Email_Support_Body;EmailPage
+;;QuoteProductPriceEmailTemplate;Quote Product Price Email Template;true;quoteProductPriceEmail;$cmsSiteUID-Email_Quote_Product_Price_Subject;$cmsSiteUID-Email_Quote_Product_Price_Body;EmailPage
+;;CatalogPlusProductPriceRequestEmailTemplate;Catalog+ Product Price Request Email Template;true;catalogPlusProductPriceRequestEmail;$cmsSiteUID-Email_Catalog_Plus_Product_Price_Request_Subject;$cmsSiteUID-Email_Catalog_Plus_Product_Price_Request_Body;EmailPage
+;;SetInitialPasswordEmailTemplate;Set initial Password Email Template;true;setInitialPasswordEmail;$cmsSiteUID-Email_Set_Initial_Password_Subject;$cmsSiteUID-Email_Set_Initial_Password_Body;EmailPage
+;;DeactivateUserEmailTemplate;Deactivate User Email Template;true;DeactivateUserEmail;$cmsSiteUID-Email_Deactivate_User_Subject;$cmsSiteUID-Email_Deactivate_User_Body;EmailPage
+;;OrderPendingApprovalEmailTemplate;Order Pending Approval Email Template;true;orderPendingApprovalEmail;$cmsSiteUID-Email_Order_Pending_Approval_Subject;$cmsSiteUID-Email_Order_Pending_Approval_Body;EmailPage
+;;OrderApprovalRejectionEmailTemplate;Order Approval Rejection Email Template;true;orderApprovalRejectionEmail;$cmsSiteUID-Email_Order_Approval_Rejection_Subject;$cmsSiteUID-Email_Order_Approval_Rejection_Body;EmailPage
+;;OrderConfirmationEmailTemplate;Order Confirmation Email Template;true;OrderConfirmationEmail;$cmsSiteUID-Email_Order_Confirmation_Subject;$cmsSiteUID-Email_Order_Confirmation_Body;EmailPage
+;;RmaRequestEmailTemplate;RMA Request Email Template;true;rmaRequestEmail;$cmsSiteUID-Email_Rma_Request_Subject;$cmsSiteUID-Email_Rma_Request_Body;EmailPage
+;;RmaRequestConfirmationEmailTemplate;RMA Request Confirmation Email Template;true;rmaRequestConfirmationEmail;$cmsSiteUID-Email_Rma_Request_Confirmation_Subject;$cmsSiteUID-Email_Rma_Request_Confirmation_Body;EmailPage
+;;AddressChangeEmailTemplate;Address Change Email Template;true;addressChangeEmail;$cmsSiteUID-Email_Address_Change_Subject;$cmsSiteUID-Email_Address_Change_Body;EmailPage
+;;CatalogOrderEmailTemplate;Catalog Order Email Template;true;catalogOrderEmail;$cmsSiteUID-Email_Catalog_Order_Subject;$cmsSiteUID-Email_Catalog_Order_Body;EmailPage
+;;SapVoucherEmailTemplate;Sap Voucher Email Template;true;sapVoucherEmail;$cmsSiteUID-Email_Sap_Voucher_Subject;$cmsSiteUID-Email_Sap_Voucher_Body;EmailPage
+
+
+# Templates for CMS Cockpit Page Edit
+UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;CustomerRegistrationEmailTemplate;$jarResourceCms/structure-view/structure_customerRegistrationEmailTemplate.vm
+;;ForgottenPasswordEmailTemplate;$jarResourceCms/structure-view/structure_forgottenPasswordEmailTemplate.vm
+;;SendToFriendEmailTemplate;$jarResourceCms/structure-view/structure_sendToFriendEmailTemplate.vm
+;;FeedbackEmailTemplate;$jarResourceCms/structure-view/structure_feedbackEmailTemplate.vm
+;;SupportEmailTemplate;$jarResourceCms/structure-view/structure_supportEmailTemplate.vm
+;;QuoteProductPriceEmailTemplate;$jarResourceCms/structure-view/structure_quoteProductPriceEmailTemplate.vm
+;;CatalogPlusProductPriceRequestEmailTemplate;$jarResourceCms/structure-view/structure_catalogPlusProductPriceRequestEmailTemplate.vm
+;;SetInitialPasswordEmailTemplate;$jarResourceCms/structure-view/structure_setInitialPasswordEmailTemplate.vm
+;;DeactivateUserEmailTemplate;$jarResourceCms/structure-view/structure_deactivateUserEmailTemplate.vm
+;;OrderPendingApprovalEmailTemplate;$jarResourceCms/structure-view/structure_orderPendingApprovalEmailTemplate.vm
+;;OrderApprovalRejectionEmailTemplate;$jarResourceCms/structure-view/structure_orderApprovalRejectionEmailTemplate.vm
+;;OrderConfirmationEmailTemplate;$jarResourceCms/structure-view/structure_orderConfirmationEmailTemplate.vm
+;;RmaRequestEmailTemplate;$jarResourceCms/structure-view/structure_rmaRequestEmailTemplate.vm
+;;RmaRequestConfirmationEmailTemplate;$jarResourceCms/structure-view/structure_rmaRequestConfirmationEmailTemplate.vm
+;;AddressChangeEmailTemplate;$jarResourceCms/structure-view/structure_addressChangeEmailTemplate.vm
+;;CatalogOrderEmailTemplate;$jarResourceCms/structure-view/structure_catalogOrderEmailTemplate.vm
+;;SapVoucherEmailTemplate;$jarResourceCms/structure-view/structure_generatedSapVoucherEmailTemplate.vm
+
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CustomerRegistrationEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+;AdvantageImage;;BannerComponent,CMSImageComponent
+;SocialImageFacebook;;BannerComponent,CMSImageComponent
+;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+;SocialImageTwitter;;BannerComponent,CMSImageComponent
+;SocialImageYoutube;;BannerComponent,CMSImageComponent
+;FooterImage1;;BannerComponent,CMSImageComponent
+;FooterImage2;;BannerComponent,CMSImageComponent
+;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ForgottenPasswordEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+;AdvantageImage;;BannerComponent,CMSImageComponent
+;SocialImageFacebook;;BannerComponent,CMSImageComponent
+;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+;SocialImageTwitter;;BannerComponent,CMSImageComponent
+;SocialImageYoutube;;BannerComponent,CMSImageComponent
+;FooterImage1;;BannerComponent,CMSImageComponent
+;FooterImage2;;BannerComponent,CMSImageComponent
+;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SetInitialPasswordEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+;AdvantageImage;;BannerComponent,CMSImageComponent
+;SocialImageFacebook;;BannerComponent,CMSImageComponent
+;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+;SocialImageTwitter;;BannerComponent,CMSImageComponent
+;FooterImage1;;BannerComponent,CMSImageComponent
+;FooterImage2;;BannerComponent,CMSImageComponent
+;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='DeactivateUserEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+;AdvantageImage;;BannerComponent,CMSImageComponent
+;SocialImageFacebook;;BannerComponent,CMSImageComponent
+;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+;SocialImageTwitter;;BannerComponent,CMSImageComponent
+;FooterImage1;;BannerComponent,CMSImageComponent
+;FooterImage2;;BannerComponent,CMSImageComponent
+;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SendToFriendEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+;AdvantageImage;;BannerComponent,CMSImageComponent
+;SocialImageFacebook;;BannerComponent,CMSImageComponent
+;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+;SocialImageTwitter;;BannerComponent,CMSImageComponent
+;FooterImage1;;BannerComponent,CMSImageComponent
+;FooterImage2;;BannerComponent,CMSImageComponent
+;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderPendingApprovalEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+;AdvantageImage;;BannerComponent,CMSImageComponent
+;SocialImageFacebook;;BannerComponent,CMSImageComponent
+;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+;SocialImageTwitter;;BannerComponent,CMSImageComponent
+;FooterImage1;;BannerComponent,CMSImageComponent
+;FooterImage2;;BannerComponent,CMSImageComponent
+;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderApprovalRejectionEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+;AdvantageImage;;BannerComponent,CMSImageComponent
+;SocialImageFacebook;;BannerComponent,CMSImageComponent
+;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+;SocialImageTwitter;;BannerComponent,CMSImageComponent
+;FooterImage1;;BannerComponent,CMSImageComponent
+;FooterImage2;;BannerComponent,CMSImageComponent
+;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderConfirmationEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+;AdvantageImage;;BannerComponent,CMSImageComponent
+;SocialImageFacebook;;BannerComponent,CMSImageComponent
+;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+;SocialImageTwitter;;BannerComponent,CMSImageComponent
+;FooterImage1;;BannerComponent,CMSImageComponent
+;FooterImage2;;BannerComponent,CMSImageComponent
+;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='RmaRequestEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='RmaRequestConfirmationEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+;AdvantageImage;;BannerComponent,CMSImageComponent
+;SocialImageFacebook;;BannerComponent,CMSImageComponent
+;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+;SocialImageTwitter;;BannerComponent,CMSImageComponent
+;FooterImage1;;BannerComponent,CMSImageComponent
+;FooterImage2;;BannerComponent,CMSImageComponent
+;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AddressChangeEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CatalogOrderEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='FeedbackEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='QuoteProductPriceEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CatalogPlusProductPriceRequestEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SapVoucherEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+;AdvantageImage;;BannerComponent,CMSImageComponent
+;SocialImageFacebook;;BannerComponent,CMSImageComponent
+;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+;SocialImageTwitter;;BannerComponent,CMSImageComponent
+;FooterImage1;;BannerComponent,CMSImageComponent
+;FooterImage2;;BannerComponent,CMSImageComponent
+;FooterImage3;;BannerComponent,CMSImageComponent
+
+
+# Create Content Slots
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailLogoSlot;Header Logo Slot;true
+;;EmailSocialImageFacebookSlot;Social Image Facebook Slot;true
+;;EmailSocialImageGooglePlusSlot;Social Image GooglePlus Slot;true
+;;EmailSocialImageTwitterSlot;Social Image Twitter Slot;true
+;;EmailSocialImageYoutubeSlot;Social Image Youtube Slot;true
+;;EmailAdvantageImageSlot;Advantage Image Slot;true
+;;EmailFooterImage1Slot;Footer Image 1 Slot;true
+;;EmailFooterImage2Slot;Footer Image 2 Slot;true
+;;EmailFooterImage3Slot;Footer Image 3 Slot;true
+
+# Bind Content Slots to Email Page Templates
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CustomerRegistrationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-CustomerRegistration;Logo;;EmailLogoSlot;true
+;;SocialImageFacebook-CustomerRegistration;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+;;SocialImageGooglePlus-CustomerRegistration;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+;;SocialImageTwitter-CustomerRegistration;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+;;SocialImageYoutube-CustomerRegistration;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+;;AdvantageImage-CustomerRegistration;AdvantageImage;;EmailAdvantageImageSlot;true
+;;FooterImage1-CustomerRegistration;FooterImage1;;EmailFooterImage1Slot;true
+;;FooterImage2-CustomerRegistration;FooterImage2;;EmailFooterImage2Slot;true
+;;FooterImage3-CustomerRegistration;FooterImage3;;EmailFooterImage3Slot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ForgottenPasswordEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-ForgottenPassword;Logo;;EmailLogoSlot;true
+;;SocialImageFacebook-ForgottenPassword;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+;;SocialImageGooglePlus-ForgottenPassword;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+;;SocialImageTwitter-ForgottenPassword;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+;;SocialImageYoutube-ForgottenPasswordEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+;;AdvantageImage-ForgottenPassword;AdvantageImage;;EmailAdvantageImageSlot;true
+;;FooterImage1-ForgottenPassword;FooterImage1;;EmailFooterImage1Slot;true
+;;FooterImage2-ForgottenPassword;FooterImage2;;EmailFooterImage2Slot;true
+;;FooterImage3-ForgottenPassword;FooterImage3;;EmailFooterImage3Slot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SetInitialPasswordEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-SetInitialPassword;Logo;;EmailLogoSlot;true
+;;SocialImageFacebook-SetInitialPassword;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+;;SocialImageGooglePlus-SetInitialPassword;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+;;SocialImageTwitter-SetInitialPassword;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+;;AdvantageImage-SetInitialPassword;AdvantageImage;;EmailAdvantageImageSlot;true
+;;FooterImage1-SetInitialPassword;FooterImage1;;EmailFooterImage1Slot;true
+;;FooterImage2-SetInitialPassword;FooterImage2;;EmailFooterImage2Slot;true
+;;FooterImage3-SetInitialPassword;FooterImage3;;EmailFooterImage3Slot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='DeactivateUserEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-DeactivateUser;Logo;;EmailLogoSlot;true
+;;SocialImageFacebook-DeactivateUser;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+;;SocialImageGooglePlus-DeactivateUser;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+;;SocialImageTwitter-DeactivateUser;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+;;AdvantageImage-DeactivateUser;AdvantageImage;;EmailAdvantageImageSlot;true
+;;FooterImage1-DeactivateUser;FooterImage1;;EmailFooterImage1Slot;true
+;;FooterImage2-DeactivateUser;FooterImage2;;EmailFooterImage2Slot;true
+;;FooterImage3-DeactivateUser;FooterImage3;;EmailFooterImage3Slot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SendToFriendEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-SendToFriend;Logo;;EmailLogoSlot;true
+;;SocialImageFacebook-SendToFriend;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+;;SocialImageGooglePlus-SendToFriend;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+;;SocialImageTwitter-SendToFriend;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+;;AdvantageImage-SendToFriend;AdvantageImage;;EmailAdvantageImageSlot;true
+;;FooterImage1-SendToFriend;FooterImage1;;EmailFooterImage1Slot;true
+;;FooterImage2-SendToFriend;FooterImage2;;EmailFooterImage2Slot;true
+;;FooterImage3-SendToFriend;FooterImage3;;EmailFooterImage3Slot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderPendingApprovalEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-OrderPendingApproval;Logo;;EmailLogoSlot;true
+;;SocialImageFacebook-OrderPendingApproval;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+;;SocialImageGooglePlus-OrderPendingApproval;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+;;SocialImageTwitter-OrderPendingApproval;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+;;AdvantageImage-OrderPendingApproval;AdvantageImage;;EmailAdvantageImageSlot;true
+;;FooterImage1-OrderPendingApproval;FooterImage1;;EmailFooterImage1Slot;true
+;;FooterImage2-OrderPendingApproval;FooterImage2;;EmailFooterImage2Slot;true
+;;FooterImage3-OrderPendingApproval;FooterImage3;;EmailFooterImage3Slot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderApprovalRejectionEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-OrderApprovalRejection;Logo;;EmailLogoSlot;true
+;;SocialImageFacebook-OrderApprovalRejection;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+;;SocialImageGooglePlus-OrderApprovalRejection;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+;;SocialImageTwitter-OrderApprovalRejection;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+;;AdvantageImage-OrderApprovalRejection;AdvantageImage;;EmailAdvantageImageSlot;true
+;;FooterImage1-OrderApprovalRejection;FooterImage1;;EmailFooterImage1Slot;true
+;;FooterImage2-OrderApprovalRejection;FooterImage2;;EmailFooterImage2Slot;true
+;;FooterImage3-OrderApprovalRejection;FooterImage3;;EmailFooterImage3Slot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderConfirmationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-OrderConfirmation;Logo;;EmailLogoSlot;true
+;;SocialImageFacebook-OrderConfirmation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+;;SocialImageGooglePlus-OrderConfirmation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+;;SocialImageTwitter-OrderConfirmation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+;;AdvantageImage-OrderConfirmation;AdvantageImage;;EmailAdvantageImageSlot;true
+;;FooterImage1-OrderConfirmation;FooterImage1;;EmailFooterImage1Slot;true
+;;FooterImage2-OrderConfirmation;FooterImage2;;EmailFooterImage2Slot;true
+;;FooterImage3-OrderConfirmation;FooterImage3;;EmailFooterImage3Slot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='RmaRequestEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-RmaRequest;Logo;;EmailLogoSlot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='RmaRequestConfirmationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-RmaRequestConfirmation;Logo;;EmailLogoSlot;true
+;;SocialImageFacebook-RmaRequestConfirmation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+;;SocialImageGooglePlus-RmaRequestConfirmation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+;;SocialImageTwitter-RmaRequestConfirmation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+;;AdvantageImage-RmaRequestConfirmation;AdvantageImage;;EmailAdvantageImageSlot;true
+;;FooterImage1-RmaRequestConfirmation;FooterImage1;;EmailFooterImage1Slot;true
+;;FooterImage2-RmaRequestConfirmation;FooterImage2;;EmailFooterImage2Slot;true
+;;FooterImage3-RmaRequestConfirmation;FooterImage3;;EmailFooterImage3Slot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AddressChangeEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AddressChange;Logo;;EmailLogoSlot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CatalogOrderEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-CatalogOrder;Logo;;EmailLogoSlot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='FeedbackEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-FeedbackEmail;Logo;;EmailLogoSlot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SupportEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-SupportEmail;Logo;;EmailLogoSlot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='QuoteProductPriceEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-QuoteProductPrice;Logo;;EmailLogoSlot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CatalogPlusProductPriceRequestEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-CatalogPlusProductPrice;Logo;;EmailLogoSlot;true
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SapVoucherEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-SapVoucherEmail;Logo;;EmailLogoSlot;true
+;;SocialImageFacebook-SapVoucherEmail;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+;;SocialImageGooglePlus-SapVoucherEmail;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+;;SocialImageTwitter-SapVoucherEmail;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+;;AdvantageImage-SapVoucherEmail;AdvantageImage;;EmailAdvantageImageSlot;true
+;;FooterImage1-SapVoucherEmail;FooterImage1;;EmailFooterImage1Slot;true
+;;FooterImage2-SapVoucherEmail;FooterImage2;;EmailFooterImage2Slot;true
+;;FooterImage3-SapVoucherEmail;FooterImage3;;EmailFooterImage3Slot;true
+
+
+############################################################################################
+# Customer Registration Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;CustomerRegistrationEmail;Customer Registration Email;CustomerRegistrationEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-CustomerRegistrationEmail;Mood Image Slot for CustomerRegistrationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-CustomerRegistrationEmail;MoodImage;CustomerRegistrationEmail;EmailMoodImageSlot-CustomerRegistrationEmail
+
+
+############################################################################################
+# Forgotten Password Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;ForgottenPasswordEmail;Forgotten Password Email;ForgottenPasswordEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-ForgottenPasswordEmail;Mood Image Slot for ForgottenPasswordEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-ForgottenPasswordEmail;MoodImage;ForgottenPasswordEmail;EmailMoodImageSlot-ForgottenPasswordEmail
+
+
+############################################################################################
+# Send To Friend Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;SendToFriendEmail;Send To Friend Email;SendToFriendEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-SendToFriendEmail;Mood Image Slot for SendToFriendEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-SendToFriendEmail;MoodImage;SendToFriendEmail;EmailMoodImageSlot-SendToFriendEmail
+
+
+############################################################################################
+# Feedback Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;FeedbackEmail;Feedback Email;FeedbackEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-FeedbackEmail;Mood Image Slot for FeedbackEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-FeedbackEmail;MoodImage;FeedbackEmail;EmailMoodImageSlot-FeedbackEmail
+
+
+############################################################################################
+# Support Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;SupportEmail;Support Email;SupportEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-SupportEmail;Mood Image Slot for SupportEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-SupportEmail;MoodImage;SupportEmail;EmailMoodImageSlot-SupportEmail
+
+
+############################################################################################
+# Quote Product Price Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;QuoteProductPriceEmail;Quote Product Price Email;QuoteProductPriceEmailTemplate;true
+;;CatalogPlusProductPriceRequestEmail;Quote Product Price Email;CatalogPlusProductPriceRequestEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-QuoteProductPriceEmail;Mood Image Slot for QuoteProductPriceEmail;true
+;;EmailMoodImageSlot-CatalogPlusProductPriceRequestEmail;Mood Image Slot for CatalogPlusProductPriceRequestEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-QuoteProductPriceEmail;MoodImage;QuoteProductPriceEmail;EmailMoodImageSlot-QuoteProductPriceEmail
+;;MoodImage-CatalogPlusProductPriceRequestEmail;MoodImage;CatalogPlusProductPriceRequestEmail;EmailMoodImageSlot-CatalogPlusProductPriceRequestEmail
+
+
+############################################################################################
+# Set Initial Password Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;SetInitialPasswordEmail;Set initial Password Email;SetInitialPasswordEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-SetInitialPasswordEmail;Mood Image Slot for SetInitialPasswordEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-SetInitialPasswordEmail;MoodImage;SetInitialPasswordEmail;EmailMoodImageSlot-SetInitialPasswordEmail
+
+
+############################################################################################
+# Deactivate User Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;DeactivateUserEmail;Deactivate User Email;DeactivateUserEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-DeactivateUserEmail;Mood Image Slot for DeactivateUserEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-DeactivateUserEmail;MoodImage;DeactivateUserEmail;EmailMoodImageSlot-DeactivateUserEmail
+
+
+############################################################################################
+# Order Pending Approval Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;OrderPendingApprovalEmail;Order Pending Approval Email;OrderPendingApprovalEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-OrderPendingApprovalEmail;Mood Image Slot for OrderPendingApprovalEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-OrderPendingApprovalEmail;MoodImage;OrderPendingApprovalEmail;EmailMoodImageSlot-OrderPendingApprovalEmail
+
+
+############################################################################################
+# Order Approval Rejection Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;OrderApprovalRejectionEmail;Order Approval Rejection Email;OrderApprovalRejectionEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-OrderApprovalRejectionEmail;Mood Image Slot for OrderApprovalRejectionEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-OrderApprovalRejectionEmail;MoodImage;OrderApprovalRejectionEmail;EmailMoodImageSlot-OrderApprovalRejectionEmail
+
+
+############################################################################################
+# Order Confirmation Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;OrderConfirmationEmail;Order Confirmation Email;OrderConfirmationEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-OrderConfirmationEmail;Mood Image Slot for OrderConfirmationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-OrderConfirmationEmail;MoodImage;OrderConfirmationEmail;EmailMoodImageSlot-OrderConfirmationEmail
+
+
+############################################################################################
+# Rma Request Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;RmaRequestEmail;RMA Request Email;RmaRequestEmailTemplate;true
+;;RmaRequestConfirmationEmail;RMA Request Confirmation Email;RmaRequestConfirmationEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-RmaRequestEmail;Mood Image Slot for RmaRequestEmail;true
+;;EmailMoodImageSlot-RmaRequestConfirmationEmail;Mood Image Slot for RmaRequestConfirmationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-RmaRequestEmail;MoodImage;RmaRequestEmail;EmailMoodImageSlot-RmaRequestEmail
+;;MoodImage-RmaRequestConfirmationEmail;MoodImage;RmaRequestConfirmationEmail;EmailMoodImageSlot-RmaRequestConfirmationEmail
+
+
+############################################################################################
+# Address Change Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;AddressChangeEmail;Address Change Email;AddressChangeEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-AddressChangeEmail;Mood Image Slot for AddressChangeEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-AddressChangeEmail;MoodImage;AddressChangeEmail;EmailMoodImageSlot-AddressChangeEmail
+
+
+############################################################################################
+# Catalog Order Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;CatalogOrderEmail;Catalog Order Email;CatalogOrderEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-CatalogOrderEmail;Mood Image Slot for CatalogOrderEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-CatalogOrderEmail;MoodImage;CatalogOrderEmail;EmailMoodImageSlot-CatalogOrderEmail
+
+############################################################################################
+# Sap Voucher Email
+############################################################################################
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;SapVoucherEmail;Sap Voucher Email;SapVoucherEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-SapVoucherEmail;Mood Image Slot for SapVoucherEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-SapVoucherEmail;MoodImage;SapVoucherEmail;EmailMoodImageSlot-SapVoucherEmail
+
+
+# CMS components velocity templates
+INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)[default='velocity']
+;$cmsSiteUID-CMSImageComponent-template;java.util.Map
+;$cmsSiteUID-BannerComponent-template;java.util.Map
+;$cmsSiteUID-SimpleBannerComponent-template;java.util.Map
+;$cmsSiteUID-CMSLinkComponent-template;java.util.Map
+;$cmsSiteUID-CMSParagraphComponent-template;java.util.Map
+
+# Email velocity templates
+INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)[default='velocity']
+;$cmsSiteUID-Email_Header;com.namics.distrelec.b2b.facades.process.email.context.CustomerEmailContext
+;$cmsSiteUID-Email_Footer;com.namics.distrelec.b2b.facades.process.email.context.CustomerEmailContext
+;$cmsSiteUID-Email_Customer_Registration_Body;com.namics.distrelec.b2b.facades.process.email.context.CustomerEmailContext
+;$cmsSiteUID-Email_Forgotten_Password_Body;com.namics.distrelec.b2b.facades.process.email.context.ForgottenPasswordEmailContext
+;$cmsSiteUID-Email_Send_To_Friend_Body;com.namics.distrelec.b2b.facades.process.email.context.DistSendToFriendEmailContext
+;$cmsSiteUID-Email_Feedback_Body;com.namics.distrelec.b2b.facades.process.email.context.DistFeedbackEmailContext
+;$cmsSiteUID-Email_Support_Body;com.namics.distrelec.b2b.facades.process.email.context.DistSupportEmailContext
+;$cmsSiteUID-Email_Quote_Product_Price_Body;com.namics.distrelec.b2b.facades.process.email.context.DistQuoteProductPriceEmailContext
+;$cmsSiteUID-Email_Catalog_Plus_Product_Price_Request_Body;com.namics.distrelec.b2b.facades.process.email.context.DistCatalogPlusProductPriceRequestEmailContext
+;$cmsSiteUID-Email_Customer_Registration_Subject;com.namics.distrelec.b2b.facades.process.email.context.CustomerEmailContext
+;$cmsSiteUID-Email_Forgotten_Password_Subject;com.namics.distrelec.b2b.facades.process.email.context.ForgottenPasswordEmailContext
+;$cmsSiteUID-Email_Send_To_Friend_Subject;com.namics.distrelec.b2b.facades.process.email.context.DistSendToFriendEmailContext
+;$cmsSiteUID-Email_Feedback_Subject;com.namics.distrelec.b2b.facades.process.email.context.DistFeedbackEmailContext
+;$cmsSiteUID-Email_Support_Subject;com.namics.distrelec.b2b.facades.process.email.context.DistSupportEmailContext
+;$cmsSiteUID-Email_Quote_Product_Price_Subject;com.namics.distrelec.b2b.facades.process.email.context.DistQuoteProductPriceEmailContext
+;$cmsSiteUID-Email_Catalog_Plus_Product_Price_Request_Subject;com.namics.distrelec.b2b.facades.process.email.context.DistCatalogPlusProductPriceRequestEmailContext
+;$cmsSiteUID-Email_Set_Initial_Password_Body;com.namics.distrelec.b2b.facades.process.email.context.SetInitialPasswordEmailContext
+;$cmsSiteUID-Email_Set_Initial_Password_Subject;com.namics.distrelec.b2b.facades.process.email.context.SetInitialPasswordEmailContext
+;$cmsSiteUID-Email_Deactivate_User_Body;com.namics.distrelec.b2b.facades.process.email.context.DeactivateUserEmailContext
+;$cmsSiteUID-Email_Deactivate_User_Subject;com.namics.distrelec.b2b.facades.process.email.context.DeactivateUserEmailContext
+;$cmsSiteUID-Email_Order_Pending_Approval_Body;com.namics.distrelec.b2b.facades.process.email.context.OrderPendingApprovalEmailContext
+;$cmsSiteUID-Email_Order_Pending_Approval_Subject;com.namics.distrelec.b2b.facades.process.email.context.OrderPendingApprovalEmailContext
+;$cmsSiteUID-Email_Order_Approval_Rejection_Body;com.namics.distrelec.b2b.facades.process.email.context.OrderApprovalRejectionEmailContext
+;$cmsSiteUID-Email_Order_Approval_Rejection_Subject;com.namics.distrelec.b2b.facades.process.email.context.OrderApprovalRejectionEmailContext
+;$cmsSiteUID-Email_Order_Confirmation_Body;com.namics.distrelec.b2b.facades.process.email.context.OrderNotificationEmailContext
+;$cmsSiteUID-Email_Order_Confirmation_Subject;com.namics.distrelec.b2b.facades.process.email.context.OrderNotificationEmailContext
+;$cmsSiteUID-Email_Rma_Request_Subject;com.namics.distrelec.b2b.facades.process.email.context.RmaRequestEmailContext
+;$cmsSiteUID-Email_Rma_Request_Body;com.namics.distrelec.b2b.facades.process.email.context.RmaRequestEmailContext
+;$cmsSiteUID-Email_Rma_Request_Confirmation_Subject;com.namics.distrelec.b2b.facades.process.email.context.RmaRequestEmailContext
+;$cmsSiteUID-Email_Rma_Request_Confirmation_Body;com.namics.distrelec.b2b.facades.process.email.context.RmaRequestEmailContext
+;$cmsSiteUID-Email_Address_Change_Subject;com.namics.distrelec.b2b.facades.process.email.context.DistAddressChangeEmailContext
+;$cmsSiteUID-Email_Address_Change_Body;com.namics.distrelec.b2b.facades.process.email.context.DistAddressChangeEmailContext
+;$cmsSiteUID-Email_Catalog_Order_Subject;com.namics.distrelec.b2b.facades.process.email.context.DistCatalogOrderEmailContext
+;$cmsSiteUID-Email_Catalog_Order_Body;com.namics.distrelec.b2b.facades.process.email.context.DistCatalogOrderEmailContext
+;$cmsSiteUID-Email_Sap_Voucher_Subject;com.namics.distrelec.b2b.facades.process.email.context.SapVoucherEmailContext
+;$cmsSiteUID-Email_Sap_Voucher_Body;com.namics.distrelec.b2b.facades.process.email.context.SapVoucherEmailContext
+
+
+# Preview Image for use in the CMS Cockpit
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true]
+;;EmailPageModel_preview;text/gif;EmailPageModel_preview.gif;$jarResourceCms/preview-images/EmailPageModel_preview.gif
+
+UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];previewImage(code, $contentCV)
+;;CustomerRegistrationEmail;EmailPageModel_preview
+;;ForgottenPasswordEmail;EmailPageModel_preview
+;;SendToFriendEmail;EmailPageModel_preview
+;;FeedbackEmail;EmailPageModel_preview
+;;SupportEmail;EmailPageModel_preview
+;;QuoteProductPriceEmail;EmailPageModel_preview
+;;CatalogPlusProductPriceRequestEmail;EmailPageModel_preview
+;;SetInitialPasswordEmail;EmailPageModel_preview
+;;DeactivateUserEmail;EmailPageModel_preview
+;;OrderPendingApprovalEmail;EmailPageModel_preview
+;;OrderApprovalRejectionEmail;EmailPageModel_preview
+;;OrderConfirmationEmail;EmailPageModel_preview
+;;RmaRequestEmail;EmailPageModel_preview
+;;RmaRequestConfirmationEmail;EmailPageModel_preview
+;;AddressChangeEmail;EmailPageModel_preview
+;;CatalogOrderEmail;EmailPageModel_preview
+;;SapVoucherEmail;EmailPageModel_preview
+
+
+
+############################################################################################
+# NPS Email
+############################################################################################
+
+# Email page Template
+INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;active;frontendTemplateName;subject(code);htmlTemplate(code);restrictedPageTypes(code)
+;;NetPromoterScoreEmailTemplate;NPS Email Template;true;npsEmail;$cmsSiteUID-Email_Net_Promoter_Score_Subject;$cmsSiteUID-Email_Net_Promoter_Score_Body;EmailPage
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='NetPromoterScoreEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-NPSEmail;Logo;;EmailLogoSlot;true
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;NPSEmail;NPS Email;NetPromoterScoreEmailTemplate;true
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-NPSEmail;Mood Image Slot for NPSEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-NPSEmail;MoodImage;NPSEmail;EmailMoodImageSlot-NPSEmail
+
+

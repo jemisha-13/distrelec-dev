@@ -1,0 +1,950 @@
+.prevent-scroll {
+  height: 100%;
+}
+
+.mod-standalone-register {
+  display: none;
+  width: 100%;
+
+  &.show {
+    display: block !important;
+    visibility: visible;
+  }
+
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
+
+  .tickItem {
+    &,
+    &Error {
+      pointer-events: none;
+    }
+  }
+
+  .form-b2c,
+  .form-b2b {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .error-already-existing,
+    .error {
+      display: inline-block;
+      margin: ($spacing-unit * 2 + 2) 0 ($spacing-unit * 3) 0;
+      width: 100%;
+
+      p {
+        float: right;
+        margin-bottom: 0 !important;
+        text-align: left;
+        width: calc(100% - 30px);
+      }
+
+    }
+
+    .infobox {
+      border: 1px solid $colour-dist-green;
+      border-radius: $spacing-unit - 3;
+      background-color: $bg-dist-light-green;
+      display: inline-flex;
+      margin: ($spacing-unit * 2 + 2) 0 ($spacing-unit * 3) 0;
+      padding: ($spacing-unit * 2) ($spacing-unit * 3);
+      width: 100%;
+
+      &__text {
+        display: flex;
+        @include font-size(14px);
+      }
+
+      i {
+        @include font-size(16px);
+        color: $colour-white;
+        margin-right: $spacing-unit * 3;
+        position: inherit;
+        background-color: $colour-dist-green;
+        box-shadow: none;
+        border-radius: 50%;
+        margin-top: $spacing-unit * 2;
+      }
+
+      p {
+        @include font-size(14px);
+        @include line-height(24px);
+        color: $ux-txt-green;
+        font-weight: 500;
+        margin-bottom: 0;
+      }
+
+    }
+
+    .error-message {
+      text-align: left;
+    }
+
+    select {
+      background: $colour-white;
+      height: 45px;
+      margin: ($spacing-unit * 2) 0 ($spacing-unit * 4);
+      width: 100%;
+
+      &.success {
+        border: 1.5px solid $colour-dist-green;
+      }
+
+      &.error {
+        border: 1.5px solid $colour-dist-red;
+      }
+
+      &.disabled {
+        pointer-events: none;
+      }
+
+    }
+
+    input:not([type='checkbox']) {
+      @include font-size(16px);
+      border: 1px solid $colour-light-grey;
+      border-radius: $spacing-unit - 3;
+      height: 42px;
+      margin: ($spacing-unit * 2) 0 ($spacing-unit * 3);
+      outline: none;
+      padding: 0 ($spacing-unit * 2);
+      width: 100%;
+      background-color: white;
+
+      &:active,
+      &:focus,
+      &:checked,
+      .validate-select {
+        border: 2px solid $colour-dark-grey;
+        margin-bottom: $spacing-unit * 3;
+      }
+
+      &.success {
+        border: 1.5px solid $colour-dist-green;
+        color: $colour-black;
+      }
+
+      &.error {
+        border: 1.5px solid $colour-dist-red;
+        padding: 0 ($spacing-unit * 2);
+        color: $colour-dist-red;
+      }
+
+    }
+
+    label {
+      font-family: $font-montserrat;
+      cursor: default;
+      @include font-size(14px);
+      @include line-height(16px);
+      font-weight: 700;
+    }
+
+    .tickItem,
+    .ticks2 {
+      @include font-size(18px);
+      color: $colour-dist-green;
+      display: block;
+      height: 25px;
+      padding: $spacing-unit;
+      position: absolute;
+      right: $spacing-unit * 2;
+      top: 0;
+      width: 25px;
+
+      &.fa-times {
+        color: $colour-dist-red;
+      }
+    }
+
+    .card-wrapper {
+      padding-bottom: 0;
+
+      h3 {
+        font-weight: bold;
+      }
+
+    }
+
+    &__title {
+      width: 100%;
+
+      .inner {
+
+        h3 {
+          margin-bottom: 0;
+        }
+
+      }
+
+    }
+
+    .form-check-inline {
+      display: inline-block;
+      margin: ($spacing-unit * 2) 0 ($spacing-unit * 4);
+      width: 100%;
+
+      &.form-check {
+
+        input {
+          display: none;
+
+          &:checked {
+
+            & + label {
+              border: 2px solid $colour-dark-grey;
+              color: $colour-black;
+            }
+
+          }
+
+        }
+
+        label {
+          @include font-size(14px);
+          @include line-height(22px);
+          background: $colour-white;
+          border: 1px solid $ux-txt-grey;
+          border-radius: $spacing-unit - 3;
+          color: lighten($colour-black, 30%);
+          display: block;
+          font-family: $font-montserrat;
+          font-weight: 500;
+          margin-bottom: ($spacing-unit * 3);
+          padding: ($spacing-unit * 3) ($spacing-unit) ($spacing-unit * 2);
+          position: relative;
+          text-align: center;
+
+
+          @media #{$ipad-landscape} {
+            margin-bottom: 0;
+          }
+
+          &:before {
+            content: none;
+          }
+        }
+
+        &:last-of-type {
+          padding-left: 0;
+        }
+
+        &.existingBtn[disabled] {
+          pointer-events: none;
+        }
+
+      }
+
+    }
+
+    &__form {
+
+      h4 {
+        display: flex;
+        float: left;
+        padding: ($spacing-unit * 2) 0;
+        width: 100%;
+
+        &.no-padding {
+          padding: 0;
+        }
+      }
+
+      &__title {
+        border-bottom: 1px solid $colour-light-grey;
+        padding-top: $spacing-unit * 4;
+      }
+
+      &__field__title {
+
+        .form-check-inline {
+          width: 45%;
+          margin: 0 0 ($spacing-unit * 2) (-$spacing-unit * 2 - 3);
+        }
+
+        input {
+          & + label:before {
+            position: absolute;
+            top: 17px;
+            left: 15px;
+            height: 21px;
+            width: 21px;
+            background-color: white;
+            border-radius: 50%;
+            border: 2px solid $colour-redesign-light-grey;
+            background-image: none !important;
+          }
+
+          &:checked {
+            & + label {
+
+              &:before {
+                position: absolute;
+                top: 17px;
+                left: 15px;
+                height: 21px;
+                width: 21px;
+                background-color: white;
+                border-radius: 50%;
+                border: 2px solid $colour-dist-grey;
+                background-image: none !important;
+              }
+
+              &:after {
+                top: 22px;
+                padding: ($spacing-unit - 4) ($spacing-unit - 2) ($spacing-unit * 2) ($spacing-unit + 3);
+                left: 20px !important;
+                height: 10px;
+                border-radius: 50%;
+                background: $colour-dist-grey;
+                content: ' ';
+                position: absolute;
+              }
+            }
+
+          }
+        }
+
+        label {
+          @include font-size(14px);
+          @include line-height(24px);
+          font-weight: 500;
+          color: lighten($colour-black, 30%);
+          display: block;
+          margin-bottom: ($spacing-unit * 3);
+          padding: ($spacing-unit * 3) 0 ($spacing-unit * 3) ($spacing-unit * 9);
+          position: relative;
+
+          @media #{$ipad-landscape} {
+            margin-bottom: 0;
+          }
+        }
+
+        .fa-check {
+          top: 15px;
+        }
+
+        .fa-times {
+          color: $colour-dist-red;
+          top: 15px;
+          position: absolute;
+        }
+
+      }
+
+      &__field {
+        &.is-full {
+          width: 100%;
+        }
+
+        &__custno {
+          float: left;
+          width: 100%;
+
+          .error-message {
+            background-color: #FDF3F3;
+            border: 1.5px solid $colour-dist-red;
+            margin-top: 0 !important;
+            padding: ($spacing-unit * 2) 0 ($spacing-unit * 2) ($spacing-unit * 2);
+
+            .fa-exclamation-triangle {
+              @include font-size(20px);
+              padding-left: $spacing-unit * 2;
+              padding-top: $spacing-unit * 4;
+            }
+
+            p {
+              width: 90% !important;
+            }
+
+            a {
+              color: $link-blue;
+            }
+          }
+
+          .fa-times {
+            color: $colour-dist-red;
+          }
+
+          i {
+            position: absolute;
+          }
+
+          &__input {
+            float: left;
+            position: relative;
+            width: 100%;
+          }
+
+        }
+
+        &--select {
+
+          a {
+            display: block;
+            margin-bottom: $spacing-unit * 4;
+            text-decoration: underline;
+            @include font-size(14px);
+            color: $link-blue;
+          }
+        }
+
+        &--country {
+          .tickItem {
+            top: 18px !important;
+          }
+          .tickItemError {
+            top: 23px !important;
+          }
+        }
+
+        &--phone,
+        &--fax,
+        &--invoice {
+
+          a {
+            display: block;
+            margin-bottom: $spacing-unit * 4;
+            text-decoration: underline;
+            @include font-size(14px);
+            color: $link-blue;
+          }
+
+          .form-group {
+
+            i {
+
+              right: 10px;
+
+              &.tickItem {
+                top: 43px;
+              }
+
+              &.tickItemError {
+                top: 48px !important;
+              }
+
+            }
+          }
+
+        }
+
+        &--terms {
+          display: flex;
+
+          a {
+            text-decoration: underline;
+          }
+
+          .terms-holder {
+
+            &__item {
+              background-color: $colour-white;
+              border: 1px solid $colour-light-grey;
+              border-radius: $spacing-unit;
+              box-shadow: 3px 3px 10px rgba(0, 0, 0, .05);
+              margin-bottom: $spacing-unit * 4;
+              padding: $spacing-unit * 2;
+
+              input[type="checkbox"] {
+
+                &.checkbox-big {
+
+                  &:checked {
+
+                    + input {
+
+                      + label {
+
+                        &:before {
+                          @include font-size(17px);
+                          background-image: none;
+                          color: $colour-mid-black;
+                          content: '\f00c';
+                          font-family: $fontAwesome;
+                          height: 30px;
+                          padding: $spacing-unit - 1;
+                          width: 30px;
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                  &:focus {
+
+                    + input {
+
+                      + label {
+
+                        &:before {
+                          background-image: none;
+                          height: 30px;
+                          width: 30px;
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+
+              }
+
+              label {
+                @include font-size(13px);
+                @include line-height(16px);
+                padding: ($spacing-unit * 2) ($spacing-unit * 2) 0 ($spacing-unit * 10);
+                text-align: justify;
+
+                a {
+                  display: inherit;
+                }
+
+                &::before {
+                  background-color: $colour-white;
+                  background-image: none;
+                  border: 3px solid $colour-mid-black;
+                  border-radius: $spacing-unit - 1;
+                  height: 30px;
+                  margin-left: -$spacing-unit * 9;
+                  width: 30px;
+                }
+
+                &:hover {
+
+                  &::before {
+                    background-image: none;
+                    height: 30px;
+                    width: 30px;
+                  }
+
+                }
+
+              }
+
+            }
+
+          }
+
+        }
+
+        .form-group-select,
+        .form-group {
+          position: relative;
+
+          &.has-loader {
+            .loading {
+              position: absolute;
+              top: 21px;
+              right: 35px;
+              width: 20px;
+            }
+          }
+
+          .tickItemError {
+            @extend %tickItemError;
+          }
+        }
+
+        .form-group-select {
+          .tickItem {
+            top: 18px;
+
+            &Error {}
+          }
+
+          .p-relative .tickItem {
+            top: 19px;
+            right: 10px;
+
+            &Error {
+              top: 25px;
+              right: 15px;
+            }
+          }
+        }
+
+        .form-group {
+          display: block;
+
+          .p-relative .tickItem {
+            &Error {
+              top: 22px;
+              right: 15px;
+            }
+          }
+
+          .tickItem {
+            top: 17px;
+            right: 10px;
+
+            &Error {
+              top: 22px;
+              right: 15px;
+            }
+          }
+
+          &.validCounts2 {
+            .tickItemError {
+              top: 22px;
+            }
+          }
+
+          &--password {
+            position: relative;
+
+            .form-group {
+
+              &__pwd-reveal {
+                color: $colour-mid-grey;
+                cursor: pointer;
+                position: absolute;
+                right: $spacing-unit * 2;
+                top: 19px;
+
+                &-icon {
+                  &.right {
+                    margin-right: $spacing-unit * 6;
+                  }
+                }
+              }
+            }
+
+            .tickItemError {
+              top: 22px;
+              right: 15px;
+            }
+          }
+
+          .field-msgs,
+          .field-msgs-fe {
+            float: left;
+            width: 100%;
+
+            .error-already-existing,
+            .error {
+              color: $colour-dist-red;
+            }
+
+          }
+
+        }
+
+      }
+
+      &__wrapper {
+        padding-top: $spacing-unit * 4;
+      }
+
+    }
+
+    .codicePopup {
+      display: table;
+      position: absolute;
+      width: 240px;
+      height: 100%;
+      top: -70px;
+      left: 0;
+
+      @media #{$ipad} {
+        top: auto;
+        right: -300px;
+        left: auto;
+      }
+
+      &--grouped {
+        transform: translateY(-50%) translateY(21px);
+      }
+
+      &__center {
+        display: table-cell;
+        vertical-align: middle;
+      }
+
+      &__popup {
+        @include font-size(13px);
+        background-color: $colour-white;
+        border: 1px solid $colour-light-grey;
+        border-radius: $spacing-unit;
+        bottom: 0;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, .15);
+        padding: $spacing-unit * 3;
+        position: relative;
+
+        &::after {
+          top: calc(100% - 10px);
+          left: 10px;
+          transform: rotate(-45deg);
+          background-color: $colour-white;
+          border-bottom: 1px solid $colour-light-grey;
+          border-left: 1px solid $colour-light-grey;
+          content: '';
+          height: 20px;
+          position: absolute;
+          width: 20px;
+
+          @media #{$ipad} {
+            top: calc(50% - 10px);
+            right: 230px;
+            left: auto;
+            transform: rotate(45deg);
+          }
+        }
+
+      }
+
+      a {
+        color: $colour-black;
+        text-decoration: underline;
+      }
+
+    }
+
+    .inputPopup, .customerNumberContainer {
+
+      &--grouped {
+        @include font-size(12px);
+        font-weight: 500;
+        color: $ux-txt-grey-2;
+        margin-bottom: $spacing-unit * 3;
+      }
+
+      .tickItemError {
+        @include font-size(18px);
+        color: $colour-dist-red;
+        position: absolute;
+      }
+
+    }
+
+    .inputPopup {
+
+      .tickItem {
+        top: 60px;
+        right: 10px;
+      }
+
+      .tickItemError {
+        top: 65px;
+        right: 10px;
+      }
+    }
+
+    .customerNumberContainer {
+
+      .tickItem {
+        top: 81px;
+        right: 10px;
+      }
+
+      .tickItemError {
+        top: 85px;
+        right: 25px;
+      }
+
+      .customerNumberFieldv2 {
+
+        .tickItemError {
+          top: 70px;
+       }
+      }
+    }
+
+  }
+
+
+  .password-validation {
+    margin: ($spacing-unit * 2) 0;
+    width: 100%;
+
+    p {
+      @include font-size(15px);
+      @include line-height(18px);
+      color: $colour-dist-red;
+    }
+
+  }
+
+  .section-form {
+    padding: ($spacing-unit * 4);
+
+    label {
+      position: relative;
+      display: block;
+      padding-left: ($spacing-unit * 5);
+      margin-bottom: ($spacing-unit);
+      font-weight: 500 !important;
+      @include font-size(14px);
+      @include line-height(24px);
+    }
+
+    input[type="checkbox"] + input + label:before {
+      position: absolute;
+      left: 0;
+      top: 5px;
+      border: 1.5px solid $colour-redesign-light-grey;
+      box-sizing: border-box;
+      border-radius: 3px;
+      width: 14px;
+      height: 14px;
+      background-image: none;
+    }
+
+    .js-checkboxIcon {
+      display: none;
+    }
+
+    .active {
+      display: flex;
+
+      .js-checkboxIcon {
+        display: block;
+      }
+
+      label {
+        padding-left:  $spacing-unit * 2 + 1 !important;
+      }
+
+      input[type="checkbox"] + input + label:before {
+        display: none;
+      }
+    }
+  }
+
+  .padded-content {
+    padding: ($spacing-unit * 4);
+  }
+
+  .password-field {
+    margin: ($spacing-unit * 2) 0 ($spacing-unit * 2) !important;
+  }
+
+  .help-text {
+      font-weight: 500;
+      @include line-height(16px);
+      color: $ux-txt-grey-2;
+
+      p {
+        @include font-size-important(12px);
+      }
+
+      &.error {
+        color: $colour-dist-red;
+        float: left;
+        margin-top: 0;
+
+        p {
+          float: left;
+        }
+      }
+    }
+
+  .half-container {
+    margin-bottom: $spacing-unit * 4;
+
+    &--t_and_c {
+      padding-top: 20px !important;
+      border-top: 1px solid $colour-light-grey !important;
+
+      .privacy-policy {
+        width: 100% !important;
+        margin-bottom: $spacing-unit * 2;
+
+        a {
+          color: $link-blue;
+        }
+      }
+
+      .description-text {
+        font-weight: 700;
+        @include font-size(14px);
+        @include line-height(24px);
+        color: $colour-dark-grey;
+        margin-bottom: $spacing-unit * 3;
+        padding-left: $spacing-unit + 2;
+      }
+    }
+
+    > div {
+      float: left;
+      width: 100%;
+
+      @media #{$ipad} {
+        width: 49%;
+      }
+    }
+
+    > div + div {
+      margin-top: $spacing-unit;
+
+      @media #{$ipad} {
+        margin-top: 0;
+        margin-left: 2%;
+      }
+    }
+
+    &::after {
+      display: table;
+      content: '';
+      clear: both;
+    }
+  }
+
+  input[type="password"] {
+    font-family: Verdana;
+    font-size: 2rem !important;
+  }
+
+  input[type="text"] {
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  select {
+    -webkit-appearance: none;
+  }
+
+  .description-text {
+    color: #595959;
+    font-weight: 500;
+    @include font-size(12px);
+    @include line-height(20px);
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  h3,
+  h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  h3 {
+    @include font-size(20px);
+    margin-bottom: $spacing-unit * 3;
+  }
+
+  h4 {
+    @include font-size(14px);
+  }
+
+  p {
+    margin-bottom: $spacing-unit * 2;
+  }
+
+  .inputPopup {
+    @include font-size(12px);
+    @include line-height(18px);
+    color: $color-hint-text-grey;
+  }
+}

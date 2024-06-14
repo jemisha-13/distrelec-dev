@@ -1,0 +1,26 @@
+<ul #scrollList class="filter-group-list mx-3 d-none d-lg-flex">
+  <li
+    *ngFor="let facet of filters; index as index"
+    class="filter-group facet-group type-{{ facet.type | lowercase }}"
+    [class.pl-0]="index === 0"
+    [class.pr-0]="index === filters.length - 1"
+  >
+    <h5 class="filter-group-list-title ellipsis">{{ facet.name }}</h5>
+    <app-product-list-filter-values [facet]="facet" [index]="index"></app-product-list-filter-values>
+  </li>
+</ul>
+
+<div
+  *ngIf="(isArrowVisible | async).left"
+  class="scroll-arrow-left"
+  (click)="scrollList.scrollBy(-scrollList.clientWidth, 0)"
+>
+  <app-icon [icon]="arrow" iconType="svg" size="xl"></app-icon>
+</div>
+<div
+  *ngIf="(isArrowVisible | async).right"
+  class="scroll-arrow-right"
+  (click)="scrollList.scrollBy(scrollList.clientWidth, 0)"
+>
+  <app-icon class="rotate-270" [icon]="arrow" iconType="svg" size="xl"></app-icon>
+</div>

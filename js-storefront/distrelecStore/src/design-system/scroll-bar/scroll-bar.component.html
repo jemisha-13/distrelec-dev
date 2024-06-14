@@ -1,0 +1,21 @@
+<div #scrollContainer class="scroll-container">
+  <ng-content></ng-content>
+</div>
+
+<div *ngIf="showScrollBar_ | async" class="custom-scroll" [class.horizontal]="scrollAxis === 'x'">
+  <div
+    class="thumb"
+    [ngStyle]="
+      scrollAxis === 'y'
+        ? {
+            transform: 'translate3d(0,' + (scrollbarPosition_ | async) + 'px, 0)',
+            height: (scrollbarThumbSize_ | async) + 'px'
+          }
+        : {
+            transform: 'translate3d(' + (scrollbarPosition_ | async) + 'px, 0, 0)',
+            width: (scrollbarThumbSize_ | async) + 'px'
+          }
+    "
+    (mousedown)="startDrag($event)"
+  ></div>
+</div>

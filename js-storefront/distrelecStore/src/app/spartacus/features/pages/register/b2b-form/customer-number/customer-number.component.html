@@ -1,0 +1,60 @@
+<ng-container [formGroup]="generalRegForm">
+  <ng-container *ngIf="isCustomerNumberInvalid$ | async as isCustomerNumberInvalid">
+    <div class="register__form__holder register__form__holder__have-account--custNo">
+      <label class="register__form__holder--title-customer-number" id="registration.general.your_customer_number">
+        {{ 'registration.general.your_customer_number' | cxTranslate }}
+      </label>
+
+      <div class="p-relative">
+        <input
+          class="register__form__holder--input"
+          [id]="'customerId' + generalRegForm.get('type').value"
+          [attr.disabled]="isValidNumberFound ? isValidNumberFound : null"
+          [class.is-invalid]="isValidated && isCustomerNumberInvalid.isCustomerNumberInvalid"
+          [class.is-correct]="isValidNumberFound"
+          type="text"
+          formControlName="customerId"
+        />
+        <fa-icon
+          *ngIf="isValidated && isCustomerNumberInvalid.isCustomerNumberInvalid"
+          id="faTimesCustId"
+          [icon]="faTimes"
+        ></fa-icon>
+        <fa-icon
+          *ngIf="isValidated && !isCustomerNumberInvalid.isCustomerNumberInvalid"
+          id="faCheckCustId"
+          [icon]="faCheck"
+        ></fa-icon>
+        <small id="registration.general.customer_help_t">
+          {{ 'registration.general.customer_help_t' | cxTranslate }}
+        </small>
+      </div>
+      <div *ngIf="isValidated && isCustomerNumberInvalid.isCustomerNumberInvalid">
+        <div class="message-error">
+          <div class="inner">
+            <div class="p-relative">
+              <fa-icon class="error-icon" id="faExclamationTriangleCust" [icon]="faExclamationTriangle"></fa-icon>
+              <p
+                class="text"
+                id="registration.b2b.cust_no_not_found"
+                [innerHTML]="'registration.b2b.cust_no_not_found' | cxTranslate"
+              ></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="register__form__holder">
+      <button
+        class="btn register__submit"
+        id="registration.b2b.find_acc"
+        [disabled]="isValidNumberFound"
+        (click)="validateCustomerNumber()"
+        type="submit"
+      >
+        {{ 'registration.b2b.find_acc' | cxTranslate }}
+      </button>
+    </div>
+  </ng-container>
+</ng-container>

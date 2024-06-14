@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+    <!--
+        Section for Traditional Spring MVC.
+        Annotation driven controllers, and a list of packages to scan. Can be extended by adding (or removing) packages.
+    -->
+
+    <!-- activates annotation driven binding -->
+    <mvc:annotation-driven ignore-default-model-on-redirect="true" validator="validator">
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- Configure the multipart resolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="1572864"/>
+    </bean>
+
+    <!-- maintenance -->
+    <mvc:resources mapping="/error/**" location="/maintenance/error/" order="-1"/>
+
+    <bean id="abstractSeoInterceptor" abstract="true"
+          class="com.namics.distrelec.b2b.storefront.interceptors.AbstractSeoInterceptor">
+        <property name="redirectStrategy" ref="redirectStrategy"/>
+        <property name="loginUrl" value="/login"/>
+        <property name="excludeUrls" ref="distExcludeUrlSet"/>
+        <property name="cookieGenerator" ref="guidCookieGenerator"/>
+        <property name="urlPathHelper">
+            <bean class="org.springframework.web.util.UrlPathHelper"/>
+        </property>
+        <property name="defaultRememberMeService" ref="rememberMeServices"/>
+        <property name="guidCookieStrategy" ref="guidCookieStrategy"/>
+        <property name="sessionService" ref="sessionService"/>
+    </bean>
+
+    <util:set id="distExcludeUrlSet" value-type="java.lang.String">
+        <value></value>
+        <value>/login</value>
+        <value>/login/checkout</value>
+        <value>/login/checkout/register/b2c</value>
+        <value>/login/checkout/register/b2b</value>
+        <value>/login/checkout/register/guest</value>
+        <value>/login/checkout/register/success</value>
+
+        <value>/login/newcheckout</value>
+        <value>/login/checkout/registration/b2c</value>
+        <value>/login/checkout/registration/b2b</value>
+        <value>/login/checkout/registration/guest</value>
+        <value>/login/checkout/registration/success</value>
+
+        <value>/login/pw/request</value>
+        <value>/login/pw/migrated/request</value>
+        <value>/login/pw/change</value>
+        <value>/_s/language</value>
+        <value>/_s/currency</value>
+        <value>/search</value>
+        <value>/cart/rollover/MiniCart</value>
+        <value>/cart/json</value>
+        <value>/compare/metaCompareProducts</value>
+        <value>/register</value>
+        <value>/registration/checkout</value>
+        <value>/register/b2c</value>
+		<value>/register/b2b</value>
+		<value>/register/b2c/async</value>
+		<value>/register/b2b/async</value>
+		<value>/register/existing</value>
+		<value>/register/existing/b2c</value>
+		<value>/register/existing/b2b</value>
+		<value>/register/doubleoptin/request</value>
+		<value>/checkout/payment/notify</value>
+		<value>/ociEntry</value>
+		<value>/DisplayOCIParameters</value>
+		<value>/cxmlEntry</value>
+		<value>/ariba/login</value>
+		<value>/ariba/authenticate</value>
+		<value>/account/password/setinitialpw</value>
+		<value>/captcha</value>
+		<value>/checkOrder</value>
+		<value>/checkOrder/erpCode</value>
+		<value>/events</value>
+		<value>/checkout/payment/jumpout/success</value>
+		<value>/checkout/payment/jumpout/failure</value>
+		<value>/checkout/payment/jumpout/notify</value>
+	</util:set>
+
+    <!-- Scan for annotation configured controller -->
+    <context:component-scan base-package="com.namics.distrelec.b2b.storefront"
+                            scope-resolver="de.hybris.platform.spring.IgnoreTenantScopeMetadataResolver"/>
+
+    <!-- Interceptor which adds the Progressbar to the model. -->
+    <bean id="checkoutProgressBarInterceptor"
+          class="com.namics.distrelec.b2b.storefront.controllers.progressbar.interceptor.ProgressBarInterceptor">
+        <property name="stepsKey" value="checkout.progress"/>
+        <property name="urlHasToBeEqual" value="false"/>
+    </bean>
+
+    <util:list id="beforeViewInterceptorList">
+        <bean class="com.namics.distrelec.b2b.storefront.interceptors.beforeview.SeoRobotsFollowBeforeViewHandler"/>
+        <bean class="com.namics.distrelec.b2b.storefront.interceptors.beforeview.DistTrackingFactFinderHandler"/>
+        <bean class="com.namics.distrelec.b2b.storefront.interceptors.beforeview.UiThemeResourceBeforeViewHandler">
+            <property name="defaultThemeName" value="common"/>
+        </bean>
+    </util:list>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/checkout/**"/>
+            <mvc:mapping path="/registration/checkout*"/>
+            <mvc:mapping path="/login/checkout*"/>
+            <mvc:mapping path="/login/newcheckout*"/>
+            <mvc:mapping path="/login/checkout/register/**"/>
+            <mvc:mapping path="/login/checkout/registration/**"/>
+            <mvc:mapping path="/login/checkout/pw/**"/>
+            <ref bean="checkoutProgressBarInterceptor"/>
+        </mvc:interceptor>
+
+        <!-- Interceptor that runs once per request and before the controller handler method is called -->
+        <bean class="com.namics.distrelec.b2b.storefront.interceptors.beforecontroller.BeforeControllerInterceptor">
+            <property name="beforeControllerHandlers">
+                <list>
+                    <bean class="com.namics.distrelec.b2b.storefront.interceptors.beforecontroller.DeviceDetectionBeforeControllerHandler"/>
+                    <bean class="com.namics.distrelec.b2b.storefront.interceptors.beforecontroller.RequireHardLoginBeforeControllerHandler">
+                        <property name="loginUrl" value="/login"/>
+                        <property name="loginAndCheckoutUrl" value="/login/checkout"/>
+                    </bean>
+                </list>
+            </property>
+        </bean>
+
+        <!-- Interceptor that runs BeforeViewHandlers before the view is rendered -->
+        <bean class="com.namics.distrelec.b2b.storefront.interceptors.beforeview.BeforeViewInterceptor">
+            <property name="beforeViewHandlers" ref="beforeViewInterceptorList"/>
+        </bean>
+
+        <bean class="com.namics.distrelec.b2b.storefront.interceptors.SecurityCheckInterceptor"/>
+        <bean class="com.namics.distrelec.b2b.storefront.interceptors.NamicsLanguageInterceptor">
+            <property name="commonI18NService" ref="commonI18NService"/>
+            <property name="languageResolver" ref="languageResolver"/>
+            <property name="localePattern" value="^\/([a-z]{2})(\/|$)"/>
+        </bean>
+
+        <!-- START-NAMICS-CHANGE: Terrific support for cms pages -->
+        <ref bean="NamicsSwitchTerrificViewHandlerInterceptorAdapter"/>
+        <!-- END-NAMICS-CHANGE: Terrific support for cms pages -->
+
+        <bean class="com.namics.distrelec.b2b.storefront.interceptors.CmsPageInterceptor"/>
+        <bean class="com.namics.distrelec.b2b.storefront.interceptors.DebugInterceptor"/>
+        <bean class="com.namics.distrelec.b2b.storefront.interceptors.GenericAttributeInterceptor"/>
+
+        <!-- <bean class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
+            <constructor-arg ref="conversionService" />
+        </bean> -->
+
+
+        <bean class="com.namics.distrelec.b2b.storefront.security.GUIDInterceptor" parent="abstractSeoInterceptor"/>
+        <bean class="com.namics.distrelec.b2b.storefront.seo.SeoFasterizeMockupInterceptor"
+              parent="abstractSeoInterceptor"/>
+        <bean class="com.namics.distrelec.b2b.storefront.security.cookie.DistCookieInterceptor"/>
+        <bean class="com.namics.distrelec.b2b.storefront.security.cookie.SameSiteCookieInterceptor"/>
+
+        <!-- START: DigitalDatalayer object conversion  -->
+        <ref bean="digitalDatalayerHandlerInterceptorAdapter"/>
+        <!-- END: DigitalDatalayer object conversion  -->
+
+    </mvc:interceptors>
+
+    <!-- Interceptor which adds the Progressbar to the model. -->
+    <bean id="importToolProgressBarInterceptor"
+          class="com.namics.distrelec.b2b.storefront.controllers.progressbar.interceptor.ProgressBarInterceptor">
+        <property name="stepsKey" value="importtool.progress"/>
+        <property name="urlHasToBeEqual" value="true"/>
+    </bean>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/import-tool/**"/>
+            <ref bean="importToolProgressBarInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/bom-tool/**"/>
+            <ref bean="importToolProgressBarInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <!-- Interceptor which adds the Progressbar to the model. -->
+    <bean id="rmaProgressBarInterceptor"
+          class="com.namics.distrelec.b2b.storefront.controllers.progressbar.interceptor.UrlMatchingProgressBarInterceptor">
+        <property name="stepsKey" value="rma.progress"/>
+        <property name="urlHasToBeEqual" value="false"/>
+    </bean>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**/return-items/**"/>
+            <ref bean="rmaProgressBarInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- Disable caching. -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/shopping/**"/>
+            <bean id="noCachingWebContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+                <property name="cacheSeconds" value="0"/>
+                <property name="useExpiresHeader" value="true"/>
+                <property name="useCacheControlHeader" value="true"/>
+                <property name="useCacheControlNoStore" value="true"/>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- Tell Spring MVC how to find its jsp files -->
+    <bean id="viewResolver" class="com.namics.distrelec.b2b.storefront.web.view.UiExperienceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+        <property name="redirectHttp10Compatible" value="true"/>
+        <property name="cache" value="false"/>
+
+        <property name="uiExperienceService" ref="uiExperienceService"/>
+        <property name="uiExperienceViewPrefix">
+            <map>
+                <entry key="DESKTOP" value="desktop/"/>
+                <!-- START-NAMICS-CHANGE: disable mobile support -->
+                <!-- <entry key="MOBILE" value="mobile/" /> -->
+                <!-- END-NAMICS-CHANGE: disable mobile support -->
+            </map>
+        </property>
+        <property name="unknownUiExperiencePrefix" value="desktop/"/>
+        <property name="exposeContextBeansAsAttributes" value="true"/>
+        <property name="exposedContextBeanNames">
+            <list>
+                <value>categoryPageController</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <!-- Localization -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <!-- MessageSource -->
+    <alias name="hybrisDBMessageSource" alias="messageSource"/>
+    <bean id="hybrisDBMessageSource" class="com.namics.hybris.i18n.UncachedDaoMessageSource">
+        <property name="messageSourceDao" ref="hybrisFlexisearchMessageSourceDao"/>
+        <property name="parentMessageSource" ref="distrelecResourceBundleMessageSource"/>
+    </bean>
+
+    <!-- parent-less message source is needed for bean 'themeSource' -->
+    <bean id="hybrisDBMessageSourceWithoutParent" class="com.namics.hybris.i18n.UncachedDaoMessageSource"
+          autowire-candidate="false" primary="false">
+        <property name="messageSourceDao" ref="hybrisFlexisearchMessageSourceDao"/>
+    </bean>
+
+    <bean id="distrelecResourceBundleMessageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>/WEB-INF/messages/base</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!-- The number of seconds to cache loaded properties files. Set to -1 (never) for production. -->
+        <property name="cacheSeconds"
+                  value="#{configurationService.configuration.getProperty('storefront.resourceBundle.cacheSeconds')}"/>
+        <property name="fallbackToSystemLocale" value="false"/>
+    </bean>
+
+    <!-- theme message source - falls back to the messageSource -->
+    <bean id="themeSource" class="com.namics.distrelec.b2b.storefront.support.CustomResourceBundleThemeSource">
+        <property name="siteBasenamePrefix" value="/WEB-INF/messages/site-"/>
+        <property name="themeBasenamePrefix" value="/WEB-INF/messages/theme-"/>
+        <property name="parentMessageSource" ref="distrelecResourceBundleMessageSource"/>
+        <!-- The number of seconds to cache loaded properties files. Set to -1 (never) for production. -->
+        <property name="cacheSeconds"
+                  value="#{configurationService.configuration.getProperty('storefront.resourceBundle.cacheSeconds')}"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="priorityMessageSource" ref="hybrisDBMessageSourceWithoutParent"/>
+    </bean>
+
+    <!-- Theme Resolver Will resolve Theme from current page and then current cms site -->
+    <alias name="defaultThemeResolver" alias="themeResolver"/>
+    <bean id="defaultThemeResolver" class="com.namics.distrelec.b2b.storefront.servlets.util.DefaultThemeResolver">
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+        <property name="defaultThemeName" value="blue"/>
+    </bean>
+
+    <bean id="localeResolver" class="com.namics.distrelec.b2b.storefront.i18n.StoreSessionLocaleResolver">
+        <property name="i18NService" ref="i18NService"/>
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+    </bean>
+
+    <!-- CMS Content Element Controllers -->
+
+    <bean id="browseHistory" class="com.namics.distrelec.b2b.storefront.history.impl.DefaultBrowseHistory">
+        <property name="sessionService" ref="sessionService"/>
+        <property name="capacity" value="10"/>
+    </bean>
+
+    <bean id="productBreadcrumbBuilder"
+          class="com.namics.distrelec.b2b.storefront.breadcrumb.impl.ProductBreadcrumbBuilder">
+        <property name="browseHistory" ref="browseHistory"/>
+        <property name="productModelUrlResolver" ref="productModelUrlResolver"/>
+        <property name="catalogPlusProductModelUrlResolver" ref="catalogPlusProductModelUrlResolver"/>
+        <property name="categoryModelUrlResolver" ref="categoryModelUrlResolver"/>
+        <property name="categoryService" ref="categoryService"/>
+    </bean>
+
+    <bean id="catalogPlusBreadcrumbBuilder"
+          class="com.namics.distrelec.b2b.storefront.breadcrumb.impl.CatalogPlusBreadcrumbBuilder">
+        <property name="baseSiteService" ref="baseSiteService"/>
+        <property name="configurationService" ref="configurationService"/>
+        <property name="messageSource" ref="messageSource"/>
+        <property name="i18nService" ref="i18nService"/>
+    </bean>
+
+    <bean id="simpleBreadcrumbBuilder"
+          class="com.namics.distrelec.b2b.storefront.breadcrumb.impl.SimpleBreadcrumbBuilder">
+        <property name="messageSource" ref="messageSource"/>
+        <property name="i18nService" ref="i18nService"/>
+    </bean>
+
+    <bean id="shoppingListBreadcrumbBuilder"
+          class="com.namics.distrelec.b2b.storefront.breadcrumb.impl.ShoppingListBreadcrumbBuilder"/>
+
+    <bean id="b2bContentPageBreadcrumbBuilder"
+          class="com.namics.distrelec.b2b.storefront.breadcrumb.impl.ContentPageBreadcrumbBuilder"/>
+
+    <bean id="accountBreadcrumbBuilder"
+          class="com.namics.distrelec.b2b.storefront.breadcrumb.impl.AccountBreadcrumbBuilder">
+        <property name="messageSource" ref="messageSource"/>
+        <property name="i18nService" ref="i18nService"/>
+    </bean>
+
+    <bean id="storefinderBreadcrumbBuilder"
+          class="com.namics.distrelec.b2b.storefront.breadcrumb.impl.StorefinderBreadcrumbBuilder"/>
+
+    <bean id="manufacturerBreadcrumbBuilder"
+          class="com.namics.distrelec.b2b.storefront.breadcrumb.impl.ManufacturerBreadcrumbBuilder">
+        <property name="messageSource" ref="messageSource"/>
+        <property name="i18nService" ref="i18nService"/>
+    </bean>
+
+    <alias name="defaultCMSPageURLMappingHandler" alias="cmsPageUrlHandlerMapping"/>
+    <bean id="defaultCMSPageURLMappingHandler"
+          class="com.namics.distrelec.b2b.storefront.preview.DefaultCMSPageURLMappingHandler">
+        <property name="pageMapping">
+            <map>
+                <entry key="homepage" value="/"/>
+                <entry key="cartPage" value="/cart"/>
+                <entry key="search" value="/search"/>
+                <entry key="searchEmpty" value="/search"/>
+                <entry key="account" value="/my-account"/>
+                <entry key="profile" value="/my-account/profile"/>
+                <entry key="address-book" value="/my-account/address-book"/>
+                <entry key="add-edit-address" value="/my-account/add-edit-address"/>
+                <entry key="payment-details" value="/my-account/payment-details"/>
+                <entry key="order" value="/my-account/order"/>
+                <entry key="orders" value="/my-account/orders"/>
+                <entry key="checkoutSummaryPage" value="/checkout/summary"/>
+                <entry key="storefinderPage" value="/store-finder"/>
+                <entry key="login" value="/login"/>
+                <entry key="checkout-login" value="/login/checkout"/>
+                <entry key="forgottenPassword" value="/login/pw/request"/>
+                <entry key="updatePassword" value="/login/pw/change"/>
+                <entry key="my-company" value="/my-company"/>
+                <entry key="my-company-login" value="/login/my-company"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="pageTitleResolver" class="com.namics.distrelec.b2b.storefront.support.PageTitleResolver">
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+        <property name="commerceCategoryService" ref="commerceCategoryService"/>
+        <property name="productService" ref="productService"/>
+        <property name="i18nService" ref="i18nService"/>
+        <property name="messageSource" ref="messageSource"/>
+    </bean>
+
+    <alias name="defaultVariantSortStrategy" alias="variantSortStrategy"/>
+    <bean id="defaultVariantSortStrategy"
+          class="com.namics.distrelec.b2b.storefront.variants.impl.DefaultVariantSortStrategy">
+        <property name="sortingFieldsOrder">
+            <list>
+                <value>size</value>
+            </list>
+        </property>
+        <property name="comparators">
+            <util:map>
+                <entry key="size" value-ref="sizeAttributeComparator"/>
+            </util:map>
+        </property>
+        <property name="defaultComparator" ref="variantsComparator"/>
+    </bean>
+
+    <alias name="defaultVariantsComparator" alias="variantsComparator"/>
+    <bean id="defaultVariantsComparator"
+          class="com.namics.distrelec.b2b.storefront.variants.impl.DefaultVariantComparator"/>
+
+    <!-- Converter for ProgressBar -->
+    <alias name="defaultProgressBarConverter" alias="progressBarConverter"/>
+    <bean id="defaultProgressBarConverter"
+          class="com.namics.distrelec.b2b.storefront.controllers.progressbar.converter.ProgressBarConverter">
+        <property name="targetClass"
+                  value="com.namics.distrelec.b2b.storefront.controllers.progressbar.data.ProgressBarData"/>
+    </bean>
+
+
+    <util:list id="searchRobotUserAgents" value-type="java.lang.String">
+        <value>adidxbot</value>
+        <value>AdsBot-Google</value>
+        <value>AhrefsBot</value>
+        <value>archive.org_bot</value>
+        <value>Baiduspider</value>
+        <value>bingbot</value>
+        <value>facebookexternalhit</value>
+        <value>Exabot</value>
+        <value>GomezAgent</value>
+        <value>Googlebot</value>
+        <value>Googlebot-Image</value>
+        <value>Mediapartners-Google</value>
+        <value>rogerbot-crawler</value>
+        <value>Sogou web spider</value>
+        <value>ca-crawler</value>
+        <value>YandexBot</value>
+        <value>YandexImages</value>
+        <value>Yahoo! Slurp</value>
+    </util:list>
+
+    <bean id="searchRobotDetector" class="com.namics.distrelec.b2b.storefront.util.SearchRobotDetector">
+        <property name="searchRobotUserAgents" ref="searchRobotUserAgents"/>
+    </bean>
+
+    <bean id="englishLocale" class="java.util.Locale">
+        <constructor-arg value="en"/>
+    </bean>
+
+    <bean id="englishMessageSourceAccessor" class="org.springframework.context.support.MessageSourceAccessor">
+        <constructor-arg ref="messageSource"/>
+        <constructor-arg ref="englishLocale"/>
+    </bean>
+
+    <util:set id="distFastCheckoutUrls" value-type="java.lang.String">
+        <value>/cart</value>
+        <value>/login/checkout</value>
+        <value>/checkout/backorderDetails</value>
+        <value>/p/</value>
+    </util:set>
+</beans>

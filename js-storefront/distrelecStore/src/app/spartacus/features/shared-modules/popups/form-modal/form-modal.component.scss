@@ -1,0 +1,137 @@
+@import 'global-utilities';
+
+.form-modal {
+  top: 10%;
+  left: 0;
+  right: 0;
+  width: 80%;
+  margin: 0 auto;
+  align-items: center;
+  background: #f5f7f9;
+  border-radius: 8px;
+  border: 1px solid $colour-popup-border;
+  box-shadow:
+    0px 4px 6px -4px rgba(24, 39, 75, 0.12),
+    0px 8px 8px -4px rgba(24, 39, 75, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: $spacing-unit * 3;
+  position: relative;
+  z-index: $zindex-modal;
+  overflow-y: auto;
+
+  @include tablet {
+    width: 40%;
+  }
+
+  @include desktop {
+    width: 28%;
+    padding: ($spacing-unit * 5) ($spacing-unit * 5) ($spacing-unit * 4);
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+
+    background: $colour-dark-grey;
+
+    padding: $spacing-unit * 3 + 1;
+    gap: 10px;
+    width: 100%;
+    border-radius: 8px;
+
+    &--title {
+      @include font-size(20px);
+      @include line-height(24px);
+      font-weight: $font-weight-semiBold;
+      color: $colour-white;
+      padding-top: $spacing-unit;
+    }
+  }
+
+  &__form {
+    width: 100%;
+    padding: ($spacing-unit * 3) ($spacing-unit * 2);
+
+    @include desktop {
+      padding: ($spacing-unit * 5) ($spacing-unit * 4) ($spacing-unit * 2) ($spacing-unit * 4);
+    }
+
+    &--holder {
+      padding-top: $spacing-unit * 2;
+
+      &:first-of-type {
+        padding: 0;
+      }
+    }
+
+    &--row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      @include font-size(14px);
+    }
+
+    &--label {
+      @include font-size(14px);
+      font-weight: $font-weight-medium;
+      color: $colour-dark-grey;
+    }
+
+    &--message {
+      height: 148px;
+    }
+
+    .form-control {
+      @include font-size(14px);
+      border-radius: 0px;
+    }
+
+    &--buttons {
+      display: inline;
+
+      .btn {
+        @include font-size(14px);
+        font-weight: $font-weight-medium;
+        min-width: 83px;
+        min-height: 40px;
+        border-radius: 0;
+
+        &:first-of-type {
+          margin-right: $spacing-unit;
+        }
+      }
+
+      &-cancel {
+        background: $colour-white;
+        border: 1px solid #c0c3c7;
+      }
+
+      &-submit {
+        color: $colour-white;
+        background: $colour-green;
+      }
+    }
+  }
+}
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  /* Stay in place */
+  z-index: $zindex-modal-backdrop;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  background-color: rgba($colour-black, 0.8);
+  /* Black w/opacity */
+  overflow-x: hidden;
+  /* Disable horizontal scroll */
+
+  transition: 0.5s;
+  /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}

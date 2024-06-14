@@ -1,0 +1,81 @@
+
+$productCatalog=distrelecProductCatalog
+$productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default='Online'])
+$languages=en,de
+
+INSERT_UPDATE Catalog;id[unique=true]
+;$productCatalog
+
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;languages(isoCode);readPrincipals(uid)
+;$productCatalog;Online;true;$languages;employeegroup
+
+INSERT_UPDATE Unit;code[unique=true];name[lang=en];name[lang=de];unitType
+;PC;Piece;Stück;pieces
+
+INSERT_UPDATE Product;code[unique=true];approvalStatus(code);name[lang=en];description[lang=en];$productCV
+;5849020;approved;Gamer-PC from Asus;Super fast Computer from Asus;
+;9238041;approved;Office PC from Dell;Best Office PC from Dell;
+;3039502;approved;Elitebook from HP;Fast Notebook;
+;2394805;approved;Ultrabook from Samsung;Light Ultrabook;
+;2093829;approved;Galaxy S I9300 from Samsung;Good Smartphone from Samsung;
+;3495802;approved;Nexus 4 from Google;Fast Android Smartphone;
+;4803907;approved;IPhone 4 from Apple;Easy to use Phone;
+;8274985;approved;IPhone 5 from Apple;Phone;
+
+INSERT_UPDATE UserPriceGroup;code[unique=true];name[lang=en];
+;B2B_DEFAULT_PRICE_GROUP;A DEFAULT B2B USERPRICEGROUP;
+;SalesOrg_UPG_7310
+
+INSERT_UPDATE DistErpPriceConditionType;code[unique=true];priority
+;ZN00;1
+;ZR00;2
+;PR00;3
+
+INSERT_UPDATE DistPriceRow;product(code)[unique=true];ug(code);minqtd[unique=true];price;unit(code);currency(isocode)[unique=true];net[unique=true];erpPriceConditionType(code)
+;5849020;SalesOrg_UPG_7310;1;42;PC;EUR;false;PR00
+;9238041;SalesOrg_UPG_7310;1;53;PC;EUR;false;PR00
+;3039502;SalesOrg_UPG_7310;1;54;PC;EUR;false;PR00
+;2394805;SalesOrg_UPG_7310;1;64;PC;EUR;false;PR00
+;2093829;SalesOrg_UPG_7310;1;75;PC;EUR;false;PR00
+;3495802;SalesOrg_UPG_7310;1;86;PC;EUR;false;PR00
+;4803907;SalesOrg_UPG_7310;1;97;PC;EUR;false;PR00
+
+INSERT_UPDATE UserGroup;uid[unique=true];groups(uid);
+;customergroup;
+;b2bgroup;
+;eProcurementGroup;
+;b2beeshopgroup;
+;b2bcustomergroup;
+;b2cgroup;
+;b2badmingroup;
+
+
+INSERT_UPDATE B2BUnit;uid[unique=true];salesOrg(code);customerType(code)
+;test_unit;7310;B2B
+
+INSERT_UPDATE B2BCustomer;uid[unique=true];email;name;groups(uid);sessionCurrency(isocode);defaultB2BUnit(uid)
+;getuser;getUser@test.com;getUser;test_unit;EUR;test_unit
+;removeuser;removeUser@test.com;removeUser;test_unit;EUR;test_unit
+;adduser;addUser@test.com;addUser;test_unit;EUR;test_unit
+
+INSERT_UPDATE Wishlist2;user(uid)[unique=true];listType(code)[unique=true];name;default
+;getuser;COMPARE;getUser_Test;true
+;removeuser;COMPARE;removeUser_Test;true
+;adduser;COMPARE;addUser_Test;true
+
+INSERT_UPDATE Wishlist2Entry;wishlist(name)[unique=true];product(code)[unique=true];priority(code);addedDate[dateformat=yyyy-MM-dd hh:mm:ss]
+;getUser_Test;5849020;medium;2013-06-18 08:33:44
+;getUser_Test;9238041;medium;2013-06-18 08:33:44
+;getUser_Test;2394805;medium;2013-06-18 08:33:44
+;getUser_Test;2093829;medium;2013-06-18 08:33:44
+
+;removeUser_Test;5849020;medium;2013-06-18 08:33:44
+;removeUser_Test;4803907;medium;2013-06-18 08:33:44
+;removeUser_Test;2093829;medium;2013-06-18 08:33:44
+
+;addUser_Test;3039502;medium;2013-06-18 08:33:44
+;addUser_Test;4803907;medium;2013-06-18 08:33:44
+;addUser_Test;2394805;medium;2013-06-18 08:33:44
+;addUser_Test;9238041;medium;2013-06-18 08:33:44
+;addUser_Test;3495802;medium;2013-06-18 08:33:44
+

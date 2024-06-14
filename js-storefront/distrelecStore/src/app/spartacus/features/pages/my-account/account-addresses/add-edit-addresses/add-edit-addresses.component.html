@@ -1,0 +1,500 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10 offset-lg-2">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-5 offset-lg-2">
+      <ng-container>
+        <div class="row mt-4">
+          <div class="col-md-12 col-lg-12 col-sm-12">
+            <h1 id="myAccount.add_edit_address">
+              {{ 'form.add_edit_address' | cxTranslate }}
+            </h1>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <h2 id="myAccount.add_edit_address_sub_title">{{ addEditAddressSubtitle | cxTranslate }}</h2>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <hr />
+              <app-action-message
+                id="addEditShippingAddress"
+                [type]="responseType"
+                [message]="responseMessage"
+              ></app-action-message>
+            </div>
+          </div>
+        </div>
+
+        <form *ngIf="loadedAddress; else loadingAddress" [formGroup]="addEditAddressForm">
+          <div
+            *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'"
+            class="form-group row mt-3"
+          >
+            <label
+              class="col-sm-4 col-form-label"
+              id="myAccount.address_company_name"
+              for="myAccount.address_company_name_input"
+            >
+              {{ 'form.company_name' | cxTranslate }} *
+            </label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                id="myAccount.address_company_name_input"
+                [(ngModel)]="addressDetails.companyName"
+                [class.is-correct]="addEditAddressForm.get('companyName').valid"
+                [class.is-invalid]="
+                  addEditAddressForm.get('companyName').errors && addEditAddressForm.get('companyName').touched
+                "
+                type="text"
+                formControlName="companyName"
+              />
+              <small
+                *ngIf="addEditAddressForm.get('companyName').errors && addEditAddressForm.get('companyName').touched"
+                class="error"
+              >
+                {{ 'address.form.input.empty' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+
+          <div
+            *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'"
+            class="form-group row"
+          >
+            <label
+              class="col-sm-4 col-form-label"
+              id="myAccount.address_company_name_two"
+              for="myAccount.address_company_name_input_two"
+            >
+              {{ 'form.company_name_2' | cxTranslate }}
+            </label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                id="myAccount.address_company_name_input_two"
+                [(ngModel)]="addressDetails.companyName2"
+                type="text"
+                formControlName="companyName2"
+              />
+            </div>
+          </div>
+          <div *ngIf="userDetails?.customerType === 'B2C'">
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label" id="myAccount.address_title" for="myAccount.address_title_select">
+                {{ 'form.title' | cxTranslate }} *
+              </label>
+              <div class="col-sm-3">
+                <ng-container *ngIf="titleList">
+                  <ng-select
+                    id="myAccount.address_title_select"
+                    [(ngModel)]="addressDetails.title"
+                    [items]="titleList.titles"
+                    formControlName="title"
+                    bindLabel="name"
+                    bindValue="code"
+                  ></ng-select>
+                  <small
+                    *ngIf="addEditAddressForm.get('title').errors && addEditAddressForm.get('title').touched"
+                    class="error"
+                  >
+                    {{ 'validations.error_dropdown' | cxTranslate }}
+                  </small>
+                </ng-container>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label
+                class="col-sm-4 col-form-label"
+                id="myAccount.address_first_name"
+                for="myAccount.address_first_name_input"
+              >
+                {{ 'form.first_name' | cxTranslate }} *
+              </label>
+              <div class="col-sm-8">
+                <input
+                  class="form-control"
+                  id="myAccount.address_first_name_input"
+                  [(ngModel)]="addressDetails.firstName"
+                  [class.is-correct]="addEditAddressForm.get('firstName').valid"
+                  [class.is-invalid]="
+                    addEditAddressForm.get('firstName').errors && addEditAddressForm.get('firstName').touched
+                  "
+                  type="text"
+                  formControlName="firstName"
+                />
+                <small
+                  *ngIf="addEditAddressForm.get('firstName').errors && addEditAddressForm.get('firstName').touched"
+                  class="error"
+                >
+                  {{ 'address.form.input.empty' | cxTranslate }}
+                </small>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label
+                class="col-sm-4 col-form-label"
+                id="myAccount.address_last_name"
+                for="myAccount.address_last_name_input"
+              >
+                {{ 'form.last_name' | cxTranslate }} *
+              </label>
+              <div class="col-sm-8">
+                <input
+                  class="form-control"
+                  id="myAccount.address_last_name_input"
+                  [(ngModel)]="addressDetails.lastName"
+                  [class.is-correct]="addEditAddressForm.get('lastName').valid"
+                  [class.is-invalid]="
+                    addEditAddressForm.get('lastName').errors && addEditAddressForm.get('lastName').touched
+                  "
+                  type="text"
+                  formControlName="lastName"
+                />
+                <small
+                  *ngIf="addEditAddressForm.get('lastName').errors && addEditAddressForm.get('lastName').touched"
+                  class="error"
+                >
+                  {{ 'address.form.input.empty' | cxTranslate }}
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label
+              class="col-sm-4 col-form-label"
+              id="myAccount.address_street_name"
+              for="myAccount.address_street_name_input"
+            >
+              {{ 'form.street_name' | cxTranslate }} *
+            </label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                id="myAccount.address_street_name_input"
+                [(ngModel)]="addressDetails.streetName"
+                [class.is-correct]="addEditAddressForm.get('streetName').valid"
+                [class.is-invalid]="
+                  addEditAddressForm.get('streetName').errors && addEditAddressForm.get('streetName').touched
+                "
+                type="text"
+                formControlName="streetName"
+              />
+              <small
+                *ngIf="addEditAddressForm.get('streetName').errors && addEditAddressForm.get('streetName').touched"
+                class="error"
+              >
+                {{ 'address.form.input.empty' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label
+              class="col-sm-4 col-form-label"
+              id="myAccount.address_street_number"
+              for="myAccount.address_street_number_input"
+            >
+              {{ 'form.street_nr' | cxTranslate }} *
+            </label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                id="myAccount.address_street_number_input"
+                [(ngModel)]="addressDetails.streetNr"
+                [class.is-correct]="addEditAddressForm.get('streetNr').valid"
+                [class.is-invalid]="
+                  addEditAddressForm.get('streetNr').errors && addEditAddressForm.get('streetNr').touched
+                "
+                type="text"
+                formControlName="streetNr"
+                maxlength="10"
+              />
+              <small
+                *ngIf="addEditAddressForm.get('streetNr').errors && addEditAddressForm.get('streetNr').touched"
+                class="error"
+              >
+                {{ 'address.form.input.empty' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label
+              class="col-sm-4 col-form-label"
+              id="myAccount.address_postal_code"
+              for="myAccount.address_postal_code_input"
+            >
+              {{ 'form.postal_code' | cxTranslate }} *
+            </label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                id="myAccount.address_postal_code_input"
+                [(ngModel)]="addressDetails.postalCode"
+                [class.is-correct]="addEditAddressForm.get('postalCode').valid"
+                [class.is-invalid]="
+                  addEditAddressForm.get('postalCode').errors && addEditAddressForm.get('postalCode').touched
+                "
+                type="text"
+                formControlName="postalCode"
+              />
+              <small
+                *ngIf="addEditAddressForm.get('postalCode').errors && addEditAddressForm.get('postalCode').touched"
+                class="error"
+              >
+                {{ 'address.form.input.empty' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label" id="myAccount.address_town" for="myAccount.address_town_input">
+              {{ 'form.town' | cxTranslate }} *
+            </label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                id="myAccount.address_town_input"
+                [(ngModel)]="addressDetails.town"
+                [class.is-correct]="addEditAddressForm.get('town').valid"
+                [class.is-invalid]="addEditAddressForm.get('town').errors && addEditAddressForm.get('town').touched"
+                type="text"
+                formControlName="town"
+              />
+              <small
+                *ngIf="addEditAddressForm.get('town').errors && addEditAddressForm.get('town').touched"
+                class="error"
+              >
+                {{ 'address.form.input.empty' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label
+              class="col-sm-4 col-form-label"
+              id="myAccount.address_country"
+              for="myAccount.address_country_select"
+            >
+              {{ 'form.country' | cxTranslate }} *
+            </label>
+            <div class="col-sm-8">
+              <ng-select
+                id="myAccount.address_country_select"
+                [(ngModel)]="addressDetails.country"
+                [items]="countryList"
+                formControlName="country"
+                bindLabel="name"
+                bindValue="isocode"
+              ></ng-select>
+            </div>
+          </div>
+          <div *ngIf="regionList && regionList.length > 0" class="form-group row">
+            <label class="col-sm-4 col-form-label" id="myAccount.address_region" for="myAccount.address_region_select">
+              {{ 'form.region' | cxTranslate }} *
+            </label>
+            <div class="col-sm-8">
+              <ng-select
+                id="myAccount.address_region_select"
+                [(ngModel)]="addressDetails.region"
+                [items]="regionList"
+                formControlName="region"
+                bindLabel="name"
+                bindValue="isocode"
+              ></ng-select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label
+              *ngIf="userDetails?.customerType === 'B2C'"
+              class="col-sm-4 col-form-label"
+              id="myAccount.address_contact_phone"
+              for="myAccount.address_phone_input"
+            >
+              {{ 'form.contact_phone_number' | cxTranslate }}&nbsp;*
+            </label>
+            <label
+              *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'"
+              class="col-sm-4 col-form-label"
+              id="myAccount.address_contact_phone"
+              for="myAccount.address_phone_input"
+              for="contactPhone"
+            >
+              {{ 'form.phone_number' | cxTranslate }} **
+            </label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                id="myAccount.address_phone_input"
+                [(ngModel)]="addressDetails.phoneNumber"
+                [class.is-invalid]="
+                  addEditAddressForm.get('phoneNumber').errors && addEditAddressForm.get('phoneNumber').touched
+                "
+                type="text"
+                formControlName="phoneNumber"
+                placeholder="{{ phonePrefix }}"
+              />
+              <small
+                *ngIf="
+                  (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT') &&
+                  !isBillingAddress &&
+                  addEditAddressForm.get('phoneNumber').errors &&
+                  addEditAddressForm.get('phoneNumber').touched
+                "
+                class="error"
+              >
+                {{ 'validations.enter_valid_phone_mobile' | cxTranslate }}
+              </small>
+              <small
+                *ngIf="
+                  (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT') &&
+                  isBillingAddress &&
+                  addEditAddressForm.get('phoneNumber').errors &&
+                  addEditAddressForm.get('phoneNumber').touched
+                "
+                class="error"
+              >
+                {{ 'validations.enter_phone' | cxTranslate }}
+              </small>
+              <small
+                *ngIf="
+                  userDetails?.customerType === 'B2C' &&
+                  addEditAddressForm.get('phoneNumber').errors &&
+                  addEditAddressForm.get('phoneNumber').touched
+                "
+                class="error"
+              >
+                {{ 'address.form.input.empty' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label
+              class="col-sm-4 col-form-label"
+              id="myAccount.address_mobile_number"
+              for="myAccount.address_mobile_number_input"
+            >
+              {{ 'form.mobile_number' | cxTranslate }} **
+            </label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                id="myAccount.address_mobile_number_input"
+                [(ngModel)]="addressDetails.mobileNumber"
+                [class.is-invalid]="
+                  (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT') &&
+                  !isBillingAddress &&
+                  addEditAddressForm.get('mobileNumber').errors &&
+                  addEditAddressForm.get('mobileNumber').touched
+                "
+                type="text"
+                formControlName="mobileNumber"
+                placeholder="{{ phonePrefix }}"
+              />
+              <small
+                *ngIf="
+                  (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT') &&
+                  !isBillingAddress &&
+                  addEditAddressForm.get('mobileNumber').errors &&
+                  addEditAddressForm.get('mobileNumber').touched
+                "
+                class="error"
+              >
+                {{ 'validations.enter_valid_phone_mobile' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+          <div
+            *ngIf="userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT'"
+            class="form-group row"
+          >
+            <label
+              class="col-sm-4 col-form-label"
+              id="myAccount.address_fax_number"
+              for="myAccount.address_fax_number_input"
+            >
+              {{ 'form.fax_number' | cxTranslate }}
+            </label>
+            <div class="col-sm-8">
+              <input
+                class="form-control"
+                id="myAccount.address_fax_number_input"
+                [(ngModel)]="addressDetails.faxNumber"
+                type="text"
+                formControlName="faxNumber"
+                placeholder="{{ phonePrefix }}"
+              />
+            </div>
+          </div>
+          <br />
+          <div class="form-group row">
+            <div class="col-md-8 col-sm-12">
+              <button
+                class="btn btn-secondary btn-distrelec btn-gray float-left mb-2 ellipsis"
+                id="myAccount.address_cancel_button"
+                (click)="cancelAddEditAddress()"
+              >
+                {{ 'form.cancel' | cxTranslate }}
+                <div class="float-left ml-2">
+                  <fa-icon [icon]="faAngleLeft"></fa-icon>
+                </div>
+              </button>
+              <button
+                *ngIf="removableAddress"
+                class="btn btn-secondary btn-distrelec btn-gray btn-delete-address float-left ml-2 mb-2 ellipsis"
+                id="myAccount.address_delete_button"
+                (click)="deleteAddress()"
+              >
+                {{ 'form.delete_address' | cxTranslate }}
+              </button>
+            </div>
+            <div class="col-md-4 col-sm-12">
+              <button
+                class="btn btn-secondary btn-distrelec float-right ellipsis"
+                id="myAccount.address_save_update_button"
+                (click)="saveAddEditAddress()"
+              >
+                {{ buttonText | cxTranslate }}
+                <div class="float-right mr-2">
+                  <fa-icon [icon]="faAngleRight"></fa-icon>
+                </div>
+              </button>
+            </div>
+          </div>
+          <br />
+          <br />
+        </form>
+
+        <ng-template #loadingAddress>
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+              <img src="app/spartacus/assets/media/spinner.gif" />
+            </div>
+          </div>
+        </ng-template>
+
+        <app-confirm-popup
+          *ngIf="showConfirm"
+          [data]="{
+            title: 'form.confirm_default_message' | cxTranslate,
+            content: 'form.message_contents' | cxTranslate,
+            type: 'warning'
+          }"
+          (confirmedEvents)="confirmedDeleteAddress($event)"
+        ></app-confirm-popup>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

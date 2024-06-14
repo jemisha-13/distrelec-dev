@@ -1,0 +1,28 @@
+<ng-template
+  *ngIf="templateName$ | async as layoutName"
+  [cxPageTemplateStyle]="layoutName"
+  [cxOutlet]="layoutName"
+  [cxOutletContext]="{ templateName$: templateName$, slots$: slots$ }"
+>
+  <ng-container *ngIf="hasManufacturerContent$ | async; else manufacturerNoContent">
+    <cx-page-slot position="ManufacturerDetailTopBar"></cx-page-slot>
+    <cx-page-slot position="ManufacturerTopPosition"></cx-page-slot>
+
+    <div class="container showing-results-labels">
+      <cx-page-slot position="ProductListTitle"></cx-page-slot>
+      <cx-page-slot position="ProductListPagination"></cx-page-slot>
+    </div>
+  </ng-container>
+
+  <ng-template #manufacturerNoContent>
+    <cx-page-slot position="ManufacturerTopPosition"></cx-page-slot>
+    <div class="container showing-results-labels">
+      <cx-page-slot position="ManufacturerDetailTopBar"></cx-page-slot>
+      <cx-page-slot position="ProductListTitle"></cx-page-slot>
+      <cx-page-slot position="ProductListPagination"></cx-page-slot>
+    </div>
+  </ng-template>
+
+  <cx-page-slot position="ProductListFilters"></cx-page-slot>
+  <cx-page-slot position="ProductListMain"></cx-page-slot>
+</ng-template>

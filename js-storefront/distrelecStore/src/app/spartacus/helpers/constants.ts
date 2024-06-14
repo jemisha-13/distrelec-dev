@@ -1,0 +1,20 @@
+export const DECIMAL_RADIX = 10;
+
+export const PAGE_QUERY_PARAM = 'currentPage';
+export const FILTER_PARAM_PREFIX = 'filter_';
+export const FILTER_RANGE_PARAM_SUFFIX = '_range';
+export const FILTER_RANGE_SEPARATOR = '-TO-';
+export const FUSION_PARAM_PREFIX = 'pimWebUse_';
+export const FUSION_RANGE_SEPARATOR = ' TO ';
+export const FUSION_PARAM_SEPARATOR = ' OR ';
+export const FACT_FINDER_CATEGORY_ROOT = `categoryCodePathROOT`;
+
+export const DISTRELEC_EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$";
+
+export const SALES_STATUS_PURCHASING_NEWPRODUCT_COMINGSOON_IDENTIFIER = '20';
+export const SALES_STATUS_PURCHASING_NEWPRODUCT_PREORDER_IDENTIFIER = '21';
+export const SALES_STATUS_PURCHASING_ACTIVE_IDENTIFIER = '3';
+export const SALES_STATUS_PURCHASING_PHASEOUT_IDENTIFIER = '4';
+export const SALES_STATUS_PURCHASING_SUSPENDED_IDENTIFIER = '5';
+export const SALES_STATUS_PURCHASING_INACTIVE_IDENTIFIER = '6';
+export const SALES_STATUS_PURCHASING_BLOCKED_IDENTIFIER = '9';

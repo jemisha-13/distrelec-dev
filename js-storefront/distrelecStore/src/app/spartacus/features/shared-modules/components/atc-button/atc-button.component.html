@@ -1,0 +1,38 @@
+<app-dist-button
+  #atcButton
+  [buttonId]="id"
+  [class.lock-focus]="isAdding || isAdded"
+  [isDisabled]="isAddToCartDisabled$ | async"
+  (click)="addProductToCart($event)"
+  type="primary"
+  size="medium"
+  width="w-fill"
+>
+  <ng-template #atcIcon>
+    <app-icon [icon]="addToCartIcon" [iconAltText]="'product.product_info.add_to_cart_btn' | cxTranslate"></app-icon>
+  </ng-template>
+
+  <span class="btn-text" [class.invisible]="(isAdding || isAdded) && showAnimation" [id]="id + '_btn-text'">
+    <ng-container *ngIf="!forceIcon; else atcIcon">
+      <span class="d-none d-xl-block">{{ translationKey | cxTranslate }}</span>
+      <div class="d-xl-none">
+        <ng-container *ngTemplateOutlet="atcIcon"></ng-container>
+      </div>
+    </ng-container>
+  </span>
+  <ng-container *ngIf="showAnimation">
+    <div *ngIf="isAdding" class="progress-spinner-icon" [id]="id + '_progress-spinner-icon'">
+      <app-icon class="progress-spinner" iconName="progress-spinner" iconType="svg"></app-icon>
+    </div>
+    <span *ngIf="isAdded" class="added-label">
+      <span class="d-none d-xl-block">{{ 'product.product_info.add_to_cart_added' | cxTranslate }}</span>
+      <app-icon class="confirmation" iconName="confirmation" iconType="svg"></app-icon>
+    </span>
+  </ng-container>
+</app-dist-button>
+
+<div *ngIf="isAddToCartDisabledForActiveSite" class="disabled-add-to-cart-tooltip">
+  <app-tooltip [tooltipID]="addToCartTooltipId" position="bottom" size="sm" textAlign="center">
+    {{ 'product.product_info.add_to_cart_disabled' | cxTranslate }}
+  </app-tooltip>
+</div>

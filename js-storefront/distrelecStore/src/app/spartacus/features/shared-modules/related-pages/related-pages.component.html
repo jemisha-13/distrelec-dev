@@ -1,0 +1,71 @@
+<ng-container *ngIf="categoryData$ | async as category">
+  <ng-container *ngIf="!(isTechnicalView$ | async)">
+    <ng-container *ngIf="!(isPlpActive$ | async)">
+      <div class="related-pages">
+        <div *ngFor="let data of category" class="container">
+          <div
+            *ngIf="data.type === RelatedDataType.RelatedManufacturer"
+            class="related-pages__section"
+            id="related-manufacturers"
+          >
+            <b>{{ 'product.related_section.related_manufacturers' | cxTranslate }}:</b>
+            <ng-container *ngFor="let CRelatedData of data.CRelatedData">
+              <ng-container *ngFor="let value of CRelatedData.values; let last = last">
+                <a [routerLink]="value.url">{{ value.name }}</a>
+                <span *ngIf="!last">|</span>
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <div
+            *ngIf="data.type === RelatedDataType.RelatedCategory"
+            class="related-pages__section"
+            id="related-categories"
+          >
+            <b>{{ 'product.related_section.related_categories' | cxTranslate }}:</b>
+            <ng-container *ngFor="let CRelatedData of data.CRelatedData">
+              <ng-container *ngFor="let value of CRelatedData.values; let last = last">
+                <a [routerLink]="value.url">{{ value.name }}</a>
+                <span *ngIf="!last">|</span>
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <div
+            *ngIf="data.type === RelatedDataType.RelatedProduct"
+            class="related-pages__section"
+            id="related-products"
+          >
+            <b>{{ 'product.related_section.related_products' | cxTranslate }}:</b>
+            <ng-container *ngFor="let CRelatedData of data.CRelatedData">
+              <ng-container *ngFor="let value of CRelatedData.values; let last = last">
+                <a [routerLink]="value.url">{{ value.name }}</a>
+                <span *ngIf="!last">|</span>
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <div *ngIf="data.type === RelatedDataType.NewProducts" class="related-pages__section" id="new-products">
+            <b>{{ 'product.related_section.new_products' | cxTranslate }}:</b>
+            <ng-container *ngFor="let CRelatedData of data.CRelatedData">
+              <ng-container *ngFor="let value of CRelatedData.values; let last = last">
+                <a [routerLink]="value.url">{{ value.name }}</a>
+                <span *ngIf="!last">|</span>
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <div *ngIf="data.type === RelatedDataType.TopSeller" class="related-pages__section" id="top-sellers">
+            <b>{{ 'product.related_section.top_seller' | cxTranslate }}:</b>
+            <ng-container *ngFor="let CRelatedData of data.CRelatedData">
+              <ng-container *ngFor="let value of CRelatedData.values; let last = last">
+                <a [routerLink]="value.url">{{ value.name }}</a>
+                <span *ngIf="!last">|</span>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>

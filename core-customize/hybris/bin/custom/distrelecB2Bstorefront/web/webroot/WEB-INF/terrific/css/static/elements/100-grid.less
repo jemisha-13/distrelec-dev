@@ -1,0 +1,144 @@
+///
+ // 1280px grid system
+ // 16 Columns ~ Margin left: 0px
+ // see: http://www.gridsystemgenerator.com/gs04.php?GridWidth=960&GridColumns=12&GridMarginLeft=0
+ // Based on the simple grid system - http://www.webnicer.com/ by Jacek Ciolek
+ ///
+
+
+// Variables:
+@grid-width:  960px;
+@grid-width-gu: 1280px;
+@grid-cols:   16;
+@grid-marginleft: 0px;
+
+
+
+
+#grid {
+	.col-base(@spacing: @grid-marginleft) {
+		padding-left: @spacing;
+		float: left;
+//		position: relative; // removed by dmodalek: causes problems with popover positions
+	}
+
+	.col-size(@colSpan, @adjust: 0, @width: @grid-width-gu, @marginleft: @grid-marginleft, @cols: @grid-cols) {
+		width:
+			(
+				( (@width + @marginleft) / @cols  - @marginleft)
+				* @colSpan
+			)
+			+ (
+				(-1 + @colSpan) * @marginleft
+			)
+			+  @adjust
+			;
+	}
+
+	.row-size(@colSpan, @width: @grid-width-gu, @marginleft: @grid-marginleft, @cols: @grid-cols) {
+		width:
+			(
+				( (@width + @marginleft) / @cols  - @marginleft)
+				* @colSpan
+			)
+			+ (
+				@colSpan * @marginleft
+			);
+	}
+
+	.col(@colSpan, @spacing: @grid-marginleft) {
+		#grid > .col-base(@spacing);
+		#grid > .col-size(@colSpan);
+	}
+
+	.col-loop(@index) when (@index > 0) {
+		.gu-@{index} {
+			.col-size(@index);
+		}
+
+		// next iteration
+		.col-loop(@index - 1);
+	}
+
+	.row-loop(@index) when (@index > 0) {
+		//.ct-@{index} .row, // all .gu-* has .col-base()
+		.gu-@{index} .row {
+			.row-size(@index);
+		}
+
+		// next iteration
+		.row-loop(@index - 1);
+	}
+}
+
+// Row clearfix
+
+.row:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.row { // sic! separate!
+	display:inline-block;
+}
+.row { // sic! separate!
+	display:block;
+}
+
+// Row
+.row {
+//	position: relative; // removed by dmodalek: causes problems with popover positions
+	margin-left: @grid-marginleft;
+	
+	&.row-relative {
+		position: relative; // if you need position relative on a row i.e. if you need pos absolute inside
+	}
+}
+
+// Columns: Base
+[class*=gu-] {
+	#grid > .col-base();
+}
+
+// Rows (loop)
+& {
+	#grid > .row-loop(@grid-cols);
+}
+
+// Columns (loop)
+& {
+	#grid > .col-loop(@grid-cols);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Used for spacings between sidebars and main content elements
+// and for all those small indentations in the main content area
+
+// example: <div class="gu-4 gu-padding-left"></div><div class="gu-8 gu-padding-left"></div>
+
+.padding,								// padding just for this element
+.padding-gu [class*=gu-],				// padding for all .gu inside this container
+.padding-gu-children > [class*=gu-] {	// padding for all direct .gu children inside this container
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.padding-left,								// padding just for this element
+.padding-left-gu [class*=gu-],				// padding for all .gu inside this container
+.padding-left-gu-children > [class*=gu-] {	// padding for all direct .gu children inside this container
+	padding-left: 10px;
+}
+
+.padding-right,								// padding just for this element
+.padding-right-gu [class*=gu-],				// padding for all .gu inside this container
+.padding-right-gu-children > [class*=gu-]{	// padding for all direct .gu children inside this container
+	padding-right: 10px;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+

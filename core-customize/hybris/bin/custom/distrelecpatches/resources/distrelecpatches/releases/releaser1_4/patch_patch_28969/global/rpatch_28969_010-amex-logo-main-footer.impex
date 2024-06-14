@@ -1,0 +1,21 @@
+$exContentCatalog = distrelec_EXContentCatalog
+$exContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $exContentCatalog]), CatalogVersion.version[default = Staged])[default = $exContentCatalog:Staged]
+
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecpatches/releases/releaser1_4/patch_patch_28969/global/images
+
+$defaultContentCatalog=Default
+$defaultContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $defaultContentCatalog]), CatalogVersion.version[default = Staged])[default = $defaultContentCatalog:Staged]
+
+
+INSERT_UPDATE Media; code[unique = true]; $defaultContentCV[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = image/png]; altText
+                   ; footer-logo-amex   ;                                 ; $siteResource/amex-icon.png                                                 ;                          ; Amex
+
+
+
+INSERT_UPDATE DistPaymentMethodComponent; uid[unique = true]                ; $exContentCV[unique = true]  ; icon(code, $defaultContentCV) ; name
+                                        ; FooterAmexPaymentComponent ;                                     ; footer-logo-amex              ; Main Footer Amex Payment Component
+
+
+
+UPDATE DistFooterComponent; uid[unique = true]  ; $exContentCV[unique = true]; paymentMethods(uid, $exContentCV)                                                       ; impressumLinks(uid, $exContentCV)
+                          ; DistFooterComponent ;                            ; FooterMastercardPaymentComponent, FooterVisaPaymentComponent, FooterAmexPaymentComponent;

@@ -1,0 +1,103 @@
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+<html>
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body style="padding: 0; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+		## CONTENT
+		<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+			<tr>
+				<td style="border-collapse: collapse; border-right: 1px solid #cccccc; border: 1px solid #cccccc; padding: 20px;">
+					<table border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0;">
+						#if($ctx.result == "ERROR" || $ctx.result == "FAILURE")
+							#if($ctx.type == "AbsolutSanityCheck")
+								<tr>
+									<td>
+										<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+											The <b>$!StringEscapeUtils.escapeHtml($ctx.cronJobName)</b> CronJob has <b>failed</b>.<br />
+											The defined threshold of <b>$!StringEscapeUtils.escapeHtml($ctx.threshold)</b> has been trespassed.<br />
+											Total number of corrupt items: $!StringEscapeUtils.escapeHtml($ctx.lastResultCheckQuery)
+										</p>
+									</td>
+								</tr>
+							#elseif($ctx.type == "PercentageSanityCheck")
+								<tr>
+									<td>
+										<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+											The <b>$!StringEscapeUtils.escapeHtml($ctx.cronJobName)</b> CronJob has <b>failed</b>.<br />
+											The defined threshold of $!StringEscapeUtils.escapeHtml($ctx.threshold)% has been trespassed.<br />
+											Total number of items: $!StringEscapeUtils.escapeHtml($ctx.lastResultBaseQuery)<br />
+											Total number of corrupt items: $!StringEscapeUtils.escapeHtml($ctx.lastResultCheckQuery)
+										</p>
+									</td>
+								</tr>
+							#end
+							<tr>
+								<td>
+									<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+										<br />
+										<b>Error description:</b><br />
+										$!StringEscapeUtils.escapeHtml($ctx.errorMessage)<br />
+										Please check the system.<br />
+									</p>
+								</td>
+							</tr>
+						#elseif($ctx.result == "SUCCESS")
+							<tr>
+								<td>
+									<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+										<b>$!StringEscapeUtils.escapeHtml($ctx.cronJobName)</b> finished <b>successfully</b>
+									</p>
+								</td>
+							</tr>
+						#elseif($ctx.result == "UNKNOWN")
+							<tr>
+								<td>
+									<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+										<b>$!StringEscapeUtils.escapeHtml($ctx.cronJobName)</b>'s result is <b>unknown</b>
+									</p>
+								</td>
+							</tr>
+						#end
+			
+						<tr>
+							<td>
+								<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+									<br />
+									---------------------------------------------------<br />
+									Job: $!StringEscapeUtils.escapeHtml($ctx.cronJobName)<br />
+									Started: $!StringEscapeUtils.escapeHtml($ctx.startDate)<br />
+									Finished: $!StringEscapeUtils.escapeHtml($ctx.endDate)<br />
+									Duration: $!StringEscapeUtils.escapeHtml($ctx.duration)<br />
+									Current status: $!StringEscapeUtils.escapeHtml($ctx.status)<br />
+									---------------------------------------------------<br />
+									<br />
+								</p>
+							</td>
+						</tr>
+
+						#if($ctx.type == "PercentageSanityCheck")
+							<tr>
+								<td>
+									<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+										The query used as base is: <br />
+										<pre>$!StringEscapeUtils.escapeHtml($ctx.baseQuery)</pre>
+									</p>
+								</td>
+							</tr>
+						#end
+
+						<tr>
+							<td>
+								<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+									The query used to check is: <br />
+									<pre>$!StringEscapeUtils.escapeHtml($ctx.checkQuery)</pre>
+								</p>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

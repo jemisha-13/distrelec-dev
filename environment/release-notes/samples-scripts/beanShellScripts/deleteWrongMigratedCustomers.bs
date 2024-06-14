@@ -1,0 +1,160 @@
+import java.util.*;
+import de.hybris.platform.servicelayer.search.*;
+import de.hybris.platform.servicelayer.search.impl.*;
+import de.hybris.platform.b2b.model.*;
+import de.hybris.platform.catalog.model.*;
+import de.hybris.platform.core.*;
+import de.hybris.platform.jalo.*;
+import de.hybris.platform.jalo.user.*;
+import de.hybris.platform.jalo.flexiblesearch.*;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import de.hybris.platform.servicelayer.model.ModelService;
+import org.apache.log4j.Logger;
+
+ 
+LOG = Logger.getLogger("BeanShell");
+modelService = (ModelService) SpringUtil.getBean("modelService");
+flexibleSearchService = (FlexibleSearchService) SpringUtil.getBean("flexibleSearchService");
+
+
+
+// ********** MODIFY THESE PARAMS START ************
+salesOrgCode = "7310";
+simulate = true;
+// ********** MODIFY THESE PARAMS END **************
+
+
+
+salesOrgQuery = "SELECT {pk} FROM {DistSalesOrg} WHERE {code}='" + salesOrgCode + "'";
+deliveryCountriesQuery = "SELECT {c:pk} FROM {Country AS c}, {BaseStore2CountryRel AS bs2c}, {BaseStore AS bs},{StoresForCMSSite AS s2s}, {CMSSite AS s}, {DistSalesOrg AS so} WHERE {bs:pk}={bs2c.target} AND {bs2c:source}={c:pk} AND {s2s:target}={bs:pk} AND {s:pk}={s2s:source} AND {s:salesOrg}={so:pk} AND {so.code} = '" + salesOrgCode + "'";
+//b2bQuery = "SELECT {pk} FROM {B2BUnit} WHERE {erpCustomerID} IS NOT NULL";
+b2bQuery = "select {unit:pk} from {B2BUnit as unit},{Address as sa} , {Address as ba} where {SalesOrg} IN ({{" + salesOrgQuery + "}}) and {unit:shippingaddress} = {sa:PK} and {unit:billingaddress} = {ba:PK} and ({sa:country} not in ({{" + deliveryCountriesQuery + "}}) or {ba:country} not in ({{" + deliveryCountriesQuery + "}})) ORDER BY {unit:erpCustomerID}";
+movexOrdersQuery = "SELECT {pk} FROM {MovexOrder} WHERE {hybrisContactId}=?hybrisContactId";
+indent = "---";
+
+// LOG.info(b2bQuery);
+
+if (!Registry.hasCurrentTenant()) {
+    Registry.activateMasterTenant();
+}
+JaloSession.getCurrentSession().setUser(UserManager.getInstance().getUserByLogin("admin"));
+
+LOG.info("===Start===");
+b2bUnits = flexibleSearchService.search(b2bQuery).getResult();
+LOG.info("About to cleanup [" + b2bUnits.size() + "] B2BUnits for SalesOrg [" + salesOrgCode + "]");
+
+int i = 0;
+for (unit : b2bUnits) {
+	i++;
+	LOG.info("About to delete B2BUnit [" + unit.getPk() + "] with erpCustomerID [" + unit.getErpCustomerID() + "] with iShopCustomerID [" + unit.getIShopCustomerID() + "]  (" + i + " of " + b2bUnits.size() + ")");
+    
+    if (!simulate) {
+		// Delete all shipping/billing addresses of unit
+		if (unit.getAddresses() != null && !unit.getAddresses().isEmpty()) {
+		    try {
+		        modelService.removeAll(unit.getAddresses());
+		    	LOG.info(indent + "addresses for unit [" + unit.getPk() + "] deleted.");
+		    } catch (Exception e) {
+		        LOG.error("Deleting addresses for unit [" + unit.getPk() + "] failed:"  + e.getMessage());
+		    }
+		} 
+		
+		// Delete Movex customer
+		try {
+		    modelService.remove(unit.getMovexCustomer());
+		    LOG.info(indent + "Movex customer for unit [" + unit.getPk() + "] deleted.");
+		} catch(Exception e) {
+		    LOG.error("Deleting Movex customer for unit [" + unit.getPk() + "] failed:"  + e.getMessage());
+		}
+		    
+		// Delete permissions
+		if (unit.getPermissions() != null && !unit.getPermissions().isEmpty()) {
+		    try {
+				for (permission : unit.getPermissions()) {
+			        modelService.remove(permission);
+			        LOG.info(indent + "Permission [" + permission.getPk() + "] for unit [" + unit.getPk() + "] deleted.");
+				}
+		    } catch(Exception e) {
+		        LOG.error("Deleting permissions for unit [" + unit.getPk() + "] failed:"  + e.getMessage());
+		    }
+		}
+		        
+		for (p : unit.getMembers()) {
+		    if (p instanceof B2BCustomerModel) {
+		        c = (B2BCustomerModel) p;
+		        
+		        // Delete Movex orders
+		        flexibleSearchQuery = new FlexibleSearchQuery(movexOrdersQuery);
+		        flexibleSearchQuery.addQueryParameter("hybrisContactId", c.getCustomerID());
+		        movex_orders = flexibleSearchService.search(flexibleSearchQuery).getResult();
+		        
+		        if (!movex_orders.isEmpty()) {
+		            try {
+		                modelService.removeAll(movex_orders);
+		                LOG.info(indent + "Movex orders for customer [" + c.getPk() + "] deleted.");
+		            } catch (Exception e) {
+		                LOG.error("Deleting Movex orders for customer [" + c.getPk() + "] failed:"  + e.getMessage());
+		            }
+		        }
+		            
+		        // Delete all contact address of customer
+		        if (c.getAddresses() != null && !c.getAddresses().isEmpty()) {
+		            try{
+		                modelService.removeAll(c.getAddresses());
+		                LOG.info(indent + "addresses for customer [" + c.getPk() + "] deleted.");
+		            } catch (Exception e) {
+		                LOG.error("Deleting addresses for customer [" + c.getPk() + "] failed:"  + e.getMessage());
+		            }
+		        }
+		            
+			    // Delete orders
+		        if (c.getOrders() != null && !c.getOrders().isEmpty()) {
+		            try{
+		                modelService.removeAll(c.getOrders());
+		                LOG.info(indent + "orders for customer [" + c.getPk() + "] deleted.");
+		            } catch(Exception e) {
+		                LOG.error("Deleting orders for customer [" + c.getPk() + "] failed:"  + e.getMessage());
+		            }
+		        }
+		        
+			    // Delete wishlists
+		        if (c.getWishlist() != null && !c.getWishlist().isEmpty()) {
+		            try{
+		                modelService.removeAll(c.getWishlist());
+		                LOG.info(indent + "wishlists for customer [" + c.getPk() + "] deleted.");
+		            } catch(Exception e) {
+		                LOG.error("Deleting wishlists for customer [" + c.getPk() + "] failed:"  + e.getMessage());
+		            }
+		        }
+		        
+			    // Delete permissions
+				if (c.getPermissions() != null && !c.getPermissions().isEmpty()) {
+					try {
+						for (permission : c.getPermissions()) {
+						    modelService.remove(permission);
+						    LOG.info(indent + "Permission [" + permission.getPk() + "] for customer [" + c.getPk() + "] deleted.");
+						}
+					} catch(Exception e) {
+					    LOG.error("Deleting permissions for customer [" + c.getPk() + "] failed:"  + e.getMessage());
+					}
+				}
+		    
+		        try{
+		            modelService.remove(c);
+		            LOG.info(indent + "customer [" + c.getPk() + "] with iShopContactID [" + c.getIShopContactID() + "] deleted.");
+		        } catch (Exception e) {
+		            LOG.error("Deleting customer [" + c.getPk() + "] failed:"  + e.getMessage());
+		        }
+		    }
+		}
+		    
+		try {
+		    modelService.remove(unit);
+		    LOG.info(indent + "B2BUnit [" + unit.getPk() + "] deleted.");
+		} catch (Exception e) {
+		    LOG.error("Deleting B2BUnit [" + unit.getPk() + "] failed:"  + e.getMessage());
+		}
+	}
+}
+
+LOG.info("===End===");

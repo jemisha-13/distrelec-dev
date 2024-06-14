@@ -1,0 +1,101 @@
+<div class="container">
+  <app-page-title variant="red"></app-page-title>
+
+  <div
+    class="matching-intro"
+    id="bom_tool_matching_instructions"
+    [innerHTML]="'import-tool.matching.instructions' | cxTranslate"
+  ></div>
+
+  <div
+    *ngIf="showValidation"
+    class="warning-no-columns"
+    id="bom_tool_matching_nocolumnswarning"
+    [innerHTML]="'import-tool.matching.nocolumnswarning' | cxTranslate"
+  ></div>
+
+  <form class="matching-table" id="bom_tool_matching_form" (ngSubmit)="submit()">
+    <div class="matching-table__content">
+      <p
+        class="content-description"
+        id="bom_tool_matching_content_description"
+        [innerHTML]="'import-tool.matching.description' | cxTranslate"
+      ></p>
+
+      <div class="firstRowDataCheckBox">
+        <input
+          class="checkbox-big is-open-order"
+          id="first_row_data"
+          [(ngModel)]="ignoreFirstRow"
+          type="checkbox"
+          name="ignoreFirstRow"
+          value="true"
+        />
+        <label class="ml-2" id="first_row_data_label" for="first_row_data">
+          {{ 'import-tool.matching.checkbox' | cxTranslate }}
+        </label>
+      </div>
+
+      <div *ngIf="importContent" class="matching-table-main">
+        <table class="table-import-matching" aria-label="Content of BOM import file">
+          <tr *ngIf="firstRow" class="first-row">
+            <th *ngFor="let column of firstRow; index as i">
+              <select
+                class="columnNameSelector"
+                [id]="'columnNameSelector-' + i"
+                (change)="handleSelectChange($event, i)"
+              >
+                <option class="disabled" [id]="'columnNameOption-disabled-' + i" value="">
+                  {{ 'import-tool.matching.options.select' | cxTranslate }}
+                </option>
+                <option [id]="'columnNameOption-quant-' + i" value="quant">
+                  {{ 'import-tool.matching.options.quantity' | cxTranslate }}
+                </option>
+                <option [id]="'columnNameOption-dis-an-' + i" value="dis-an">
+                  {{ 'import-tool.matching.options.distArticleNumber' | cxTranslate }}
+                </option>
+                <option [id]="'columnNameOption-ref-' + i" value="ref">
+                  {{ 'import-tool.matching.options.reference' | cxTranslate }}
+                </option>
+              </select>
+            </th>
+          </tr>
+
+          <tr
+            *ngFor="let row of importContent; index as i"
+            [ngClass]="{ 'heading-row': i === 0 && !ignoreFirstRow }"
+            [id]="'row-' + i"
+          >
+            <td *ngFor="let cell of row">
+              {{ cell }}
+            </td>
+          </tr>
+
+          <colgroup *ngIf="firstRow">
+            <ng-container *ngFor="let column of firstRow; index as i">
+              <col
+                *ngIf="i < 3"
+                [class]="'columnNameSelector-' + i"
+                [ngClass]="{ colorSelectedColumn: isColumnFilled(i) }"
+              />
+            </ng-container>
+          </colgroup>
+        </table>
+      </div>
+    </div>
+
+    <div class="matching-table__btn">
+      <a class="mat-button btn btn-secondary btn-back" id="bom_tool_matching_back_btn" routerLink="/bom-tool">
+        <fa-icon [icon]="icons.faChevronLeft"></fa-icon>
+        {{ 'bomdataimport.review.back' | cxTranslate }}
+      </a>
+
+      <app-button [disabled]="isSubmitting" buttonId="bom_tool_matching_continue_btn" type="submit">
+        {{ 'bomdataimport.continue' | cxTranslate }}
+        <fa-icon [icon]="icons.faChevronRight"></fa-icon>
+      </app-button>
+    </div>
+
+    <input id="fileName" type="hidden" name="fileName" value="${fileName}" />
+  </form>
+</div>

@@ -1,0 +1,52 @@
+<div *ngIf="model$ | async as model" class="price-and-stock">
+  <app-stock
+    [productAvailability]="model.productAvailability"
+    [salesStatus]="product.salesStatus"
+    [displayNotifyModal$]="displayNotifyModal$"
+    [productCode]="product.code"
+  ></app-stock>
+  <app-prices
+    [productData]="product"
+    [salesUnit]="product.salesUnit"
+    [prices]="model.prices"
+    [currentChannel]="model.channel"
+    [allowBulk]="product.allowBulk"
+    [minQuantity]="product.orderQuantityMinimum"
+    [quantityStep]="product.orderQuantityStep"
+    [class.no_prices]="model.prices?.volumePrices?.length < 1"
+    [control]="quantityControl"
+  ></app-prices>
+  <div class="pdp-add-cart-content">
+    <app-add-to-cart
+      [productCode]="product.code"
+      [salesStatus]="product.salesStatus"
+      [minQuantity]="product.orderQuantityMinimum"
+      [quantityStep]="product.orderQuantityStep"
+      [itemListEntity]="itemListEntity"
+      [availabilityData]="model.productAvailability"
+      [control]="quantityControl"
+      (addToCart)="sendFactFinderCartEvent($event)"
+      minusButtonId="numeric_stepper_minus_btn"
+      plusButtonId="numeric_stepper_plus_btn"
+      inputId="numeric_stepper_input"
+      popupId="pdp_atc_min_error_msg"
+      cartButtonId="pdp_atc_btn"
+      pageType="pdp"
+    ></app-add-to-cart>
+  </div>
+  @if (ghsIcons) {
+    <app-divider-line></app-divider-line>
+    <div class="ghs-icons d-flex justify-content-xl-start justify-content-lg-center">
+      <div *ngFor="let ghsImageSrc of ghsIcons" class="ghs-icon">
+        <img
+          class="img-fluid"
+          [ngSrc]="model.channel.mediaDomain + ghsImageSrc"
+          priority
+          alt="GHS Image"
+          height="77"
+          width="50"
+        />
+      </div>
+    </div>
+  }
+</div>

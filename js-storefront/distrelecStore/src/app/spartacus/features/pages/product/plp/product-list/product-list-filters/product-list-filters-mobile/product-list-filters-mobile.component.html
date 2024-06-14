@@ -1,0 +1,90 @@
+<div *ngIf="filterDisplayState" class="container-fluid d-flex flex-column d-lg-none filters-list">
+  <ng-container *ngIf="filters$ | async as filters">
+    <div class="row vw-100 d-block" style="top: 0">
+      <div class="border-bottom-gray p-3">
+        <h5 class="strong text-center">
+          {{ 'plp.facet_buttons_and_headers.filters' | cxTranslate }}
+        </h5>
+        <span class="close-button position-absolute p-3" (click)="closeModal()">
+          {{ 'plp.facet_buttons_and_headers.close' | cxTranslate }}
+        </span>
+        <p class="font-weight-light text-center m-0 small">
+          {{ totalResults }}
+          {{ 'plp.facet_buttons_and_headers.products' | cxTranslate }}
+        </p>
+      </div>
+
+      <div
+        *ngIf="filterOpen !== undefined"
+        class="chosen-filter d-flex justify-content-between p-2"
+        (click)="openFilterValues(filterOpen)"
+      >
+        <span class="small">{{ filters[filterOpen].name }}</span>
+        <span>
+          <span class="text-danger small mr-2">
+            {{ checkBoxChecked | async }}
+          </span>
+          <fa-icon [icon]="faAngleUp"></fa-icon>
+        </span>
+      </div>
+    </div>
+    <div class="flex-grow-1 overflow-auto px-3">
+      <ul class="m-0 p-0">
+        <li
+          *ngFor="let filter of filters; let i = index"
+          class="p-2 small px-2 filters-group type-{{ filter.type | lowercase }}"
+          [class.d-none]="filterOpen !== undefined && filterOpen !== i"
+          [class.border-bottom-gray]="filterOpen !== i"
+        >
+          <div *ngIf="filterOpen === undefined" class="d-flex justify-content-between" (click)="openFilterValues(i)">
+            <span>{{ filter.name }}</span>
+            <span>
+              <span class="text-danger mr-1">
+                {{ filter.values | countSelected }}
+              </span>
+              <fa-icon [icon]="faAngleDown"></fa-icon>
+            </span>
+          </div>
+
+          <!-- checkboxes -->
+          <div class="d-none" [ngClass]="{ 'd-block': filterOpen === i }">
+            <input
+              class="form-control"
+              [(ngModel)]="searchTerm"
+              [placeholder]="'plp.facet_search_placeholder.placeholder' | cxTranslate"
+              type="text"
+            />
+
+            <ul class="m-0 p-0 mt-2" (change)="updateCheckBoxCount()">
+              <li *ngFor="let value of filter.values | optionFilter: searchTerm" class="my-1">
+                <label class="m-0 d-flex align-items-center">
+                  <input [(ngModel)]="value.checked" (change)="filterChange.emit(filter)" type="checkbox" />
+                  <span *ngIf="translatedFacets.includes(filter.code); else noTranslated" class="ml-2">
+                    {{ 'plp.facets.' + value.name | cxTranslate }}
+                  </span>
+                  <ng-template #noTranslated>
+                    <span class="ml-2">{{ value.name }}</span>
+                  </ng-template>
+                </label>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </ng-container>
+  <div class="row border-top-gray justify-content-end">
+    <app-product-list-filters-chips
+      [filters$]="filters$"
+      (removeOverflowHidden)="closeModal()"
+      mode="mobile"
+    ></app-product-list-filters-chips>
+    <button
+      class="btn apply-filters rounded-pill py-1 px-4 my-2 mx-4 font-weight-bold"
+      [disabled]="loading || (haveFiltersChanged | async) === false"
+      (click)="applyFiltersEmitter.emit(); closeModal()"
+    >
+      {{ 'plp.facet_buttons_and_headers.apply_filters' | cxTranslate }}
+    </button>
+  </div>
+</div>

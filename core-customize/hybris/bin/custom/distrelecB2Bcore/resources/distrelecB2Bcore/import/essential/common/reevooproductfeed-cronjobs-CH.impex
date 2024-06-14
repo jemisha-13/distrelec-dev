@@ -1,0 +1,21 @@
+################################################################
+## Impex File to create Reevoo Product Feed cronjobs                     ##
+################################################################
+INSERT_UPDATE DistReevooProductFeedCronJob;code[unique=true];mediaPrefix;exportDirectory;sessionLanguage(isocode);job(code)[default='reevooProductFeedJob'];sessionUser(uid)[default='technicalExportUser'];;sites(uid);sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING'];nodeID[default=0]
+;distReevooProductFeedExportJob_CH;DIS-CH_Product;TEST/Switzerland/Product;en;;;;distrelec_CH
+
+################################################################
+## Create a composite entry for each site cronjob
+################################################################
+INSERT_UPDATE CompositeEntry;code[unique=true];executableCronJob(code)
+;distReevooProductFeedExportJob_CH_Entry;distReevooProductFeedExportJob_CH
+
+
+###############################################################
+## Create a composite cronjob to run all the site cronjobs
+################################################################
+INSERT_UPDATE CompositeCronJob;code[unique=true];compositeEntries(code)[mode=append];
+;distReevooProductFeedExportExportCronJob;distReevooProductFeedExportJob_CH_Entry
+
+UPDATE CMSSite;uid[unique=true];reevooActivated
+;distrelec_CH;true

@@ -1,0 +1,200 @@
+@import 'global-utilities';
+
+.o-cart {
+  padding: ($spacing-unit * 7) 0 ($spacing-unit * 50);
+  background: $colour-pale-grey;
+
+  @include tabletPlus {
+    padding: ($spacing-unit * 7) 0 ($spacing-unit * 5);
+  }
+
+  &__error {
+    border: 1px solid $colour-error-message;
+    background-color: $colour-error-bg;
+    color: $colour-red;
+  }
+
+  &__success {
+    border: 1px solid $colour-green;
+    background-color: $colour-success-bg;
+    color: $colour-green;
+  }
+
+  &__error,
+  &__success {
+    @include font-size(14px);
+    @include line-height(28px);
+    display: inline-block;
+    width: 100%;
+    padding: $spacing-unit ($spacing-unit * 2);
+    margin-bottom: $spacing-unit * 4;
+    font-weight: $font-weight-bold;
+    text-align: center;
+  }
+
+  &__head {
+    padding-bottom: $spacing-unit * 4;
+
+    &,
+    &__title {
+      font-weight: $font-weight-medium;
+    }
+
+    &__title {
+      @include font-size(24px);
+      @include line-height(28px);
+
+      &.is-empty-cart {
+        @include tabletDown {
+          text-align: center;
+        }
+      }
+    }
+
+    &__subtitle {
+      @include font-size(13px);
+      @include line-height(17px);
+
+      .is-mobile-msg {
+        @include tabletPlus {
+          display: none;
+        }
+
+        .btn {
+          &--continue-shopping {
+            @include font-size(15px);
+            @include line-height(19px);
+            padding: ($spacing-unit * 2) ($spacing-unit * 8);
+            border-radius: 2px;
+            margin-top: $spacing-unit * 2;
+            background: $colour-dist-marigold;
+            color: $colour-white;
+            font-weight: $font-weight-bold;
+            text-align: center;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .is-desktop-msg {
+        @include tabletDown {
+          display: none;
+        }
+      }
+    }
+  }
+
+  &__low-stock-msg {
+    @include font-size(14px);
+    padding: $spacing-unit * 2;
+    border: 1px solid $colour-dangerous-border;
+    margin-bottom: $spacing-unit * 4;
+    background-color: $colour-pale-green;
+  }
+
+  &__dangerous-msg {
+    @include font-size(14px);
+    @include line-height(24px);
+    padding: $spacing-unit * 2;
+    border: 1px solid $colour-dangerous-border;
+    margin-bottom: $spacing-unit * 4;
+    background-color: $colour-dangerous-bg;
+
+    .bold {
+      font-weight: $font-weight-bold;
+      padding-bottom: $spacing-unit * 2;
+    }
+
+    li {
+      margin: $spacing-unit 0;
+    }
+  }
+
+  &__sidebar {
+    z-index: 330;
+    width: 100%;
+    display: block;
+    padding: $spacing-unit * 3;
+    border-top: 0;
+    box-shadow: 0 0 6px rgb(54 54 54 / 8%);
+    background: $colour-white;
+
+    @include tabletDown {
+      position: fixed;
+      top: auto !important;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    @include tabletPlus {
+      position: sticky;
+      top: 100px;
+      bottom: 0;
+      left: 0;
+    }
+
+    .mat-button.disabled {
+      @include font-size(13px);
+      @include line-height(16px);
+      background: #e0e0e0;
+      border-radius: 2px;
+      color: $colour-dist-mid-grey;
+      cursor: pointer;
+      display: inline-block;
+      font-weight: $font-weight-bold;
+      opacity: 1;
+      padding: ($spacing-unit * 2) ($spacing-unit * 7);
+      pointer-events: none;
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
+.o-cart-list {
+  position: relative;
+  z-index: 1;
+  min-height: 250px;
+
+  &__head {
+    display: none;
+
+    @include tabletPlus {
+      display: flex;
+      align-items: center;
+    }
+
+    .cell {
+      padding-left: $spacing-unit * 3;
+
+      p {
+        @include font-size(12px);
+        @include line-height(24px);
+        width: 100%;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+      }
+
+      &.cell-availability {
+        width: 45%;
+      }
+
+      &.cell-numeric {
+        width: 25%;
+      }
+
+      &.cell-price {
+        width: 15%;
+      }
+    }
+  }
+
+  &__loader {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}

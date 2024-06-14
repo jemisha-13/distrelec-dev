@@ -1,0 +1,82 @@
+################################################################
+## Impex File to create site map cronjobs                     ##
+################################################################
+INSERT_UPDATE DistWebSitemapCronJob;code[unique=true];sessionLanguage(isocode);job(code)[default='webSitemapJob'];sessionUser(uid)[default='technicalExportUser'];sessionCurrency(isocode)[default='CHF'];sites(uid);sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING'];nodeID[default=0]
+;distWebSitemapJob_CH;en;;;CHF;distrelec_CH
+;distWebSitemapJob_AT;en;;;EUR;distrelec_AT
+;distWebSitemapJob_BE;en;;;EUR;distrelec_BE
+;distWebSitemapJob_DE;en;;;EUR;distrelec_DE
+;distWebSitemapJob_SE;en;;;EUR;distrelec_SE
+;distWebSitemapJob_NO;en;;;EUR;distrelec_NO
+;distWebSitemapJob_IT;en;;;EUR;distrelec_IT
+;distWebSitemapJob_RO;en;;;EUR;distrelec_RO
+;distWebSitemapJob_CZ;en;;;EUR;distrelec_CZ
+;distWebSitemapJob_HU;en;;;EUR;distrelec_HU
+;distWebSitemapJob_SK;en;;;EUR;distrelec_SK
+;distWebSitemapJob_HU;en;;;EUR;distrelec_HU
+;distWebSitemapJob_DK;en;;;EUR;distrelec_DK
+;distWebSitemapJob_FI;en;;;EUR;distrelec_FI
+;distWebSitemapJob_LV;en;;;EUR;distrelec_LV
+;distWebSitemapJob_LT;en;;;EUR;distrelec_LT
+;distWebSitemapJob_PL;en;;;EUR;distrelec_PL
+;distWebSitemapJob_NL;en;;;EUR;distrelec_NL
+;distWebSitemapJob_EX;en;;;EUR;distrelec_EX
+;distWebSitemapJob_EE;en;;;EUR;distrelec_EE
+
+################################################################
+## Create a composite entry for each site cronjob
+################################################################
+INSERT_UPDATE CompositeEntry;code[unique=true];executableCronJob(code)
+;distWebSitemapJob_CH_Entry;distWebSitemapJob_CH
+;distWebSitemapJob_AT_Entry;distWebSitemapJob_AT
+;distWebSitemapJob_BE_Entry;distWebSitemapJob_BE
+;distWebSitemapJob_DE_Entry;distWebSitemapJob_DE
+;distWebSitemapJob_SE_Entry;distWebSitemapJob_SE
+;distWebSitemapJob_NO_Entry;distWebSitemapJob_NO
+;distWebSitemapJob_IT_Entry;distWebSitemapJob_IT
+;distWebSitemapJob_RO_Entry;distWebSitemapJob_RO
+;distWebSitemapJob_CZ_Entry;distWebSitemapJob_CZ
+;distWebSitemapJob_HU_Entry;distWebSitemapJob_HU
+;distWebSitemapJob_SK_Entry;distWebSitemapJob_SK
+;distWebSitemapJob_HU_Entry;distWebSitemapJob_HU
+;distWebSitemapJob_DK_Entry;distWebSitemapJob_DK
+;distWebSitemapJob_FI_Entry;distWebSitemapJob_FI
+;distWebSitemapJob_LV_Entry;distWebSitemapJob_LV
+;distWebSitemapJob_LT_Entry;distWebSitemapJob_LT
+;distWebSitemapJob_PL_Entry;distWebSitemapJob_PL
+;distWebSitemapJob_NL_Entry;distWebSitemapJob_NL
+;distWebSitemapJob_EX_Entry;distWebSitemapJob_EX
+;distWebSitemapJob_EE_Entry;distWebSitemapJob_EE
+
+################################################################
+## Create a composite cronjob to run all the site cronjobs
+################################################################
+INSERT_UPDATE CompositeCronJob;code[unique=true];compositeEntries(code);job(code)[default='compositeJobPerformable'];sessionUser(uid)[default='technicalExportUser'];sessionLanguage(isocode)[default='en'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING'];nodeID[default=0]
+;distWebSitemapExportCronJob;"
+        distWebSitemapJob_CH_Entry,
+        distWebSitemapJob_AT_Entry,
+        distWebSitemapJob_BE_Entry,
+        distWebSitemapJob_DE_Entry,
+        distWebSitemapJob_SE_Entry,
+        distWebSitemapJob_NO_Entry,
+        distWebSitemapJob_IT_Entry,
+        distWebSitemapJob_RO_Entry,
+        distWebSitemapJob_CZ_Entry,
+        distWebSitemapJob_HU_Entry,
+        distWebSitemapJob_SK_Entry,
+        distWebSitemapJob_HU_Entry,
+        distWebSitemapJob_DK_Entry,
+        distWebSitemapJob_FI_Entry,
+        distWebSitemapJob_LV_Entry,
+        distWebSitemapJob_LT_Entry,
+        distWebSitemapJob_PL_Entry,
+        distWebSitemapJob_NL_Entry,
+        distWebSitemapJob_EX_Entry,
+        distWebSitemapJob_EE_Entry
+"
+
+################################################################
+## Trigger
+################################################################
+INSERT_UPDATE Trigger;code[unique=true];cronJob(code);second;minute;hour;day;month;year;relative;active;maxAcceptableDelay;weekInterval;daysOfWeek(code)
+;distWebSitemapExportCronJobTrigger;distWebSitemapExportCronJob;0;0;1;-1;-1;-1;false;true;-1;1;SATURDAY

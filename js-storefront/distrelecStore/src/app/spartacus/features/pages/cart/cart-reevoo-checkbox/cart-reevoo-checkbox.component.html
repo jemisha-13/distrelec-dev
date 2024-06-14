@@ -1,0 +1,48 @@
+<ng-container *ngIf="activeCountryCode$ | async as countryCode">
+  <ng-container *ngIf="countryCode === 'DE'">
+    <div class="reevoo-container">
+      <div class="reevoo-checkbox-container">
+        <input
+          class="reevoo-checkbox"
+          id="reevoo-checkbox"
+          [checked]="cartData?.reevooEligible"
+          (change)="handleChange()"
+          type="checkbox"
+        />
+      </div>
+
+      <div class="reevoo-label-container">
+        <label for="reevoo-checkbox">
+          <span class="reevoo-label">
+            {{ 'cart.reevoo_message_1' | cxTranslate }}
+            <br />
+            {{ 'cart.reevoo_message_2' | cxTranslate }}
+          </span>
+
+          <ng-container *ngIf="isMobileBreakpoint$ | async; else desktopButton">
+            <button
+              #reevooTooltip="ngbTooltip"
+              [ngbTooltip]="reevooTooltipTemplate"
+              [autoClose]="'outside'"
+              (click)="reevooTooltip.toggle()"
+              tooltipClass="reevoo-tooltip"
+              triggers="manual"
+            >
+              <fa-icon class="info-circle" [icon]="faInfoCircle"></fa-icon>
+            </button>
+          </ng-container>
+
+          <ng-template #desktopButton>
+            <button [ngbTooltip]="reevooTooltipTemplate" tooltipClass="reevoo-tooltip">
+              <fa-icon class="info-circle" [icon]="faInfoCircle"></fa-icon>
+            </button>
+          </ng-template>
+
+          <ng-template #reevooTooltipTemplate>
+            <span class="reevoo-content">{{ 'cart.reevoo_tooltip' | cxTranslate }}</span>
+          </ng-template>
+        </label>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

@@ -1,0 +1,24 @@
+<div class="overlay">
+  <div [class]="data.type + '-popup'">
+    <div class="warning-popup__text">
+      <div class="warning-popup__text--icon">
+        <img src="app/spartacus/assets/media/InfoIcon.svg" alt="warningIcon" />
+      </div>
+
+      <div *ngIf="data.title || data.titleKey" class="warning-popup__text--title" id="warningPopupTitle">
+        {{ data.title ?? (data.titleKey | cxTranslate) }}
+      </div>
+
+      <div
+        class="warning-popup__text--subtitle"
+        id="warningPopupSubtitle"
+        [class.extra-p]="!(data.title || data.titleKey)"
+        [innerHTML]="data.subtitle ?? (data.subtitleKey | cxTranslate)"
+      ></div>
+    </div>
+
+    <div class="warning-popup__close">
+      <button class="btn" id="warningPopupCloseBtn" (click)="onCloseButton()">{{ 'form.ok' | cxTranslate }}</button>
+    </div>
+  </div>
+</div>

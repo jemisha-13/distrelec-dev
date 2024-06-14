@@ -1,0 +1,781 @@
+.skin-standalone-register-b2b {
+
+  .form-b2b {
+
+    &__companydetails {
+
+      &.card-wrapper {
+        padding-bottom: 0;
+
+        label {
+          font-weight: 700 !important;
+          @include font-size(14px);
+          line-height: 16px;
+        }
+
+        h3 {
+          margin-bottom: 0;
+          @include font-size(24px);
+          padding: ($spacing-unit * 4 ) ($spacing-unit * 4 ) 0;
+          font-weight: 500;
+          line-height: 32px;
+        }
+
+      }
+
+      &__title {
+        width: 100%;
+      }
+
+      &__input {
+        padding: $spacing-unit * 4;
+        width: 100%;
+
+        &__bisnode {
+
+          .row {
+            position: relative;
+
+            label {
+              padding-bottom: 0;
+              padding-left: 0;
+
+              small {
+                @include font-size(12px);
+                @include line-height(20px);
+                display: block;
+                margin-top: $spacing-unit;
+                font-weight: 500;
+              }
+            }
+
+            input {
+
+              &[name="bisnode"] {
+                border: 1px solid lighten($colour-mid-black, 30%);
+                border-radius: $spacing-unit - 3;
+                box-sizing: border-box;
+                height: 45px;
+                margin-bottom: $spacing-unit * 3;
+                padding: 0 ($spacing-unit * 2);
+                transition: .5s ease;
+                font-size: 14px;
+                font-weight: 500;
+
+                &:hover,
+                &:focus {
+                  border-color: $colour-mid-black;
+                }
+
+
+                &::placeholder {
+                  color: $colour-light-grey;
+                }
+
+                &.error {
+                  border-color: $border-input-warning;
+                  margin-right: ($spacing-unit * 28);
+                }
+
+              }
+
+            }
+
+            .customerNumberContainer {
+
+              .cant-find {
+                color: $link-blue;
+                float: right;
+
+                &:hover,
+                &:focus {
+                  color: $link-dark-blue;
+                  text-decoration: underline;
+                }
+              }
+
+              .mat-button {
+                @include font-size(13px);
+                font-family: $font-stack-alt;
+                width: 30%;
+              }
+
+              #customerNumber {
+
+                &.pass {
+                  align-items: center;
+                  background-color: rgba(104, 193, 67, .1);
+                  border-color: $colour-dist-green;
+                  border-width: 0 0 5px 0;
+                  box-shadow: none;
+                  display: flex;
+                  flex-wrap: wrap;
+                  justify-content: space-between;
+                  pointer-events: none;
+                  width: 100%;
+
+                  &:focus {
+                    border-color: $colour-dist-green;
+                  }
+
+                }
+
+              }
+
+              .tickItem {
+                top: 43px;
+                right: 15px;
+              }
+
+            }
+
+            .bisnode__results {
+              background-color: $colour-white;
+              box-shadow: 3px 3px 10px rgba(0, 0, 0, .10);
+              font-family: $font-stack-alt;
+              left: 0;
+              position: absolute;
+              top: 65px;
+              z-index: 500;
+
+              &--shown {
+                box-shadow: none;
+                margin-top: $spacing-unit * 2;
+
+                small {
+                  margin-bottom: 15px;
+                }
+              }
+
+              &--selected {
+                position: inherit;
+                top: 0 !important;
+
+                .bisnode__results {
+                  &__wrapper {
+                    overflow-y: visible;
+                    max-height: none;
+                  }
+                  &__duplicate {
+                    padding: 0;
+                  }
+                }
+
+                .single {
+                  margin-bottom: ($spacing-unit * 4);
+                }
+              }
+
+              .row {
+                flex-direction: column;
+              }
+
+              &__item {
+
+                &__noresult {
+                  background-color: lighten($colour-light-grey, 10%);
+
+                  + .bisnode__results__wrapper {
+                    border-bottom: none;
+                  }
+
+                  p {
+                    @include font-size(14px);
+                    padding: ($spacing-unit * 2) ($spacing-unit * 2 + 2);
+                    margin: 0;
+                  }
+
+                }
+
+              }
+
+              #showresults {
+                background-color: lighten($colour-light-grey, 10%);
+                margin-bottom: 0;
+                padding: ($spacing-unit * 2) ($spacing-unit * 2 + 2);
+              }
+
+              #countryOption {
+                padding-left: ($spacing-unit);
+              }
+
+              #findCompany {
+                @include font-size(14px);
+                font-weight: 500;
+                padding: 0 ($spacing-unit * 4) ($spacing-unit * 4);
+                color: $link-blue;
+                text-decoration: underline;
+
+              &:hover {
+                  text-decoration: underline;
+                }
+              }
+
+              &__wrapper {
+                float: left;
+                width: 100%;
+                max-height: 267px; // max 5 items visible
+                overflow-y: scroll;
+                margin-bottom: $spacing-unit * 2;
+
+                &__item {
+                  padding: $spacing-unit ($spacing-unit * 2) $spacing-unit ($spacing-unit * 4);
+                  cursor: pointer;
+
+                  &:hover {
+                    background: lighten($colour-light-grey, 10%);
+                  }
+
+                  &:first-child {
+                    padding-top: $spacing-unit * 2;
+                  }
+
+                  &:last-child {
+                    padding-bottom: $spacing-unit * 2;
+                  }
+
+                  &.active {
+                    align-items: center;
+                    border: 1.5px solid $colour-dist-green;
+                    box-shadow: none;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    padding: $spacing-unit + 2 $spacing-unit * 2 + 2;
+                    width: 100%;
+
+                    .searchTermCompany {
+                      @include font-size(14px);
+                    }
+
+                    p {
+                      @include font-size(15px);
+
+                      .primaryActive {
+                        font-weight: 500;
+                      }
+                    }
+
+                      .tickItem {
+                        top: 50px;
+                        right: 20px;
+                      }
+
+                      .duplicate {
+                        top: 25px;
+                        right: 15px;
+                      }
+
+                    .address_section {
+                      width: 75%;
+
+                    }
+
+                    .changeDetails {
+                      @include font-size(12px);
+                      color: $link-blue;
+                      font-family: $font-montserrat;
+                      font-weight: 600;
+                      text-decoration: underline;
+                      width: 100%;
+
+                      @media #{$ipad} {
+                        margin-right: ($spacing-unit * 6);
+                        margin-top: $spacing-unit;
+                        width: 20%;
+                      }
+
+                      @media #{$ipad-landscape} {
+                        margin-right: ($spacing-unit * 3);
+                      }
+
+                    }
+
+                  }
+
+                  .animateActive {
+                    height: 125px;
+
+                    @media #{$ipad-landscape} {
+                      height: 75px;
+                    }
+
+                  }
+
+                  p {
+                    @include font-size(13px);
+                    margin-bottom: 0;
+                  }
+
+                  .address_section {
+                    > p {
+                      @include font-size(14px);
+                      @include line-height(24px);
+                      font-weight: 500;
+
+                      &.primaryActive {
+
+                      }
+
+                      &:not(.primaryActive) {
+                        @include font-size(12px);
+                        color: $ux-txt-grey;
+                      }
+                    }
+                  }
+                }
+
+                &.existingWrapper {
+                  overflow-y: visible;
+                  max-height: none;
+                  margin: 0 0 ($spacing-unit * 4) 0;
+                }
+
+              }
+
+              &__additional {
+                position: relative;
+
+                .row {
+
+                  h4 {
+                    margin: $spacing-unit 0 ($spacing-unit * 4);
+                  }
+
+                  label {
+                    font-family: $font-montserrat;
+                  }
+
+                  .grouped {
+                    display: flex;
+                    flex-direction: column;
+                    position: relative;
+                    width: 100%;
+
+                    &.validCounts2 div.inputGroup {
+                      .tickItemError {
+                        top: 27px;
+                      }
+                    }
+
+                    div.inputGroup{
+                      position: relative;
+
+                      > input.error {
+                        margin-bottom: 15px;
+                      }
+
+                      .tickItemError {
+                        top: 23px;
+                        right: 15px;
+                      }
+                    }
+
+                    .error {
+                      margin-top: $spacing-unit * 3;
+
+                      div.prefilled{
+                        border-right: 1px solid $colour-dist-red;
+                        margin: 0;
+
+                        p {
+                          width: 100%;
+                          float: none;
+                          text-align: center;
+                        }
+                      }
+                    }
+
+                    .error-message {
+                      margin-top: 0;
+                      border: none;
+                    }
+
+                    &__prefilled {
+                      display: flex;
+                      flex-wrap: wrap;
+                      margin: ($spacing-unit * 2) 0 $spacing-unit;
+                      position: relative;
+
+                      &.active {
+                        border: 1px solid $colour-dist-green;
+
+                        input {
+                          border: none !important;
+                        }
+                      }
+
+                      &.error {
+                        border: 1px solid $colour-dist-red;
+                      }
+
+                      input {
+                        border: 1px solid $colour-border-register-grey;
+                        border-left: none;
+                        border-radius: 0%;
+                        margin: 0;
+                        width: 90%;
+
+                        &.error {
+                          margin: 0;
+                          border: 1px solid $colour-dist-red;
+                          border-left: none;
+                        }
+
+                        &.success {
+                          border: 1px solid $colour-dist-green;
+                          border-left: none;
+                        }
+                      }
+
+                      .prefilled {
+                        border: 1px solid $colour-border-register-grey;
+                        height: 42px;
+                        color: $colour-black;
+                        text-align: center;
+                        width: 10%;
+
+                        &.active {
+                          border-right: 1px solid $colour-dist-green;
+                          border-left: none;
+                          border-top: none;
+                          border-bottom: none;
+                          border-right: 1px solid $colour-dist-green;
+
+                          input {
+                            border: none !important;
+                          }
+                        }
+
+                        &.hidden + input.vatID {
+                          border-left: 1px solid $colour-border-register-grey;
+                        }
+
+                        p {
+                            @include line-height(42px);
+                            margin: 0;
+                            font-weight: 500;
+                        }
+
+                      }
+
+                    }
+
+                    h4 {
+                      margin-bottom: 0;
+                    }
+
+                    .wrapper {
+                      flex-direction: row;
+                    }
+
+                    .ticks2 {
+                      top: 40px;
+
+                      &.fa-times, &.fa-check {
+                        top: 19px;
+                      }
+                    }
+
+                    &.disable-select {
+
+                      select {
+                        opacity: 0.4;
+                        pointer-events: none;
+                      }
+
+                    }
+
+                    &.compVat {
+                      .ticks2 {
+                        top: 9px;
+                        right: 6px;
+                        margin: 0;
+                      }
+
+                      .fa-times {
+                        color: $colour-dist-red;
+                      }
+                    }
+                  }
+
+                  .compVat {
+                    
+                    .error-message {
+                      margin-top: 0;
+                    }
+
+                    .inputPopup {
+                      margin-bottom: $spacing-unit * 4;
+                    }
+
+                    .red {
+                      color: $colour-dist-red;
+                    }
+                  }
+
+                  #continueStep {
+                    @include font-size(15px);
+                    @include line-height(30px);
+                    background: $colour-dist-green;
+                    border-radius: $spacing-unit - 3;
+                    box-sizing: border-box;
+                    color: $colour-white;
+                    float: left;
+                    padding: ($spacing-unit + 3) ($spacing-unit) ($spacing-unit) ($spacing-unit);
+                    text-align: center;
+                    min-width: 20%;
+                    text-decoration: none;
+                  }
+
+                  .vat-container {
+                    float: left;
+                    width: 100%;
+
+                    .tickItemError {
+                      @include font-size(18px);
+                      color: $colour-dist-red;
+                      position: absolute;
+                      top: 22px;
+                      right: 10px;
+                    }
+
+                    .tickItem {
+                      top: 19px
+                    }
+
+                    div.error {
+                      margin-top: 0;
+                    }
+
+                    .codiceEmail {
+                      margin: ($spacing-unit * 2) 0 ($spacing-unit * 2);
+                    }
+                  }
+
+                }
+
+              }
+
+              &__existing {
+
+                &.pl-0 {
+                  padding-right: 0 !important;
+                  padding-left: 0;
+                }
+
+              }
+
+              &__duplicate {
+
+                .customernumber {
+                  position: relative;
+                  display: block;
+
+                  label {
+                    font-family: $font-montserrat;
+                    font-weight: 700;
+                  }
+
+                  .mat-button {
+                    @include font-size-important(14px);
+                    margin-top: $spacing-unit * 3;
+                    text-decoration: none;
+                    width: 30%;
+                  }
+
+                  .error-message {
+                    margin-bottom: 0;
+                    margin-top: $spacing-unit * 4;
+                    background-color: #FDF3F3;
+                    border: 1.5px solid $colour-dist-red;
+                    padding: ($spacing-unit * 2) 0 ($spacing-unit * 2) ($spacing-unit * 2);
+
+                    .fa-exclamation-triangle {
+                      @include font-size(20px);
+                      Padding-left: $spacing-unit * 2;
+                      padding-top: $spacing-unit * 4;
+                    }
+
+                    p {
+                      width: 90% !important;
+                    }
+
+                    a {
+                      color: $link-blue;
+                    }
+                  }
+
+                  .fa {
+                    &.tickItem {
+                      top: 40px;
+                      right: 20px;
+                    }
+                  }
+
+                  .tickItemError {
+                    position: absolute;
+                    color: $colour-dist-red;
+                    top: 47px;
+                    right: 20px;
+                  }
+
+                  #customerNum {
+
+                    &.pass {
+                      align-items: center;
+                      background-color: rgba(104, 193, 67, .1);
+                      border-color: $colour-dist-green;
+                      border-width: 0 0 5px 0;
+                      box-shadow: none;
+                      display: flex;
+                      flex-wrap: wrap;
+                      justify-content: space-between;
+                      pointer-events: none;
+                      width: 100%;
+                    }
+
+                  }
+
+                }
+
+              }
+
+              &.isBiz {
+                top: 195px;
+
+                &.bisnode__results {
+
+                  &--selected {
+                    top: 0;
+                  }
+
+                }
+
+              }
+
+              &__info-text {
+                margin: ($spacing-unit * 2) 0;
+              }
+
+            }
+
+            .bisnode__companynotfound {
+
+              .form-group {
+                margin-bottom: $spacing-unit * 3;
+              }
+
+              .validCountCompany {
+                padding-left: 0;
+
+                input {
+
+                  &.error {
+                    border-color: $colour-dist-red;
+                    border-width: 1px 1px 5px 1px;
+                  }
+
+                }
+
+                .error-length {
+                  color: $colour-dist-red;
+                  text-align: left;
+                }
+
+              }
+
+              h4 {
+                @include font-size(18px);
+                margin-bottom: $spacing-unit * 4;
+              }
+
+              label {
+                font-family: $font-montserrat;
+                font-weight: 700;
+              }
+
+              input {
+                @include font-size(14px);
+                border: 1px solid $colour-light-grey;
+                border-radius: $spacing-unit - 3;
+                padding: 0 ($spacing-unit * 2);
+                height: 45px;
+
+                &:active,
+                &:focus {
+                  border: 2px solid $colour-light-grey;
+                }
+
+              }
+
+              .form-group {
+
+                &--button {
+                  margin-top: $spacing-unit * 2;
+                }
+
+                &--password {
+                  position: relative;
+                }
+
+              }
+
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+    &__country-wrapper {
+      padding: 0;
+
+      .tickItem {
+        top: 20px;
+        right: 10px;
+      }
+
+      .tickItemError {
+        @extend %tickItemError;
+        top: 26px;
+        right: 15px;
+      }
+    }
+
+    &__form {
+
+      &__field {
+
+        h4 {
+          clear: both;
+          display: flex;
+          padding: ($spacing-unit * 4) 0;
+          @include font-size(24px);
+          @include line-height(32px);
+          font-weight: 300;
+          line-height: 32px;
+        }
+
+        &__primary {
+          input:not([type='checkbox']) {
+            &,
+            &:active,
+            &:focus {
+              margin-bottom: $spacing-unit;
+            }
+          }
+
+          .inputPopup {
+            margin-bottom: $spacing-unit * 2;
+          }
+        }
+      }
+
+    }
+
+  }
+}

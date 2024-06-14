@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2017 SAP SE or an SAP affiliate company. All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="ymktSyncChangeDetectionService" class="com.hybris.ymkt.sapymktsync.services.SyncChangeDetectionService">
+		<property name="changeDetectionService" ref="changeDetectionService" />
+		<property name="typeService" ref="typeService" />
+	</bean>
+
+	<bean id="ymktImportMessageService" class="com.hybris.ymkt.sapymktsync.services.ImportMessageService">
+		<property name="ODataService" ref="ODataService_CUAN_IMPORT_MESSAGES_SRV" />
+	</bean>
+
+	<bean id="ymktAbstractSyncJob" class="com.hybris.ymkt.sapymktsync.jobs.AbstractSyncJob" abstract="true" parent="abstractJobPerformable">
+		<property name="importMessageService" ref="ymktImportMessageService" />
+		<property name="syncChangeDetectionService" ref="ymktSyncChangeDetectionService" />
+	</bean>
+
+	<bean id="ymktAbstractSyncService" class="com.hybris.ymkt.sapymktsync.services.AbstractSyncService" abstract="true">
+		<property name="modelService" ref="modelService" />
+	</bean>
+
+	<!-- AbandonedCart -->
+	<bean id="ymktAbandonedCartSyncService" class="com.hybris.ymkt.sapymktsync.services.AbandonedCartSyncService" parent="ymktAbstractSyncService">
+		<property name="ODataService" ref="ODataService_CUAN_IMPORT_SRV" />
+		<property name="productURLService" ref="ymktProductURLService" />
+	</bean>
+
+	<bean id="ymktAbandonedCartSyncJob" class="com.hybris.ymkt.sapymktsync.jobs.AbandonedCartSyncJob" parent="ymktAbstractSyncJob">
+		<property name="syncService" ref="ymktAbandonedCartSyncService" />
+	</bean>
+
+	<!-- Category -->
+	<bean id="ymktCategorySyncService" class="com.hybris.ymkt.sapymktsync.services.CategorySyncService" parent="ymktAbstractSyncService">
+		<property name="enableParentCategory" value="false" />
+		<property name="ODataService" ref="ODataService_CUAN_IMPORT_SRV" />
+	</bean>
+	<bean id="ymktCategoryLinkSyncService" class="com.hybris.ymkt.sapymktsync.services.CategorySyncService" parent="ymktAbstractSyncService">
+		<property name="enableParentCategory" value="true" />
+		<property name="ODataService" ref="ODataService_CUAN_IMPORT_SRV" />
+	</bean>
+
+	<bean id="ymktCategorySyncJob" class="com.hybris.ymkt.sapymktsync.jobs.CategorySyncJob" parent="ymktAbstractSyncJob">
+		<property name="syncService" ref="ymktCategorySyncService" />
+	</bean>
+	<bean id="ymktCategoryLinkSyncJob" class="com.hybris.ymkt.sapymktsync.jobs.CategorySyncJob" parent="ymktAbstractSyncJob">
+		<property name="syncService" ref="ymktCategoryLinkSyncService" />
+	</bean>
+
+	<!-- Category 1708 -->
+	<bean id="ymktCategory1708SyncService" class="com.hybris.ymkt.sapymktsync.services.Category1708SyncService" parent="ymktAbstractSyncService">
+		<property name="enableParentCategory" value="false" />
+		<property name="ODataService" ref="ODataService_API_MKT_PRODCAT_HIERARCHY_SRV" />
+		<property name="commonI18NService" ref="commonI18NService" />
+	</bean>
+	<bean id="ymktCategoryLink1708SyncService" class="com.hybris.ymkt.sapymktsync.services.Category1708SyncService" parent="ymktAbstractSyncService">
+		<property name="enableParentCategory" value="true" />
+		<property name="ODataService" ref="ODataService_API_MKT_PRODCAT_HIERARCHY_SRV" />
+		<property name="commonI18NService" ref="commonI18NService" />
+	</bean>
+
+	<bean id="ymktCategory1708SyncJob" class="com.hybris.ymkt.sapymktsync.jobs.CategorySyncJob" parent="ymktAbstractSyncJob">
+		<property name="syncService" ref="ymktCategory1708SyncService" />
+	</bean>
+	<bean id="ymktCategoryLink1708SyncJob" class="com.hybris.ymkt.sapymktsync.jobs.CategorySyncJob" parent="ymktAbstractSyncJob">
+		<property name="syncService" ref="ymktCategoryLink1708SyncService" />
+	</bean>
+
+	<bean id="ymktCustomerSyncService" class="com.hybris.ymkt.sapymktsync.services.CustomerSyncService" parent="ymktAbstractSyncService">
+		<property name="ODataService" ref="ODataService_CUAN_IMPORT_SRV" />
+	</bean>
+
+	<bean id="ymktCustomerSyncJob" class="com.hybris.ymkt.sapymktsync.jobs.CustomerSyncJob" parent="ymktAbstractSyncJob">
+		<property name="syncService" ref="ymktCustomerSyncService" />
+	</bean>
+
+	<!-- Order -->
+	<bean id="ymktOrderSyncService" class="com.hybris.ymkt.sapymktsync.services.OrderSyncService" parent="ymktAbstractSyncService">
+		<property name="ODataService" ref="ODataService_CUAN_BUSINESS_DOCUMENT_IMP_SRV" />
+	</bean>
+
+	<bean id="ymktOrderSyncJob" class="com.hybris.ymkt.sapymktsync.jobs.OrderSyncJob" parent="ymktAbstractSyncJob">
+		<property name="syncService" ref="ymktOrderSyncService" />
+	</bean>
+
+	<!-- Product -->
+	<bean id="ymktProductSyncService" class="com.hybris.ymkt.sapymktsync.services.ProductSyncService" parent="ymktAbstractSyncService">
+		<property name="ODataService" ref="ODataService_CUAN_IMPORT_SRV" />
+		<property name="productURLService" ref="ymktProductURLService" />
+	</bean>
+
+	<bean id="ymktProductSyncJob" class="com.hybris.ymkt.sapymktsync.jobs.ProductSyncJob" parent="ymktAbstractSyncJob">
+		<property name="syncService" ref="ymktProductSyncService" />
+	</bean>
+
+	<!-- Product 1708 -->
+	<bean id="ymktProduct1708SyncService" class="com.hybris.ymkt.sapymktsync.services.Product1708SyncService" parent="ymktAbstractSyncService">
+		<property name="ODataService" ref="ODataService_API_MKT_PRODUCT_SRV" />
+		<property name="commonI18NService" ref="commonI18NService" />
+		<property name="productURLService" ref="ymktProductURLService" />
+	</bean>
+
+	<bean id="ymktProduct1708SyncJob" class="com.hybris.ymkt.sapymktsync.jobs.ProductSyncJob" parent="ymktAbstractSyncJob">
+		<property name="syncService" ref="ymktProduct1708SyncService" />
+	</bean>
+
+	<!-- Review -->
+	<bean id="ymktReviewSyncService" class="com.hybris.ymkt.sapymktsync.services.ReviewSyncService" parent="ymktAbstractSyncService">
+		<property name="ODataService" ref="ODataService_CUAN_IMPORT_SRV" />
+		<property name="productURLService" ref="ymktProductURLService" />
+	</bean>
+
+	<bean id="ymktReviewSyncJob" class="com.hybris.ymkt.sapymktsync.jobs.ReviewSyncJob" parent="ymktAbstractSyncJob">
+		<property name="syncService" ref="ymktReviewSyncService" />
+	</bean>
+
+	<!-- SavedCart -->
+	<bean id="ymktSavedCartSyncService" class="com.hybris.ymkt.sapymktsync.services.SavedCartSyncService" parent="ymktAbstractSyncService">
+		<property name="ODataService" ref="ODataService_CUAN_BUSINESS_DOCUMENT_IMP_SRV" />
+	</bean>
+
+	<bean id="ymktSavedCartSyncJob" class="com.hybris.ymkt.sapymktsync.jobs.SavedCartSyncJob" parent="ymktAbstractSyncJob">
+		<property name="syncService" ref="ymktSavedCartSyncService" />
+	</bean>
+
+</beans>

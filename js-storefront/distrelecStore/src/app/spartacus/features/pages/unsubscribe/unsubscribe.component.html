@@ -1,0 +1,187 @@
+<div class="wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-2"></div>
+      <div class="col-lg-8">
+        <ng-container *ngIf="customerDetails$ | async as customerDetails; else loadingSpinner">
+          <form [formGroup]="unsubscribeForm">
+            <div class="newsletter-unsubscribe">
+              <h2 class="newsletter-unsubscribe__title" id="unsubscribeFeedbackTitle">
+                <ng-container *ngIf="resubscribeFeedback === true; else unsubscribeTitle">
+                  <fa-icon class="fa-check-circle" [icon]="faCircleCheck"></fa-icon>
+                  {{ 'unsubscribe.feedback.resubscription.title' | cxTranslate }}
+                </ng-container>
+
+                <ng-template #unsubscribeTitle>
+                  <fa-icon class="fa-check-circle" [icon]="faCircleCheck"></fa-icon>
+                  {{ 'unsubscribe.feedback.title' | cxTranslate }}
+                </ng-template>
+              </h2>
+
+              <div class="newsletter-unsubscribe__inner">
+                <ng-container *ngIf="unsubscribeAllFeedback || feedback || resubscribeFeedback; else mainForm">
+                  <ng-container *ngIf="feedback">
+                    <div class="newsletter-unsubscribe__success">
+                      <div id="unsubscribeFeedbackThankYouMessage">
+                        {{ 'unsubscribe.feedback.success.thankYou' | cxTranslate }}
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <button class="submit" id="unsubscribeFeedbackContinueButton" routerLink="/">
+                    {{ 'unsubscribe.feedback.success.continue' | cxTranslate }}
+                  </button>
+                </ng-container>
+
+                <ng-template #mainForm>
+                  <!-- explanation text -->
+                  <p id="unsubscribeFeedbackInfoText">
+                    {{ categoryCode | cxTranslate: { customerEmail: customerDetails.email } }}
+                  </p>
+
+                  <a id="unsubscribeFeedbackResubscribeLink" (click)="resubscribe(customerDetails.email)">
+                    <strong>{{ 'unsubscribe.feedback.resubscribeLink' | cxTranslate }}</strong>
+                  </a>
+
+                  <div class="newsletter-unsubscribe__feedback">
+                    <p id="unsubscribeFeedbackReasonLabel">
+                      <strong>{{ 'unsubscribe.feedback.reasonsLabel' | cxTranslate }}</strong>
+                    </p>
+
+                    <!-- unsubscribe options -->
+                    <div class="newsletter-unsubscribe__feedback-reason">
+                      <a class="icon-background additional-spacing" (click)="updateFormValue('reason1')">
+                        <fa-icon [icon]="unsubscribeForm.get('reason1').value ? faCheckSquare : faSquare"></fa-icon>
+                      </a>
+                      <input
+                        class="checkbox"
+                        id="unsubscribeFeedbackFrequently"
+                        type="checkbox"
+                        formControlName="reason1"
+                      />
+                      <label id="unsubscribeFeedbackFrequently-label" for="unsubscribeFeedbackFrequently">
+                        {{ 'unsubscribe.feedback.reason1' | cxTranslate }}
+                      </label>
+                    </div>
+
+                    <div class="newsletter-unsubscribe__feedback-reason">
+                      <a class="icon-background additional-spacing" (click)="updateFormValue('reason2')">
+                        <fa-icon [icon]="unsubscribeForm.get('reason2').value ? faCheckSquare : faSquare"></fa-icon>
+                      </a>
+                      <input
+                        class="checkbox"
+                        id="unsubscribeFeedbackRelevance"
+                        type="checkbox"
+                        formControlName="reason2"
+                      />
+                      <label id="unsubscribeFeedbackRelevance-label" for="unsubscribeFeedbackRelevance">
+                        {{ 'unsubscribe.feedback.reason2' | cxTranslate }}
+                      </label>
+                    </div>
+
+                    <div class="newsletter-unsubscribe__feedback-reason">
+                      <a class="icon-background additional-spacing" (click)="updateFormValue('reason3')">
+                        <fa-icon [icon]="unsubscribeForm.get('reason3').value ? faCheckSquare : faSquare"></fa-icon>
+                      </a>
+                      <input
+                        class="checkbox"
+                        id="unsubscribeFeedbackWrongEmail"
+                        type="checkbox"
+                        formControlName="reason3"
+                      />
+                      <label id="unsubscribeFeedbackWrongEmail-label" for="unsubscribeFeedbackWrongEmail">
+                        {{ 'unsubscribe.feedback.reason3' | cxTranslate: { customerEmail: customerDetails.email } }}
+                      </label>
+
+                      <ng-container *ngIf="unsubscribeForm.get('reason3').value">
+                        <div class="newsletter-unsubscribe__new-email">
+                          <p>
+                            {{ 'unsubscribe.feedback.reason3.newsletterNewEmail' | cxTranslate }}&nbsp;
+                            <span class="is-opt">{{ 'unsubscribe.feedback.reason3.optional' | cxTranslate }}</span>
+                          </p>
+                          <input
+                            id="unsubscribeFeedbackNewEmail"
+                            [(ngModel)]="newEmail"
+                            [ngModelOptions]="{ standalone: true }"
+                            [placeholder]="'form.email_address' | cxTranslate"
+                            type="text"
+                          />
+                        </div>
+                      </ng-container>
+                    </div>
+
+                    <div class="newsletter-unsubscribe__feedback-reason">
+                      <a class="icon-background additional-spacing" (click)="updateFormValue('reason4')">
+                        <fa-icon [icon]="unsubscribeForm.get('reason4').value ? faCheckSquare : faSquare"></fa-icon>
+                      </a>
+                      <input
+                        class="checkbox"
+                        id="unsubscribeFeedbackAlternative"
+                        type="checkbox"
+                        formControlName="reason4"
+                      />
+                      <label id="unsubscribeFeedbackAlternative-label" for="unsubscribeFeedbackAlternative">
+                        {{ 'unsubscribe.feedback.reason4' | cxTranslate }}
+                      </label>
+                    </div>
+
+                    <div class="newsletter-unsubscribe__feedback-reason">
+                      <a class="icon-background" (click)="updateFormValue('reasonOther')">
+                        <fa-icon [icon]="unsubscribeForm.get('reasonOther').value ? faCheckSquare : faSquare"></fa-icon>
+                      </a>
+                      <input
+                        class="checkbox"
+                        id="unsubscribeFeedbackOther"
+                        type="checkbox"
+                        formControlName="reasonOther"
+                      />
+                      <label id="unsubscribeFeedbackOther-label" for="unsubscribeFeedbackOther">
+                        {{ 'unsubscribe.feedback.reasonOther' | cxTranslate }}
+                      </label>
+
+                      <ng-container *ngIf="unsubscribeForm.get('reasonOther').value">
+                        <div class="newsletter-unsubscribe__other-msg">
+                          <textarea
+                            id="unsubscribeFeedbackOtherTextArea"
+                            [(ngModel)]="otherReason"
+                            [ngModelOptions]="{ standalone: true }"
+                            [placeholder]="'unsubscribe.feedback.reasonOther.placeholder' | cxTranslate"
+                            (input)="submitButtonDisabled = !otherReason.length > 0 ? true : false"
+                          ></textarea>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+
+                  <button
+                    class="submit"
+                    id="unsubscribeFeedbackSubmitButton"
+                    [disabled]="submitButtonDisabled"
+                    (click)="handleSubmit()"
+                  >
+                    {{ 'unsubscribe.feedback.submit' | cxTranslate }}
+                  </button>
+
+                  <div class="text-center">
+                    <!-- unsubscribe from all newsletters -->
+                    <a id="unsubscribeFeedbackUnsubscribeAllLink" (click)="unsubscribeAll(customerDetails.email)">
+                      <strong>{{ 'unsubscribe.feedback.unsubscribeAll' | cxTranslate }}</strong>
+                    </a>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </form>
+        </ng-container>
+
+        <ng-template #loadingSpinner>
+          <div class="newsletter-unsubscribe">
+            <div class="newsletter-unsubscribe__inner">
+              <app-component-loading-spinner></app-component-loading-spinner>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

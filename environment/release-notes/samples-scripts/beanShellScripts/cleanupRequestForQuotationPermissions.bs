@@ -1,0 +1,25 @@
+// Cleanup permissions
+import de.hybris.platform.servicelayer.search.FlexibleSearchQuery;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import com.namics.distrelec.b2b.core.model.DistB2BRequestQuotationPermissionModel;
+
+modelService = SpringUtil.getBean("modelService");
+flexibleSearchService = SpringUtil.getBean("flexibleSearchService");
+b2bCommerceUserService= SpringUtil.getBean("b2bCommerceUserService");
+
+FlexibleSearchQuery query = new FlexibleSearchQuery("SELECT {pk} FROM {Customer} WHERE {PK} IN ({{SELECT {source} FROM {PrincipalGroupRelation AS rel JOIN UserGroup AS ug ON {rel.target}={ug.PK} } WHERE {ug.uid}='b2badmingroup' }})");
+result = flexibleSearchService.search(query).getResult();
+for(user : result) {
+	FlexibleSearchQuery queryPermission = new FlexibleSearchQuery("SELECT {pk} FROM {DistB2BRequestQuotationPermission} WHERE {code}='RequestQuotationPermission_" + user.getCustomerID() + "'");
+	resultPermission = flexibleSearchService.search(queryPermission).getResult();
+
+	if(resultPermission.size() == 0) {
+		DistB2BRequestQuotationPermissionModel requestQuotationPermission = modelService.create(DistB2BRequestQuotationPermissionModel.class);
+		requestQuotationPermission.setCode("RequestQuotationPermission_" + user.getCustomerID());
+		requestQuotationPermission.setActive(Boolean.TRUE);requestQuotationPermission.setUnit(user.getDefaultB2BUnit());
+		requestQuotationPermission.setMessage("User is allowed to request quotations");
+		requestQuotationPermission.setCustomers(Collections.singletonList(user));
+		modelService.save(requestQuotationPermission);
+		b2bCommerceUserService.addPermissionToCustomer(user.getUid(), requestQuotationPermission.getCode());
+	}
+}

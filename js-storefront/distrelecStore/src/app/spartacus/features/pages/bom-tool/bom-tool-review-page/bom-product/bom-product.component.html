@@ -1,0 +1,210 @@
+<div
+  class="bom-product bom-product--{{ product.code }}"
+  [id]="'bom_product_container_' + product.code"
+  [class.error]="!isNumericStepperValid"
+  [attr.data-status-code]="product.salesStatus"
+>
+  <div class="col-3 col-md-2">
+    <label class="bom-product__checkbox">
+      <input
+        [(ngModel)]="entry.isSelected"
+        [id]="'bom_product_select_input_' + product.code"
+        [disabled]="addToCartForm.get('quantity').disabled || isMaximumQuantityReached()"
+        (change)="onSelectChange()"
+        type="checkbox"
+      />
+      <span class="mat-checkbox"></span>
+    </label>
+
+    <a
+      class="teaser-link bom-product__image"
+      [id]="'bom_product_img_url_' + product.code"
+      [routerLink]="productUrl"
+      data-aainteraction="product click"
+      data-product-code="${product.code}"
+      data-position="${statusIndex}"
+    >
+      <picture>
+        <source [srcset]="landscapeSmallWebP" />
+        <img
+          class="bom-product__img"
+          [id]="'bom_product_img_' + product.code"
+          [alt]="'product.page.title.buy' | cxTranslate: { '0': product.name }"
+          [src]="landscapeSmallJpg"
+          width="112"
+          height="93"
+        />
+      </picture>
+    </a>
+
+    <div *ngIf="product.energyEfficiency">
+      <app-energy-efficiency-label
+        [id]="product.code + '-energy-efficiency-label'"
+        [energyEfficiency]="product.energyEfficiency"
+        [energyEfficiencyLabelImageUrl]="getEnergyEfficiencyLabelImageUrl(product?.energyEfficiencyLabelImage)"
+      ></app-energy-efficiency-label>
+    </div>
+  </div>
+
+  <div class="col-9 col-md-10 pull-right">
+    <div class="bom-product__price">
+      <span class="vat-text" [id]="'bom_product_vat_text_' + product.code">
+        {{ product.price?.currencyIso }}&nbsp;{{ price | price }}&nbsp;({{
+          (activeChannel === 'B2B' ? 'product.scaledPrices.excVat' : 'product.scaledPrices.incVat') | cxTranslate
+        }})
+      </span>
+    </div>
+
+    <div class="bom-product__information">
+      <div class="d-flex align-items-center">
+        <a
+          *ngIf="product.buyable || (product.endOfLifeDate && product.buyableReplacementProduct); else titleWithoutLink"
+          class="teaser-link"
+          [id]="'bom_product_information_title_url_' + product.code"
+          [routerLink]="product.url"
+          [queryParams]="{ itemList: itemListEntity.BOM }"
+          [attr.data-position]="position"
+          (click)="trackProductClick(product, index)"
+        >
+          <h3
+            class="bom-product__title"
+            [id]="'bom_product_information_title_' + product.code"
+            [innerHTML]="product.name"
+          ></h3>
+        </a>
+        <ng-template #titleWithoutLink>
+          <h3
+            class="bom-product__title"
+            [id]="'bom_product_information_title_without_url_' + product.code"
+            [title]="product.name"
+          >
+            {{ product.name }}
+          </h3>
+        </ng-template>
+
+        <ng-container *ngIf="product?.eligibleForReevoo">
+          <app-reevoo
+            [isEligible]="product.eligibleForReevoo"
+            [productCode]="product.code"
+            reevooType="product-badge-plp"
+          ></app-reevoo>
+        </ng-container>
+      </div>
+
+      <div class="bom-product__information articleNumber">
+        <div class="bom-product__information-item">
+          <span class="label" [id]="'bom_product_information_articleNumber_' + product.code">
+            {{ 'product.articleNumber' | cxTranslate }}:
+          </span>
+          <span class="value" [id]="'bom_product_information_codeErpRelevant_' + product.code">
+            {{ product.codeErpRelevant | articleNumber }}
+          </span>
+        </div>
+
+        <div class="bom-product__information-item">
+          <span class="label" [id]="'bom_product_information_typeName_label_' + product.code">
+            {{ 'product.typeName' | cxTranslate }}:
+          </span>
+          <span
+            class="value type-name-short"
+            [id]="'bom_product_information_typeName_' + product.code"
+            [title]="product.typeName"
+          >
+            {{ product.typeName }}
+          </span>
+        </div>
+
+        <div *ngIf="product.distManufacturer" class="bom-product__information-item">
+          <span class="label" [id]="'bom_product_information_manufacturer_label_' + product.code">
+            {{ 'product.manufacturer' | cxTranslate }}:
+          </span>
+          <span
+            class="value type-name-short"
+            [id]="'bom_product_information_manufacturer_' + product.code"
+            [title]="product.distManufacturer.name"
+          >
+            {{ product.distManufacturer.name }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="showDetailedView" class="row bom-product__detail-view">
+      <div class="col-md-8">
+        <div class="attributes">
+          <div *ngFor="let attribute of product.technicalAttributes" class="attributes__row">
+            <span class="label" [id]="'bom_product_technicalAttributes_' + product.code + '_' + attribute.key">
+              {{ attribute.key }}
+            </span>
+            <span class="value" [id]="'bom_product_technicalAttributes_' + product.code + '_' + attribute.value">
+              {{ attribute.value }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 bom-product__price__second">
+        <app-scaled-prices [id]="'bom_product_scaled_prices_' + product.code" [product]="product"></app-scaled-prices>
+      </div>
+    </div>
+
+    <div class="bom-product__actions row">
+      <div class="col-lg-7 bom-product__actions-left">
+        <app-toolbar-item
+          [toolbarId]="'bom_product_actions_remove_btn_' + product.code"
+          [class]="'remove'"
+          (click)="onRemoveClick()"
+          labelTranslationKey="shoppingList.remove"
+        ></app-toolbar-item>
+        <app-shopping-list-toolbar-item
+          [toolbarId]="'bom_product_actions_shopping_list_' + product.code"
+          [product]="product"
+          [quantity]="entry.quantity"
+          [reference]="entry.reference"
+          location="bom"
+        ></app-shopping-list-toolbar-item>
+
+        <input
+          class="product-reference bom-product__reference"
+          [(ngModel)]="entry.reference"
+          [id]="'bom_product_actions_reference_input_' + product.code"
+          [placeholder]="'text.addyourreference' | cxTranslate"
+          (input)="onChange()"
+          type="text"
+          name="reference"
+        />
+      </div>
+
+      <div class="col bom-product__actions-right">
+        <div class="bom-product__shipping-info">
+          <app-erp-sales-status
+            [productArtNo]="product.code"
+            [productStatusCode]="product.salesStatus"
+          ></app-erp-sales-status>
+        </div>
+
+        <div *ngIf="this.availability$ | async as availabilityData" class="bom-product__numeric-stepper">
+          <app-numeric-stepper
+            [ids]="numericStepperID"
+            [minimumQuantity]="product.orderQuantityMinimum"
+            [quantityStep]="product.orderQuantityStep"
+            [productCode]="product.code"
+            [control]="addToCartForm.get('quantity')"
+            [availabilityData]="availabilityData"
+            [salesStatus]="product.salesStatus"
+            popupAlignment="right"
+          ></app-numeric-stepper>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <span
+    *ngIf="entry.isAddedToCart"
+    class="addtocart-message"
+    [id]="'bom_product_added_to_cart_message_label_' + product.code"
+  >
+    {{ 'text.added.to.cart' | cxTranslate }}
+    <fa-icon [icon]="faCheckCircle"></fa-icon>
+  </span>
+</div>

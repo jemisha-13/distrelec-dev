@@ -1,0 +1,35 @@
+$salesOrg=7800
+
+INSERT_UPDATE DistFactFinderExportChannel;code[unique=true]   ;channel             ;cmsSite(uid);language(isocode);catalogVersion(catalog(id), version)[default='distrelecProductCatalog:Online']
+                                         ;distrelec_7800_be_en;distrelec_7800_be_en;distrelec_BE;en
+
+INSERT_UPDATE DistFactFinderExportCronJob;code[unique=true]                     ;channel(code)       ;sessionLanguage(isocode);job(code)[default='distff.factFinderAttributeExportJob'];sessionUser(uid)[default='techUserFactFinderExportJobs'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING'];mediaPrefix[default='export.attributes.'];nodeID[default=0]
+                                         ;distrelec_7800_be_en_export_attributes;distrelec_7800_be_en;en
+
+INSERT_UPDATE DistFactFinderExportCronJob;code[unique=true]                ;channel(code)       ;sessionLanguage(isocode);job(code)[default='distff.factFinderUnitExportJob'];sessionUser(uid)[default='techUserFactFinderExportJobs'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING'];mediaPrefix[default='export.units.'];nodeID[default=0]
+                                         ;distrelec_7800_be_en_export_units;distrelec_7800_be_en;en
+
+INSERT_UPDATE DistCategoryStructureExportCronJob;code[unique=true]                     ;channel(code)       ;sessionLanguage(isocode);job(code)[default='distff.categoryStructureExportJob'];sessionUser(uid)[default='techUserFactFinderExportJobs'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='ERROR'];mediaPrefix[default='export.category.structure.'];nodeID[default=0]
+                                                ;distrelec_7800_be_en_export_categories;distrelec_7800_be_en;en
+
+INSERT_UPDATE CompositeEntry;code[unique=true];compositeCronJob(code)[default='distFACTFinderExportCronJob'];executableCronJob(code)
+                            ;distrelec_7800_be_en_export_attributes;;distrelec_7800_be_en_export_attributes
+                            ;distrelec_7800_be_en_export_units;;distrelec_7800_be_en_export_units
+
+INSERT_UPDATE CompositeEntry;code[unique=true];compositeCronJob(code)[default='distFACTFinderCategoryStructureExportCronJob'];executableCronJob(code)
+                            ;distrelec_7800_be_en_export_categories;;distrelec_7800_be_en_export_categories
+
+INSERT_UPDATE DistProductInfoExportCronJob;code[unique=true]      ;mediaPrefix            ;cmsSite(uid);language(isocode);job(code)[default='exportProductInfoJob'];sessionUser(uid)[default='techUserFactFinderExportJobs'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='WARNING'];nodeID[default=0]
+                                          ;productInfoExport_be_en;productInfoExport_be_en;distrelec_BE;en
+
+INSERT_UPDATE CompositeEntry;code[unique=true];compositeCronJob(code)[default='distProductInformationExporCronJob'];executableCronJob(code)
+                            ;productInfoExport_be_en;;productInfoExport_be_en
+
+INSERT_UPDATE DistBMECatExportChannel;code[unique=true]          ;channel             ;cmsSite(uid);language(isocode);catalogVersion(catalog(id),version)[default='distrelecProductCatalog:Online']
+                                     ;distrelec_bmecat_7800_be_en;distrelec_7800_be_en;distrelec_BE;en
+
+INSERT_UPDATE DistBMECatExportCronJob;code[unique=true]                 ;channel(code)       ;sessionLanguage(isocode);job(code)[default='distBMECatExportJob'];sessionUser(uid)[default='admin'];sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='ERROR'];mediaPrefix[default='bmecat.'];nodeID[default=0]
+                                     ;distrelec_7800_be_en_bmecat_export;distrelec_bmecat_7800_be_en;en;
+
+INSERT_UPDATE CompositeEntry;code[unique=true];compositeCronJob(code)[default='distBMECatExportCronJob'];executableCronJob(code)
+                            ;distrelec_7800_be_en_bmecat_export;;distrelec_7800_be_en_bmecat_export

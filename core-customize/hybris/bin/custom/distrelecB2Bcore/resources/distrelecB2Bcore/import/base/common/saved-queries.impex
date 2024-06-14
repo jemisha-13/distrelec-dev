@@ -1,0 +1,63 @@
+INSERT_UPDATE SavedQuery;code[unique=true];resulttype(code);query;params(key,value(code))[map-delimiter=|];
+;FindCustomersByOrderedProducts;B2BCustomer;"
+SELECT
+  DISTINCT {c.pk}
+FROM
+  {B2BCustomer AS c},
+  {Order AS o},
+  {OrderEntry AS oe},
+  {Product AS p}
+WHERE
+  {c.pk}={o.user} AND
+  {o.date} >= ?startDate AND
+  {o.date} <= ?endDate AND
+  {oe.order} = {o.pk} AND
+  {oe.product} = ?product.pk
+";product->Product|startDate->java.util.Date|endDate->java.util.Date;
+
+
+;FindCustomersWithCarts;B2BCustomer;"
+SELECT DISTINCT
+  {cu.pk}
+FROM
+  {B2BCustomer AS cu},
+  {Cart AS ca}
+WHERE
+  {cu.pk} = {ca.user} AND
+  {ca.date} >= ?startDate AND
+  {ca.date} <= ?endDate
+";startDate->java.util.Date|endDate->java.util.Date;
+
+
+;FindDuplicatePriceRows;DistPriceRow;"
+SELECT
+  {outer_dpr.pk}
+FROM
+  {DistPriceRow AS outer_dpr}
+WHERE EXISTS
+({{
+SELECT
+  count({dpr.pk}),
+  {dpr.ug},
+  {dpr.product},
+  {dpr.currency},
+  {dpr.minqtd},
+  {dpr.specialPrice}
+FROM
+  {DistPriceRow AS dpr}
+WHERE
+  GETDATE() BETWEEN {dpr.startTime} AND {dpr.endTime} AND
+  {dpr.ug} = {outer_dpr.ug} AND
+  {dpr.product} = {outer_dpr.product} AND
+  {dpr.currency} = {outer_dpr.currency} AND
+  {dpr.minqtd} = {outer_dpr.minqtd} AND
+  {dpr.specialPrice} = {outer_dpr.specialPrice}
+GROUP BY
+  {dpr.ug},
+  {dpr.product},
+  {dpr.currency},
+  {dpr.minqtd},
+  {dpr.specialPrice}
+HAVING COUNT({dpr.pk}) > 1
+}})
+";;

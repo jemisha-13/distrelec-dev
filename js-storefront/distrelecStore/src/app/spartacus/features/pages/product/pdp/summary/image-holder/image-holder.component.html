@@ -1,0 +1,111 @@
+@if (imageLabels) {
+  <div class="d-flex image-labels">
+    @if (productData?.isBetterWorld) {
+      <app-better-world-label
+        [productCode]="productData?.code"
+        (click)="scrollToBetterWorldContent()"
+      ></app-better-world-label>
+    }
+    @if ((isMobileBreakpoint | async) === false || !productData.isBetterWorld) {
+      @if (productData?.availableInSnapEda) {
+        <app-snap-eda
+          class="snap-eda"
+          [isAvailableInSnapEda]="productData?.availableInSnapEda"
+          [mpn]="productData?.typeName"
+          [manufacturerName]="productData?.distManufacturer?.name"
+          [isBetterWorldShown]="productData?.isBetterWorld"
+        ></app-snap-eda>
+      }
+
+      @if (productData?.audios) {
+        <app-audio-play [audioFiles]="productData?.audios"></app-audio-play>
+      }
+
+      @if (isCalibrated) {
+        <app-calibrated-label></app-calibrated-label>
+      }
+
+      @if (activePromotionLabels.length > 0 && !isInactiveProduct()) {
+        <div class="image-product-labels" [class.justify-content-start]="!productData?.availableInSnapEda">
+          @for (productLabel of activePromotionLabels | filterLabels; track $index) {
+            <app-product-label [activePromotionLabel]="productLabel"></app-product-label>
+          }
+        </div>
+      }
+
+      @if (energyEfficiency) {
+        <app-energy-efficiency-label
+          class="energy-efficiency"
+          id="code + '-energy-efficiency-label'"
+          [ngClass]="
+            productData?.availableInSnapEda ||
+            isCalibrated ||
+            activePromotionLabels.length ||
+            productData?.audios ||
+            productData?.isBetterWorld
+              ? 'justify-content-end'
+              : 'justify-content-start'
+          "
+          [energyEfficiency]="energyEfficiency"
+          [energyEfficiencyLabelImageUrl]="energyEfficiencyLabelImageUrl"
+        ></app-energy-efficiency-label>
+      }
+    }
+  </div>
+}
+
+<div class="image-holder-container">
+  <div class="image-holder">
+    @if (data?.length > 1) {
+      <app-icon class="prev-icon" [icon]="prev" (click)="prevImage()"></app-icon>
+    }
+
+    <div class="image-holder__frame">
+      <div class="image-holder__image" [class.image-without-chevrons]="data?.length < 2">
+        @if (data[currentIndex]?.type === 'image') {
+          <a (click)="onImageClick(data[currentIndex])">
+            <picture draggable>
+              <source [srcset]="data[currentIndex].source" />
+              <img
+                class="image-holder__image--content"
+                id="pdp_product_img"
+                [magnifyImage]="data[currentIndex].source"
+                [src]="data[currentIndex].source"
+                [alt]="productTitle"
+                loading="eager"
+                fetchpriority="high"
+                draggable
+                width="1020"
+                height="570"
+              />
+            </picture>
+          </a>
+
+          @if (displayPreview()) {
+            <app-gallery-preview
+              [data]="data"
+              [showCount]="false"
+              [displayPreview]="displayPreview"
+            ></app-gallery-preview>
+          }
+        }
+
+        @if (data[currentIndex]?.type === 'video') {
+          <div class="image-holder__image" [class.image-without-chevrons]="data?.length < 2">
+            <iframe
+              class="video-frame"
+              [src]="data[currentIndex].safeResourceUrl"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (data?.length > 1) {
+      <app-icon class="next-icon" [icon]="next" (click)="nextImage()"></app-icon>
+    }
+  </div>
+</div>
+

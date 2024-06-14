@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Deployment
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-deployment" basedir="." xmlns:props="antlib:org.apache.ant.props">
+
+
+	<!--
+	=================================
+	macro: detectDeploymentRelease
+	=================================
+	-->
+	<macrodef name="detectDeploymentRelease" description="Set the deployment release to the property 'releasePath'. This may be a given release tag in the property 'releaseToInstall' or otherwise 'trunk' by default.">
+		<sequential>
+			<condition property="releaseToInstall" value="${mandant.version}" >
+				<not>
+					<isset property="releaseToInstall" />
+				</not>
+			</condition>			
+			
+			<condition property="releasePath" value="tags/${releaseToInstall}" else="trunk">
+				<not>
+					<equals arg1="${releaseToInstall}" arg2="trunk" casesensitive="false" />
+				</not>
+			</condition>			
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: setupDeploymentScript
+	=================================
+	-->
+	<macrodef name="setupDeploymentScript" description="Set up the intial build script to create and install deployments. These scripts are separated from environment, to replace the environment with another one (tags).">
+		<sequential>
+			<input message="Release? example: v1.0.0 or v1.0-rc1" addproperty="releaseToInstall" />
+			<fail message="Attribute 'releaseToInstall' was not set. You have to set a relase, like: v1.0.0 or v1.0-rc1 or trunk" unless="releaseToInstall"/>
+			<detectDeploymentRelease />
+			<echo message="Set up ${initscript.folder.name} folder for '${releasePath}'..." />
+			<delete dir="${project.home}/${initscript.folder.name}" />
+			<mkdir dir="${project.home}/${initscript.folder.name}" />
+			<mkdir dir="${project.home}/${initscript.folder.name}/libs" />
+			<svnSetting id="svn.settings" javahl="false" svnkit="false" username="${svn.repository.username}" password="${svn.repository.password}" />
+			<svn refid="svn.settings">
+				<export srcUrl="${svn.repository.url}/${releasePath}/environment/build-deployment.xml" destPath="${project.home}/${initscript.folder.name}/build.xml" force="true"/>
+				<export srcUrl="${svn.repository.url}/${releasePath}/environment/properties-config.xml" destPath="${project.home}/${initscript.folder.name}/properties-config.xml" force="true"/>
+				<export srcUrl="${svn.repository.url}/${releasePath}/environment/libs/svnant" destPath="${project.home}/${initscript.folder.name}/libs/svnant" force="true"/>
+				<export srcUrl="${svn.repository.url}/${releasePath}/environment/libs/yainput" destPath="${project.home}/${initscript.folder.name}/libs/yainput" force="true"/>
+				<export srcUrl="${svn.repository.url}/${releasePath}/environment/libs/ant-contrib" destPath="${project.home}/${initscript.folder.name}/libs/ant-contrib" force="true"/>
+			</svn>
+		</sequential>
+	</macrodef>	
+	
+	<!--
+	=================================
+	macro: extractProductionZip
+	=================================
+	-->
+	<macrodef name="extractProductionZip" description="Extract the zip file for the production environment.">
+		<attribute name="fromPath" />
+		<!--
+		 DeploymentUnit: ${project.home}/deployment
+		 Production: ${hybris.home}\temp\hybris\hybrisServer
+		-->
+		<sequential>
+			<echo message="Extract the zip file for the production server." />
+			<delete dir="${hybrisserver.home}/bin" />
+			<unzip src="${fromPath}/hybrisServer-AllExtensions.zip" dest="${project.home}/hybrisserver" overwrite="true" />
+			<unzip src="${fromPath}/hybrisServer-Platform.zip" dest="${project.home}/hybrisserver" overwrite="true" />
+		</sequential>
+	</macrodef>
+	
+	<!--
+	=================================
+	macro: createproduction 
+	=================================
+	-->
+	<macrodef name="createproduction" description="This target calls within the hybris platform the hybris-target production">
+		<sequential>
+			<ant antfile="${hybris.platform.home}\build.xml" target="production">
+				<property name="platformhome" value="${hybris.platform.home}" />
+			</ant>
+		</sequential>
+	</macrodef>
+	
+	<!--
+	=================================
+	macro: createServerEnvironmentZip 
+	=================================
+	-->
+	<macrodef name="createServerEnvironmentZip" description="Creates a dedicated ZIP file including the environment specific properties and ant scripts for installing a release on the server.">
+		<sequential>
+			<zip destfile="${hybris.home}\temp\hybris\hybrisServer\hybrisServer-environment.zip">
+				<zipfileset file="${environment.home}\build-install.xml" prefix="environment" />
+				<zipfileset file="${environment.home}\tasks\library-import.xml" prefix="environment" />
+			</zip>
+			<propertyhelper>
+				<props:nested />
+			</propertyhelper>
+			<for list="${${deployment.environment}.environmentinclude}" param="env">
+				<sequential>
+					<zip destfile="${hybris.home}\temp\hybris\hybrisServer\hybrisServer-environment.zip" update="true">
+						<zipfileset dir="${environment.home}\@{env}" prefix="environment/@{env}">
+							<exclude name="**/*.svn" />
+						</zipfileset>
+					</zip>
+				</sequential>
+			</for>
+			
+			<!-- Include the release notes of the current release -->
+			<sequential>
+				<zip destfile="${hybris.home}\temp\hybris\hybrisServer\hybrisServer-environment.zip" update="true">
+					<zipfileset dir="${environment.home}\release-notes\${releaseToInstall}" prefix="environment/release-notes/${releaseToInstall}">
+						<exclude name="**/*.svn" />
+					</zipfileset>
+				</zip>
+			</sequential>
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: server 
+	=================================
+	-->
+	<macrodef name="server" description="Configures hybris Server and restart if running.">
+		<sequential>
+			<ant antfile="${hybris.platform.home}\build.xml" target="server">
+				<property name="platformhome" value="${hybris.platform.home}" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: rebuildProduction
+	=================================
+	-->
+	<macrodef name="rebuildProduction" description="Rebuild the production environment.">
+		<sequential>
+			<echo message="Rebuild the production environment." />
+			<ant antfile="${hybrisserver.platform.home}\build.xml" target="clean">
+				<property name="platformhome" value="${hybrisserver.platform.home}" />
+			</ant>
+			<ant antfile="${hybrisserver.platform.home}\build.xml" target="all">
+				<property name="platformhome" value="${hybrisserver.platform.home}" />
+			</ant>
+		</sequential>
+	</macrodef>
+	
+</project>
+

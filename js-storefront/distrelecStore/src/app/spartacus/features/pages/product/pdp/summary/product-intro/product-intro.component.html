@@ -1,0 +1,158 @@
+<div class="product-intro">
+  <div class="product-intro-row">
+    <div class="product-intro-row-main">
+      <div class="product-intro-row-main__content">
+        <span
+          *ngIf="title"
+          class="title"
+          id="pdp_product_title"
+          [innerHtml]="formatTitle(manNumber, title, familyName)"
+        ></span>
+
+        <div class="copy-functions">
+          <div
+            class="copy-functions__info tooltip-container"
+            (click)="copyText(code, 'article')"
+            data-aainteraction="copy text"
+          >
+            <div>
+              <div class="tooltip-container__content">
+                <button class="copy-functions__copy-button" id="pdp_product_code_copy_button">
+                  <app-icon class="copy-icon" [icon]="copy"></app-icon>
+                </button>
+
+                <span class="copy-functions__info-title" id="pdp_product_intro_article_number_title">
+                  <ng-container *ngIf="isDesktop$ | async">
+                    {{ 'product.product_intro.article_number_title' | cxTranslate }}
+                  </ng-container>
+                  <ng-container *ngIf="isTablet$ | async">{{ 'product.articleNumber' | cxTranslate }}.</ng-container>
+                </span>
+                <span class="copy-functions__info-number" id="js-productcode" [attr.data-js-product-code]="code">
+                  {{ code | articleNumber }}
+                </span>
+              </div>
+
+              <ng-container *ngIf="copiedState$ | async as copiedState">
+                <ng-container *ngIf="isDesktop$ | async">
+                  <app-tooltip
+                    *ngIf="copiedState['article']"
+                    class="product-tooltip"
+                    [position]="'top-left'"
+                    [tooltipID]="'product-article-code-' + code"
+                  >
+                    {{ code }}
+                    {{ 'product.product_intro.copied_text' | cxTranslate }}
+                  </app-tooltip>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+
+          <div
+            class="copy-functions__info tooltip-container"
+            (click)="copyText(manNumber, 'manufacturer', 'manufacturer')"
+            data-aainteraction="copy text"
+          >
+            <ng-container *ngIf="manNumber">
+              <div>
+                <div class="tooltip-container__content">
+                  <button class="copy-functions__copy-button" id="pdp_manufacturer_copy_button">
+                    <app-icon class="copy-icon" [icon]="copy"></app-icon>
+                  </button>
+
+                  <span class="copy-functions__info-title" id="pdp_product_intro_man_number_title">
+                    <ng-container *ngIf="isDesktop$ | async">
+                      {{ 'product.product_intro.man_number_title' | cxTranslate }}
+                    </ng-container>
+                    <ng-container *ngIf="isTablet$ | async">{{ 'form.mpn' | cxTranslate }}.</ng-container>
+                  </span>
+                  <span class="copy-functions__info-number" id="pdp_manufacturer_number">{{ manNumber }}</span>
+                </div>
+
+                <ng-container *ngIf="copiedState$ | async as copiedState">
+                  <ng-container *ngIf="isDesktop$ | async">
+                    <app-tooltip
+                      *ngIf="copiedState['manufacturer']"
+                      class="product-tooltip"
+                      [position]="'top-left'"
+                      [tooltipID]="'product-manufacturer-number-' + manNumber"
+                    >
+                      {{ manNumber }}
+                      {{ 'product.product_intro.copied_text' | cxTranslate }}
+                    </app-tooltip>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </ng-container>
+          </div>
+
+          <div
+            *ngIf="alternativeAliasMPN"
+            class="copy-functions__info tooltip-container"
+            (click)="copyText(alternativeAliasMPN, 'mpnAlias', 'mpnAlias')"
+            data-aainteraction="copy text"
+          >
+            <div>
+              <div class="tooltip-container__content">
+                <button class="copy-functions__copy-button" id="pdp_alias_copy_button">
+                  <app-icon class="copy-icon" [icon]="copy"></app-icon>
+                </button>
+
+                <ng-container *ngIf="productAvailability$ | async as productAvailability">
+                  <ng-container *ngIf="isRSProduct(productAvailability)">
+                    <span class="copy-functions__info-title" id="pdp_product_intro_rs_title">
+                      {{ 'product.rs.title' | cxTranslate }}:
+                    </span>
+                  </ng-container>
+                  <ng-container *ngIf="!isRSProduct(productAvailability)">
+                    <span class="copy-functions__info-title" id="pdp_product_intro_alias_title">
+                      {{ 'product.alias.text' | cxTranslate }}:
+                    </span>
+                  </ng-container>
+                </ng-container>
+                <span class="copy-functions__info-number" id="pdp_alias">{{ alternativeAliasMPN }}</span>
+              </div>
+
+              <ng-container *ngIf="copiedState$ | async as copiedState">
+                <ng-container *ngIf="isDesktop$ | async">
+                  <app-tooltip
+                    *ngIf="copiedState['mpnAlias']"
+                    class="product-tooltip"
+                    [position]="'top-left'"
+                    [tooltipID]="'alternative-alias-mpn-' + alternativeAliasMPN"
+                  >
+                    {{ alternativeAliasMPN }}
+                    {{ 'product.product_intro.copied_text' | cxTranslate }}
+                  </app-tooltip>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-intro-row-main__logo">
+        <div *ngIf="brandLogoUrl" class="product-intro__logo">
+          <a id="pdp_product_intro_brand_logo_link" [routerLink]="familyNameUrl">
+            <img
+              class="product-intro__logo__brand-logo"
+              [src]="brandLogoUrl"
+              [attr.data-src]="brandLogoUrl"
+              fetchpriority="auto"
+              alt="Brand logo"
+              width="70"
+              height="14"
+            />
+          </a>
+        </div>
+        <div class="row reevoo-row">
+          <div class="reevoo-article-section">
+            <app-reevoo [isEligible]="reevooEligible" [productCode]="code" reevooType="product-badge"></app-reevoo>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-divider-line class="divider w-100"></app-divider-line>
+  </div>
+</div>

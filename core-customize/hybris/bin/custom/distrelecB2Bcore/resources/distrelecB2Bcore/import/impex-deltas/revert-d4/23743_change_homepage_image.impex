@@ -1,0 +1,51 @@
+# Update the hero banner for D4.
+$country=FR
+
+# Constants
+$mediaTranslator = de.hybris.platform.impex.jalo.media.MediaDataTranslator
+$siteResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/revert-d4/media/banner/homepage
+$mode = Staged
+
+# FR Catalog
+$contentCatalog = distrelec_FRContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = $mode])[default = $contentCatalog:$mode]
+
+# Default Catalog
+$defaultContentCatalog=Default
+$defaultContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $defaultContentCatalog]), CatalogVersion.version[default = $mode])[default = $defaultContentCatalog:$mode]
+
+# International Catalog
+$internationalContentCatalog = distrelec_IntContentCatalog
+$internationalContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $internationalContentCatalog]), CatalogVersion.version[default = $mode])[default = $internationalContentCatalog:$mode]
+
+# Languages for International Catalog
+$languages=de, de_AT, de_DE, de_CH, fr, fr_BE, fr_FR, fr_CH, nl, nl_BE, nl_NL, en, en_CH, en_DE, en_DK, en_EX, en_NL, en_NO, en_PL, en_SE, cs, da, et, fi, sv, sv_FI, sv_SE, hu, it, lt, lv, no, pl, ro, sk
+
+INSERT_UPDATE Language;isocode[unique=true];active[default=true];name[lang=en]         ;name[lang=de];fallbackLanguages(isocode)
+                      ;fr_FR               ;                    ;French (France)       ;             ;fr,en
+
+UPDATE CatalogVersion;catalog(id)[unique=true]    ;version[unique=true];languages(isocode)
+                     ;distrelec_IntContentCatalog ;Staged              ;$languages
+                     ;distrelec_IntContentCatalog ;Online              ;$languages
+
+UPDATE BaseStore;uid[unique=true]          ;languages(isocode)
+                ;internationalB2BBaseStore ;$languages
+                ;internationalB2CBaseStore ;$languages
+
+# Banner Components
+# Hide the old D4 Banner
+UPDATE DistBannerComponent;uid[unique = true];$contentCV[unique = true];visible
+                          ;HomepageBanner-D4;;false;
+
+# Set up banner for FR - fr_FR locale
+INSERT_UPDATE Media;code[unique = true];$defaultContentCV[unique = true];@media[translator=$mediaTranslator, lang=fr_FR];mime[default = image/jpeg];
+                   ;maintainance_preparation;;$siteResource/CW20-D4-hp-hero.jpg;
+
+
+INSERT_UPDATE DistBannerComponent; uid[unique = true] ;media(code, $defaultContentCV)[lang = fr_FR];$internationalContentCV[unique = true];localizedUrlLink[lang = fr_FR];&componentRef
+                                 ;comp_00007000;maintainance_preparation;;/clearance?int_cid=2028categories.na-summer20&ikw=hero-banner;comp_00007000
+
+
+# Add banner to content slot
+UPDATE ContentSlot;uid[unique=true];$contentCV[unique = true];cmsComponents(&componentRef);
+                  ;Homepage2018-BannerContentSlot;;comp_00007000

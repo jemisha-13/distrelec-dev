@@ -1,0 +1,74 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-9">
+      <ng-container class="account-information-main">
+        <div class="order-return-wrapper">
+          <div class="row mt-4">
+            <div class="col-md-8 col-sm-12">
+              <h1 id="order_returns_page_title">{{ 'rma.success.title' | cxTranslate }}</h1>
+            </div>
+          </div>
+          <div class="row mt-1">
+            <div class="col-md-12">
+              <app-action-message
+                id="orderDetails"
+                [type]="responseType"
+                [message]="responseMessage"
+              ></app-action-message>
+            </div>
+          </div>
+
+          <div *ngIf="loadedOrderDetails; else loadingOrderDetails">
+            <div>
+              <div class="row mt-4 mb-4">
+                <div class="col-sm-12 col-md-12">
+                  <p class="mt-4" [innerHtml]="'rma.success.text' | cxTranslate: { '0': returnCaseNumber }"></p>
+                  <p
+                    class="mt-4"
+                    [innerHtml]="'rma.success.textSecond' | cxTranslate: { '0': userDetails?.displayUid }"
+                  ></p>
+                  <p class="mt-4">{{ 'rma.guest.returnPage.confirmation' | cxTranslate }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-md-6 col-sm-12 mt-4">
+                <button
+                  class="btn btn-secondary btn-gray back-button"
+                  id="myAccount-orderReturnConfirmation-backButton"
+                  (click)="goBack()"
+                >
+                  <div class="mr-3 d-inherit">
+                    <fa-icon [icon]="faAngleLeft"></fa-icon>
+                  </div>
+                  {{ 'form.back' | cxTranslate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #loadingOrderDetails>
+          <div class="row mt-4">
+            <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+              <img src="app/spartacus/assets/media/spinner.gif" />
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

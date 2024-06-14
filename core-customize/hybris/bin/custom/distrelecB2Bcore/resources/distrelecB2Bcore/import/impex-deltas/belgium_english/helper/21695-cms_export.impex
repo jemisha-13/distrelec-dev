@@ -1,0 +1,28 @@
+$catalog=distrelec_NLContentCatalog
+$version=Online
+$pageName=buyers-guide-m12
+
+# ---- Extension: cms2 ---- Type: ContentPage ----
+"#% impex.setTargetFile( ""ContentPage.csv"" );"
+insert_update ContentPage;&Item;addToSitemap[allownull=true];approvalStatus(code, itemtype(code))[allownull=true];catalogVersion(catalog(id), version)[unique=true, allownull=true];changeFreq(code, itemtype(code));copyToCatalogsDisabled[allownull=true];defaultPage[allownull=true];description[lang=en];description[lang=nl];displayOnSites(cxConfig(code), uid);homepage[allownull=true];keywords[lang=en];keywords[lang=nl];label;lockedBy(uid);masterTemplate(catalogVersion(catalog(id), version), uid)[allownull=true];name;navigationNodeList(catalogVersion(catalog(id), version), uid);onlyOneRestrictionMustApply[allownull=true];originalPage(catalogVersion(catalog(id), version), uid);pageStatus(code, itemtype(code));previewImage(catalogVersion(catalog(id), version), code);priority;title[lang=en];title[lang=nl];uid[unique=true, allownull=true];restrictions(catalogVersion(catalog(id), version), uid)
+"#% impex.exportItems(""SELECT {com.pk} FROM {ContentPage! AS com JOIN CatalogVersion AS cv ON {com.catalogVersion}={cv.pk} JOIN Catalog AS c ON {cv.catalog}={c.pk}} WHERE {com.name}='$pageName' AND {c.id}='$catalog' AND {cv.version}='$version'"", Collections.EMPTY_MAP, Collections.singletonList( Item.class ), true, true, -1, -1 );"
+
+# ---- Extension: cms2 ---- Type: ContentSlotForPage ----
+"#% impex.setTargetFile( ""ContentSlotForPage.csv"" );"
+insert_update ContentSlotForPage;&Item;catalogVersion(catalog(id), version)[unique=true, allownull=true];contentSlot(catalogVersion(catalog(id), version), uid)[allownull=true];page(catalogVersion(catalog(id), version), uid)[allownull=true];position[allownull=true];uid[unique=true, allownull=true];
+"#% impex.exportItems(""SELECT {com.pk} FROM {ContentSlotForPage! AS com JOIN CatalogVersion AS cv ON {com.catalogVersion}={cv.pk} JOIN Catalog AS c ON {cv.catalog}={c.pk} JOIN AbstractPage AS p ON {com.page}={p.pk}} WHERE {p.name}='$pageName' AND {c.id}='$catalog' AND {cv.version}='$version' "", Collections.EMPTY_MAP, Collections.singletonList( Item.class ), true, true, -1, -1 );"
+
+# ---- Extension: cms2 ---- Type: ContentSlot ----
+"#% impex.setTargetFile( ""ContentSlot.csv"" );"
+insert_update ContentSlot;&Item;activeFrom[dateformat=dd.MM.yyyy hh:mm:ss];activeUntil[dateformat=dd.MM.yyyy hh:mm:ss];active[allownull=true];catalogVersion(catalog(id), version)[unique=true, allownull=true];currentPosition;name[unique=true];originalSlot(catalogVersion(catalog(id), version), uid);title[lang=en];title[lang=nl];uid[unique=true, allownull=true];cmsComponents(uid, catalogVersion(catalog(id), version))[unique=true]
+"#% impex.exportItems(""SELECT {cs.pk} FROM {ContentSlot! AS cs JOIN CatalogVersion AS cv ON {cs.catalogVersion}={cv.pk} JOIN Catalog AS c ON {cv.catalog}={c.pk} JOIN ContentSlotForPage AS cs4p ON {cs4p.contentSlot}={cs.pk} JOIN AbstractPage AS p ON {cs4p.page}={p.pk}} WHERE {p.name}='$pageName' AND {c.id}='$catalog' AND {cv.version}='$version'"", Collections.EMPTY_MAP, Collections.singletonList( Item.class ), true, true, -1, -1 );"
+
+# ---- Extension: acceleratorcms ---- Type: SimpleBannerComponent ----
+"#% impex.setTargetFile( ""SimpleBannerComponent.csv"" );"
+insert_update SimpleBannerComponent;&Item;catalogVersion(catalog(id), version)[unique=true, allownull=true];external[allownull=true];localizedUrlLink[lang=en];localizedUrlLink[lang=nl];media(catalogVersion(catalog(id), version), code)[lang=en];media(catalogVersion(catalog(id), version), code)[lang=nl];name;onlyOneRestrictionMustApply[allownull=true];uid[unique=true, allownull=true];urlLink;visibleFromDate[dateformat=dd.MM.yyyy hh:mm:ss];visibleToDate[dateformat=dd.MM.yyyy hh:mm:ss];visible[allownull=true];youTubeID[lang=en];youTubeID[lang=nl];restrictions(catalogVersion(catalog(id), version), uid)
+"#% impex.exportItems(""SELECT {com.pk} FROM {SimpleBannerComponent! AS com JOIN CatalogVersion AS cv ON {com.catalogVersion}={cv.pk} JOIN Catalog AS c ON {cv.catalog}={c.pk}}WHERE {c.id} = '$catalog' AND {cv.version} = '$version' AND (EXISTS ({{SELECT {e4s.pk} FROM {ElementsForSlot AS e4s JOIN ContentSlot AS cs ON {e4s.source}={cs.pk} JOIN ContentSlotForPage AS csp ON {csp.contentSlot}={cs.pk} JOIN AbstractPage AS p ON {csp.page}={p.pk}} WHERE {p.name}='$pageName' AND {e4s.target}={com.pk}}}))"", Collections.EMPTY_MAP, Collections.singletonList( Item.class ), true, true, -1, -1 );"
+
+# ---- Extension: cms2 ---- Type: CMSParagraphComponent ----
+"#% impex.setTargetFile( ""CMSParagraphComponent.csv"" );"
+insert_update CMSParagraphComponent;&Item;catalogVersion(catalog(id), version)[unique=true, allownull=true];content[lang=en];content[lang=nl];name;onlyOneRestrictionMustApply[allownull=true];uid[unique=true, allownull=true];visibleFromDate[dateformat=dd.MM.yyyy hh:mm:ss];visibleToDate[dateformat=dd.MM.yyyy hh:mm:ss];visible[allownull=true];restrictions(catalogVersion(catalog(id), version), uid)
+"#% impex.exportItems(""SELECT {com.pk} FROM {CMSParagraphComponent! AS com JOIN CatalogVersion AS cv ON {com.catalogVersion}={cv.pk} JOIN Catalog AS c ON {cv.catalog}={c.pk}}WHERE {c.id} = '$catalog' AND {cv.version} = '$version' AND (EXISTS ({{SELECT {e4s.pk} FROM {ElementsForSlot AS e4s JOIN ContentSlot AS cs ON {e4s.source}={cs.pk} JOIN ContentSlotForPage AS csp ON {csp.contentSlot}={cs.pk}JOIN AbstractPage AS p ON {csp.page}={p.pk}}WHERE {p.name}='$pageName' AND {e4s.target}={com.pk}}}))"", Collections.EMPTY_MAP, Collections.singletonList( Item.class ), true, true, -1, -1 );"

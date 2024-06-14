@@ -1,0 +1,130 @@
+<div class="back-order-item" [id]="'backorder-entry-' + entryNumber">
+  <!-- banner -->
+  <div class="back-order-item__message">
+    <div class="back-order-item__message__icon" [id]="'backorder-entry' + entryNumber + '-icon'">
+      <fa-icon [icon]="faExclamationCircle"></fa-icon>
+    </div>
+    <div class="back-order-item__message__text" [id]="'backorder-entry' + entryNumber + '-message'">
+      <ng-container
+        *ngIf="entry?.backOrderedQuantity !== 0 && entry.quantity > entry?.backOrderedQuantity; else noQuantityCalc"
+      >
+        <ng-container *ngIf="entry.alternativeAvailable; else noAlternative">
+          {{
+            'backorder.item.message.requested.alternate'
+              | cxTranslate: { requestedQuantity: entry.quantity, backorderQuantity: entry?.backOrderedQuantity }
+          }}
+        </ng-container>
+
+        <ng-template #noAlternative>
+          {{
+            'backorder.item.message.requested.noAlternate'
+              | cxTranslate: { requestedQuantity: entry.quantity, backorderQuantity: entry?.backOrderedQuantity }
+          }}
+        </ng-template>
+      </ng-container>
+
+      <ng-template #noQuantityCalc>
+        <ng-container *ngIf="entry?.backOrderedQuantity === 0">
+          <ng-container *ngIf="entry.alternateAvailable === true">
+            {{ 'backorder.item.message' | cxTranslate }}
+          </ng-container>
+
+          <ng-container *ngIf="!entry.alternateAvailable">
+            {{ 'backorder.item.message.noAlternate' | cxTranslate }}
+          </ng-container>
+        </ng-container>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- card data -->
+  <div class="back-order-item__content">
+    <div class="back-order-item__content__img" [id]="'backorder-entry-' + entryNumber + '-product-image'">
+      <a [routerLink]="entry.product?.url">
+        <img class="img-fluid" [src]="entry.product?.images[0].url" height="63" width="47" />
+      </a>
+    </div>
+
+    <div class="back-order-item__content__text" [id]="'backorder-entry-' + entryNumber + '-product-name'">
+      <h3 [id]="'backorder-entry-' + entryNumber + '-product-name-text'">
+        {{ entry.product?.name }}
+      </h3>
+
+      <div class="text-item" [id]="'backorder-entry-' + entryNumber + '-product-manufacturer'">
+        <span class="text-item__title" [id]="'backorder-entry-' + entryNumber + '-product-manufacturer-label'">
+          {{ 'homepage.manufacturer' | cxTranslate }}:
+        </span>
+        <span class="text-item__attr" [id]="'backorder-entry-' + entryNumber + '-product-manufacturer-text'">
+          {{ entry.product?.distManufacturer?.name }}
+        </span>
+      </div>
+
+      <div class="text-item" [id]="'backorder-entry-' + entryNumber + '-product-artnr'">
+        <span class="text-item__title" [id]="'backorder-entry-' + entryNumber + '-product-artnr-label'">
+          {{ 'backorder.articleNumber' | cxTranslate }}:
+        </span>
+        <span class="text-item__attr" [id]="'backorder-entry-' + entryNumber + '-product-artnr-text'">
+          {{ entry.product?.codeErpRelevant | articleNumber: entry.product?.codeErpRelevant }}
+        </span>
+      </div>
+
+      <div class="text-item" [id]="'backorder-entry-' + entryNumber + '-product-mpn'">
+        <span class="text-item__title" [id]="'backorder-entry-' + entryNumber + '-product-mpn-label'">
+          {{ 'homepage.mpn' | cxTranslate }}:
+        </span>
+        <span class="text-item__attr" [id]="'backorder-entry-' + entryNumber + '-product-mpn-text'">
+          {{ entry.product?.typeName }}
+        </span>
+      </div>
+
+      <div class="text-item" [id]="'backorder-entry-' + entryNumber + '-product-quantity'">
+        <span class="text-item__title" [id]="'backorder-entry-' + entryNumber + '-product-quantity-label'">
+          {{ 'product.volumePrices.column.qa' | cxTranslate }}:
+        </span>
+        <span class="text-item__attr" [id]="'backorder-entry-' + entryNumber + '-product-quantity-text'">
+          {{ entry.backOrderedQuantity }}
+        </span>
+      </div>
+    </div>
+
+    <ng-container *ngIf="entry.alternateAvailable">
+      <div class="back-order-item__content__btn" [id]="'backorder-entry-' + entryNumber + '-display-alternatives'">
+        <a class="action-button" (click)="displayAlternatives()">
+          <span [id]="'backorder-entry-' + entryNumber + '-display-alternatives-label'">
+            <ng-container *ngIf="!alternativeDisplay; else hideAlternatives">
+              {{ 'backorder.item.btn.alternative' | cxTranslate }}
+            </ng-container>
+
+            <ng-template #hideAlternatives>
+              {{ 'backorder.item.modal.close' | cxTranslate }}
+            </ng-template>
+          </span>
+        </a>
+      </div>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="alternativeDisplay">
+    <div class="back-order-item__alternative">
+      <div class="row">
+        <div class="col-12" [id]="'backorder-entry-' + entryNumber + '-alternativeDisplay'">
+          <ng-container *ngIf="alternativeEntries$ | async as alternativeEntries; else loadingSpinner">
+            <ng-container *ngFor="let product of alternativeEntries.products; index as index">
+              <app-back-order-alternative
+                [product]="product"
+                [itemNumber]="index"
+                (sendEventToParent)="sendCodeToParent($event)"
+              ></app-back-order-alternative>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #loadingSpinner>
+            <div class="spinner-wrapper">
+              <app-component-loading-spinner></app-component-loading-spinner>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2018 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+<widgets>
+    <widget id="com.namics.distrelec.b2b.backoffice.distreferenceadvancedsearchgroup" widgetDefinitionId="com.hybris.cockpitng.backoffice.referenceadvancedsearch" slotId="composedRootSlot" template="false">
+        <widget id="referenceAdvancedSearch" widgetDefinitionId="com.distrelec.cockpitng.distadvancedsearch" slotId="advancedSearch" template="false">
+            <widget id="referenceAdvancedSearchEngine"
+                    widgetDefinitionId="com.hybris.cockpitng.widgets.common.advancedsearchengine"
+                    slotId="cockpitWidgetChildrenInvisible" template="false">
+                <setting key="defaultPageSize" type="Integer">50</setting>
+                <virtual-sockets/>
+            </widget>
+            <setting key="actionSlotComponentName" value="_empty"/>
+            <virtual-sockets/>
+        </widget>
+        <widget id="referenceCollectionBrowser" widgetDefinitionId="com.namics.distrelec.b2b.backoffice.distCollectionBrowser" slotId="collectionBrowser" template="false">
+            <setting key="multiSelect" type="Boolean">true</setting>
+            <setting key="actionSlotComponentId" type="java.lang.String">referenceSearchListViewActions</setting>
+            <setting key="socketDataType_$T" type="java.lang.String">java.lang.Object</setting>
+            <virtual-sockets/>
+        </widget>
+        <virtual-sockets/>
+    </widget>
+
+    <widget-connection sourceWidgetId="com.namics.distrelec.b2b.backoffice.distreferenceadvancedsearchgroup" outputId="advancedSearchInitCtx" targetWidgetId="referenceAdvancedSearch" inputId="initContext"/>
+    <widget-connection sourceWidgetId="referenceAdvancedSearch" outputId="searchData" targetWidgetId="referenceAdvancedSearchEngine" inputId="searchData"/>
+    <widget-connection sourceWidgetId="referenceAdvancedSearchEngine" outputId="pageable" targetWidgetId="referenceCollectionBrowser" inputId="pageable"/>
+    <widget-connection sourceWidgetId="referenceAdvancedSearchEngine" outputId="pageable" targetWidgetId="com.namics.distrelec.b2b.backoffice.distreferenceadvancedsearchgroup" inputId="resetSelection"/>
+    <widget-connection sourceWidgetId="referenceCollectionBrowser" outputId="selectedItems" targetWidgetId="com.namics.distrelec.b2b.backoffice.distreferenceadvancedsearchgroup" inputId="selectedItems"/>
+    <widget-connection sourceWidgetId="referenceCollectionBrowser" outputId="selectedItem" targetWidgetId="com.namics.distrelec.b2b.backoffice.distreferenceadvancedsearchgroup" inputId="selectedItem"/>
+    <widget-connection sourceWidgetId="com.namics.distrelec.b2b.backoffice.distreferenceadvancedsearchgroup" outputId="selectedReferences" targetWidgetId="com.namics.distrelec.b2b.backoffice.distreferenceadvancedsearchgroup" inputId="selectedReferencesOutputForward"/>
+    <widget-connection sourceWidgetId="com.namics.distrelec.b2b.backoffice.distreferenceadvancedsearchgroup" outputId="cancel" targetWidgetId="com.namics.distrelec.b2b.backoffice.distreferenceadvancedsearchgroup" inputId="cancelOutputForward"/>
+
+
+
+
+</widgets>

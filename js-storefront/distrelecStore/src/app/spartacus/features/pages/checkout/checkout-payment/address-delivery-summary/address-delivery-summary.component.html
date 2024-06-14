@@ -1,0 +1,184 @@
+<div class="ch__component">
+  <div class="ch__component__title">
+    <div class="ch__component__edit">
+      <button class="btn" id="editDeliveryModesBtn" (click)="onAddressesEdit('')">
+        <a class="link" id="checkout.delivery.options.edit">{{ 'checkout.delivery.edit' | cxTranslate }}</a>
+        <fa-icon id="faPenEditDelOptions" [icon]="faPen"></fa-icon>
+      </button>
+    </div>
+
+    <h2 id="deliveryOptionsTitle">
+      {{ 'checkout.delivery_options' | cxTranslate }}
+    </h2>
+  </div>
+
+  <div *ngIf="deliveryMode" class="ch__component__details" id="deliveryModeTranslation">
+    <span class="fw-sb mb-1">
+      {{ deliveryMode.name }}
+      <ng-container *ngIf="scheduledDeliveryDate">
+        &nbsp;-&nbsp;{{ 'checkout.payment.scheduled_delivery' | cxTranslate }}
+      </ng-container>
+    </span>
+
+    <ng-container *ngIf="isPickUpAndCH(); else notPickupAndCH">
+      <ng-container *ngIf="availableForImmediatePickup; else notAvailableForImmediatePickup">
+        <span>
+          {{
+            'checkout.payment.CH_warehouse_available_info'
+              | cxTranslate
+                : {
+                    date: pickUpDate | date: dateFormat
+                  }
+          }}
+        </span>
+      </ng-container>
+
+      <ng-template #notAvailableForImmediatePickup>
+        <span>
+          {{
+            'checkout.payment.CH_warehouse_not_available_info'
+              | cxTranslate
+                : {
+                    date: pickUpDate | date: dateFormat
+                  }
+          }}
+        </span>
+      </ng-template>
+    </ng-container>
+
+    <ng-template #notPickupAndCH>
+      <ng-container *ngIf="scheduledDeliveryDate; else notScheduledDeliveryDate">
+        <span>
+          {{ 'checkout.payment.scheduled_arrives' | cxTranslate }}&nbsp;{{
+            scheduledDeliveryDate | cxDate: 'LLL'
+          }}&nbsp;{{ scheduledDeliveryDate | cxDate: 'd' }},&nbsp;{{ scheduledDeliveryDate | cxDate: 'YYYY' }}
+        </span>
+      </ng-container>
+
+      <ng-template #notScheduledDeliveryDate>
+        <span>
+          {{ deliveryMode.description }}
+          <ng-container *ngIf="isDeliveryModeExpress">
+            {{ 'checkout.express_delivery.description' | cxTranslate }}
+          </ng-container>
+        </span>
+      </ng-template>
+    </ng-template>
+  </div>
+
+  <div class="separator-simple"></div>
+
+  <div class="ch__component__title">
+    <div
+      *ngIf="checkoutService.isBillingEditable(activeSiteId) || checkoutService.isMultipleBillingAddresses()"
+      class="ch__component__edit"
+    >
+      <button class="btn" id="editBillingBtn" (click)="onAddressesEdit('billing')">
+        <a class="link" id="checkout.delivery.address.edit">{{ 'checkout.delivery.edit' | cxTranslate }}</a>
+        <fa-icon id="faPenEditDelivery" [icon]="faPen"></fa-icon>
+      </button>
+    </div>
+
+    <h2
+      *ngIf="areBillingAndDeliveryAddressTheSame(); else billing_title"
+      id="checkout.delivery.billing_and_delivery_title"
+    >
+      {{ 'checkout.delivery.billing_and_delivery_title' | cxTranslate }}
+    </h2>
+
+    <ng-template #billing_title>
+      <h2 id="billingDetailsTitle">
+        {{ 'checkout.billing_details' | cxTranslate }}
+      </h2>
+    </ng-template>
+  </div>
+
+  <div class="ch__component__details" id="deliveryDetailsPayment">
+    <span *ngIf="billingAddress.companyName">{{ billingAddress.companyName }}</span>
+
+    <span *ngIf="billingAddress.companyName2">{{ billingAddress.companyName2 }}</span>
+
+    <span *ngIf="billingAddress.firstName && billingAddress.lastName">
+      {{ 'form.' + billingAddress.titleCode | cxTranslate }}&nbsp;{{ billingAddress.firstName }}&nbsp;{{
+        billingAddress.lastName
+      }}
+    </span>
+
+    <span>{{ billingAddress.line1 }}&nbsp;{{ billingAddress.line2 }}</span>
+
+    <span>{{ billingAddress.postalCode }}&nbsp;{{ billingAddress.town }},</span>
+
+    <span>{{ billingAddress.country?.name }}</span>
+
+    <span>{{ billingAddress.cellphone ?? billingAddress.phone }}</span>
+  </div>
+
+  <ng-container *ngIf="deliveryAddress && !areBillingAndDeliveryAddressTheSame()">
+    <div class="separator-simple"></div>
+
+    <div class="ch__component__title">
+      <div class="ch__component__edit">
+        <button class="btn" id="editDeliveryButton" (click)="onAddressesEdit('delivery')">
+          <a class="link" id="checkout.delivery.edit">{{ 'checkout.delivery.edit' | cxTranslate }}</a>
+          <fa-icon id="faPenEdit" [icon]="faPen"></fa-icon>
+        </button>
+      </div>
+
+      <h2 id="deliveryDetailsTitle">
+        {{ 'checkout.delivery_details' | cxTranslate }}
+      </h2>
+    </div>
+
+    <div class="ch__component__details" id="billingDetailsPayment">
+      <span *ngIf="deliveryAddress.companyName">{{ deliveryAddress.companyName }}</span>
+
+      <span *ngIf="deliveryAddress.companyName2">{{ deliveryAddress.companyName2 }}</span>
+
+      <span *ngIf="deliveryAddress.firstName && deliveryAddress.lastName">
+        {{ 'form.' + deliveryAddress.titleCode | cxTranslate }}&nbsp;{{ deliveryAddress.firstName }}&nbsp;{{
+          deliveryAddress.lastName
+        }}
+      </span>
+
+      <span>{{ deliveryAddress.line1 }}&nbsp;{{ deliveryAddress.line2 }}</span>
+
+      <span>{{ deliveryAddress.postalCode }}&nbsp;{{ deliveryAddress.town }},</span>
+
+      <span>{{ deliveryAddress.country?.name }}</span>
+
+      <span>{{ deliveryAddress.cellphone ?? deliveryAddress.phone }}</span>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isPickUp() && pickupLocation">
+    <div class="separator-simple"></div>
+
+    <div class="ch__component__title">
+      <h2 id="checkout.payment.pickup_title">{{ 'checkout.delivery.pickup_title' | cxTranslate }}</h2>
+    </div>
+
+    <div class="ch__component__details">
+      <span id="pickUpPlaceOfName">{{ pickupLocation.name }}</span>
+
+      <span id="pickUpStreetNameNumber">{{ pickupLocation.streetName }}&nbsp;{{ pickupLocation.streetNumber }}</span>
+
+      <span id="pickUpPostalTown">{{ pickupLocation.postalCode }}&nbsp;{{ pickupLocation.town }},</span>
+
+      <span id="pickUpPhone">{{ pickupLocation.phone }}</span>
+
+      <span *ngIf="pickupLocation.openingsHourMoFr || pickupLocation.openingsHourSa" id="pickUpHours">
+        <span id="pickUpHoursLabel">{{ 'checkout.pickup_info' | cxTranslate }}</span>
+
+        <span *ngIf="pickupLocation.openingsHourMoFr" id="pickUpHoursMoFr">
+          <br />
+          {{ 'checkout.mon_fri' | cxTranslate }}&nbsp;{{ pickupLocation.openingsHourMoFr }}
+        </span>
+
+        <span *ngIf="pickupLocation.openingsHourSa" id="pickUpHoursSa">
+          <br />
+          {{ 'checkout.sat' | cxTranslate }} {{ pickupLocation.openingsHourSa }}
+        </span>
+      </span>
+    </div>
+  </ng-container>
+</div>

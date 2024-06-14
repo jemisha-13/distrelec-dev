@@ -1,0 +1,2765 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+
+    <enum class="com.namics.distrelec.occ.core.populator.options.PaymentInfoOption">
+        <value>BASIC</value>
+        <value>BILLING_ADDRESS</value>
+    </enum>
+
+    <enum class="com.namics.distrelec.occ.core.user.ws.dto.DistConsentStatusWsDTO">
+        <value>Y</value>
+        <value>N</value>
+        <value>DOUBLE_OPTIN_PENDING</value>
+        <value>NOT_FOUND</value>
+        <value>ERROR_FETCHING_DETAILS</value>
+    </enum>
+
+    <!--auth response  -->
+    <bean class="com.namics.distrelec.occ.core.auth.data.LogoutResponse">
+        <property name="success" type="boolean"/>
+    </bean>
+
+    <!-- storesession data -->
+
+    <bean class="com.namics.distrelec.occ.core.storesession.data.LanguageDataList">
+        <property name="languages"
+                  type="java.util.Collection&lt;de.hybris.platform.commercefacades.storesession.data.LanguageData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.storesession.data.CurrencyDataList">
+        <property name="currencies"
+                  type="java.util.Collection&lt;de.hybris.platform.commercefacades.storesession.data.CurrencyData>"/>
+    </bean>
+
+    <!-- order data -->
+
+    <bean class="com.namics.distrelec.occ.core.order.data.CartDataList">
+        <property name="carts"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.CartData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.data.OrderEntryDataList">
+        <property name="orderEntries"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.OrderEntryData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.data.CardTypeDataList">
+        <property name="cardTypes"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.CardTypeData>"/>
+    </bean>
+
+    <!-- product data -->
+
+    <bean class="com.namics.distrelec.occ.core.product.data.ProductDataList">
+        <property name="products"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductData>"/>
+        <property name="catalog" type="String"/>
+        <property name="version" type="String"/>
+        <property name="totalProductCount" type="int"/>
+        <property name="totalPageCount" type="int"/>
+        <property name="currentPage" type="int"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.product.data.PromotionDataList">
+        <property name="promotions"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.PromotionData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.product.data.PromotionResultDataList">
+        <property name="promotions"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.PromotionResultData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.product.data.ReviewDataList">
+        <property name="reviews" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ReviewData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.product.data.SuggestionDataList">
+        <property name="suggestions"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.SuggestionData>"/>
+    </bean>
+
+    <!-- user data -->
+
+    <bean class="com.namics.distrelec.occ.core.user.data.TitleDataList">
+        <property name="titles" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.TitleData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.data.CountryDataList">
+        <property name="countries" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.CountryData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.data.RegionDataList">
+        <property name="regions"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.RegionData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.data.AddressDataList">
+        <property name="addresses" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.AddressData>"/>
+    </bean>
+
+    <!-- voucher data -->
+    <bean class="com.namics.distrelec.occ.core.voucher.data.VoucherDataList">
+        <property name="vouchers"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.voucher.data.VoucherData>"/>
+    </bean>
+
+    <!-- validation data -->
+    <bean class="com.namics.distrelec.occ.core.validation.data.AddressValidationData">
+        <property name="errors" type="de.hybris.platform.webservicescommons.dto.error.ErrorListWsDTO"/>
+        <property name="decision" type="String"/>
+        <property name="suggestedAddressesList"
+                  type="com.namics.distrelec.occ.core.user.data.AddressDataList"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.validation.data.CartVoucherValidationData">
+        <property name="subject" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.validation.data.CartVoucherValidationDataList">
+        <property name="CartVoucherValidationDataList"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.validation.data.CartVoucherValidationData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.data.LoginChangeResponse">
+        <property name="success" type="boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.data.PasswordRestoreResponse">
+        <property name="success" type="boolean"/>
+    </bean>
+
+    <!-- update queues -->
+
+    <bean class="com.namics.distrelec.occ.core.queues.data.ProductExpressUpdateElementData">
+        <property name="code" type="String"/>
+        <property name="catalogId" type="String"/>
+        <property name="catalogVersion" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.queues.data.ProductExpressUpdateElementDataList">
+        <property name="productExpressUpdateElements"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.queues.data.ProductExpressUpdateElementData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.queues.data.OrderStatusUpdateElementData">
+        <property name="code" type="String"/>
+        <property name="status" type="String"/>
+        <property name="baseSiteId" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.queues.data.OrderStatusUpdateElementDataList">
+        <property name="orderStatusUpdateElements"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.queues.data.OrderStatusUpdateElementData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.store.data.StoreCountListData">
+        <property name="countriesAndRegionsStoreCount"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.store.data.StoreCountData>"/>
+    </bean>
+
+    <!-- Consent management -->
+    <bean class="com.namics.distrelec.occ.core.consent.data.ConsentTemplateDataList">
+        <property name="consentTemplates"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.consent.data.ConsentTemplateData>"/>
+    </bean>
+
+    <!-- Base Sites -->
+    <bean class="com.namics.distrelec.occ.core.basesite.data.BaseSiteDataList">
+        <property name="baseSites"
+                  type="java.util.List&lt;de.hybris.platform.commercefacades.basesite.data.BaseSiteData>"/>
+        <property name="internalIps" type="java.util.List&lt;String>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.basesite.BaseSiteListWsDTO">
+        <property name="internalIps" type="java.util.List&lt;String>"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.occ.core.returns.data.ReturnRequestsData">
+        <property name="returnRequests"
+                  type="java.util.List&lt;de.hybris.platform.ordermanagementfacades.returns.data.ReturnRequestData>"/>
+        <property name="sorts" type="java.util.List&lt;de.hybris.platform.commerceservices.search.pagedata.SortData>"/>
+        <property name="pagination" type="de.hybris.platform.commerceservices.search.pagedata.PaginationData"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.PaymentModeWsDTO">
+        <property name="url" type="String"/>
+        <property name="icons"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO>"/>
+        <property name="paymentCost" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="ricevutaBancaria" type="Boolean"/>
+        <property name="hop" type="Boolean"/>
+        <property name="iframe" type="Boolean"/>
+        <property name="creditCardPayment" type="Boolean"/>
+        <property name="invoicePayment" type="Boolean"/>
+        <property name="defaultPaymentMode" type="Boolean"/>
+        <property name="translationKey" type="String"/>
+        <property name="selectable" type="Boolean"/>
+        <property name="paymentDetails"
+                  type="de.hybris.platform.commercewebservicescommons.dto.order.PaymentDetailsWsDTO"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.PaymentDetailsWsDTO">
+        <property name="isValid" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.basesite.data.DistrelecSiteSettingsDataList">
+        <property name="settings"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.basesite.data.DistrelecSiteSettingData>"/>
+        <property name="factFinderSearchExpose"
+                  type="com.namics.distrelec.occ.core.basesite.data.DistFactFinderSearchExposeData"/>
+        <property name="fusionSearchExpose"
+                  type="com.namics.distrelec.occ.core.basesite.data.DistFusionSearchExposeData"/>
+        <property name="decimalCommaCountries"
+                  type="java.util.List&lt;java.lang.String>"/>
+        <property name="salesOrg"
+                  type="com.namics.distrelec.b2b.facades.storesession.data.SalesOrgData"/>
+        <property name="ymktTrackingEnabled" type="Boolean"/>
+        <property name="gitInfo" type="com.namics.distrelec.occ.core.basesite.data.DistGitInfoData"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.basesite.data.DistrelecSiteSettingData">
+        <property name="country" type="java.util.Map&lt;String, String>"/>
+        <property name="channels" type="java.util.Map&lt;String, String>"/>
+        <property name="languages" type="java.util.Map&lt;String, String>"/>
+        <property name="currencies" type="java.util.Map&lt;String, String>"/>
+        <property name="domain" type="String"/>
+        <property name="mediaDomain" type="String"/>
+        <property name="storefrontDomain" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.basesite.data.DistFactFinderSearchExposeData">
+        <property name="ffrecoUrl" type="String"/>
+        <property name="ffsuggestUrl" type="String"/>
+        <property name="ffsearchChannel" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.basesite.data.DistFusionSearchExposeData">
+        <property name="fusionBaseUrl" type="String"/>
+        <property name="fusionSearchAPIKey" type="String"/>
+        <property name="fusionProfileSuffix" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.basesite.data.DistSiteTrackingSettingsData">
+        <property name="gtmAuth" type="String"/>
+        <property name="gtmCookiesWin" type="String"/>
+        <property name="gtmPreview" type="String"/>
+        <property name="gtmTagId" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.basesite.data.DistGitInfoData">
+        <property name="gitVersion" type="String"/>
+        <property name="revision" type="String"/>
+    </bean>
+
+    <!-- DISTRELEC WsDTO -->
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.basesite.DistrelecSiteSettingsDataListWsDTO">
+        <property name="settings"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.basesite.DistrelecSiteSettingWsDTO>"/>
+        <property name="decimalCommaCountries"
+                  type="java.util.List&lt;java.lang.String>"/>
+        <property name="factFinderSearchExpose"
+                  type="com.namics.distrelec.occ.core.storesession.ws.dto.DistFactFinderSearchExposeWsDTO"/>
+        <property name="fusionSearchExpose"
+                  type="com.namics.distrelec.occ.core.storesession.ws.dto.DistFusionSearchExposeWsDTO"/>
+        <property name="domain" type="String"/>
+        <property name="salesOrg" type="com.namics.distrelec.occ.core.storesession.ws.dto.SalesOrgDataWsDTO"/>
+        <property name="ymktTrackingEnabled" type="Boolean"/>
+        <property name="gitInfo" type="com.namics.distrelec.occ.core.storesession.ws.dto.DistGitInfoWsDTO"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.basesite.DistrelecSiteSettingWsDTO">
+        <property name="country" type="java.util.Map&lt;String, String>"/>
+        <property name="channels" type="java.util.Map&lt;String, String>"/>
+        <property name="languages" type="java.util.Map&lt;String, String>"/>
+        <property name="currencies" type="java.util.Map&lt;String, String>"/>
+        <property name="domain" type="String"/>
+        <property name="mediaDomain" type="String"/>
+        <property name="storefrontDomain" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.rewrite.ws.dto.DistContentPageMappingWsDTO">
+        <property name="shortURL" type="String"/>
+        <property name="destinationURL" type="String"/>
+        <property name="urlMatchExpression" type="String"/>
+        <property name="permanent" type="java.lang.Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.topcategories.ws.dto.DistCategoryIndexWsDTO"
+          extends="de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO">
+        <description>Representation of a DistCategoryIndexData</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">DistCategoryIndexData</hint>
+        </hints>
+        <property name="children"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.topcategories.ws.dto.DistCategoryIndexWsDTO>"/>
+        <property name="level" type="Integer"/>
+        <property name="nameEN" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.topcategories.ws.dto.DistCategoryIndexListWsDTO">
+        <description>Representation of a DistCategoryIndexData List</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">DistCategoryIndexDataList</hint>
+        </hints>
+        <property name="categories"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.topcategories.ws.dto.DistCategoryIndexWsDTO>"/>
+        <property name="searchbarCategories"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.topcategories.ws.dto.DistCategoryIndexWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.storesession.ws.dto.DistFactFinderSearchExposeWsDTO">
+        <description>Representation of FactFinder Search expose attributes</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">FactFinderSearchExpose</hint>
+        </hints>
+        <property name="ffrecoUrl" type="String"/>
+        <property name="ffsuggestUrl" type="String"/>
+        <property name="ffsearchChannel" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.storesession.ws.dto.DistFusionSearchExposeWsDTO">
+        <property name="fusionBaseUrl" type="String"/>
+        <property name="fusionSearchAPIKey" type="String"/>
+        <property name="fusionProfileSuffix" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.storesession.ws.dto.SalesOrgDataWsDTO">
+        <property name="code" type="String"/>
+        <property name="brand" type="String"/>
+        <property name="nativeName" type="String"/>
+        <property name="countryIsocode" type="String"/>
+        <property name="erpSystem" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.storesession.ws.dto.DistSiteTrackingSettingsWsDTO">
+        <property name="gtmAuth" type="String"/>
+        <property name="gtmCookiesWin" type="String"/>
+        <property name="gtmPreview" type="String"/>
+        <property name="gtmTagId" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.storesession.ws.dto.DistGitInfoWsDTO">
+        <property name="gitVersion" type="String"/>
+        <property name="revision" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.topcategories.ws.dto.DistCategoryPageWsDTO">
+        <description>Representation of Distrelec Category Page Data attributes</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">DistrelecCategoryPageWsDTO</hint>
+        </hints>
+        <property name="sourceCategory" type="de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO"/>
+        <property name="subCategories"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO>"/>
+        <property name="showCategoriesOnly" type="java.lang.Boolean"/>
+        <!-- Breadcrumbs -->
+        <property name="breadcrumbs"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO>"/>
+    </bean>
+
+    <!-- DISTRELEC manufacturer Menu bean definition-->
+    <bean class="com.namics.distrelec.occ.core.basesite.data.DistManufacturerMenuWSDTO">
+        <description>Representation of DISTRELEC Manufacturer list</description>
+        <property name="key" type="java.lang.String"/>
+        <property name="manufacturerList"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.basesite.data.DistMiniManufacturerWSDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.basesite.data.DistManufacturerMenuResponseWSDTO">
+        <property name="response"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.basesite.data.DistManufacturerMenuWSDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.basesite.data.DistMiniManufacturerWSDTO">
+        <description>Representation of DISTRELEC Mini Manufacturer</description>
+        <property name="url" type="java.lang.String"/>
+        <property name="name" type="java.lang.String"/>
+        <property name="nameEN" type="java.lang.String"/>
+        <property name="nameSeo" type="java.lang.String"/>
+        <property name="code" type="java.lang.String"/>
+        <property name="urlId" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.topcategories.ws.dto.CategorySEOSectionWsDTO">
+        <description>Representation of Category SEO Section attributes</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">CategorySEOSection</hint>
+        </hints>
+        <property name="header" type="String"/>
+        <property name="text" type="String"/>
+    </bean>
+
+
+    <!-- Start related data ws dto and other beans-->
+
+    <bean class="com.namics.distrelec.occ.core.topcategories.ws.dto.CIValueWsDTO">
+        <property name="uid" type="java.lang.String"/>
+        <property name="name" type="java.lang.String"/>
+        <property name="url" type="java.lang.String"/>
+        <property name="order" type="java.lang.Integer"/>
+        <property name="count" type="java.lang.Long"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.topcategories.ws.dto.CRelatedWsDTO">
+        <description>Representation of Distrelec Category related Data attributes</description>
+        <property name="type" type="java.lang.String"/>
+        <property name="values"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.topcategories.ws.dto.CIValueWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.categories.ws.dto.RelatedWsDTO">
+        <description>Representation of related attribute of the product</description>
+        <property name="type" type="java.lang.String"/>
+        <property name="cRelatedData"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.topcategories.ws.dto.CRelatedWsDTO>"/>
+    </bean>
+    <!-- End related data ws dto and other beans-->
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO">
+        <property name="title" type="String"/>
+        <property name="nameEN" type="String"/>
+        <property name="introText" type="String"/>
+        <property name="seoMetaTitle" type="String"/>
+        <property name="seoMetaDescription" type="String"/>
+        <property name="seoSections"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.topcategories.ws.dto.CategorySEOSectionWsDTO>"/>
+        <property name="promotionText" type="String"/>
+        <property name="level" type="Integer"/>
+        <property name="selected" type="Boolean"/>
+        <property name="productCount" type="Integer"/>
+        <property name="subCategoryList"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO>"/>
+        <property name="images"
+                  type="java.util.Map&lt;String, de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO>"/>
+        <property name="relatedData"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.categories.ws.dto.RelatedWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.v2.response.ws.dto.NewsletterSubscribeResponseWsDTO">
+        <description>Representation of Newsletter Subscription Response</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">NewsletterSubscribeResponseWsDTO</hint>
+        </hints>
+        <property name="doubleOptIn" type="boolean"/>
+        <property name="errorMessage" type="String"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.HazardWsDTO">
+        <property name="code" type="String">
+            <description>Code of Hazard Information</description>
+        </property>
+        <property name="description" type="String">
+            <description>Description of Hazard Information</description>
+        </property>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.occ.basesites.seo.ws.dto.DistLinkWsDTO">
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">DistLink</hint>
+        </hints>
+        <property name="rel" type="java.lang.String"/>
+        <property name="href" type="java.lang.String"/>
+        <property name="hreflang" type="java.lang.String"/>
+        <property name="countryName" type="java.lang.String"/>
+        <property name="mediaQuery" type="java.lang.String"/>
+        <property name="type" type="com.namics.distrelec.b2b.facades.basesites.seo.LinkType"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.basesites.seo.ws.dto.BaseSiteLinksWsDTO">
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">BaseSiteLinks</hint>
+        </hints>
+        <property name="canonicalLink"
+                  type="com.namics.distrelec.occ.basesites.seo.ws.dto.DistLinkWsDTO"/>
+        <property name="headerLinksLangTags"
+                  type="java.util.List&lt;com.namics.distrelec.occ.basesites.seo.ws.dto.DistLinkWsDTO>"/>
+        <property name="footerLinksLangTags"
+                  type="java.util.List&lt;com.namics.distrelec.occ.basesites.seo.ws.dto.DistLinkWsDTO>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.user.CountryWsDTO">
+        <property name="regions"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.RegionWsDTO>"/>
+        <property name="nameEN" type="java.lang.String"/>
+        <property name="european" type="Boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.DistPromotionLabelWsDTO">
+        <property name="code" type="java.lang.String"/>
+        <property name="label" type="java.lang.String"/>
+        <property name="nameEN" type="java.lang.String"/>
+        <property name="rank" type="int"/>
+        <property name="priority" type="int"/>
+        <property name="active" type="Boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.manufacturer.DistMiniManufacturerWsDTO">
+        <property name="name" type="java.lang.String"/>
+        <property name="nameEN" type="java.lang.String"/>
+        <property name="nameSeo" type="java.lang.String"/>
+        <property name="code" type="java.lang.String"/>
+        <property name="urlId" type="java.lang.String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.manufacturer.DistManufacturerWsDTO"
+          extends="de.hybris.platform.commercewebservicescommons.dto.manufacturer.DistMiniManufacturerWsDTO">
+        <property name="url" type="java.lang.String"/>
+        <property name="promotionText" type="java.lang.String"/>
+        <property name="webshopUrl" type="java.lang.String"/>
+        <property name="image"
+                  type="java.util.Map&lt;String,de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO>"/>
+        <property name="productGroups" type="java.util.List&lt;String>"/>
+        <property name="languages" type="java.util.List&lt;String>"/>
+        <property name="phoneNumbers" type="java.util.List&lt;String>"/>
+        <property name="websites" type="java.util.List&lt;String>"/>
+        <property name="emailAddresses" type="java.util.List&lt;String>"/>
+        <property name="repairsText" type="java.lang.String"/>
+        <property name="seoMetaDescription" type="java.lang.String"/>
+        <property name="seoMetaTitle" type="java.lang.String"/>
+        <property name="webDescription" type="java.lang.String"/>
+    </bean>
+
+    <!-- B2bPriceWsDTO -->
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO">
+        <property name="originalValue" type="java.math.BigDecimal"/>
+        <property name="formattedOriginalValue" type="java.lang.String"/>
+        <property name="discountValue" type="java.math.BigDecimal"/>
+        <property name="formattedDiscountValue" type="java.lang.String"/>
+        <property name="pricePerX" type="java.math.BigDecimal"/>
+        <property name="formattedPricePerX" type="String"/>
+        <property name="pricePerXUOM" type="String"/>
+        <property name="pricePerXUOMDesc" type="String"/>
+        <property name="pricePerXUOMQty" type="java.lang.Long"/>
+        <property name="pricePerXBaseQty" type="java.lang.Long"/>
+        <property name="vatPercentage" type="java.lang.Double"/>
+        <property name="vatValue" type="java.math.BigDecimal"/>
+        <property name="basePrice" type="java.math.BigDecimal"/>
+        <property name="priceWithVat" type="java.math.BigDecimal"/>
+        <property name="formattedPriceWithVat" type="String"/>
+        <property name="saving" type="java.lang.Integer"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.DistDownloadSectionWsDTO">
+        <property name="code" type="java.lang.String"/>
+        <property name="title" type="java.lang.String"/>
+        <property name="description" type="java.lang.String"/>
+        <property name="rank" type="int"/>
+        <property name="downloads"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.DistDownloadWsDTO>"/>
+        <property name="alternativeDownloads"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.DistDownloadWsDTO>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.DistDownloadWsDTO">
+        <property name="name" type="java.lang.String"/>
+        <property name="downloadUrl" type="java.lang.String"/>
+        <property name="mimeType" type="java.lang.String"/>
+        <property name="languages"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.storesession.LanguageWsDTO>"/>
+        <property name="icon" type="de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.storesession.LanguageWsDTO">
+        <property name="required" type="Boolean"/>
+        <property name="nameEN" type="java.lang.String"/>
+        <property name="rank" type="int"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.DistVideoWsDTO">
+        <property name="brightcoveVideoId" type="java.lang.String"/>
+        <property name="brightcovePlayerId" type="java.lang.String"/>
+        <property name="youtubeUrl" type="java.lang.String"/>
+        <property name="languages"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.storesession.LanguageWsDTO>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.DistAudioWsDTO">
+        <property name="audioUrl" type="java.lang.String"/>
+        <property name="mimeType" type="java.lang.String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.DistImage360WsDTO">
+        <property name="rows" type="int"/>
+        <property name="cols" type="int"/>
+        <property name="pattern" type="java.lang.String"/>
+        <property name="firstImageSmallPath" type="java.lang.String"/>
+        <property name="firstImageMediumPath" type="java.lang.String"/>
+        <property name="firstImageLargePath" type="java.lang.String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.user.DistTransportGroupWsDTO">
+        <property name="code" type="java.lang.String"/>
+        <property name="name" type="java.lang.String"/>
+        <property name="nameErp" type="java.lang.String"/>
+        <property name="relevantName" type="java.lang.String"/>
+        <property name="bulky" type="java.lang.Boolean"/>
+        <property name="dangerous" type="java.lang.Boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.ProductInformationWsDTO">
+        <property name="orderNote" type="java.lang.String"/>
+        <property name="orderNoteArticle" type="java.lang.String"/>
+        <property name="deliveryNote" type="java.lang.String"/>
+        <property name="deliveryNoteArticle" type="java.lang.String"/>
+        <property name="assemblyNote" type="java.lang.String"/>
+        <property name="usageNote" type="java.util.List&lt;java.lang.String>"/>
+        <property name="familyDescription" type="java.util.List&lt;java.lang.String>"/>
+        <property name="familyDescriptionBullets" type="java.util.List&lt;java.lang.String>"/>
+        <property name="seriesDescription" type="java.util.List&lt;java.lang.String>"/>
+        <property name="seriesDescriptionBullets" type="java.util.List&lt;java.lang.String>"/>
+        <property name="articleDescription" type="java.util.List&lt;java.lang.String>"/>
+        <property name="articleDescriptionBullets" type="java.util.List&lt;java.lang.String>"/>
+        <property name="paperCatalogPageNumber" type="java.lang.String"/>
+        <property name="paperCatalogPageNumber_16_17" type="java.lang.String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.KeyValueAttributeWsDTO">
+        <property name="key" type="java.lang.String"/>
+        <property name="value" type="java.lang.String"/>
+    </bean>
+
+    <!-- B2bProductWsDTO-->
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO">
+        <property name="codeErpRelevant" type="java.lang.String"/>
+        <property name="activePromotionLabels"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.DistPromotionLabelWsDTO>"/>
+        <property name="typeName" type="java.lang.String"/>
+        <property name="rohs" type="java.lang.String"/>
+        <property name="rohsCode" type="java.lang.String"/>
+        <property name="rohsURL" type="java.lang.String"/>
+        <property name="svhc" type="java.lang.String"/>
+        <property name="svhcURL" type="java.lang.String"/>
+        <property name="hasSvhc" type="Boolean"/>
+        <property name="unspsc5" type="java.lang.String"/>
+        <property name="dangerousSubstancesDirective" type="java.lang.String"/>
+        <property name="svhcReviewDate" type="java.util.Date"/>
+        <property name="scip" type="java.lang.String"/>
+        <property name="productReferencesMap"
+                  type="java.util.Map&lt;String, java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductReferenceWsDTO>>"/>
+        <property name="listPrice" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="orderQuantityMinimum" type="java.lang.Long"/>
+        <property name="orderQuantityStep" type="java.lang.Long"/>
+        <property name="grossWeight" type="java.lang.Double"/>
+        <property name="grossWeightUnit" type="java.lang.String"/>
+        <property name="dimensions" type="java.lang.String"/>
+        <property name="originalPackSize" type="java.lang.String"/>
+        <property name="customsCode" type="java.lang.String"/>
+        <property name="salesUnit" type="java.lang.String"/>
+        <property name="productImages"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductImagesMapWsDTO>"/>
+        <property name="downloads"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.DistDownloadSectionWsDTO>"/>
+        <property name="videos"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.DistVideoWsDTO>"/>
+        <property name="images360"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.DistImage360WsDTO>"/>
+        <property name="distManufacturer"
+                  type="de.hybris.platform.commercewebservicescommons.dto.manufacturer.DistManufacturerWsDTO"/>
+        <property name="countryOfOrigin" type="de.hybris.platform.commercewebservicescommons.dto.user.CountryWsDTO"/>
+        <property name="transportGroup" type="String"/>
+        <property name="transportGroupData"
+                  type="de.hybris.platform.commercewebservicescommons.dto.user.DistTransportGroupWsDTO"/>
+        <property name="buyable" type="Boolean"/>
+        <property name="endOfLifeDate" type="java.util.Date"/>
+        <property name="promotionText" type="java.lang.String"/>
+        <property name="nextUrl" type="java.lang.String"/>
+        <property name="prevUrl" type="java.lang.String"/>
+        <property name="buyableReplacementProduct" type="Boolean"/>
+        <property name="replacementReason" type="java.lang.String"/>
+        <property name="productInformation"
+                  type="de.hybris.platform.commercewebservicescommons.dto.product.ProductInformationWsDTO"/>
+        <property name="productFamilyName" type="java.lang.String"/>
+        <property name="productFamilyUrl" type="java.lang.String"/>
+        <property name="technicalAttributes"
+                  type="java.util.Collection&lt;de.hybris.platform.commercewebservicescommons.dto.product.KeyValueAttributeWsDTO>"/>
+        <property name="tabularFilterCodes"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.KeyValueAttributeWsDTO>"/>
+        <property name="promotionEndDate" type="java.util.Date"/>
+        <property name="technicalAttributeMap" type="java.util.Map&lt;String,String>"/>
+        <property name="possibleCommonAttributes" type="java.util.Map&lt;String,String>"/>
+        <property name="commonAttributes"
+                  type="java.util.Map&lt;java.lang.String,de.hybris.platform.commercewebservicescommons.dto.product.FeatureWsDTO>"/>
+        <property name="possibleOtherAttributes" type="java.util.Map&lt;String,String>"/>
+        <property name="otherAttributes"
+                  type="java.util.Map&lt;String,de.hybris.platform.commercewebservicescommons.dto.product.FeatureWsDTO>"/>
+        <property name="illustrativeImage" type="Boolean"/>
+        <property name="catPlusSupplierAID" type="java.lang.String"/>
+        <property name="catPlusItem" type="Boolean"/>
+        <property name="buyablePhaseoutProduct" type="Boolean"/>
+        <property name="withSavings" type="Boolean"/>
+        <property name="energyEfficiency" type="java.lang.String"/>
+        <property name="energyPower" type="java.lang.String"/>
+        <property name="energyClassesFitting" type="java.lang.String"/>
+        <property name="energyClassesIncludedBulb" type="java.lang.String"/>
+        <property name="energyClassesBuiltInLed" type="java.lang.String"/>
+        <property name="energyTopText" type="java.lang.String"/>
+        <property name="energyBottomText" type="java.lang.String"/>
+        <property name="salesStatus" type="java.lang.String"/>
+        <property name="movexArticleNumber" type="java.lang.String"/>
+        <property name="navisionArticleNumber" type="java.lang.String"/>
+        <property name="elfaArticleNumber" type="java.lang.String"/>
+        <property name="calibrationService" type="Boolean"/>
+        <property name="calibrated" type="Boolean"/>
+        <property name="calibrationItemArtNo" type="java.lang.String"/>
+        <property name="ean" type="java.lang.String"/>
+        <property name="enumber" type="java.lang.String"/>
+        <property name="origPosition" type="java.lang.String"/>
+        <property name="categoryCodePath" type="java.lang.String"/>
+        <property name="campaign" type="java.lang.String"/>
+        <property name="formattedSvhcReviewDate" type="java.lang.String"/>
+        <property name="alternativeAliasMPN" type="java.lang.String"/>
+        <property name="alternateCategory" type="java.lang.String"/>
+        <property name="batteryComplianceCode" type="java.lang.String"/>
+        <!-- Breadcrumbs -->
+        <property name="breadcrumbs"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO>"/>
+        <property name="relatedData"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.categories.ws.dto.RelatedWsDTO>"/>
+        <!-- businessOnlyProduct -->
+        <property name="businessOnlyProduct" type="Boolean"/>
+        <!-- Additional Attributes -->
+        <property name="cachingTimeProductFeature" type="java.lang.Integer"/>
+        <property name="isROHSValidForCountry" type="Boolean"/>
+        <property name="isROHSComplaint" type="Boolean"/>
+        <property name="isROHSConform" type="Boolean"/>
+        <property name="isRNDProduct" type="Boolean"/>
+        <property name="isProductBatteryCompliant" type="Boolean"/>
+        <property name="availableToB2B" type="Boolean"/>
+        <property name="availableToB2C" type="Boolean"/>
+        <!-- isDangerousGoods -->
+        <property name="isDangerousGoods" type="Boolean"/>
+        <property name="commonAttrs"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.FeatureWsDTO>"/>
+        <property name="eligibleForReevoo" type="Boolean"/>
+        <!-- SEO related information -->
+        <property name="metaData" type="com.namics.distrelec.occ.core.seo.ws.dto.MetaWsDTO"/>
+        <property name="phaseoutProductFlag" type="Boolean"/>
+        <property name="nameEN" type="java.lang.String"/>
+        <!-- snapEDA flag -->
+        <property name="availableInSnapEda" type="Boolean"/>
+        <property name="allowBulk" type="java.lang.Boolean"/>
+        <property name="primaryImage" type="de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO"/>
+        <property name="ghsImages" type="java.util.List&lt;java.lang.String>"/>
+        <property name="signalWord" type="String"/>
+        <property name="supplementalHazardInfos"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.HazardWsDTO>"/>
+        <property name="hazardStatements"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.HazardWsDTO>"/>
+        <property name="primaryCategory"
+                  type="de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO"/>
+        <property name="itemCategoryGroup" type="java.lang.String"/>
+        <property name="volumePricesMap"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.product.ws.dto.VolumePricesMapEntryWsDTO>"/>
+        <property name="energyEfficiencyLabelImage"
+                  type="java.util.Map&lt;java.lang.String, de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO>"/>
+        <property name="audios"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.DistAudioWsDTO>"/>
+        <property name="weeeCategory" type="java.lang.String"/>
+        <property name="isBetterWorld" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.seo.ws.dto.MetaWsDTO">
+        <property name="robots" type="java.lang.String"/>
+        <property name="alternateHreflangUrls" type="java.lang.String"/>
+        <property name="canonicalUrl" type="java.lang.String"/>
+        <property name="metaTitle" type="java.lang.String"/>
+        <property name="metaImage" type="java.lang.String"/>
+        <property name="metaDescription" type="java.lang.String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.basesite.ProductCarouselWsDTOList">
+        <property name="accessories"
+                  type="de.hybris.platform.commercewebservicescommons.dto.basesite.ProductCarouselWsDTO"/>
+        <property name="alternatives"
+                  type="de.hybris.platform.commercewebservicescommons.dto.basesite.ProductCarouselWsDTO"/>
+        <property name="mandatory"
+                  type="de.hybris.platform.commercewebservicescommons.dto.basesite.ProductCarouselWsDTO"/>
+        <property name="crosselling"
+                  type="de.hybris.platform.commercewebservicescommons.dto.basesite.ProductCarouselWsDTO"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.basesite.ProductCarouselWsDTO">
+        <property name="carouselProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.CommerceCartModificationWsDTO">
+        <description>Representation of a Cart Commerce modification</description>
+        <property name="statusCode" type="String"/>
+        <property name="quantityAdded" type="Long"/>
+        <property name="quantity" type="Long"/>
+        <property name="entry" type="de.hybris.platform.commercewebservicescommons.dto.order.OrderEntryWsDTO"/>
+        <property name="product" type="de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO"/>
+        <property name="deliveryModeChanged" type="Boolean"/>
+        <property name="entryGroupNumbers" type="java.util.Set&lt;Integer>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.cart.ws.dto.AddToCartBulkResponseWsDTO">
+        <property name="cartModifications"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.order.CartModificationWsDTO>">
+        </property>
+        <property name="errorProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>">
+        </property>
+        <property name="punchOutProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>">
+        </property>
+        <property name="phaseOutProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>">
+        </property>
+        <property name="blockedProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>">
+        </property>
+        <property name="addedFrom" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.product.ws.dto.VolumePricesMapEntryWsDTO">
+        <property name="key" type="java.lang.Long"/>
+        <property name="value"
+                  type="java.util.Map&lt;String, de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO>"/>
+    </bean>
+    <!--DATA: ProductAvailabilityListData, ProductAvailabilityData, PickupStockLevelData, StockLevelData-->
+    <bean class="com.namics.distrelec.b2b.facades.product.data.ProductAvailabilityListData">
+        <property name="productAvailability"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.product.data.ProductAvailabilityData>"/>
+    </bean>
+
+    <!-- DTOs: ProductAvailabilityListWsDTO, ProductAvailabilityWsDTO, PickupStockLevelWsDTO, StockLevelWsDTO-->
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.ProductAvailabilityListWsDTO">
+        <property name="productAvailability"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductAvailabilityWsDTO>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.ProductAvailabilityWsDTO">
+        <property name="productCode" type="String"/>
+        <property name="country" type="String"/>
+        <property name="requestedQuantity" type="java.lang.Integer"/>
+        <property name="detailInfo" type="Boolean"/>
+        <property name="statusLabel" type="String"/>
+        <property name="stockLevelTotal" type="Integer"/>
+        <property name="backorderQuantity" type="Integer"/>
+        <property name="stockLevelPickup"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.PickupStockLevelWsDTO>"/>
+        <property name="backorderDeliveryDate" type="java.util.Date"/>
+        <property name="deliveryTimeBackorder" type="String"/>
+        <property name="leadTimeErp" type="Integer"/>
+        <property name="stockLevels"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.StockLevelWsDTO>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.PickupStockLevelWsDTO">
+        <property name="warehouseCode" type="String"/>
+        <property name="warehouseName" type="String"/>
+        <property name="stockLevel" type="Integer"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.StockLevelWsDTO">
+        <property name="warehouseId" type="String"/>
+        <property name="warehouseName" type="String"/>
+        <property name="available" type="Integer"/>
+        <property name="deliveryTime" type="String"/>
+        <property name="leadTime" type="Integer"/>
+        <property name="fast" type="Boolean"/>
+        <property name="external" type="Boolean"/>
+        <property name="exclusive" type="Boolean"/>
+        <property name="waldom" type="Boolean"/>
+        <property name="mview" type="String"/>
+        <property name="replenishmentDeliveryTime" type="String"/>
+        <property name="replenishmentDeliveryTime2" type="String"/>
+        <property name="vendorNumber" type="String" />
+        <property name="availablePO" type="String" />
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.ProductImagesMapWsDTO">
+        <property name="key" type="String"/>
+        <property name="value" type="de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.product.ws.dto.ProductEnhancementWsDTO">
+        <property name="productCode" type="String"/>
+        <property name="inShoppingList" type="boolean"/>
+        <property name="exclusionReason" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.product.ws.dto.ProductEnhancementListWsDTO">
+        <property name="productEnhancements"
+                  type="java.util.List&lt;com.namics.distrelec.occ.product.ws.dto.ProductEnhancementWsDTO>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.cmsoccaddon.data.NavigationEntryWsDTO">
+        <property name="localizedUrl" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.cmsoccaddon.data.NavigationNodeWsDTO">
+        <property name="sortingNumber" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.cms.ws.dto.ContentPageNavigationWsDTO">
+        <property name="navRootNodes"
+                  type="java.util.List&lt;de.hybris.platform.cmsoccaddon.data.NavigationNodeWsDTO>"/>
+        <property name="pageRootNavNode" type="de.hybris.platform.cmsoccaddon.data.NavigationNodeWsDTO"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.occ.cms.ws.dto.ShoppingListEntryWsDTO">
+        <property name="product" type="de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO"/>
+        <property name="baseProduct" type="de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO"/>
+        <property name="desired" type="Integer"/>
+        <property name="received" type="Integer"/>
+        <property name="addedDate" type="java.util.Date"/>
+        <property name="comment" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.cms.ws.dto.ShoppingListWsDTO">
+        <property name="name" type="String"/>
+        <property name="description" type="String"/>
+        <property name="defaultWishlist" type="Boolean"/>
+        <property name="listType" type="String"/>
+        <property name="uniqueId" type="String"/>
+        <property name="entries"
+                  type="java.util.List&lt;com.namics.distrelec.occ.cms.ws.dto.ShoppingListEntryWsDTO&gt;"/>
+        <property name="customer" type="de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO"/>
+        <property name="totalUnitCount" type="Integer"/>
+        <property name="totalPrice" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="calculated" type="Boolean"/>
+        <property name="totalTax" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="subTotal" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="productCodes" type="java.util.List&lt;String>"/>
+        <property name="punchOutProducts" type="java.util.List&lt;ShoppingListPunchedOutProductEntryWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.cms.ws.dto.ShoppingListPunchedOutProductEntryWsDTO">
+        <property name="productCode" type="String" />
+        <property name="isPunchedOut" type="Boolean" />
+        <property name="isBuyable" type="Boolean" />
+        <property name="salesStatus" type="String" />
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.cms.ws.dto.ShoppingListsWsDTO">
+        <property name="list" type="java.util.List&lt;com.namics.distrelec.occ.cms.ws.dto.ShoppingListWsDTO>"/>
+        <property name="count" type="Integer"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.user.UserSignUpWsDTO">
+        <description>Representation of an UserSignUp. Consists of fields required to register new customer</description>
+        <property name="company" type="String"/>
+        <property name="checkPwd" type="String"/>
+        <property name="customerId" type="String"/>
+        <property name="countryCode" type="String"/>
+        <property name="currencyCode" type="String"/>
+        <property name="phoneNumber" type="String"/>
+        <property name="mobileNumber" type="String"/>
+        <property name="codiceFiscale" type="String"/>
+        <property name="faxNumber" type="String"/>
+        <property name="invoiceEmail" type="String"/>
+        <property name="termsOfUseOption" type="Boolean"/>
+        <property name="marketingConsent" type="Boolean"/>
+        <property name="npsConsent" type="Boolean"/>
+        <property name="customerType" type="de.hybris.platform.commerceservices.enums.CustomerType"/>
+        <property name="existingCustomer" type="Boolean"/>
+        <property name="vat4" type="String"/>
+        <property name="legalEmail" type="String"/>
+        <property name="registrationType" type="com.namics.distrelec.b2b.core.enums.RegistrationType"/>
+        <property name="selectAllemailConsents" type="Boolean"/>
+        <property name="saleAndClearanceConsent" type="Boolean"/>
+        <property name="knowHowConsent" type="Boolean"/>
+        <property name="obsolescenceConsent" type="Boolean"/>
+        <property name="smsConsent" type="Boolean"/>
+        <property name="phoneConsent" type="Boolean"/>
+        <property name="postConsent" type="Boolean"/>
+        <property name="personalisationConsent" type="Boolean"/>
+        <property name="profilingConsent" type="Boolean"/>
+        <property name="newsLetterConsent" type="Boolean"/>
+        <property name="termsAndConditionsConsent" type="Boolean"/>
+        <property name="personalisedRecommendationConsent" type="Boolean"/>
+        <property name="customerSurveysConsent" type="Boolean"/>
+        <property name="termsCheck" type="Boolean"/>
+        <property name="isMarketingCookieEnabled" type="String"/>
+        <property name="groupVatId" type="String"/>
+        <property name="vatId" type="String"/>
+        <property name="functionCode" type="String"/>
+        <property name="guid" type="String">
+            <description>Guest order's guid.</description>
+        </property>
+        <property name="organizationalNumber" type="String"/>
+    </bean>
+
+    <enum class="de.hybris.platform.commercewebservicescommons.dto.forms.RegistrationTypeWsDTO">
+        <value>B2B</value>
+        <value>B2C</value>
+    </enum>
+
+    <bean class="com.namics.distrelec.occ.cms.ws.dto.UpdateShoppingListWsDTO">
+        <property name="status" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.cms.ws.dto.ValidateUidFormWsDTO">
+        <property name="uid" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.user.VatValidationResponseWsDTO">
+        <property name="success" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.ws.dto.UserDashboardContentWsDTO">
+        <property name="openOrdersCount" type="Integer"/>
+        <property name="newInvoicesCount" type="Integer"/>
+        <property name="appReqCount" type="Integer"/>
+        <property name="quoteCount" type="Integer"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.ws.dto.ReplaceLoginWsDTO">
+        <property name="newLogin" type="String"/>
+        <property name="password" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.ws.dto.ReplacePasswordWsDTO">
+        <property name="currentPassword" type="String"/>
+        <property name="newPassword" type="String"/>
+        <property name="checkNewPassword" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.v2.forms.SetInitialPasswordForm">
+        <property name="password" type="String"/>
+        <property name="checkPassword" type="String"/>
+        <property name="token" type="String"/>
+        <property name="migration" type="boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.v2.forms.UpdateProfileInfoForm">
+        <property name="functionCode" type="String"/>
+        <property name="departmentCode" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.ws.dto.ObsolescenceCategoryWsDTO">
+        <property name="isObsolCategorySelected" type="boolean"/>
+        <property name="category" type="de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO"/>
+        <property name="categoryCode" type="String"/>
+    </bean>
+
+    <!--Marketing Consent wsdto-->
+    <bean class="com.namics.distrelec.occ.core.user.ws.dto.DistMarketingConsentWsDTO">
+        <property name="uid" type="String"/>
+        <property name="titleCode" type="String"/>
+        <property name="firstName" type="String"/>
+        <property name="lastName" type="String"/>
+        <property name="division" type="String"/>
+        <property name="role" type="String"/>
+        <property name="activeSubscription" type="boolean"/>
+        <property name="npsSubscription" type="boolean"/>
+        <property name="segmentedTopic" type="boolean"/>
+        <property name="isAnonymousUser" type="boolean"/>
+        <property name="isRegistration" type="boolean"/>
+        <property name="status" type="com.namics.distrelec.occ.core.user.ws.dto.DistConsentStatusWsDTO"/>
+        <property name="modifiedTime" type="java.util.Date"/>
+        <property name="erpContactId" type="String"/>
+        <property name="consentType" type="String"/>
+        <property name="contactOrigin" type="String"/>
+        <property name="marketingArea" type="String"/>
+        <property name="lastChangedbyUser" type="String"/>
+        <property name="communicationCategory" type="String"/>
+        <property name="emailConsent" type="boolean"/>
+        <property name="newsLetterConsent" type="boolean"/>
+        <property name="saleAndClearanceConsent" type="boolean"/>
+        <property name="knowHowConsent" type="boolean"/>
+        <property name="obsolescenceConsent" type="boolean"/>
+        <property name="smsConsent" type="boolean"/>
+        <property name="phoneConsent" type="boolean"/>
+        <property name="postConsent" type="boolean"/>
+        <property name="personalisationConsent" type="boolean"/>
+        <property name="profilingConsent" type="boolean"/>
+        <property name="phoneNumber" type="String"/>
+        <property name="mobileNumber" type="String"/>
+        <property name="selectAllemailConsents" type="boolean"/>
+        <property name="termsAndConditionsConsent" type="boolean"/>
+        <property name="personalisedRecommendationConsent" type="boolean"/>
+        <property name="customerSurveysConsent" type="boolean"/>
+        <property name="optedForObsolescence" type="boolean"/>
+        <property name="allCatSelected" type="boolean"/>
+        <property name="categories"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.user.ws.dto.ObsolescenceCategoryWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.bomtool.ws.dto.BomToolImportEntryWsDTO">
+        <property name="code" type="java.lang.String"/>
+        <property name="customerReference" type="java.lang.String"/>
+        <property name="productCode" type="java.lang.String"/>
+        <property name="quantity" type="java.lang.Long"/>
+        <property name="position" type="java.lang.Integer"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.bomtool.ws.dto.BomToolImportWsDTO">
+        <property name="fileName" type="java.lang.String"/>
+        <property name="entry"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.bomtool.ws.dto.BomToolImportEntryWsDTO&gt;"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.importtool.ws.dto.ImportToolMatchingWsDTO">
+        <property name="searchTerm" type="java.lang.String"/>
+        <property name="product" type="de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO"/>
+        <property name="salesStatus" type="java.lang.String"/>
+        <property name="position" type="java.lang.Integer"/>
+        <property name="mpn" type="java.lang.String"/>
+        <property name="duplicateMpnProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>"/>
+        <property name="quantityRaw" type="java.lang.String"/>
+        <property name="productCode" type="java.lang.String"/>
+        <property name="quantity" type="java.lang.Long"/>
+        <property name="itemNumber" type="java.lang.String"/>
+        <property name="reference" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.bomtool.ws.dto.BomToolSearchResultWsDTO">
+        <property name="matchingProducts"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.importtool.ws.dto.ImportToolMatchingWsDTO&gt;"/>
+        <property name="unavailableProducts"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.importtool.ws.dto.ImportToolMatchingWsDTO&gt;"/>
+        <property name="punchedOutProducts"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.importtool.ws.dto.ImportToolMatchingWsDTO&gt;"/>
+        <property name="duplicateMpnProducts"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.importtool.ws.dto.ImportToolMatchingWsDTO&gt;"/>
+        <property name="notMatchingProductCodes"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.importtool.ws.dto.ImportToolMatchingWsDTO&gt;"/>
+        <property name="quantityAdjustedProducts"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.importtool.ws.dto.ImportToolMatchingWsDTO&gt;"/>
+        <property name="quantityAdjustedProductsCount" type="java.lang.Integer"/>
+        <property name="customerId" type="java.lang.String"/>
+        <property name="loadFile" type="java.lang.Boolean"/>
+        <property name="fileName" type="java.lang.String"/>
+        <property name="errorMessages" type="java.util.List&lt;java.lang.String>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.user.RegionWsDTO">
+        <property name="nameEN" type="String"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO">
+        <property name="companyName2" type="java.lang.String"/>
+        <property name="companyName3" type="java.lang.String"/>
+        <property name="pobox" type="java.lang.String"/>
+        <property name="department" type="java.lang.String"/>
+        <property name="departmentCode" type="java.lang.String"/>
+        <property name="phone1" type="java.lang.String"/>
+        <property name="phone2" type="java.lang.String"/>
+        <property name="fax" type="java.lang.String"/>
+        <property name="additionalAddress" type="java.lang.String"/>
+        <property name="erpAddressID" type="java.lang.String"/>
+        <property name="contactAddress" type="boolean"/>
+        <property name="regionData" type="de.hybris.platform.commercewebservicescommons.dto.user.RegionWsDTO"/>
+        <property name="defaultShipping" type="boolean"/>
+        <property name="defaultBilling" type="boolean"/>
+        <property name="codiceFiscale" type="java.lang.String"/>
+        <property name="canEditCompanyName" type="java.lang.Boolean"/>
+        <property name="billingAddress" type="Boolean">
+            <description>Boolean flag if address is for billing</description>
+        </property>
+        <property name="checkoutPhone" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.v2.forms.OfflineAddressForm">
+        <property name="companyName" type="java.lang.String"/>
+        <property name="firstName" type="java.lang.String"/>
+        <property name="lastName" type="java.lang.String"/>
+        <property name="department" type="java.lang.String"/>
+        <property name="street" type="java.lang.String"/>
+        <property name="number" type="java.lang.String"/>
+        <property name="pobox" type="java.lang.String"/>
+        <property name="zip" type="java.lang.String"/>
+        <property name="place" type="java.lang.String"/>
+        <property name="country" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.v2.forms.AddressChangeForm">
+        <property name="customerNumber" type="java.lang.String"/>
+        <property name="comment" type="java.lang.String"/>
+        <property name="oldAddress" type="com.namics.distrelec.occ.core.v2.forms.OfflineAddressForm"/>
+        <property name="newAddress" type="com.namics.distrelec.occ.core.v2.forms.OfflineAddressForm"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.user.ws.dto.RegisterB2BEmployeeWsDTO">
+        <property name="titleCode" type="java.lang.String"/>
+        <property name="firstName" type="java.lang.String"/>
+        <property name="lastName" type="java.lang.String"/>
+        <property name="email" type="java.lang.String"/>
+        <property name="phoneNumber" type="java.lang.String"/>
+        <property name="mobileNumber" type="java.lang.String"/>
+        <property name="faxNumber" type="java.lang.String"/>
+        <property name="functionCode" type="java.lang.String"/>
+        <property name="departmentCode" type="java.lang.String"/>
+        <property name="budgetWithoutLimit" type="boolean"/>
+        <property name="budgetPerOrder" type="java.math.BigDecimal"/>
+        <property name="yearlyBudget" type="java.math.BigDecimal"/>
+        <property name="residualBudget" type="java.math.BigDecimal"/>
+        <property name="requestQuotationPermission" type="boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.DeliveryModeWsDTO">
+        <description>delivery mode informations</description>
+        <property name="shippingCost" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+        <property name="defaultDeliveryMode" type="boolean"/>
+        <property name="selectable" type="boolean"/>
+        <property name="translationKey" type="String"/>
+        <property name="translation" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.payment.ws.dto.DistPaymentOptionsWsDTO">
+        <property name="paymentOptions"
+                  type="de.hybris.platform.commercewebservicescommons.dto.order.PaymentModeListWsDTO"/>
+        <property name="ccPaymentInfos"
+                  type="de.hybris.platform.commercewebservicescommons.dto.order.PaymentDetailsListWsDTO"/>
+        <property name="canRequestInvoicePaymentMode" type="Boolean"/>
+        <property name="invoicePaymentModeRequested" type="Boolean"/>
+    </bean>
+
+    <enum class="com.namics.distrelec.occ.core.v2.enums.ShowMode">
+        <value>Page</value>
+        <value>ALL</value>
+    </enum>
+
+    <bean class="com.namics.distrelec.occ.core.v2.forms.OrderHistoryForm">
+        <property name="page" type="Integer"/>
+        <property name="pageSize" type="Integer"/>
+        <property name="orderNumber" type="String"/>
+        <property name="contactId" type="String"/>
+        <property name="show" type="com.namics.distrelec.occ.core.v2.enums.ShowMode"/>
+        <property name="sort" type="String"/>
+        <property name="sortType" type="String"/>
+        <property name="status" type="String"/>
+        <property name="fromDate" type="String"/>
+        <property name="toDate" type="String"/>
+        <!-- additional filter for sap implementation -->
+        <property name="currencyCode" type="String"/>
+        <property name="invoiceNumber" type="String"/>
+        <property name="minTotal" type="Double"/>
+        <property name="maxTotal" type="Double"/>
+        <property name="reference" type="String"/>
+        <property name="productNumber" type="String"/>
+        <property name="filterContactId" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.v2.forms.NewsletterFeedbackForm">
+        <property name="email" type="String"/>
+        <property name="alternateEmail" type="String"/>
+        <property name="unsubscribeReason" type="String"/>
+        <property name="category" type="String"/>
+        <property name="language" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.v2.forms.NewsletterUnsubscribeForm">
+        <property name="reason" type="String"/>
+        <property name="email" type="String"/>
+        <property name="category" type="String"/>
+        <property name="alternateEmail" type="String"/>
+        <property name="otherReason" type="String"/>
+        <property name="smcOutboubdId" type="String"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.OrderHistoryWsDTO">
+        <property name="userFullName" type="String"/>
+        <property name="deliveryDate" type="java.util.Date"/>
+        <property name="invoiceIds" type="String"/>
+        <property name="rmaStatus" type="boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.OrderReferenceWsDTO">
+        <property name="orderCode" type="String"/>
+        <property name="workflowCode" type="String"/>
+        <property name="orderReference" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.v2.dto.invoice.InvoiceHistorySearchInputWsDTO">
+        <property name="page" type="Integer"/>
+        <property name="pageSize" type="Integer"/>
+        <property name="invoiceNumber" type="String"/>
+        <property name="orderNumber" type="String"/>
+        <property name="ordernf" type="String"/>
+        <property name="articleNumber" type="String"/>
+        <property name="contactId" type="String"/>
+        <property name="show" type="com.namics.distrelec.occ.core.v2.enums.ShowMode"/>
+        <property name="sort" type="String"/>
+        <property name="sortType" type="String"/>
+        <property name="status" type="String"/>
+        <property name="fromDate" type="java.time.LocalDate"/>
+        <property name="toDate" type="java.time.LocalDate"/>
+        <property name="fromDueDate" type="java.time.LocalDate"/>
+        <property name="toDueDate" type="java.time.LocalDate"/>
+        <property name="minTotal" type="java.math.BigDecimal"/>
+        <property name="maxTotal" type="java.math.BigDecimal"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.invoice.ws.dto.DistB2BInvoiceHistoryOrderWsDTO">
+        <property name="orderNumber" type="String"/>
+        <property name="contactName" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.invoice.ws.dto.DistB2BInvoiceHistoryWsDTO">
+        <property name="invoiceNumber" type="String"/>
+        <property name="invoiceDate" type="java.time.LocalDate"/>
+        <property name="invoiceDueDate" type="java.time.LocalDate"/>
+        <property name="invoiceStatus" type="String"/>
+        <property name="invoiceTotal" type="java.lang.Double"/>
+        <property name="currency" type="String"/>
+        <property name="invoiceDocumentURL" type="String"/>
+        <property name="relatedOrders"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.invoice.ws.dto.DistB2BInvoiceHistoryOrderWsDTO>">
+            <description>List of invoice related orders</description>
+        </property>
+        <property name="invoiceTotalWithoutTaxes" type="java.lang.Double"/>
+        <property name="invoiceTaxes" type="java.lang.Double"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.b2b.facades.invoice.ws.dto.DistB2BInvoiceHistoryListWsDTO">
+        <property name="invoices"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.invoice.ws.dto.DistB2BInvoiceHistoryWsDTO>"/>
+        <property name="sorts"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.search.pagedata.SortWsDTO>"/>
+        <property name="pagination"
+                  type="de.hybris.platform.commercewebservicescommons.dto.search.pagedata.PaginationWsDTO"/>
+        <property name="invoiceFromDate" type="java.time.LocalDate"/>
+        <property name="invoiceToDate" type="java.time.LocalDate"/>
+        <property name="dueFromDate" type="java.time.LocalDate"/>
+        <property name="dueToDate" type="java.time.LocalDate"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercefacades.user.ws.dto.MyCompanyWsDTO">
+        <property name="vatId" type="String"/>
+        <property name="customerId" type="String"/>
+        <property name="companyInformationAdr"
+                  type="de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO"/>
+        <property name="companyName" type="String"/>
+        <property name="companyName2" type="String"/>
+        <property name="companyName3" type="String"/>
+        <property name="breadcrumbs"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.ws.dto.ObsolescenceTempWsDTO">
+        <property name="obsolCategorySelected" type="boolean"/>
+        <property name="code" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.ws.dto.ConsentProfileWsDTO">
+        <property name="selectAllemailConsents" type="boolean"/>
+        <property name="emailConsent" type="boolean"/>
+        <property name="saleAndClearanceConsent" type="boolean"/>
+        <property name="knowHowConsent" type="boolean"/>
+        <property name="obsolescenceConsent" type="boolean"/>
+        <property name="smsConsent" type="boolean"/>
+        <property name="phoneConsent" type="boolean"/>
+        <property name="postConsent" type="boolean"/>
+        <property name="personalisationConsent" type="boolean"/>
+        <property name="profilingConsent" type="boolean"/>
+        <property name="newsLetterConsent" type="boolean"/>
+        <property name="termsAndConditionsConsent" type="boolean"/>
+        <property name="personalisedRecommendationConsent" type="boolean"/>
+        <property name="customerSurveysConsent" type="boolean"/>
+        <property name="obsoleCategories"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.user.ws.dto.ObsolescenceTempWsDTO>"/>
+        <property name="allCatSelected" type="boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.basesite.BaseSiteWsDTO">
+        <property name="wtTrackId" type="String"/>
+        <property name="wtTrackDomain" type="String"/>
+        <property name="wtDomain" type="String"/>
+        <property name="wtActivateEventTracking" type="String"/>
+        <property name="wtDefaultAreaCode" type="String"/>
+        <property name="printFooterContent" type="String"/>
+        <property name="exclusiveFastDeliveryTime" type="String"/>
+        <property name="exclusiveSlowDeliveryTime" type="String"/>
+        <property name="externalFastDeliveryTime" type="String"/>
+        <property name="externalSlowDeliveryTime" type="String"/>
+        <property name="fastDeliveryTime" type="String"/>
+        <property name="slowDeliveryTime" type="String"/>
+        <property name="backorderDeliveryTime" type="String"/>
+        <property name="redirect404" type="String"/>
+        <property name="reevooPurchaserDuration" type="java.lang.Integer"/>
+        <property name="requestedDeliveryDateMaxDays" type="java.lang.Integer"/>
+        <property name="doNotCalcuteTaxForB2B" type="boolean"/>
+        <property name="shippingOptionsEditable" type="boolean"/>
+        <property name="paymentOptionsEditable" type="boolean"/>
+        <property name="requestedDeliveryDateEnabled" type="boolean"/>
+        <property name="httpsOnly" type="boolean"/>
+        <property name="hidden" type="boolean"/>
+        <property name="reevooActivated" type="boolean"/>
+        <property name="reevooBrandVisible" type="boolean"/>
+        <property name="useProductFeatures" type="boolean"/>
+        <property name="guestCheckoutEnabled" type="boolean"/>
+        <property name="tracking"
+                  type="com.namics.distrelec.occ.core.storesession.ws.dto.DistSiteTrackingSettingsWsDTO"/>
+        <property name="checkoutDeliveryMethodPricesShown" type="Boolean"/>
+        <property name="bloomreachScriptToken" type="String"/>
+        <property name="enableRegistration" type="Boolean"/>
+        <property name="enableAddToCart" type="Boolean"/>
+        <property name="enableNewsletter" type="Boolean"/>
+        <property name="enableMyAccountRedirect" type="Boolean"/>
+        <property name="enableProductReturn" type="Boolean"/>
+        <property name="enableSubUserManagement" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.dto.basesite.BaseSiteMutableListWsDTO">
+        <description>Representation of a Base Site List with mutable data</description>
+        <property name="baseSites"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.dto.basesite.BaseSiteMutableWsDTO>">
+            <description>List of basesites</description>
+        </property>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.dto.basesite.BaseSiteMutableWsDTO">
+        <property name="uid" type="String">
+            <description>Unique identifier of Basesite</description>
+        </property>
+        <property name="maintenanceActive" type="boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistAvailabilityWsDTO">
+        <property name="estimatedDate" type="java.util.Date"/>
+        <property name="quantity" type="java.lang.Long"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.SubOrderEntryWsDTO">
+        <property name="materialNumber" type="String"/>
+        <property name="materialName" type="String"/>
+        <property name="imageUrl" type="String"/>
+        <property name="orderedQuantity" type="java.lang.Integer"/>
+        <property name="product" type="de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistRMAEntryWsDTO">
+        <property name="notAllowed" type="boolean">
+            <description>Is item can be returned</description>
+        </property>
+        <property name="notAllowedDesc" type="String">
+            <description>RMA not allowed description</description>
+        </property>
+        <property name="remainingReturnQty" type="Long">
+            <description>Item quantity that can be returned</description>
+        </property>
+        <property name="rmas" type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.RMAWsDTO>">
+            <description>RMA Details for an order entry</description>
+        </property>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.RMAWsDTO">
+        <property name="rmaNumber" type="String">
+            <description>RMA Number</description>
+        </property>
+        <property name="rmaItemStatus" type="de.hybris.platform.commercefacades.order.data.RMAStatus">
+            <description>RMA Status</description>
+        </property>
+        <property name="officeAddress" type="String">
+            <description>Return Address</description>
+        </property>
+
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.OrderEntryWsDTO">
+        <property type="String" name="customerReference"/>
+        <property type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO" name="baseListPrice"/>
+        <property type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO" name="totalListPrice"/>
+        <property type="Double" name="taxValue"/>
+        <property type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.DistAvailabilityWsDTO>"
+                  name="availabilities"/>
+        <property type="String" name="searchQuery"/>
+        <property type="java.util.Date" name="requestedDeliveryDateItemLevel"/>
+        <property type="java.lang.Boolean" name="bom"/>
+        <property type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.SubOrderEntryWsDTO>"
+                  name="subOrderEntryData"/>
+        <property type="java.util.Date" name="deliveryDate"/>
+        <property type="java.lang.Boolean" name="isQuotation"/>
+        <property type="String" name="quotationId"/>
+        <property type="String" name="lineNumber"/>
+        <property type="String" name="quotationReference"/>
+        <property type="String" name="articleDescription"/>
+        <property type="java.lang.Boolean" name="dummyItem"/>
+        <property type="java.lang.Boolean" name="mandatoryItem"/>
+        <property type="String" name="quoteModificationType"/>
+        <property type="String" name="itemPosition"/>
+        <property type="String" name="deliveryId"/>
+        <property type="String" name="deliveryTrackingUrl"/>
+        <property type="java.lang.Long" name="deliveryQuantity"/>
+        <property type="java.lang.Long" name="pendingQuantity"/>
+        <property type="String" name="invoiceId"/>
+        <property type="java.lang.Boolean" name="isBackOrder"/>
+        <property type="java.lang.Boolean" name="backOrderProfitable"/>
+        <property type="java.lang.Long" name="backOrderedQuantity"/>
+        <property type="java.lang.Boolean" name="alternateAvailable"/>
+        <property type="java.lang.Long" name="alternateQuantity"/>
+        <property type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"
+                  name="totalAfterDiscountPrice"/>
+        <property type="String" name="typeName"/>
+        <property name="rmaData" type="com.namics.distrelec.occ.core.order.ws.dto.DistRMAEntryWsDTO"/>
+        <property type="String" name="mview"/>
+        <property name="addedFrom" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.user.TitleWsDTO">
+        <property name="sapCode" type="String"/>
+        <property name="active" type="java.lang.Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.user.data.DistDepartmentDataList">
+        <property name="departments"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.user.data.DistDepartmentData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.user.ws.dto.DistDepartmentListWsDTO">
+        <property name="departments"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.dto.user.DistDepartmentWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.dto.user.DistDepartmentWsDTO">
+        <property name="code" type="String"/>
+        <property name="name" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.user.data.DistFunctionDataList">
+        <property name="functions"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.user.data.DistFunctionData>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.user.ws.dto.DistFunctionsListWsDTO">
+        <property name="functions"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.dto.user.DistFunctionWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.dto.user.DistFunctionWsDTO">
+        <property name="code" type="String"/>
+        <property name="name" type="java.lang.String"/>
+    </bean>
+
+    <!-- Quotation History START -->
+    <!-- DATA -->
+    <bean class="com.namics.distrelec.occ.core.v2.forms.QuotationHistoryForm">
+        <property name="page" type="Integer"/>
+        <property name="pageSize" type="Integer"/>
+        <property name="sort" type="String"/>
+        <property name="quotationReference" type="String"/>
+        <property name="contactId" type="String"/>
+        <property name="quotationId" type="String"/>
+        <property name="sortType" type="String"/>
+        <property name="status" type="String"/>
+        <property name="fromDate" type="java.time.LocalDate"/>
+        <property name="toDate" type="java.time.LocalDate"/>
+        <property name="expiryFromDate" type="java.time.LocalDate"/>
+        <property name="expiryToDate" type="java.time.LocalDate"/>
+        <property name="currencyCode" type="String"/>
+        <property name="minTotal" type="Double"/>
+        <property name="maxTotal" type="Double"/>
+        <property name="articleNumber" type="String"/>
+        <property name="poNumber" type="String"/>
+    </bean>
+
+    <!-- DTO -->
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.QuotationHistoriesWsDTO">
+        <property name="quotations"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.order.QuotationHistoryWsDTO>"/>
+        <property name="sorts"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.search.pagedata.SortWsDTO>"/>
+        <property name="pagination"
+                  type="de.hybris.platform.commercewebservicescommons.dto.search.pagedata.PaginationWsDTO"/>
+        <property name="contactsOfCustomer"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO>"/>
+        <property name="quotationStatuses"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.order.QuoteStatusWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.QuotationEntryWsDTO">
+        <property name="itemNumber" type="String"/>
+        <property name="product" type="de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO"/>
+        <property name="price" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="subtotal" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="quantity" type="Integer"/>
+        <property name="articleDescription" type="String"/>
+        <property name="dummyItem" type="boolean"/>
+        <property name="quantityModificationType" type="String"/>
+        <property name="mandatory" type="boolean"/>
+        <property name="itemNote" type="String"/>
+        <property name="manufacturerType" type="String"/>
+        <property name="manufacturerPartNumber" type="String"/>
+        <property name="customerReference" type="String"/>
+        <property name="yourItemRef" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.QuotationHistoryWsDTO">
+        <property name="customerId" type="String"/>
+        <property name="fullQuote" type="boolean"/>
+        <property name="quotationChannel" type="String"/>
+        <property name="quotationNote" type="String"/>
+        <property name="subtotal1" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="subtotal2" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="tax" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="quotationEntries"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.QuotationEntryWsDTO>"/>
+        <property name="quotationId" type="String"/>
+        <property name="poNumber" type="String"/>
+        <property name="total" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="currency" type="de.hybris.platform.commercewebservicescommons.dto.storesession.CurrencyWsDTO"/>
+        <property name="status" type="de.hybris.platform.commercewebservicescommons.dto.order.QuoteStatusWsDTO"/>
+        <property name="quotationRequestDate" type="java.time.LocalDate"/>
+        <property name="quotationExpiryDate" type="java.time.LocalDate"/>
+        <property name="customerName" type="String"/>
+        <property name="purchasable" type="Boolean"/>
+        <property name="quotationDocURL" type="String"/>
+        <property name="previousQuoteID" type="String"/>
+        <property name="isTender" type="Boolean"/>
+        <property name="reqDate" type="java.time.LocalDate"/>
+        <property name="expireDate" type="java.math.BigInteger"/>
+        <property name="yourHeaderRef" type="String"/>
+        <property name="resubmitted" type="Boolean"/>
+        <property name="childQuote" type="String"/>
+        <property name="resubmitOrChildQuotationUrl" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.QuoteStatusWsDTO">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+        <property name="status" type="String"/>
+        <property name="message" type="String"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.QuotationProductWsDTO">
+        <property name="productCode" type="String"/>
+        <property name="quantity" type="java.lang.Long"/>
+        <property name="itemNumber" type="String"/>
+        <property name="reference" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.AddQuotationRequestWsDTO">
+        <property name="quotationId" type="String"/>
+        <property name="products"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.QuotationProductWsDTO>"/>
+    </bean>
+    <!-- Quotation History END -->
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.AbstractOrderWsDTO">
+        <property name="billingAddress" type="de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO"/>
+        <property name="projectNumber" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.CartWsDTO">
+        <property name="movLimit" type="java.lang.Double"/>
+        <property name="movMissing" type="java.lang.Double"/>
+        <property name="movCurrency" type="String"/>
+        <property name="creditBlocked" type="Boolean"/>
+        <property name="erpVoucherInfoData"
+                  type="de.hybris.platform.commercewebservicescommons.dto.order.DistErpVoucherInfoWsDTO"/>
+        <property name="scheduledDeliveryDate" type="java.time.LocalDate"/>
+        <property name="paymentMode" type="de.hybris.platform.commercewebservicescommons.dto.order.PaymentModeWsDTO"/>
+        <property name="pickupLocation" type="com.namics.distrelec.occ.core.cart.ws.dto.WarehouseWsDTO"/>
+        <property name="codiceCIG" type="String"/>
+        <property name="codiceCUP" type="String"/>
+        <property name="eligibleForFastCheckout" type="Boolean"/>
+        <property name="punchedOutProducts" type="String"/>
+        <property name="blockedProducts" type="String"/>
+        <property name="completeDelivery" type="Boolean"/>
+        <property name="endOfLifeProducts" type="java.util.List&lt;String>"/>
+        <property name="phasedOutProducts" type="java.util.List&lt;String>"/>
+        <property name="updatedMOQProducts" type="java.util.List&lt;String>"/>
+        <property name="hasUnallowedBackorder" type="Boolean"/>
+        <property name="deliveryCostExcluded" type="Boolean"/>
+        <property name="reevooEligible" type="Boolean"/>
+        <property name="calculationFailed" type="Boolean"/>
+        <property name="productCodeMisalignment" type="String"/>
+        <property name="customerBlockedInErp" type="Boolean"/>
+        <property name="moq" type="Long"/>
+        <property name="waldom" type="Boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.DistErpVoucherInfoWsDTO">
+        <description>Informations about voucher from Distrelec SAP-ERP</description>
+        <property name="code" type="String"/>
+        <property name="fixedValue" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="currency" type="String"/>
+        <property name="valid" type="Boolean"/>
+        <property name="returnERPCode" type="String"/>
+        <property name="erpErrorMessageKey" type="String"/>
+        <property name="calculatedInERP" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.v2.forms.OrderApprovalForm">
+        <property name="page" type="Integer"/>
+        <property name="pageSize" type="Integer"/>
+        <property name="show" type="com.namics.distrelec.occ.core.v2.enums.ShowMode"/>
+        <property name="sort" type="String"/>
+        <property name="sortType" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.v2.forms.OrderApprovalDecisionForm">
+        <property name="workFlowActionCode" type="String"/>
+        <property name="approverSelectedDecision" type="String"/>
+        <property name="comments" type="String"/>
+        <property name="termsAndConditions" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.OrderApprovalDecisionWsDTO">
+        <property name="continueUrl" type="String"/>
+        <property name="errorMessage" type="String"/>
+        <property name="checkoutUser" type="String"/>
+        <property name="orderApprovalConfirmed" type="boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.order.OrderApprovalListWsDTO">
+        <description>Representation of a Order Approval List</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">OrderApprovalList</hint>
+        </hints>
+        <property name="orderApprovals"
+                  type="java.util.List&lt;de.hybris.platform.b2bwebservicescommons.dto.order.OrderApprovalWsDTO>">
+            <description>List of Order Approvals</description>
+            <hints>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="sorts"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.search.pagedata.SortWsDTO>">
+            <description>List of sorts</description>
+            <hints>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="pagination"
+                  type="de.hybris.platform.commercewebservicescommons.dto.search.pagedata.PaginationWsDTO">
+            <description>Pagination items</description>
+            <hints>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.order.OrderApprovalWsDTO">
+        <description>Details of one specific order approval</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">OrderApproval</hint>
+        </hints>
+        <property name="code" type="String">
+            <description>Code that identifies the approval.</description>
+            <hints>
+                <hint name="required">true</hint>
+                <hint name="example">00000005</hint>
+            </hints>
+        </property>
+        <property name="order" type="de.hybris.platform.commercewebservicescommons.dto.order.OrderWsDTO">
+            <description>Order linked to this approval.</description>
+        </property>
+        <property name="approvalDecisionRequired" type="Boolean">
+            <description>Boolean flag which states whether an approval decision is required.</description>
+        </property>
+        <property name="customerOrderApprovalRecords"
+                  type="java.util.List&lt;de.hybris.platform.b2bwebservicescommons.dto.order.OrderApprovalRecordWsDTO>">
+            <description>Customer approval records related to this order approval.</description>
+        </property>
+        <property name="merchantOrderApprovalRecords"
+                  type="java.util.List&lt;de.hybris.platform.b2bwebservicescommons.dto.order.OrderApprovalRecordWsDTO>">
+            <description>Merchant approval records related to this order approval.</description>
+        </property>
+        <property name="trigger" type="de.hybris.platform.b2bwebservicescommons.dto.order.TriggerWsDTO">
+            <description>Replenishment trigger if this is an approval for a replenishment order.</description>
+        </property>
+        <property name="decisionDate" type="java.util.Date">
+            <description>Decision date for B2B customer.</description>
+        </property>
+        <property name="approvalComments" type="String">
+            <description>Approval comments for B2B customer.</description>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.order.OrderApprovalRecordWsDTO">
+        <description>Details of one order approval record</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">OrderApprovalRecord</hint>
+        </hints>
+        <property name="permissionTypes"
+                  type="java.util.List&lt;de.hybris.platform.b2bwebservicescommons.dto.company.B2BPermissionTypeWsDTO>">
+            <description>List of permission types related to this approval record.</description>
+        </property>
+        <property name="approver" type="de.hybris.platform.commercewebservicescommons.dto.user.PrincipalWsDTO">
+            <description>Principal responsible to this approval record.</description>
+        </property>
+        <property name="statusDisplay" type="String">
+            <description>Status of the order approval.</description>
+            <hints>
+                <hint name="example">Pending approval</hint>
+            </hints>
+        </property>
+        <property name="comments" type="String">
+            <description>Any comments the approver (or the workflow system) added to the approval item.</description>
+            <hints>
+                <hint name="example">Submitted for approval</hint>
+            </hints>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.order.TriggerWsDTO">
+        <description>Representation of a Trigger</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">Trigger</hint>
+        </hints>
+        <property name="activationTime" type="java.util.Date">
+            <description>The time the trigger will be activated</description>
+            <hints>
+                <hint name="example">2020-12-31T09:00:00+0000</hint>
+            </hints>
+        </property>
+        <property name="displayTimeTable" type="String">
+            <description>Description of when the trigger is being activated</description>
+            <hints>
+                <hint name="example">Every Monday at 00:00:00</hint>
+            </hints>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.company.B2BPermissionTypeWsDTO">
+        <description>Request body fields required and optional to operate on Order Approval Permission Type data.
+            Typical permission types are: B2BBudgetExceededPermission, B2BOrderThresholdTimespanPermission and
+            B2BOrderThresholdPermission
+        </description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">OrderApprovalPermissionType</hint>
+        </hints>
+        <property name="code" type="String">
+            <description>Code of the Order Approval Permission Type</description>
+            <hints>
+                <hint name="required">true</hint>
+                <hint name="example">B2BOrderThresholdTimespanPermission</hint>
+            </hints>
+        </property>
+        <property name="name" type="String">
+            <description>Name of the Order Approval Permission Type</description>
+            <hints>
+                <hint name="example">Allowed Order Threshold (per timespan)</hint>
+            </hints>
+        </property>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.b2b.facades.customer.ws.dto.DistUserProfileWsDTO">
+        <property name="userProfileData" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.mycompany.BudgetWsDTO"
+          extends="de.hybris.platform.b2bwebservicescommons.dto.mycompany.BudgetBaseWsDTO">
+        <description>Request body fields required and optional to operate on Budget data.
+            This bean may have relationships to other Org Unit WsDTO, whose type are WsDTO beans as well.
+        </description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">Budget</hint>
+        </hints>
+        <property name="orgUnit" type="de.hybris.platform.b2bwebservicescommons.dto.company.B2BUnitWsDTO">
+            <description>The unit of the Budget</description>
+            <hints>
+                <hint name="example">Rustic</hint>
+            </hints>
+        </property>
+        <property name="costCenters"
+                  type="java.util.List&lt;de.hybris.platform.b2bwebservicescommons.dto.company.B2BCostCenterWsDTO>">
+            <description>List of Cost Centers</description>
+        </property>
+        <!-- properties from Distrelec custom code-->
+        <property name="orderBudget" type="java.math.BigDecimal"/>
+        <property name="yearlyBudget" type="java.math.BigDecimal"/>
+        <property name="exceededOrderBudget" type="java.math.BigDecimal"/>
+        <property name="exceededYearlyBudget" type="java.math.BigDecimal"/>
+        <property name="yearlyBudgetUsedToDate" type="java.math.BigDecimal"/>
+
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.mycompany.BudgetBaseWsDTO">
+        <description>Request body fields required and optional to operate on Budget data.
+            This base bean has no relationship fields to other Org Unit WsDTOs
+        </description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">BudgetBase</hint>
+        </hints>
+        <property name="active" type="Boolean">
+            <description>Boolean flag of whether the Budget is active</description>
+        </property>
+        <property name="budget" type="java.math.BigDecimal">
+            <description>Value of Budget</description>
+            <hints>
+                <hint name="example">50000</hint>
+            </hints>
+        </property>
+        <property name="code" type="String">
+            <description>Code of the Budget</description>
+            <hints>
+                <hint name="example">Monthly_50K_USD</hint>
+            </hints>
+        </property>
+        <property name="name" type="String">
+            <description>The name of the Budget</description>
+            <hints>
+                <hint name="example">Monthly 50K USD</hint>
+            </hints>
+        </property>
+        <property name="currency" type="de.hybris.platform.commercewebservicescommons.dto.storesession.CurrencyWsDTO">
+            <description>Currency of the Budget</description>
+            <hints>
+                <hint name="example">USD</hint>
+            </hints>
+        </property>
+        <property name="startDate" type="java.util.Date">
+            <description>The start date of the Budget</description>
+            <hints>
+                <hint name="example">2020-11-31T09:00:00+0000</hint>
+            </hints>
+        </property>
+        <property name="endDate" type="java.util.Date">
+            <description>The end date of the Budget</description>
+            <hints>
+                <hint name="example">2020-12-31T09:00:00+0000</hint>
+            </hints>
+        </property>
+        <property name="selected" type="java.lang.Boolean">
+            <description>Boolean flag whether the budget is selected for a cost center</description>
+            <hints>
+                <hint name="example">true</hint>
+            </hints>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.company.B2BCostCenterWsDTO"
+          extends="de.hybris.platform.b2bwebservicescommons.dto.company.B2BCostCenterBaseWsDTO">
+        <description>Representation of a cost center. This bean may have relationships to other Org Unit WsDTO, whose
+            type are WsDTO beans as well.
+        </description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">B2BCostCenter</hint>
+        </hints>
+        <property name="unit" type="de.hybris.platform.b2bwebservicescommons.dto.company.B2BUnitWsDTO">
+            <description>The parent unit of the cost center</description>
+        </property>
+        <property name="assignedBudgets"
+                  type="java.util.List&lt;de.hybris.platform.b2bwebservicescommons.dto.mycompany.BudgetShallowWsDTO>">
+            <description>Budgets assigned to this cost center</description>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.company.B2BCostCenterBaseWsDTO">
+        <description>Representation of a cost center. This base bean has no relationship fields to other Org Unit
+            WsDTOs
+        </description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">B2BCostCenterBase</hint>
+        </hints>
+        <property name="originalCode" type="String" deprecated="since 2005, no longer needed">
+            <description>The original code of the cost center. Deprecated since 2005.</description>
+            <hints>
+                <hint name="example">Custom_Retail</hint>
+            </hints>
+        </property>
+        <property name="name" type="String">
+            <description>The name of the cost center</description>
+            <hints>
+                <hint name="example">Custom Retail</hint>
+            </hints>
+        </property>
+        <property name="active" type="String" deprecated="since 2005, read-only, used for display purposes">
+            <description>Indication of whether the cost center is active. Deprecated since 2005. Read-only, used for
+                display purposes.
+            </description>
+            <hints>
+                <hint name="example">true</hint>
+            </hints>
+        </property>
+        <property name="activeFlag" type="Boolean">
+            <description>Boolean flag of whether the cost center is active.</description>
+            <hints>
+                <hint name="example">true</hint>
+            </hints>
+        </property>
+        <property name="code" type="String">
+            <description>The code of the cost center</description>
+            <hints>
+                <hint name="example">Custom_Retail</hint>
+            </hints>
+        </property>
+        <property name="currency" type="de.hybris.platform.commercewebservicescommons.dto.storesession.CurrencyWsDTO">
+            <description>The currency of the cost center</description>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.mycompany.BudgetShallowWsDTO"
+          extends="de.hybris.platform.b2bwebservicescommons.dto.mycompany.BudgetBaseWsDTO">
+        <description>Request body fields required and optional to operate on Budget data.
+            This bean is shallow, which means its potential relationship fields to other Org Unit fields are simple ids.
+            No Org Unit WsDTO should be declared in this bean to avoid circular references.
+        </description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">BudgetShallow</hint>
+        </hints>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.company.B2BUnitWsDTO">
+        <description>Representation of an organizational unit</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">B2BUnit</hint>
+        </hints>
+        <property name="active" type="Boolean">
+            <description>Boolean flag of whether Organizational Unit is active</description>
+            <hints>
+                <hint name="example">true</hint>
+            </hints>
+        </property>
+        <property name="uid" type="String">
+            <description>Identifier of the organizational unit</description>
+            <hints>
+                <hint name="example">Pronto</hint>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="name" type="String">
+            <description>Name of the organizational unit</description>
+            <hints>
+                <hint name="example">Pronto</hint>
+            </hints>
+        </property>
+
+        <property name="parentOrgUnit" type="de.hybris.platform.b2bwebservicescommons.dto.company.B2BUnitWsDTO">
+            <description>Parent unit of the organizational unit</description>
+        </property>
+
+        <property name="approvalProcess"
+                  type="de.hybris.platform.b2bwebservicescommons.dto.company.B2BApprovalProcessWsDTO">
+            <description>Approval Process of the organizational unit node</description>
+        </property>
+
+        <property name="addresses"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO>">
+            <description>Addresses of the organizational unit node</description>
+        </property>
+        <property name="approvers"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO>">
+            <description>Approvers of the organizational unit node</description>
+        </property>
+        <property name="managers"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO>">
+            <description>Managers of the organizational unit node</description>
+        </property>
+        <property name="administrators"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO>">
+            <description>Administrators of the organizational unit node</description>
+        </property>
+        <property name="customers"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO>">
+            <description>Customers of the organizational unit node</description>
+        </property>
+        <property name="costCenters"
+                  type="java.util.List&lt;de.hybris.platform.b2bwebservicescommons.dto.company.B2BCostCenterShallowWsDTO>">
+            <description>The cost centers of the organizational unit node</description>
+        </property>
+        <property name="erpCustomerId" type="java.lang.String">
+            <description>Customers ERP ID</description>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.company.B2BApprovalProcessWsDTO">
+        <description>Representation of an organizational approval process</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">B2BApprovalProcess</hint>
+        </hints>
+        <property name="code" type="String">
+            <description>Code of the Organizational Approval Process</description>
+            <hints>
+                <hint name="example">accApproval</hint>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="name" type="String">
+            <description>Name of the Organizational Approval Process</description>
+            <hints>
+                <hint name="example">Escalation Approval with Merchant Check</hint>
+            </hints>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.b2bwebservicescommons.dto.company.B2BCostCenterShallowWsDTO"
+          extends="de.hybris.platform.b2bwebservicescommons.dto.company.B2BCostCenterBaseWsDTO">
+        <description>Representation of a cost center. This bean is shallow, which means its potential relationship
+            fields to other Org Unit fields are simple ids.
+            No Org Unit WsDTO fields should be declared in this bean to avoid circular references.
+        </description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">B2BCostCenterShallow</hint>
+        </hints>
+    </bean>
+
+    <!-- Bean definition END : OrderApprovalWsDTO and other copied over from b2bwebservicescommons-->
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.user.AddressListWsDTO">
+        <property name="distAddresses"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO>"/>
+    </bean>
+
+    <enum class="de.hybris.platform.commercewebservicescommons.dto.user.AddressTypeWsDTO">
+        <value>ALL</value>
+        <value>BILLING</value>
+        <value>SHIPPING</value>
+    </enum>
+
+    <bean class="com.namics.distrelec.occ.core.cart.ws.dto.SendToFriendFormWsDTO">
+        <property name="senderName" type="String"/>
+        <property name="senderEmail" type="String"/>
+        <property name="receiverName" type="String"/>
+        <property name="receiverEmail" type="String"/>
+        <property name="message" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.cart.ws.dto.PriceDiffFormWsDTO">
+        <property name="source" type="String">
+            <description>product code of source</description>
+            <hints>
+                <hint name="example">17672583</hint>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="target" type="String">
+            <description>product code of target (calibrated product)</description>
+            <hints>
+                <hint name="example">30035868</hint>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.cart.ws.dto.CalibrationFormWsDTO"
+          extends="com.namics.distrelec.occ.core.cart.ws.dto.PriceDiffFormWsDTO">
+        <property name="newQty" type="Long"/>
+    </bean>
+
+    <!--Base Store-->
+    <bean class="com.namics.distrelec.b2b.facades.search.data.SearchExperienceDTO">
+        <property name="code" type="String"/>
+        <property name="searchUrl" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.search.ws.dto.SearchExperienceWsDTO">
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">SearchExperience</hint>
+        </hints>
+        <property name="code" type="String"/>
+        <property name="searchUrl" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.basestore.BaseStoreWsDTO">
+        <description>extension of a Base Store WS related</description>
+        <property name="backorderAllowed" type="boolean"/>
+        <property name="quotationsEnabled" type="boolean"/>
+        <property name="orderApprovalEnabled" type="boolean"/>
+        <property name="searchExperienceMap"
+                  type="java.util.Map&lt;String, com.namics.distrelec.occ.core.search.ws.dto.SearchExperienceWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.cart.ws.dto.HostedOrderPageWsDTO">
+        <property name="postUrl" type="String"/>
+        <property name="debugMode" type="Boolean"/>
+        <property name="parameters" type="java.util.Map&lt;String, String>"/>
+    </bean>
+
+    <enum class="com.namics.distrelec.occ.core.cart.ws.dto.CustomerTypeWsDTO">
+        <value>B2B</value>
+        <value>B2C</value>
+        <value>B2E</value>
+        <value>GUEST</value>
+    </enum>
+
+    <bean class="com.namics.distrelec.occ.core.cart.ws.dto.PossibleDeliveryDatesWsDTO">
+        <description>Get possible delivery dates WsDTO in checkout, Returns min and max date for current cart
+        </description>
+        <property name="minRequestedDeliveryDateForCurrentCart" type="java.time.LocalDate"/>
+        <property name="maxRequestedDeliveryDateForCurrentCart" type="java.time.LocalDate"/>
+    </bean>
+
+
+    <bean class="com.namics.distrelec.occ.core.cart.ws.dto.WarehouseWsDTO">
+        <description>Data Transfer Object of WarehouseData</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">WarehouseWsDTO</hint>
+        </hints>
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+        <property name="streetName" type="String"/>
+        <property name="streetNumber" type="String"/>
+        <property name="postalCode" type="String"/>
+        <property name="town" type="String"/>
+        <property name="phone" type="String"/>
+        <property name="openingsHourMoFr" type="String"/>
+        <property name="openingsHourSa" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.DeliveryModeListWsDTO">
+        <property name="warehouses"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.cart.ws.dto.WarehouseWsDTO>">
+            <description>List of warehouses</description>
+        </property>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.cart.ws.dto.CheckoutReviewFormWsDTO">
+        <description>Review Form before continue checkout</description>
+        <property name="agree" type="Boolean">
+            <hints>
+                <hint name="example">true</hint>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="agree1" type="Boolean">
+            <hints>
+                <hint name="example">true</hint>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="marketingConsent" type="Boolean">
+            <hints>
+                <hint name="example">true</hint>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="completeDelivery" type="Boolean">
+            <hints>
+                <hint name="example">true</hint>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="openOrderCloseDate" type="java.util.Date">
+            <hints>
+                <hint name="example">2020-12-31T09:00:00+0000</hint>
+                <hint name="required">false</hint>
+            </hints>
+        </property>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistDiscountWsDTO">
+        <property name="code" type="String"/>
+        <property name="discountString" type="String"/>
+        <property name="global" type="Boolean"/>
+        <property name="absolute" type="Boolean"/>
+        <property name="priority" type="Integer"/>
+        <property name="value" type="Double"/>
+        <property name="currencyData"
+                  type="de.hybris.platform.commercewebservicescommons.dto.storesession.CurrencyWsDTO"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistHandlingUnitItemWsDTO">
+        <property name="materialID" type="String"/>
+        <property name="articleName" type="String"/>
+        <property name="quantity" type="java.math.BigDecimal"/>
+        <property name="unit" type="String"/>
+        <property name="type" type="String"/>
+        <property name="manufacturer" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistHandlingUnitWsDTO">
+        <property name="unitID" type="String"/>
+        <property name="trackingURL" type="String"/>
+        <property name="handlingUnitItem"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.DistHandlingUnitItemWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistDeliveryWsDTO">
+        <description>DISTRELEC delivery informations</description>
+        <property name="deliveryID" type="String"/>
+        <property name="deliveryDate" type="java.util.Date"/>
+        <property name="handlingUnit"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.DistHandlingUnitWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistMainReasonWsDTO">
+        <property name="mainReasonId" type="String"/>
+        <property name="mainReasonText" type="String"/>
+        <property name="defaultSubReasonId" type="String">
+            <description>Used in case when main reason shouldn't show any sub reasons</description>
+        </property>
+        <property name="subReasons"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.DistSubReasonWsDTO>"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistSubReasonWsDTO">
+        <property name="subReasonId" type="String">
+            <description>Main RMA Reason</description>
+        </property>
+        <property name="subReasonMessages" type="java.util.List&lt;String&gt;">
+            <description>Main Reason Text</description>
+        </property>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.OrderWsDTO">
+        <property name="orderDate" type="java.util.Date"/>
+        <property name="billingAddress" type="de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO"/>
+        <property name="salesApplication" type="String"/>
+        <property name="note" type="String"/>
+        <property name="customerType" type="String"/>
+        <property name="discounts"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.DistDiscountWsDTO>"/>
+        <property name="deliveryData"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.DistDeliveryWsDTO>"/>
+        <property name="openOrder" type="Boolean"/>
+        <property name="openOrderReference" type="String"/>
+        <property name="placedBy" type="String"/>
+        <property name="distCostCenter" type="String"/>
+        <property name="openOrderEditableForAllContacts" type="Boolean"/>
+        <property name="pickupLocation" type="com.namics.distrelec.occ.core.cart.ws.dto.WarehouseWsDTO"/>
+        <property name="isRMARaised" type="Boolean"/>
+        <property name="returnReason"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.DistMainReasonWsDTO>">
+            <description>Return Reasons</description>
+        </property>
+        <property name="returnSubReason"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.DistSubReasonWsDTO>">
+            <description>Return Sub Reasons</description>
+        </property>
+        <property name="validForReturn" type="Boolean"/>
+        <property name="erpVoucherInfoData"
+                  type="de.hybris.platform.commercewebservicescommons.dto.order.DistErpVoucherInfoWsDTO"/>
+        <property name="paymentMode" type="de.hybris.platform.commercewebservicescommons.dto.order.PaymentModeWsDTO"/>
+        <property name="b2bCustomerData" type="de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO"/>
+        <property name="paymentCost" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="projectNumber" type="String"/>
+        <property name="canRequestInvoicePaymentMode" type="Boolean"/>
+        <property name="invoicePaymentModeRequested" type="Boolean"/>
+        <property name="exceededBudgetPrice" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+    </bean>
+
+    <!-- product family -->
+
+    <bean class="com.namics.distrelec.occ.core.product.data.DistProductFamilyWsData">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+        <property name="nameEN" type="String"/>
+        <property name="introText" type="String"/>
+        <property name="seoMetaTitle" type="String"/>
+        <property name="seoMetaDescription" type="String"/>
+        <property name="seoSections"
+                  type="java.util.List&lt;com.namics.distrelec.b2b.facades.category.CategorySEOSectionData>"/>
+        <property name="familyMedia"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductImagesMapWsDTO>"/>
+        <property name="familyVideo"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.DistVideoWsDTO>"/>
+        <property name="familyImage"
+                  type="java.util.Map&lt;java.lang.String, de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO>"/>
+        <property name="familyDatasheet"
+                  type="java.util.Map&lt;java.lang.String, de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO>"/>
+        <property name="familyManufacturerImage"
+                  type="java.util.Map&lt;java.lang.String, de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO>"/>
+        <property name="familyBullets" type="java.util.Map&lt;java.lang.Integer, java.lang.String>"/>
+        <property name="familyApplications" type="java.util.List&lt;java.lang.String>"/>
+        <property name="familyCategoryCode" type="String"/>
+        <property name="url" type="String"/>
+    </bean>
+
+    <!-- Fact-Finder -->
+
+    <bean class="com.namics.distrelec.occ.core.v2.helper.search.SearchRedirectRule">
+        <property name="redirectUrl" type="String"/>
+        <property name="status" type="com.namics.distrelec.occ.core.v2.helper.search.SearchRedirectStatus"/>
+    </bean>
+
+    <enum class="com.namics.distrelec.occ.core.v2.helper.search.SearchRedirectStatus">
+        <value>REDIRECT</value>
+        <value>NOT_FOUND</value>
+        <value>PUNCHED_OUT</value>
+    </enum>
+
+    <bean class="com.namics.distrelec.occ.core.search.data.FactFinderSessionWsDTO">
+        <property name="sessionId" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.ProductSearchPageWsDTO">
+        <property name="punchedOut" type="boolean"/>
+        <property name="notFound" type="boolean"/>
+        <property name="categoryDisplayData"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.dto.search.facetdata.CategoryDisplayDataWsDTO>"/>
+        <property name="sessionId" type="String"/>
+        <property name="productFamilyCategoryCode" type="String"/>
+        <property name="filtersRemovedGeneralSearch" type="boolean"/>
+        <property name="punchedOutProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>">
+            <description>List of punched out products</description>
+        </property>
+        <property name="feedbackCampaigns"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.dto.search.facetdata.FeedbackCampaignDataWsDTO>"/>
+        <property name="categoryBreadcrumbs"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO>"/>
+        <property name="singleWordSearchItems"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.search.facetdata.SingleWordSearchItemWsDTO>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.SingleWordSearchItemWsDTO">
+        <property name="singleTerm" type="String"/>
+        <property name="count" type="Integer"/>
+        <property name="items"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.ProductCategorySearchPageWsDTO"
+          extends="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.ProductSearchPageWsDTO">
+        <property name="productListLevel" type="boolean"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.FacetWsDTO">
+        <property name="code" type="String"/>
+        <property name="type" type="String"/>
+        <property name="hasSelectedElements" type="boolean"/>
+        <property name="hasMinMaxFilters" type="boolean"/>
+        <property name="unit" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.FacetValueWsDTO">
+        <property name="absoluteMaxValue" type="double"/>
+        <property name="absoluteMinValue" type="double"/>
+        <property name="selectedMaxValue" type="double"/>
+        <property name="selectedMinValue" type="double"/>
+
+        <property name="queryFilter" type="String"/>
+        <property name="propertyName" type="String"/>
+        <property name="propertyNameArguments" type="String"/>
+        <property name="propertyNameArgumentSeparator" type="String"/>
+        <property name="filterString" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.dto.search.facetdata.CategoryDisplayDataWsDTO"
+          extends="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.FacetValueWsDTO">
+        <property name="image"
+                  type="java.util.Map&lt;String,de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO>"/>
+        <property name="url" type="java.lang.String"/>
+        <property name="code" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.dto.search.facetdata.FeedbackCampaignDataWsDTO"
+          extends="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.FacetValueWsDTO">
+        <property name="id" type="java.lang.String"/>
+        <property name="category" type="java.lang.String"/>
+        <property name="name" type="java.lang.String"/>
+        <property name="pushedProducts"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>"/>
+        <property name="feedbackTexts" type="java.util.Map&lt;String,String>"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.GeneratedVoucherWsDTO">
+        <property name="code" type="String"/>
+        <property name="value" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="validFrom" type="java.util.Date"/>
+        <property name="validUntil" type="java.util.Date"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.data.ErpOrderCodeWsDTO">
+        <property name="status" type="java.lang.String"/>
+        <property name="erpCode" type="java.lang.String"/>
+        <property name="erpVoucher"
+                  type="de.hybris.platform.commercewebservicescommons.dto.order.GeneratedVoucherWsDTO"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.JumpOutPaymentWsDTO">
+        <property name="allParameters" type="String"/>
+        <property name="continueUrl" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.CheckoutPaymentResponseWsDTO">
+        <property name="orderCode" type="String"/>
+        <property name="continueUrl" type="String"/>
+        <property name="jsessionId" type="String"/>
+        <property name="errorCode" type="String"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.SubmitForApprovalResponseWsDTO">
+        <property name="submitApproval" type="Boolean"/>
+        <property name="exceededBudget" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+        <property name="orderCode" type="String"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.user.PrincipalWsDTO">
+        <property name="type" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.cart.ws.dto.CodiceVatFormWsDTO">
+        <property name="vat4" type="String"/>
+        <property name="legalEmail" type="String"/>
+        <property name="codiceCIG" type="String">
+            <description>Italy, government issues CUP and CIG codes to identify contracts or assignments with public
+                investments
+            </description>
+        </property>
+        <property name="codiceCUP" type="String">
+            <description>Italy, government issues CUP and CIG codes to identify contracts or assignments with public
+                investments
+            </description>
+        </property>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.cart.ws.dto.ZeroStockWsDTO">
+        <property name="customerEmail" type="String"/>
+        <property name="articleNumbers" type="java.util.List&lt;String>"/>
+    </bean>
+
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO">
+        <property name="contactAddress" type="de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO"/>
+        <property name="billingAddress" type="de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO"/>
+        <property name="createdDate" type="java.util.Date"/>
+        <property name="functionName" type="java.lang.String"/>
+        <property name="defaultPaymentMode" type="java.lang.String"/>
+        <property name="functionNameEN" type="java.lang.String"/>
+        <property name="defaultDeliveryMode" type="java.lang.String"/>
+        <property name="customerBaseSite" type="java.lang.String"/>
+        <property name="doubleOptinActivated" type="boolean"/>
+        <property name="newsletterPopup" type="boolean"/>
+        <property name="customersBaseSite" type="String"/>
+        <property name="customerType" type="java.lang.String"/>
+        <property name="companyName" type="java.lang.String"/>
+        <property name="functionCode" type="java.lang.String"/>
+        <property name="encryptedUserID" type="java.lang.String"/>
+        <property name="contactId" type="java.lang.String"/>
+        <property name="timeout" type="java.lang.String"/>
+        <property name="loginDisabled" type="boolean"/>
+        <property name="requestQuotationPermission" type="boolean"/>
+        <property name="budgetWithoutLimit" type="java.lang.Boolean"/>
+        <property name="orgUnit" type="de.hybris.platform.b2bwebservicescommons.dto.company.B2BUnitWsDTO">
+            <description>The unit of the User</description>
+            <hints>
+                <hint name="example">Rustic</hint>
+            </hints>
+        </property>
+        <property name="roles" type="java.util.List&lt;String>"/>
+        <property name="approvers"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO>">
+            <description>List of organizational approvers</description>
+        </property>
+        <property name="selected" type="Boolean">
+            <description>Boolean flag of whether the user is selected</description>
+            <hints>
+                <hint name="example">true</hint>
+            </hints>
+        </property>
+        <property name="active" type="Boolean">
+            <description>Boolean flag of whether the user is active/enabled or not</description>
+            <hints>
+                <hint name="example">true</hint>
+            </hints>
+        </property>
+        <property name="email" type="String">
+            <description>Email of the user</description>
+            <hints>
+                <hint name="example">mark.rivers@rustic-hw.com</hint>
+            </hints>
+        </property>
+        <property name="budget" type="de.hybris.platform.b2bwebservicescommons.dto.mycompany.BudgetWsDTO"/>
+        <property name="userProfileData" type="com.namics.distrelec.b2b.facades.customer.ws.dto.DistUserProfileWsDTO"/>
+        <property name="legalEmail" type="String"/>
+        <property name="vat4" type="String"/>
+        <property name="derivedChannel" type="String"/>
+        <property name="registeredAsGuest" type="java.lang.Boolean"/>
+        <property name="rsCustomer" type="java.lang.Boolean"/>
+        <property name="erpSelectedCustomer" type="java.lang.Boolean"/>
+        <property name="consentConditionRequired" type="java.lang.Boolean"/>
+    </bean>
+    <bean class="com.namics.distrelec.occ.core.qualityandlegal.ws.dto.QualityAndLegalDownloadWsDTO">
+        <property name="productCodes" type="java.util.List&lt;String>"/>
+        <property name="customerName" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.cart.ws.dto.PunchoutWsDTO">
+        <property name="punchedOutProducts" type="String"/>
+        <property name="punchout" type="Boolean"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.ws.dto.UnsubscribeLandingPageWsDTO">
+        <property name="email" type="String"/>
+        <property name="outboundId" type="String"/>
+        <property name="category" type="String"/>
+        <property name="isMarketingCookieEnabled" type="String"/>
+        <property name="ymktTrackingEnabled" type="boolean"/>
+        <property name="knowhowId" type="String"/>
+        <property name="salesAndClearanceId" type="String"/>
+        <property name="personaliseRecommendationId" type="String"/>
+        <property name="customerSurveyId" type="String"/>
+        <property name="newsletterId" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.customererrorfeedback.ws.dto.CustomerErrorFeedbackWsDTO">
+        <property name="errorReason" type="java.lang.String"/>
+        <property name="errorDescription" type="java.lang.String"/>
+        <property name="customerEmailId" type="java.lang.String"/>
+        <property name="customerName" type="java.lang.String"/>
+        <property name="productId" type="java.lang.String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistCreateRMAResponseWsDTO">
+        <property name="errorMsgKey" type="String"/>
+        <property name="isRmaCreated" type="boolean"/>
+        <property name="isRmaRaised" type="boolean"/>
+        <property name="isValidReturnClaim" type="boolean"/>
+        <property name="invalidQuantity" type="boolean"/>
+        <property name="createRMAResponseData"
+                  type="com.namics.distrelec.b2b.core.service.rma.data.CreateRMAResponseData"/>
+        <property name="createRMARequestJson" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistReturnRequestEntryInputWsDTO">
+        <description>Representation of a return request entry input for an order</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">ReturnRequestEntryInput</hint>
+        </hints>
+        <property name="orderEntryNumber" type="Integer">
+            <description>Order entry number of the returned product</description>
+            <hints>
+                <hint name="example">1</hint>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="quantity" type="Long">
+            <description>Quantity of the product which belongs to the order entry and is requested to be returned
+            </description>
+            <hints>
+                <hint name="example">5</hint>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="mainReasonId" type="String"/>
+        <property name="articleNumber" type="String"/>
+        <property name="subReasonId" type="String"/>
+        <property name="customerComment" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistGuestRMACreateRequestFormWsDTO">
+        <property name="customerName" type="String"/>
+        <property name="orderNumber" type="String"/>
+        <property name="articleNumber" type="String"/>
+        <property name="quantity" type="Long"/>
+        <property name="returnReason" type="String"/>
+        <property name="returnSubReason" type="String"/>
+        <property name="emailAddress" type="String"/>
+        <property name="phoneNumber" type="String"/>
+        <property name="customerText" type="String"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.DistReturnRequestEntryInputListWsDTO">
+        <description>Representation of a return request entry input list for an order</description>
+        <hints>
+            <hint name="wsRelated"/>
+            <hint name="alias">ReturnRequestEntryInputList</hint>
+        </hints>
+        <property name="orderCode" type="java.lang.String">
+            <description>Code of the order which return request is related to</description>
+            <hints>
+                <hint name="example">00000001</hint>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+        <property name="returnRequestEntryInputs"
+                  type="java.util.List&lt;com.namics.distrelec.occ.core.order.ws.dto.DistReturnRequestEntryInputWsDTO>">
+            <description>Return request entry inputs which contain information about the order entries which are
+                requested to be returned
+            </description>
+            <hints>
+                <hint name="required">true</hint>
+            </hints>
+        </property>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.user.ws.dto.PasswordUpdateDTO">
+        <property name="password" type="java.lang.String"/>
+        <property name="token" type="java.lang.String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.FeatureWsDTO">
+        <property name="visibility" type="String"/>
+        <property name="searchable" type="boolean"/>
+        <property name="position" type="Integer"/>
+        <property name="featurePosition" type="Integer"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.FeatureValueWsDTO">
+        <property name="baseUnitValue" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.order.NpsResponseWsDTO"
+          extends="com.namics.distrelec.occ.core.order.ws.dto.FeedbackNPSForm">
+        <property name="npsFormReasons" type="java.util.List&lt;java.lang.String>"/>
+        <property name="npsFormSubReasons" type="java.util.List&lt;java.lang.String>"/>
+        <property name="lastNpsDate" type="java.util.Date"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.occ.core.order.ws.dto.FeedbackNPSForm">
+        <property name="reason" type="String"/>
+        <property name="subreason" type="String"/>
+        <property name="type" type="String"/>
+        <property name="feedback" type="String"/>
+        <property name="order" type="String"/>
+        <property name="email" type="String"/>
+        <property name="fname" type="String"/>
+        <property name="namn" type="String"/>
+        <property name="company" type="String"/>
+        <property name="cnumber" type="String"/>
+        <property name="contactnum" type="String"/>
+        <property name="delivery" type="java.util.Date"/>
+        <property name="id" type="String"/>
+        <property name="value" type="Integer"/>
+    </bean>
+
+    <bean class="com.namics.distrelec.b2b.facades.product.data.ProductAccessibilityListData">
+        <property name="productAccessibility"
+                  type="java.util.List&lt;java.lang.String>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.commercewebservicescommons.dto.product.ProductAccessibilityListWsDTO">
+        <property name="productAccessibility"
+                  type="java.util.List&lt;java.lang.String>"/>
+    </bean>
+
+    <enum class="com.namics.distrelec.occ.core.user.ws.dto.PasswordUpdateResult">
+        <value>SUCCESS</value>
+        <value>TOKEN_INVALIDATED</value>
+        <value>ERROR</value>
+        <value>TOKEN_EMPTY</value>
+    </enum>
+
+    <bean class="com.namics.distrelec.b2b.core.service.product.model.StockLevelData">
+        <property name="stockLevels"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.StockLevelWsDTO>"/>
+    </bean>
+
+    <bean class="de.hybris.platform.cmsoccaddon.data.MediaWsDTO">
+        <property name="width" type="Integer"/>
+        <property name="height" type="Integer"/>
+    </bean>
+</beans>

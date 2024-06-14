@@ -1,0 +1,84 @@
+<app-component-loading-spinner *ngIf="showOrderRefLoadingSpinner_ | async"></app-component-loading-spinner>
+<ng-container *ngIf="cartData_ | async as cartData">
+  <div class="checkout-payment">
+    <div class="container larger-container">
+      <div class="row">
+        <div *ngIf="errorMessage_ | async as errorMessage" class="col-10 col-md-12 offset-lg-1">
+          <div class="error">
+            <div class="inner">
+              <div class="center">
+                <p class="text" [innerHTML]="errorMessage | cxTranslateWithDefault: { defaultValue: errorMessage }"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="successMessage_ | async as successMessage" class="col-10 offset-lg-1">
+          <div class="success">
+            <div class="inner">
+              <div class="center">
+                <p class="text">
+                  {{ successMessage | cxTranslate }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="userDetails_ | async as userDetails">
+          <ng-container *ngIf="vatMessages_ | async as vatMessages">
+            <div class="col-10 offset-lg-1 vat-messages">
+              <ng-container *ngFor="let vatMessage of vatMessages">
+                <div class="ch__component__alert-message">
+                  <fa-icon [icon]="faCircleExclamation"></fa-icon>
+                  <p class="ch__component__alert-message__content" id="vatAlertMessage">
+                    {{ vatMessage | cxTranslate }}
+                  </p>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <div class="col-lg-6 offset-lg-1">
+          <app-address-delivery-summary
+            [cartData]="cartData"
+            [activeSiteId]="activeSiteId"
+            [userDetails_]="userDetails_"
+          ></app-address-delivery-summary>
+
+          <app-italy-codice *ngIf="codiceForm" [codiceForm]="codiceForm"></app-italy-codice>
+
+          <div class="separator-simple separator-simple__mobile"></div>
+
+          <app-payment-details
+            [paymentForm]="paymentForm"
+            [isDisplayCardForm_]="isDisplayCardForm_"
+            [activeSiteId]="activeSiteId"
+            (newCreditCardSelected)="onNewCreditCardSelected($event)"
+            (isPaymentInfoLoaded)="onPaymentInfoLoaded($event)"
+            (isOrderRefEdited)="onOrderRefEdited($event)"
+          ></app-payment-details>
+        </div>
+
+        <div class="col-lg-4">
+          <app-order-summary
+            [paymentForm]="paymentForm"
+            [cartData]="cartData"
+            [isDisplayCardForm_]="isDisplayCardForm_"
+            [isPaymentLoading_]="isPaymentLoading_"
+            [customerType]="customerType"
+            [isExceededBudget_]="isExceededBudget_"
+            [codiceForm]="codiceForm"
+            [newCreditCardSelected]="newCreditCardSelected"
+          ></app-order-summary>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<app-skeleton-loader
+  [isSkeletonLoading]="(isPaymentInfoLoaded_ | async) === false || (cartData_ | async) === null"
+  pageName="checkout-review-pay"
+></app-skeleton-loader>

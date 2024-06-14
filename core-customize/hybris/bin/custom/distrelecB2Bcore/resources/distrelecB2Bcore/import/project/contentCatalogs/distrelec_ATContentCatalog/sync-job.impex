@@ -1,0 +1,15 @@
+# ImpEx for Content Catalog Synch Job
+
+# Macros / Replacement Parameter definitions
+$cmsPublicationName=sync distrelec_ATContentCatalog\:Staged->Online
+
+INSERT_UPDATE SyncJob2TypeRel;language;qualifier;source(code)[unique=true];target(code)[unique=true]
+;;SyncJob2TypeRel;$cmsPublicationName;MessageResourceTableEntry
+;;SyncJob2TypeRel;$cmsPublicationName;Category
+
+##
+## https://jira.hybris.com/browse/ACCEL-379
+#
+# Attribute die nicht synchronisiert werden sollen. z.B.navigationNodeList
+INSERT_UPDATE SyncAttributeDescriptorConfig;syncJob(code)[unique=true];attributeDescriptor(enclosingType(code),qualifier)[unique=true];includedInSync[default=false];copyByValue[default=false];
+;$cmsPublicationName;AbstractPage:navigationNodeList;false;false

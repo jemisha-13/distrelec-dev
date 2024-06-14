@@ -1,0 +1,233 @@
+@import 'global-utilities';
+
+:host {
+  display: block;
+}
+
+.product-list-item {
+  --product-image-width: 120px;
+  --gap: 20px;
+  --gap-sm: 8px;
+
+  display: grid;
+  grid-template-areas:
+    'image content'
+    'actions actions';
+  grid-template-columns: var(--product-image-width) 1fr;
+  gap: var(--gap-sm) var(--gap);
+
+  width: 100%;
+  margin-bottom: var(--gap);
+
+  @include tabletPlusDown {
+    --product-image-width: 80px;
+  }
+}
+
+.product-labels {
+  display: flex;
+  margin-bottom: 4px;
+
+  .energy-efficiency {
+    margin-left: auto;
+    height: 22px;
+  }
+}
+
+.product-image {
+  grid-area: image;
+  padding-top: 4px;
+
+  .image-wrapper {
+    display: block;
+    width: var(--product-image-width);
+    height: var(--product-image-width);
+  }
+
+  .image {
+    border: 1px solid $ux-light-grey;
+    width: 100%;
+    height: 100%;
+    padding: 4px;
+    object-fit: contain;
+  }
+
+  @include desktop {
+    &:hover {
+      .image {
+        position: absolute;
+        height: ($spacing-unit * 36);
+        width: ($spacing-unit * 36);
+        max-height: ($spacing-unit * 36);
+        max-width: ($spacing-unit * 36);
+        padding: 5px;
+
+        background-color: $colour-white;
+        border: 1px solid $colour-light-grey;
+        border-radius: 2px;
+        box-shadow: 0 4px 14px rgb(0 0 0 / 30%);
+        transition: none;
+        z-index: $zindex-tooltip;
+      }
+    }
+  }
+}
+
+.content {
+  grid-area: content;
+
+  &-top {
+    display: grid;
+    gap: var(--gap-sm) var(--gap);
+    grid-template-areas:
+      'name     stock price'
+      'details  stock price';
+    grid-template-columns: 2fr 1fr 1fr;
+    margin-bottom: var(--gap-sm);
+
+    @include tabletPlusDown {
+      grid-gap: var(--gap-sm);
+    }
+
+    @include mobilePlusDown {
+      grid-template-areas:
+        'name    name'
+        'stock   price'
+        'details price';
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+.actions {
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  flex-basis: 100%;
+  justify-content: space-between;
+  gap: 20px;
+
+  app-add-to-list {
+    border-radius: 4px;
+    background: $colour-pale-grey;
+    margin-left: calc(var(--product-image-width) + #{var(--gap)}); // product image + grid-gap
+    display: flex;
+    padding: 8px;
+    align-items: center;
+    gap: 16px;
+    flex: 1 0 0;
+  }
+
+  @include mobilePlusDown {
+    flex-wrap: wrap;
+    gap: var(--gap);
+
+    app-add-to-cart {
+      flex-basis: 100%;
+    }
+  }
+}
+
+.name {
+  grid-area: name; // .content-top area
+}
+
+.stock {
+  grid-area: stock; // .content-top area
+}
+
+.product-pricing {
+  grid-area: price; // .content-top area
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  gap: 4px;
+  margin-left: auto;
+
+  .vat {
+    @include typography-ui-xs();
+    color: $colour-redesign-light-grey;
+  }
+
+  .old-price {
+    margin-top: 4px;
+    text-decoration: line-through;
+    color: $colour-redesign-light-grey;
+  }
+
+  .price-save {
+    @include typography-display-sm();
+    color: $colour-dist-grey;
+    font-weight: $font-weight-medium;
+    text-transform: uppercase;
+  }
+}
+
+.details {
+  grid-area: details; // .content-top area
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.product-name-and-price {
+  @include typography-display-sm();
+  min-height: 20px;
+  font-weight: $font-weight-semiBold;
+  color: $colour-dist-grey;
+}
+
+.details-toggle {
+  @include typography-ui-sm();
+  padding: 4px 0;
+
+  @include mobilePlusDown {
+    display: none;
+  }
+}
+
+.detailed-content {
+  @include typography-text-sm();
+
+  display: flex;
+  gap: var(--gap);
+  margin: 12px 0;
+  color: $colour-dist-grey;
+
+  @include mobilePlusDown {
+    display: none;
+  }
+
+  .detailed-attributes {
+    flex-basis: 80%;
+    column-count: 2;
+    column-gap: var(--gap);
+  }
+
+  .volume-prices {
+    flex-basis: 20%;
+    margin-bottom: 4px;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .label {
+    font-weight: $font-weight-medium;
+  }
+
+  .value {
+    text-align: right;
+    word-break: break-word;
+  }
+
+  .product-family-link {
+    display: block;
+    padding: 4px 0;
+    text-align: right;
+    white-space: nowrap;
+  }
+}

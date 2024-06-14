@@ -1,0 +1,56 @@
+<div *ngIf="returnCountryCodeEU" class="register__form__holder is-country-code-other" [formGroup]="generalRegForm">
+  <div class="register__form__holder--full">
+    <label class="register__form__holder--title" id="registration.general.country">
+      {{ 'registration.general.country' | cxTranslate }}
+    </label>
+    <small id="registration.general.country_help_t">
+      {{ 'registration.general.country_help_t' | cxTranslate }}
+    </small>
+    <div class="p-relative">
+      <select
+        #countryCodeSelect
+        class="register__form__holder--input js-validate"
+        id="countryCodeOtherB2B"
+        [class.is-correct]="generalRegForm.get('countryCodeOther').valid"
+        [class.is-invalid]="
+          generalRegForm.get('countryCodeOther').errors && generalRegForm.get('countryCodeOther').touched
+        "
+        (change)="countrySelected.emit(countryCodeSelect.value)"
+        type="text"
+        formControlName="countryCodeOther"
+      >
+        <option id="registration.general.select" value="" disabled selected>
+          {{ 'registration.general.select' | cxTranslate }}
+        </option>
+        <ng-container *ngIf="countryListEX_ | async as countryListEX">
+          <ng-container *ngFor="let country of countryListEX">
+            <option [value]="country.isocode" [id]="'countryCode_' + country.isocode">
+              {{ country.name }}
+            </option>
+          </ng-container>
+        </ng-container>
+      </select>
+      <fa-icon
+        id="faAngleDownCountry"
+        [icon]="faAngleDown"
+        [class.left]="
+          (generalRegForm.get('countryCodeOther').errors && generalRegForm.get('countryCodeOther').touched) ||
+          generalRegForm.get('countryCodeOther').valid
+        "
+      ></fa-icon>
+      <fa-icon
+        *ngIf="generalRegForm.get('countryCodeOther').errors && generalRegForm.get('countryCodeOther').touched"
+        id="faTimesCountry"
+        [icon]="faTimes"
+      ></fa-icon>
+      <fa-icon *ngIf="!generalRegForm.get('countryCodeOther').errors" id="faCheckCountry" [icon]="faCheck"></fa-icon>
+      <small
+        *ngIf="generalRegForm.get('countryCodeOther').errors && generalRegForm.get('countryCodeOther').touched"
+        class="error"
+        id="validations.enter_valid_field"
+      >
+        {{ 'validations.enter_valid_field' | cxTranslate }}
+      </small>
+    </div>
+  </div>
+</div>

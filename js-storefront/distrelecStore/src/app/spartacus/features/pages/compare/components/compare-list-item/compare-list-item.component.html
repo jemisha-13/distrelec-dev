@@ -1,0 +1,177 @@
+<div *ngIf="availability$ | async as availability" class="col-sm-12 tableGrid">
+  <ng-container *ngIf="currentChannel_ | async as currentChannel">
+    <div class="hover-target">
+      <button
+        class="btn compare-list__close-btn"
+        [id]="'product-' + index + 'product-details.add-to-cart.btn'"
+        (click)="deleteCompareProduct(product.code)"
+      >
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </button>
+
+      <div class="compare-list__item--manufacturer">
+        <ng-container *ngFor="let image of product.distManufacturer.image">
+          <ng-container *ngIf="image.key === 'brand_logo'">
+            <img [src]="image.value.url" [id]="'product-' + index + '.manufacturer.img'" width="70" height="14" />
+          </ng-container>
+        </ng-container>
+      </div>
+      <a
+        class="compare-list__product"
+        [routerLink]="product.url"
+        [queryParams]="{ itemList: itemListEntity.COMPARE }"
+        (click)="trackProductClick(product, index)"
+      >
+        <div class="compare-list__product--img">
+          <picture>
+            <ng-container *ngIf="product.images?.length > 0; else defaultImg">
+              <source [srcset]="useWebpImg('landscape_small_webp', product?.images, product.images[0])" />
+              <img
+                [src]="product.images[0].url"
+                [id]="'product-' + index + '.img'"
+                [alt]="product.name"
+                width="118"
+                height="98"
+              />
+            </ng-container>
+            <ng-template #defaultImg>
+              <img
+                [src]="missingImgSrc"
+                [id]="'product-' + index + '.img'"
+                [alt]="product.name"
+                width="118"
+                height="98"
+              />
+            </ng-template>
+          </picture>
+        </div>
+        <div class="compare-list__product--title">
+          <h3 class="compare-product-title" id="compare_list_product_title">{{ product.name }}</h3>
+        </div>
+      </a>
+      <a class="compare-list__info" [routerLink]="product.url" [queryParams]="{ itemList: itemListEntity.COMPARE }">
+        <ul class="compare-list__info--art_nr" [id]="'product-' + index + '.art-nr'">
+          <li id="compare_list_artNr_title">{{ 'cart.artNr' | cxTranslate }}</li>
+          <li id="js-productcode" [attr.data-js-product-code]="product.code">
+            {{ product.code | articleNumber }}
+          </li>
+        </ul>
+        <ul class="compare-list__info--mpn" [id]="'product-' + index + '.mpn'">
+          <li id="compare_list_mpn_title">{{ 'homepage.mpn' | cxTranslate }}</li>
+          <li id="compare_list_mpn_typeName">
+            {{ product.typeName }}
+          </li>
+        </ul>
+      </a>
+      <div class="compare-list__add-to" [class.extra-height]="isEnergyLabelPresent">
+        <ul>
+          <li class="compare-list__add-to-cart" data-aainteraction="add to cart">
+            <app-atc-button
+              [id]="'product-' + index + '.add-to-cart.btn'"
+              [quantityStep]="product.quantityStep"
+              [productCode]="product.code"
+              [shouldOpenFlyout]="true"
+              [pageTrackingType]="itemListEntity.COMPARE"
+              [salesStatus]="product.salesStatus"
+              [control]="addToCartForm.get('quantity')"
+              [availabilityData]="availability"
+            ></app-atc-button>
+          </li>
+          <li *ngIf="userId$ | async as userId" class="compare-list__add-to-shop-list">
+            <button
+              class="btn"
+              [id]="'product-' + index + '.details.shop-list.btn'"
+              (click)="addToShoppingList(product, userId)"
+            >
+              {{ 'shoppingList.add_to_shopping_list' | cxTranslate }}
+            </button>
+          </li>
+        </ul>
+        <div *ngIf="product.energyEfficiency">
+          <app-energy-efficiency-label
+            [id]="product.code + '-energy-efficiency-label' + index"
+            [energyEfficiency]="product.energyEfficiency"
+            [energyEfficiencyLabelImageUrl]="getEnergyEfficiencyLabelImageUrl(product?.energyEfficiencyLabelImage)"
+          ></app-energy-efficiency-label>
+        </div>
+      </div>
+
+      <div class="table-primary"></div>
+    </div>
+    <div class="scaled-prices">
+      <div class="compare-list__item--price">
+        <ng-container *ngFor="let price of product.volumePrices; let priceIndex = index">
+          <ng-container>
+            <div class="compare-list__item--price-wrap" [id]="'product-' + index + '.price-volumes.' + priceIndex">
+              <span>{{ price.minQuantity }}+</span>
+              <span>
+                {{ price.currencyIso }}&nbsp;
+                <ng-container *ngIf="currentChannel.channel === 'B2B'">
+                  {{ getPriceWithoutVatForB2B(price) | volumePrice: price.currencyIso : price.basePrice }}
+                </ng-container>
+                <ng-container *ngIf="currentChannel.channel === 'B2C'">
+                  {{ getPriceWithVatForB2C(price) | volumePrice: price.currencyIso : price.priceWithVat }}
+                </ng-container>
+              </span>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <div class="compare-availability">
+      <div class="compare-list__item--stock">
+        <ng-container *ngIf="availability?.stockLevelTotal === 0 && availability?.stockLevels[0].mview !== 'BTR'">
+          {{ 'salesStatus.no_stock.available_to_back_order' | cxTranslate }}
+        </ng-container>
+        <ng-container *ngIf="availability?.stockLevelTotal > 0 || availability?.stockLevels[0].mview === 'BTR'">
+          {{ 'salesStatus.cart.in_stock' | cxTranslate: { stock: availability?.stockLevels[0]?.available } }}
+        </ng-container>
+      </div>
+      <div
+        *ngIf="currentChannel.country === 'CH' && availability?.stockLevelPickup[0]?.stockLevel > 0"
+        class="compare-list__item--stock"
+      >
+        {{
+          'salesStatus.compare.pickup_in_store' | cxTranslate: { stock: availability?.stockLevelPickup[0]?.stockLevel }
+        }}
+      </div>
+      <div *ngIf="availability && availability.leadTimeErp > 0" class="compare-list__item--stock">
+        {{ 'salesStatus.compare.more_stock_weeks' | cxTranslate: { leadTimeErp: availability.leadTimeErp } }}
+      </div>
+    </div>
+    <div class="datasheet-download" (click)="dispatchPDFEvent()">
+      <div class="compare-list__item--datasheet">
+        <ng-container *ngIf="product.downloads">
+          <a [href]="currentChannel?.mediaDomain + product.downloads[0]?.downloads[0]?.downloadUrl" target="_blank">
+            <fa-icon [icon]="faFilePdf"></fa-icon>
+            <div class="compare-list__item--datasheet-holder">
+              <span class="datasheet-title">
+                {{ product.downloads[0]?.downloads[0]?.name }}
+              </span>
+              <span>
+                ({{ product.downloads[0]?.downloads[0]?.mimeType }},
+                {{ product.downloads[0]?.downloads[0]?.languages[0].name }})
+              </span>
+            </div>
+          </a>
+        </ng-container>
+      </div>
+    </div>
+    <div class="table-primary"></div>
+
+    <app-attribute-list [product]="product" [attributes]="attributes"></app-attribute-list>
+
+    <div class="add-to-cart-compare compare-list__add-to-cart">
+      <app-atc-button
+        [id]="'product-' + index + '.add-to-cart.btn'"
+        [quantityStep]="product.quantityStep"
+        [productCode]="product.code"
+        [shouldOpenFlyout]="true"
+        [pageTrackingType]="itemListEntity.COMPARE"
+        [salesStatus]="product.salesStatus"
+        [control]="addToCartForm.get('quantity')"
+        [availabilityData]="availability"
+      ></app-atc-button>
+    </div>
+  </ng-container>
+</div>

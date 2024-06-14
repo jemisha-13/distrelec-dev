@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:		Deployment over SCP
+date:		01.10.2013
+author:		rhusi
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-deployment-scp" basedir="." xmlns:props="antlib:org.apache.ant.props">
+
+	<!--
+	=================================
+	macro: testScpConnection
+	=================================
+	-->
+	<macrodef name="testScpConnection" description="Test, if the SCP connection can be establish.">
+		<sequential>
+			<propertyhelper>
+				<props:nested />
+			</propertyhelper>
+			<property name="deployment.environment" value="env-q" />
+			<property name="scp.username" value="${${deployment.environment}.scp.username}" />
+			<property name="scp.password" value="${${deployment.environment}.scp.password}" />
+			<property name="scp.server" value="${${deployment.environment}.scp.server}" />
+			<property name="scp.deployment.dir.base" value="${${deployment.environment}.scp.deployment.dir.base}" />
+
+			<echo message="Testing SCP-Connection to '${scp.server}' with user '${scp.username}'..." />
+			<trycatch property="exceptionMessage" reference="exceptionReference">
+				<try>
+					<scp file="./readme.txt" todir="${scp.username}:${scp.password}@${scp.server}:${scp.deployment.dir.base}/connectiontest" trust="true" failonerror="true" />
+				</try>
+				<catch>
+					<fail>Error during SCP-Test: ${exceptionMessage}.</fail>
+				</catch>
+			</trycatch>
+			<echo message="SCP-Connection successfully tested." />
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: createDeploymentUnitInScp (client part)
+	=================================
+	-->
+	<macrodef name="createDeploymentUnitInScp" description="Create a deployment unit and uploads it to the scp server.">
+		<sequential>
+			<input message="On which environment you would like to deploy? example env-hp-q2, env-hp-q, env-hp-p" addproperty="deployment.environment" />
+			<testScpConnection />
+			<delete dir="${project.home}/deployment" />
+			<antcall target="checkout" />
+			<antcall target="updateHybrisPlatformAndExtensions" />
+			<antcall target="configure" />
+			<antcall target="clean" />
+			<antcall target="build" />
+			<antcall target="createproduction" />
+			<antcall target="createServerEnvironmentZip" />
+			<antcall target="uploadDeploymentUnitToScpHost" />
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: uploadDeploymentUnitToScpHost (client part)
+	=================================
+	-->
+	<macrodef name="uploadDeploymentUnitToScpHost" description="Upload the zip file to the SCP host">
+		<sequential>
+			<detectDeploymentRelease />
+			<echo message="scp.deployment.dir.base: ${scp.deployment.dir.base}" />
+			<echo message="releasePath: ${releasePath}" />
+			<echo message="Set scp.deployment.dir.release to ${scp.deployment.dir.base}/${releasePath}" />
+			<property name="scp.deployment.dir.release" value="${scp.deployment.dir.base}/${releasePath}/" />
+
+			<propertyhelper>
+				<props:nested />
+			</propertyhelper>
+			<property name="scp.username" value="${${deployment.environment}.scp.username}" />
+			<property name="scp.password" value="${${deployment.environment}.scp.password}" />
+			<property name="scp.server" value="${${deployment.environment}.scp.server}" />
+			<property name="scp.deployment.dir.base" value="${${deployment.environment}.scp.deployment.dir.base}" />
+
+			<echo message="Upload the zip files to SCP host: ${scp.server}" />
+			<sshexec host="${scp.server}" username="${scp.username}" trust="true" password="${scp.password}" command="mkdir ${scp.deployment.dir.release}" failonerror="false" />
+			<scp todir="${scp.username}:${scp.password}@${scp.server}:${scp.deployment.dir.release}" trust="true" failonerror="true">
+				<fileset dir="${hybris.home}\temp\hybris\hybrisServer">
+					<filename name="**/*.zip" />
+				</fileset>
+			</scp>
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: installDeploymentUnitFromScp (server part)
+	=================================
+	-->
+	<macrodef name="installDeploymentUnitFromScp" description="Install a deployment unit, previously created with ant target 'createDeploymentUnitInScp', from SCP host on a server. If the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk.">
+		<sequential>
+			<delete dir="${project.home}/deployment" />
+			<antcall target="downloadDeploymentUnitFromScp" />
+			<antcall target="extractProductionZip">
+				<param name="fromPath">${project.home}/deployment</param>
+			</antcall>
+			<antcall target="configureHybrisServer" />
+			<antcall target="rebuildProduction" />
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: downloadDeploymentUnitFromScp (server part)
+	=================================
+	-->
+	<macrodef name="downloadDeploymentUnitFromScp" description="Download the zip file from SCP host. If the property 'releaseToInstall' is set, the release will be a tag release. Otherwise the release is from trunk.">
+		<sequential>
+			<detectDeploymentRelease />
+			<echo message="Set scp.deployment.dir.release to ${releasePath}" />
+			<property name="scp.deployment.dir.release" value="${scp.deployment.dir.base}/${releasePath}" />
+			<echo message="Download deployment unit from ${scp.server} and path ${scp.deployment.dir.release}" />
+			<scp file="${scp.username}:${scp.password}@${scp.server}:${scp.deployment.dir.release}/hybrisServer-AllExtensions.zip" todir="${project.home}/deployment" trust="true" failonerror="true" />
+			<scp file="${scp.username}:${scp.password}@${scp.server}:${scp.deployment.dir.release}/hybrisServer-Platform.zip" todir="${project.home}/deployment" trust="true" failonerror="true" />
+		</sequential>
+	</macrodef>
+</project>

@@ -1,0 +1,17 @@
+INSERT_UPDATE DistContentPageMapping;shortURL[unique=true]   ;destinationURL      ;urlMatchExpression(code);active[default=true];permanent[default=true];validForSite(uid)[unique=true]
+                                    ;/cms/widerrufsbelehrung ;/cms/disclaimer     ;ENDSWITH                ;                    ;                       ;distrelec_AT
+                                    ;/cms/widerrufsbelehrung ;/cms/disclaimer     ;ENDSWITH                ;                    ;                       ;distrelec_IT
+                                    ;/disclaimer             ;/cms/disclaimer     ;EQUALS                  ;                    ;                       ;distrelec_DK
+                                    ;/delivery terms         ;/cms/delivery-terms ;EQUALS                  ;                    ;                       ;distrelec_LT
+
+$contentCatalog=distrelec_LTContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+
+UPDATE ContentPage;uid[unique=true];$contentCV[unique=true];label           ;
+                  ;page_00000TBT   ;                       ;/delivery-terms ;
+
+UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];localizedUrl[lang=en] ;localizedUrl[lang=lt] ;
+                       ;                       ;Deliveryterms   ;"/cms/delivery-terms" ;"/cms/delivery-terms" ;
+
+UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];localizedUrl[lang=lt] ;
+                       ;                       ;delivery_terms  ;"/cms/delivery-terms" ;

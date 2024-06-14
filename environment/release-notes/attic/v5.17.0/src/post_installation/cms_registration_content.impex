@@ -1,0 +1,1320 @@
+$contentCatalog=distrelec_ATContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_BEContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_CZContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_DEContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_DKContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_EEContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_EXContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_FIContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_HUContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_ITContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_LTContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_LVContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_NLContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_NOContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_PLContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_ROContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_SEContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_SKContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+$contentCatalog=distrelec_TRContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$contentMasterCatalog=distrelecContentCatalog
+
+$lang=en
+# These define sets of components that can fit into similar slots
+$distHome=SimpleBannerComponent,CMSParagraphComponent,DistCarpetComponent,DistExtCarpetComponent,DistLinkedImageComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistWarningComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distContent=SimpleBannerComponent,CMSParagraphComponent,DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistProductCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistCarpetComponent,DistExtCarpetComponent,DistHeadlineComponent,DistIframeComponent,DistWarningComponent,DistContentTeaserComponent,DistLeadTextComponent,DistLinkedImageComponent,DistLinkedImageTextComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent,DistrelecCategoryGridComponent,DistProductBoxComponent,DistrelecCategoryManagerCardComponent
+$distTeaserContent=DistLinkListComponent,DistLinkedImageComponent
+$distLogoContent=SimpleBannerComponent
+$distServiceNavContent=CMSLinkComponent
+$distMainNavContent=DistMainNavigationComponent
+$distSwynContent=CMSLinkComponent
+$distFooterLinksContent=FooterComponent,DistFooterComponent
+$distCertLabelsContent=SimpleBannerComponent
+$distImpressumContent=CMSLinkComponent
+$distHeadlineComponent=DistHeadlineComponent,DistWarningComponent
+$distTextImageContent=CMSParagraphComponent
+$distCarouselContent=DistProductCookieCarouselComponent,DistProductReferencesCarouselComponent,DistCategoryCarouselComponent,DistManufacturerCarouselComponent,DistHeroRotatingTeaserComponent,DistProductFFCampaignCarouselComponent,DistExtHeroRotatingTeaserComponent,DistrelecManufacturerLinecardComponent
+$distCheckoutContent=CMSParagraphComponent
+$distStoreContent=$distContent
+
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;AccountRegisterSuccessPageTemplate;Account Register Success Page Template;/register/success;
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;TopRegisterContentSlot;Top Register Content Slot;true
+;;BottomRegisterContentSlot;Bottom Register Content Slot;true
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];validComponentTypes(code)
+;Logo;;$distLogoContent
+;ServiceNav;;$distServiceNavContent
+;MainNav;;$distMainNavContent
+;TopRegisterContentSlot;;$distContent
+;BottomRegisterContentSlot;;$distContent
+;TeaserContent;;$distTeaserContent
+;Swyn;;$distSwynContent
+;FooterLinks;;$distFooterLinksContent
+;CertLabels;;$distCertLabelsContent
+;Impressum;;$distImpressumContent
+
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='AccountRegisterSuccessPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;Logo-AccountRegisterSuccessPageTemplate;Logo;;LogoSlot;false
+;;ServiceNav-AccountRegisterSuccessPageTemplate;ServiceNav;;ServiceNavSlot;false
+;;MainNav-AccountRegisterSuccessPageTemplate;MainNav;;MainNavSlot;false
+;;Swyn-AccountRegisterSuccessPageTemplate;Swyn;;SwynSlot;false
+;;FooterLinks-AccountRegisterSuccessPageTemplate;FooterLinks;;FooterLinksSlot;false
+;;CertLabels-AccountRegisterSuccessPageTemplate;CertLabels;;CertLabelsSlot;false
+;;Impressum-AccountRegisterSuccessPageTemplate;Impressum;;ImpressumSlot;false
+;;RegistrationSuccessTop-AccountRegisterSuccessPageTemplate;TopContent;;TopRegisterContentSlot;false
+;;RegistrationSuccessBottom-AccountRegisterSuccessPageTemplate;BottomContent;;BottomRegisterContentSlot;false
+	
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;AccountRegisterSuccessPageTemplate     ;$jarResourceCms/structure-view/structure_accountRegisterSuccessPage.vm
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;
+;;accountRegisterSuccessPage; Account Registration Page;AccountRegisterSuccessPageTemplate;accountRegisterSuccessPage;;;;accountRegisterSuccessPage
+
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;accountRegisterSuccessPage;Register Success Page
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------

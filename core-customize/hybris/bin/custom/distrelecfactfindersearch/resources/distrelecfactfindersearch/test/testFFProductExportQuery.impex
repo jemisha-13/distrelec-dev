@@ -1,0 +1,27 @@
+$productCatalog=distrelecProductCatalog
+$productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default='Online'])
+$languages=en,de
+
+INSERT_UPDATE Catalog;id[unique=true]
+;$productCatalog
+
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;languages(isoCode);readPrincipals(uid)
+;$productCatalog;Online;true;$languages;employeegroup
+
+INSERT_UPDATE Currency;isocode[unique=true]
+                      ;CHF
+
+INSERT_UPDATE Country;isocode[unique=true];name[lang=de];name[lang=en];active;
+                     ;CH;Schweiz;Switzerland;true;
+
+INSERT_UPDATE CMSSite;uid[unique=true];country(isocode);defaultCurrency(isocode);registrationCurrencies(isocode)
+                     ;distrelec_CH;CH;CHF;CHF
+
+INSERT_UPDATE ServicelayerJob;code[unique=true];springId
+;distFactFinderExportJob;distff.factFinderExportJob
+
+INSERT_UPDATE DistFactFinderExportChannel;code[unique=true];channel;cmsSite(uid);language(isocode);catalogVersion(catalog(id),version)[default='distrelecProductCatalog:Online']
+                                         ;distrelec_7310_ch_de;distrelec_7310_ch_de;distrelec_CH;de
+# ;logLevelFile(code)[default='ERROR'];mediaPrefix[default='export.'];nodeID[default=0]
+INSERT_UPDATE DistFactFinderExportCronJob;code[unique=true];channel(code);sessionLanguage(isocode);job(code)[default='distff.factFinderExportJob'];sessionUser(uid);sessionCurrency(isocode)[default='CHF'];sendEmail[default='false'];emailAddress[default='']
+                                         ;distrelec_7310_ch_de_export;distrelec_7310_ch_de;de;distFactFinderExportJob;;

@@ -1,0 +1,41 @@
+<div class="prices__priceholder-per-q__wrapper">
+  <div class="prices__priceholder-per-q">
+    <div class="quantity-and-price-details">
+      <div class="quantity">
+        @for (volumePriceMap of volumePricesMap; track volumePriceMap.key; let i = $index) {
+          <span class="quantity-item" [id]="'pdp_min_quantity_' + i">{{ volumePriceMap.key }} +</span>
+        }
+      </div>
+
+      <div class="price-per-q">
+        @for (volumePriceMap of volumePricesMap; track volumePriceMap.key; let i = $index) {
+          @if (priceService.getListPrice(volumePriceMap.value); as listPrice) {
+            <div [id]="'pdp_price_per_q_' + i">
+              <span [innerHTML]="listPrice.currencyIso"></span>
+              &nbsp;
+              @if (currentChannel.channel === 'B2B') {
+                <span
+                  class="notranslate"
+                  [innerHTML]="
+                    priceService.getPriceWithoutVatForB2B(listPrice)
+                      | decimalPlaces: 4
+                      | volumePrice: price.currencyIso : currentChannel : price.basePrice
+                  "
+                ></span>
+              } @else {
+                <span
+                  class="notranslate"
+                  [innerHTML]="
+                    priceService.getPriceWithVatForB2C(listPrice)
+                      | decimalPlaces: 4
+                      | volumePrice: price.currencyIso : currentChannel : price.basePrice
+                  "
+                ></span>
+              }
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+# FI
+$contentCatalog=distrelec_FIContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+
+$lang=fi
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;localizedUrl[lang=$lang];linkName[lang=$lang]
+;;QLLink;Tuotteiden laatu ja lainsäädäntö;Tuotteiden laatu ja lainsäädäntö;/cms/quality-and-legislation;Tuotteiden laatu ja lainsäädäntö
+
+$lang=sv
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;localizedUrl[lang=$lang];linkName[lang=$lang]
+;;QLLink;Produktkvalitet och legalisering;Produktkvalitet och legalisering;/cms/quality-and-legislation;Produktkvalitet och legalisering
+
+UPDATE DistFooterComponent;UID[unique=true];impressumLinks(uid,$contentCV)[mode=append];$contentCV[unique=true]
+                                                                          ;DistFooterComponent;QLLink

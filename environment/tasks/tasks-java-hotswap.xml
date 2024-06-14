@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Java - Hotswap
+date:		07.05.2012
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-java-hotswap" basedir=".">
+
+
+
+	<!--
+	=================================
+	macrodef: hotswap
+	=================================
+	-->
+	<!-- http://another-lazy-blogger.blogspot.com/2008/04/how-to-hotswap-classes-in-running.html -->
+	
+	<macrodef name="hybrisjavahotswap" > 
+		<sequential>
+			<property name="datepattern" value="MM/dd/yyyy kk:mm:ss"/>
+			<property name="hotswapport" value="8000"/>
+			
+			<!--enable timestamping upto second level (required for hotswapping)-->     
+			<tstamp>       
+				<format property="class.tstamp" pattern="${datepattern}" />     
+			</tstamp>
+			<echo message="Compiling classes with timestamp ${class.tstamp}." />
+			
+			<!-- here build your source -->
+			<antcall target="build" /> 
+	
+			<echo message="Building list of classes that are replaced..." />
+			<property name="temp-classes-file-location" location="${hybris.home}/temp/hybris/hotswap" />
+			
+			<delete dir="${temp-classes-file-location}" />
+			<mkdir dir="${temp-classes-file-location}" />
+
+			<for list="${extensionlist}" param="extension">
+				<sequential>
+					<!--
+					<echo message="Building extension @{extension} on ${current.os} ..." />
+					<ant antfile="${hybris.extensions.home}/@{extension}/build.xml" target="build">
+						<property name="platformhome" value="${hybris.platform.home}" />
+						<property name="extname" value="@{extension}" />
+						<property name="ext.@{extension}.path" location="${hybris.extensions.home}/@{extension}"></property>
+					</ant>
+					-->					
+					
+					<copy todir="${temp-classes-file-location}">
+						<fileset dir="${hybris.extensions.home}/@{extension}/classes" includes="**/*.class" erroronmissingdir="false">        
+							<date datetime="${class.tstamp}" pattern="${datepattern}" when="after" granularity="2000"/>   
+						</fileset>
+					</copy>
+					
+					<copy todir="${temp-classes-file-location}">
+						<fileset dir="${hybris.extensions.home}/@{extension}/hmc/classes" includes="**/*.class" erroronmissingdir="false">        
+							<date datetime="${class.tstamp}" pattern="${datepattern}" when="after" granularity="2000"/>   
+						</fileset>
+					</copy>
+					
+					<copy todir="${temp-classes-file-location}">
+						<fileset dir="${hybris.extensions.home}/@{extension}/web/webroot/WEB-INF/classes" includes="**/*.class" erroronmissingdir="false">        
+							<date datetime="${class.tstamp}" pattern="${datepattern}" when="after" granularity="2000"/>   
+						</fileset>
+					</copy>
+				</sequential>
+			</for>	
+
+			<fileset id="hotswap.fileset" dir="${temp-classes-file-location}" includes="**/*.class" />
+
+			<!--
+		    <echo message="Hotswap will replace the following outdated classes compiled after '${class.tstamp}'..." />
+			<echo-fileset  filesetref="hotswap.fileset"/>
+			-->
+		    <echo message="Hotswap outdated classes compiled after '${class.tstamp}'..." />
+			<hotswap verbose="true" port="${hotswapport}" >
+				<fileset refid="hotswap.fileset" />
+			</hotswap>
+
+			<echo message="Hotswap finished." />
+			
+		</sequential>
+	</macrodef>
+	
+	
+	<!--
+	=================================
+	target: hotswap (alternatives)
+	=================================
+	-->
+	<!-- http://another-lazy-blogger.blogspot.com/2008/04/how-to-hotswap-classes-in-running.html -->
+	
+	<!--
+	<target name="hotswap_alternative"> 
+		<property name="date-pattern" value="MM/dd/yyyy kk:mm:ss"/>
+		<property name="hotswap.port" value="8000"/>
+
+		<sequential>
+			<tstamp>       
+				<format property="class.tstamp" pattern="${date-pattern}" />     
+			</tstamp>
+			<echo message="Compiling classes with timestamp ${class.tstamp}." />
+			
+			<antcall target="onlybuild" /> 
+	
+		    <echo message="Hotswap outdated classes compiled after '${class.tstamp}'..." />
+			<hotswap verbose="true" port="${hotswap.port}" >
+				<fileset dir="${hybris.extensions.home}/freitagacceleratorcore/classes" includes="**/*.class" erroronmissingdir="false">        
+					<date datetime="${class.tstamp}" pattern="${date-pattern}" when="after" granularity="2000"/>   
+				</fileset>
+				<fileset dir="${hybris.extensions.home}/freitagacceleratorfacades/classes" includes="**/*.class" erroronmissingdir="false">        
+					<date datetime="${class.tstamp}" pattern="${date-pattern}" when="after" granularity="2000"/>   
+				</fileset>
+				<fileset dir="${hybris.extensions.home}/freitagacceleratorstorefront/web/webroot/WEB-INF/classes" includes="**/*.class" erroronmissingdir="false">        
+					<date datetime="${class.tstamp}" pattern="${date-pattern}" when="after" granularity="2000"/>   
+				</fileset>
+			</hotswap>
+			
+			<echo message="Hotswap finished." />
+			
+		</sequential>
+	</target>
+	-->
+
+	
+	<macrodef name="echo-fileset">
+        <attribute name="filesetref" />
+        <sequential>
+        <for param="file">
+            <fileset  refid="@{filesetref}"/>
+            <sequential>
+                <echo>@{file}</echo>
+            </sequential>
+        </for>
+        </sequential>
+    </macrodef>
+    
+    
+</project>

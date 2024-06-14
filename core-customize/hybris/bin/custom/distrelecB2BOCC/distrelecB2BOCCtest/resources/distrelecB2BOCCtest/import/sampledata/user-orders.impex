@@ -1,0 +1,120 @@
+# ---------------------------------------------------------------------------
+# Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+# ---------------------------------------------------------------------------
+#
+# Import Sample Customer and Orders
+#
+
+$customergroup = customergroup
+
+$defaultPassword = 1234
+
+# Sample customer
+INSERT_UPDATE Customer; originalUid[unique = true]       ; uid[unique = true]               ; title(code); name                            ; description                              ; sessionLanguage(isocode); sessionCurrency(isocode); groups(uid)    ; password[default = $defaultPassword]; &userId
+                      ; OrderHistoryUser@test.com        ; orderhistoryuser@test.com        ; mr         ; orders test user                ; a test user for orders                   ; en                      ; GBP                     ; $customergroup ;                                     ; orderHistoryUser
+                      ; OrderReturnsUser@test.com        ; orderreturnsuser@test.com        ; mr         ; orders test return user         ; a test user for order returns            ; en                      ; GBP                     ; $customergroup ;                                     ; orderReturnsUser
+                      ; OrderReturnsUser2@test.com       ; orderreturnsuser2@test.com       ; mr         ; orders test return user 2       ; second test user for order returns       ; en                      ; GBP                     ; $customergroup ;                                     ; orderReturnsUserTwo
+                      ; OrderCancellationsUser@test.com  ; ordercancellationsuser@test.com  ; mr         ; orders test cancellation user   ; a test user for order cancellations      ; en                      ; GBP                     ; $customergroup ;                                     ; orderCancellationsUser
+                      ; OrderCancellationsUser2@test.com ; ordercancellationsuser2@test.com ; mr         ; orders test cancellation user 2 ; second test user for order cancellations ; en                      ; GBP                     ; $customergroup ;                                     ; orderCancellationsUserTwo
+
+
+# Sample customer addresses
+INSERT_UPDATE Address; &addId                        ; owner(&userId)[unique = true]; streetname[unique = true]; postalcode[unique = true]; duplicate[unique = true]; town      ; country(isocode); region(isocode); billingAddress; contactAddress; shippingAddress; unloadingAddress; firstname    ; lastname; email                     ; gender(code); middlename; phone1    ; title(code); url; company; fax; department
+                     ; orderHistoryUserAddress       ; orderHistoryUser             ; 21 Trumpington Street    ; CB2 1RB                  ; false                   ; Cambridge ; GB              ;                ; true          ; true          ; true           ; true            ; OrderHistory ; User    ; OrderHistoryUser@test.com ; MALE        ;           ; +60616707 ; mr         ;    ; Hybris ;    ;
+                     ; orderReturnsUserAddress       ; orderReturnsUser             ; 21 Trumpington Street    ; CB2 1RB                  ; false                   ; Cambridge ; GB              ;                ; true          ; true          ; true           ; true            ; OrderReturns ; User    ; OrderReturnsUser@test.com ; MALE        ;           ; +60616707 ; mr         ;    ; Hybris ;    ;
+                     ; orderCancellationsUserAddress ; orderCancellationsUser       ; 21 Trumpington Street    ; CB2 1RB                  ; false                   ; Cambridge ; GB              ;                ; true          ; true          ; true           ; true            ; OrderReturns ; User    ; OrderReturnsUser@test.com ; MALE        ;           ; +60616707 ; mr         ;    ; Hybris ;    ;
+
+# Set default payment and shipping addresses for sample customer
+UPDATE Customer; uid[unique = true]              ; defaultPaymentAddress(&addId) ; defaultShipmentAddress(&addId)
+               ; orderhistoryuser@test.com       ; orderHistoryUserAddress       ; orderHistoryUserAddress
+               ; orderreturnsuser@test.com       ; orderReturnsUserAddress       ; orderReturnsUserAddress
+               ; ordercancellationsuser@test.com ; orderCancellationsUserAddress ; orderCancellationsUserAddress
+
+
+# Set payment mode
+INSERT_UPDATE StandardPaymentMode; code[unique = true]; name[lang = de]; name[lang = en]; description[lang = de]; description[lang = en]; active; paymentinfotype(code)
+                                 ; advance            ; Vorkasse       ; Advance        ; per Vorkasse bezahlen ; payment in advance    ; true  ; AdvancePaymentInfo
+
+INSERT_UPDATE StandardPaymentModeValue; paymentMode(code)[unique = true]; value; currency(isocode)[unique = true]
+                                      ; advance                         ; 0.00 ; USD
+
+INSERT_UPDATE Order; code[unique = true]; user(uid)                       ; date[dateformat = dd.MM.yyyy HH:mm]; currency(isocode); net   ; deliveryMode(code[default = 'premium-gross']); paymentMode(code); Discounts(code); calculated; site(uid); store(uid); status(code)
+                   ; testOrder1         ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());"; "#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder2         ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder3         ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder4         ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder5         ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder6         ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder7         ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder8         ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder9         ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder10        ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder11        ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CANCELLED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder12        ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CANCELLED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder13        ; orderhistoryuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CANCELLED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder14        ; orderreturnsuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; COMPLETED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder15        ; orderreturnsuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; COMPLETED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder16        ; orderreturnsuser@test.com       ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; COMPLETED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder17        ; ordercancellationsuser@test.com ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+                   ; testOrder18        ; ordercancellationsuser@test.com ; 17.04.2011 15:10                   ; USD              ; false ;                                              ; advance          ;                ; false     ; wsTest   ; wsTest    ; CREATED
+"#%   impex.getLastImportedItem().setDeliveryAddress(impex.getLastImportedItem().getUser().getDefaultDeliveryAddress());impex.getLastImportedItem().setPaymentAddress(impex.getLastImportedItem().getUser().getDefaultPaymentAddress());";
+"#%   impex.getLastImportedItem().calculate();";
+
+INSERT_UPDATE OrderEntry; order(code)[unique = true]; product(code, catalogVersion(catalog(id), version))[unique = true]; quantity; calculated; unit(code); entryNumber;
+                        ; testOrder1                ; 1934793:wsTestProductCatalog:Online                               ; 4       ; false     ; pieces    ; 0          ; t                        estOrder1 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder2 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder2 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder3 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder3 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder4 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder4 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder5 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder5 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder6 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder6 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder7 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder7 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder8 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder8 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder9 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder9 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder10 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder10 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder11 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder11 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder12 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder12 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder13 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder13 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder14 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder14 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder15 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder15 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder16 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder16 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder17 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder17 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1 ; t                        estOrder18 ; 1934793:wsTestProductCatalog:Online ; 4 ; false ; pieces ; 0 ; t                        estOrder18 ; 3429337:wsTestProductCatalog:Online ; 3 ; false ; pieces ; 1
+INSERT_UPDATE Consignment; code[unique = true]                   ; status(code); order(code) ; s hippingAddress(&addId); w arehouse(code); deliveryMode(code[default = 'premium-gross']);
+                         ; c                         testOrder14 ; SHIPPED     ; testOrder14 ; orderReturnsUserAddress ; ws_warehouse_s  ;                                              ;
+                         ; c                         testOrder15 ; SHIPPED     ; testOrder15 ; orderReturnsUserAddress ; ws_warehouse_s  ;                                              ;
+                         ; c                         testOrder16 ; SHIPPED     ; testOrder16 ; orderReturnsUserAddress ; ws_warehouse_s  ;                                              ;
+
+INSERT_UPDATE ConsignmentEntry; quantity; shippedQuantity; orderEntry(order(code), entryNumber)[unique = true]; consignment(code);
+                              ; 4       ; 3              ; testOrder14:0                                      ; ctestOrder14     ;
+                              ; 3       ; 3              ; testOrder14:1                                      ; ctestOrder14     ;
+                              ; 4       ; 4              ; testOrder15:0                                      ; ctestOrder15     ;
+                              ; 3       ; 3              ; testOrder15:1                                      ; ctestOrder15     ;
+                              ; 4       ; 4              ; testOrder16:0                                      ; ctestOrder16     ;
+                              ; 3       ; 3              ; testOrder16:1                                      ; ctestOrder16     ;
+
+INSERT_UPDATE ReturnRequest; code[unique = true]                            ; rma     ; s     tatus(code); order(code) ; r eturnWarehouse(code);
+                           ; t                           estReturnRequest01 ; 0000001 ; WAIT             ; testOrder15 ; ws_warehouse_s        ;
+                           ; t                           estReturnRequest02 ; 0000002 ; WAIT             ; testOrder15 ; ws_warehouse_s        ;
+                           ; t                           estReturnRequest03 ; 0000003 ; WAIT             ; testOrder14 ; ws_warehouse_s        ;
+
+INSERT_UPDATE RefundEntry; action(code)[unique = true]   ; orderEntry(order(code), entryNumber)[unique = true]; status(code)[unique = true]; returnRequest(code) ; expectedQuantity; reason(code);
+                         ; H                         OLD ; testOrder15:0                                      ; WAIT                       ; testReturnRequest01 ; 3               ; GoodWill    ;
+                         ; H                         OLD ; testOrder15:1                                      ; WAIT                       ; testReturnRequest02 ; 1               ; GoodWill    ;
+                         ; H                         OLD ; testOrder14:0                                      ; WAIT                       ; testReturnRequest03 ; 1               ; GoodWill    ;
+                         ; H                         OLD ; testOrder14:1                                      ; WAIT                       ; testReturnRequest03 ; 1               ; GoodWill    ;

@@ -1,0 +1,41 @@
+<div class="add-to-cart" id="update-product-buttons">
+  <div class="add-to-cart__calculation">
+    <div *ngIf="displayPopup" class="numeric-popover backorder">
+      <div class="arrow"></div>
+      <div class="content">
+        {{ 'searchResults.moqMsg' | cxTranslate: { productCode: productCode, quantity: minQuantity } }}
+      </div>
+    </div>
+
+    <div class="add-to-cart__calculation--stepper">
+      <button class="btn minus-button" id="decrease-q-button" (click)="decreaseQuantity()">-</button>
+      <input
+        #qty
+        class="total-added"
+        id="total-added-input"
+        (input)="updateInput($event)"
+        (keypress)="numberOnly($event)"
+        tabindex="0"
+        value="{{ productQuantity }}"
+      />
+      <button class="btn plus-button" id="increase-q-button" (click)="increaseQuantity()">+</button>
+    </div>
+  </div>
+  <div *ngIf="productInQueue_ | async as productInQueue" class="add-to-cart__button">
+    <!-- TODO: check this through URL directly -->
+    <button class="btn icon-button" id="add-to-cart-button" (click)="handleBackorderAddToCart()">
+      <span *ngIf="!productInQueue.isInQueue" id="add-to-queue-cart-icon">
+        <fa-icon [icon]="faCart"></fa-icon>
+      </span>
+
+      <span *ngIf="productInQueue.isInQueue" id="add-to-queue-check-icon">
+        <fa-icon [icon]="faCheckCircle"></fa-icon>
+      </span>
+    </button>
+  </div>
+</div>
+<div class="add-to-cart__calculation--min-order">
+  <span id="product.product_info.min_order">
+    {{ 'product.product_info.min_order' | cxTranslate: { quantity: minQuantity } }}
+  </span>
+</div>

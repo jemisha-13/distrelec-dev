@@ -1,0 +1,57 @@
+<h3>Post installations for QA & PROD</h3>
+
+
+
+<h4>Hybris Update:</h4>
+http://[app-node-0]:9001/hac/platform/update
+
+
+
+<h4>System Update:</h4>
+- nothing to do
+
+
+
+<h4>Run Impex:</h4>
+- nothing to do
+
+
+
+<h4>Blog entries:</h4>
+- https://wiki.namics.com/display/distrelint/2014/06/18/webtrekk+again
+
+
+
+<h4>Misc:</h4>
+- Remove all Message Entries for all content catalogs in the hMC (Internationalization --> Message Entries)
+  (use /environment/release-notes/samples-scripts/impexScripts/removeAllMessageResourceTableEntries.impex for large amount on items)
+
+- Run Groovy script:
+import de.hybris.platform.acceleratorservices.setup.SetupImpexService;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+
+SetupImpexService impexService = SpringUtil.getBean("setupImpexService", SetupImpexService.class);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ATContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_CHContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_DEContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_DKContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_EEContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_EXContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_FIContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ITContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_LTContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_LVContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_NLContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_NOContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_PLContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_SEContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_HUContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ROContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_SKContentCatalog/email-content.impex", false, false);
+impexService.importImpexFile("/distrelecB2Bcore/import/project/contentCatalogs/distrelec_CZContentCatalog/email-content.impex", false, false);
+return "Done!"
+
+
+
+<h4>Synchronization:</h4>
+- synchronize content catalog

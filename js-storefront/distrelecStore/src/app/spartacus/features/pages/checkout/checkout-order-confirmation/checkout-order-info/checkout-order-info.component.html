@@ -1,0 +1,186 @@
+<ng-container *ngIf="isOrderApproval; else notOrderApproval">
+  <h2 class="card-item__title" id="checkout.confirmation.approval.title">
+    {{ 'checkout.confirmation.approval_title' | cxTranslate }}
+  </h2>
+
+  <div class="order-info__banner is-info">
+    <app-icon iconName="info-circle" iconType="svg"></app-icon>
+    <span class="ml-2" id="checkout.confirmation.approval">
+      {{ 'checkout.confirmation.order_approval' | cxTranslate }}
+    </span>
+  </div>
+
+  <p
+    class="card-item__txt"
+    id="checkout.confirmation.approval.message"
+    [innerHTML]="
+      'checkout.confirmation.approval'
+        | cxTranslate
+          : { exceededAmount: order.exceededBudgetPrice.value | price, currency: order.exceededBudgetPrice.currencyIso }
+    "
+  ></p>
+
+  <div class="pt-1 mt-3">
+    <app-dist-button
+      (click)="redirectToOrderApprovalRequestsList()"
+      width="w-fixed"
+      type="outlined"
+      buttonId="checkout.confirmation.review.order.approbal.link"
+    >
+      {{ 'checkout.confirmation.approval_request_list' | cxTranslate }}
+    </app-dist-button>
+  </div>
+</ng-container>
+
+<ng-template #notOrderApproval>
+  <ng-container *ngIf="!!erpCode; else erpCodeLoading">
+    <ul class="card-item-list">
+      <li class="card-item">
+        <ng-container *ngIf="erpCode.timeout; else successMessage">
+          <h2 class="card-item__title" id="checkout.confirmation.timeout.title">
+            {{ 'checkout.confirmation.processing_title' | cxTranslate }}
+          </h2>
+
+          <div class="order-info__banner is-success">
+            <app-icon iconName="success-circle" iconType="svg"></app-icon>
+            <span class="ml-2" id="checkout.confirmation.timeout">
+              {{ 'checkout.confirmation.order_erp_error' | cxTranslate }}
+            </span>
+          </div>
+
+          <p
+            class="card-item__txt"
+            id="checkout.confirmation.timeout.message"
+            [innerHTML]="
+              'checkout.confirmation.order_code_error'
+                | cxTranslate: { email: customerUid, phone: ('service.phone' | cxTranslate) }
+            "
+          ></p>
+
+          <ng-template [ngTemplateOutlet]="rsProductMessage"></ng-template>
+        </ng-container>
+
+        <ng-template #successMessage>
+          <h2 class="card-item__title" id="checkout.confirmation.title">
+            {{ 'checkout.confirmation.title' | cxTranslate }}
+          </h2>
+
+          <div class="order-info__banner is-success">
+            <app-icon iconName="success-circle" iconType="svg"></app-icon>
+            <span class="ml-2" id="checkout.confirmation.order_n">
+              {{ 'checkout.confirmation.order_n' | cxTranslate }}&nbsp;
+              <span id="checkout.confirmation.order_n.code">{{ erpCode.erpCode }}</span>
+            </span>
+          </div>
+
+          <ng-container *ngIf="order.pickupLocation; else notPickupDetails">
+            <p
+              class="card-item__txt"
+              id="checkout.confirmation.pickup_note"
+              [innerHTML]="
+                'checkout.confirmation.pickup_note1'
+                  | cxTranslate: { email: customerUid, phone: ('service.phone' | cxTranslate) }
+              "
+            ></p>
+
+            <p
+              class="card-item__txt my-2"
+              id="checkout.confirmation.pickup_note2"
+              [innerHTML]="'checkout.confirmation.pickup_note2' | cxTranslate"
+            ></p>
+
+            <p
+              class="card-item__txt"
+              id="checkout.confirmation.pickup_note3"
+              [innerHTML]="'checkout.confirmation.pickup_note3' | cxTranslate"
+            ></p>
+          </ng-container>
+
+          <ng-template #notPickupDetails>
+            <p
+              class="card-item__txt"
+              id="checkout.confirmation.info.message"
+              [innerHTML]="
+                'checkout.confirmation.order_info'
+                  | cxTranslate: { email: customerUid, phone: ('service.phone' | cxTranslate) }
+              "
+            ></p>
+          </ng-template>
+
+          <ng-template [ngTemplateOutlet]="rsProductMessage"></ng-template>
+        </ng-template>
+      </li>
+
+      <li *ngIf="order.pickupLocation as pickupDetails" class="card-item">
+        <h2 class="card-item__title" id="checkout.confirmation.pickup.title">
+          {{ 'checkout.confirmation.pickup.adress_heading' | cxTranslate }}
+        </h2>
+
+        <p class="card-item__txt">
+          <span class="card-item__txt" id="checkout.address.pickupLocation">{{ pickupDetails.name }}</span>
+          <br />
+          <span class="card-item__txt" id="checkout.address.street">
+            {{ pickupDetails.streetName + ' ' + pickupDetails.streetNumber }}
+          </span>
+          <br />
+          <span class="card-item__txt" id="checkout.address.city">{{ pickupDetails.town + ',' }}</span>
+          <br />
+          <span class="card-item__txt" id="address.postcode">{{ pickupDetails.postalCode }}</span>
+          <br />
+          <span class="card-item__txt" id="checkout.address.phone">
+            {{ 'checkout.address.phone' | cxTranslate }}:&nbsp;{{ pickupDetails.phone }}
+          </span>
+          <br />
+          <span class="card-item__txt" id="checkout.confirmation.pickup.opening_hours">
+            {{ 'checkout.confirmation.pickup.opening_hours' | cxTranslate }}:&nbsp;{{
+              'checkout.confirmation.pickup.open_days.mo2fr' | cxTranslate
+            }}&nbsp;
+            <strong>{{ pickupDetails.openingsHourMoFr }}</strong>
+          </span>
+
+          <ng-container *ngIf="pickupDetails.openingsHourSa">
+            <br />
+            <span class="card-item__txt" id="checkout.address.saturday">
+              {{ 'checkout.address.saturday' | cxTranslate }}:&nbsp;{{ pickupDetails.openingsHourSa }}
+            </span>
+          </ng-container>
+        </p>
+      </li>
+    </ul>
+  </ng-container>
+
+  <ng-template #erpCodeLoading>
+    <h2 class="card-item__title" id="checkout.confirmation.loading.title">
+      {{ 'checkout.confirmation.processing_title' | cxTranslate }}
+    </h2>
+
+    <div class="p-relative">
+      <app-component-loading-spinner></app-component-loading-spinner>
+
+      <p
+        class="card-item__txt"
+        id="checkout.confirmation.info.message.loading"
+        [innerHTML]="
+          'checkout.confirmation.order_info'
+            | cxTranslate: { email: customerUid, phone: ('service.phone' | cxTranslate) }
+        "
+      ></p>
+
+      <ng-template [ngTemplateOutlet]="rsProductMessage"></ng-template>
+    </div>
+  </ng-template>
+</ng-template>
+
+<ng-template #rsProductMessage>
+  <ng-container *ngIf="orderContainsRsProducts">
+    <h2 class="card-item__title mt-4 mb-2" id="checkout.confirmation.rs.info.title">
+      {{ 'checkout.confirmation.delivery_information' | cxTranslate }}
+    </h2>
+
+    <img class="mb-2" src="app/spartacus/assets/media/rs-logo.svg" width="123" />
+
+    <p class="card-item__txt" id="checkout.confirmation.rs.info.message">
+      {{ 'checkout.confirmation.rs.order_info' | cxTranslate }}
+    </p>
+  </ng-container>
+</ng-template>

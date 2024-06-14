@@ -1,0 +1,63 @@
+<div *ngIf="productReferences.length" class="bom-unavailable-product">
+  <app-action-message [message]="'bom.notstocked.message.info' | cxTranslate" type="info"></app-action-message>
+
+  <div class="bom-unavailable-product__info">
+    <div class="bom-unavailable-product__info-box bom-product" [class.bordered]="entry.selectedAlternative">
+      <span
+        *ngIf="entry.selectedAlternative"
+        class="bom-unavailable-product__original-request"
+        [id]="'bom_not_available_product_selected_title_' + product.code"
+      >
+        <strong>{{ 'text.original.request' | cxTranslate }}:</strong>
+      </span>
+      <span class="bom-unavailable-product__title" [id]="'bom_not_available_product_title_' + product.code">
+        {{ requestedQuantity }}, {{ entry.searchTerm }} - {{ entry.product.name }}, {{ entry.reference }}
+      </span>
+    </div>
+
+    <app-button
+      class="bom-unavailable-product__show-alternative"
+      [buttonId]="'bom_not_available_show_alternative_' + product.code + '_' + showAlternatives"
+      [modifiers]="['sm']"
+      [dataAttributes]="{
+        'product-code': entry.productCode,
+        'change-text': 'text.changealternativeitems' | cxTranslate,
+        aainteraction: 'show product alternatives',
+        aabutton: 'show',
+        aabuttonshow: 'show',
+        aabuttonhide: 'hide',
+        aabuttonchange: 'change'
+      }"
+      (click)="showAlternatives = !showAlternatives"
+      colour="orange"
+    >
+      {{
+        (showAlternatives
+          ? 'text.hidealternativeitems'
+          : entry.selectedAlternative
+          ? 'text.changealternativeitems'
+          : 'text.showalternativeitems'
+        ) | cxTranslate
+      }}
+    </app-button>
+  </div>
+
+  <app-bom-product
+    *ngIf="entry.selectedAlternative"
+    class="alternative-product"
+    [entry]="entry"
+    [index]="index"
+    (remove)="onRemove()"
+  ></app-bom-product>
+
+  <div *ngIf="showAlternatives" class="row bom-unavailable-product__alternatives">
+    <app-bom-alternative-product-card
+      *ngFor="let productReference of productReferences; index as index"
+      [product]="productReference.target"
+      [referenceType]="productReference.referenceType"
+      [index]="index"
+      [isSelected]="entry.selectedAlternative && productReference.target.code === entry.selectedAlternative.code"
+      (selectAlternative)="onSelect($event)"
+    ></app-bom-alternative-product-card>
+  </div>
+</div>

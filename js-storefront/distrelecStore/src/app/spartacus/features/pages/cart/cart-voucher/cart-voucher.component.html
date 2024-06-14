@@ -1,0 +1,83 @@
+<button
+  class="btn voucher-holder"
+  id="cart-voucher-button-trigger"
+  [class.extra-m]="!isVoucherCode"
+  (click)="isVoucherCode = !isVoucherCode"
+>
+  <h2 class="voucher-holder--title" id="cart.voucher_code_q">
+    {{ 'cart.voucher_code_q' | cxTranslate }}
+  </h2>
+</button>
+
+<ng-container *ngIf="erpVoucherInfoData && isVoucherCode">
+  <div class="form-box__voucher">
+    <div class="form-box__voucher-code">
+      <span class="voucher-code" id="cart-voucher-success-code">
+        {{ erpVoucherInfoData.code }}
+      </span>
+
+      <button
+        class="btn form-box__action-btn"
+        id="cart-voucher-success-remove-button"
+        [disabled]="isVoucherLoading$ | async"
+        (click)="removeVoucher()"
+      >
+        <fa-icon *ngIf="isVoucherLoading$ | async" [icon]="faSync" spin="true"></fa-icon>
+
+        <span id="cart.cart_voucher_remove" [class.d-none]="isVoucherLoading$ | async">
+          {{ 'cart.cart_voucher_remove' | cxTranslate }}
+        </span>
+      </button>
+    </div>
+
+    <div class="form-box__voucher-info" id="cart-voucher-success-info">
+      <div class="icon-holder">
+        <fa-icon [icon]="faCheckCircle"></fa-icon>
+      </div>
+
+      <span class="voucher-info">
+        {{
+          'cart.voucher_details'
+            | cxTranslate
+              : { currency: erpVoucherInfoData.fixedValue.currencyIso, price: erpVoucherInfoData.fixedValue.value }
+        }}
+      </span>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!erpVoucherInfoData && isVoucherCode">
+  <div *ngIf="isVoucherCode" [formGroup]="cartForm">
+    <div class="form-box">
+      <div class="form-box__item">
+        <input
+          class="form-box__item-input"
+          id="cart-voucher-input"
+          [placeholder]="'cart.voucher_code' | cxTranslate"
+          type="text"
+          formControlName="voucherCode"
+          maxlength="10"
+          size="10"
+        />
+      </div>
+
+      <div *ngIf="userId$ | async as userId" class="form-box__action">
+        <button
+          class="btn form-box__action-btn"
+          id="cart-voucher-redeem-button"
+          [disabled]="isVoucherLoading$ | async"
+          (click)="cartForm.get('voucherCode').value && validateVoucher(userId)"
+        >
+          <fa-icon *ngIf="isVoucherLoading$ | async" [icon]="faSync" spin="true"></fa-icon>
+          <span id="cart.redeem" [class.d-none]="isVoucherLoading$ | async">
+            {{ 'cart.redeem' | cxTranslate }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="isVoucherError$ | async" class="form-box__error" id="cart.voucher_invalid">
+      {{ 'cart.voucher_invalid' | async }}
+    </div>
+  </div>
+</ng-container>

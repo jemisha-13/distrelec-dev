@@ -1,0 +1,91 @@
+#
+# Import the CMS content for the Distrelec site emails
+#
+$contentCatalog=Default
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/base
+
+
+#Cronjob Templates
+INSERT_UPDATE CatalogUnawareMedia;code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];
+;DistSanityCheckNotificationTemplate;text/html;sanityCheckNotificationTemplate.vm;$jarResource/common/email/cronjob/sanityCheckNotificationTemplate.vm;
+
+
+# Email page Template
+INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;active;frontendTemplateName;subject(code);htmlTemplate(code);restrictedPageTypes(code)
+;;PimImportNotificationEmailTemplate;Pim Import Notification Email Template;true;pimImportNotificationEmail;Email_Pim_Import_Notification_Subject;Email_Pim_Import_Notification_Body;EmailPage
+;;CheckNewCustomerRegistrationEmailTemplate;Check New Customer Registration Email Template;true;checkNewCustomerRegistrationEmail;Email_Check_New_Customer_Registration_Subject;Email_Check_New_Customer_Registration_Body;EmailPage
+;;NewProductNewsLetterEmailTemplate;News Letter For New Products Email Template;true;newProductsNewsLetterEmail;Email_New_Product_News_Letter_Subject;Email_New_Product_News_Letter_Body;EmailPage
+;;PaymentNotifyOrderEmailTemplate;Payment Notify Order Email Template;true;paymentNotifyOrderEmail;Email_Payment_Notify_Order_Subject;Email_Payment_Notify_Order_Body;EmailPage
+
+
+
+# Templates for CMS Cockpit Page Edit
+UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;PimImportNotificationEmailTemplate;$jarResource/cockpits/cmscockpit/structure-view/structure_pimImportNotificationEmailTemplate.vm
+;;CheckNewCustomerRegistrationEmailTemplate;$jarResource/cockpits/cmscockpit/structure-view/structure_CheckNewCustomerRegistrationEmailTemplate.vm
+;;NewProductNewsLetterEmailTemplate;$jarResource/cockpits/cmscockpit/structure-view/structure_newProductsNewsLetterEmailTemplate.vm
+;;PaymentNotifyOrderEmailTemplate;$jarResource/cockpits/cmscockpit/structure-view/structure_paymentNotifyOrderEmailTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='PimImportNotificationEmailTemplate'];validComponentTypes(code)
+
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CheckNewCustomerRegistrationEmailTemplate'];validComponentTypes(code)
+
+# Content Slot Names for the template PaymentNotifyOrderEmailTemplate
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='PaymentNotifyOrderEmailTemplate'];validComponentTypes(code)
+
+
+# Create Content Slots
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+
+
+## Bind Content Slots to Email Page Templates
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='PimImportNotificationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CheckNewCustomerRegistrationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+
+# Content Slots for the PaymentNotifyOrderEmailTemplate
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='PaymentNotifyOrderEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+
+
+# Sanity Check Notification Email
+# Pim Import Notification Email
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;PimImportNotificationEmail;Pim Import Notification Email;PimImportNotificationEmailTemplate;true
+
+# New Contact Registration Notification Email
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;CheckNewCustomerRegistrationEmail;Check New Customer Registration Email;CheckNewCustomerRegistrationEmailTemplate;true
+
+# New Product Newsletter Email
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;NewProductNewsLetterEmail;New Product Newsletter Email;NewProductNewsLetterEmailTemplate;true
+
+# Payment Notify Order Email
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;PaymentNotifyOrderEmail;Payment Notify Order Email;PaymentNotifyOrderEmailTemplate;true
+
+
+
+# Email velocity templates
+INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)[default='velocity']
+;Email_Pim_Import_Notification_Body;com.namics.distrelec.b2b.facades.process.email.context.PimImportNotificationEmailContext
+;Email_Pim_Import_Notification_Subject;com.namics.distrelec.b2b.facades.process.email.context.PimImportNotificationEmailContext
+;Email_Check_New_Customer_Registration_Body;com.namics.distrelec.b2b.facades.process.email.context.CheckNewCustomerRegistrationEmailContext
+;Email_Check_New_Customer_Registration_Subject;com.namics.distrelec.b2b.facades.process.email.context.CheckNewCustomerRegistrationEmailContext
+;Email_New_Product_News_Letter_Body;com.namics.distrelec.b2b.facades.process.email.context.DistNewProductsNewsLetterEmailContext
+;Email_New_Product_News_Letter_Subject;com.namics.distrelec.b2b.facades.process.email.context.DistNewProductsNewsLetterEmailContext
+;Email_Payment_Notify_Order_Body;com.namics.distrelec.b2b.facades.process.email.context.PaymentNotifyOrderEmailContext
+;Email_Payment_Notify_Order_Subject;com.namics.distrelec.b2b.facades.process.email.context.PaymentNotifyOrderEmailContext
+
+
+# Preview Image for use in the CMS Cockpit
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true]
+;;EmailPageModel_preview;text/gif;EmailPageModel_preview.gif;$jarResource/cockpits/cmscockpit/preview-images/EmailPageModel_preview.gif
+
+UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];previewImage(code, $contentCV)
+;;PimImportNotificationEmail;EmailPageModel_preview
+;;CheckNewCustomerRegistrationEmail;EmailPageModel_preview
+;;NewProductNewsLetterEmail;EmailPageModel_preview
+;;PaymentNotifyOrderEmail;EmailPageModel_preview

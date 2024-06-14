@@ -1,0 +1,37 @@
+#
+# Import of CMS Site configurations used to redirect to external shops (either iShop/ELFA shops or distributor shops).
+# This can be achieved using a CMSSite with a configured redirectURL. 
+# UPG and UTG are not relevant, but mandatory. Use a dummy value.
+# A distrelec SalesOrg must be used (where brand is equal to "distrelec").
+#
+
+$distributorCode=DISTRIBUTORS
+$distributorSalesOrgCode=$distributorCode
+$distributorUPG=$distributorCode
+$distributorUTG=$distributorCode
+
+$externalshopCode=EXTERNALSHOPS
+$externalshopSalesOrgCode=$externalshopCode
+$externalshopUPG=$externalshopCode
+$externalshopUTG=$externalshopCode
+
+
+# Create dummy SalesOrgs, UserPriceGroup, UserTaxGroup to attach distributors and external shops (still hosted by iShop)
+INSERT_UPDATE DistSalesOrg;code[unique=true];brand(code);country(isocode);erpSystem(code)
+;$distributorSalesOrgCode;distrelec;EX;SAP
+;$externalshopSalesOrgCode;distrelec;EX;SAP
+
+INSERT_UPDATE UserPriceGroup;code[unique=true]
+;$distributorUPG
+;$externalshopUPG
+
+INSERT_UPDATE UserTaxGroup;code[unique=true]
+;$distributorUTG
+;$externalshopUTG
+
+
+# 
+# CMS Site
+#INSERT_UPDATE CMSSite;uid[unique=true];country(isocode);salesOrg(code);userPriceGroup(code);userTaxGroup(code);redirectURL
+
+

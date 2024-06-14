@@ -1,0 +1,90 @@
+<div
+  *ngIf="parentComponent$ | async as parentComponent"
+  class="md-system"
+  [ngClass]="{
+    'featured-brands': parentComponent?.uid === 'comp_00000047' || parentComponent?.uid === 'Homepage-TopBrands-D4',
+    'welcome-mat': parentComponent?.uid === 'homepagewelcomematcomponent',
+    'latest-offer': parentComponent?.uid === 'comp_00000050',
+    'pt-3': pageTemplate !== 'StorePageTemplate'
+  }"
+>
+  <div class="app-dist-component-group">
+    <div
+      class="parallax"
+      [ngClass]="{
+        'parallax__bgr-img': parentComponent?.backgroundImage?.url
+      }"
+      [ngStyle]="
+        parentComponent?.backgroundImage && {
+          'background-image': 'url(' + parentComponent?.backgroundImage.url + ')'
+        }
+      "
+    >
+      <div *rxIf="parentComponent?.currentLogoImage" class="container">
+        <div class="row">
+          <div class="col-12 heading-parallax-logo">
+            <img [src]="parentComponent?.currentLogoImage?.url" [alt]="parentComponent?.currentLogoImage?.altText" />
+          </div>
+        </div>
+      </div>
+
+      <section class="parallax" [ngClass]="{ 'parallax__bgr-img--wrapper': parentComponent?.backgroundImage?.url }">
+        <div class="parallax__content">
+          <div class="parallax__content__border">
+            <div
+              class="dist-component__container"
+              [ngClass]="parentComponent?.htmlClasses + '__grouped'"
+              [class.container]="!isClearancePage"
+            >
+              <div
+                class="row dist-component__container__row"
+                [ngClass]="parentComponent?.htmlClasses + '__grouped__row'"
+              >
+                <div
+                  *rxIf="parentComponent?.title"
+                  class="col-12 dist-component-heading"
+                  id="heading-offers-and-promotions"
+                  [ngClass]="parentComponent.htmlClasses + '__heading'"
+                >
+                  <h2 class="heading">
+                    <span>{{ parentComponent?.title }}</span>
+                    <span class="heading__link">{{ parentComponent?.subtitle }}</span>
+                    <a *rxIf="parentComponent?.topLinkText" [routerLink]="parentComponent?.topLinkUrl">
+                      {{ parentComponent?.topLinkText }}
+                    </a>
+                  </h2>
+                </div>
+
+                <div class="col-12 dist-component__container" [ngClass]="parentComponent?.htmlClasses + '-container'">
+                  <div
+                    class="row dist-component__row"
+                    id="dist_component_group_welcome_mat_container"
+                    [ngClass]="parentComponent?.htmlClasses + '-container__row'"
+                  >
+                    <ng-container *ngFor="let component of components$ | async">
+                      <div [ngClass]="getComponentWrapperClass(parentComponent, component)">
+                        <ng-template [cxComponentWrapper]="component"></ng-template>
+                      </div>
+                    </ng-container>
+
+                    <ng-container *rxIf="parentComponent?.bottomLinkText">
+                      <div class="col-12 bottom-link-container">
+                        <a
+                          class="anchor-link"
+                          [innerHTML]="parentComponent?.bottomLinkText"
+                          [externalRouterLink]="parentComponent?.bottomLinkUrl"
+                          [title]="parentComponent?.bottomLinkText"
+                          [class]="parentComponent?.htmlClasses"
+                        ></a>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

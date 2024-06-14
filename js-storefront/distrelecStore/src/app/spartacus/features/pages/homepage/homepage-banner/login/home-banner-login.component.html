@@ -1,0 +1,110 @@
+<div class="register-wrapper">
+  <ng-container *rxIf="userId === 'anonymous'">
+    <form id="registerHomeForm">
+      <div class="state__logout">
+        <div class="welcome">
+          <div class="welcome__user-wrap">
+            <fa-icon id="home_banner_user_image" [icon]="faUser"></fa-icon>
+          </div>
+          <p id="home_banner_welcome_text">{{ 'homepage.welcome' | cxTranslate }}</p>
+          <div class="welcome__action">
+            <a
+              id="home_banner_registration_button"
+              (click)="dispatchHomepageInteractionEvent('registration_click')"
+              routerLink="/registration"
+            >
+              {{ 'homepage.register' | cxTranslate }}
+            </a>
+            <a
+              id="home_banner_login_button"
+              (click)="dispatchHomepageInteractionEvent('login_click')"
+              routerLink="/login"
+            >
+              {{ 'homepage.login' | cxTranslate }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </form>
+    <hr class="divider" />
+  </ng-container>
+  <ng-container *rxIf="isLoggedIn">
+    <div class="state__login">
+      <div class="state__login--title" id="home_banner_user_greeting">
+        <ng-container *rxIf="userData_; let userData; else: elseUser">
+          {{ 'homepage.greeting' | cxTranslate }} {{ userData.name }},
+        </ng-container>
+        <ng-template #elseUser>
+          {{ 'homepage.greeting' | cxTranslate }}
+        </ng-template>
+      </div>
+      <div class="state__login--subtitle" id="home_banner_user_welcome_text">
+        {{ 'homepage.account_glance' | cxTranslate }}
+      </div>
+
+      <ng-container *rxIf="userDashboardContents$; let userDashboardContents">
+        <div class="state__login--overview">
+          <button
+            class="btn state__login--overview__orders"
+            id="home_banner_order_history_link"
+            (click)="btnClick('/my-account/order-history')"
+          >
+            <span class="state__login--overview__orders--quantity" id="home_banner_order_history_count">
+              {{ userDashboardContents?.openOrdersCount }}
+            </span>
+            <span class="state__login--overview__orders--text" id="home_banner_order_history_text">
+              {{ 'homepage.account_open_orders' | cxTranslate }}
+            </span>
+          </button>
+          <button
+            class="btn state__login--overview__invoices"
+            id="home_banner_invoice_history_link"
+            (click)="btnClick('/my-account/invoice-history')"
+          >
+            <span class="state__login--overview__invoices--quantity" id="home_banner_invoice_history_count">
+              {{ userDashboardContents?.newInvoicesCount }}
+            </span>
+            <span class="state__login--overview__invoices--text" id="home_banner_invoice_history_text">
+              {{ 'homepage.account_recent_invoices' | cxTranslate }}
+            </span>
+          </button>
+        </div>
+        <div *rxLet="userData_; let userData" class="state__login--overview">
+          <ng-container *rxIf="(isQuotationsEnabled$ | async) && (isB2B$ | async)">
+            <button
+              class="btn state__login--overview__orders"
+              id="home_banner_quote_history_link"
+              (click)="btnClick('/my-account/quote-history')"
+            >
+              <span class="state__login--overview__orders--quantity" id="home_banner_quote_history_count">
+                {{ userDashboardContents?.quoteCount }}
+              </span>
+              <span class="state__login--overview__orders--text" id="home_banner_quote_history_text">
+                {{ 'homepage.account_quote_history' | cxTranslate }}
+              </span>
+            </button>
+          </ng-container>
+          <ng-container
+            *rxIf="
+              activeSiteId !== 'FR' &&
+              (userData?.customerType === 'B2B' || userData?.customerType === 'B2B_KEY_ACCOUNT')
+            "
+          >
+            <button
+              class="btn state__login--overview__invoices"
+              id="home_banner_order_approval_link"
+              (click)="btnClick('/my-account/order-approval')"
+            >
+              <span class="state__login--overview__invoices--quantity" id="home_banner_order_approval_count">
+                {{ userDashboardContents?.appReqCount }}
+              </span>
+              <span class="state__login--overview__invoices--text" id="home_banner_order_approval_text">
+                {{ 'homepage.account_order_approval' | cxTranslate }}
+              </span>
+            </button>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

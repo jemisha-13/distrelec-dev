@@ -1,0 +1,19 @@
+$beContentCatalog = distrelec_BEContentCatalog
+$beContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $beContentCatalog]), CatalogVersion.version[default = Staged])[default = $beContentCatalog:Staged]
+
+#Register content slot in BE catalog
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $beContentCV)[unique = true][default = 'ContentPageWithoutNavigationTemplate']; validComponentTypes(code)
+                             ; LeftSideContentPosition ;                                                                                             ; CMSParagraphComponent,DistLinkedImageComponent,SimpleBannerComponent,DistLinkListComponent
+
+INSERT_UPDATE ContentSlot; uid[unique = true]  ; name                   ; $beContentCV[unique = true];
+                         ; LeftSideContentSlot ; Left Side Content Slot ;
+
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                                           ; $beContentCV[unique = true]; pageTemplate(uid, $beContentCV)[unique = true][default = 'ContentPageWithoutNavigationTemplate']; contentSlot(uid, $beContentCV); position
+                                    ; LeftSideContentSlot-ContentPageWithoutNavigationPageTemplate ;                            ;                                                                                                 ; LeftSideContentSlot           ; LeftSideContentPosition
+
+$contentCatalog = distrelec_IntContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+#Register content slot in international catalog
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $contentCV)[unique = true][default = 'ContentPageWithoutNavigationTemplate']; validComponentTypes(code)
+                             ; LeftSideContentPosition ;                                                                                           ; CMSParagraphComponent,DistLinkedImageComponent,SimpleBannerComponent,DistLinkListComponent,DistLocalCatalogFilterComponentContainer

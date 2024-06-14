@@ -1,0 +1,19 @@
+<div *ngIf="pagination$ | async as p" class="row d-none d-lg-flex justify-content-end container-pagination mx-0">
+  <div class="d-flex align-items-center change-view">
+    <span class="top-bar-label" id="sort-by">
+      {{ 'plp.facet_buttons_and_headers.sort_by' | cxTranslate }}
+    </span>
+    <ng-select
+      id="sort-by-drop-down"
+      class="sort-by"
+      [searchable]="false"
+      [(ngModel)]="sort"
+      (ngModelChange)="filterList(sortOptions.queryKey, $event)"
+      name=""
+    >
+      <ng-option *ngFor="let option of sortOptions.options" id="sort-by-option-{{ option.label }}" [value]="option.value">
+        <span class="sort-option">{{ 'plp.facet_buttons_and_headers.' + option.label | cxTranslate }}</span>
+      </ng-option>
+    </ng-select>
+  </div>
+</div>

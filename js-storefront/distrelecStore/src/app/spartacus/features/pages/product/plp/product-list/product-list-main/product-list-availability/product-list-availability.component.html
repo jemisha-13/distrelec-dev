@@ -1,0 +1,13 @@
+<ng-container *ngIf="availability$ | async as availability; else defaultProductAvailability">
+  <div class="product-availability-container">
+    <ng-container *ngIf="config; else defaultProductAvailability">
+      <app-icon [icon]="config.icon" [class]="config.class"></app-icon>
+      <span class="product-availability">{{ config.stockTotal }} {{ config.message | cxTranslate }}</span>
+    </ng-container>
+  </div>
+</ng-container>
+<ng-template #defaultProductAvailability>
+  <div class="product-availability-container">
+    <app-icon class="progress-spinner-icon" iconName="progress-spinner-grey" iconType="svg"></app-icon>
+  </div>
+</ng-template>

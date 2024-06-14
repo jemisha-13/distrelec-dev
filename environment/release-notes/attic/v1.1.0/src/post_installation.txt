@@ -1,0 +1,33 @@
+<h3>post installations for QA & PROD </h3>
+
+<h4>Hybris Update:</h4>
+http://<app-node-0>:9001/hac/platform/update
+
+<h4>System Updates:</h4>
+- nothing to do
+
+<h4>Run Impex:</h4>
+1) Delete all existing Media with the following file pattern:  distrelec_??-PDF_Order_Confirmation*   (e.g. distrelec_AT-PDF_Order_Confirmation_de). There should be 10 Media residing in the default catalog. 
+        
+2) Import the following impex files: 
+/distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ATContentCatalog/pdf-content.impex 
+/distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_CHContentCatalog/pdf-content.impex 
+/distrelecB2Bcore/resources/distrelecB2Bcore/import/project/contentCatalogs/distrelec_ITContentCatalog/pdf-content.impex 
+
+
+<h4>Blog entries:</h4>
+- nothing to do
+
+<h4>Misc:</h4>
+-          System-Update ausführen
+-          Scripts als Direct SQL ausführen, jedoch getrennt:
+--   UPDATE movexproduct item_t0 SET p_movexcatalog=(SELECT PK FROM enumerationvalues item_t1 WHERE ( item_t1.Code ='CAT')), p_catalog=NULL WHERE (item_t0.p_catalog='CAT')
+--   UPDATE movexproduct item_t0 SET p_movexcatalog=(SELECT PK FROM enumerationvalues item_t1 WHERE ( item_t1.Code ='DAT')), p_catalog=NULL WHERE (item_t0.p_catalog='DAT')
+--   UPDATE movexscaleshiftmethod item_t0 SET p_catalog=NULL
+-          In der hMC bitte das Attribut catalog für die Typen MovexProduct, MovexRebateModel und MovexScaleShiftMethod löschen.
+
+
+
+
+<h4>Synchronization:</h4>
+- synchronize content catalogs

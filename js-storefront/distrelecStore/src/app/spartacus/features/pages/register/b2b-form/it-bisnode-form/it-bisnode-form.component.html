@@ -1,0 +1,92 @@
+<ng-container *ngIf="generalRegForm.get('countryCode').value === 'IT'" [formGroup]="generalRegForm">
+  <div class="register__form__holder">
+    <label class="register__form__holder--title" id="codiceUnivocoQ">Sei in possesso di un Codice Univoco?</label>
+  </div>
+  <div class="register__form__holder__have-account">
+    <div class="register__form__holder-btn" [class.is-checked]="isCodice">
+      <button class="btn" id="codiceUnivoco.form.yes" (click)="triggerCodice(true)" type="radio">
+        {{ 'form.yes' | cxTranslate }}
+      </button>
+    </div>
+
+    <div class="register__form__holder-btn" [class.is-checked]="!isCodice">
+      <button class="btn" id="codiceUnivoco.form.no" (click)="triggerCodice(false)" type="button">
+        {{ 'form.no' | cxTranslate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- CODICE DESTINARIO -->
+  <ng-container *ngIf="isCodice && generalRegForm.get('vat4')">
+    <div *ngIf="isCodice" class="register__form__holder">
+      <div class="register__form__holder--full">
+        <label class="register__form__holder--title" id="codiceDestinatarioTitle">Codice Destinatario *</label>
+        <div class="p-relative">
+          <input
+            class="register__form__holder--input js-validate"
+            [id]="'vat4' + this.generalRegForm.get('type').value"
+            [class.is-correct]="generalRegForm.get('vat4').valid"
+            [class.is-invalid]="generalRegForm.get('vat4').errors && generalRegForm.get('vat4').touched"
+            (click)="onControlTouch('vat4')"
+            type="text"
+            formControlName="vat4"
+            placeholder="e.g 0123456"
+          />
+          <fa-icon
+            *ngIf="generalRegForm.get('vat4').errors && generalRegForm.get('vat4').touched"
+            id="faTimesCodiceFisc"
+            [icon]="faTimes"
+          ></fa-icon>
+          <fa-icon *ngIf="!generalRegForm.get('vat4').errors" id="faCheckCodiceFisc" [icon]="faCheck"></fa-icon>
+          <small
+            *ngIf="generalRegForm.get('vat4').errors && generalRegForm.get('vat4').touched"
+            class="error"
+            id="errorCodiceFiscInvalid"
+          >
+            Il tuo Codice Univoco deve essere di 6 o 7 caratteri senza spazi.
+          </small>
+          <small id="errorCodiceFiscInvalidHelp">
+            {{ 'validations.codicefiscale_invalid_error' | cxTranslate }}
+          </small>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- LEGAL EMAIL -->
+  <ng-container *ngIf="!isCodice">
+    <div class="register__form__holder">
+      <div class="register__form__holder--full">
+        <label class="register__form__holder--title" id="registration.b2b.legal_email">
+          {{ 'registration.b2b.legal_email' | cxTranslate }}
+        </label>
+        <div class="p-relative">
+          <input
+            class="register__form__holder--input js-validate"
+            [id]="'legalEmail' + this.generalRegForm.get('type').value"
+            [class.is-correct]="generalRegForm.get('legalEmail').valid"
+            [class.is-invalid]="generalRegForm.get('legalEmail').errors && generalRegForm.get('legalEmail').touched"
+            (click)="onControlTouch('legalEmail')"
+            autocomplete="email"
+            type="text"
+            formControlName="legalEmail"
+            placeholder="esempio@legalmail.it"
+          />
+          <fa-icon
+            *ngIf="generalRegForm.get('legalEmail').errors && generalRegForm.get('legalEmail').touched"
+            id="faTimesLegalEmail"
+            [icon]="faTimes"
+          ></fa-icon>
+          <fa-icon *ngIf="!generalRegForm.get('legalEmail').errors" id="faCheckLegalEmail" [icon]="faCheck"></fa-icon>
+          <small
+            *ngIf="generalRegForm.get('legalEmail').errors && generalRegForm.get('legalEmail').touched"
+            class="error"
+            id="validations.enter_valid_field"
+          >
+            {{ 'validations.email_error_invalid' | cxTranslate }}
+          </small>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

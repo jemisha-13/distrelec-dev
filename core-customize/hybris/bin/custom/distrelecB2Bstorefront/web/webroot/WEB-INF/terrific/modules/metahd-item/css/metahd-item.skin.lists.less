@@ -1,0 +1,241 @@
+.skin-metahd-item-lists {
+
+	@_flyout_width: 340px;
+	@_flyout_offset: -170px;
+	@_arrow_offset: 162px;
+
+	.lt-ie8 & {
+		width: 118px;
+	}
+
+	// active bg change (because active state is currently unused in parent xmod)
+	&.active,
+	&:active {
+		background-color: @c-grey20;
+		color: @c-white;
+	}
+
+	// state INITIAL
+	.menuitem {
+		i {
+			margin-top: 6px;
+			.s-metahd-list-header-black();
+		}
+	}
+
+	// state HOVER, ACTIVE
+	&.hover,
+	&.active,
+	&:active {
+		i {
+			.s-metahd-list-header-white();
+		}
+	}
+
+	// state DISABLED
+	&[disabled],
+	&.disabled {
+		i {
+			.s-metahd-list-header-black();
+		}
+	}
+	&:disabled {// keep this selector separate (unsupported pseudo class ie8)
+		i {
+			.s-metahd-list-header-black();
+		}
+	}
+
+
+	//
+	// The Flyout
+	.mod-metahd-item > .flyout-mixin(@_flyout_width, @_flyout_offset, @_arrow_offset);
+
+	.flyout .bd {
+		padding: 10px 20px 0 20px;
+	}
+
+	.ui-list {
+		display: inline-block;
+		width: 100%;
+		margin-bottom: 20px;
+
+		li {
+			padding: 0 14px;
+			border-top: 1px solid @c-grey80;
+
+			&:first-child {
+				border-top: 0;
+			}
+
+			i {
+				margin-top: 14px;
+			}
+
+			//
+			// Row "Import Tool"
+
+			&.import {
+				i.ico-import {
+					float: left;
+					margin-right: 14px;
+					margin-top: 13px;
+					.s-upload-black();
+				}
+
+				i.ico-closed {
+					float: right;
+					margin-top: 13px;
+					.s-closed-black();
+				}
+
+				a:active i.ico-import {
+					.s-upload-lightblue();
+				}
+
+				a:active i.ico-closed {
+					.s-closed-lightblue();
+				}
+			}
+
+			//
+			// Row "Favorite List"
+
+			&.favorite-products {
+				i.ico-favorite-products {
+					float: left;
+					margin-left: 1px; // center it optically with the other icons (design review)
+					margin-right: 13px;
+					.s-favorite-black();
+				}
+				i.ico-closed {
+					float: right;
+					.s-closed-black();
+				}
+				a:active i.ico-favorite-products {
+					.s-favorite-lightblue();
+				}
+				a:active i.ico-closed {
+					.s-closed-lightblue();
+				}
+			}
+
+			//
+			// Row "List Item"
+
+			&.list {
+				i {
+					float: left;
+				}
+
+				i.ico-list {
+					margin-left: 1px; // center it optically with the other icons (design review)
+					margin-right: 13px;
+					.s-list-black();
+				}
+
+				i.ico-closed {
+					float: right;
+					.s-closed-black();
+				}
+
+				a:active i.ico-list {
+					.s-list-lightblue();
+				}
+
+				a:active i.ico-closed {
+					.s-closed-lightblue();
+				}
+			}
+
+			&:hover {
+				&.list i.ico-list {
+					.s-list-blue();
+				}
+
+				&.import i.ico-import {
+					.s-upload-blue();
+				}
+
+				&.favorite-products i.ico-favorite-products {
+					.s-favorite-blue();
+				}
+
+				i.ico-closed {
+					.s-closed-blue();
+				}
+			}
+		}
+
+		// List entries
+		a {
+			#typo > .size-x-c();
+			color: @c-grey20;
+			display: block;
+			line-height: 41px;
+
+			&:hover {
+				color: #AA1936;
+			}
+
+			&:active {
+				color: #AA1936C;
+			}
+		}
+
+		&.-lists {
+			margin-bottom: 0;
+
+			li:last-child {
+				border: none;
+			}
+		}
+	}
+
+	//
+	// Popover
+
+	.popover-variation(@c-white, @c-grey20, 'bottom');
+
+	.popover{
+		z-index: 1160; // override standard popover z index to be visible over the metahd suggest flyout
+	}
+
+	.ico-favorite-popover, .ico-list-popover {
+
+		i {
+			display: inline-block;
+			position: absolute;
+			right: 10px;
+		}
+	}
+
+	.ico-favorite-popover {
+		i {
+			.s-favorite-white();
+			margin-top: 3px;
+		}
+	}
+
+	.ico-list-popover {
+		i {
+			.s-list-white();
+		}
+	}
+
+	// The Flyout footer
+	.ft {
+		padding-left: 20px;
+		padding-right: 20px;
+		border: 1px solid @c-grey80;
+		border-top: none;
+
+		&:hover {
+			background: @c-white;
+		}
+	}
+	.show-all {
+		#typo > .size-m();
+		line-height: 60px;
+		display: block;
+	}
+}

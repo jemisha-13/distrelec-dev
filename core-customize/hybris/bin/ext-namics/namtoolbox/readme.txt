@@ -1,0 +1,1 @@
+Für eine ausführliche Dokumentation dieser Extension, siehe http://know.namics.com/display/hybris/Namics+hybris+Extensions

@@ -1,0 +1,20 @@
+<ng-template
+  *ngIf="templateName$ | async as layoutName"
+  [cxPageTemplateStyle]="layoutName"
+  [cxOutlet]="layoutName"
+  [cxOutletContext]="{ templateName$: templateName$, slots$: slots$ }"
+>
+  <div class="bom-data-import container">
+    <div class="header-wrap">
+      <app-page-title variant="red"></app-page-title>
+
+      <a class="help-link" id="bom_tool_upload_help_link" (click)="scroll(help)">{{ 'text.needhelp' | cxTranslate }}</a>
+    </div>
+
+    <app-bom-data-import></app-bom-data-import>
+
+    <div #help class="bom-help">
+      <cx-page-slot [isPageFold]="false" position="BomHelp"></cx-page-slot>
+    </div>
+  </div>
+</ng-template>

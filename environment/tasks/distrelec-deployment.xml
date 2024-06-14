@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!-- ====================================================================== project: Namics Hybris Extensions topic: Configuration date: 13.09.2011 author: jweiss 
+	====================================================================== -->
+
+
+<project name="distrelec-hybris-tasks-deployment" basedir="." xmlns:props="antlib:org.apache.ant.props">
+
+	<!-- ================================= macro: configure ================================= -->
+	<macrodef name="installDeploymentUnitDistrelec" description="Deploy deploymentUnit on server">
+		<sequential>
+			<echo message="start deployment on server" />
+
+			<propertyhelper>
+				<props:nested />
+			</propertyhelper>
+
+			<input message="Release? example: v1.0.0 or v1.0-rc1" addproperty="releaseToInstall" />
+			<fail message="Attribute 'releaseToInstall' was not set. Release example: v1.0.0 or v1.0-rc1" unless="releaseToInstall" />
+
+			<input message="On which environment you would like to deploy? example: env-hp-q, env-hp-q2, env-hp-p" addproperty="deployment.environment" />
+
+			<fail message="environmentlist for ${deployment.environment} not set">
+				<condition>
+					<not>
+						<isset property="${deployment.environment}.environmentlist" />
+					</not>
+				</condition>
+			</fail>
+			<echo message="starting installation of release: ${releaseToInstall} to on environments: ${${deployment.environment}.environmentlist}" />
+			<input message="continue?" addproperty="continue" validargs="y,n" defaultvalue="n" />
+
+			<fail message="user requested cancle">
+				<condition>
+					<not>
+						<equals arg1="${continue}" arg2="y" />
+					</not>
+				</condition>
+			</fail>
+
+			<property name="scp.username" value="${${deployment.environment}.scp.username}" />
+			<property name="scp.password" value="${${deployment.environment}.scp.password}" />
+
+
+			<tstamp />
+			<echo message="${DSTAMP}-${TSTAMP} ${releaseToInstall} ${deployment.environment} &lt;br/&gt;${line.separator}" append="true" file="/data/www/deployment/deployment_log.html" />
+			
+			<for list="${${deployment.environment}.environmentlist}" param="env">
+				<sequential>
+					<echo message="@{env}" />
+					<property file="@{env}/static/scripts/install-release-env.rc" prefix="@{env}" />
+					<echo message="install_environment_ip:${@{env}.install_environment_ip}" />
+
+					<property name="scp.server" value="" />
+
+					<sshexec host="${@{env}.install_environment_ip}" username="${scp.username}" trust="true" password="${scp.password}" command="(cd /data/project_distrelec/; ./install-release-${@{env}.install_environment}.sh ${releaseToInstall})" failonerror="true" />
+
+					<echo message="@{env} done" />
+
+				</sequential>
+			</for>
+
+		</sequential>
+	</macrodef>
+
+</project>

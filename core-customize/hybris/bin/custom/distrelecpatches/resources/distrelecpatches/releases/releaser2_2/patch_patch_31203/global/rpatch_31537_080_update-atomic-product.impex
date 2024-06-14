@@ -1,0 +1,82 @@
+$productCatalog=distrelecProductCatalog
+$catalogVersions=catalogVersions(catalog(id), version);
+$atomicFacetSearchConfigDescription=Atomic Product Fusion Indexes
+$atomicSearchIndexNamePrefix=atomicProducts
+$solrIndexedTypeProductAtomic=distproductTypeAtomic
+$atomicFacetSearchConfigName=distSearchConfigAtomic
+$indexCurrencies=
+
+INSERT_UPDATE SolrIndexedType;identifier[unique=true]       ;type(code);variant;indexName
+                             ;$solrIndexedTypeProductAtomic ;Product   ;false  ;product_atomic
+
+INSERT_UPDATE SolrFacetSearchConfig;name[unique=true]            ;description                         ;indexNamePrefix              ;languages(isocode);currencies(isocode);solrServerConfig(name);solrSearchConfig(description);solrIndexConfig(name);solrIndexedTypes(identifier)  ;enabledLanguageFallbackMechanism;$catalogVersions
+                                   ;$atomicFacetSearchConfigName ;$atomicFacetSearchConfigDescription ;$atomicSearchIndexNamePrefix ;                  ;$indexCurrencies   ;fusionServerConfig    ;Default                      ;Default              ;$solrIndexedTypeProductAtomic ;true                            ;$productCatalog:Online
+
+INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[unique=true];type(code);sortableType(code);currency[default=false];localized[default=false];multiValue[default=false];fieldValueProvider                      ;valueProviderParameter;ftsPhraseQuery[default=false];ftsPhraseQueryBoost;ftsQuery[default=false];ftsQueryBoost;ftsFuzzyQuery[default=false];ftsFuzzyQueryBoost;ftsWildcardQuery[default=false];ftsWildcardQueryType(code)[default=POSTFIX];ftsWildcardQueryBoost;ftsWildcardQueryMinTermLength
+                                 ;$solrIndexedTypeProductAtomic           ;priceAttributes  ;double    ;                  ;                       ;                        ;                         ;distAllPriceAttributesValueResolver     ;
+                                 ;$solrIndexedTypeProductAtomic           ;stock            ;boolean   ;                  ;                       ;                        ;                         ;distTotalInStockForCMSSiteValueResolver ;
+
+#atomic product update
+INSERT_UPDATE SolrIndexerQuery;solrIndexedType(identifier)[unique=true];identifier[unique=true]    ;type(code);injectCurrentDate[default=false];injectCurrentTime[default=true];injectLastIndexTime[default=false];query;user(uid) ;parameterProvider
+                              ;$solrIndexedTypeProductAtomic           ;products-atomicUpdateQuery ;update    ;                                ;                               ;                                  ;"
+SELECT {p.pk}
+  FROM {Product AS p}
+ WHERE {p.pimId} IS NOT NULL
+   AND {p.code} IS NOT NULL
+   AND ({p.exclude} IS NULL OR {p.exclude} != 1)
+   AND EXISTS ({{
+    SELECT 1
+      FROM {CatalogVersion AS cv
+      JOIN Catalog AS cat ON {cv.catalog} = {cat.pk}}
+     WHERE {cv.pk} = {p.catalogversion}
+       AND {cv.version} = 'Online'
+       AND {cat.id} = 'distrelecProductCatalog'
+   }})
+   AND EXISTS ({{
+    SELECT 1
+      FROM {ArticleApprovalStatus AS aas}
+     WHERE {aas.pk} = {p.approvalStatus}
+       AND {aas.code} = 'approved'
+   }})
+   AND EXISTS ({{
+      SELECT 1
+        FROM {DistSalesOrgProduct AS dsop
+        JOIN DistSalesStatus AS dss ON {dss.pk} = {dsop.salesStatus}}
+       WHERE {dsop.product} = {p.pk}
+         AND {dsop.salesOrg} = ?salesOrg
+         AND {dss.code} NOT IN ('10', '60', '61', '62', '90', '91', '92', '99')
+   }})
+   AND EXISTS ({{
+   	SELECT 1
+   	  FROM {DistPriceRow AS pr
+   	  JOIN CmsSite AS cms ON {pr.ug} = {cms.userPriceGroup}}
+   	  WHERE {pr.product} = {p.pk}
+		AND {cms.pk} = ?cmsSite
+   }})
+   AND (
+    EXISTS ({{
+      SELECT 1
+        FROM {StockLevel AS sl}
+       WHERE {sl.productCode} = {p.code}
+         AND {sl.modifiedtime} > ?lastIndexTime
+         AND {sl.inOutStockChange} = 1
+    }})
+    OR EXISTS ({{
+      SELECT 1
+        FROM {DistSalesOrgProduct AS dsop}
+       WHERE {dsop.product} = {p.pk}
+         AND {dsop.salesOrg} = ?salesOrg
+         AND {dsop.modifiedtime} > ?lastIndexTime
+    }})
+    OR EXISTS ({{
+      SELECT 1
+        FROM {DistPriceRow AS pr
+        JOIN CmsSite AS cms ON {pr.ug} = {cms.userPriceGroup}}
+       WHERE {pr.product} = {p.pk}
+         AND {cms.pk} = ?cmsSite
+         AND ({pr.modifiedtime} > ?lastIndexTime
+            OR ({pr.startTime} >= ?lastIndexTime AND  {pr.startTime} <= ?currentTime)
+            OR ({pr.endTime} >= ?lastIndexTime AND {pr.endtime} <= ?currentTime))
+    }})
+   )
+"    ;anonymous ;

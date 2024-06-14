@@ -1,0 +1,40 @@
+# ImpEx for Importing Products
+
+$productCatalog=distrelecProductCatalog
+$productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default='Online'])
+$languages=en,de
+
+INSERT_UPDATE Catalog;id[unique=true]
+;$productCatalog
+
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;languages(isoCode);readPrincipals(uid)
+;$productCatalog;Online;true;$languages;employeegroup
+
+INSERT_UPDATE Unit;code[unique=true];name[lang=en];name[lang=de];unitType
+;PC;Piece;Stück;pieces
+
+INSERT_UPDATE Product;code[unique=true];materialType(code);approvalstatus(code)[default='approved'];$productCV[unique=true];
+;9301490_sample;;
+;9301491_sample;;
+;8500027_sample;;
+;8500035_sample;;
+;8500043_sample;;
+;8500050_sample;;
+;2352138_sample;ZOCC;
+;8706616_sample;ZOCC;
+
+INSERT_UPDATE DistSalesOrgProduct;salesOrg(code)[unique=true];product(code,$productCV)[unique=true];salesStatus(code)[unique=true];showBestsellerLabelFromDate[dateformat=yyyy-MM-dd hh:mm:ss];showBestsellerLabelUntilDate[dateformat=yyyy-MM-dd hh:mm:ss];showNewLabelFromDate[dateformat=yyyy-MM-dd hh:mm:ss];showNewLabelUntilDate[dateformat=yyyy-MM-dd hh:mm:ss]
+;7310;9301490_sample;30;2000-01-01 00:00:00;2001-12-31 00:00:00
+;7310;9301491_sample;30;2000-01-01 00:00:00;9999-12-31 00:00:00
+;7310;8500035_sample;10;2000-01-01 00:00:00;2001-12-31 00:00:00;2000-01-01 00:00:00;9999-12-31 00:00:00
+;7310;8500027_sample;10;2000-01-01 00:00:00;9999-12-31 00:00:00;2000-01-01 00:00:00;9999-12-31 00:00:00
+;7310;8706616_sample;10;2000-01-01 00:00:00;9999-12-31 00:00:00;2000-01-01 00:00:00;9999-12-31 00:00:00
+
+INSERT_UPDATE ProductCountry;country(isocode)[unique=true];product(code,$productCV)[unique=true];showTopLabelFromDate[dateformat=yyyy-MM-dd hh:mm:ss];showTopLabelUntilDate[dateformat=yyyy-MM-dd hh:mm:ss];showHotOfferLabelFromDate[dateformat=yyyy-MM-dd hh:mm:ss];showHotOfferLabelUntilDate[dateformat=yyyy-MM-dd hh:mm:ss];showHitLabelFromDate[dateformat=yyyy-MM-dd hh:mm:ss];showHitLabelUntilDate[dateformat=yyyy-MM-dd hh:mm:ss];
+;CH;8500043_sample;2000-01-01 00:00:00;2001-12-31 00:00:00;2000-01-01 00:00:00;9999-12-31 00:00:00;2000-01-01 00:00:00;9999-12-31 00:00:00
+;CH;9301490_sample;2000-01-01 00:00:00;2001-12-31 00:00:00;2000-01-01 00:00:00;2001-12-31 00:00:00;2000-01-01 00:00:00;2001-12-31 00:00:00
+;CH;8706616_sample;2000-01-01 00:00:00;2001-12-31 00:00:00;2000-01-01 00:00:00;9999-12-31 00:00:00;2000-01-01 00:00:00;9999-12-31 00:00:00
+
+
+INSERT_UPDATE UserPriceGroup;code[unique=true];name[lang=de];name[lang=en]
+;SalesOrg_UPG_7310_M01;Movex User Price Group Sales Org 7310;Movex User Price Group Sales Org 7310

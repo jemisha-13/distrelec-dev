@@ -1,0 +1,15 @@
+$contentCatalog=distrelec_ATContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+$distTextImageContent=CMSParagraphComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;InfoBoxSlot;Calibration Service InfoBox Slot;true
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='ProductDetailsPageTemplate'];validComponentTypes(code)
+;InfoBox;;$distTextImageContent
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ProductDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;InfoBox-ProductDetails;InfoBox;;InfoBoxSlot;false
+
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];slots(uid,$contentCV);name
+;;InfoBoxParagraphComponent;InfoBoxSlot;"Info Box Paragraph Component"

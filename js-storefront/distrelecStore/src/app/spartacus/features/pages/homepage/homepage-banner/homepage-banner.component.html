@@ -1,0 +1,28 @@
+<div class="container home-container">
+  <section class="row home-container__row" id="home_banner_container">
+    <div class="col-xl-9 home-container__banner">
+      <div *rxIf="bannerData.length" class="banner-container col-12">
+        <ng-container *ngFor="let item of bannerData; let i = index">
+          <div *rxIf="i === 0" class="banner-main banner">
+            <a [externalRouterLink]="item?.localizedUrlLink">
+              <img [ngSrc]="item?.media?.url" [alt]="item?.media?.code" fetchpriority="high" width="520" height="533" />
+            </a>
+          </div>
+        </ng-container>
+        <div class="child-banner-wrap">
+          <ng-container *rxFor="let item of bannerData; let j = index">
+            <div *rxIf="j !== 0" class="other-banner banner">
+              <a [externalRouterLink]="item?.localizedUrlLink" [id]="'other-banner_' + j">
+                <img [ngSrc]="item?.media?.url" [alt]="item?.media?.code" width="403" height="261" />
+              </a>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 home-container__rnl">
+      <app-home-banner-login [isLoggedIn]="userLoggedIn$ | async"></app-home-banner-login>
+      <app-quick-order *ngIf="isAddToCartEnabled$ | async"></app-quick-order>
+    </div>
+  </section>
+</div>

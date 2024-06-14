@@ -1,0 +1,134 @@
+<div class="row row-holder">
+  <div class="col-12 col-md-6 row-holder__item">
+    <div class="form-box form-textimport">
+      <form id="upload-form-text" (ngSubmit)="submitText()">
+        <div class="content">
+          <h3 class="head" id="bom_data_import_title" [innerHTML]="'bomdataimport.title' | cxTranslate"></h3>
+          <div class="content__item">
+            <p
+              id="bom_data_import_copypastedescription"
+              [innerHTML]="'bomdataimport.copypastedescription' | cxTranslate"
+            ></p>
+          </div>
+          <div class="content__item">
+            <textarea
+              id="bom_data_import_upload_textarea"
+              [placeholder]="'import-tool.upload.textarea' | cxTranslate | brToNewline"
+              (focus)="showLoginIfRequired()"
+              (input)="textContent = $any($event.target)?.value"
+              >{{ textContent }}</textarea
+            >
+          </div>
+        </div>
+        <div class="btn-holder">
+          <app-button
+            [disabled]="!isTextFormValid"
+            [modifiers]="['fixed-width']"
+            buttonId="bom_data_import_upload_submit"
+            type="submit"
+          >
+            {{ 'bomdataimport.continue' | cxTranslate }}
+            <fa-icon *ngIf="isTextFormValid" [icon]="icons.faChevronRight"></fa-icon>
+          </app-button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row-holder__item-partition">
+    <span>or</span>
+  </div>
+
+  <div class="col-12 col-md-6 row-holder__item">
+    <div class="form-box form-fileimport" id="form-fileimport">
+      <form id="upload-form-file" (ngSubmit)="submitFile()">
+        <div class="content">
+          <h3
+            class="head"
+            id="bom_data_import_file_import_title"
+            [innerHTML]="'bomdataimport.fileimport' | cxTranslate"
+          ></h3>
+
+          <div class="content__item content__item--${currentCountry.isocode}">
+            <p
+              id="bom_data_import_file_import_introduction"
+              [innerHTML]="'bomdataimport.introduction' | cxTranslate"
+            ></p>
+            <a class="download-example boxy" id="bom_data_import_template_download_url" [href]="bomTemplateDownloadUrl">
+              <fa-icon [icon]="icons.faDownload"></fa-icon>
+              &nbsp;
+              <span class="right">{{ 'bomdataimport.downloadtemplate' | cxTranslate }}</span>
+            </a>
+          </div>
+          <div class="content__item">
+            <input
+              #fileUpload
+              class="file-upload-input"
+              id="bom_data_import_upload_file"
+              (change)="onFileChange($event)"
+              type="file"
+              name="file"
+            />
+
+            <div class="advanced-upload">
+              <a
+                class="upload-file"
+                id="bom_data_import_upload_file_url"
+                [ngClass]="{ 'upload-file--dragover': isDragOver }"
+                (click)="isLoggedIn ? fileUpload.click() : showLoginIfRequired()"
+                (drop)="isLoggedIn ? onDrop($event) : showLoginIfRequired($event)"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+              >
+                <div class="upload-file__item">
+                  <div class="browser-other">
+                    <span class="icon">
+                      <fa-icon [icon]="icons.faCloudUploadAlt"></fa-icon>
+                    </span>
+                    <span
+                      class="text"
+                      id="bom_data_import_upload_file_uploaddescription"
+                      [innerHTML]="'bomdataimport.uploaddescription' | cxTranslate"
+                    ></span>
+                  </div>
+
+                  <div
+                    class="browser-ie mat-button mat-button__solid--action-blue"
+                    id="bom_data_import_upload_file_uploaddescription_browser-ie"
+                    routerLink="/welcome"
+                  >
+                    <fa-icon [icon]="icons.faCloudUploadAlt"></fa-icon>
+                    {{ 'bomdataimport.uploaddescription' | cxTranslate }}
+                  </div>
+
+                  <span class="filename" id="bom_data_import_upload_file_name">{{ selectedFile?.name }}</span>
+                </div>
+              </a>
+            </div>
+
+            <div *ngIf="validationErrors.length" class="errors">
+              <p
+                *ngFor="let error of validationErrors; index as i"
+                [id]="'bom_data_import_upload_file_validation_error_' + i"
+              >
+                {{ error }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="btn-holder">
+          <app-button
+            class="mat-button mat-button__solid--action-green btn-continue"
+            [modifiers]="['fixed-width']"
+            [disabled]="!isFileFormValid"
+            buttonId="bom_data_import_file_import_submit"
+            type="submit"
+          >
+            {{ 'bomdataimport.continue' | cxTranslate }}
+            <fa-icon *ngIf="isFileFormValid" [icon]="icons.faChevronRight"></fa-icon>
+          </app-button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

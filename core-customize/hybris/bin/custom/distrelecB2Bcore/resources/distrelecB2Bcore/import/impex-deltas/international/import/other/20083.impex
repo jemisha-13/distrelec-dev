@@ -1,0 +1,16 @@
+$cmsSiteUID=distrelec_FR
+$contentCatalog=distrelec_FRContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$stockEmailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/essential/common/email
+$translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator
+
+INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;active;frontendTemplateName;subject(code);htmlTemplate(code);restrictedPageTypes(code)
+                               ;;StockNotificationEmailTemplate;Stock Notification Email Template;true;StockNotificationEmail;$cmsSiteUID-Email_Stock_Notification_Subject;$cmsSiteUID-Email_Stock_Notification_Body;EmailPage
+
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang = en];contextClass[default = com.namics.distrelec.b2b.facades.process.email.context.DistStockNotificationEmailContext];templateScript[lang = en, translator = $translator] ;rendererType(code)[default='velocity']
+                              ;$cmsSiteUID-Email_Stock_Notification_Body;Stock Notification Email Template;;$stockEmailResource/email-StockNotificationBody.vm;
+                              ;$cmsSiteUID-Email_Stock_Notification_Subject;Stock Notification Email Subject Template;;$stockEmailResource/email-StockNotificationSubject.vm;
+
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang = fr];contextClass[default = com.namics.distrelec.b2b.facades.process.email.context.DistStockNotificationEmailContext];templateScript[lang = fr, translator = $translator] ;rendererType(code)[default='velocity']
+                              ;$cmsSiteUID-Email_Stock_Notification_Body;Stock Notification Email Template;;$stockEmailResource/email-StockNotificationBody.vm;
+                              ;$cmsSiteUID-Email_Stock_Notification_Subject;Stock Notification Email Subject Template;;$stockEmailResource/email-StockNotificationSubject.vm;

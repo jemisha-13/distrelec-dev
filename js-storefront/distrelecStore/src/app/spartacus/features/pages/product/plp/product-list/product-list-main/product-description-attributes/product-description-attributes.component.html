@@ -1,0 +1,46 @@
+<div class="attribute-list">
+  <div
+    class="attribute has-action"
+    id="art-nr-text-{{ index }}"
+    (click)="copyToClipboard(product.code, product.code + '_article')"
+  >
+    <span class="attribute-descriptions">
+      <fa-icon [icon]="faCopy"></fa-icon>
+      <span>{{ 'homepage.artNr' | cxTranslate | stripHTMLTags }}</span>
+      &nbsp;
+    </span>
+    <span>{{ product.code | articleNumber }}</span>
+    <ng-container *ngIf="copiedState$ | async as copiedState">
+      <app-article-tooltip
+        *ngIf="copiedState[product.code + '_article']"
+        class="tooltip-container"
+        [copiedText]="product.code"
+      ></app-article-tooltip>
+    </ng-container>
+  </div>
+
+  <div
+    class="attribute has-action mpn-number"
+    id="mpn-text-{{ index }}"
+    (click)="copyToClipboard(product.typeName, product.code + '_mpnAlias', 'mpnAlias')"
+  >
+    <span class="attribute-descriptions">
+      <fa-icon [icon]="faCopy"></fa-icon>
+      <span class="attribute-descriptions">{{ 'homepage.mpn' | cxTranslate }}.</span>
+      &nbsp;
+    </span>
+    <span>{{ product.typeName }}</span>
+    <ng-container *ngIf="copiedState$ | async as copiedState">
+      <app-article-tooltip
+        *ngIf="copiedState[product.code + '_mpnAlias']"
+        class="tooltip-container"
+        [copiedText]="product.typeName"
+      ></app-article-tooltip>
+    </ng-container>
+  </div>
+
+  <div class="attribute space" id="man-text-{{ index }}">
+    <span class="attribute-descriptions">{{ 'product.manufacturer' | cxTranslate }}: &nbsp;</span>
+    <span>{{ product.distManufacturer?.name }}</span>
+  </div>
+</div>

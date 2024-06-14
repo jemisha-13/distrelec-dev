@@ -1,0 +1,118 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 col-lg-12 mt-2">
+      <app-action-message
+        id="nps-feeback-response"
+        [type]="responseType"
+        [message]="responseMessage"
+      ></app-action-message>
+    </div>
+    <span *ngIf="submit" class="mb-5"></span>
+  </div>
+  <div *ngIf="!submit" class="nps-wrapper">
+    <div class="row mt-4 mb-4">
+      <div *ngIf="!changeScore" class="col-sm-12 col-lg-12 col-md-12 text-center">
+        <br />
+        <h2 id="nps-heading">{{ 'feedback.nps.score.title' | cxTranslate }}</h2>
+        <h1 id="nps-heading-score">{{ npsFeedback.value }}</h1>
+        <a *ngIf="!duplicate" class="cursor" (click)="changeScore = !changeScore">
+          <u>{{ 'feedback.nps.score.change' | cxTranslate }}</u>
+        </a>
+        <br />
+      </div>
+    </div>
+    <div *ngIf="changeScore" class="row text-center">
+      <div class="col-md-12 col-lg-12">
+        <h2 id="nps-how-likely-you-recommend">{{ 'feedback.nps.nps' | cxTranslate }}</h2>
+        <br />
+        <div class="chart-scale mt-3">
+          <span class="unlikely">{{ 'feedback.nps.unlikely' | cxTranslate }}</span>
+          <br />
+          <button
+            *ngFor="let item of scoreArray; let i = index"
+            class="btn btn-scale btn-scale-desc-{{ i + 1 }}"
+            [ngClass]="npsFeedback.value == i + 1 ? 'activeScore' : ''"
+            (click)="updateScore(i + 1)"
+          >
+            {{ i + 1 }}
+          </button>
+          <br />
+          <span class="likely float-right">{{ 'feedback.nps.verylikely' | cxTranslate }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4 mb-4 justify-content-center">
+      <div class="col-sm-12 col-lg-12 col-md-12 text-center" id="nps-main-reason">
+        {{ 'feedback.nps.score.reason' | cxTranslate }}
+      </div>
+      <div class="col-sm-12 col-lg-4 col-md-12">
+        <ng-select
+          class="mb-2 mt-2 fs-small"
+          id="nps-rating-main-reasons"
+          [disabled]="duplicate"
+          [ngModel]="npsFeedback.reason ? npsFeedback.reason : '0'"
+          (change)="onChangeMainReason($event)"
+        >
+          <ng-option id="0" selected value="0">{{ 'form.please_select' | cxTranslate }}</ng-option>
+          <ng-option *ngFor="let mainReason of returnData?.npsFormReasons" [value]="mainReason" [id]="mainReason">
+            {{ 'nps.reason.' + mainReason | cxTranslate }}
+          </ng-option>
+        </ng-select>
+      </div>
+    </div>
+    <div class="row mt-4 mb-4 justify-content-center">
+      <div
+        *ngIf="npsFeedback.reason === 'deliveryOfGoods'"
+        class="col-sm-12 col-lg-12 col-md-12 text-center"
+        id="nps-detailed-topic"
+      >
+        {{ 'nps.reason.topic.sub' | cxTranslate }}:
+      </div>
+      <div class="col-sm-12 col-lg-4 col-md-12">
+        <ng-select
+          *ngIf="npsFeedback.reason === 'deliveryOfGoods'"
+          class="mb-2 mt-2 fs-small"
+          id="nps-rating-main-reasons"
+          [disabled]="duplicate"
+          [ngModel]="npsFeedback.subreason"
+          (change)="onChangeSubReason($event)"
+        >
+          <ng-option id="0" selected value="0">{{ 'form.please_select' | cxTranslate }}</ng-option>
+          <ng-option
+            *ngFor="let subReason of returnData?.npsFormSubReasons"
+            [value]="'nps.reason.' + subReason | cxTranslate"
+            [id]="subReason"
+          >
+            {{ 'nps.reason.' + subReason | cxTranslate }}
+          </ng-option>
+        </ng-select>
+      </div>
+      <div class="col-sm-12 col-lg-12 col-md-12 text-center mt-3">
+        <p id="nps-comments-below">
+          {{ 'feedback.nps.score.comment' | cxTranslate }}
+          <br />
+          <br />
+        </p>
+        <div class="form-row">
+          <textarea
+            class="w-100"
+            id="nps-rating-comments-explain"
+            [(ngModel)]="npsFeedback.feedback"
+            [disabled]="duplicate"
+            rows="10"
+            cols="60"
+          ></textarea>
+        </div>
+        <br />
+        <button
+          class="btn btn-secondary btn-distrelec"
+          id="nps-submit-button"
+          [disabled]="duplicate"
+          (click)="postFeedback()"
+        >
+          {{ 'feedback.nps.score.submit' | cxTranslate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+# cronjobs: update & export
+INSERT_UPDATE DistFactFinderExportCronJob;code[unique=true];sessionLanguage(isocode);mediaPrefix;cmsSite(uid);channel(code);job(code)[default='distff.factFinderErpExportJob'];sessionUser(uid)[default='will.spalinger'];sessionCurrency(isocode)[default='EUR'];sendEmail[default='false'];emailAddress[default=''];logLevelFile(code)[default='ERROR'];nodeID[default=0]
+;erpExport_7310_ch;de;erpExport_7310_ch;distrelec_CH;distrelec_7310_ch_de;;;CHF
+;erpExport_7320_at;de;erpExport_7320_at;distrelec_AT;distrelec_7320_at_de;;;EUR
+;erpExport_7320_cz;cs;erpExport_7320_cz;distrelec_CZ;distrelec_7320_cz_cs;;;
+;erpExport_7320_hu;hu;erpExport_7320_hu;distrelec_HU;distrelec_7320_hu_hu;;;
+;erpExport_7320_ro;ro;erpExport_7320_ro;distrelec_RO;distrelec_7320_ro_ro;;;
+;erpExport_7320_sk;sk;erpExport_7320_sk;distrelec_SK;distrelec_7320_sk_sk;;;
+;erpExport_7330_it;it;erpExport_7330_it;distrelec_IT;distrelec_7330_it_it;;;
+;erpExport_7350_de;de;erpExport_7350_de;distrelec_DE;distrelec_7350_de_de;;;
+;erpExport_7640_se;sv;erpExport_7640_se;distrelec_SE;distrelec_7640_se_sv;;;SEK
+;erpExport_7650_no;no;erpExport_7650_no;distrelec_NO;distrelec_7650_no_no;;;NOK
+;erpExport_7660_pl;pl;erpExport_7660_pl;distrelec_PL;distrelec_7660_pl_pl;;;PLN
+;erpExport_7670_fi;fi;erpExport_7670_fi;distrelec_FI;distrelec_7670_fi_fi;;;
+;erpExport_7680_dk;da;erpExport_7680_dk;distrelec_DK;distrelec_7680_dk_da;;;NOK
+;erpExport_7790_ee;et;erpExport_7790_ee;distrelec_EE;distrelec_7790_ee_et;;;
+;erpExport_7800_be;nl;erpExport_7800_be;distrelec_BE;distrelec_7800_be_nl;;;
+;erpExport_7801_ex;en;erpExport_7801_ex;distrelec_EX;distrelec_7801_ex_en;;;
+;erpExport_7810_lv;lv;erpExport_7810_lv;distrelec_LV;distrelec_7810_lv_lv;;;
+;erpExport_7820_lt;lt;erpExport_7820_lt;distrelec_LT;distrelec_7820_lt_lt;;;
+
+
+# composite entries
+INSERT_UPDATE CompositeEntry;code[unique=true];executableCronJob(code)
+;ERP-CH;erpExport_7310_ch
+;ERP-AT;erpExport_7320_at
+;ERP-CZ;erpExport_7320_cz
+;ERP-HU;erpExport_7320_hu
+;ERP-RO;erpExport_7320_ro
+;ERP-SK;erpExport_7320_sk
+;ERP-IT;erpExport_7330_it
+;ERP-DE;erpExport_7350_de
+;ERP-SE;erpExport_7640_se
+;ERP-NO;erpExport_7650_no
+;ERP-PL;erpExport_7660_pl
+;ERP-FI;erpExport_7670_fi
+;ERP-DK;erpExport_7680_dk
+;ERP-EE;erpExport_7790_ee
+;ERP-BE;erpExport_7800_be
+;ERP-EX;erpExport_7801_ex
+;ERP-LV;erpExport_7810_lv
+;ERP-LT;erpExport_7820_lt
+
+
+INSERT_UPDATE CompositeCronJob;code[unique=true];compositeEntries(code);job(code)[default='compositeJobPerformable'];sendEmail[default='true'];emailAddress[default='DefaultCronJobFinishNotificationTemplate'];logLevelFile(code)[default='WARNING'];nodeID[default=0]
+;factFinderERPexport;"
+	ERP-CH,
+	ERP-AT,
+	ERP-CZ,
+	ERP-HU,
+	ERP-RO,
+	ERP-SK,
+	ERP-IT,
+	ERP-DE,
+	ERP-SE,
+	ERP-NO,
+	ERP-PL,
+	ERP-FI,
+	ERP-DK,
+	ERP-EE,
+	ERP-BE,
+	ERP-EX,
+	ERP-LV,
+	ERP-LT
+"
+
+# Trigger for composite cronjob
+INSERT_UPDATE Trigger;code[unique=true];cronJob(code);second;minute;hour;day;month;year;relative;active;maxAcceptableDelay
+;factFinderERPexportTrigger;factFinderERPexport;0;0;5;-1;-1;-1;false;true;-1

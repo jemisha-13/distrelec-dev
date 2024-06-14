@@ -1,0 +1,25 @@
+# 
+# Import the Distrelec Product and Classification Catalogs
+#
+
+$productCatalog=distrelecProductCatalog
+$classificationCatalog=DistrelecClassification
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Online'])[unique=true,default=$productCatalog:Online]
+$languages=en,de
+
+# Product catalog
+INSERT_UPDATE Catalog;id[unique=true]
+;$productCatalog
+
+# Product versions for product catalogs
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;languages(isoCode);readPrincipals(uid)
+#;$productCatalog;Staged;false;$languages;employeegroup
+;$productCatalog;Online;true;$languages;employeegroup
+
+# Distrelec Classification catalog
+INSERT_UPDATE ClassificationSystem;id[unique=true]
+;$classificationCatalog
+
+# Insert Classifications System Version
+INSERT_UPDATE ClassificationSystemVersion;catalog(id)[unique=true];version[unique=true];active;inclPacking[virtual=true,default=true];inclDuty[virtual=true,default=true];inclFreight[virtual=true,default=true];inclAssurance[virtual=true,default=true]
+;$classificationCatalog;1.0;true

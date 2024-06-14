@@ -1,0 +1,1642 @@
+$contentCatalog=distrelec_ATContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);&nodeRef;
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;InfoCenterNavNode;HtmlSitemapNavEntry;HtmlSitemapNode
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;&entryRef;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNavEntry;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=de]
+						;HtmlSitemapNode;;Vollständige Seitenübersicht anzeigen
+        
+$contentCatalog=distrelec_BEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;AboutUsNavNode;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=en];title[lang=fr];title[lang=nl]
+						;HtmlSitemapNode;;View Full Site Map;Voir le plan du site complet;Bekijk de volledige sitemap
+
+
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+                             
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;InfoCenterNavNode;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=en];title[lang=fr];title[lang=de]
+						;HtmlSitemapNode;;View Full Site Map;Voir le plan du site complet;Vollständige Seitenübersicht anzeigen
+
+$contentCatalog=distrelec_CZContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;AboutusNavigationNode;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=cs]
+						;HtmlSitemapNode;;Zobrazit celou mapu stránek
+
+
+$contentCatalog=distrelec_DEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;InfoCenterNavNode;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=en];title[lang=de]
+						;HtmlSitemapNode;;View Full Site Map;Vollständige Seitenübersicht anzeigen
+
+
+$contentCatalog=distrelec_DKContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+       
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;navigationNode_00000QAL;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=en];title[lang=da]
+						;HtmlSitemapNode;;View Full Site Map;Se fuldt kort over websted
+
+$contentCatalog=distrelec_EEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;navigationNode_00000PGQ;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=et]
+						;HtmlSitemapNode;;Vaata täielikku lehe kaart
+
+$contentCatalog=distrelec_EXContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+							
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+							
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;navigationNode_00000TCL;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=en]
+						;HtmlSitemapNode;;View Full Site Map
+
+$contentCatalog=distrelec_FIContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;navigationNode_00000TBK;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=sv];title[lang=fi]
+						;HtmlSitemapNode;;Visa fullständig webbplatskarta;Näytä koko sivustokartta
+						
+$contentCatalog=distrelec_HUContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;InfoCenterNavNode;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=hu];
+						;HtmlSitemapNode;;Teljes oldaltérkép megtekintése
+						
+
+$contentCatalog=distrelec_ITContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;InfoCenterNavNode;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=it]
+						;HtmlSitemapNode;;Visualizza la mappa completa del sito
+
+$contentCatalog=distrelec_LTContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;InfoCenterNavNode;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=lt]
+						;HtmlSitemapNode;;Žiūrėti išsamų vietos žemėlapį
+						
+$contentCatalog=distrelec_LVContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;navigationNode_00000QBE;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=lv]
+						;HtmlSitemapNode;;Skatīt pilnu vietnes karti
+						
+$contentCatalog=distrelec_NLContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;navigationNode_00000R0G;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=en];title[lang=nl]
+						;HtmlSitemapNode;;View Full Site Map;Bekijk de volledige sitemap
+
+$contentCatalog=distrelec_NOContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;navigationNode_00000R1F;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=en];title[lang=no]
+						;HtmlSitemapNode;;View Full Site Map;Vis fullstendig nettstedskart
+
+$contentCatalog=distrelec_PLContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;navigationNode_00000R2D;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=en];title[lang=pl]
+						;HtmlSitemapNode;;View Full Site Map;Wyświetl pełną mapę witryny
+
+$contentCatalog=distrelec_ROContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;InfoCenterNavNode;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=ro]
+						;HtmlSitemapNode;;Vizualizați harta completă a site-ului
+
+$contentCatalog=distrelec_SEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;navigationNode_00000Q93;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=en];title[lang=sv]
+						;HtmlSitemapNode;;View Full Site Map;Visa fullständig webbplatskarta
+
+$contentCatalog=distrelec_SKContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+
+        
+        INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+        
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;AboutusNavigationNode;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=sk]
+						;HtmlSitemapNode;;Zobraziť celú mapu stránky
+                             
+$contentCatalog=distrelec_FRContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemap   ; Sitemap Page 	; sitemap	;                          ; true       ; SitemapTemplate		             	; approved
+  
+  INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; SearchBox          ;                                                                             ; CMSFlexComponent
+                             ; HeaderLogin        ;                                                                             ; CMSFlexComponent
+                             ; MiniCart           ;                                                                             ; CMSFlexComponent
+                             ; SiteSwitcher       ;                                                                             ; CMSFlexComponent
+                             
+                             
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+                            ;                            ; SearchBox-SitemapTemplate    ; SearchBox              ;                                                                                 ; SearchBoxSlot                                ; false
+                            ;                            ; HeaderLogin-SitemapTemplate  ; HeaderLogin            ;                                                                                 ; HeaderLoginSlot                              ; false
+                            ;                            ; MiniCart-SitemapTemplate     ; MiniCart               ;                                                                                 ; MiniCartSlot                                 ; false
+                            ;                            ; SiteSwitcher-SitemapTemplate ; SiteSwitcher           ;                                                                                 ; SiteSwitcherSlot                             ; false
+
+INSERT_UPDATE ContentSlotForTemplate; $contentCV[unique = true]; uid[unique = true]   ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite
+;                            ; HeaderWrapper-SitemapTemplate    ; HeaderWrapper              ;  SitemapTemplate                                                                           ; HeaderWrapperSlot                                ; false
+
+INSERT_UPDATE ContentSlotName;name[unique=true]   ;template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+;MainManufacturerNav ;SitemapTemplate                ;DistMainNavigationComponent
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;TopHeader        ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true];$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position  ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-TopHeader                ;                         ;SitemapTemplate                ;TopHeader ;TopHeaderSlot
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+                             ;MobileHeader     ;SitemapTemplate                                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+                             
+INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]                                     ;$contentCV[unique=true]  ;pageTemplate(uid, $contentCV)           ;position     ;contentSlot(uid, $contentCV)
+                             ;SitemapTemplate-MobileHeader                                ;                         ;SitemapTemplate                         ;MobileHeader ;MobileHeaderSlot
+ 
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']; validComponentTypes(code)
+                             ; breadcrumb         ;                                                                        ; BreadcrumbComponent
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]                      ; $contentCV[unique = true]; contentSlot(uid, $contentCV); page(uid, $contentCV)[unique = true]  ; position
+                                ; BreadcrumbContentSlot-sitemap ;                          ; BreadcrumbContentSlot       ; sitemap                     ; breadcrumb
+
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;BottomHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForTemplate;uid[unique=true]  ;$contentCV[unique=true];pageTemplate(uid, $contentCV)                 ;position     ;contentSlot(uid, $contentCV)
+ ;SitemapTemplate-BottomHeader                ;                         ;SitemapTemplate                ;BottomHeader ;BottomHeaderSlot
+ 
+ 
+ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid, $contentCV)[unique=true]        ;validComponentTypes(code)
+ ;MobileHeader     ;SitemapTemplate                ;DistMainNavigationComponent,CMSFlexComponent,SimpleBannerComponent
+ 
+ 
+ INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; SitemapPage-Logo                  ;                          ; LogoSlot                           ; sitemap                 ; Logo
+                                ; SitemapPage-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemap                ; ServiceNav
+                                ; SitemapPage-MainNavSlot           ;                          ; MainNavSlot                        ; sitemap                 ; MainNav
+                                ; SitemapPage-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemap                 ; MainCategoryNav
+                                ; SitemapPage-RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemap                 ; RightSideNavNodes
+                                ; SitemapPage-RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemap                 ; RightSideCMSLinks
+                                ; SitemapPage-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemap                ; FooterLinks
+ 
+ # CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);
+;HtmlSitemapNode;;HTML Sitemap Navigation Node;InfoCenterNavNode;HtmlSitemapNavEntry;
+
+INSERT_UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];name          ;target(code)[default='sameWindow']
+                              ;htmlsitemaplink    ;                      ;HTML Sitemap Link ;
+
+UPDATE CMSLinkComponent;uid[unique=true];$contentCV[unique=true];localizedUrl[lang=en];localizedUrl[lang=pl]
+                       ;htmlsitemaplink    ;                    ;/cms/sitemap       ;/cms/sitemap
+
+INSERT_UPDATE CMSNavigationEntry;uid[unique=true]           ;$contentCV[unique=true];name                    ;navigationNode(uid, $contentCV);item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV)
+                                ;HtmlSitemapNavEntry ;      ;HTML Sitemap Navigation Entry ;HtmlSitemapNode             ;htmlsitemaplink
+
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];title[lang=fr]
+						;HtmlSitemapNode;;Voir le plan du site complet           
+                    

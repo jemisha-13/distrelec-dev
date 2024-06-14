@@ -1,0 +1,16 @@
+$internationalContentCatalog = distrelec_IntContentCatalog
+
+$mode=Staged
+$internationalContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $internationalContentCatalog]), CatalogVersion.version[default = Staged])[default = $internationalContentCatalog:$mode]
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/revert-d4/media/banner/welcome_mat
+$translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator
+
+INSERT_UPDATE Media	;code[unique = true];$internationalContentCV[unique = true]; @media[translator = $translator,lang=fr]; mime[default = image/png]
+                    ;welcomeimage1_fr	;                          ; $siteResource/euro_icon.png                        ;
+                    ;welcomeimage2_fr	;                          ; $siteResource/red_star_icon.png                    ;
+                    ;welcomeimage3_fr	;                          ; $siteResource/red_truck_icon.png                   ;
+
+UPDATE DistWelcomeMatComponent;uid[unique =true]     ;text[lang=fr]                              ;$internationalContentCV[unique=true]   ;image(code, $internationalContentCV)[lang = fr]
+                              ;homepagewelcomemat1  ;Prix bas sur tout le catalogue de produits ;                                       ;welcomeimage1_fr
+                              ;homepagewelcomemat2  ;Plus de 1.000 marques bien connues dans le secteur;                                  ;welcomeimage2_fr
+                              ;homepagewelcomemat3  ;Livraison gratuite pour les commandes supérieures à 150 EUR;                         ;welcomeimage3_fr

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2012 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/util
+		                http://www.springframework.org/schema/util/spring-util.xsd
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- filter -->
+
+	<bean id="storefrontFilterChain" class="de.hybris.platform.servicelayer.web.PlatformFilterChain">
+		<constructor-arg ref="storefrontTenantDefaultFilterChainList"/>
+	</bean>
+
+	<util:list id="storefrontTenantDefaultFilterChainList">
+		<!-- generic platform filters -->
+		<ref bean="corsFilter"/>
+		<ref bean="log4jFilter"/>
+		<ref bean="storefrontTenantActivationFilter"/>
+		<ref bean="storefrontSystemNotInitializedRedirectFilter"/>
+		<ref bean="sessionFilter"/>
+
+		<!-- filter to log the current request -->
+		<ref bean="requestLoggerFilter"/>
+
+		<!-- filter to setup the cms integration -->
+		<ref bean="cmsSiteFilter"/>
+
+		<!-- filter to initialize the storefront -->
+		<ref bean="storefrontFilter"/>
+
+		<!-- filter to return maintenance pages -->
+		<ref bean="maintenanceFilter"/>
+
+		<!-- btg filters -->
+		<!-- <ref bean="refererHeaderBtgFilter"/> -->
+		<!-- <ref bean="requestParamsBtgFilter"/> -->
+		<!-- <ref bean="productVisitedBtgFilter"/> -->
+		<!-- <ref bean="categoryVisitedBtgFilter"/> -->
+		<!-- <ref bean="btgSegmentFilter"/> -->
+
+		<!-- filter to delay the current request/response -->
+		<ref bean="delayTestFilter"/>
+
+		<ref bean="openOrderHandlerFilter"/>
+
+		<!-- filter to shorten session duration -->
+		<ref bean="shortTimeSessionFilter"/>
+		
+		<ref bean="eventsHandlerFilter"/>
+	</util:list>
+
+	<bean id="storefrontTenantActivationFilter" class="de.hybris.platform.servicelayer.web.TenantActivationFilter"/>
+
+	<bean id="storefrontSystemNotInitializedRedirectFilter" class="de.hybris.platform.servicelayer.web.RedirectWhenSystemIsNotInitializedFilter">
+		<constructor-arg>
+			<value><!-- nothing - redirect to default maintenance page --></value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="requestLoggerFilter" class="com.namics.distrelec.b2b.storefront.filters.RequestLoggerFilter"/>
+	
+	<bean id="delayTestFilter" class="com.namics.distrelec.b2b.storefront.filters.DelayTestFilter"/>
+
+	<bean id="cmsSiteFilter" class="com.namics.distrelec.b2b.storefront.filters.cms.CMSSiteFilter">
+		<property name="urlMappingHandler" ref="cmsPageUrlHandlerMapping" />
+		<property name="cmsSiteService" ref="cmsSiteService" />
+		<property name="cmsPreviewService" ref="cmsPreviewService" />
+		<property name="baseSiteService" ref="baseSiteService" />
+		<property name="commerceCommonI18NService" ref="commerceCommonI18NService" />
+		<property name="sessionService" ref="sessionService" />
+		<property name="userService" ref="userService" />
+		<property name="contextInformationLoader">
+			<bean class="com.namics.distrelec.b2b.storefront.filters.util.ContextInformationLoader">
+				<property name="baseSiteService" ref="baseSiteService" />
+				<property name="catalogService" ref="catalogService" />
+				<property name="catalogVersionService" ref="catalogVersionService" />
+				<property name="cmsSiteService" ref="cmsSiteService" />
+				<property name="i18NService" ref="i18NService" />
+				<property name="modelService" ref="modelService" />
+				<property name="timeService" ref="timeService" />
+				<property name="userService" ref="userService" />
+			</bean>
+		</property>
+		<aop:scoped-proxy />
+	</bean>
+	
+	<bean id="storefrontFilter" class="com.namics.distrelec.b2b.storefront.filters.StorefrontFilter">
+		<property name="storeSessionFacade" ref="storeSessionFacade"/>
+		<property name="browseHistory" ref="browseHistory"/>
+		<aop:scoped-proxy/>
+	</bean>
+
+	<bean id="maintenanceFilter" class="com.namics.distrelec.b2b.storefront.filters.MaintenanceFilter">
+	</bean>
+
+	<bean id="anonymousCheckoutFilter" class="com.namics.distrelec.b2b.storefront.filters.AnonymousCheckoutFilter" />
+	
+	<bean id="eventsHandlerFilter" class="com.namics.distrelec.b2b.storefront.filters.EventsHandlerFilter" />
+		
+	<bean id="openOrderHandlerFilter" class="com.namics.distrelec.b2b.storefront.filters.OpenOrderHandlerFilter">
+		<property name="cartService" ref="cartService" />
+		<property name="configurationService" ref="configurationService" />
+		<property name="openOrderService" ref="distOpenOrderService" />
+		<aop:scoped-proxy />
+	</bean>
+
+	<bean id="shortTimeSessionFilter" class="com.namics.distrelec.b2b.storefront.filters.ShortTimeSessionFilter">
+		<property name="searchRobotDetector" ref="searchRobotDetector" />
+		<property name="timeout" value="300" />
+		<aop:scoped-proxy />
+	</bean>
+</beans>

@@ -1,0 +1,36 @@
+##############################
+# STAGING -> Fusion QA
+##############################
+
+$fullEOLIndexJob=full-Product-EOL-Fusion
+# start every night at 22:00 GMT
+$fullEOLIndexJobCronExpression=0 0 22 * * ? *
+INSERT_UPDATE Trigger;code[unique=true]       ;cronExpression
+                     ;$fullEOLIndexJobTrigger ;$fullEOLIndexJobCronExpression
+
+$fullIndexJob=full-ProdCatMan-Fusion
+# start nighty at 22:00 GMT on Saturday and Sunday
+$fullIndexJobCronExpression=0 0 22 ? * SAT,SUN *
+INSERT_UPDATE Trigger;code[unique=true]    ;cronExpression
+                     ;$fullIndexJobTrigger ;$fullIndexJobCronExpression
+
+$updateIndexJob=update-ProdCatMan-Fusion
+# start 1 hour after full index finishes and last execution should finish before full index starts again
+# keep the "update" schedule same over the entire week
+$updateIndexJobCronExpression=0 0 3,6,9,12,15,18,21 * * ? *
+INSERT_UPDATE Trigger;code[unique=true]      ;cronExpression
+                     ;$updateIndexJobTrigger ;$updateIndexJobCronExpression
+
+$updateAtomicIndexJob=update-Product-Atomic-Fusion
+# start 2 hours after full index finishes and last execution should finish before full index starts again
+# keep the "atomic update" schedule same over the entire week
+$updateAtomicIndexJobCronExpression=0 0 4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21 * * ? *
+INSERT_UPDATE Trigger;code[unique=true]            ;cronExpression
+                     ;$updateAtomicIndexJobTrigger ;$updateAtomicIndexJobCronExpression
+
+# Top 5 countries on staging must be indexed fully every work day (CH,DE,SE,NO,BIZ)
+# In Phase2 we will have only three active (SE,NO,BIZ)
+INSERT_UPDATE Trigger;code[unique=true]                  ;cronJob(code)              ;cronExpression       ;active
+                     ;$fullIndexJob-distrelec_SE-Trigger ;$fullIndexJob-distrelec_SE ;0 0 0 ? * MON-FRI * ;true
+                     ;$fullIndexJob-distrelec_NO-Trigger ;$fullIndexJob-distrelec_NO ;0 40 0 ? * MON-FRI * ;true
+                     ;$fullIndexJob-distrelec_EX-Trigger ;$fullIndexJob-distrelec_EX ;0 20 1 ? * MON-FRI * ;true

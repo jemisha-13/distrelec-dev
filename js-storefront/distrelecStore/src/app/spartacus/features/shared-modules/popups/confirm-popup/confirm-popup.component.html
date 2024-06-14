@@ -1,0 +1,50 @@
+<div class="overlay" id="confirmPopupMain">
+  <div class="success-popup">
+    <div class="container">
+      <div class="row mt-4">
+        <div class="col-md-12 col-sm-12 text-center">
+          <div class="alert alert-{{ data.type }}" role="alert">
+            <fa-icon id="confirm_popup_icon" [icon]="faIcon"></fa-icon>
+            <div class="title" id="confirm_popup_title_section">
+              <h4 id="confirm_popup_title_label">{{ data.title }}</h4>
+            </div>
+            <div class="success-popup__text--subtitle" id="confirmPopupSubtitle" [innerHtml]="data.content"></div>
+            <div *ngIf="data.link" class="link mt-2" id="confirm_popup_subtitle_link" [innerHTML]="data.link"></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row mt-1">
+        <div class="col-md-12 col-sm-12 text-center">
+          <button
+            *ngIf="!noCancelButton"
+            class="btn-secondary btn-distrelec btn-gray"
+            id="confirm_popup_close_btn"
+            [disabled]="isDisabled"
+            (click)="onCloseButton()"
+          >
+            {{ 'form.cancel' | cxTranslate }}
+          </button>
+          <button
+            *ngIf="!buttonText; else buttonTextTemp"
+            class="btn btn-secondary btn-distrelec overflow ml-2"
+            id="confirm_popup_confirm_btn"
+            [disabled]="isDisabled"
+            (click)="onYesButton()"
+          >
+            {{ isDisabled ? ('form.please_wait' | cxTranslate) : ('form.yes' | cxTranslate) }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #buttonTextTemp>
+  <button
+    class="btn-secondary btn-distrelec overflow ml-2"
+    id="confirm_popup_default_confirm_btn"
+    [disabled]="isDisabled"
+    (click)="onYesButton()"
+  >
+    {{ isDisabled ? ('form.please_wait' | cxTranslate) : buttonText }}
+  </button>
+</ng-template>

@@ -1,0 +1,100 @@
+<div class="register">
+  <div *ngIf="errorMessage_ | async as error" class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="global-error">
+          <div class="inner">
+            <div class="center">
+              <p class="text" id="registrationErrorBanner" [innerHTML]="error"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container p-relative">
+    <div class="row">
+      <div class="col-12 register__holder">
+        <h1 class="register__title" id="registration.general.welcome_title">
+          {{ 'registration.general.welcome_title' | cxTranslate }}
+        </h1>
+        <span id="registration.general.welcome_subtitle">
+          {{ 'registration.general.welcome_subtitle' | cxTranslate }}
+        </span>
+      </div>
+
+      <div class="col-12 col-lg-9 order-1">
+        <div class="register__select">
+          <h3 class="register__select--title" id="registration.general.account_type">
+            1. {{ 'registration.general.account_type' | cxTranslate }}
+          </h3>
+
+          <form class="register__select--options" [formGroup]="accountSelectorForm">
+            <button
+              class="btn register__select--options__radio"
+              id="business_customer_button"
+              [class.is-checked]="accountSelectorForm.value.radio === 'B2B'"
+              (click)="onClick('B2B')"
+              data-aainteraction="customer type selection"
+            >
+              <input
+                class="custom-control-input register__select--options__button"
+                type="radio"
+                formControlName="radio"
+                value="B2B"
+              />
+              <label id="registration.b2b.type">{{ 'registration.b2b.type' | cxTranslate }}</label>
+            </button>
+
+            <button
+              class="btn register__select--options__radio b2c"
+              id="private_customer_button"
+              [class.is-checked]="accountSelectorForm.value.radio === 'B2C'"
+              (click)="onClick('B2C')"
+              data-aainteraction="customer type selection"
+            >
+              <input
+                class="custom-control-input register__select--options__button"
+                type="radio"
+                formControlName="radio"
+                value="B2C"
+              />
+              <label id="registration.b2c.type">{{ 'registration.b2c.type' | cxTranslate }}</label>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <ng-container *ngIf="accountSelectorForm.value.radio === 'B2B'">
+        <div class="col-12 col-lg-9 order-2">
+          <app-b2b-form [activeSiteId]="activeSiteId" [stepsList_]="stepsList_"></app-b2b-form>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="accountSelectorForm.value.radio === 'B2C'">
+        <div class="col-12 col-lg-9 order-2">
+          <app-b2c-form [activeSiteId]="activeSiteId" [stepsList_]="stepsList_"></app-b2c-form>
+        </div>
+      </ng-container>
+
+      <div *ngIf="stepsList_ | async as stepsList" class="register__steps col-12 col-lg-3 order-1 d-none d-lg-block">
+        <ul class="register__steps__items">
+          <li *ngFor="let step of stepsList; let i = index" class="register__steps__items--item">
+            <span class="number number--active" [class.number--active]="step.active" [id]="'number_' + i + 1">
+              {{ i + 1 }}
+            </span>
+            <span class="text" [id]="'step.key_' + (i + 1)">{{ step.key | cxTranslate }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container go-back__holder">
+    <button class="btn go-back" id="registration.go_back" (click)="back()">
+      <fa-icon [icon]="faAngleLeft"></fa-icon>
+      {{ 'registration.go_back' | cxTranslate }}
+    </button>
+  </div>
+</div>

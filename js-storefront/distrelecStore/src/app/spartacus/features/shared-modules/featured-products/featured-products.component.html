@@ -1,0 +1,59 @@
+<div class="app-featured-products">
+  <ng-container *ngIf="$featuredProducts | async as featuredProducts">
+    <owl-carousel-o *ngIf="isBrowser" [options]="customOptions">
+      <ng-container *ngFor="let item of featuredProducts; let i = index">
+        <ng-template [id]="i" carouselSlide>
+          <div class="product__item">
+            <div *ngIf="item?.distManufacturer" class="manufacturer">
+              <a [routerLink]="item?.distManufacturer?.urlId" [title]="item?.distManufacturer?.nameSeo">
+                <img [src]="item?.distManufacturer?.image[1]?.value?.url" />
+              </a>
+            </div>
+            <a
+              *ngIf="item?.images?.length"
+              class="product-img-link"
+              [routerLink]="item.url"
+              [queryParams]="{ itemList: itemListEntity.FEATURED }"
+              [title]="item?.name"
+              (click)="trackProductClick(item, i)"
+            >
+              <picture>
+                <source [srcset]="useWebpImg('portrait_small_webp', item?.images, item?.images[0])" />
+                <img *ngIf="item?.images[0]?.url; else missingUrl" [src]="item?.images[0]?.url" [alt]="item?.name" />
+                <ng-template #missingUrl>
+                  <img [src]="'/app/spartacus/assets/media/img/missing_landscape_small.png'" [alt]="item?.name" />
+                </ng-template>
+              </picture>
+            </a>
+            <h3 class="col-12 title">
+              <a
+                class="title__link"
+                [routerLink]="item?.url"
+                [queryParams]="{ itemList: itemListEntity.FEATURED }"
+                [title]="item?.name"
+                (click)="trackProductClick(item, i)"
+              >
+                {{ item?.name }}
+              </a>
+            </h3>
+            <div class="col-12 price">
+              {{ item?.price?.value | price }}
+            </div>
+            <div class="col-12 cta-wrapper">
+              <a
+                class="product-view"
+                [routerLink]="item?.url"
+                [queryParams]="{ itemList: itemListEntity.FEATURED }"
+                (click)="trackProductClick(item, i)"
+                title="View product"
+              >
+                {{ 'cart.buy_now' | cxTranslate }}
+                <fa-icon [icon]="faAngleRight"></fa-icon>
+              </a>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </owl-carousel-o>
+  </ng-container>
+</div>

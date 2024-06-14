@@ -1,0 +1,51 @@
+<div *ngIf="messages$ | async as messages" class="app-global-message">
+  <div *ngIf="isMessagesPresent(messages)" class="container">
+    <app-action-message
+      *ngFor="let confMsg of messages[messageType.MSG_TYPE_CONFIRMATION]; let i = index"
+      type="success"
+      hasContent="true"
+    >
+      <span
+        *ngIf="confMsg['raw'] === messageKey.LoginSuccess; else confirm"
+        id="global-message-success-label-{{ i }}"
+        [innerHTML]="messageKey.LoginSuccess | cxTranslate"
+      ></span>
+      <ng-template #confirm>
+        <span id="global-message-success-label-{{ i }}" [innerHTML]="confMsg | cxTranslate"></span>
+      </ng-template>
+    </app-action-message>
+
+    <app-action-message
+      *ngFor="let infoMsg of messages[messageType.MSG_TYPE_INFO]; let i = index"
+      type="info"
+      hasContent="true"
+    >
+      <span id="global-message-info-label-{{ i }}" [innerHTML]="infoMsg | cxTranslate"></span>
+    </app-action-message>
+
+    <app-action-message
+      *ngFor="let warningMsg of messages[messageType.MSG_TYPE_WARNING]; let i = index"
+      type="warning"
+      hasContent="true"
+    >
+      <span id="global-message-warning-label-{{ i }}" [innerHTML]="warningMsg | cxTranslate"></span>
+    </app-action-message>
+
+    <ng-container *ngFor="let errorMsg of messages[messageType.MSG_TYPE_ERROR]; let i = index">
+      <app-action-message
+        *ngIf="errorMsg"
+        [type]="errorMsg['key'] === messageKey.AccountDeactivated ? 'warning' : 'danger'"
+        hasContent="true"
+      >
+        <span
+          *ngIf="errorMsg['key'] === messageKey.AccountDeactivated; else error"
+          id="global-message-error-label-{{ i }}"
+          [innerHTML]="'account?.signout?.active?.error' | cxTranslate"
+        ></span>
+        <ng-template #error>
+          <span id="global-message-error-label-{{ i }}" [innerHTML]="errorMsg | cxTranslate"></span>
+        </ng-template>
+      </app-action-message>
+    </ng-container>
+  </div>
+</div>

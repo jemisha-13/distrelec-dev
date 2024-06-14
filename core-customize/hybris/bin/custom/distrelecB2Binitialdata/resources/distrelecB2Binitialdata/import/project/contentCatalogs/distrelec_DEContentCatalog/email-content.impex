@@ -1,0 +1,29 @@
+#
+# Import the Email CMS content for the Distrelec DE
+#
+$contentCatalog=distrelec_DEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$cmsSiteUID=distrelec_DE
+$picture=media(code, $contentCV);
+$contentMasterCatalog=distrelecContentCatalog
+$siteResource=jar:com.namics.distrelec.b2b.initialdata.constants.Namb2bacceleratorInitialDataConstants&/distrelecB2Binitialdata/import/project/contentCatalogs/$contentMasterCatalog
+
+
+# Language
+$lang=en
+
+# Email Logo
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpg'];altText
+;;/images/theme/distrelec_logo_email.png;distrelec_logo_email.png;$siteResource/images/theme/distrelec_logo_email.png;image/png;Distrelec Logo
+
+INSERT_UPDATE CMSImageComponent;$contentCV[unique=true];uid[unique=true];name;$picture[lang=$lang];&componentRef
+;;DistrelecLogoImage;Distrelec Logo Image;/images/theme/distrelec_logo_email.png;DistrelecLogoImage
+;;CertLabelTuvImage;Certification Label Tüv Image;/images/certlabels/logo-tuv.png;CertLabelTuvImage
+;;CertLabelEhiImage;Certification Label Ehi Image;/images/certlabels/logo-ehi.png;CertLabelEhiImage
+;;CertLabelTrustedShopsImage;Certification Label TrustedShops Image;/images/certlabels/logo-trustedshops.png;CertLabelTrustedShopsImage
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
+;;EmailLogoSlot;DistrelecLogoImage
+;;EmailFooterImage1Slot;CertLabelTrustedShopsImage
+;;EmailFooterImage2Slot;CertLabelEhiImage
+;;EmailFooterImage3Slot;CertLabelTuvImage

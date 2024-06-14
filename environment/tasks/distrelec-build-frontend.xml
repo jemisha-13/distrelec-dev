@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="distrelec-build-frontend" basedir=".">
+    <macrodef name="buildFrontend" description="Build frontend files">
+        <sequential>
+
+            <echo message="Installing node packages" />
+            <!-- check fo os to execure NPM -->
+            <condition property="isWindows">
+                <os family="windows" />
+            </condition>
+            <if>
+                <os family="windows" />
+                <then>
+                    <property name="npmCommand" value="npm.cmd" />
+                </then>
+                <else>
+                    <property name="npmCommand" value="npm" />
+                </else>
+            </if>
+            <antcall target="execNPN" />
+
+            <echo message="Start building frontend files (grunt) ..." />
+            <exec failonerror="true" executable="node" dir="${hybris.home}/bin/custom/distrelecB2Bstorefront">
+                <arg value='grunt_start.js' />
+                <arg value='prod' />
+            </exec>
+            <echo message="Start building frontend files (gulp) ..." />
+            <exec failonerror="true" executable="${npmCommand}" dir="${hybris.home}/bin/custom/distrelecB2Bstorefront">
+                <arg value='run' />
+                <arg value='gulp_builder' />
+                <arg value='compileStyles' />
+            </exec>
+            <exec failonerror="true" executable="${npmCommand}" dir="${hybris.home}/bin/custom/distrelecB2Bstorefront">
+                <arg value='run' />
+                <arg value='gulp_builder' />
+                <arg value='minifyStyles' />
+            </exec>
+            <echo message="... building frontend files done!" />
+        </sequential>
+    </macrodef>
+
+    <macrodef name="cleanFrontendProduction" description="Build frontend files">
+        <sequential>
+            <echo message="Start clean uncompressed files ..." />
+            <exec failonerror="true" executable="node" dir="${hybris.home}/bin/custom/distrelecB2Bstorefront">
+                <arg value='grunt_start.js' />
+                <arg value='prod_clean' />
+            </exec>
+            <echo message="... building frontend files done!" />
+        </sequential>
+    </macrodef>
+
+    <target name="execNPN" depends="execNPNwin,execNPNnix">
+
+    </target>
+
+    <target name="execNPNwin" if="isWindows">
+        <echo>exec npm win</echo>
+        <exec failonerror="true" executable="npm.cmd" dir="${hybris.home}/bin/custom/distrelecB2Bstorefront">
+            <arg value='install' />
+        </exec>
+    </target>
+
+    <target name="execNPNnix" unless="isWindows">
+        <echo>exec npm *nix</echo>
+        <exec failonerror="true" executable="npm" dir="${hybris.home}/bin/custom/distrelecB2Bstorefront">
+            <arg value='install' />
+        </exec>
+    </target>
+
+</project>

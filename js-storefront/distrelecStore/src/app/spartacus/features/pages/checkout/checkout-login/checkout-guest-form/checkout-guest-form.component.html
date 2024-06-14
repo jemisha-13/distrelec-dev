@@ -1,0 +1,115 @@
+<div class="ch__component guest">
+  <form [formGroup]="checkoutLoginForm">
+    <ng-container *ngIf="activeSiteId$ | async as activeSiteId">
+      <div class="ch__component__title">
+        <h2 id="checkout.login.guest_title">{{ 'checkout.login.guest_title' | cxTranslate }}</h2>
+        <p
+          *ngIf="activeSiteId !== 'PL'"
+          id="checkout.login.guest_subtitle"
+          [innerHTML]="'checkout.login.guest_subtitle' | cxTranslate"
+        ></p>
+      </div>
+
+      <ng-container *ngIf="activeSiteId === 'PL'">
+        <ul class="ch__component__bulletlist" id="guestRegisterNotification">
+          <li id="guestRegisterNotification_1">{{ 'checkout.login.guest_register_info_1' | cxTranslate }}</li>
+          <li id="guestRegisterNotification_2"><strong class='is-sb'>{{ 'checkout.login.guest_register_info_2' | cxTranslate }}</strong></li>
+          <li id="guestRegisterNotification_3">{{ 'checkout.login.guest_register_info_3' | cxTranslate }}</li>
+        </ul>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="isExportShop">
+      <div class="ch__component__info-message" id="guestCheckoutInfoWrapper">
+        <fa-icon [icon]="faCircleExclamation"></fa-icon>
+        <p class="ch__component__info-message__content" id="guestCheckoutInfo">
+          Guest checkout is only available for EU customers.
+        </p>
+      </div>
+    </ng-container>
+
+    <div class="row ch__component__form-group mb-0">
+      <div class="col-12 ch__component__label">
+        <label id="form.email">
+          {{ 'form.email_placeholder' | cxTranslate }}
+        </label>
+      </div>
+
+      <div class="col-12 ch__component__field">
+        <div class="p-relative">
+          <input
+            class="login__body--form-input"
+            id="guestCheckoutEmailInput"
+            [class.is-invalid]="
+              checkoutLoginForm.get('guestCheckoutEmail').touched && checkoutLoginForm.get('guestCheckoutEmail').errors
+            "
+            [disabled]="isGuestLoading_ | async"
+            autocomplete="email"
+            type="email"
+            formControlName="guestCheckoutEmail"
+          />
+          <fa-icon
+            *ngIf="
+              checkoutLoginForm.get('guestCheckoutEmail').touched && checkoutLoginForm.get('guestCheckoutEmail').errors
+            "
+            class="is-faXmark"
+            id="faXmarkGuest"
+            [icon]="faXmark"
+          ></fa-icon>
+        </div>
+
+        <div
+          *ngIf="
+            checkoutLoginForm.get('guestCheckoutEmail').touched &&
+            checkoutLoginForm.get('guestCheckoutEmail').errors?.alreadyExist
+          "
+        >
+          <small class="text-danger" id="'validations.account_exist_error">
+            {{ 'validations.account_exist_error' | cxTranslate }}
+          </small>
+        </div>
+
+        <div
+          *ngIf="
+            checkoutLoginForm.get('guestCheckoutEmail').touched &&
+            (checkoutLoginForm.get('guestCheckoutEmail').errors?.email ||
+              checkoutLoginForm.get('guestCheckoutEmail').errors?.incorrect)
+          "
+        >
+          <small class="text-danger" id="validations.email_valid_example">
+            {{ 'validations.email_valid_example' | cxTranslate }}
+          </small>
+        </div>
+
+        <div
+          *ngIf="
+            checkoutLoginForm.get('guestCheckoutEmail').touched &&
+            checkoutLoginForm.get('guestCheckoutEmail').errors?.manyAttempts
+          "
+        >
+          <small class="text-danger" id="validations.email_guest_max_attempts_error_mgs">
+            {{ 'validations.email_guest_max_attempts_error_mgs' | cxTranslate }}
+          </small>
+        </div>
+
+        <div *ngIf="!checkoutLoginForm.get('guestCheckoutEmail').errors">
+          <small id="validations.email_empty_error">{{ 'validations.email_empty_error' | cxTranslate }}</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 ch__component__submit mb-0">
+        <button
+          class="btn checkout-guest-button"
+          id="checkout.login.guest_cta_checkout"
+          [disabled]="isGuestLoading_ | async"
+          (click)="submitGuestCheckout()"
+        >
+          {{ 'checkout.login.guest_cta_checkout' | cxTranslate }}
+        </button>
+      </div>
+    </div>
+    <app-component-loading-spinner *ngIf="isGuestLoading_ | async"></app-component-loading-spinner>
+  </form>
+</div>

@@ -1,0 +1,407 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10 offset-lg-2">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-5 offset-lg-2">
+      <ng-container class="account-information-main">
+        <app-action-message
+          id="userPreferenceUpdate"
+          [type]="responseType"
+          [message]="responseMessage"
+        ></app-action-message>
+        <div class="row mt-4">
+          <div class="col-md-12 col-lg-12 col-sm-12">
+            <h1 id="accountCommunication_page_title">
+              {{ 'form.com_preferences' | cxTranslate }}
+            </h1>
+          </div>
+        </div>
+        <div *ngIf="!communicationPref" class="row mt-4">
+          <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+            <img src="app/spartacus/assets/media/spinner.gif" />
+          </div>
+        </div>
+        <div *ngIf="communicationPref">
+          <div class="row mt-4 mb-4">
+            <div class="col-md-12">
+              <h3 id="accountCommunicationPreferencesCenter-your-data-your-choice">
+                {{ 'form.your_data_your_choice' | cxTranslate }}
+              </h3>
+              <p>
+                <span id="accountCommunicationPreferencesCenter-the-distrelec">
+                  {{ 'form.the_distrelec' | cxTranslate }}
+                </span>
+                <a
+                  class="newsletterLink"
+                  id="accountCommunicationPreferencesCenter-privacyPolicy"
+                  routerLink="/cms/datenschutz"
+                  target="_blank"
+                >
+                  {{ 'form.privacy_policy' | cxTranslate }}
+                </a>
+                <span id="accountCommunicationPreferencesCenter-privacyPolicyDetails">
+                  {{ 'form.privacy_policy_details' | cxTranslate }}
+                </span>
+              </p>
+              <p id="accountCommunicationPreferencesCenter-privacyPolicyReachUs">
+                {{ 'form.privacy_policy_reach_us' | cxTranslate }}
+              </p>
+
+              <p id="accountCommunicationPreferencesCenter-your-com-preference">
+                <strong>{{ 'form.your_com_preferences' | cxTranslate }}</strong>
+              </p>
+              <p id="accountCommunicationPreferencesCenter-your-com-preferences-message">
+                {{ 'form.com_preferences_message' | cxTranslate }}
+              </p>
+            </div>
+          </div>
+          <div class="row mb-3 border border-gray p-3">
+            <div class="col-md-12">
+              <div class="form-check">
+                <label
+                  class="form-check-label"
+                  id="accountCommunicationPreferencesCenter-mailConsent"
+                  for="emailConsent"
+                >
+                  <input
+                    class="form-check-input"
+                    id="emailConsent"
+                    [checked]="communicationPref.emailConsent"
+                    (change)="onEmailConsentChange()"
+                    type="checkbox"
+                    name="emailConsent"
+                  />
+                  <strong>{{ 'form.com_preferences_by_email' | cxTranslate }}</strong>
+                </label>
+              </div>
+              <div class="form-check">
+                <label
+                  class="form-check-label"
+                  id="accountCommunicationPreferencesCenter-newsletter-consent"
+                  for="selectAllemailConsents"
+                >
+                  <input
+                    class="form-check-input"
+                    id="selectAllemailConsents"
+                    [checked]="communicationPref.selectAllemailConsents"
+                    (click)="checkAllNewsletters($event)"
+                    type="checkbox"
+                    name="selectAllemailConsents"
+                  />
+                  <strong>{{ 'form.like_receiving_newsletters' | cxTranslate }}</strong>
+                </label>
+              </div>
+            </div>
+            <div class="col-md-12 mt-3 ml-3">
+              <p class="p-3 bg-warning text-grey" id="accountCommunicationPreferencesCenter-optEmail">
+                {{ 'form.you_need_to_opt_in_emails' | cxTranslate }}
+              </p>
+            </div>
+            <div class="col-md-12 ml-3">
+              <div class="form-check">
+                <label class="form-check-label" id="lblnewsLetterConsent" for="newsLetterConsent">
+                  <input
+                    class="form-check-input"
+                    id="newsLetterConsent"
+                    [checked]="communicationPref.newsLetterConsent"
+                    (click)="onPrefChange($event)"
+                    type="checkbox"
+                    name="newsLetterConsent"
+                  />
+                  {{ 'form.new_brands_product_services' | cxTranslate }}
+                </label>
+                <a class="newsletterLink" (click)="openModelNewsletter('one')">
+                  {{ 'form.view_example' | cxTranslate }}
+                </a>
+              </div>
+              <div class="form-check">
+                <label
+                  class="form-check-label"
+                  id="lblaccountCommunication"
+                  for="accountCommunication.saleAndClearanceConsent"
+                >
+                  <input
+                    class="form-check-input"
+                    id="accountCommunication.saleAndClearanceConsent"
+                    [checked]="communicationPref.saleAndClearanceConsent"
+                    (click)="onPrefChange($event)"
+                    type="checkbox"
+                    name="saleAndClearanceConsent"
+                  />
+                  {{ 'form.unmissible_promotions_and_sales' | cxTranslate }}
+                </label>
+                <a class="newsletterLink" (click)="openModelNewsletter('two')">
+                  {{ 'form.view_example' | cxTranslate }}
+                </a>
+              </div>
+              <div class="form-check">
+                <label class="form-check-label" id="lblKnowHowConsent" for="accountCommunication.knowHowConsent">
+                  <input
+                    class="form-check-input"
+                    id="accountCommunication.knowHowConsent"
+                    [checked]="communicationPref.knowHowConsent"
+                    (click)="onPrefChange($event)"
+                    type="checkbox"
+                    name="knowHowConsent"
+                  />
+                  {{ 'form.latest_industry_news_updates' | cxTranslate }}
+                </label>
+                <a class="newsletterLink" (click)="openModelNewsletter('three')">
+                  {{ 'form.view_example' | cxTranslate }}
+                </a>
+              </div>
+              <div class="form-check">
+                <label
+                  class="form-check-label"
+                  id="accountCommunicationperson-personalisedRecommendationConsent"
+                  for="accountCommunication.personalisedRecommendationConsent"
+                >
+                  <input
+                    class="form-check-input"
+                    id="accountCommunication.personalisedRecommendationConsent"
+                    [checked]="communicationPref.personalisedRecommendationConsent"
+                    (click)="onPrefChange($event)"
+                    type="checkbox"
+                    name="personalisedRecommendationConsent"
+                  />
+                  {{ 'form.personalized_recomendations' | cxTranslate }}
+                </label>
+              </div>
+              <div class="form-check">
+                <label
+                  class="form-check-label"
+                  id="accountCommunication-customerSurveysConsent"
+                  for="accountCommunication.customerSurveysConsent"
+                >
+                  <input
+                    class="form-check-input"
+                    id="accountCommunication.customerSurveysConsent"
+                    [checked]="communicationPref.customerSurveysConsent"
+                    (click)="onPrefChange($event)"
+                    type="checkbox"
+                    name="customerSurveysConsent"
+                  />
+                  {{ 'form.customer_feedback_research_survey' | cxTranslate }}
+                </label>
+              </div>
+              <ng-container *ngIf="siteCountryCode$ | async as countryCode">
+                <div *ngIf="countryCode !== 'DE'" class="form-check">
+                  <label class="form-check-label" for="accountCommunication.obsolescenceConsent">
+                    <input
+                      class="form-check-input"
+                      id="accountCommunication.obsolescenceConsent"
+                      [checked]="communicationPref.obsolescenceConsent"
+                      (click)="checkAllObsolescence($event)"
+                      type="checkbox"
+                      name="obsolescenceConsent"
+                    />
+                    {{ 'form.obsolescence_notifications' | cxTranslate }}
+                  </label>
+                </div>
+
+                <div *ngIf="countryCode !== 'DE'" class="container ml-2 mt-3">
+                  <div class="row">
+                    <div *ngFor="let category of communicationPref.categories" class="col-md-6">
+                      <div class="form-check">
+                        <label class="form-check-label" for="category.category.code">
+                          <input
+                            class="form-check-input"
+                            [id]="category.category.code"
+                            [name]="category.category.name"
+                            [checked]="category.isObsolCategorySelected"
+                            (change)="onCategoryChange($event)"
+                            type="checkbox"
+                          />
+                          {{ category.category.name }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <p id="accountCommunication.phoneSmsConsent">
+                {{ 'form.receive_coms_over_phone_sms' | cxTranslate }}
+              </p>
+            </div>
+          </div>
+          <div class="row mb-2 border border-gray p-3">
+            <div class="col-md-12">
+              <div class="form-check">
+                <label
+                  class="form-check-label"
+                  id="accountCommunication-smsConsent"
+                  for="accountCommunication.smsConsent"
+                >
+                  <input
+                    class="form-check-input"
+                    id="accountCommunication.smsConsent"
+                    [checked]="communicationPref.smsConsent"
+                    (change)="communicationPref.smsConsent = !communicationPref.smsConsent"
+                    type="checkbox"
+                    name="smsConsent"
+                  />
+                  <strong>{{ 'form.like_receive_coms_by_sms' | cxTranslate }} *</strong>
+                </label>
+              </div>
+              <div class="form-check">
+                <label
+                  class="form-check-label"
+                  id="accountCommunication-phoneConsent"
+                  for="accountCommunication.phoneConsent"
+                >
+                  <input
+                    class="form-check-input"
+                    id="accountCommunication.phoneConsent"
+                    [checked]="communicationPref.phoneConsent"
+                    (change)="communicationPref.phoneConsent = !communicationPref.phoneConsent"
+                    type="checkbox"
+                    name="phoneConsent"
+                  />
+                  <strong>{{ 'form.like_receive_coms_by_phone' | cxTranslate }} *</strong>
+                </label>
+              </div>
+              <div class="form-check">
+                <label
+                  class="form-check-label"
+                  id="accountCommunication-postConsent"
+                  for="accountCommunication.postConsent"
+                >
+                  <input
+                    class="form-check-input"
+                    id="accountCommunication.postConsent"
+                    [checked]="communicationPref.postConsent"
+                    (change)="communicationPref.postConsent = !communicationPref.postConsent"
+                    type="checkbox"
+                    name="postConsent"
+                  />
+                  <strong>{{ 'form.like_receive_coms_by_post' | cxTranslate }} *</strong>
+                </label>
+              </div>
+            </div>
+            <div class="col-md-12 mb-2 mt-2 border border-dark p-3">
+              <p id="accountCommunication.correctContactAssurance">
+                *{{ 'form.to_opt_for_preference_visit' | cxTranslate }}
+                <a class="newsletterLink" routerLink="/my-account/my-account-information" target="_blank">
+                  {{ 'form.my_account_information_link' | cxTranslate }}
+                </a>
+                {{ 'form.ensure_for_correct_contact_details' | cxTranslate }}
+              </p>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-12">
+              <p id="accountCommunication.personalisation">
+                <strong>{{ 'form.personalisation' | cxTranslate }}</strong>
+              </p>
+              <p id="accountCommunication.personalisationSuggestion">
+                {{ 'form.personalisation_suggestions' | cxTranslate }}
+              </p>
+            </div>
+          </div>
+          <div class="row mb-3 border border-gray p-3">
+            <div class="form-check">
+              <label
+                class="form-check-label"
+                id="accountCommunication-personalisationConsent"
+                for="accountCommunication.personalisationConsent"
+              >
+                <input
+                  class="form-check-input"
+                  id="accountCommunication.personalisationConsent"
+                  [checked]="communicationPref.personalisationConsent"
+                  (change)="communicationPref.personalisationConsent = !communicationPref.personalisationConsent"
+                  type="checkbox"
+                  name="personalisationConsent"
+                />
+                {{ 'form.receive_personalized_coms_based_on_activity_history' | cxTranslate }}
+              </label>
+            </div>
+          </div>
+          <div class="row p-3">
+            <p id="accountCommunication-profiling">
+              <strong>{{ 'form.Profiling' | cxTranslate }}</strong>
+            </p>
+            <p id="accountCommunication-matchProfilingData">
+              {{ 'form.match_profiling_data_with_third_parties_like_google' | cxTranslate }}
+              <a
+                class="newsletterLink"
+                id="accountCommunication.newsletterLink"
+                routerLink="/cms/datenschutz"
+                target="_blank"
+              >
+                {{ 'form.trusted_partners' | cxTranslate }}
+              </a>
+              {{ 'form.help_us_select_contents_fits_your_interest' | cxTranslate }}
+            </p>
+          </div>
+
+          <div class="row mb-5 border border-gray p-3">
+            <div class="form-check">
+              <label
+                class="form-check-label"
+                id="accountCommunication-profilingConsent"
+                for="accontCommunication.profilingConsent"
+              >
+                <input
+                  class="form-check-input"
+                  id="accontCommunication.profilingConsent"
+                  [checked]="communicationPref.profilingConsent"
+                  (change)="communicationPref.profilingConsent = !communicationPref.profilingConsent"
+                  type="checkbox"
+                  name="profilingConsent"
+                />
+                {{ 'form.happy_for_distrelec_to_combine_my_data' | cxTranslate }}
+              </label>
+            </div>
+          </div>
+
+          <div class="row mb-5">
+            <button class="btn btn-gray btn-distrelec float-right mr-3" (click)="cancel()">
+              {{ 'text.preferences.cancel' | cxTranslate }}
+            </button>
+            <button
+              class="btn btn-secondary btn-distrelec float-right"
+              [disabled]="isDisabled"
+              (click)="saveCommunicationPreferences()"
+            >
+              {{ buttonText | cxTranslate }}
+              <div class="float-right mr-2">
+                <fa-icon [icon]="faAngleRight"></fa-icon>
+              </div>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>
+<ng-container *ngIf="{ siteCode: siteCountryCode$ | async, showModel: showConfirmModal | async } as data">
+  <app-confirm-popup
+    *ngIf="data.showModel && data.siteCode === 'DE'"
+    [buttonText]="'OK'"
+    [noCancelButton]="true"
+    [data]="{
+      title: 'text.preferences.updated.dont.forget' | cxTranslate,
+      content: 'text.preferences.updated.below' | cxTranslate,
+      type: 'info',
+      link: communicationPref.uid
+    }"
+    (confirmedEvents)="onModalClose()"
+  ></app-confirm-popup>
+</ng-container>

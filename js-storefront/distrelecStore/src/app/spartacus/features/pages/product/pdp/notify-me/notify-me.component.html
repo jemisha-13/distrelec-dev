@@ -1,0 +1,69 @@
+<div class="notify-me">
+  <div class="notify-me__head">
+    <p class="notify-me__head--title" id="pdp_notify_popup_head_title">
+      {{ 'product.notify_me_section.get_notified_title' | cxTranslate }}
+    </p>
+    <button class="btn notify-me__head--btn" id="pdp_notify_popup_body_close_icon" (click)="hideNotifyModal()">
+      <fa-icon [icon]="faTimes"></fa-icon>
+    </button>
+  </div>
+  <div class="notify-me__body">
+    <div *ngIf="showForm" class="notify-me__body--title" id="pdp_notify_popup_body_title">
+      {{ 'product.notify_me_section.get_notified_body' | cxTranslate }}
+    </div>
+    <form #formDir="ngForm" *ngIf="showForm" [formGroup]="userRegistrationForm" (ngSubmit)="submitNotifyMe()">
+      <div class="notify-me__body--form">
+        <div>
+          <input
+            class="form-control notify-me__body--form-input"
+            id="pdp_notify_popup_email_input"
+            [(ngModel)]="userEmail"
+            [class.is-invalid]="
+              (userRegistrationForm.get('email').touched && userRegistrationForm.get('email').invalid) ||
+              (formDir.submitted && userRegistrationForm.get('email').invalid)
+            "
+            [placeholder]="'form.email_address' | cxTranslate"
+            type="email"
+            formControlName="email"
+          />
+        </div>
+
+        <button class="btn notify-me__body--form-btn" id="pdp_notify_popup_submit_btn">
+          {{ 'product.notify_me_section.notify_submit_btn' | cxTranslate }}
+        </button>
+      </div>
+      <div
+        *ngIf="
+          (userRegistrationForm.get('email').touched && userRegistrationForm.get('email').invalid) ||
+          (formDir.submitted && userRegistrationForm.get('email').invalid)
+        "
+      >
+        <small
+          *ngIf="userRegistrationForm.get('email').errors?.required"
+          class="text-danger"
+          id="pdp_notify_popup_email_req_error"
+        >
+          {{ 'validations.email_error_invalid_notify_me' | cxTranslate }}
+        </small>
+        <small
+          *ngIf="userRegistrationForm.get('email').errors?.pattern"
+          class="text-danger"
+          id="pdp_notify_popup_email_email_error"
+        >
+          {{ 'validations.email_error_invalid_notify_me' | cxTranslate }}
+        </small>
+      </div>
+      <div class="notify-me__body--privacy-info" id="pdp_notify_popup_policy_info">
+        <div [innerHTML]="'product.notify_me_section.notify_policy' | cxTranslate"></div>
+      </div>
+    </form>
+    <div *ngIf="displaySuccessMessage || !showForm" class="notify-me__body--success">
+      <div class="notify-me__body--success-text" id="pdp_notify_popup_success_text">
+        {{ 'product.notify_me_section.thank_you' | cxTranslate }}
+      </div>
+      <button class="btn notify-me__body--success-btn" id="pdp_notify_popup_success_btn" (click)="hideNotifyModal()">
+        {{ 'product.notify_me_section.btn_continue_shop' | cxTranslate }}
+      </button>
+    </div>
+  </div>
+</div>

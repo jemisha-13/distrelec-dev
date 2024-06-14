@@ -1,0 +1,13 @@
+$emailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/distrelecContentCatalog/emails
+
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=en];templateScript[lang=en,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];rendererType(code)[default='velocity'];contextClass;
+                              ;Missing_Image_Media_File_CronJob_Report_Template;Missing Image Media File Report;$emailResource/email-MissingImageMediaFileCronJobReport.vm;;com.namics.distrelec.b2b.core.mail.internal.DistInternalMailContext;
+
+INSERT_UPDATE ServicelayerJob;code[unique=true];springId[unique=true]
+                             ;distMissingImageMediaFileJob;distMissingImageMediaFileJob
+
+INSERT_UPDATE DistMissingImageMediaFileCronJob;code[unique=true];job(code)[unique=true];active[default=true];logToDatabase;logToFile;emailSubject;emailTemplate(code);fromMailAddress;sessionLanguage(isocode);nodeGroup;sqlQuery;maxImagesToImport
+                                              ;distMissingImageMediaFileCronJob;distMissingImageMediaFileJob;;true;false;Missing Image Media File Report: {date};Missing_Image_Media_File_CronJob_Report_Template;noreply@distrelec.com;en;integration;"SELECT {m.internalURL} FROM {Media as m} WHERE {m.internalURL} LIKE '/Web/%' ORDER BY {m.internalURL}";1048575
+
+INSERT_UPDATE Trigger;code[unique=true];cronJob(code);second;minute;hour;day;month;year;relative;active;maxAcceptableDelay;weekInterval;daysOfWeek(code)
+                     ;distMissingImageMediaFileCronJobTrigger;distMissingImageMediaFileCronJob;0;0;6;-1;-1;-1;false;true;-1;1;SATURDAY

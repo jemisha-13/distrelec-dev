@@ -1,0 +1,1134 @@
+$contentMasterCatalog = distrelecContentCatalog
+
+# Distrelec AT
+$contentCatalog = distrelec_ATContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$emailResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/$contentMasterCatalog/emails
+$cmsSiteUID = distrelec_AT
+
+$lang = de
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]; fromName[lang = $lang]   ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; info-at@distrelec.com  ; "Distrelec Kundendienst" ; OrderCancellationEmailTemplate
+
+$lang = en
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; info-at@distrelec.com  ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+# Distrelec BE
+$contentCatalog=distrelec_BEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_BE
+
+
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; customerservices@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+$lang=fr
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; sales.be@distrelec.com ; "Service client Distrelec" ; OrderCancellationEmailTemplate
+
+$lang=nl
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; sales.be@distrelec.com ; "Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec CH
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_CH
+
+$lang=de
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; customerservices@distrelec.com ; "Distrelec Kundendienst" ; OrderCancellationEmailTemplate
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; customerservices@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=fr
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; customerservices@distrelec.com ; "Service client Distrelec" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec CZ
+$contentCatalog=distrelec_CZContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_CZ
+
+
+$lang=cs
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; info.cz@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; info.cz@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec DE
+$contentCatalog=distrelec_DEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_DE
+
+
+$lang=de
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; verkauf@distrelec.com ; "Customer Service" ; OrderCancellationEmailTemplate
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; verkauf@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec DK
+$contentCatalog=distrelec_DKContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_DK
+
+
+
+$lang=da
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; danmark@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; danmark@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+#Distrelec EE
+$contentCatalog=distrelec_EEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_EE
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; eesti@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=et
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; eesti@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec EX
+$contentCatalog=distrelec_EXContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_EX
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; export@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec FI
+$contentCatalog=distrelec_FIContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_FI
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; tilaukset@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+
+$lang=fi
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; myynti@elfadistrelec.com ; "Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=sv
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; myynti@elfadistrelec.com ; "Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec HU
+$contentCatalog=distrelec_HUContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_HU
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; info.hu@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=hu
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; info.hu@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec IT
+$contentCatalog=distrelec_ITContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_IT
+
+
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; customerservices@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=it
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; customerservices@distrelec.com ; "Servizio Clienti Distrelec" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec LT
+$contentCatalog=distrelec_LTContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_LT
+
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; lietuva@elfa.se ; "ELFA Distrelec Customer Service" ; OrderCancellationEmailTemplate
+
+$lang=lt
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; lietuva@elfa.se ; "klientų aptarnavimas" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec LV
+$contentCatalog=distrelec_LVContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_LV
+
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; latvija@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=lv
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; latvija@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec NL
+$contentCatalog=distrelec_NLContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_NL
+
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; sales.nl@distrelec.com ; "Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=nl
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; sales.nl@distrelec.com ; "Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec NO
+$contentCatalog=distrelec_NOContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_NO
+
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; norge@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=no
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; norge@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec PL
+$contentCatalog=distrelec_PLContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_PL
+
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; obsluga.klienta@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=pl
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; obsluga.klienta@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec RO
+$contentCatalog=distrelec_ROContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_RO
+
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; info-ro@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=ro
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; info-ro@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+
+#Distrelec SE
+$contentCatalog=distrelec_SEContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_SE
+
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; order@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=sv
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; order@elfa.se ; "Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true
+
+#Distrelec SK
+$contentCatalog=distrelec_SKContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID=distrelec_SK
+
+
+$lang=en
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPageTemplate; $contentCV[unique = true]; uid[unique = true]             ; name                              ; active; frontendTemplateName   ; subject(code)                          ; htmlTemplate(code)                  ; restrictedPageTypes(code)
+                               ;                          ; OrderCancellationEmailTemplate ; Order Confirmation Email Template ; true  ; OrderCancellationEmail ; $cmsSiteUID-Order_Cancellation_Subject ; $cmsSiteUID-Order_Cancellation_Body ; EmailPage
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; info.sk@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+$lang=sk
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                    ; description[lang = $lang]     ; contextClass                                                                         ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-Order_Cancellation_Body    ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationBody.vm                                                                      ;
+                              ; $cmsSiteUID-Order_Cancellation_Subject ; Order Cancellation Prepayment ; com.namics.distrelec.b2b.facades.process.email.context.OrderCancellationEmailContext ; $emailResource/email-orderCancellationSubject.vm                                                                   ;
+
+INSERT_UPDATE EmailPage; $contentCV[unique = true]; uid[unique = true]     ; fromEmail[lang = $lang]        ; fromName[lang = $lang]      ; masterTemplate(uid, $contentCV)
+                       ;                          ; OrderCancellationEmail ; info.sk@distrelec.com ; "Distrelec Customerservice" ; OrderCancellationEmailTemplate
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];validComponentTypes(code)
+                             ;Logo;;BannerComponent,CMSImageComponent
+                             ;MoodImage;;BannerComponent,CMSImageComponent
+                             ;AdvantageImage;;BannerComponent,CMSImageComponent
+                             ;SocialImageFacebook;;BannerComponent,CMSImageComponent
+                             ;SocialImageGooglePlus;;BannerComponent,CMSImageComponent
+                             ;SocialImageTwitter;;BannerComponent,CMSImageComponent
+                             ;SocialImageYoutube;;BannerComponent,CMSImageComponent
+                             ;FooterImage1;;BannerComponent,CMSImageComponent
+                             ;FooterImage2;;BannerComponent,CMSImageComponent
+                             ;FooterImage3;;BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+                         ;;EmailMoodImageSlot-OrderCancellationEmail;Mood Image Slot for OrderCancellationEmail;true
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+                                ;;MoodImage-OrderCancellationEmail;MoodImage;OrderCancellationEmail;EmailMoodImageSlot-OrderCancellationEmail
+
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='OrderCancellationEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+                                    ;;Logo-OrderCancellation;Logo;;EmailLogoSlot;true
+                                    ;;SocialImageFacebook-OrderCancellation;SocialImageFacebook;;EmailSocialImageFacebookSlot;true
+                                    ;;SocialImageGooglePlus-OrderCancellation;SocialImageGooglePlus;;EmailSocialImageGooglePlusSlot;true
+                                    ;;SocialImageTwitter-OrderCancellation;SocialImageTwitter;;EmailSocialImageTwitterSlot;true
+                                    ;;SocialImageYoutube-OrderCancellationEmailTemplate;SocialImageYoutube;;EmailSocialImageYoutubeSlot;true
+                                    ;;AdvantageImage-OrderCancellation;AdvantageImage;;EmailAdvantageImageSlot;true
+                                    ;;FooterImage1-OrderCancellation;FooterImage1;;EmailFooterImage1Slot;true
+                                    ;;FooterImage2-OrderCancellation;FooterImage2;;EmailFooterImage2Slot;true
+                                    ;;FooterImage3-OrderCancellation;FooterImage3;;EmailFooterImage3Slot;true

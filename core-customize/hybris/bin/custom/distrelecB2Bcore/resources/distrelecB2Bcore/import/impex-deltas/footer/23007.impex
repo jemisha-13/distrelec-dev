@@ -1,0 +1,59 @@
+$contentCatalog=distrelec_DEContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang='en_de'];content[lang='en'];content[lang='de_de'];content[lang='de']
+                                   ;;contactUsFooterNavNode;"
+  <ul class=""nav-footer-list"" style=""margin-left:-8px;""><li style=""color:#D8D8D8;""><strong>Central ordering</strong>
+      </li><li style=""color:#D8D8D8;"">Phone: 0421 3654 200</li><li style=""color:#D8D8D8;"">Fax: 0421 3654 236</li>
+      <li><a href=""mailto:verkauf@distrelec.de"">verkauf@distrelec.de</a></li></br>
+      <li style=""color:#D8D8D8;""><strong>Technical consulting</strong></li>
+      <li style=""color:#D8D8D8;"">Phone: 0421 3654 200</li>
+      <li style=""color:#D8D8D8;"">Fax: 0421 3654 236</li>
+      <li><a href=""mailto:verkauf@distrelec.de"">verkauf@distrelec.de</a></li>
+  </ul>
+";"
+    <ul class=""nav-footer-list"" style=""margin-left:-8px;""><li style=""color:#D8D8D8;""><strong>Central ordering</strong></li><li style=""color:#D8D8D8;"">Phone: 0421 3654 200</li>
+    <li style=""color:#D8D8D8;"">Fax: 0421 3654 236</li><li><a href=""mailto:verkauf@distrelec.de"">verkauf@distrelec.de</a></li></br>
+    <li style=""color:#D8D8D8;""><strong>Technical consulting</strong></li>
+    <li style=""color:#D8D8D8;"">Phone: 0421 3654 200</li>
+    <li style=""color:#D8D8D8;"">Fax: 0421 3654 236</li>
+    <li><a href=""mailto:verkauf@distrelec.de"">verkauf@distrelec.de</a></li>
+    </ul>
+";"
+    <ul class=""nav-footer-list"" style=""margin-left:-8px;""><li style=""color:#D8D8D8;""><strong>Zentrale Bestellannahme</strong></li><li style=""color:#D8D8D8;"">Telefon: 0421 3654 200</li>
+    <li style=""color:#D8D8D8;"">Fax: 0421 3654 236</li><li><a href=""mailto:verkauf@distrelec.de"">verkauf@distrelec.de</a></li></br>
+    <li style=""color:#D8D8D8;""><strong>Technische Beratung</strong></li>
+    <li style=""color:#D8D8D8;"">Telefon: 0421 3654 200</li>
+    <li style=""color:#D8D8D8;"">Fax: 0421 3654 236</li>
+    <li><a href=""mailto:verkauf@distrelec.de"">verkauf@distrelec.de</a></li>
+    </ul>
+";"
+<ul class=""nav-footer-list"" style=""margin-left:-8px;""><li style=""color:#D8D8D8;""><strong>Zentrale Bestellannahme</strong></li><li style=""color:#D8D8D8;"">Telefon: 0421 3654 200</li>
+<li style=""color:#D8D8D8;"">Fax: 0421 3654 236</li><li><a href=""mailto:verkauf@distrelec.de"">verkauf@distrelec.de</a></li></br>
+<li style=""color:#D8D8D8;""><strong>Technische Beratung</strong></li>
+<li style=""color:#D8D8D8;"">Telefon: 0421 3654 200</li>
+<li style=""color:#D8D8D8;"">Fax: 0421 3654 236</li>
+<li><a href=""mailto:verkauf@distrelec.de"">verkauf@distrelec.de</a></li>
+</ul>
+"
+
+INSERT_UPDATE DistHtmlCMSNavigationEntry;uid[unique=true]           ;name                       ;&entryRef                  ;isContactNode;item(&nodeRef);htmlContent(uid, $contentCV)   ;$contentCV[unique=true]
+                                        ;NavNode_L1D_ContactEntry   ;NavNode_L1D_ContactEntry   ;NavNode_L1D_ContactEntry   ;true;NavNode_L1D_Contact;contactUsFooterNavNode         ;
+
+# Turn off the visibility for the PopularNav (Most Searched) Node for DE
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];visible;$contentCV[unique=true]
+                               ;PopularNavNode;false;
+
+# CMS Navigation Nodes
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);entries(&entryRef);&nodeRef;visible;title[lang='en_de'];title[lang='en'];title[lang='de'];title[lang='de_de']
+                               ;NavNode_L1D_Contact;;Contact;FooterNavNode;NavNode_L1D_ContactEntry;NavNode_L1D_Contact;true;Contact;Contact;Kontakt;Kontakt
+
+
+# CMS Footer Component
+# NavNode_L1D_Services = Services
+# InfoCenterNavNode = About Us
+# NavNode_L1D_Manufacturers = Manufacturers
+# ToolsNavNode = Quick Links
+# NavNode_L1D_Contact = Contact (Node defined above)
+UPDATE DistFooterComponent;$contentCV[unique=true];uid[unique=true];navigationNode(uid,$contentCV)
+                          ;;DistFooterComponent;FooterNavNode

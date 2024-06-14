@@ -1,0 +1,99 @@
+$daysToKeepOrder=90
+$daysToKeepMovexStock=1
+$daysToKeepStock=7
+$daysToKeepHybrisOrder=365
+
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+#Remove unused Jobs
+REMOVE CronJob;code[unique=true]
+;distWebSitemapJob
+
+
+# Cleanup CronJobs
+INSERT_UPDATE DistGenericCleanUpCronJob;code[unique=true];job(code)[unique=true];active[default=true];sessionUser(uid);logToDatabase;logToFile;flexibleSearchStatement;maxDaysToKeep;maxItemsToDelete
+;distCleanUpPunchoutOutFilterCronJob;distGenericCleanUpJob;;technicalCleanUpUser;false;true;SELECT {pk} FROM {DistPunchOutFilter} WHERE {validUntilDate} < ?now AND {modifiedTime} < ?nowMinusMaxDaysToKeep;14;1000
+;distCleanUpAnonymousUpCronJob;distGenericCleanUpJob;;technicalCleanUpUser;false;true;SELECT {cart.pk} FROM {cart! JOIN user ON {user.pk}={cart.user}} WHERE {user.uid} = 'anonymous' AND {modifiedTime} < ?nowMinusMaxDaysToKeep;1;
+;distCleanUpCartCronJob;distGenericCleanUpJob;;technicalCleanUpUser;false;true;SELECT {pk} FROM {Cart!} WHERE {modifiedTime} < ?nowMinusMaxDaysToKeep and {ghostorder}=0;180;
+;distCleanUpAribaCartCronJob;distGenericCleanUpJob;;technicalCleanUpUser;false;true;SELECT {pk} FROM {AribaCart} WHERE {modifiedTime} < ?nowMinusMaxDaysToKeep and {ghostorder}=0;365;
+;distCleanUpSeminarRegistrationCronJob;distGenericCleanUpJob;;technicalCleanUpUser;false;true;SELECT {pk} FROM {DistSeminarRegistration} WHERE {exported}=1 AND {modifiedTime} < ?nowMinusMaxDaysToKeep;180;1000
+;distCleanUpOrderCronJob;distGenericCleanUpJob;;technicalCleanUpUser;false;true;"SELECT {pk} FROM {Order} WHERE {modifiedTime} < ?nowMinusMaxDaysToKeep ORDER BY {date} ASC";$daysToKeepHybrisOrder;10000
+;distCleanUpB2BApprovalProcessCronJob;distGenericCleanUpJob;;technicalCleanUpUser;false;true;SELECT {b.pk} FROM {B2BApprovalProcess AS b LEFT JOIN Order AS o ON {b.order}={o.pk}} WHERE {o.pk} IS NULL OR {o.modifiedTime} < ?nowMinusMaxDaysToKeep;$daysToKeepOrder;1000
+;distCleanUpOrderHistoryEntryCronJob;distGenericCleanUpJob;;technicalCleanUpUser;false;true;SELECT {h.pk} FROM {OrderHistoryEntry AS h LEFT JOIN Order AS o ON {h.order}={o.pk}} WHERE {o.pk} IS NULL OR {o.modifiedTime} < ?nowMinusMaxDaysToKeep;$daysToKeepOrder;10000
+;distCleanUpSyncCronJob;distGenericCleanUpJob;;technicalCleanUpUser;false;true;SELECT a.PK FROM ({{ SELECT {cj.job} AS job, {cj.PK} AS PK, ROW_NUMBER() OVER (PARTITION BY {cj.job} ORDER BY {cj.PK} DESC) AS rowRank FROM {CatalogVersionSyncCronJob as cj JOIN CronJobStatus AS stat ON {cj.status}={stat.PK} JOIN CronJobResult AS res on {cj.result}={res.PK}} WHERE {stat.code}='FINISHED' AND {res.code}='SUCCESS' }}) as a WHERE rowRank <> 1;;
+;distCleanUpPriceHistoryCronJob;distGenericCleanUpJob;;technicalCleanUpUser;false;true;SELECT {pk} FROM {PriceRow} WHERE {endTime} < ?nowMinusMaxDaysToKeep;7;
+
+# Threshold based Cleanup CronJobs
+INSERT_UPDATE DistThresholdBasedCleanUpCronJob;code[unique=true];job(code)[unique=true];active[default=true];sessionUser(uid);logToDatabase;logToFile;sendEmail;emailAddress;flexibleSearchStatement;maxDaysToKeep;itemCountThreshold;ignoreItemCountThreshold
+;distCleanUpMovexStockCronJob;distThresholdBasedCleanUpJob;false;technicalCleanUpUser;false;true;true;$config-cronjob.notification.emailaddress;SELECT {PK} FROM {StockLevel AS sl JOIN Warehouse AS w ON {sl.warehouse}={w.pk}} WHERE ({w.code}='7311' OR {w.code}='PTCH' OR {w.code}='EF11' OR {w.code}='ES11') AND {lastModifiedErp} < ?nowMinusMaxDaysToKeep;$daysToKeepMovexStock;20000;false
+;distCleanUpStockCronJob;distThresholdBasedCleanUpJob;$config-stock.cleanup.cronjob.active;technicalCleanUpUser;false;true;true;$config-cronjob.notification.emailaddress;SELECT {PK} FROM {StockLevel} WHERE {lastModifiedErp} < ?nowMinusMaxDaysToKeep;$daysToKeepStock;20000;false
+
+
+# File Cleanup CronJobs
+INSERT_UPDATE DistGenericFileCleanUpCronJob;code[unique=true];job(code)[unique=true];active[default=true];sessionUser(uid);logToDatabase;logToFile;directoryKey;filePattern;maxDaysToKeep;dateFormat;maxFilesToDelete
+;distCleanUpErpImportFilesCronJob;distGenericFileCleanUpJob;;technicalCleanUpUser;true;false;file.cleanup.erp.import;^.*?-.*?-?\d+\.(csv|zip)_(\d{17});7;yyyyMMddHHmmssSSS;100
+;distCleanUpErpMovexAsciiImportFilesCronJob;distGenericFileCleanUpJob;false;technicalCleanUpUser;true;false;file.cleanup.erp.mvx.ascii.import;^.*?-.*?-?\d+\.(csv|zip)_(\d{17});7;yyyyMMddHHmmssSSS;100
+;distCleanUpErpMovexUtf8ImportFilesCronJob;distGenericFileCleanUpJob;false;technicalCleanUpUser;true;false;file.cleanup.erp.mvx.utf8.import;^.*?-.*?-?\d+\.(csv|zip)_(\d{17});7;yyyyMMddHHmmssSSS;100
+
+# Export Seminar Registrations
+INSERT_UPDATE DistExportSeminarRegistrationCronJob;code[unique=true];job(code)[unique=true];active[default=true];sessionUser(uid);logToDatabase;logToFile
+;distExportSeminarRegistrationsCronJob;distExportSeminarRegistrationJob;;technicalExportUser;true;false
+
+# Export Education Registrations
+INSERT_UPDATE DistExportEducationRegistrationCronJob;code[unique=true];job(code)[unique=true];active[default=true];sessionUser(uid);logToDatabase;logToFile
+;distExportEducationRegistrationCronJob;distExportEducationRegistrationJob;;technicalExportUser;true;false
+
+# Reset Budget Job
+INSERT_UPDATE CronJob;code[unique=true];job(code)[unique=true];active[default=true];sessionUser(uid);logToDatabase;logToFile
+;distResetBudgetsCronJob;distResetBudgetsJob;;technicalCleanUpUser;true;false
+
+
+# Fact-Finder Trigger
+INSERT_UPDATE Trigger;code[unique=true];cronJob(code);second;minute;hour;day;month;year;relative;active;maxAcceptableDelay
+;distFirstAppearanceCronJobTrigger;distFirstAppearanceCronJob;0;0;4;-1;-1;-1;false;true;-1
+;distFACTFinderCategoryStructureExportCronJobTrigger;distFACTFinderCategoryStructureExportCronJob;0;30;3;-1;-1;-1;false;true;-1
+;factFinderERPexportTrigger;factFinderERPexport;0;0;5;-1;-1;-1;false;true;-1
+
+# Triggers
+INSERT_UPDATE Trigger;code[unique=true];cronJob(code);second;minute;hour;day;month;year;relative;active;maxAcceptableDelay;weekInterval;daysOfWeek(code)
+;distWebSitemapExportCronJobTrigger;distWebSitemapExportCronJob;0;0;1;-1;-1;-1;false;true;-1;1;SATURDAY
+;distExportSeminarRegistrationsCronJobTrigger;distExportSeminarRegistrationsCronJob;0;0;0;-1;-1;-1;false;true;-1;;;
+;distExportEducationRegistrationCronJobTrigger;distExportEducationRegistrationCronJob;0;0;0;-1;-1;-1;false;true;-1;;;
+;distCleanUpSeminarRegistrationCronJobTrigger;distCleanUpSeminarRegistrationCronJob;0;0;1;-1;-1;-1;false;true;-1;;;
+;distCleanUpAribaCartCronJobTrigger;distCleanUpAribaCartCronJob;0;0;2;-1;-1;-1;false;true;-1;;;
+;distCleanUpCartCronJobTrigger;distCleanUpCartCronJob;0;0;3;-1;-1;-1;false;true;-1;;;
+;distCleanUpAnonymousUpCronJobTrigger;distCleanUpAnonymousUpCronJob;0;0;4;-1;-1;-1;false;true;-1;;;
+;distCleanUpPunchoutOutFilterCronJobTrigger;distCleanUpPunchoutOutFilterCronJob;0;0;5;-1;-1;-1;false;true;-1;;;
+;distCleanUpOrderCronJobTrigger;distCleanUpOrderCronJob;0;0;6;-1;-1;-1;false;true;-1;;;
+;distCleanUpB2BApprovalProcessCronJobTrigger;distCleanUpB2BApprovalProcessCronJob;0;0;7;-1;-1;-1;false;true;-1;;;
+;distCleanUpOrderHistoryEntryCronJobTrigger;distCleanUpOrderHistoryEntryCronJob;0;0;8;-1;-1;-1;false;true;-1;;;
+;distCleanUpSyncCronJobTrigger;distCleanUpSyncCronJob;0;0;1;-1;-1;-1;true;true;-1;;;
+;distCleanUpPriceHistoryCronJobTrigger;distCleanUpPriceHistoryCronJob;0;10;2;-1;-1;-1;false;true;-1;;;
+;distCleanUpMovexStockCronJobTrigger;distCleanUpMovexStockCronJob;0;0;6;-1;-1;-1;false;false;-1;1;TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY;
+;distCleanUpStockCronJobTrigger;distCleanUpStockCronJob;0;30;6;-1;-1;-1;false;true;-1;;;
+;distCleanUpErpImportFilesCronJobTrigger;distCleanUpErpImportFilesCronJob;0;0;12;0;0;0;true;true;-1;0;;
+;distCleanUpErpMovexAsciiImportFilesCronJobTrigger;distCleanUpErpMovexAsciiImportFilesCronJob;0;0;12;0;0;0;true;false;-1;0;;
+;distCleanUpErpMovexUtf8ImportFilesCronJobTrigger;distCleanUpErpMovexUtf8ImportFilesCronJob;0;0;12;0;0;0;true;false;-1;0;;
+;distCleanUpImpexMediaCronJob_trigger;distCleanUpImpexMediaCronJob;0;30;6;-1;-1;-1;false;true;-1;1;SUNDAY;
+;distProductInformationExporCronJob_trigger;distProductInformationExporCronJob;0;20;4;-1;-1;-1;false;true;-1;1;SUNDAY;
+;netPromoterScoreExportCronJobTrigger;NetPromoterScoreExportCronJob;0;10;5;-1;-1;-1;false;true;-1;1;MONDAY;
+;DistPaypalOrdersjob_Trigger;DistPaypalOrdersjob;0;0;8;-1;-1;-1;false;true;-1;1;MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY;SUNDAY
+;DistMissingOrdersCronJob_Trigger;DistMissingOrdersCronJob;0;0;8;-1;-1;-1;false;true;-1;1;MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY;SUNDAY
+;DistNewProductsNewsletterCronJobTrigger;DistNewProductsNewsletterCronJob;0;0;7;-1;-1;-1;false;true;-1;1;MONDAY;
+;manufacturerFlagUpdatetrigger;manufacturerFlagUpdateCronjob;0;30;8;-1;-1;-1;false;true;-1;1;FRIDAY;
+;duplicatePriceCleanUpCronJobTrigger;duplicatePriceCleanUpCronJob;0;0;6;-1;-1;-1;false;true;-1;1;SUNDAY;
+;distResetBudgetsCronJobTrigger;distResetBudgetsCronJob;0;0;0;0;0;1;true;true;-1;;;
+;PIM_Driven_CMS_Navigation_Update_Job_Trigger;PIM_Driven_CMS_Navigation_Update_Job;0;30;21;-1;-1;-1;false;true;-1;1;MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY,SUNDAY;
+;CHECK_NON_EMPTY_CATEGORIES_CronJob_Trigger;CHECK_NON_EMPTY_CATEGORIES_CronJob;0;0;21;-1;-1;-1;false;true;-1;1;MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY,SUNDAY;
+
+## Sanity check Triggers
+INSERT_UPDATE Trigger;code[unique=true];cronJob(code);second;minute;hour;day;month;year;relative;active;maxAcceptableDelay;weekInterval;daysOfWeek(code)
+;distSanityCheckCodeCronJobTrigger         ;distSanityCheckCodeCronJob         ;0;1;5;-1;-1;-1;false;true;-1;;;
+;distSanityCheckCodeMovexCronJobTrigger    ;distSanityCheckCodeMovexCronJob    ;0;2;5;-1;-1;-1;false;false;-1;;;
+;distSanityCheckPimIdCronJobTrigger        ;distSanityCheckPimIdCronJob        ;0;3;5;-1;-1;-1;false;true;-1;;;
+;distSanityCheckPrice7310M01CronJobTrigger ;distSanityCheckPrice7310M01CronJob ;0;11;5;-1;-1;-1;false;true;-1;;;
+;distSanityCheckPrice7320M01CronJobTrigger ;distSanityCheckPrice7320M01CronJob ;0;12;5;-1;-1;-1;false;true;-1;;;
+;distSanityCheckPrice7320M10CronJobTrigger ;distSanityCheckPrice7320M10CronJob ;0;13;5;-1;-1;-1;false;true;-1;;;
+;distSanityCheckPrice7330M01CronJobTrigger ;distSanityCheckPrice7330M01CronJob ;0;14;5;-1;-1;-1;false;true;-1;;;
+;distSanityCheckPictureCronJobTrigger      ;distSanityCheckPictureCronJob      ;0;20;5;-1;-1;-1;false;true;-1;;;

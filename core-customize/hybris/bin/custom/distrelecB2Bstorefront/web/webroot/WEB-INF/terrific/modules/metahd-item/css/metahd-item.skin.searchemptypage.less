@@ -1,0 +1,102 @@
+.skin-metahd-item-searchemptypage {
+
+	@_height: @mod-metahd-height;
+	@_buttonWidth: 20px + 2 * 16; // img + ( 2 * min. space )
+	@_searchFieldWidth: @mod-metahd-searchWidth - @_buttonWidth;
+	@_searchPaddingH: 9px;
+	@_searchPaddingV: 5px;
+
+	.input-wrapper-searchemptypage{
+		overflow: hidden;
+		width: 433px;
+	}
+	.input-searchemptypage {
+		// use 100% to prevent the button from falling below the input field in webkit browsers
+		width: 100%;
+		height: @_height - 2 * @_searchPaddingV; // compensate padding
+		margin: 0;
+		padding: @_searchPaddingV @_searchPaddingH;
+		outline: none;
+		
+
+		&[placeholder] {
+			color: @c-grey20;
+		}
+
+		// Element Styling
+		border: none;
+
+		// Background: Default
+		background-color: @c-greyB;
+
+		// Background: States
+		// Hover
+		&:hover, .on-hover& {
+			color: @c-white;
+		}
+
+		// Focus and Active. DO NOT STYLE FOCUS!
+		&:active, .active&, .activeSuggest& { // Review: KR:
+			background-color: @c-grey20;
+			color: @c-white;
+		}
+
+		.lt-ie9 & {
+			line-height: @_height - 2 * @_searchPaddingV;
+		}
+
+	}
+	
+	.suggest-target {
+		margin-top: 594px;
+	}
+	
+
+	.btn-search {
+		.ir-btn();
+		display: inline-block;
+		width: @_buttonWidth;
+		height: @_height;
+		text-align: center;
+		float: right;
+
+		// Background Default
+		background-color: @c-greyB;
+
+		// Background States
+		// Hover AND parent.hover
+		&:hover, .on-hover& {
+			background-color: @c-red;
+			color: @c-white;
+		}
+		// click, focus AND parent.active
+		&:active, &:focus, .active&, .activeSuggest& {
+			background-color: @c-red;
+			color: @c-white;
+		}
+
+		// Icon Default
+		i {
+			.s-loupe-black();
+		}
+
+		// Icon States
+		// Hover AND parent.hover
+		&:hover, .on-hover& {
+			i {
+				.s-loupe-white();
+			}
+		}
+		// Click, focus AND parent.active
+		&:active, &:focus, .active&, .activeSuggest& {
+			i {
+				.s-loupe-white();
+			}
+		}
+
+		&:active,
+		&:focus {
+			outline: thin dotted;
+		}
+	}
+}

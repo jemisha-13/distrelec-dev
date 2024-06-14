@@ -1,0 +1,1 @@
+UPDATE distsalesorgproduct SET p_lastmodifiederp = NULL

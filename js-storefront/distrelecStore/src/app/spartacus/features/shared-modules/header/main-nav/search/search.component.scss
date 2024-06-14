@@ -1,0 +1,149 @@
+@import 'global-utilities';
+
+:host {
+  border: 0;
+  border: 1px solid $ux-light-grey;
+  border-radius: 4px;
+  box-sizing: content-box;
+  display: block;
+  float: left;
+  margin-left: 0;
+  position: relative;
+  width: 100%;
+  z-index: 0;
+
+  @include tabletPlus {
+    top: 0;
+  }
+
+  @include tabletPlusOnly {
+    width: 70%;
+  }
+
+  .search-wrapper-container {
+    form {
+      display: flex;
+      height: 46px;
+      margin: 0;
+      position: relative;
+      z-index: $zindex-popover;
+
+      @include mobilePlusDown {
+        height: 40px;
+      }
+
+      .btn-search {
+        background: $colour-white;
+        border: 0;
+        border-radius: 0;
+        color: $colour-dist-grey;
+        display: inline-block;
+        float: right;
+        padding-right: ($ux-spacing-unit * 2);
+        text-align: center;
+
+        .ng-fa-icon {
+          align-items: center;
+          display: flex;
+          height: 24px;
+          justify-content: right;
+          width: 24px;
+        }
+      }
+
+      .input-wrapper {
+        display: flex;
+        justify-content: space-around;
+        overflow: hidden;
+        width: 100%;
+
+        .input-search {
+          @include typography-text-sm();
+          background: $colour-white;
+          border: 0;
+          border-radius: 0;
+          margin: 0;
+          order: 2;
+          outline: 0;
+          padding: ($ux-spacing-unit) ($ux-spacing-unit * 2);
+          text-overflow: ellipsis;
+          width: 100%;
+
+          &::placeholder {
+            color: $ux-outline-hover;
+            opacity: 1;
+          }
+          &.empty-search-text::placeholder {
+            color: $ux-error;
+            opacity: 1;
+          }
+        }
+
+        .metahd-select {
+          text-overflow: ellipsis;
+        }
+
+        .select-holder {
+          background: $ux-light-grey;
+          flex-shrink: 0;
+          max-width: 176px;
+          min-width: 59px;
+          order: 1;
+          padding-left: ($ux-spacing-unit * 3);
+          padding-right: ($ux-spacing-unit);
+          position: relative;
+          width: auto;
+
+          &__facade {
+            align-items: center;
+            display: flex;
+            height: 100%;
+
+            span {
+              @include typography-text-sm();
+              display: inline-block;
+              font-weight: $font-weight-medium;
+              overflow-x: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 100%;
+            }
+          }
+
+          select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: $ux-light-grey;
+            border: 0;
+            border-radius: 0;
+            cursor: pointer;
+            height: 100%;
+            left: 0;
+            opacity: 0;
+            outline: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+.overlay-suggest {
+  background-color: $colour-black;
+  display: none;
+  height: 100%;
+  left: 0;
+  opacity: 0.6;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: $zindex-modal-backdrop;
+
+  &.active {
+    display: block;
+  }
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2018 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<alias name="distPlatformBackofficeAuthenticationProvider" alias="backofficeAuthenticationProvider"/>
+	<bean id="distPlatformBackofficeAuthenticationProvider"
+		  class="com.namics.distrelec.b2b.backoffice.spring.security.DistBackofficeAuthenticationProvider"
+		  parent="platformBackofficeAuthenticationProvider"/>
+
+	<!-- initialize client-side caches for SAP PI -->
+	<bean id="backofficeCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="shared" value="false" />
+		<property name="acceptExisting" value="true" />
+		<property name="cacheManagerName" value="backoffice-ehcache" />
+		<property name="configLocation" value="backoffice-ehcache-config.xml" />
+	</bean>
+
+	<bean id="backofficeCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="backofficeCacheManagerFactory" />
+	</bean>
+</beans>

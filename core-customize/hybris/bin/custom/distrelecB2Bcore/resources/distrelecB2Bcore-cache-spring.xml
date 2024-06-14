@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Spring configuration for Distrelec hybris Cache. -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd
+			            http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="true">
+
+    <bean id="coreCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="shared" value="false" />
+        <property name="acceptExisting" value="true" />
+    </bean>
+
+    <bean id="coreCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="coreCacheManagerFactory" />
+    </bean>
+
+    <!-- Product Cache Region -->
+    <alias alias="productCacheRegion" name="distProductCacheRegion"/>
+    <bean name="distProductCacheRegion" class="de.hybris.platform.regioncache.region.impl.EHCacheRegion"
+          scope="singleton">
+        <constructor-arg name="name" value="productCacheRegion"/>
+        <constructor-arg name="maxEntries" value="${regioncache.productcacheregion.size}"/>
+        <constructor-arg name="evictionPolicy" value="${regioncache.productcacheregion.evictionpolicy}"/>
+        <constructor-arg name="statsEnabled" value="${regioncache.stats.enabled}"/>
+        <constructor-arg name="exclusiveComputation" value="${regioncache.exclusivecomputation}"/>
+        <property name="handledTypes">
+            <array>
+                <value>1</value>      <!-- products -->
+                <value>604</value>      <!-- prod2keywordrel -->
+                <value>606</value>      <!-- productreferences -->
+                <value>607</value>      <!-- classificationattrs -->
+                <value>608</value>      <!-- classattrvalues -->
+                <value>609</value>      <!-- attr2valuerel -->
+                <value>1055</value>      <!-- pricerows -->
+                <value>2007</value>      <!-- stocklevels -->
+                <value>2015</value>   <!-- stocklevproductrel -->
+                <value>2020</value>   <!-- stocklevelhistoryentry -->
+                <value>26001</value>  <!-- distsalesorgproduct -->
+            </array>
+        </property>
+    </bean>
+
+    <!-- Category Cache Region -->
+    <alias alias="categoryCacheRegion" name="distCategoryCacheRegion"/>
+    <bean name="distCategoryCacheRegion" class="de.hybris.platform.regioncache.region.impl.EHCacheRegion"
+          scope="singleton">
+        <constructor-arg name="name" value="categoryCacheRegion"/>
+        <constructor-arg name="maxEntries" value="${regioncache.categorycacheregion.size}"/>
+        <constructor-arg name="evictionPolicy" value="${regioncache.categorycacheregion.evictionpolicy}"/>
+        <constructor-arg name="statsEnabled" value="${regioncache.stats.enabled}"/>
+        <constructor-arg name="exclusiveComputation" value="${regioncache.exclusivecomputation}"/>
+        <property name="handledTypes">
+            <array>
+                <value>143</value>      <!-- cat2prodrel -->
+                <value>142</value>      <!-- categories -->
+                <value>144</value>      <!-- cat2catrel -->
+                <value>145</value>      <!-- cat2medrel -->
+                <value>605</value>      <!-- cat2keywordrel -->
+                <value>610</value>      <!-- cat2attrrel -->
+            </array>
+        </property>
+    </bean>
+
+    <!-- User Cache Region -->
+    <alias alias="userCacheRegion" name="distUserCacheRegion"/>
+    <bean name="distUserCacheRegion" class="de.hybris.platform.regioncache.region.impl.EHCacheRegion" scope="singleton">
+        <constructor-arg name="name" value="userCacheRegion"/>
+        <constructor-arg name="maxEntries" value="${regioncache.usercacheregion.size}"/>
+        <constructor-arg name="evictionPolicy" value="${regioncache.usercacheregion.evictionpolicy}"/>
+        <constructor-arg name="statsEnabled" value="${regioncache.stats.enabled}"/>
+        <constructor-arg name="exclusiveComputation" value="${regioncache.exclusivecomputation}"/>
+        <property name="handledTypes">
+            <array>
+                <value>4</value>      <!-- users -->
+                <value>5</value>      <!-- usergroups -->
+                <value>23</value>     <!-- addresses -->
+                <value>43</value>     <!-- carts -->
+                <value>44</value>     <!-- cartentries -->
+                <value>45</value>     <!-- orders -->
+                <value>46</value>     <!-- orderentries -->
+                <value>701</value>    <!-- wishlist2 -->
+                <value>702</value>    <!-- wishlist2entry -->
+                <value>201</value>    <!-- principalgrouprelation -->
+                <value>10007</value>  <!-- b2bpermissions -->
+                <value>10008</value>  <!-- b2bgroups2permissionsrel -->
+                <value>10012</value>  <!-- empl2permgrpsrel -->
+                <value>10013</value>  <!-- customers2permissions -->
+            </array>
+        </property>
+    </bean>
+
+    <!-- Top categories cache region -->
+    <alias alias="topCategoriesCacheRegion" name="distTopCategoriesCacheRegion"/>
+    <bean name="distTopCategoriesCacheRegion" class="com.namics.distrelec.b2b.core.regioncache.region.impl.DistEHCacheRegionImpl"
+          scope="singleton">
+        <constructor-arg name="name" value="topCategoriesCacheRegion"/>
+        <!-- do not define ttlSeconds for this cache region -->
+        <!--<constructor-arg name="ttlSeconds" value="3600" />-->
+        <constructor-arg name="maxEntries" value="100"/>
+        <constructor-arg name="evictionPolicy" value="LRU"/>
+        <constructor-arg name="statsEnabled" value="${regioncache.stats.enabled}"/>
+        <constructor-arg name="exclusiveComputation" value="${regioncache.exclusivecomputation}"/>
+        <property name="handledTypes">
+            <array>
+                <value>topCategory</value>
+            </array>
+        </property>
+    </bean>
+    
+     <!-- Hazard statements cache region -->
+    <alias alias="hazardStatementCacheRegion" name="disthazardStatementCacheRegion"/>
+    <bean name="disthazardStatementCacheRegion" class="de.hybris.platform.regioncache.region.impl.EHCacheRegion"
+          scope="singleton">
+        <constructor-arg name="name" value="hazardStatementCacheRegion"/>
+        <constructor-arg name="ttlSeconds" value="3600" />
+        <constructor-arg name="maxEntries" value="100"/>
+        <constructor-arg name="evictionPolicy" value="LRU"/>
+        <constructor-arg name="statsEnabled" value="${regioncache.stats.enabled}"/>
+        <constructor-arg name="exclusiveComputation" value="${regioncache.exclusivecomputation}"/>
+        <property name="handledTypes">
+            <array>
+            </array>
+        </property>
+    </bean>
+    
+    <!-- Hazard Supplemental Info cache region -->
+    <alias alias="hazardSuppInfoCacheRegion" name="disthazardSuppInfoCacheRegion"/>
+    <bean name="disthazardSuppInfoCacheRegion" class="de.hybris.platform.regioncache.region.impl.EHCacheRegion"
+          scope="singleton">
+        <constructor-arg name="name" value="hazardSuppInfoCacheRegion"/>
+        <constructor-arg name="ttlSeconds" value="3600" />
+        <constructor-arg name="maxEntries" value="100"/>
+        <constructor-arg name="evictionPolicy" value="LRU"/>
+        <constructor-arg name="statsEnabled" value="${regioncache.stats.enabled}"/>
+        <constructor-arg name="exclusiveComputation" value="${regioncache.exclusivecomputation}"/>
+        <property name="handledTypes">
+            <array>
+            </array>
+        </property>
+    </bean>
+
+    <!-- Registration of the new cache regions -->
+    <bean id="productCacheRegionRegistrar" class="de.hybris.platform.regioncache.region.CacheRegionRegistrar"
+          c:region-ref="productCacheRegion"/>
+    <bean id="userCacheRegionRegistrar" class="de.hybris.platform.regioncache.region.CacheRegionRegistrar"
+          c:region-ref="userCacheRegion"/>
+    <bean id="topCategoriesCacheRegionRegistrar" class="de.hybris.platform.regioncache.region.CacheRegionRegistrar"
+          c:region-ref="topCategoriesCacheRegion"/>
+    <bean id="hazardStatementCacheRegionRegistar" class="de.hybris.platform.regioncache.region.CacheRegionRegistrar"
+          c:region-ref="hazardStatementCacheRegion"/> 
+    <bean id="hazardSuppInfoCacheRegionRegistar" class="de.hybris.platform.regioncache.region.CacheRegionRegistrar"
+          c:region-ref="hazardSuppInfoCacheRegion"/>
+    <bean id="categoryCacheRegionRegistrar" class="de.hybris.platform.regioncache.region.CacheRegionRegistrar"
+          c:region-ref="categoryCacheRegion"/>
+</beans>

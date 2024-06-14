@@ -1,0 +1,66 @@
+<div *rxIf="manufacturers$ as manufacturer" class="man">
+  <ng-container *ngIf="(isDataLoaded$ | async) === true; else loading">
+    <div class="contents man__a-z-wrapper">
+      <ng-container *rxFor="let item of manufacturer">
+        <div class="man_nav">
+          <a class="man_nav_letter man_nav_border man_nav_a-z" (click)="scrollToKey($event, item?.key)">
+            {{ item?.key }}
+          </a>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="contents man__main-wrapper">
+      <div *rxFor="let k of manufacturer" class="contents man__main-wrapper__group">
+        <h3 class="man__main-wrapper__group__heading" id="man-starts-with-{{ k?.key }}">{{ k?.key }}</h3>
+        <div class="contents man__main-wrapper__group__wrapper">
+          <ng-container *rxFor="let item of k?.manufacturerList">
+            <div class="man_item">
+              <a
+                class="man_nav_border man_nav_name btn-text"
+                [id]="'manufactures_man_link_key_' + k?.key + '_' + item?.code"
+                [routerLink]="item?.url"
+                [attr.data-link-value]="item?.name"
+                (click)="dispatchHeaderInteractionEvent()"
+                data-aainteraction="navigation"
+                data-location="manufacturer nav"
+                data-parent-link="manufacturers"
+              >
+                {{ item?.name }}
+              </a>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *rxIf="parentComponents$ as parentComponents">
+      <ul class="contents man__featured">
+        <li *rxFor="let item of parentComponents" class="man__featured__item">
+          <a
+            class="man__featured__item__link"
+            [externalRouterLink]="item?.localizedUrlLink"
+            [title]="item?.media?.code"
+            [id]="'manufactures_man_feat_' + item?.name"
+            (click)="dispatchHeaderInteractionEvent()"
+            (click)="closePanel()"
+          >
+            <img
+              class="man__featured__item__img"
+              [src]="item?.media?.url"
+              [alt]="item?.media?.code"
+              width="178"
+              height="57"
+            />
+          </a>
+        </li>
+      </ul>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="data-loading">
+      <app-component-loading-spinner></app-component-loading-spinner>
+    </div>
+  </ng-template>
+</div>

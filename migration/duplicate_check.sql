@@ -1,0 +1,1 @@
+select  count(PK) - 1, trim(p_emailaddress),trim(P_DISPLAYNAME) from emailaddress group by trim(p_emailaddress),trim(P_DISPLAYNAME) having count(PK) > 1

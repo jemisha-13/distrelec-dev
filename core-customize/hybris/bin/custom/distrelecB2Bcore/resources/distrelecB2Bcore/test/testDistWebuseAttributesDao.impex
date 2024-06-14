@@ -1,0 +1,101 @@
+# core data
+INSERT_UPDATE Language;isocode[unique=true];active;;;;;;
+;de;true;;;;;;
+;en;true;;;;;;
+
+UPDATE Language;isocode[unique=true];name[lang=de];name[lang=en];;;;;
+;de;Deutsch;German;;;;;
+;en;Englisch;English;;;;;
+
+INSERT_UPDATE Currency;isocode[unique=true];name[lang=de];name[lang=en];active;base;conversion;digits;symbol
+;EUR;Euro;Euro;true;true;1;2;€
+;CHF;Schweizer Franken;Swiss franc;true;false;0,6447;2;SFr.
+;USD;US-Dollar;US Dollar;true;false;1,38;2;$
+;GBP;Pfund Sterling;Pound Sterling;true;false;0,68;2;£
+
+INSERT_UPDATE Country;isocode[unique=true];
+;CH;
+
+INSERT_UPDATE Usergroup;uid[unique=true];name;
+;customergroup;Customer Group;
+;employeegroup;Employee Group;
+
+# catalogs
+$productCatalog=distrelecProductCatalog
+$productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default='Online'])
+
+$classificationCatalog=distrelecClassificationCatalog
+$classificationCV=catalogVersion(catalog(id[default=$classificationCatalog]),version[default='Online'])
+$systemVersion=systemVersion(catalog(id[default=$classificationCatalog]),version[default='Online'])
+
+$languages=en,de
+
+INSERT_UPDATE Catalog;id[unique=true]
+;$productCatalog
+
+INSERT_UPDATE ClassificationSystem;id[unique=true]
+;$classificationCatalog
+
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;languages(isoCode);readPrincipals(uid)
+;$productCatalog;Online;true;$languages;employeegroup
+
+
+INSERT_UPDATE ClassificationSystemVersion;catalog(id)[unique=true];version[unique=true];active;languages(isoCode);readPrincipals(uid)
+;$classificationCatalog;Online;true;$languages;employeegroup
+
+
+INSERT_UPDATE ClassificationClass;code[unique=true];allowedPrincipals(uid)[default='customergroup'];$classificationCV[unique=true];
+;class1;customergroup;
+;class2;customergroup;
+;class3;customergroup;
+
+
+INSERT_UPDATE Product;&product;code[unique=true];supercategories(code);pimId;$productCV[unique=true];approvalstatus(code)[default='approved']
+;test1;test1;class1;
+;test2;test2;class2;
+;test3;test3;class2,class3;
+
+INSERT_UPDATE ClassificationAttribute;code[unique=true];name[lang=de];name[lang=en];$systemVersion[unique=true];
+;attr1;name1_de;name1_en;
+;attr2;name2_de;name2_en;
+;attr3;name3_de;name3_en;
+;attr4;name4_de;name4_en;
+;attr5;;name4_en;
+
+REMOVE ClassificationAttributeUnit[batchmode=true];itemtype(code)[unique=true]
+;ClassificationAttributeUnit
+
+INSERT_UPDATE ClassificationAttributeUnit;code[unique=true];symbol;$systemVersion[unique=true]
+;unece.unit.VLT;vlt
+;unece.unit.4K;4K
+;unece.unit.MMT;MMT
+
+INSERT_UPDATE ClassAttributeAssignment;&assignment;classificationClass(code)[unique=true];classificationAttribute(code)[unique=true];position;unit(code);attributeType(code);multiValued[default=false];visibility(code)[default=not_visible];searchable[default=false];localized[default=true]
+;&caa11;class1;attr1;1001;;string;false;a_visibility
+;&caa12;class1;attr2;1002;unece.unit.VLT;number;false;a_visibility
+;&caa13;class1;attr3;3001;;string;false;c_visibility
+;&caa14;class1;attr4;4001;unece.unit.VLT;number;false;d_visibility
+;&caa15;class1;attr5;1003;;string;false;a_visibility
+;&caa21;class2;attr3;3001;;string;false;c_visibility
+;&caa31;class3;attr4;4001;unece.unit.MMT;number;false;d_visibility
+
+#
+#INSERT_UPDATE ProductFeature;qualifier[unique=true,forceWrite=true,allownull=true];classificationAttributeAssignment(&assignment);language(isocode)[unique=true,forceWrite=true,allownull=true];product(&product);value[translator=de.hybris.platform.catalog.jalo.classification.impex.ProductFeatureValueTranslator,allownull=true];unit(code)
+#;pf11de;&caa11;de;test1;string,value1_de;;
+#;pf12de;&caa12;de;test1;number,2;unece.unit.VLT;
+#;pf13de;&caa13;de;test1;string,value3_de;;
+#;pf14de;&caa14;de;test1;number,4;unece.unit.VLT;
+#;pf15de;&caa15;de;test1;number,5;unece.unit.VLT;
+#;pf11en;&caa11;en;test1;string,value1_en;;
+#;pf12en;&caa12;en;test1;number,1;unece.unit.VLT;
+#;pf13en;&caa13;en;test1;string,value3_en;;
+#;pf14en;&caa14;en;test1;number,4;unece.unit.MMT;
+#;pf15en;&caa15;en;test1;number,5;unece.unit.MMT;
+#;pf21de;&caa21;de;test2;string,value21_de;;
+#;pf21en;&caa21;en;test2;string,value21_en;;
+#;pf31de;&caa31;de;test3;number,31;unece.unit.MMT;
+#;pf31en;&caa31;en;test3;number,31;unece.unit.MMT;
+
+
+
+

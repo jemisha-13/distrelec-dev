@@ -1,0 +1,57 @@
+import java.util.*;
+import de.hybris.platform.servicelayer.search.*;
+import de.hybris.platform.servicelayer.search.impl.*;
+import de.hybris.platform.b2b.model.*;
+import com.namics.distrelec.erpabstraction.model.*;
+import de.hybris.platform.core.*;
+import de.hybris.platform.jalo.*;
+import de.hybris.platform.jalo.user.*;
+import de.hybris.platform.jalo.flexiblesearch.*;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import de.hybris.platform.servicelayer.model.ModelService;
+import com.namics.distrelec.b2b.core.service.url.UrlResolverUtils;
+
+if (!Registry.hasCurrentTenant()) {
+  Registry.activateMasterTenant();
+}
+
+JaloSession.getCurrentSession().setUser(UserManager.getInstance().getUserByLogin("admin"));
+modelService = (ModelService) SpringUtil.getBean("modelService");
+flexibleSearchService = (FlexibleSearchService) SpringUtil.getBean("flexibleSearchService");
+
+queryManufacturer = "SELECT {pk} FROM {DistManufacturer}";
+manufacturers = flexibleSearchService.search(queryManufacturer).getResult();
+
+for (manufacturer : manufacturers) {
+	manufacturer.setNameSeo(UrlResolverUtils.normalize(manufacturer.getName(), true));
+	modelService.save(manufacturer);
+}
+
+
+locales = new Locale[] { new Locale("en"), new Locale("de"), new Locale("fr"), new Locale("it"), new Locale("lt"), 
+						   new Locale("cs"), new Locale("hu"), new Locale("ro"), new Locale("sk")};
+
+
+
+queryCategory = "SELECT {pk} FROM {Category!} WHERE {code} LIKE 'cat-%'";
+categories = flexibleSearchService.search(queryCategory).getResult();
+
+for (category : categories) {
+	for(locale: locales) {
+		category.setNameSeo(UrlResolverUtils.normalize(category.getName(locale), true), locale);
+	}
+	modelService.save(category);
+}
+
+queryProduct = "SELECT {pk} FROM {Product}";
+products = flexibleSearchService.search(queryProduct).getResult();
+
+for (product : products) {
+	for(locale: locales) {
+		product.setNameSeo(UrlResolverUtils.normalize(product.getName(locale), true), locale);
+	}
+	product.setTypeNameSeo(UrlResolverUtils.normalize(product.getTypeName(), true));
+	modelService.save(product);
+}
+
+

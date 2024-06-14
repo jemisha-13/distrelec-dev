@@ -1,0 +1,110 @@
+<section class="flyout des">
+  <section class="flyout-body">
+    <div class="fd-white">
+      <ul class="ui-list__container-border">
+        <li class="ui-list__container">
+          <a
+            class="ui-list-link"
+            id="header_my_account_information"
+            [routerLink]="isB2B() ? '/my-account/company/information' : '/my-account/my-account-information'"
+          >
+            <span class="ui-list-link__text" id="account-details-text">
+              {{ 'metahd.account.account-details' | cxTranslate }}
+            </span>
+          </a>
+        </li>
+        <li class="ui-list__container">
+          <a
+            class="ui-list-link"
+            id="header_my_account_payment_and_delivery"
+            routerLink="/my-account/payment-and-delivery-options"
+          >
+            <span class="ui-list-link__text" id="payment_and_delivery">
+              {{ 'form.payment_and_delivery' | cxTranslate }}
+            </span>
+          </a>
+        </li>
+        <li class="ui-list__container">
+          <a class="ui-list-link" id="header_my_account_order_history" routerLink="/my-account/order-history">
+            <span class="ui-list-link__text" id="order_and_returns">
+              {{ 'form.order_and_returns' | cxTranslate }}
+              <ng-container *ngIf="count$ | async as count">
+                <span *ngIf="count?.appReqCount > 0" class="badge badge-danger">{{ count?.appReqCount }}</span>
+              </ng-container>
+            </span>
+          </a>
+        </li>
+        <li class="ui-list__container">
+          <a class="ui-list-link" id="header_my_account_invoice_history" routerLink="/my-account/invoice-history">
+            <span class="ui-list-link__text" id="invoice_manager_text">
+              {{ 'form.invoice_manager' | cxTranslate }}
+            </span>
+          </a>
+        </li>
+        <li *rxIf="(userData_ | async)?.customerType !== 'B2C'" class="ui-list__container">
+          <a class="ui-list-link" id="header_my_account_quote_history" routerLink="/my-account/quote-history">
+            <span class="ui-list-link__text" id="quotation_manager_text">
+              {{ 'form.quotation_manager' | cxTranslate }}
+              <ng-container *ngIf="count$ | async as count">
+                <span *ngIf="count?.quoteCount > 0" class="badge badge-danger">{{ count?.quoteCount }}</span>
+              </ng-container>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="fd-white-border">
+      <ul class="ui-list">
+        <li class="ui-list__container" title="compare products">
+          <a class="ui-list-link" id="header_my_account_compare_link" routerLink="/compare">
+            <span class="ui-list-link__text" id="header_my_account_compare_link_text">
+              {{ 'login.compare_list' | cxTranslate }}
+              <span
+                *ngIf="compareList$ | async as compareList"
+                class="number-of-products compare-list-size"
+                id="compare-number-of-products"
+              >
+                ({{ compareList.totalUnitCount }})
+              </span>
+            </span>
+          </a>
+        </li>
+        <li *ngIf="shoppingList$ | async as shoppingList" class="ui-list__container" title="shopping list">
+          <a
+            class="ui-list-link"
+            id="header_my_account_shopping_list_link"
+            [routerLink]="'/shopping/' + shoppingList.uniqueId"
+          >
+            <span class="ui-list-link__text" id="header_my_account_shopping_list_text">
+              {{ 'form.shopping_list' | cxTranslate }}
+              <span class="number-of-products compare-list-size" id="number-of-products compare-list-size">
+                ({{ listTotal_ | async }})
+              </span>
+            </span>
+          </a>
+        </li>
+        <li *rxIf="numBomFiles$ as numBomFiles" class="ui-list__container" title="bom tool">
+          <a class="ui-list-link" id="header_my_account_bom_tool_link" routerLink="/my-account/savedBomEntries">
+            <span class="ui-list-link__text" id="account_bom_tool_link_list">
+              {{ 'text.savedbomfiles' | cxTranslate }} ({{ numBomFiles }})
+            </span>
+          </a>
+        </li>
+        <li class="ui-list__container" title="bom tool">
+          <a class="ui-list-link" id="bom_tool_link" routerLink="/bom-tool">
+            <span class="ui-list-link__text" id="bom_tool_text">
+              {{ 'form.bom_tool' | cxTranslate }}
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <app-dist-button
+      id="header_my_account_logout_btn"
+      [text]="'login.signout' | cxTranslate"
+      (click)="onLogout()"
+      type="primary"
+      width="w-fill"
+    ></app-dist-button>
+  </section>
+</section>

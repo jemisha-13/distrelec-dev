@@ -1,0 +1,260 @@
+<ng-container *ngIf="productAvailability">
+  <div *ngIf="hasAvailabilityData" class="stock" [class.stock--small]="size === 'small'">
+    <!-- IN STOCK LOGIC -->
+
+    <div *ngIf="productAvailability.stockLevelTotal !== 0" class="stock__with-stock">
+      <div class="stock__with-stock--headline" id="pdp_stock_headline">
+        <div *ngIf="returnIconForInStock() === 'check'" id="pdp_stock_headline_check_icon">
+          <app-icon [icon]="xInStock"></app-icon>
+        </div>
+        <div *ngIf="returnIconForInStock() === 'times'" id="pdp_stock_headline_times_icon">
+          <app-icon
+            [icon]="tickCancelCircle"
+            [class]="salesStatus.includes('9') ? 'tick-cancel-circle-grey' : ''"
+          ></app-icon>
+        </div>
+        <div *ngIf="returnIconForInStock() === 'clock'" id="pdp_stock_headline_clock_icon">
+          <app-icon [icon]="iconClock"></app-icon>
+        </div>
+
+        <ng-container *ngIf="isStockAvailableTitle(stockLevelAvailable)">
+          <ng-container *ngIf="isSwitzerlandOrLiechtenstein() && isStockedProduct()">
+            <p id="pdp_stock_available_ch_text">
+              {{
+                salesData?.messagePdPCh
+                  | cxTranslate: { stock: stockLevelAvailable, deliveryTime: replenishDeliveryText }
+              }}
+            </p>
+          </ng-container>
+
+          <ng-container
+            *ngIf="!isSwitzerlandOrLiechtenstein() || (isSwitzerlandOrLiechtenstein() && !isStockedProduct())"
+          >
+            <p id="pdp_stock_available_text">
+              {{
+                salesData?.messagePdP
+                  | cxTranslate: { stock: stockLevelAvailable, deliveryTime: cdcReplenishmentDeliveryTime }
+              }}
+            </p>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="isShippingAvailableInFuture()">
+          <p id="shippingAvailableInFuture">
+            {{
+              'product.shipping.available.future'
+                | cxTranslate: { stock: productAvailability.stockLevelTotal, deliveryTime: replenishDeliveryText }
+            }}
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="isNotifyBackInStockPopupWithStock()">
+          <div class="stock__notify">
+            <a class="anchor" id="pdp_stock_notify_btn" (click)="appendNotifyMePopup()">
+              <app-icon [icon]="emailIcon"></app-icon>
+              <div>
+                {{ 'product.notify_me_section.notify_me_cta' | cxTranslate }}
+              </div>
+            </a>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="isNoStockForBTRorDir()">
+          <p id="outOfStockMessageBtoDir">
+            {{ salesData?.outOfStockMessageBtoDir | cxTranslate }}
+          </p>
+        </ng-container>
+
+        <ng-container
+          *ngIf="isStockAvailableTOorderForCDCOnly() && !isStatus50(salesStatus) && !isStatus90(salesStatus)"
+        >
+          <span id="availableToOrder">
+            {{ 'salesStatus.no_stock.cdc_only' | cxTranslate: { stock: productAvailability.stockLevelTotal } }}
+          </span>
+        </ng-container>
+
+        <ng-container
+          *ngIf="isStockAvailableTOorderForCDCOnly() && (isStatus50(salesStatus) || isStatus90(salesStatus))"
+        >
+          <span id="outOfStockMessage">
+            {{ salesData?.outOfStockMessage | cxTranslate }}
+          </span>
+        </ng-container>
+
+        <ng-container *ngIf="isStockAvailableTOorderForCDCOnlyStatus6061()">
+          <p id="noLongerAvailable">
+            {{ 'salesStatus.pdp.status_60' | cxTranslate }}
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="isStockAvailableToBackorder()">
+          <p id="availableToBackOrder">
+            {{ 'salesStatus.no_stock.available_to_back_order' | cxTranslate }}
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="isStockAvailableForCDC() && !isStockAvailableTOorderForCDCOnly() && salesStatus !== '52'">
+          <p id="availableToOrderForCDC">
+            {{ 'salesStatus.no_stock.cdc_only' | cxTranslate: { stock: productAvailability.stockLevelTotal } }}
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="isStockAvailableForCDC() && !isStockAvailableTOorderForCDCOnly() && salesStatus === '52'">
+          <p id="outOfStockMessage">
+            {{ salesData?.outOfStockMessage | cxTranslate }}
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="isOutOfStockMessage()">
+          <p id="outOfStockMessage">
+            {{ salesData?.outOfStockMessage | cxTranslate }}
+          </p>
+        </ng-container>
+      </div>
+
+      <div class="stock__with-stock--info">
+        <p *ngIf="isBTODelivery() || (isNordicCountries() && isWaldomDeliveryTime)" id="pdp_stock_btoText">
+          {{ salesData?.btoText | cxTranslate: { isNordics: isNordicCountries() } }}
+        </p>
+
+        <p *ngIf="!isNordicCountries() && isWaldomBelow40NotFrDelivery()" id="pdp_stock_waldomDeliveryTimeText">
+          {{ salesData?.waldomDeliveryTimeText | cxTranslate }}
+        </p>
+
+        <p *ngIf="isMoreStockAvailableAndStatusBelow40()" id="pdp_stock_moreStockAvailableText">
+          {{ salesData?.moreStockAvailableText | cxTranslate: { availableTime: moreStockAvailableText } }}
+        </p>
+
+        <p *ngIf="isWaldomNextDayDeliveryTimeForWebshop()" id="pdp_stock_waldomNextDayDeliveryTimeText">
+          {{ salesData?.waldomNextDayDeliveryTimeText | cxTranslate }}
+        </p>
+
+        <p *ngIf="isWaldomStockNotCDCAndBelow60()" class="stock__no-stock--info" id="pdp_stock_furtherTextWaldom">
+          {{
+            salesData?.furtherTextWaldom
+              | cxTranslate: { available: furtherStockAvailable, deliveryTime: cdcReplenishmentDeliveryTime }
+          }}
+        </p>
+
+        <p
+          *ngIf="isAdditionalStockWarehouse7371()"
+          class="stock__no-stock--info"
+          id="pdp_stock_replenishDeliveryTextPickup"
+        >
+          {{ salesData?.furtherTextAdditional | cxTranslate: { deliveryTime: replenishDeliveryTextPickup } }}
+        </p>
+
+        <p *ngIf="isAdditionalStockWarehouse7374()" class="stock__no-stock--info" id="pdp_stock_replenishDeliveryText">
+          {{ salesData?.furtherTextAdditional | cxTranslate: { deliveryTime: replenishDeliveryText } }}
+        </p>
+      </div>
+
+      <div
+        *ngIf="(isSameDayDeliveryContent() && (isoCode === 'CH' || isoCode === 'LI')) || isSameDayDeliveryMessageBeNl()"
+        class="stock__with-stock--sameday"
+        id="pdp_stock_pickup"
+        (click)="appendPopup()"
+      >
+        <app-icon [icon]="deliveryIcon"></app-icon>
+        <p id="lc-dis126-pdp-modal">{{ 'salesStatus.pdp.lc_next_day.' + isoCode | cxTranslate }}</p>
+        <app-icon [icon]="angleRight"></app-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- OUT OF STOCK LOGIC -->
+
+  <div *ngIf="productAvailability.stockLevelTotal === 0" class="stock__no-stock">
+    <div
+      *ngIf="!isBto && !isDir"
+      class="stock__no-stock--headline"
+      id="pdp_noStock_headline"
+      [class.stock__no-stock--with-notify]="isNotifyBackInStockPopupNoStock()"
+    >
+      <ng-container *ngIf="salesStatus === '21' || salesStatus === '20'">
+        <div class="fa-clock-icon" id="pdp_noStock_status_21_20_icon">
+          <app-icon [icon]="iconClock"></app-icon>
+        </div>
+        <p id="pdp_noStock_status20s_text">{{ salesData?.outOfStockMessage | cxTranslate }}</p>
+      </ng-container>
+
+      <ng-container *ngIf="salesStatus === '30' || salesStatus === '31'">
+        <ng-container *ngIf="isStockLevelWaldom">
+          <div class="fa-coming-soon" id="pdp_noStock_status_30_31_icon">
+            <app-icon [icon]="tickCancelCircle" [class]="returnIconClass()"></app-icon>
+          </div>
+          <p id="pdp_noStock_status30s_waldom_text">{{ salesData?.outOfStockMessage | cxTranslate }}</p>
+        </ng-container>
+
+        <ng-container *ngIf="!isStockLevelWaldom">
+          <div class="fa-check-icon" id="pdp_noStock_status_30_31_icon">
+            <app-icon [icon]="xInStock"></app-icon>
+          </div>
+          <p id="pdp_noStock_status30s_bto_text">
+            {{ 'salesStatus.no_stock.available_to_back_order' | cxTranslate }}
+          </p>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="salesStatus > '31'">
+        <div *ngIf="salesStatus >= '40'" class="fa-coming-soon" id="pdp_noStock_coming_soon_icon">
+          <app-icon [icon]="tickCancelCircle" [class]="returnIconClass()"></app-icon>
+        </div>
+        <p id="pdp_noStock_outOfStockMessageBtoDir">{{ salesData?.outOfStockMessageBtoDir | cxTranslate }}</p>
+      </ng-container>
+    </div>
+
+    <div *ngIf="isBto || isDir" class="stock__no-stock--headline" id="pdp_noStock_headline_bto_dir">
+      <div
+        *ngIf="salesStatus === '21' || salesStatus === '20'"
+        class="fa-clock-icon"
+        id="pdp_noStock_bto_dir_status_21_20_icon"
+      >
+        <app-icon [icon]="iconClock"></app-icon>
+      </div>
+      <div
+        *ngIf="salesStatus !== '21' && salesStatus !== '20' && salesStatus < '40'"
+        class="fa-check-icon"
+        id="pdp_noStock_bto_dir_status_30_31_icon"
+      >
+        <app-icon [icon]="xInStock"></app-icon>
+      </div>
+      <div *ngIf="salesStatus >= '40'" class="fa-coming-soon" id="pdp_noStock_bto_dir_coming_soon_icon">
+        <app-icon [icon]="tickCancelCircle" [class]="returnIconClass()"></app-icon>
+      </div>
+      <p>{{ salesData?.outOfStockMessageBtoDir | cxTranslate }}</p>
+    </div>
+
+    <ng-container *ngIf="isNotifyBackInStockPopupNoStock()">
+      <div class="stock__notify">
+        <a class="notify-text" id="pdp_stock_notify_btn" (click)="appendNotifyMePopup()">
+          <app-icon [icon]="emailIcon"></app-icon>
+          <p>
+            {{ 'product.notify_me_section.notify_me_cta' | cxTranslate }}
+          </p>
+        </a>
+      </div>
+    </ng-container>
+
+    <p *ngIf="isNoStockForBTOText()" class="stock__no-stock--info" id="pdp_noStock_btoText">
+      {{ salesData?.btoText | cxTranslate }}
+    </p>
+
+    <p *ngIf="isFurtherStock()" class="stock__no-stock--info" id="pdp_noStock_furtherTextAdditional">
+      {{ salesData?.furtherTextAdditional | cxTranslate: { deliveryTime: replenishDeliveryTextPickup } }}
+    </p>
+
+    <div *ngIf="isFurtherStockWithDelivery()" class="stock__no-stock--info">
+      <p *ngIf="isFurtherStockWithReplenishDelivery()" id="pdp_noStock_replenishDeliveryText">
+        {{ salesData?.furtherTextAdditional | cxTranslate: { deliveryTime: replenishDeliveryText } }}
+      </p>
+      <p
+        *ngIf="isFurtherStockWithPickupDelivery()"
+        class="stock__no-stock--info"
+        id="pdp_noStock_replenishDeliveryTextPickup"
+      >
+        {{ salesData?.furtherTextAdditional | cxTranslate: { deliveryTime: replenishDeliveryTextPickup } }}
+      </p>
+    </div>
+  </div>
+</ng-container>

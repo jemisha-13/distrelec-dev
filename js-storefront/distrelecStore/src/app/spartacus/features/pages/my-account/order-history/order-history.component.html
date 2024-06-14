@@ -1,0 +1,388 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-10">
+      <app-my-account-breadcrumb></app-my-account-breadcrumb>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mobile-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+    <div class="col-sm-12 col-md-8 col-lg-9">
+      <ng-container *ngIf="!showOrderDetailsFlag && !showOrderReturnsFlag" class="account-information-main">
+        <div class="order-history-wrapper">
+          <div class="notForPrint">
+            <div class="row mt-4">
+              <div class="col-md-12 col-lg-12 col-sm-12">
+                <h1 id="orderHistory.page_title">
+                  {{ 'form.order_history' | cxTranslate }}
+                </h1>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-md-12"></div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-md-12">
+                <app-action-message
+                  id="orderHistory"
+                  [message]="responseMessage"
+                  [type]="responseType"
+                ></app-action-message>
+              </div>
+            </div>
+
+            <div class="row mt-exta">
+              <label class="col-md-2 col-sm-12 col-form-label" id="orderHistory.orderNumber" for="orderNumber">
+                {{ 'listfilter.orderNr' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input class="form-control" id="orderNumber" [(ngModel)]="orderNumber" type="text" />
+              </div>
+
+              <label class="col-md-2 col-sm-12 col-form-label" id="orderHistory-datetext">
+                {{ 'listfilter.date' | cxTranslate }}
+              </label>
+              <div class="col-md-2 col-sm-12 mb-2">
+                <ngbd-datepicker-popup
+                  id="orderHistory-maxDate"
+                  [customMaxDate]="maxDate"
+                  [customPlaceHolder]="'listfilter.from' | cxTranslate"
+                  [resetDate]="clearEvent.asObservable()"
+                  (dateSelected)="receivedFromDate($event)"
+                ></ngbd-datepicker-popup>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <ngbd-datepicker-popup
+                  id="orderHistory-minDate"
+                  [customMinDate]="minDate"
+                  [customPlaceHolder]="'listfilter.to' | cxTranslate"
+                  [resetDate]="clearEvent.asObservable()"
+                  (dateSelected)="receivedToDate($event)"
+                ></ngbd-datepicker-popup>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-md-2 col-sm-12 col-form-label" id="orderHistory-invoiceNumber" for="invoiceNumber">
+                {{ 'listfilter.invoiceNr' | cxTranslate }}
+              </label>
+
+              <div class="col-md-4 col-sm-12">
+                <input class="form-control" id="invoiceNumber" [(ngModel)]="invoiceNumber" type="text" />
+              </div>
+
+              <label
+                class="col-md-2 col-sm-12 col-form-label"
+                id="orderHistory-orderTotal"
+                for="orderHistory.orderTotalFrom"
+              >
+                {{ 'listfilter.orderTotal' | cxTranslate }}
+              </label>
+              <div class="col-md-2 col-sm-12 mb-2">
+                <input
+                  class="form-control"
+                  id="orderHistory.orderTotalFrom"
+                  [(ngModel)]="orderTotalFrom"
+                  [placeholder]="'listfilter.from' | cxTranslate"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <input
+                  class="form-control"
+                  id="orderHistory.orderTotalTo"
+                  [(ngModel)]="orderTotalTo"
+                  [placeholder]="'listfilter.to' | cxTranslate"
+                  type="textg"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <label
+                class="col-sm-12 col-md-2 col-form-label"
+                id="orderHistory.orderRefPurchase"
+                for="orderHistory.orderRefPurchase"
+              >
+                {{ 'listfilter.reference' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input
+                  class="form-control"
+                  id="orderHistory.orderRefPurchase"
+                  [(ngModel)]="purchaseOrder"
+                  type="text"
+                />
+              </div>
+              <label
+                *ngIf="userType === 'B2B' || userType === 'B2B_KEY_ACCOUNT'"
+                class="col-sm-12 col-md-2 col-form-label"
+                id="orderHistory-orderBy"
+              >
+                {{ 'listfilter.orderedBy' | cxTranslate }}
+              </label>
+              <div *ngIf="userType === 'B2B' || userType === 'B2B_KEY_ACCOUNT'" class="col-md-4 col-sm-12">
+                <ng-select
+                  class="account-info"
+                  id="orderHistory-orderByList"
+                  [(ngModel)]="selectedOrderBy"
+                  [items]="orderByList"
+                  bindLabel="name"
+                  bindValue="contactId"
+                ></ng-select>
+              </div>
+              <label
+                class="col-sm-12 col-md-2 col-form-label"
+                id="orderHistory-articleNumber"
+                for="orderHistory.articleNumber"
+              >
+                {{ 'listfilter.articleNumber' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <input class="form-control" id="orderHistory.articleNumber" [(ngModel)]="articleNumber" type="text" />
+              </div>
+              <label class="col-sm-12 col-md-2 col-form-label" id="orderHistory-state" for="orderHistory.stateSelect">
+                {{ 'listfilter.state' | cxTranslate }}
+              </label>
+              <div class="col-md-4 col-sm-12">
+                <ng-select class="account-info" id="orderHistory.stateSelect" [(ngModel)]="selectedStatusList">
+                  <ng-option *ngFor="let statusItem of statusList" [id]="statusItem.value" [value]="statusItem.value">
+                    {{ statusItem.name | cxTranslate }}
+                  </ng-option>
+                </ng-select>
+              </div>
+              <label
+                *ngIf="userType === 'B2B' || userType === 'B2B_KEY_ACCOUNT'"
+                class="col-sm-12 col-md-2 col-form-label"
+                id="orderHistory-userType"
+              ></label>
+              <div *ngIf="userType === 'B2B' || userType === 'B2B_KEY_ACCOUNT'" class="col-md-4 col-sm-12"></div>
+              <label class="col-sm-12 col-md-2 col-form-label"></label>
+              <div
+                class="col-md-2 col-sm-6"
+                [ngClass]="userType === 'B2B' || userType === 'B2B_KEY_ACCOUNT' ? 'mt-3' : ''"
+              >
+                <button
+                  class="btn btn-secondary btn-distrelec btn-gray float-right"
+                  id="myAccount-orderHistorysearch-resetButton"
+                  (click)="resetForm()"
+                >
+                  {{ buttonResetText | cxTranslate }}
+                </button>
+              </div>
+              <div
+                class="col-md-2 col-sm-6"
+                [ngClass]="userType === 'B2B' || userType === 'B2B_KEY_ACCOUNT' ? 'mt-3' : ''"
+              >
+                <button
+                  class="btn btn-secondary btn-distrelec float-right ml-1 mb-2"
+                  id="myAccount-orderHistorysearch-searchButton"
+                  (click)="search(1)"
+                >
+                  {{ buttonSearchText | cxTranslate }}
+                  <div class="float-sm-right mr-2">
+                    <fa-icon [icon]="faAngleRight"></fa-icon>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="myOrders" id="searchResults">
+            <div class="row mb-3 mt-4">
+              <div class="col-sm-12 col-md-12">
+                <h2 id="myOrders">{{ 'form.my_orders' | cxTranslate }}</h2>
+              </div>
+            </div>
+            <div class="row mb-3 align-items-end">
+              <div class="col-sm-12 col-md-4">
+                <label for="orderHistory-sortingListSelect">{{ 'accountorder.history.order.by' | cxTranslate }}</label>
+                <ng-select
+                  class="account-info"
+                  id="orderHistory-sortingListSelect"
+                  [(ngModel)]="selectedOrderSorting"
+                  (change)="onSortingOrders()"
+                >
+                  <ng-option *ngFor="let sortItem of sortingList" [id]="sortItem.value" [value]="sortItem.value">
+                    {{ sortItem.name | cxTranslate }}
+                  </ng-option>
+                </ng-select>
+              </div>
+              <div class="col-sm-12 col-md-8 mt-2">
+                <img
+                  class="float-md-right cursor"
+                  id="orderHistory-imgPrintOrders"
+                  (click)="printOrders('printOrders')"
+                  src="app/spartacus/assets/media/general/print.svg"
+                />
+              </div>
+            </div>
+            <br />
+
+            <div *ngIf="userOrders_ | async as userOrders; else loadingOrders">
+              <div *ngIf="userOrders?.length > 0; else noOrders">
+                <div *ngIf="!isMobile" class="row mt-2">
+                  <div class="col-sm-2 col-md-2">
+                    <label id="orderHistory-orderDate">{{ 'form.order_date' | cxTranslate }}:</label>
+                  </div>
+                  <div class="col-sm-2 col-md-2">
+                    <label id="orderHistory-orderNr">{{ 'form.order_nr' | cxTranslate }}:</label>
+                  </div>
+                  <div class="col-sm-2 col-md-2">
+                    <label id="orderHistory-orderBy">{{ 'listfilter.orderedBy' | cxTranslate }}:</label>
+                  </div>
+                  <div class="col-sm-2 col-md-2">
+                    <label id="orderHistory-invoiceNr">{{ 'form.invoice_nr' | cxTranslate }}:</label>
+                  </div>
+                  <div class="col-sm-2 col-md-2">
+                    <label id="orderHistory-status">{{ 'form.order_status' | cxTranslate }}:</label>
+                  </div>
+                  <div class="col-sm-2 col-md-2">
+                    <label id="orderHistory-orderTotal">{{ 'form.order_total' | cxTranslate }}:</label>
+                  </div>
+                </div>
+                <hr />
+                <div *ngFor="let order of userOrders">
+                  <div class="row mt-2">
+                    <div class="col-sm-12 col-md-2">
+                      <label id="orderHistory-orderPlaced">{{ order?.placed | date: dateformat }}</label>
+                    </div>
+                    <div class="col-sm-12 col-md-2">
+                      <label id="orderHistory-orderCode">{{ order?.code }}</label>
+                    </div>
+                    <div class="col-sm-12 col-md-2">
+                      <label id="orderHistory-userFullName">{{ order?.userFullName }}</label>
+                    </div>
+                    <div class="col-sm-12 col-md-2">
+                      <label id="orderHistory-invoiceIds">{{ order?.invoiceIds }}</label>
+                    </div>
+
+                    <div class="col-sm-12 col-md-2" [ngClass]="orderStatusColor(order.status)">
+                      <fa-icon class="mr-1" [icon]="orderStatusIcon(order.status)"></fa-icon>
+                      <label *ngIf="order.status" id="orderHistory-orderStatusText">
+                        {{ orderStatus(order.status) | cxTranslate | titlecase }}
+                      </label>
+                      <label *ngIf="!order.status" id="orderHistory-orderStatusText">N/A</label>
+                      <label *ngIf="order.rmaStatus" class="ml-2 text-secondary" id="orderHistory-orderStatusValue">
+                        <fa-icon [icon]="replyIcon"></fa-icon>
+                        {{ 'accountlist.orderHistoryList.returnStatus' | cxTranslate }}
+                      </label>
+                    </div>
+                    <div class="col-sm-12 col-md-2">
+                      <label id="orderHistory-currencyIso">
+                        {{ order?.total.currencyIso }} {{ order?.total.value | price }}
+                      </label>
+                    </div>
+                  </div>
+                  <div class="row mt-5 notForPrint">
+                    <div class="col-sm-6 col-md-9 cursor">
+                      <img
+                        class="mr-2"
+                        id="orderHistory-printOrderimg"
+                        (click)="printOrders('printOrders')"
+                        src="app/spartacus/assets/media/general/print.svg"
+                      />
+                      <img
+                        class="min-width d-none"
+                        [id]="'loading-' + order?.code"
+                        src="app/spartacus/assets/media/spinner.gif"
+                      />
+                      <img
+                        [id]="'downloadButton-' + order?.code"
+                        [ngbTooltip]="downloadLinks"
+                        src="app/spartacus/assets/media/general/download.svg"
+                        tooltipClass="distrelec-tooltip-class"
+                        triggers="click:blur"
+                      />
+                      <span
+                        *ngIf="order.status === 'ERP_STATUS_SHIPPED' && isProductReturnEnabled$ | async"
+                        id="orderHistory-showReturnOrders"
+                        (click)="showOrderReturns(order)"
+                      >
+                        <img class="cursor" class="ml-2" src="app/spartacus/assets/media/general/return.svg" />
+                        <label class="cursor small ml-2">{{ 'toolsitem.return.items' | cxTranslate }}</label>
+                      </span>
+                    </div>
+                    <ng-template #downloadLinks class="cursor">
+                      <span class="text-underline" id="orderHistory-saveAsXlsx" (click)="download(order?.code, 'xlsx')">
+                        {{ 'toolsitem.save.as' | cxTranslate }} xlsx
+                      </span>
+                      <br />
+                      <span class="text-underline" id="orderHistory-saveAscsv" (click)="download(order?.code, 'csv')">
+                        {{ 'toolsitem.save.as' | cxTranslate }} csv
+                      </span>
+                    </ng-template>
+                    <div class="col-sm-12 col-md-3 mt-2">
+                      <button
+                        class="btn btn-secondary btn-distrelec float-md-right"
+                        id="myAccount-orderHistorysearch-orderDetails"
+                        (click)="showOrderDetails(order)"
+                      >
+                        {{ 'form.order_details' | cxTranslate }}
+                        <div *ngIf="!isMobile" class="float-sm-right mr-2">
+                          <fa-icon [icon]="faAngleRight"></fa-icon>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                  <hr />
+                </div>
+              </div>
+              <ng-template #noOrders>
+                <div class="row mt-2 mb-4">
+                  <div class="col-md-12 col-lg-12 col-sm-12">
+                    <h5 class="redFont" id="orderHistory-noOrders">{{ 'form.no_orders' | cxTranslate }}</h5>
+                  </div>
+                </div>
+              </ng-template>
+              <div
+                *ngIf="userOrders && userOrders.length > 0 && pagination && pagination.totalResults > 0"
+                class="row mb-3"
+              >
+                <label class="col-sm-12 col-md-2 col-form-label" for="ordersPerPage">
+                  {{ 'form.orders_pp' | cxTranslate }}
+                </label>
+                <div class="col-sm-12 col-md-2 mb-3">
+                  <ng-select
+                    class="account-info"
+                    id="orderHistory-selectPageSize"
+                    [(ngModel)]="ordersPerPage"
+                    [items]="pageSize"
+                    (change)="onPageSizeSelect()"
+                    bindLabel="label"
+                    bindValue="label"
+                  ></ng-select>
+                </div>
+                <div class="col-sm-10 col-md-8">
+                  <ngb-pagination
+                    class="float-right"
+                    [(page)]="selectedPaginationPage"
+                    [boundaryLinks]="true"
+                    [collectionSize]="pagination.totalResults"
+                    [directionLinks]="false"
+                    [maxSize]="'4'"
+                    [pageSize]="ordersPerPage"
+                    [rotate]="true"
+                    (click)="onPagination()"
+                  ></ngb-pagination>
+                </div>
+              </div>
+            </div>
+            <ng-template #loadingOrders>
+              <div class="row mt-4">
+                <div class="col-md-12 col-lg-12 col-sm-12 text-center">
+                  <img src="app/spartacus/assets/media/spinner.gif" />
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="desktop-only col-sm-12 col-lg-3 col-md-4 notForPrint">
+      <!-- Sidebar navigation -->
+      <app-my-account-sidebar-menu></app-my-account-sidebar-menu>
+    </div>
+  </div>
+</div>

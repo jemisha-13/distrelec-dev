@@ -1,0 +1,37 @@
+<div class="d-none d-md-block">
+    <div
+      class="audio-box"
+      [ngClass]="{ 'multiple-audios': audioFiles?.length > 1, 'one-audio': audioFiles?.length === 1 }"
+      (click)="toggleAudioBoxFunctions()"
+      id="audio-box"
+    >
+      <app-icon
+        class="icon-audio"
+        [id]="audioFiles?.length === 1 ? 'icon-audio-' + 0 : 'open-dropdown'"
+        [icon]="audioFiles?.length === 1 ? (playbackStates[0] ? iconAudioBlack : iconAudio) : iconAudio"
+        [class.one-audio]="audioFiles?.length === 1"
+      ></app-icon>
+      <span class="play-title" id="product-audio-play">{{ 'product.audio.play' | cxTranslate }}</span>
+      <ng-container *ngIf="audioFiles?.length > 1">
+        <app-icon
+          class="icon-arrow"
+          id="toggle-dropdown"
+          [icon]="showDropdown ? iconArrowUp : iconArrowDown"
+        ></app-icon>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="showDropdown && audioFiles?.length > 1">
+      <div class="audio-dropdown" id="audio-dropdown" [class.show-dropdown]="showDropdown && audioFiles?.length > 1">
+        <div *ngFor="let audio of audioFiles; index as i" class="audio-item" (click)="toggleAudios(i)" [id]="'audio-item-' + i">
+          <span class="tone-title" [id]="'product-audio-tone-' + i">
+            {{ 'product.audio.tone' | cxTranslate: { '0': i + 1 } }}
+          </span>
+          <app-icon
+            class="icon-audio-list"
+            [icon]="playbackStates[i] ? iconAudioBlack : iconAudio"
+            [id]="'icon-audio-list-' + i"
+          ></app-icon>
+        </div>
+      </div>
+    </ng-container>
+</div>

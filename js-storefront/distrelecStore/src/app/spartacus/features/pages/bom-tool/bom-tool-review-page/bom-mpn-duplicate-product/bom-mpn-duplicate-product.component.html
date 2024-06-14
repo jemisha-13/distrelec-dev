@@ -1,0 +1,56 @@
+<div *ngIf="entry.duplicateMpnProducts.length" class="bom-mpn-product">
+  <app-action-message [message]="'bom.duplicatempn.message.info' | cxTranslate" type="info"></app-action-message>
+
+  <div class="bom-mpn-product__info">
+    <div class="bom-mpn-product__info-box bom-product" [class.bordered]="entry.selectedAlternative">
+      <span *ngIf="entry.selectedAlternative" class="bom-mpn-product__original-request">
+        <strong>{{ 'text.original.request' | cxTranslate }}:</strong>
+      </span>
+      <span class="bom-mpn-product__title">{{ entry.quantity }}, {{ entry.mpn }}, {{ entry.reference }}</span>
+    </div>
+
+    <app-button
+      class="bom-mpn-product__show-alternative"
+      [modifiers]="['sm']"
+      [dataAttributes]="{
+        'product-code': entry.searchTerm,
+        'change-text': 'text.changealternativeitems' | cxTranslate,
+        aainteraction: 'show product alternatives',
+        aabutton: 'show',
+        aabuttonshow: 'show',
+        aabuttonhide: 'hide',
+        aabuttonchange: 'change'
+      }"
+      (click)="showAlternatives = !showAlternatives"
+      colour="orange"
+    >
+      {{
+        (showAlternatives
+          ? 'text.hidemultipleproducts'
+          : entry.selectedAlternative
+          ? 'text.changeselectedproducts'
+          : 'text.showmultipleproducts'
+        ) | cxTranslate
+      }}
+    </app-button>
+  </div>
+
+  <app-bom-product
+    *ngIf="entry.selectedAlternative"
+    class="alternative-product"
+    [entry]="entry"
+    [index]="index"
+    (remove)="onRemove()"
+  ></app-bom-product>
+
+  <div *ngIf="showAlternatives" class="bom-mpn-product__alternatives row">
+    <app-bom-alternative-product-card
+      *ngFor="let alternative of filterValid(entry.duplicateMpnProducts); index as index"
+      class="col-12 col-sm-4 col-lg-3"
+      [product]="alternative"
+      [index]="index"
+      [isSelected]="entry.selectedAlternative && alternative.code === entry.selectedAlternative.code"
+      (selectAlternative)="onSelect($event)"
+    ></app-bom-alternative-product-card>
+  </div>
+</div>

@@ -1,0 +1,94 @@
+<ng-container *ngIf="isPlpActive$ | async">
+  <!-- TODO: Temporary BE should create a new slot for this -->
+  <app-feedback-campaign></app-feedback-campaign>
+
+  <ng-container *ngIf="isMobileBreakpoint | async">
+    <div class="container" [class.d-none]="isPLPLoading_ | async">
+      <div
+        *ngIf="filters$ | async as filters"
+        class="d-lg-none plp-filters"
+        id="plp-filters"
+      >
+        <ng-container *ngIf="categories$ | async as categories">
+          <div *ngIf="categories.length > 0" class="filter-category d-flex flex-column flex-lg-row">
+            <span class="category-title text-nowrap">
+              {{ 'plp.facet_buttons_and_headers.filter_by_category' | cxTranslate }}:
+            </span>
+            <div class="category-links">
+              <a
+                *ngFor="let category of categories"
+                class="small text-nowrap category-link"
+                [absoluteRouterLink]="category.url"
+              >
+                {{ category.displayName }} ({{ category.count }})
+              </a>
+            </div>
+          </div>
+        </ng-container>
+
+        <app-product-list-filters-scroll-list
+          [class.d-none]="filtersHidden.value || (totalCount | async) === 1"
+          [filters]="filters"
+        ></app-product-list-filters-scroll-list>
+
+        <div *ngIf="{ value: activeFilteredCount$ | async } as count" class="filter-group-list-button-container">
+          <app-product-list-filters-chips
+            class="d-none d-lg-block flex-grow-1"
+            [filters$]="filters$"
+          ></app-product-list-filters-chips>
+
+          <div class="d-none d-lg-flex align-items-center">
+            <app-product-list-filters-selected></app-product-list-filters-selected>
+          </div>
+
+          <!--  mobile filters buttons  -->
+          <div class="d-flex d-lg-none w-100 m-btn">
+            <button class="font-weight-bolder btn" (click)="toggleSortVisibility()">
+              {{ 'plp.facet_buttons_and_headers.sort_by' | cxTranslate }}
+            </button>
+            <button class="font-weight-bolder btn" (click)="toggleMobileFilters()">
+              <ng-container *ngIf="totalAppliedFilters | async as filterTotal">({{ filterTotal }})</ng-container>
+              {{ 'plp.facet_buttons_and_headers.filter_results' | cxTranslate }}
+            </button>
+          </div>
+
+          <!-- mobile filters -->
+          <app-product-list-filters-mobile
+            class="m-filters"
+            [class.active]="mFiltersOpen"
+            [filters$]="filters$"
+            [loading]="loading | async"
+            [totalResults]="activeFilteredCount$ | async"
+            [filterDisplayState]="mFiltersOpen"
+            (applyFiltersEmitter)="applyFilters()"
+            (closeEmitter)="toggleMobileFilters()"
+            (filterChange)="onFilterChange()"
+          ></app-product-list-filters-mobile>
+
+          <!-- mobile sort-by -->
+          <app-product-list-sort-mobile
+            class="m-sort"
+            [class.active]="mSortOpen"
+            (closeEmitter)="toggleSortVisibility()"
+          ></app-product-list-sort-mobile>
+
+          <button
+            *ngIf="(totalCount | async) > 1"
+            class="minimise-filters-button mat-button d-none d-lg-flex"
+            id="minimise-filters-button"
+            [class.hidden]="filtersHidden.value"
+            (click)="setHideFilters(!filtersHidden.value)"
+            type="submit"
+          >
+            {{
+              (filtersHidden.value
+                ? 'plp.facet_buttons_and_headers.show_filters'
+                : 'plp.facet_buttons_and_headers.minimise_filters'
+              ) | cxTranslate
+            }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

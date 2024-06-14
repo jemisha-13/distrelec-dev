@@ -1,0 +1,17 @@
+$contentDECatalog = distrelec_DEContentCatalog
+$deContentCV = catalogVersion(catalog(id[default=$contentDECatalog]), version[default='Staged'])
+
+INSERT_UPDATE CMSFlexComponent; $deContentCV[unique = true]; uid[unique = true]         ; name                         ; flexType
+                              ;                            ; NewsletterSuccessComponent ; Newsletter Success Component ; NewsletterSuccessComponent
+
+INSERT_UPDATE ContentSlot; $deContentCV[unique = true]; uid[unique = true]          ; name                                     ; active ; cmsComponents(uid, $deContentCV)
+                         ;                            ; MainSlot-newsletter-success ; Main Content Slot for Newsletter Success ; true   ; NewsletterSuccessComponent
+
+INSERT_UPDATE ContentSlotName; name[unique = true]     ; template(uid, $deContentCV)[unique = true][default = 'NewsletterSuccessPageTemplate']; validComponentTypes(code)
+                             ; main-newsletter-success ;                                                                                      ; CMSFlexComponent
+
+INSERT_UPDATE ContentSlotForTemplate; $deContentCV[unique = true]; uid[unique = true]          ; position[unique = true] ; pageTemplate(uid, $deContentCV)[unique = true][default = 'NewsletterSuccessPageTemplate']; contentSlot(uid, $deContentCV)[unique = true]; allowOverwrite
+                                    ;                            ; MainSlot-newsletter-success ; main-newsletter-success ;                                                                                          ; MainSlot-newsletter-success                  ; false
+
+UPDATE ContentPage; $deContentCV[unique = true]; uid[unique = true]    ; label
+                  ;                            ; NewsletterSuccessPage ; /newsletter/success

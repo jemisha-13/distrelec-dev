@@ -1,0 +1,100 @@
+.mod-carpet {
+	.carpet-items {
+		.cf();
+	}
+
+	.mod-carpet-item{
+		border-right: 1px solid @c-grey80;
+		border-bottom: 1px solid @c-grey80;
+	}
+
+	/**
+	 * Variant 1: Query Products
+	 */
+
+	.item-template-1{
+		// Border top only applies for the first item-template-1
+		&:first-child{
+			border-top: 1px solid @c-grey80;
+		}
+		// Border left only applies for the first and the fourth element
+		.mod-carpet-item{
+			&:first-child {
+				border-left: 1px solid @c-grey80;
+			}
+			&:nth-child(4) {
+				border-left: 1px solid @c-grey80;
+			}
+			.lt-ie9 & {// workaround for nth-child selector
+				&:first-child + .mod-carpet-item + .mod-carpet-item + .mod-carpet-item {
+					border-left: 1px solid @c-grey80;
+				}
+			}
+		}
+	}
+	.item-template-2{
+		// Border left only applies for the first and the fourth element
+		.mod-carpet-item{
+			&:first-child {
+				border-left: 1px solid @c-grey80;
+			}
+			&:nth-child(4) {
+				border-left: 1px solid @c-grey80;
+			}
+			.lt-ie9 & {
+				&:first-child{
+					& + div{
+						& + div{
+							& + div{
+								border-left: 1px solid @c-grey80;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	.item-template-3{
+		// Border left only applies for the first element
+		.mod-carpet-item{
+			&:first-child {
+				border-left: 1px solid @c-grey80;
+			}
+		}
+	}
+
+
+	/**
+	 * Variant 2: Manual Selection Columns (Teasers and Products, small and large)
+	 */
+
+	.items-colum-1,
+	.items-colum-2,
+	.items-colum-3 {
+		float: left;
+		width: 320px;
+	}
+
+	.items-colum-1 {
+		border-top: 1px solid @c-grey80;
+		border-left: 1px solid @c-grey80;
+	}
+
+	.items-colum-2 {
+		border-top: 1px solid @c-grey80;
+		.mod-carpet-item{
+			&.fullsize{
+				padding-left: 1px; // needed to make fullsize pictures in column2 1px smaller, because column2 is 318px instead of 319px
+				overflow-x: hidden;
+				overflow-y: hidden; // needed for chrome to not display a vertical scrollbar
+			}
+		}
+	}
+
+	.items-colum-3 {
+		border-top: 1px solid @c-grey80;
+		.lt-ie8 & {
+			width: 319px;
+		}
+	}
+}

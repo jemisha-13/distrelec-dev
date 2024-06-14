@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SI_Hybris_IF12_out"
+	targetNamespace="http://www.distrelec.com/hybris/IF12"
+	xmlns:p3="http://www.distrelec.com/hybris"
+	xmlns:p2="http://www.distrelec.com/sap"
+	xmlns:p1="http://www.distrelec.com/hybris/IF12"
+	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:documentation />
+	<wsp:UsingPolicy wsdl:required="true" />
+	<wsp:Policy wsu:Id="OP_SendEmail" />
+	<wsp:Policy wsu:Id="OP_Search" />
+	<wsp:Policy wsu:Id="OP_Pay" />
+	<wsp:Policy wsu:Id="OP_GetPaymentTerms" />
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://www.distrelec.com/sap"
+			xmlns="http://www.distrelec.com/sap"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:element name="PayResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="StatusFI" type="PayStatusType" />
+						<xsd:element name="StatusClr" type="PayStatusType" />
+						<xsd:element name="FICompanyCode" type="xsd:string"
+							minOccurs="0" />
+						<xsd:element name="FIAccountingDocumentNumber"
+							type="xsd:string" minOccurs="0" />
+						<xsd:element name="FIFiscalYear" type="xsd:string"
+							minOccurs="0" />
+						<xsd:element name="ErrorID" type="xsd:string"
+							minOccurs="0" />
+						<xsd:element name="ErrorMessage" type="xsd:string"
+							minOccurs="0" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SendEmailRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="InvoiceNumberFilter" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="InvoiceNumber"
+										type="DocumentNumberType" maxOccurs="unbounded" />
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="MainEmailAddress"
+							type="EmailAddressType" />
+						<xsd:element name="AdditionalEmailAddress"
+							type="EmailAddressType" minOccurs="0" />
+						<xsd:element name="BodyTextExtension"
+							type="xsd:string" minOccurs="0" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PayRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="CustomerID" type="CustomerType" />
+						<xsd:element name="SalesOrganization"
+							type="SalesOrganizationType" />
+						<xsd:element name="PaymentReferenceID"
+							type="xsd:string" />
+						<xsd:element name="Invoice" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="InvoiceNumber"
+										type="DocumentNumberType" />
+									<xsd:element name="AmountValue"
+										type="CurrencyAmountType" />
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="Currency" type="CurrencyType" />
+						<xsd:element name="PaymentTerm" type="PaymentTermType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SendEmailResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Invoice" minOccurs="0"
+							maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="InvoiceNumber"
+										type="DocumentNumberType" />
+									<xsd:element name="Status" type="EmailStatusType" />
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetPaymentTermsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PaymentTerm" minOccurs="0"
+							maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="PaymentTermsKey"
+										type="PaymentTermType" />
+									<xsd:element name="PaymentTermsDescription"
+										type="xsd:string" />
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SearchRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="InvoiceNumberFilter" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="InvoiceNumber"
+										type="DocumentNumberType" maxOccurs="unbounded" />
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="CustomerID" type="CustomerType" />
+						<xsd:element name="SalesOrganization"
+							type="SalesOrganizationType" />
+						<xsd:element name="ContactPersonFilter" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="ContactPerson"
+										type="CustomerType" maxOccurs="unbounded" />
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="InvoiceDateFilter" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="InvoiceDate"
+										maxOccurs="unbounded">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="From" type="xsd:date" />
+												<xsd:element name="To" type="xsd:date" />
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="InvoiceTotalFilter" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="InvoiceTotal"
+										maxOccurs="unbounded">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="From"
+													type="CurrencyAmountType" />
+												<xsd:element name="To" type="CurrencyAmountType" />
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="InvoiceStatus"
+							type="InvoiceStatusType" minOccurs="0" />
+						<xsd:element name="DueDateFilter" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="DueDate" maxOccurs="unbounded">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="From" type="xsd:date" />
+												<xsd:element name="To" type="xsd:date" />
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="SalesOrderFilter" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="SalesOrder"
+										type="DocumentNumberType" maxOccurs="unbounded" />
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="SalesOrderReferenceFilter"
+							minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="SalesOrderReference"
+										type="DocumentNumberType" maxOccurs="unbounded" />
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="ArticleFilter" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Article" maxOccurs="unbounded">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="0" />
+												<xsd:maxLength value="18" />
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="PagingOptions" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="SortCriteria"
+										type="SortCriteriaType" />
+									<xsd:element name="SortAscending"
+										type="SortAscendingType" />
+									<xsd:element name="ResultSize"
+										type="ResultSizeType" />
+									<xsd:element name="ResultOffset"
+										type="ResultOffsetType" />
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SearchResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="CustomerID" type="CustomerType" />
+						<xsd:element name="Invoices" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Invoice" maxOccurs="unbounded">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="ContactPersonID"
+													type="CustomerType" />
+												<xsd:element name="InvoiceNumber"
+													type="DocumentNumberType" />
+												<xsd:element name="InvoiceCreationDate"
+													type="xsd:date" />
+												<xsd:element name="InvoiceDate" type="xsd:date" />
+												<xsd:element name="InvoiceStatus"
+													type="InvoiceStatusType" />
+												<xsd:element name="InvoiceCurrency"
+													type="CurrencyType" />
+												<xsd:element name="InvoiceDueDate"
+													type="xsd:date" />
+												<xsd:element
+													name="InvoiceTotalAmountIncludingTaxes"
+													type="CurrencyAmountType" />
+												<xsd:element name="InvoiceTaxes"
+													type="CurrencyAmountType" />
+												<xsd:element name="InvoiceOpenAmount"
+													type="CurrencyAmountType" />
+												<xsd:element name="InvoiceType"
+													type="InvoiceType" />
+												<xsd:element name="InvoiceListNumber"
+													type="DocumentNumberType" />
+												<xsd:element name="Selected"
+													type="InvoiceSelectedType" />
+												<xsd:element name="InvoiceDocURL" type="URLType" />
+												<xsd:element name="order"
+													type="InvoiceSearchOrderResponse" minOccurs="0"
+													maxOccurs="unbounded" />
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="ResultTotalSize"
+							type="ResultTotalSizeType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetPaymentTermsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SalesOrganization"
+							type="xsd:string" />
+						<xsd:element name="Country" type="xsd:string"
+							minOccurs="0" />
+						<xsd:element name="CustomerID" type="CustomerType"
+							minOccurs="0" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:simpleType name="InvoiceType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="D" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="InvoiceStatusType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="00" />
+					<xsd:enumeration value="01" />
+					<xsd:enumeration value="02" />
+					<xsd:pattern value="(00|01|02)" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="PaymentTermType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="4" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="ContactName">
+				<xsd:annotation>
+					<xsd:documentation>Contact Name</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="50" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="ResultSizeType">
+				<xsd:restriction base="xsd:nonNegativeInteger">
+					<xsd:minInclusive value="1" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="CustomerType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="10" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="PayStatusType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="NA" />
+					<xsd:enumeration value="E" />
+					<xsd:enumeration value="OK" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="CurrencyType">
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="ResultOffsetType">
+				<xsd:restriction base="xsd:nonNegativeInteger" />
+			</xsd:simpleType>
+			<xsd:simpleType name="SortCriteriaType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="INVOICE_DUE_DATE" />
+					<xsd:enumeration value="INVOICE_DATE" />
+					<xsd:enumeration value="INVOICE_STATUS" />
+					<xsd:enumeration value="INVOICE_TOTAL" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="OrderId">
+				<xsd:annotation>
+					<xsd:documentation>Order ID</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="10" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="CurrencyAmountType">
+				<xsd:restriction base="xsd:decimal" />
+			</xsd:simpleType>
+			<xsd:simpleType name="EmailStatusType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="E" />
+					<xsd:enumeration value="OK" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="ResultTotalSizeType">
+				<xsd:restriction base="xsd:nonNegativeInteger" />
+			</xsd:simpleType>
+			<xsd:simpleType name="SortAscendingType">
+				<xsd:restriction base="xsd:boolean" />
+			</xsd:simpleType>
+			<xsd:simpleType name="InvoiceSelectedType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="P">
+						<xsd:annotation>
+							<xsd:documentation>Invoice was selected due to the Request
+								parameters
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="L">
+						<xsd:annotation>
+							<xsd:documentation>Invoice was selected due to the Invoice List
+								logic (see
+								Business Rules)
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="EmailAddressType">
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="URLType">
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="DocumentNumberType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="10" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="SalesOrganizationType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="4" />
+					<xsd:pattern value="[a-zA-Z0-9]{4}" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="InvoiceSearchOrderResponse">
+				<xsd:sequence>
+					<xsd:element name="orderId" type="OrderId" />
+					<xsd:element name="contactName" type="ContactName"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+		<xsd:schema
+			targetNamespace="http://www.distrelec.com/hybris"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			xmlns="http://www.distrelec.com/hybris">
+			<xsd:element name="FaultMessage" type="FaultMessage" />
+			<xsd:simpleType name="FaultUrl">
+				<xsd:annotation>
+					<xsd:documentation>URL to the long text of this message
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="Severity">
+				<xsd:annotation>
+					<xsd:documentation>URL to the long text of this message
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="1" />
+					<xsd:enumeration value="A">
+						<xsd:annotation>
+							<xsd:documentation>Abend - error</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="E">
+						<xsd:annotation>
+							<xsd:documentation>Error</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="W">
+						<xsd:annotation>
+							<xsd:documentation>Warning</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="Text">
+				<xsd:annotation>
+					<xsd:documentation>Formatted T100 message text (in the language in
+						which the service was executed)
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="FaultName">
+				<xsd:annotation>
+					<xsd:documentation>Fault message name</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="75" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="Id">
+				<xsd:annotation>
+					<xsd:documentation>Connection from work area and message number
+						(for example, “XY(007)”).
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="Url">
+				<xsd:annotation>
+					<xsd:documentation>URL to the T100 long text (if available).
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string" />
+			</xsd:simpleType>
+			<xsd:simpleType name="FaultId">
+				<xsd:annotation>
+					<xsd:documentation>Fault message ID</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="9" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="FaultText">
+				<xsd:annotation>
+					<xsd:documentation>Fault message text</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="200" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="FaultDetail">
+				<xsd:sequence>
+					<xsd:element name="severity" type="Severity" />
+					<xsd:element name="text" type="Text" />
+					<xsd:element name="url" type="Url" />
+					<xsd:element name="id" type="Id" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="FaultMessage">
+				<xsd:sequence>
+					<xsd:element name="faultId" type="FaultId" />
+					<xsd:element name="faultName" type="FaultName" />
+					<xsd:element name="faultText" type="FaultText" />
+					<xsd:element name="faultUrl" type="FaultUrl"
+						minOccurs="0" />
+					<xsd:element name="faultDetail" type="FaultDetail"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="p2.SendEmailRequest">
+		<wsdl:documentation />
+		<wsdl:part name="SendEmailRequest"
+			element="p2:SendEmailRequest" />
+	</wsdl:message>
+	<wsdl:message name="p2.SendEmailResponse">
+		<wsdl:documentation />
+		<wsdl:part name="SendEmailResponse"
+			element="p2:SendEmailResponse" />
+	</wsdl:message>
+	<wsdl:message name="p2.SearchRequest">
+		<wsdl:documentation />
+		<wsdl:part name="SearchRequest" element="p2:SearchRequest" />
+	</wsdl:message>
+	<wsdl:message name="p2.SearchResponse">
+		<wsdl:documentation />
+		<wsdl:part name="SearchResponse" element="p2:SearchResponse" />
+	</wsdl:message>
+	<wsdl:message name="p2.PayRequest">
+		<wsdl:documentation />
+		<wsdl:part name="PayRequest" element="p2:PayRequest" />
+	</wsdl:message>
+	<wsdl:message name="p2.PayResponse">
+		<wsdl:documentation />
+		<wsdl:part name="PayResponse" element="p2:PayResponse" />
+	</wsdl:message>
+	<wsdl:message name="p2.GetPaymentTermsRequest">
+		<wsdl:documentation />
+		<wsdl:part name="GetPaymentTermsRequest"
+			element="p2:GetPaymentTermsRequest" />
+	</wsdl:message>
+	<wsdl:message name="p2.GetPaymentTermsResponse">
+		<wsdl:documentation />
+		<wsdl:part name="GetPaymentTermsResponse"
+			element="p2:GetPaymentTermsResponse" />
+	</wsdl:message>
+	<wsdl:message name="p3.FaultMessage">
+		<wsdl:documentation />
+		<wsdl:part name="FaultMessage" element="p3:FaultMessage" />
+	</wsdl:message>
+	<wsdl:portType name="SI_Hybris_IF12_out">
+		<wsdl:documentation />
+		<wsdl:operation name="SendEmail">
+			<wsdl:documentation />
+			<wsp:Policy>
+				<wsp:PolicyReference URI="#OP_SendEmail" />
+			</wsp:Policy>
+			<wsdl:input message="p1:p2.SendEmailRequest" />
+			<wsdl:output message="p1:p2.SendEmailResponse" />
+			<wsdl:fault name="p3.FaultMessage"
+				message="p1:p3.FaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="Search">
+			<wsdl:documentation />
+			<wsp:Policy>
+				<wsp:PolicyReference URI="#OP_Search" />
+			</wsp:Policy>
+			<wsdl:input message="p1:p2.SearchRequest" />
+			<wsdl:output message="p1:p2.SearchResponse" />
+			<wsdl:fault name="p3.FaultMessage"
+				message="p1:p3.FaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="Pay">
+			<wsdl:documentation />
+			<wsp:Policy>
+				<wsp:PolicyReference URI="#OP_Pay" />
+			</wsp:Policy>
+			<wsdl:input message="p1:p2.PayRequest" />
+			<wsdl:output message="p1:p2.PayResponse" />
+			<wsdl:fault name="p3.FaultMessage"
+				message="p1:p3.FaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetPaymentTerms">
+			<wsdl:documentation />
+			<wsp:Policy>
+				<wsp:PolicyReference URI="#OP_GetPaymentTerms" />
+			</wsp:Policy>
+			<wsdl:input message="p1:p2.GetPaymentTermsRequest" />
+			<wsdl:output message="p1:p2.GetPaymentTermsResponse" />
+			<wsdl:fault name="p3.FaultMessage"
+				message="p1:p3.FaultMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="SI_Hybris_IF12_outBinding"
+		type="p1:SI_Hybris_IF12_out">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http"
+			xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+		<wsdl:operation name="SendEmail">
+			<soap:operation
+				soapAction="http://sap.com/xi/WebService/soap1.1"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			<wsdl:input>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:output>
+			<wsdl:fault name="p3.FaultMessage">
+				<soap:fault use="literal" name="p3.FaultMessage"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="Search">
+			<soap:operation
+				soapAction="http://sap.com/xi/WebService/soap1.1"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			<wsdl:input>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:output>
+			<wsdl:fault name="p3.FaultMessage">
+				<soap:fault use="literal" name="p3.FaultMessage"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="Pay">
+			<soap:operation
+				soapAction="http://sap.com/xi/WebService/soap1.1"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			<wsdl:input>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:output>
+			<wsdl:fault name="p3.FaultMessage">
+				<soap:fault use="literal" name="p3.FaultMessage"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetPaymentTerms">
+			<soap:operation
+				soapAction="http://sap.com/xi/WebService/soap1.1"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			<wsdl:input>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:output>
+			<wsdl:fault name="p3.FaultMessage">
+				<soap:fault use="literal" name="p3.FaultMessage"
+					xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="SI_Hybris_IF12_outService">
+		<wsdl:port name="HTTP_Port"
+			binding="p1:SI_Hybris_IF12_outBinding">
+			<soap:address
+				location="http://piqdisap.dat.datwyler.biz:52000/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=WSQ&amp;receiverParty=&amp;receiverService=&amp;interface=SI_Hybris_IF12_out&amp;interfaceNamespace=http%3A%2F%2Fwww.distrelec.com%2Fhybris%2FIF12"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+		</wsdl:port>
+		<wsdl:port name="HTTPS_Port"
+			binding="p1:SI_Hybris_IF12_outBinding">
+			<soap:address
+				location="https://piqdisap.dat.datwyler.biz:52001/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=WSQ&amp;receiverParty=&amp;receiverService=&amp;interface=SI_Hybris_IF12_out&amp;interfaceNamespace=http%3A%2F%2Fwww.distrelec.com%2Fhybris%2FIF12"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,115 @@
+@if (siteMapData$ | async; as siteMapData) {
+<div class="container content-page">
+  <div class="cms-custom-container">
+    <div class="sitemap__left">
+      <!-- Categories list -->
+      <ul class="categories-list" id="categories-list">
+        @for (element of siteMapData.categories[0].children; track element) {
+        <ng-container *ngTemplateOutlet="categoryTemplate; context: { $implicit: element }"></ng-container>
+        }
+      </ul>
+    </div>
+
+    <div class="sitemap__right">
+      <ul id="miscellaneous-link-list">
+        <!-- my account -->
+        <li class="item-holder">
+          <a
+            class="heading"
+            id="my-account-heading-link"
+            [externalRouterLink]="isB2B ? '/my-account/company/information' : '/my-account/my-account-information'"
+          >
+            {{ 'form.my_account' | cxTranslate }}
+          </a>
+
+          <a
+            class="sub-cat"
+            id="account-details-link"
+            [externalRouterLink]="isB2B ? '/my-account/company/information' : '/my-account/my-account-information'"
+          >
+            {{ 'form.account_details' | cxTranslate }}
+          </a>
+
+          <a
+            class="sub-cat"
+            id="payment-and-delivery-link"
+            [externalRouterLink]="'/my-account/payment-and-delivery-options'"
+          >
+            {{ 'form.payment_and_delivery' | cxTranslate }}
+          </a>
+
+          <a class="sub-cat" id="order-and-returns-link" [externalRouterLink]="'my-account/order-history'">
+            {{ 'form.order_and_returns' | cxTranslate }}
+          </a>
+
+          <a class="sub-cat" id="invoice-manager-link" [externalRouterLink]="'my-account/invoice-history'">
+            {{ 'form.invoice_manager' | cxTranslate }}
+          </a>
+
+          <a class="sub-cat" id="quote-manager-link" [externalRouterLink]="'/my-account/quote-history'">
+            {{ 'form.quote_manager' | cxTranslate }}
+          </a>
+
+          <a class="sub-cat" id="compare-list-link" [externalRouterLink]="'compare'">
+            {{ 'form.compare_list' | cxTranslate }}
+          </a>
+
+          <a class="sub-cat" id="shopping-list-link" [externalRouterLink]="'shopping'">
+            {{ 'form.shopping_list' | cxTranslate }}
+          </a>
+
+          <a class="sub-cat" id="bom-tool-link" [externalRouterLink]="'bom-tool'">
+            {{ 'form.bom_tool' | cxTranslate }}
+          </a>
+        </li>
+
+        <!-- misc links -->
+        @for (element of siteMapData.misc[0].children; track element) {
+        <ng-container *ngTemplateOutlet="categoryTemplate; context: { $implicit: element }"></ng-container>
+        }
+
+        <!-- cms links -->
+        @for (element of siteMapData.rightSideLinks; track element) {
+        <li class="item-holder">
+          <a class="heading" [externalRouterLink]="element.localizedUrl ?? element.url">
+            {{ element.linkName }}
+          </a>
+        </li>
+        }
+
+        <!-- template for link elements -->
+        <ng-template #categoryTemplate let-link>
+          <li class="item-holder">
+            <a
+              class="heading"
+              [externalRouterLink]="link.entries.length ? link.entries[0].localizedUrl : ''"
+              [attr.id]="
+                link.entries.length
+                  ? link.entries[0].itemId.toLowerCase() + '-heading'
+                  : link.uid.toLowerCase() + '-heading'
+              "
+            >
+              {{ link.localizedTitle }}
+            </a>
+
+            @if (link.children.length > 0) { @for (sublink of link.children; track sublink) {
+            <a
+              *ngIf="sublink.entries[0].itemId.toLowerCase() !== 'htmlsitemaplink'"
+              class="sub-cat"
+              [attr.id]="sublink.entries[0].itemId.toLowerCase() + '-link'"
+              [externalRouterLink]="sublink.entries[0].localizedUrl"
+            >
+              {{ sublink.localizedTitle }}
+            </a>
+            } } @if (link.uid === 'ToolsNavNode') {
+            <a class="heading" [externalRouterLink]="'/manufacturer-stores/cms/manufacturer'">
+              {{ 'text.viewAllManufacturers' | cxTranslate }}
+            </a>
+            }
+          </li>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+</div>
+}

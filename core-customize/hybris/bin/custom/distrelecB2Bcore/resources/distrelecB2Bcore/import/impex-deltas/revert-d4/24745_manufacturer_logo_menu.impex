@@ -1,0 +1,31 @@
+# Update the banner for Manufacturer Icons in the Menu.
+$country=FR
+
+# Constants
+$mediaTranslator = de.hybris.platform.impex.jalo.media.MediaDataTranslator
+$siteResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/impex-deltas/revert-d4/media/menu
+$mode = Staged
+
+# FR Catalog
+$contentCatalog = distrelec_FRContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = $mode])[default = $contentCatalog:$mode]
+
+INSERT_UPDATE Media; code[unique=true] ; $contentCV[unique=true]; @media[translator=$mediaTranslator, lang = fr]  ;mime[default=image/jpeg]
+                   ; manufactbrandImage1    ;                          ; $siteResource/arduino.jpeg                                                    ;
+                   ; manufactbrandImage2    ;                          ; $siteResource/fluke.jpeg                                                      ;
+                   ; manufactbrandImage3    ;                          ; $siteResource/keysight.jpeg                                                   ;
+                   ; manufactbrandImage4    ;                          ; $siteResource/molex.jpeg                                                      ;
+                   ; manufactbrandImage5    ;                          ; $siteResource/rnd.jpeg                                                        ;
+                   ; manufactbrandImage6    ;                          ; $siteResource/tektronix.jpeg                                                  ;
+
+
+INSERT_UPDATE DistBannerComponent   ;uid[unique=true] ; $contentCV[unique=true] ;localizedUrlLink[lang = fr]     ;media(code, $contentCV)[lang = fr]  ;mode(code[default = NORMAL])
+                                    ;manufacturerBrand1 ;                       ;/fr/manufacturer/arduino/man_aio   ;manufactbrandImage1                    ;
+                                    ;manufacturerBrand2 ;                       ;/fr/manufacturer/fluke/man_flu     ;manufactbrandImage2                    ;
+                                    ;manufacturerBrand3 ;                       ;/fr/manufacturer/keysight/man_ksg  ;manufactbrandImage3                    ;
+                                    ;manufacturerBrand4 ;                       ;/fr/manufacturer/molex/man_mlx     ;manufactbrandImage4                    ;
+                                    ;manufacturerBrand5 ;                       ;/fr/cms/rnd                        ;manufactbrandImage5                    ;
+                                    ;manufacturerBrand6 ;                       ;/fr/manufacturer/tektronix/man_tek ;manufactbrandImage6                    ;
+
+UPDATE DistMainNavigationComponent   ;$contentCV[unique=true];uid[unique=true]      ;DistBannerComponentsList(uid,$contentCV)
+                                     ;       ;MainTopNavComponent   ;manufacturerBrand1,manufacturerBrand2,manufacturerBrand3,manufacturerBrand4,manufacturerBrand5,manufacturerBrand6

@@ -1,0 +1,104 @@
+<ng-container>
+  <div
+    class="container xtra-h"
+    [ngClass]="{
+      'manufacturer-featured-products': (currentPageObservable$ | async)?.type === 'DistManufacturerPage'
+    }"
+  >
+    <div class="row">
+      <div *ngIf="(productAdditionalClasses$ | async) === false" class="col-12 heading">
+        <h2 [class.productOutletPage]="productAdditionalClasses$ | async">
+          {{ 'product.featured.title' | cxTranslate }}
+        </h2>
+      </div>
+      <div class="container m-height">
+        <ng-container *ngIf="featuredProducts$ | async as featuredProducts">
+          <div class="row">
+            <div
+              *rxFor="let item of featuredProducts; let i = index"
+              class="col product"
+              [class.productOutletPage]="productAdditionalClasses$ | async"
+            >
+              <div class="product__item" [id]="'featured_products_item_' + i">
+                <ng-container *rxIf="item.activePromotionLabels.length > 0">
+                  <app-promo-label [promoLabel]="item.activePromotionLabels[0]"></app-promo-label>
+                </ng-container>
+                <div *rxIf="item?.distManufacturer" class="manufacturer">
+                  <a [routerLink]="item?.distManufacturer?.urlId" [title]="item?.distManufacturer?.nameSeo">
+                    <ng-container *rxFor="let image of item?.distManufacturer?.image">
+                      <ng-container *rxIf="image.key === 'brand_logo'">
+                        <img
+                          [ngSrc]="image.value?.url"
+                          [alt]="item?.distManufacturer?.nameSeo"
+                          width="110"
+                          height="22"
+                        />
+                      </ng-container>
+                    </ng-container>
+                  </a>
+                </div>
+                <a
+                  class="product-img-link"
+                  [routerLink]="item?.url"
+                  [queryParams]="{ itemList: itemListEntity.FEATURED }"
+                  [title]="item?.name"
+                  [id]="'product-img-link' + i"
+                  (click)="trackProductClick(item, i)"
+                >
+                  <ng-container *rxFor="let collection of item?.images">
+                    <ng-container
+                      *rxIf="collection?.format === 'portrait_small' && collection?.imageType === 'PRIMARY'"
+                    >
+                      <picture>
+                        <source [srcset]="useWebpImg('portrait_small_webp', item?.images, collection)" />
+                        <img [ngSrc]="collection?.url" [alt]="item?.name" width="90" height="120" />
+                      </picture>
+                    </ng-container>
+                  </ng-container>
+                </a>
+                <h3 class="col-12 title">
+                  <a
+                    class="title__link"
+                    [routerLink]="item?.url"
+                    [queryParams]="{ itemList: itemListEntity.FEATURED }"
+                    [innerText]="item?.featureProductTitle"
+                    [title]="item?.name | stripHTMLTags"
+                    (click)="trackProductClick(item, i)"
+                  ></a>
+                </h3>
+                <ng-container *rxLet="currentChannelData$; let currentChannel">
+                  <div *rxIf="currentChannel.channel === 'B2B'" class="col-12 price">
+                    {{ item?.price?.currencyIso }}
+                    {{
+                      item?.price?.value
+                        | volumePrice: item?.price?.currencyIso : currentChannel : item?.price?.basePrice
+                    }}
+                  </div>
+                  <div *rxIf="currentChannel.channel === 'B2C'" class="col-12 price">
+                    {{ item?.price?.currencyIso }}
+                    {{
+                      item?.price?.priceWithVat
+                        | volumePrice: item?.price?.currencyIso : currentChannel : item?.price?.basePrice
+                    }}
+                  </div>
+                </ng-container>
+                <div class="col-12 cta-wrapper">
+                  <a
+                    class="product-view"
+                    [id]="'add_featured_product_to_cart_link_' + i"
+                    [routerLink]="item?.url"
+                    [queryParams]="{ itemList: itemListEntity.FEATURED }"
+                    (click)="trackProductClick(item, i)"
+                  >
+                    {{ linkText }}
+                    <fa-icon [icon]="faAngleRight"></fa-icon>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>

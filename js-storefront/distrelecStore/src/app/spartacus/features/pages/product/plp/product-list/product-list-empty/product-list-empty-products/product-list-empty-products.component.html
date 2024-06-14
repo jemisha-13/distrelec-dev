@@ -1,0 +1,39 @@
+<ng-container *ngFor="let products of singlSearchResults$ | async">
+  <section class="zero-results">
+    <div id="zero-search-results">
+      <h3
+        class="title"
+        id="zero-search-results-title"
+        [innerHTML]="
+          'searchResults.resultsTitle' | cxTranslate: { totalCount: products?.count, searchTerm: products?.singleTerm }
+        "
+      ></h3>
+      <a class="search-results-link" [externalRouterLink]="'/search?q=' + products?.singleTerm">
+        {{ 'searchResults.showAllResults' | cxTranslate }}
+      </a>
+    </div>
+    <div class="zero-results-products">
+      <div *ngFor="let item of products?.items; let index = index" class="product">
+        <a *ngIf="index < 4" href="{{ item?.url }}">
+          <div *ngFor="let image of item?.images" class="product-image">
+            <img
+              *ngIf="image?.format == 'landscape_small' && currentChannel$ | async as currentChannel"
+              [src]="currentChannel?.mediaDomain + image?.url"
+              [alt]="item?.name"
+            />
+          </div>
+          <h4 class="product-name" id="zero-search-results-name">{{ item?.name }}</h4>
+          <span class="product-price" id="zero-search-results-price">{{ item?.price?.value | price }}</span>
+        </a>
+      </div>
+    </div>
+    <button
+      class="show-all-results"
+      id="zero-search-results-all"
+      [externalRouterLink]="'/search?q=' + products?.singleTerm"
+    >
+      {{ 'searchResults.showAllResults' | cxTranslate }}
+      <fa-icon [icon]="faChevronRight"></fa-icon>
+    </button>
+  </section>
+</ng-container>

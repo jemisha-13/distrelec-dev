@@ -1,0 +1,10 @@
+# DO NOT EXECUTE DIRECTLY, PLEASE USE 16676.groovy SCRIPT
+
+$internationalContentCatalog = distrelec_IntContentCatalog
+$internationalContentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $internationalContentCatalog]), CatalogVersion.version[default = Online])[default = $internationalContentCatalog:Online]
+
+UPDATE ContentSlotForPage[batchmode = true]; uid[unique = true]                ; contentSlot(uid, $internationalContentCV);
+                                           ; checkout-registration-disruptions ; DisruptionMessagesSlot                   ;
+
+REMOVE ContentSlot[batchmode = true]; uid[unique = true]     ;
+                                    ; DisruptionCheckoutSlot ;

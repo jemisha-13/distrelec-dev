@@ -1,0 +1,549 @@
+<form [formGroup]="generalRegForm">
+  <h3 class="register__form--secondary-title" id="registration.general.about_you">
+    {{ 'registration.general.about_you' | cxTranslate }}
+  </h3>
+
+  <!--- TITLE SELECTION --->
+  <div class="register__form__holder">
+    <h4 class="register__form__holder--title" id="form.title">
+      {{ 'form.title_alt' | cxTranslate }}
+    </h4>
+  </div>
+
+  <div class="register__select--options reg-title">
+    <button class="btn register__select--options__radio" (click)="onTitleClick('mr')">
+      <input
+        class="custom-control-input js-validate"
+        [id]="'titleCode' + registrationType"
+        (click)="inputClicked.emit('titleCode')"
+        type="radio"
+        formControlName="titleCode"
+        value="mr"
+      />
+      <label id="form.mr">{{ 'form.mr' | cxTranslate }}</label>
+    </button>
+
+    <button class="btn register__select--options__radio right" id="onTitleSelectionBtn" (click)="onTitleClick('ms')">
+      <input
+        class="custom-control-input"
+        (click)="inputClicked.emit('titleCode')"
+        (focusout)="generalRegForm.controls['titleCode'].markAsDirty()"
+        type="radio"
+        formControlName="titleCode"
+        value="ms"
+      />
+      <label id="form.ms">{{ 'form.ms' | cxTranslate }}</label>
+    </button>
+
+    <fa-icon
+      *ngIf="generalRegForm.get('titleCode').errors && generalRegForm.get('titleCode').touched"
+      class="icon-title"
+      id="faTimesTitle"
+      [icon]="faTimes"
+    ></fa-icon>
+
+    <fa-icon
+      *ngIf="!generalRegForm.get('titleCode').errors && !!generalRegForm.get('titleCode').value"
+      class="icon-title"
+      id="faCheckTitle"
+      [icon]="faCheck"
+    ></fa-icon>
+  </div>
+
+  <div
+    *ngIf="generalRegForm.get('titleCode').errors && generalRegForm.get('titleCode').touched"
+    class="register__form__holder is-title-error"
+  >
+    <small class="error" id="validations.title_required">
+      {{ 'validations.title_required' | cxTranslate }}
+    </small>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-lg-10">
+      <div class="register__form__holder names">
+        <!--- FIRST NAME INPUT --->
+        <div class="register__form__holder--half first-name">
+          <label class="register__form__holder--title" id="form.first_name">
+            {{ 'form.register_first_name' | cxTranslate }}
+          </label>
+          <div class="p-relative">
+            <input
+              #firstName
+              class="register__form__holder--input js-validate"
+              [id]="'firstName' + registrationType"
+              [class.is-correct]="generalRegForm.get('firstName').valid"
+              [class.is-invalid]="generalRegForm.get('firstName').errors && generalRegForm.get('firstName').touched"
+              (input)="resetInputValidation(generalRegForm.controls['firstName'])"
+              (click)="inputClicked.emit('firstName')"
+              type="text"
+              autocomplete="given-name"
+              formControlName="firstName"
+            />
+            <fa-icon
+              *ngIf="generalRegForm.get('firstName').errors && generalRegForm.get('firstName').touched"
+              id="faTimesFirstName"
+              [icon]="faTimes"
+            ></fa-icon>
+            <fa-icon *ngIf="!generalRegForm.get('firstName').errors" id="faCheckFirstName" [icon]="faCheck"></fa-icon>
+            <small
+              *ngIf="generalRegForm.get('firstName').errors && generalRegForm.get('firstName').touched"
+              class="error"
+              id="validations.first_name_required"
+            >
+              {{ 'validations.first_name_required' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+
+        <!--- SURNAME INPUT --->
+        <div class="register__form__holder--half">
+          <label class="register__form__holder--title" id="form.surname">{{ 'form.surname' | cxTranslate }}</label>
+          <div class="p-relative">
+            <input
+              class="register__form__holder--input js-validate"
+              [id]="'lastName' + registrationType"
+              [class.is-correct]="generalRegForm.get('lastName').valid"
+              [class.is-invalid]="generalRegForm.get('lastName').errors && generalRegForm.get('lastName').touched"
+              (input)="resetInputValidation(generalRegForm.controls['lastName'])"
+              (click)="inputClicked.emit('lastName')"
+              autocomplete="family-name"
+              type="text"
+              formControlName="lastName"
+            />
+            <fa-icon
+              *ngIf="generalRegForm.get('lastName').errors && generalRegForm.get('lastName').touched"
+              id="faTimesLastName"
+              [icon]="faTimes"
+            ></fa-icon>
+            <fa-icon *ngIf="!generalRegForm.get('lastName').errors" id="faCheckLastName" [icon]="faCheck"></fa-icon>
+            <small
+              *ngIf="generalRegForm.get('lastName').errors && generalRegForm.get('lastName').touched"
+              class="error"
+              id="validations.surname_required"
+            >
+              {{ 'validations.surname_required' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!--- CODICE FISCALE: IT --->
+      <div
+        *ngIf="generalRegForm.get('countryCode').value === 'IT' && generalRegForm.get('type').value === 'B2C'"
+        class="register__form__holder"
+      >
+        <div class="register__form__holder--full">
+          <label class="register__form__holder--title" id="registration.general.codice_title">
+            {{ 'registration.general.codice_title' | cxTranslate }}
+          </label>
+          <div class="p-relative">
+            <input
+              class="register__form__holder--input js-validate"
+              [id]="'codiceFiscale' + registrationType"
+              [class.is-correct]="generalRegForm.get('codiceFiscale').valid"
+              [class.is-invalid]="
+                generalRegForm.get('codiceFiscale').errors && generalRegForm.get('codiceFiscale').touched
+              "
+              (click)="inputClicked.emit('codiceFiscale')"
+              autocomplete="family-name"
+              type="text"
+              formControlName="codiceFiscale"
+              placeholder="16 caratteri alfanumerici"
+            />
+            <fa-icon
+              *ngIf="generalRegForm.get('codiceFiscale').errors && generalRegForm.get('codiceFiscale').touched"
+              id="faTimesCodiceFisc"
+              [icon]="faTimes"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="!generalRegForm.get('codiceFiscale').errors"
+              id="faCheckCodiceFisc"
+              [icon]="faCheck"
+            ></fa-icon>
+            <small
+              *ngIf="generalRegForm.get('codiceFiscale').errors && generalRegForm.get('codiceFiscale').touched"
+              class="error"
+              id="validations.enter_valid_field.codiceFisc"
+            >
+              {{ 'validations.enter_valid_field' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!--- COUNTRY INPUT: BIZ/EX --->
+      <ng-container *ngIf="countryList_ | async as countryList">
+        <ng-container *ngIf="isExportShop && generalRegForm.get('type').value === 'B2C'">
+          <app-country-select
+            [generalRegForm]="generalRegForm"
+            [countryList]="countryList"
+            [registrationType]="registrationType"
+            [isExportShop]="true"
+            [isValidNumberForRegion]="isValidNumberForRegion"
+            (selectEventEmitter)="onCountrySelectEvent($event)"
+          ></app-country-select>
+        </ng-container>
+      </ng-container>
+
+      <!--- PHONE NUMBER INPUT --->
+      <div class="register__form__holder">
+        <div class="register__form__holder--full">
+          <label class="register__form__holder--title" id="form.phone_number">
+            {{ 'form.phone_number' | cxTranslate }}
+          </label>
+          <div class="p-relative">
+            <input
+              class="register__form__holder--input js-validate"
+              [id]="'phoneNumber' + registrationType"
+              [class.is-correct]="generalRegForm.get('phoneNumber').valid"
+              [class.is-invalid]="generalRegForm.get('phoneNumber').errors && generalRegForm.get('phoneNumber').touched"
+              (input)="resetInputValidation(generalRegForm.controls['phoneNumber'])"
+              (click)="inputClicked.emit('phoneNumber')"
+              autocomplete="tel"
+              type="text"
+              formControlName="phoneNumber"
+            />
+
+            <fa-icon
+              *ngIf="generalRegForm.get('phoneNumber').errors && generalRegForm.get('phoneNumber').touched"
+              id="faTimesPhoneNum"
+              [icon]="faTimes"
+            ></fa-icon>
+
+            <fa-icon *ngIf="generalRegForm.get('phoneNumber').valid" id="faCheckPhoneNum" [icon]="faCheck"></fa-icon>
+
+            <small
+              *ngIf="generalRegForm.get('phoneNumber').errors && generalRegForm.get('phoneNumber').touched"
+              class="error"
+              id="validations.enter_valid_phone"
+            >
+              {{ 'validations.enter_valid_phone' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- JOB FUNCTION INPUT -->
+      <div *ngIf="generalRegForm.get('functionCode')" class="register__form__holder">
+        <div class="register__form__holder--full">
+          <label class="register__form__holder--title" id="registration.b2b.function">
+            {{ 'registration.b2b.function' | cxTranslate }}
+          </label>
+          <div class="p-relative">
+            <select
+              class="register__form__holder--input js-validate"
+              [class.is-correct]="generalRegForm.get('functionCode').valid"
+              [class.is-invalid]="
+                generalRegForm.get('functionCode').errors && generalRegForm.get('functionCode').touched
+              "
+              aria-placeholder="Please select"
+              type="text"
+              formControlName="functionCode"
+            >
+              <option id="registration.function.select" value="" disabled selected>
+                {{ 'registration.b2b.function_help' | cxTranslate }}
+              </option>
+              <ng-container *ngIf="functionResults_ | async as functionResults">
+                <ng-container *ngFor="let functions of functionResults; let i = index">
+                  <option [value]="functions.code" [id]="'function_' + functions.code">
+                    {{ functions.name }}
+                  </option>
+                </ng-container>
+              </ng-container>
+            </select>
+            <fa-icon
+              id="faAngleDownFunction"
+              [icon]="faAngleDown"
+              [class.left]="
+                (generalRegForm.get('functionCode').errors && generalRegForm.get('functionCode').touched) ||
+                generalRegForm.get('functionCode').valid
+              "
+            ></fa-icon>
+            <fa-icon
+              *ngIf="generalRegForm.get('functionCode').errors && generalRegForm.get('functionCode').touched"
+              id="faTimesFunction"
+              [icon]="faTimes"
+            ></fa-icon>
+            <fa-icon *ngIf="!generalRegForm.get('functionCode').errors" id="faCheckFunction" [icon]="faCheck"></fa-icon>
+            <small
+              *ngIf="generalRegForm.get('functionCode').errors && generalRegForm.get('functionCode').touched"
+              class="error"
+              id="validations.function_error"
+            >
+              {{ 'validations.function_error' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!--- COUNTRY INPUT: IF WEBSHOP(EXCEPT BIZ) HAVE MULTIPLE COUNTRIES --->
+      <ng-container *ngIf="countryList_ | async as countryList">
+        <ng-container *ngIf="isNonExportShopWithMultipleCountries(countryList)">
+          <app-country-select
+            [generalRegForm]="generalRegForm"
+            [countryList]="countryList"
+            [registrationType]="registrationType"
+            [isExportShop]="false"
+            [isValidNumberForRegion]="isValidNumberForRegion"
+            (selectEventEmitter)="onCountrySelectEvent($event)"
+          ></app-country-select>
+        </ng-container>
+      </ng-container>
+
+      <h3 class="register__form--title" id="registration.b2c.account_details">
+        {{ 'registration.b2c.account_details' | cxTranslate }}
+      </h3>
+
+      <!--- EMAIL INPUT --->
+      <div class="register__form__holder">
+        <div class="register__form__holder--full">
+          <label class="register__form__holder--title" id="form.email">{{ 'form.register_email' | cxTranslate }}</label>
+          <div class="p-relative">
+            <ng-container *ngIf="isEmailExist$ | async as isEmailExist">
+              <input
+                class="register__form__holder--input js-validate"
+                [id]="'uid' + registrationType"
+                [disabled]="isLoading"
+                [class.is-correct]="
+                  generalRegForm.get('uid').valid && !isUserTyping && !isEmailExist.isEmailExist && !isLoading
+                "
+                [class.is-invalid]="
+                  (generalRegForm.get('uid').errors && generalRegForm.get('uid').touched) ||
+                  (!isUserTyping && isEmailExist.isEmailExist && !isLoading)
+                "
+                (input)="isUserTyping = true; resetInputValidation(generalRegForm.controls['uid'])"
+                (blur)="isUserTyping = false; validateIfEmailExist()"
+                (click)="inputClicked.emit('uid')"
+                autocomplete="username"
+                type="email"
+                formControlName="uid"
+              />
+              <fa-icon *ngIf="isLoading" id="faCircleNotchEmail" [icon]="faCircleNotch" spin="true"></fa-icon>
+              <ng-container *ngIf="!isLoading">
+                <fa-icon
+                  *ngIf="
+                    (generalRegForm.get('uid').errors && generalRegForm.get('uid').touched) ||
+                    (!isUserTyping && isEmailExist.isEmailExist)
+                  "
+                  id="faTimesEmail"
+                  [icon]="faTimes"
+                ></fa-icon>
+                <fa-icon
+                  *ngIf="generalRegForm.get('uid').valid && !isUserTyping && !isEmailExist.isEmailExist && !isLoading"
+                  id="faCheckTimes"
+                  [icon]="faCheck"
+                ></fa-icon>
+                <small
+                  *ngIf="generalRegForm.get('uid').errors && generalRegForm.get('uid').touched && !isUserTyping"
+                  class="error"
+                  id="validations.email_error_invalid"
+                >
+                  {{ 'validations.email_error_invalid_alt' | cxTranslate }}
+                </small>
+                <small
+                  *ngIf="!generalRegForm.get('uid').errors && !isUserTyping && isEmailExist.isEmailExist"
+                  class="error"
+                  id="validations.email_error_exist"
+                >
+                  {{ 'validations.email_error_exist_pt_1' | cxTranslate }}
+                  <a routerLink="/login">{{ 'validations.email_error_exist_pt_2' | cxTranslate }}</a>
+                  {{ 'validations.email_error_exist_pt_3' | cxTranslate }}
+                </small>
+              </ng-container>
+              <small id="form.login_help_t">{{ 'form.login_help_t' | cxTranslate }}</small>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isDisplayInvoiceContainer_ | async" class="register__form__holder">
+        <div class="register__form__holder--full register__form__holder--invoice">
+          <a class="register__form__holder--invoice-label link" (click)="toggleDisplayDiv()">
+            {{ 'form.addInvoiceEmail' | cxTranslate }} ({{ 'form.optional' | cxTranslate }})
+          </a>
+          <div *ngIf="showInvoiceField">
+            <label class="register__form__holder--title" id="form.invoiceEmail">
+              {{ 'form.invoiceEmail' | cxTranslate }} ({{ 'form.optional' | cxTranslate }})
+            </label>
+            <div class="p-relative">
+              <input
+                class="register__form__holder--input"
+                id="invoiceEmail"
+                [id]="'invoiceEmail' + registrationType"
+                [class.is-correct]="
+                  generalRegForm.get('invoiceEmail').valid &&
+                  !generalRegForm.get('invoiceEmail').errors &&
+                  generalRegForm.get('invoiceEmail').pristine
+                "
+                [class.is-invalid]="generalRegForm.get('invoiceEmail').errors"
+                (input)="isUserTyping = true; resetInputValidation(generalRegForm.controls['invoiceEmail'])"
+                (blur)="isUserTyping = false"
+                (click)="onControlTouch('invoiceEmail')"
+                autocomplete="email"
+                type="email"
+                formControlName="invoiceEmail"
+              />
+              <small
+                *ngIf="
+                  generalRegForm.get('invoiceEmail').errors?.incorrect ||
+                  (generalRegForm.get('invoiceEmail').errors?.email && !isUserTyping)
+                "
+                class="error"
+                id="validations.email_valid_example_invoice"
+              >
+                {{ 'validations.email_valid_example' | cxTranslate }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--- PASSWORD INPUT --->
+      <div class="register__form__holder">
+        <div class="register__form__holder--full">
+          <label class="register__form__holder--title" id="form.password">{{ 'form.password' | cxTranslate }}</label>
+          <div class="p-relative">
+            <input
+              class="register__form__holder--input js-validate"
+              [id]="'password' + registrationType"
+              [class.is-correct]="generalRegForm.get('password').valid && !generalRegForm.get('password').errors"
+              [class.is-invalid]="generalRegForm.get('password').errors && generalRegForm.get('password').touched"
+              [type]="isPasswordVisible ? 'text' : 'password'"
+              (click)="inputClicked.emit('password')"
+              autocomplete="new-password"
+              formControlName="password"
+              minlength="6"
+            />
+            <!--- SEE PASSWORD TRIGGER --->
+            <button
+              *ngIf="!isPasswordVisible"
+              class="btn pwd-icon-btn"
+              id="seePswdBtn"
+              [class.left]="generalRegForm.get('password').touched || generalRegForm.get('password').valid"
+              (click)="isPasswordVisible = !isPasswordVisible"
+              type="button"
+              tabindex="-1"
+            >
+              <fa-icon id="faEyeSlashPwd" [icon]="faEyeSlash"></fa-icon>
+            </button>
+            <button
+              *ngIf="isPasswordVisible"
+              class="btn pwd-icon-btn"
+              id="hidePswdBtn"
+              [class.left]="generalRegForm.get('password').touched || generalRegForm.get('password').valid"
+              (click)="isPasswordVisible = !isPasswordVisible"
+              type="button"
+              tabindex="-1"
+            >
+              <fa-icon id="faEyePwd" [icon]="faEye"></fa-icon>
+            </button>
+
+            <fa-icon
+              *ngIf="generalRegForm.get('password').errors && generalRegForm.get('password').touched"
+              id="faTimesPwd"
+              [icon]="faTimes"
+            ></fa-icon>
+            <fa-icon *ngIf="!generalRegForm.get('password').errors" id="faCheckPwd" [icon]="faCheck"></fa-icon>
+            <small
+              *ngIf="generalRegForm.get('password').invalid"
+              id="validations.pwd_error_required"
+              [class.error]="generalRegForm.get('password').errors && generalRegForm.get('password').touched"
+            >
+              {{ 'validations.pwd_error_required' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!--- PASSWORD CONFIRM INPUT --->
+      <div class="register__form__holder">
+        <div class="register__form__holder--full">
+          <label class="register__form__holder--title" id="form.confirm_pwd">
+            {{ 'form.confirm_pwd' | cxTranslate }}
+          </label>
+          <div class="p-relative">
+            <input
+              class="register__form__holder--input js-validate"
+              [id]="'checkPwd' + registrationType"
+              [class.is-correct]="
+                generalRegForm.get('checkPwd').valid &&
+                this.generalRegForm.get('checkPwd').value === this.generalRegForm.get('password').value
+              "
+              [class.is-invalid]="
+                generalRegForm.get('checkPwd').dirty &&
+                this.generalRegForm.get('checkPwd').value !== this.generalRegForm.get('password').value
+              "
+              [type]="isConfrmPasswordVisible ? 'text' : 'password'"
+              (click)="inputClicked.emit('checkPwd')"
+              autocomplete="new-password"
+              formControlName="checkPwd"
+              minlength="6"
+            />
+
+            <!--- SEE PASSWORD TRIGGER --->
+            <button
+              *ngIf="!isConfrmPasswordVisible"
+              class="btn pwd-icon-btn"
+              id="seeConfirmPwdBtn"
+              [class.left]="generalRegForm.get('checkPwd').dirty"
+              (click)="isConfrmPasswordVisible = !isConfrmPasswordVisible"
+              type="button"
+              tabindex="-1"
+            >
+              <fa-icon id="faEyeSlashConfirmPwd" [icon]="faEyeSlash"></fa-icon>
+            </button>
+            <button
+              *ngIf="isConfrmPasswordVisible"
+              class="btn pwd-icon-btn"
+              [class.left]="
+                (generalRegForm.get('checkPwd').dirty &&
+                  this.generalRegForm.get('checkPwd').value !== this.generalRegForm.get('password').value) ||
+                generalRegForm.get('checkPwd').valid
+              "
+              (click)="isConfrmPasswordVisible = !isConfrmPasswordVisible"
+              type="button"
+              tabindex="-1"
+            >
+              <fa-icon id="faEyeConfirmPwd" [icon]="faEye"></fa-icon>
+            </button>
+
+            <fa-icon
+              *ngIf="
+                generalRegForm.get('checkPwd').dirty &&
+                this.generalRegForm.get('checkPwd').value !== this.generalRegForm.get('password').value
+              "
+              id="faTimesConfirmPwd"
+              [icon]="faTimes"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="
+                generalRegForm.get('checkPwd').valid &&
+                this.generalRegForm.get('checkPwd').value === this.generalRegForm.get('password').value
+              "
+              id="faCheckConfirmPwd"
+              [icon]="faCheck"
+            ></fa-icon>
+            <small
+              *ngIf="
+                generalRegForm.get('checkPwd').dirty &&
+                this.generalRegForm.get('checkPwd').value !== this.generalRegForm.get('password').value
+              "
+              class="error"
+              id="validations.pwd_no_match_error"
+            >
+              {{ 'validations.pwd_no_match_error' | cxTranslate }}
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="register__form__holder">
+        <div class="register__form__holder--full">
+          <app-password-strength-bar
+            [passwordToCheck]="generalRegForm.controls['password'].value"
+          ></app-password-strength-bar>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

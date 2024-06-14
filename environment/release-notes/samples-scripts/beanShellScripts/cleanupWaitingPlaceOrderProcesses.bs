@@ -1,0 +1,19 @@
+import de.hybris.platform.servicelayer.search.FlexibleSearchQuery;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import org.apache.log4j.Logger;
+
+LOG = Logger.getLogger("BeanShell");
+
+flexibleSearchService = SpringUtil.getBean("flexibleSearchService");
+modelService = SpringUtil.getBean("modelService");
+
+FlexibleSearchQuery query = new FlexibleSearchQuery("SELECT {PK} FROM {TaskCondition} WHERE {fulfilled}=0 AND {uniqueID} LIKE '%APPROVAL_ORDER_SUBMIT_EVENT%' AND {creationtime} > to_date('2014-03-20 01:00:01', 'YYYY-MM-DD HH:MI:SS')");
+result = flexibleSearchService.search(query).getResult();
+LOG.info("===Start===");
+for(condition : result) {
+	LOG.info("Continue PlaceOrder for task " + condition.getTask() + "...");
+	condition.setFulfilled(Boolean.TRUE);
+	modelService.save(condition);
+}
+LOG.info("===End===");
+            

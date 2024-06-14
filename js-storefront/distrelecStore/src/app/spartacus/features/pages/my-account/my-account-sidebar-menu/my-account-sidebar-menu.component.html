@@ -1,0 +1,244 @@
+<div class="mb-3" id="myAccountMenu">
+  <div class="card">
+    <div
+      class="card-header"
+      id="accountDetails"
+      [ngClass]="accountDetailsExpandClass ? 'menu-header-bg-light-grey' : 'menu-header-bg-white'"
+      (click)="changeIcons($event)"
+    >
+      <h5 class="mb-0" id="myAccountSidebar-buttonHeading">
+        <button
+          class="btn btn-link"
+          id="btnmyAccountSidebar-accountDetails"
+          [attr.aria-expanded]="!accountDetailsExpand"
+          (click)="accountDetailsExpand = !accountDetailsExpand"
+          type="button"
+          data-target="#collapseOne"
+          aria-controls="collapseOne"
+        >
+          <fa-icon [icon]="faAngleDownAccountDetails"></fa-icon>
+          <span class="ml-2">{{ 'text.account.details' | cxTranslate }}</span>
+        </button>
+      </h5>
+    </div>
+    <div #collapse="ngbCollapse" class="collapse" id="collapseOne" [(ngbCollapse)]="!accountDetailsExpand">
+      <div class="card-body">
+        <a
+          *ngIf="
+            (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT') &&
+            findRole('b2bcustomergroup')
+          "
+          class="ui-list-link"
+          id="my_account_company_information"
+          [ngClass]="{ active: uri === 'company/information' }"
+          (click)="goToAccountLink('my-account/company/information')"
+        >
+          <span class="ui-list-link__text" id="spn-my_account_company_information">
+            {{ 'text.account.company.information' | cxTranslate }}
+          </span>
+        </a>
+        <a
+          class="ui-list-link"
+          id="my_account_account_information"
+          [ngClass]="{ active: uri === 'my-account-information' }"
+          (click)="goToAccountLink('my-account/my-account-information')"
+        >
+          <span class="ui-list-link__text" id="spn_my_account_account_information">
+            {{ 'text.preferences.account.info' | cxTranslate }}
+          </span>
+        </a>
+        <a
+          class="ui-list-link"
+          id="my_account_communication_preferences"
+          [ngClass]="{ active: uri === 'preference-center' }"
+          (click)="goToAccountLink('my-account/preference-center')"
+        >
+          <span class="ui-list-link__text" id="spn_my_account_communication_preferences">
+            {{ 'text.preferences.communication' | cxTranslate }}
+          </span>
+        </a>
+        <a
+          class="ui-list-link"
+          id="my_account_addresses"
+          [ngClass]="{ active: uri === 'addresses' }"
+          (click)="goToAccountLink('my-account/addresses')"
+        >
+          <span class="ui-list-link__text" id="spn_my_account_addresses">
+            {{ 'text.account.addresses' | cxTranslate }}
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div
+      class="card-header"
+      id="paymentAndDelivery"
+      [ngClass]="paymentDetailsExpandClass ? 'menu-header-bg-light-grey' : 'menu-header-bg-white'"
+      (click)="changeIcons($event)"
+    >
+      <h5 class="mb-0" id="myAccountSidebar-paymentDelivery">
+        <button
+          class="btn btn-link"
+          id="btn-myAccountSidebar-paymentDelivery"
+          [attr.aria-expanded]="!paymentDetailsExpand"
+          (click)="paymentDetailsExpand = !paymentDetailsExpand"
+          type="button"
+          aria-controls="collapseTwo"
+        >
+          <fa-icon [icon]="faAngleDownPayment"></fa-icon>
+          <span class="ml-2">{{ 'text.account.settings' | cxTranslate }}</span>
+        </button>
+      </h5>
+    </div>
+    <div #collapse="ngbCollapse" class="collapse" id="collapseTwo" [(ngbCollapse)]="!paymentDetailsExpand">
+      <div class="card-body">
+        <a
+          class="ui-list-link"
+          id="myAccountSidebar-paymentOptions"
+          [ngClass]="{ active: uri === 'payment-and-delivery-options' }"
+          (click)="goToAccountLink('my-account/payment-and-delivery-options')"
+        >
+          <span class="ui-list-link__text" id="spn-myAccountSidebar-paymentOptions">
+            {{ 'text.account.paymentOptions' | cxTranslate }}
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="activeBasesiteData$ | async as basesiteData" class="card">
+    <div
+      class="card-header"
+      id="orderManagement"
+      [ngClass]="orderDetailsExpandClass ? 'menu-header-bg-light-grey' : 'menu-header-bg-white'"
+      (click)="changeIcons($event)"
+    >
+      <h5 class="mb-0" id="myAccountSidebar-orderMangement">
+        <button
+          class="btn btn-link"
+          id="btn-myAccountSidebar-orderMangement"
+          [attr.aria-expanded]="!orderDetailsExpand"
+          (click)="orderDetailsExpand = !orderDetailsExpand"
+          type="button"
+          aria-controls="collapseThree"
+        >
+          <fa-icon [icon]="faAngleDownOrderManagement"></fa-icon>
+          <span class="ml-2">{{ 'text.account.orderManager' | cxTranslate }}</span>
+          <span
+            *ngIf="
+              (basesiteData.quotationsEnabled && count?.quoteCount > 0) ||
+              (basesiteData.orderApprovalEnabled && count?.appReqCount > 0)
+            "
+            class="badge badge-danger multi-collapse collapse"
+            id="collapseBadge"
+            [ngClass]="orderDetailsExpand ? '' : 'show'"
+          >
+            {{ count?.quoteCount + count?.appReqCount }}
+          </span>
+        </button>
+      </h5>
+    </div>
+    <div #collapse="ngbCollapse" id="collapseThree" [(ngbCollapse)]="!orderDetailsExpand">
+      <div class="card-body">
+        <a
+          class="ui-list-link"
+          id="my_account_order_history"
+          [ngClass]="{ active: uri === 'order-history' }"
+          (click)="goToAccountLink('my-account/order-history')"
+        >
+          <span class="ui-list-link__text" id="spn-myAccountSidebar-orderHistory">
+            {{ 'text.account.orderHistory' | cxTranslate }}
+          </span>
+        </a>
+        <a
+          class="ui-list-link"
+          id="my_account_invoice_manager"
+          [ngClass]="{ active: uri === 'invoice-history' }"
+          (click)="goToAccountLink('my-account/invoice-history')"
+        >
+          <span class="ui-list-link__text" id="spn_my_account_invoice_manager">
+            {{ 'text.account.invoiceHistory' | cxTranslate }}
+          </span>
+        </a>
+        <a
+          *ngIf="
+            (basesiteData.quotationsEnabled || userDetails?.erpSelectedCustomer) &&
+            (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT')
+          "
+          class="ui-list-link"
+          id="my_account_quote_history"
+          [ngClass]="{ active: uri === 'quote-history' }"
+          (click)="goToAccountLink('my-account/quote-history')"
+        >
+          <span class="ui-list-link__text" id="spn-myAccountSidebar-quoteManager">
+            {{ 'text.account.quoteManager' | cxTranslate }}
+          </span>
+          <span *ngIf="count?.quoteCount > 0" class="badge badge-danger" id="spn-myAccountSidebar-quoteManager">
+            {{ count?.quoteCount }}
+          </span>
+        </a>
+        <a
+          *ngIf="
+            basesiteData.orderApprovalEnabled &&
+            (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT') &&
+            findRole('b2badmingroup')
+          "
+          class="ui-list-link"
+          id="my_account_approval_requests"
+          [ngClass]="{ active: uri === 'order-approval' }"
+          (click)="goToAccountLink('my-account/order-approval')"
+        >
+          <span class="ui-list-link__text" id="spn-myAccountSidebar-approvalRequest">
+            {{ 'text.account.approvalRequests' | cxTranslate }}
+          </span>
+          <span
+            *ngIf="count?.appReqCount > 0"
+            class="badge badge-danger"
+            id="spnCount-myAccountSidebar-approvalRequest"
+          >
+            {{ count?.appReqCount }}
+          </span>
+        </a>
+        <a
+          *ngIf="
+            basesiteData.orderApprovalEnabled &&
+            (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT') &&
+            !findRole('b2badmingroup') &&
+            findRole('b2bcustomergroup')
+          "
+          class="ui-list-link"
+          id="myAccountSidebar-orderApprovalRequest"
+          id="my_account_my_order_approval_requests"
+          [ngClass]="{ active: uri === 'order-approval-requests' }"
+          (click)="goToAccountLink('my-account/order-approval-requests')"
+        >
+          <span class="ui-list-link__text" id="spn_my_account_my_order_approval_requests">
+            {{ 'text.account.myOrderApprovalRequests' | cxTranslate }}
+          </span>
+          <span
+            *ngIf="count?.appReqCount > 0"
+            class="badge badge-danger"
+            id="spnCount-myAccountSidebar-myOrder-approvalRequest"
+          >
+            {{ count?.appReqCount }}
+          </span>
+        </a>
+        <a
+          *ngIf="
+            (userDetails?.customerType === 'B2B' || userDetails?.customerType === 'B2B_KEY_ACCOUNT') &&
+            findRole('b2badmingroup')
+          "
+          class="ui-list-link"
+          id="my_account_user_management"
+          [ngClass]="{ active: uri === 'company/user-management' }"
+          (click)="goToAccountLink('my-account/company/user-management')"
+        >
+          <span class="ui-list-link__text" id="spn-myAccountSidebar-userManagement">
+            {{ 'text.account.company.userManagement' | cxTranslate }}
+          </span>
+          <ng-content select=".badge"></ng-content>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

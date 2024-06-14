@@ -1,0 +1,25 @@
+@if (cmsData$ | async; as cmsData) {
+  <div class="simple-banner">
+    @if (cmsData.media) {
+      @if (cmsData.localizedUrlLink !== undefined) {
+        <a
+          class="img-ct sbc-link"
+          id="simple-banner__link-{{ cmsData.uid }}"
+          [absoluteRouterLink]="cmsData.localizedUrlLink"
+        >
+          <app-media-image
+            [mediaData]="cmsData.media"
+            [priority]="cmsData.priority"
+            (click)="onLogoClick()"
+          ></app-media-image>
+        </a>
+      } @else {
+        <app-media-image
+          [mediaData]="cmsData.media"
+          [priority]="cmsData.priority"
+          (click)="onLogoClick()"
+        ></app-media-image>
+      }
+    }
+  </div>
+}

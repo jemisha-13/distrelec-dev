@@ -1,0 +1,15 @@
+# EX
+$contentCatalog = distrelec_EXContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+$lang = en
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]  ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Privacy/Cookie Settings ; #triggerCookieSettings
+
+
+UPDATE DistFooterComponent; UID[unique = true]  ; impressumLinks(uid, $contentCV); $contentCV[unique = true]
+                          ; DistFooterComponent ; footer_legals_ex_agb, footer_legals_ex_impressum, PrivacyCookieLink, footer_legals_ex_datenschutz, footer_legals_ex_disclaimer, ADR-Link, ODR-link, QLLink
+
+

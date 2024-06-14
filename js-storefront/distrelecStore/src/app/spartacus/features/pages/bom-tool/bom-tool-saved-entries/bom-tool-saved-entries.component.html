@@ -1,0 +1,26 @@
+<div class="container saved-bom-entries">
+  <div class="saved-bom-entries__body">
+    <app-page-title titleI18nKey="text.savebomuploads" variant="red"></app-page-title>
+
+    <app-action-message
+      *ngIf="maxFilesReached"
+      [message]="'import-tool.file.limitexhausted' | cxTranslate"
+      type="danger"
+    ></app-action-message>
+
+    <ng-container *ngIf="files$ | async as files">
+      <div *ngIf="files.length === 0" class="no-files-saved" id="boom_tool_no_saved_files">
+        {{ 'import-tool.file.nosavedfiles' | cxTranslate }}
+      </div>
+
+      <div *ngFor="let bomFile of files; index as i" class="saved-bom-entries__item">
+        <app-saved-file-entry
+          [bomFile]="bomFile"
+          [index]="i"
+          (error)="onError($event)"
+          (fileDeleted)="maxFilesReached = false"
+        ></app-saved-file-entry>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions 
+topic:	Hybris Typesystem (Update, initialize)
+date:		13.09.2011
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-typesystem" basedir=".">
+
+
+
+	<!--
+	=================================
+	macro: initializemaster
+	=================================
+	-->
+	<macrodef name="initializemaster" description="This target initilizes the tenant master using the provided hybris build script.">
+		<sequential>
+			<ant antfile="${hybris.platform.home}\build.xml" target="initialize">
+				<property name="platformhome" value="${hybris.platform.home}" />
+				<property name="tenant" value="master" />
+			</ant>
+		</sequential>
+	</macrodef>
+	
+	<!--
+	=================================
+	macro: initializejunit
+	=================================
+	-->
+	<macrodef name="initializejunit" description="Initializes the junit tenant">
+		<sequential>
+			<echo message="Initializes the junit tenant for hybris platform on ${current.os} ..." />
+			<ant antfile="${hybris.platform.home}\build.xml" target="initialize">
+				<property name="platformhome" value="${hybris.platform.home}" />
+				<property name="tenant" value="junit" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+	<!--
+	=================================
+	macro: updatemaster
+	=================================
+	-->
+	<macrodef name="updatemaster" description="This target updates the master tenant using the provided hybris build script.">
+		<sequential>
+			<echo message="Update master tenant for hybris platform on ${current.os} ..." />
+			<ant antfile="${hybris.platform.home}\build.xml" target="updatesystem">
+				<property name="platformhome" value="${hybris.platform.home}" />
+				<property name="tenant" value="master" />
+			</ant>
+		</sequential>
+	</macrodef>
+	
+	<!--
+	=================================
+	macro: updatejunit
+	=================================
+	-->
+	<macrodef name="updatejunit" description="This target updates the junit tenant using the provided hybris build script.">
+		<sequential>
+			<echo message="Update master tenant for hybris platform on ${current.os} ..." />
+			<ant antfile="${hybris.platform.home}\build.xml" target="updatesystem">
+				<property name="platformhome" value="${hybris.platform.home}" />
+				<property name="tenant" value="junit" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+</project>
+

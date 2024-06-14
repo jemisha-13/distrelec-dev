@@ -1,0 +1,78 @@
+<div class="prices__priceholder-per-q__wrapper" id="discountsPriceMap">
+  <div
+    class="prices__priceholder-per-q"
+    [class.has-discounts]="priceService.getCustomPrice(volumePricesMap[0].value).saving"
+  >
+    <div class="quantity-and-price-details" [class.has-discounts]="priceService.getCustomPrice(volumePricesMap[0].value).saving">
+      <div class="quantity">
+        @for (volumePriceMap of volumePricesMap; track volumePriceMap.key; let i = $index) {
+          <span class="quantity-item" [id]="'pdp_min_quantity_' + i">{{ volumePriceMap.key }} +</span>
+        }
+      </div>
+
+      <div class="was-price price-per-q">
+        @for (volumePriceMap of volumePricesMap; track volumePriceMap.key; let i = $index) {
+          @if (priceService.getListPrice(volumePriceMap.value); as listPrice) {
+            <div [id]="'pdp_discounted_price_per_q_' + i">
+              <span [innerHTML]="listPrice.currencyIso"></span>
+              &nbsp;
+              @if (currentChannel.channel === 'B2B') {
+                <span
+                  class="notranslate"
+                  [innerHTML]="
+                    priceService.getPriceWithoutVatForB2B(listPrice)
+                      | decimalPlaces: 4
+                      | volumePrice: price.currencyIso : currentChannel : price.basePrice
+                  "
+                ></span>
+              } @else {
+                <span
+                  class="notranslate"
+                  [innerHTML]="
+                    priceService.getPriceWithVatForB2C(listPrice)
+                      | decimalPlaces: 4
+                      | volumePrice: price.currencyIso : currentChannel : price.basePrice
+                  "
+                ></span>
+              }
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+    <div class="price-per-q">
+      @for (volumePriceMap of volumePricesMap; track volumePriceMap.key; let i = $index) {
+        @if (priceService.getCustomPrice(volumePriceMap.value); as customPrice) {
+          <div class="notranslate" [id]="'pdp_price_per_q_' + i">
+            {{ customPrice.currencyIso }}
+            <ng-container *ngIf="currentChannel.channel === 'B2B'">
+              {{
+                priceService.getPriceWithoutVatForB2B(customPrice)
+                  | decimalPlaces: 4
+                  | volumePrice: price.currencyIso : currentChannel : price.basePrice
+              }}
+            </ng-container>
+            <ng-container *ngIf="currentChannel.channel === 'B2C'">
+              {{
+                priceService.getPriceWithVatForB2C(customPrice)
+                  | decimalPlaces: 4
+                  | volumePrice: price.currencyIso : currentChannel : price.basePrice
+              }}
+            </ng-container>
+          </div>
+        }
+      }
+    </div>
+
+    <div class="saving-percent">
+      @for (volumePriceMap of volumePricesMap; track volumePriceMap.key; let i = $index) {
+        @if (priceService.getCustomPrice(volumePriceMap.value); as customPrice) {
+          <div *ngIf="customPrice.saving > 0" class="notranslate" [id]="'pdp_price_per_q_saving_' + i">
+            {{ 'shoppingList.reducedPrice_notification' | cxTranslate }} {{ customPrice.saving }}%
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>

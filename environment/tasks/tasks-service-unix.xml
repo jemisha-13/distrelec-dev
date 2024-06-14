@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Namics Hybris Extensions
+topic:	Unix Daemon (hybris)
+date:		19.01.2012
+author:		jweiss
+======================================================================
+-->
+
+
+<project name="namics-hybris-tasks-services-unix" basedir=".">
+
+	<!--
+	https://know.namics.com/pages/viewpage.action?pageId=73597229
+	-->
+	
+	<!--
+		=================================
+		macro: startHybrisService
+		=================================
+	-->
+	<macrodef name="startHybrisServiceUnix">
+		<sequential>
+			<available file="${serviceAutorunDir}/${serviceProcessName}" type="file" property="doesInitFileExist"/>
+			<fail unless="doesInitFileExist" message="The file '${serviceAutorunDir}/${serviceProcessName}' doesn't exist. Use 'ant installHybrisService' to install it." />
+			
+			<echo message="Starting hybris as process..." />
+			<!-- /etc/init.d/hybrisserver start --> 
+			<exec dir="${serviceAutorunDir}" executable="${serviceProcessName}" failifexecutionfails="true" failonerror="true">
+				<env key="JAVA_HOME" path="${env.JAVA_HOME}" /> <!-- propably /usr/java/default -->
+				<arg value="start" />
+			</exec>
+			<echo message="Hybris process started." />
+
+		</sequential>
+	</macrodef>
+	<!--
+		=================================
+		macro: stopHybrisService
+		=================================
+	-->
+	<macrodef name="stopHybrisServiceUnix">
+		<sequential>
+			<available file="${serviceAutorunDir}/${serviceProcessName}" type="file" property="doesInitFileExist"/>
+			<fail unless="doesInitFileExist" message="The file '${serviceAutorunDir}/${serviceProcessName}' doesn't exist. Use 'ant installHybrisService' to install it." />
+			
+			<echo message="Stopping hybris process..." />
+			<!-- /etc/init.d/hybrisserver stop --> 
+			<exec dir="${serviceAutorunDir}" executable="${serviceProcessName}" failifexecutionfails="true" failonerror="true">
+				<env key="JAVA_HOME" path="${env.JAVA_HOME}" /> <!-- propably /usr/java/default -->
+				<arg value="stop" />
+			</exec>
+			<echo message="Hybris process stopped." />
+
+			
+		</sequential>
+	</macrodef>
+	
+	<!--
+		=================================
+		macro: installHybrisService
+		=================================
+	-->
+	<macrodef name="installHybrisServiceUnix">
+		<sequential>
+			<!-- Configuration of the service is done in /config/tomcat/conf/wrapper.conf -->
+			
+			<available file="${serviceAutorunDir}" type="dir" property="doesInitDirExist"/>
+			<fail unless="doesInitDirExist" message="The directory '${serviceAutorunDir}' doesn't exist. You need that directory to put the startup scripts in." />
+
+			<mkdir dir="${project.home}/installTemplate" />
+			<delete file="${project.home}/installTemplate/${serviceProcessName}" failonerror="false"/>
+			<copy file="${environment.home}/libs/unixscripts/hybrisserver.template.txt" tofile="${project.home}/installTemplate/${serviceProcessName}" >
+			    <filterchain>
+			       <replacetokens>
+			            <token key="SERVICE_PROCESS_NAME" value="${serviceProcessName}"/>
+			            <token key="SERVICE_SERVER_PATH" value="${serviceServerPath}"/>
+			            <token key="SERVICE_TOMCAT_PATH" value="${serviceTomcatPath}"/>
+			            <token key="SERVICE_RUNAS_USER" value="${serviceRunAsUser}"/>
+			            <token key="SERVICE_AUTORUN_DIR" value="${serviceAutorunDir}"/>
+		            	<token key="SERVICE_JAVA_HOME" value="${env.JAVA_HOME}"/>
+			        </replacetokens>
+			    </filterchain>
+			</copy>
+			
+			<chmod perm="755" file="${project.home}/installTemplate/${serviceProcessName}" verbose="true"/>
+			<!-- copy tofile="${serviceAutorunDir}/${serviceProcessName}" file="${project.home}/installTemplate/${serviceProcessName}" failonerror="false"/ -->
+			
+			<echo />
+			<echo />
+			<echo message="Please finish the installation by copy the file '${project.home}/installTemplate/${serviceProcessName}' to '${serviceAutorunDir}/${serviceProcessName}' and configurate the server."/>
+			<echo message=" > sudo cp ${project.home}/installTemplate/${serviceProcessName} ${serviceAutorunDir}/${serviceProcessName}"/>
+			<echo message=" > sudo chkconfig --add ${serviceProcessName}"/>
+			
+		</sequential>
+	</macrodef>
+	
+	<!--
+		=================================
+		macro: uninstallHybrisService
+		=================================
+	-->
+	<macrodef name="uninstallHybrisServiceUnix">
+		<sequential>
+			<!-- Configuration of the service is done in /config/tomcat/conf/wrapper.conf -->
+			<delete file="${serviceAutorunDir}/${serviceProcessName}" failonerror="true" verbose="true"/>
+		</sequential>
+	</macrodef>		
+
+
+</project>

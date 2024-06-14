@@ -1,0 +1,20 @@
+# FI
+$contentCatalog = distrelec_FIContentCatalog
+$contentCV = catalogVersion(catalog(id[default=$contentCatalog]), version[default='Staged'])
+
+$lang = fi
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]        ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Tietosuoja- / evästeasetukset ; #triggerCookieSettings
+
+$lang = sv
+
+# CMS Link Components
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                  ; linkName[lang = $lang]         ; localizedUrl[lang = $lang]
+                              ;                          ; PrivacyCookieLink ; PrivacyCookieSettings ; Sekretess/Cookie-inställningar ; #triggerCookieSettings
+
+
+UPDATE DistFooterComponent; UID[unique = true]  ; impressumLinks(uid, $contentCV); $contentCV[unique = true]
+                          ; DistFooterComponent ; footer_legals_fi_agb, footer_legals_fi_impressum, PrivacyCookieLink, footer_legals_fi_datenschutz, footer_legals_fi_disclaimer, ADR-Link, ODR-link, QLLink
+

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ws71.webservice.adapters.factfinder.de" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws71.webservice.adapters.factfinder.de" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns2="http://whatshot.ws71.webservice.factfinder.de" xmlns:ns1="http://ws71.webservice.factfinder.de" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:ns4="http://campaign.ws71.webservice.factfinder.de" xmlns:ns3="http://search.ws71.webservice.factfinder.de">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws71.webservice.factfinder.de">
+<xsd:complexType name="AuthenticationToken">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="password" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="timestamp" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="username" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws71.webservice.adapters.factfinder.de">
+<xsd:element name="getTagCloudEntries">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" type="xsd:int"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="ns1:AuthenticationToken"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:complexType name="ArrayOfString">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="getTagCloudEntriesResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:TagCloud"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://whatshot.ws71.webservice.factfinder.de">
+<xsd:complexType name="TagCloud">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="entries" nillable="true" type="ns2:ArrayOfTagCloudEntry"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfTagCloudEntry">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="TagCloudEntry" nillable="true" type="ns2:TagCloudEntry"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="TagCloudEntry">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="nr" type="xsd:int"/>
+<xsd:element minOccurs="0" name="params" nillable="true" type="ns3:Params"/>
+<xsd:element minOccurs="0" name="searchCount" type="xsd:int"/>
+<xsd:element minOccurs="0" name="searchTerm" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="weight" type="xsd:double"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://search.ws71.webservice.factfinder.de">
+<xsd:complexType name="Params">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="advisorStatus" nillable="true" type="ns4:AdvisorCampaignStatusHolder"/>
+<xsd:element minOccurs="0" name="articleNumber" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="channel" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="detailCustomParameters" nillable="true" type="ns3:ArrayOfCustomParameter"/>
+<xsd:element minOccurs="0" name="filters" nillable="true" type="ns3:ArrayOfFilter"/>
+<xsd:element minOccurs="0" name="followSearch" type="xsd:int"/>
+<xsd:element minOccurs="0" name="noArticleNumberSearch" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="page" type="xsd:int"/>
+<xsd:element minOccurs="0" name="query" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="resultsPerPage" type="xsd:int"/>
+<xsd:element minOccurs="0" name="searchField" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="seoPath" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="sortsList" nillable="true" type="ns3:ArrayOfSortItem"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfSortItem">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="SortItem" nillable="true" type="ns3:SortItem"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="SortItem">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="description" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="order" nillable="true" type="ns3:SortMethods"/>
+<xsd:element minOccurs="0" name="relevanceSortItem" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="searchParams" nillable="true" type="ns3:Params"/>
+<xsd:element minOccurs="0" name="selected" type="xsd:boolean"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:simpleType name="SortMethods">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="asc"/>
+<xsd:enumeration value="desc"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="ArrayOfFilter">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="Filter" nillable="true" type="ns3:Filter"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Filter">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="substring" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="valueList" nillable="true" type="ns3:ArrayOfFilterValue"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfFilterValue">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="FilterValue" nillable="true" type="ns3:FilterValue"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="FilterValue">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="exclude" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="type" nillable="true" type="ns3:FilterValueType"/>
+<xsd:element minOccurs="0" name="value" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+<xsd:simpleType name="FilterValueType">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="or"/>
+<xsd:enumeration value="and"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="ArrayOfCustomParameter">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="CustomParameter" nillable="true" type="ns3:CustomParameter"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="CustomParameter">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="cacheIgnored" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="values" nillable="true" type="tns:ArrayOfString"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://campaign.ws71.webservice.factfinder.de">
+<xsd:complexType name="AdvisorCampaignStatusHolder">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="answerPath" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="campaignId" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+<xsd:anyAttribute/>
+</xsd:complexType>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getTagCloudEntriesRequest">
+    <wsdl:part name="parameters" element="tns:getTagCloudEntries">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTagCloudEntriesResponse">
+    <wsdl:part name="parameters" element="tns:getTagCloudEntriesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="TagcloudPortType">
+    <wsdl:operation name="getTagCloudEntries">
+      <wsdl:input name="getTagCloudEntriesRequest" message="tns:getTagCloudEntriesRequest">
+    </wsdl:input>
+      <wsdl:output name="getTagCloudEntriesResponse" message="tns:getTagCloudEntriesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TagcloudHttpBinding" type="tns:TagcloudPortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getTagCloudEntries">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getTagCloudEntriesRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTagCloudEntriesResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Tagcloud">
+    <wsdl:port name="TagcloudHttpPort" binding="tns:TagcloudHttpBinding">
+      <wsdlsoap:address location="http://test72-basic.fact-finder.de/Distrelec/webservice/ws71/Tagcloud"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

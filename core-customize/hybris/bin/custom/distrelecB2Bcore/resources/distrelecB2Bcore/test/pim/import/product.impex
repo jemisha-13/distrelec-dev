@@ -1,0 +1,32 @@
+# catalogs
+$productCatalog=distrelecProductCatalog
+$classificationCatalog=DistrelecClassification
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Online'])
+$systemVersion=systemVersion(catalog(id[default=$classificationCatalog]),version[default='1.0'])
+$classificationCatalogVersion=catalogversion(catalog(id[default=$classificationCatalog]),version[default='1.0'])
+
+INSERT_UPDATE ClassificationClass;code[unique=true];allowedPrincipals(uid)[default='customergroup'];$classificationCatalogVersion[unique=true]
+;class-DC-71109
+
+INSERT_UPDATE DistPimCategoryType;code[unique=true];visible;categoryPage;categoryWithSimilarProducts
+;"Familie";true;false;true
+
+INSERT_UPDATE Category;code[unique=true];pimCategoryType(code);allowedPrincipals(uid)[default='customergroup'];$catalogVersion[unique=true]
+;cat-DC-71109;"Familie"
+
+INSERT_UPDATE Product;code[unique=true];supercategories(code);pimId;$catalogVersion[unique=true];approvalstatus(code)[default='approved']
+;17002437
+;600325
+
+INSERT_UPDATE ClassificationAttribute;code[unique=true];$systemVersion[unique=true]
+;auftragstypas400_txt
+;spitzensperrspannung_Vp
+
+INSERT_UPDATE ClassificationAttributeUnit;code[unique=true];symbol;$systemVersion[unique=true]
+;unece.unit.VLT;vlt
+;unece.unit.4K;4K
+;unece.unit.MMT;MMT
+
+INSERT_UPDATE ClassAttributeAssignment;classificationClass(code)[unique=true];classificationAttribute(code)[unique=true];position;unit(code);attributeType(code);multiValued[default=false];visibility(code)[default=not_visible];searchable[default=false];localized[default=true]
+;class-DC-71109;auftragstypas400_txt;0;;string;false;a_visibility
+;class-DC-71109;spitzensperrspannung_Vp;1;unece.unit.VLT;number;false;a_visibility

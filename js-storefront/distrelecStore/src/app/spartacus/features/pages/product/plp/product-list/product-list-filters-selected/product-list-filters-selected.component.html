@@ -1,0 +1,29 @@
+<ng-container *ngIf="{ value: activeFilteredCount$ | async } as count">
+  <ng-container *ngIf="showApplyFilters | async; else noFiltersSelected">
+    <div class="selected-box">
+      <span *ngIf="(chips | async)?.length === 0" class="title">
+        {{ 'plp.facet_buttons_and_headers.selected_filters' | cxTranslate }}
+      </span>
+      <div class="btn-group">
+        <app-dist-button
+          *ngIf="(totalCount | async) !== 1"
+          id="apply-filters-button"
+          [isDisabled]="count.value === 0"
+          (click)="applyFilters()"
+          size="medium"
+          width="w-fill"
+          height="h-small"
+        >
+          {{ 'plp.facet_buttons_and_headers.show_filter_results' | cxTranslate: { filterCount: count.value } }}
+        </app-dist-button>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-template #noFiltersSelected>
+  <div class="no-selected-filters-box">
+    <span class="title">{{ 'plp.facet_buttons_and_headers.no_selected_filters' | cxTranslate | uppercase }}</span>
+    <span class="no-selected-filters-sub-text">{{ 'plp.facet_buttons_and_headers.refine_sidebar' | cxTranslate }}</span>
+  </div>
+</ng-template>

@@ -1,0 +1,194 @@
+.mod-productfinder {
+	.c-center-vertical {
+		text-align: center;
+
+		&:before {
+			content: '';
+			display: inline-block;
+			height: 100%;
+			vertical-align: middle;
+		}
+
+		.centered {
+			display: inline-block;
+			vertical-align: middle;
+		}
+	}
+
+	.pos-indicator {
+		position: relative;
+
+		.indicator {
+			display: none;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: #fff;
+			opacity: 0.5;
+			text-align: center;
+
+			img {
+				display: inline-block;
+				vertical-align: middle;
+			}
+		}
+
+		&.loading {
+			.indicator {
+				display: block;
+			}
+		}
+	}
+
+	.grid,
+	.controls {
+		#border .border-std(1px, 0, 0, 0);
+	}
+
+	.grid {
+		margin-top: 20px;
+		padding-top: 20px;
+	}
+
+	.controls {
+		margin-top: 40px;
+		padding-top: 40px;
+	}
+
+	.column {
+		float: left;
+		padding-right: 10px;
+		width: 155px;// 930/6
+
+		h3 {
+			#typo .size-m();
+		}
+	}
+
+	.group {
+		margin-top: 40px;
+
+		&:first-child {
+			margin-top: 0;
+		}
+
+		label {
+			span {
+				display: inline-block;
+				margin-left: -10px;
+				width: 125px;// adjust to pseudo content, padding/margin
+				#typo .size-s();
+				vertical-align: top;
+				.ellipsis();
+			}
+		}
+
+		.numeric-minmax {
+			margin: 0 0;
+			padding: 1px;
+			width: 50px;
+			height: 20px;
+			#typo .size-s();
+		}
+
+		.label-minmax {
+			margin-left: 0;
+			#typo .size-s();
+		}
+
+		.between-minmax {
+			display: inline;
+			margin-left: 0;
+			width: auto;
+			line-height: auto;
+			#typo .size-s();
+			white-space: inherit;
+		}
+
+		fieldset {
+			display: inline;
+			border: 0 none;
+			margin: 0 0;
+			padding: 0 0;
+		}
+
+		// add the custom styles for form labels to this element (label does not work here because multiple inputs follow)
+		input[type="radio"] + .customValue:before {
+			content: "";
+			.s-forms-radio-button-grey-std();
+			display:inline-block;
+			margin-right: 2px;// different spacing than default form styles
+		}
+
+		input[type="radio"] + .customValue:hover:before {
+			.s-forms-radio-button-blue-std-hov();
+		}
+
+		input[type="radio"]:checked + .customValue:before {
+			.s-forms-radio-button-blue-act();
+		}
+
+		input[type="radio"]:checked + .customValue:hover:before {
+			.s-forms-radio-button-blue-act-hov();
+		}
+
+		// IE 8 and below fallback
+		.lt-ie9 & {
+			input[type="radio"] {
+				display: inline-block;
+				margin-right: 2px;// different spacing than default form styles
+				position: relative;
+				height: auto;
+				width: auto;
+			}
+		}
+
+		.lt-ie9 & {
+			input[type="radio"] + .customValue:before {
+				display: none;
+			}
+		}
+
+		// Tabindex Focus the real Radio Button, but visually show on our checkbox
+
+		// Focus & unchecked
+		input[type="radio"]:focus + .customValue:before {
+			.s-forms-radio-button-blue-std-hov();
+		}
+
+		// Focus & checked
+		input[type="radio"]:checked:focus + .customValue:before {
+			.s-forms-radio-button-blue-act-hov();
+		}
+	}
+
+	.groupControls {
+		.itemControl {
+			margin-top: 4px;
+
+			&:first-child {
+				margin-top: 0;
+			}
+		}
+	}
+
+	.finder-total {
+		#typo .size-m();
+
+		span {
+			display: inline-block;
+			padding-right: 0.5em;
+			color: #AA1936;
+			font-weight: @font-base-bold;
+		}
+	}
+
+	// overwrite .base label for .customValue
+	.base {
+		.customValue {
+			line-height: inherit;// 20px
+		}
+	}
+}

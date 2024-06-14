@@ -1,0 +1,51 @@
+<div class="container">
+  <app-component-loading-spinner *ngIf="!file"></app-component-loading-spinner>
+  <ng-container *ngIf="file">
+    <app-bom-file-title [file]="file" [isNewFile]="isNewFile"></app-bom-file-title>
+    <app-bom-tool-review-summary [file]="file"></app-bom-tool-review-summary>
+
+    <app-bom-tool-review-control-bar></app-bom-tool-review-control-bar>
+
+    <app-bom-not-available-product
+      *ngFor="let entry of file.unavailableProducts; index as i"
+      [entry]="entry"
+      [index]="i"
+    ></app-bom-not-available-product>
+
+    <app-bom-mpn-duplicate-product
+      *ngFor="let entry of file.duplicateMpnProducts; index as i"
+      [entry]="entry"
+      [index]="i"
+    ></app-bom-mpn-duplicate-product>
+
+    <ul class="product-list">
+      <li *ngFor="let entry of file?.matchingProducts; index as i">
+        <app-bom-product [entry]="entry" [index]="i" (remove)="onRemoveEntry($event)"></app-bom-product>
+      </li>
+    </ul>
+
+    <app-action-message *ngIf="productsBelowMinOrderQuantity.length" type="danger" hasContent="true">
+      <p *ngFor="let entry of productsBelowMinOrderQuantity">
+        {{
+          'validation.error.min.order.quantity'
+            | cxTranslate
+              : { '0': entry.product.codeErpRelevant | articleNumber, '1': entry.product.orderQuantityMinimum }
+        }}
+      </p>
+    </app-action-message>
+
+    <app-bom-tool-review-toolbar
+      [file]="file"
+      [isNewFile]="isNewFile"
+      [isDirty]="isDirty"
+      (saveFile)="onSave()"
+    ></app-bom-tool-review-toolbar>
+
+    <ng-container *rxIf="showSaveSuccessMessage">
+      <div class="success-container">
+        <fa-icon class="check-circle" [icon]="faCircleCheck"></fa-icon>
+        <span class="bom-unavailable-product__alt-warning-message">{{ 'import-tool.file.saved' | cxTranslate }}</span>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>

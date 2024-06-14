@@ -1,0 +1,34 @@
+<h3>Post installations for QA & PROD</h3>
+
+
+
+<h4>Hybris Update:</h4>
+http://[app-node-0]:9001/hac/platform/update
+
+
+
+<h4>System Update:</h4>
+- nothing to do
+
+
+
+<h4>Run Impex:</h4>
+- nothing to do
+
+
+
+<h4>Blog entries:</h4>
+- https://wiki.namics.com/display/distrelint/2014/06/18/webtrekk+again
+
+
+
+<h4>Misc:</h4>
+- Remove all Message Entries for all content catalogs in the hMC (Internationalization --> Message Entries)
+  (use /environment/release-notes/samples-scripts/impexScripts/removeAllMessageResourceTableEntries.impex for large amount on items)
+- Update the price condition type for all the prices
+	- For special prices: UPDATE pricerows SET p_erppriceconditiontype = (SELECT PK FROM genericitems item_t0 WHERE (p_code ='ZN00')), p_matchvalue = 5 WHERE p_specialprice = 1
+	- For normal prices: UPDATE pricerows SET p_erppriceconditiontype = (SELECT PK FROM genericitems item_t0 WHERE (p_code ='PR00')), p_matchvalue = 3 WHERE p_specialprice = 0
+
+
+<h4>Synchronization:</h4>
+- synchronize content catalog

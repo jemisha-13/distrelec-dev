@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- [y] hybris Platform Copyright (c) 2000-2012 hybris AG All rights reserved. This software is the confidential and proprietary information of hybris ("Confidential 
+	Information"). You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement you entered into 
+	with hybris. -->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:file="http://www.springframework.org/schema/integration/file" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	
+	<bean id="catplusImportBaseDirectory" class="java.lang.String">
+		<constructor-arg value="#{baseDirectory}/distrelec/catplus" />
+	</bean>
+
+	<bean id="catplusImportProcessingDirectory" class="java.lang.String">
+		<constructor-arg value="#{catplusImportBaseDirectory}/processing" />
+	</bean>
+	
+	<!-- Impex Import -->
+	<!-- Composite Filter for CSV File processing -->
+	<bean id="catalogPlusFileNameStep2" class="java.lang.String">
+		<constructor-arg value="(step2_catplus_product-ALL_MANUFACTURERS_[A-Z]{2}-[0-9]{17})(\.csv)" />
+	</bean>
+	
+	<bean id="catplusStep2CsvCompositeFilter" class="com.namics.distrelec.b2b.core.inout.spring.integration.DistCompositeFileListFilter">
+		<constructor-arg>
+			<list>
+				<bean class="org.springframework.integration.file.filters.RegexPatternFileListFilter">
+					<constructor-arg value="#{catalogPlusFileNameStep2}"/>
+				</bean>
+				<bean class="com.namics.distrelec.b2b.core.inout.spring.integration.DistFileLocker" />
+				<bean class="org.springframework.integration.file.filters.AcceptOnceFileListFilter" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 1) Read first the csv file -->
+	<file:inbound-channel-adapter id="catplusStep2CsvFiles" directory="#{catplusImportBaseDirectory}" filter="catplusStep2CsvCompositeFilter">
+		<int:poller fixed-rate="5000" />
+	</file:inbound-channel-adapter>
+	
+	<!-- 2a) move the file to processing and create header -->
+	<file:outbound-gateway request-channel="catplusStep2CsvFiles" reply-channel="catplusStep2CsvFilesProc" directory="#{catplusImportProcessingDirectory}"
+		delete-source-files="true" />
+	<int:service-activator input-channel="catplusStep2CsvFilesProc" output-channel="catplusStep2BatchFilesHeaderInit" ref="catplusStep2HeaderSetupTask" method="execute" />
+	<bean id="catplusStep2HeaderSetupTask" class="de.hybris.platform.acceleratorservices.dataimport.batch.task.HeaderSetupTask">
+		<property name="catalog" value="distrelecCatalogPlusProductCatalog" />
+		<property name="net" value="false" />
+		<property name="storeBaseDirectory" ref="catplusImportBaseDirectory" />
+	</bean>
+	
+	<!-- 2b) move the file to processing and setup header, partly site dependent -->
+	<int:service-activator input-channel="catplusStep2BatchFilesHeaderInit" output-channel="catplusStep2BatchFilesHeader" ref="headerInitTask" method="execute" />
+
+	<!-- 3) transform csv to impex file(s) -->
+	<!-- The impex file names that will be trasformed are stored into the BatchHeader object -->
+	<int:service-activator input-channel="catplusStep2BatchFilesHeader" output-channel="catplusStep2BatchFilesTran" ref="catplusStep2BatchTransformerTask" method="execute" />
+	<!-- initConvertersMap will lookup all the converters bean and later on they are filtered by p:mapping name. -->
+	<bean id="catplusStep2BatchTransformerTask" class="de.hybris.platform.acceleratorservices.dataimport.batch.task.ImpexTransformerTask" init-method="initConvertersMap">
+		<property name="fieldSeparator" value=";" />
+		<!-- use the 'ISO-8859-1' encoding instead of 'UTF-8' to be able to process special char like: ß -->
+		<property name="encoding" value="ISO-8859-1" />
+		<property name="linesToSkip" value="1"/>
+		<property name="cleanupHelper" ref="distCatPlusStep2CsvCleanupHelper" />
+	</bean>
+	
+	<bean id="distCatPlusStep2CsvCleanupHelper" class="com.namics.distrelec.b2b.core.dataimport.batch.task.DistCleanupHelper">
+		<property name="timeStampFormat" value="yyyyMMddHHmmssSSS" />
+		<property name="cleanupTransformedFiles" value="true" />
+		<property name="finalArchive" value="true" />
+	</bean>
+	
+	<bean id="catplusStep2ImpexImportHeader" class="java.lang.String">
+		<constructor-arg>
+			<value>
+				#-------------------------------------------------------------------------------
+				# GERMAN is set as default locale for ImpEx. Then, the decimal separator would be a comma!
+				# Set locale to ch_DE. Hence, the usual number format can be used. e.g. 7.2
+				#-------------------------------------------------------------------------------
+				#% impex.setLocale(new Locale("de","CH"));
+				
+				## general settings macros
+				$language=$LANGUAGE$
+				$defaultLanguage=de
+				$net=$NET$							
+				
+				# catalogs macros
+				# $productCatalog=$CATALOG$
+				
+				### Classification macros
+				#$classificationSystem=DistrelecClassification
+				#$classificatonSystemVersion=1.0
+				$clAttrModifiers=system='DistrelecClassification',version='1.0',translator=de.hybris.platform.catalog.jalo.classification.impex.ClassificationAttributeTranslator,lang=$defaultLanguage
+				
+				
+				$catalogPlusProductCatalog=distrelecCatalogPlusProductCatalog
+				$catalogVersion=catalogversion(catalog(id[default=$catalogPlusProductCatalog]),version[default='Online'])
+								
+				### exchange rate
+				$eur2chf=1.2314 
+				$eur2ltl=3.45 
+								
+				### sales organizations.				
+				$disCH=7310
+				$disAT=7320
+				$disIT=7330
+
+				### salesorg not included for catplus
+				$prodAG=7340
+				$disDE=7350
+				$newCo=7370
+				$elfaSE=7640
+				$elfaNOR=7650
+				$elfaPL=7660
+				$elfaFI=7670
+				$elfaDK=7680
+				$elfaLV=7700
+				## $elfaLT=7710
+				$elfaLT=7820
+				$elfaEE=7790
+				$elfaNL=7800	
+				
+				### Media macros
+				$media=@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator]
+				$mediaCatPlus=@media[translator=com.namics.distrelec.b2b.core.inout.catplus.impex.translator.DistCatPlusMediaDataTranslator]
+				$mediaResource=http:/Web/WebShopImages/catplus/
+				
+								
+				### Classification Attributes Definition				
+				## classification attributes for commodity codes.
+				## for catalog plus the codes of each class are common for all the products 
+				$eclass40=@eclass40[$clAttrModifiers];
+				$eclass41=@eclass41[$clAttrModifiers];
+				$eclass50=@eclass50[$clAttrModifiers];
+				$eclass51=@eclass51[$clAttrModifiers];
+				$eclass60=@eclass60[$clAttrModifiers];
+				$eclass70=@eclass70[$clAttrModifiers];
+				$esn=@esn[$clAttrModifiers];
+				$unspsc3=@unspsc3[$clAttrModifiers];
+				$unspsc5=@unspsc5[$clAttrModifiers];
+				$unspsc8=@unspsc8[$clAttrModifiers];
+				$unspsc11=@unspsc11[$clAttrModifiers];
+				$unspsc13=@unspsc13[$clAttrModifiers];
+				$unspsc13_1=@unspsc13_1[$clAttrModifiers];
+				$jAndj=@jAndj[$clAttrModifiers];
+				$unspsc_Unilever=@unspsc_Unilever[$clAttrModifiers];	
+				$unspsc70901=@unspsc70901[$clAttrModifiers];
+				##NOT PRESENT IN TEST SYSTEM #$unspsc15=@unspsc15[$clAttrModifiers];
+																				
+			</value>
+		</constructor-arg>
+	</bean>
+
+
+ 	<bean id="catplusStep2DistSalesOrgProductConverter" class="com.namics.distrelec.b2b.core.dataimport.batch.converter.impl.DefaultDistImpexConverter">
+		<property name="header">
+			<value>#{catplusImpexImportHeader}
+				INSERT_UPDATE DistSalesOrgProduct;salesOrg(code)[unique=true];product(catPlusSupplierShortName,catPlusSupplierAID)[unique=true];salesStatus(code[default=30]);endOfLifeDate[default=31.12.9999 23:59:59];productTaxGroup(code)[default=1];orderQuantityMinimum[default=1];OrderQuantityStep[default=1];		
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				;$disCH;{+0}:{+1};;;;{10};{11};
+				;$disAT;{+0}:{+1};;;;{10};{11};
+				;$disIT;{+0}:{+1};;;;{10};{11};
+				;$elfaSE;{+0}:{+1};;;;{10};{11};
+				;$elfaNOR;{+0}:{+1};;;;{10};{11};
+				;$elfaPL;{+0}:{+1};;;;{10};{11};
+				;$elfaFI;{+0}:{+1};;;;{10};{11};
+				;$elfaDK;{+0}:{+1};;;;{10};{11};
+				;$elfaLV;{+0}:{+1};;;;{10};{11};
+				;$elfaLT;{+0}:{+1};;;;{10};{11};
+				;$elfaEE;{+0}:{+1};;;;{10};{11};
+				;$elfaNL;{+0}:{+1};;;;{10};{11};
+			</value>
+		</property>
+		<property name="type" value="Product" />
+	</bean>
+		
+
+  	<bean id="catplusStep2DistSalesOrgProductConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping"
+		 p:mapping="step2_catplus_product" p:converter-ref="catplusStep2DistSalesOrgProductConverter" />
+	<!-- Converters -->
+	
+	<!-- 4) import the impex(ex) -->
+	<!-- The impex file names that have been trasformed are stored into the BatchHeader object -->
+	<int:service-activator input-channel="catplusStep2BatchFilesTran" output-channel="batchFilesTran" ref="catPlusBatchRunnerTask" method="execute" />
+	<bean id="catPlusBatchRunnerTask" class="de.hybris.platform.acceleratorservices.dataimport.batch.task.AbstractImpexRunnerTask">
+		<lookup-method name="getImportConfig" bean="catPlusImportConfig" />
+		<property name="importService" ref="importService"/>
+		<property name="sessionService" ref="sessionService"/>
+	</bean>
+	<!-- Define the impex worker configuration to avoid problems when importing media files -->
+	<bean id="catPlusImportConfig" class="de.hybris.platform.servicelayer.impex.ImportConfig" scope="prototype">
+		<property name="removeOnSuccess" value="true" />
+		<property name="failOnError" value="false" />
+		<property name="synchronous" value="true" />
+		<property name="maxThreads" value="#{configurationService.configuration.getProperty('import.catplus.batch.impex.max-threads')}" />
+		<property name="locale" value="en"/>
+	</bean>
+
+
+</beans>

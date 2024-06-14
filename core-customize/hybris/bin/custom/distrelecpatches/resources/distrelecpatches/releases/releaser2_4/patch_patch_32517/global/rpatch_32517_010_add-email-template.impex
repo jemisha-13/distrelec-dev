@@ -1,0 +1,57 @@
+#Distrelec CH
+$contentCatalog = distrelec_CHContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+$cmsSiteUID = distrelec_CH
+$emailResource = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/distrelecContentCatalog/emails
+
+$lang = de
+
+INSERT_UPDATE RendererTemplate; code[unique = true]                         ; description[lang = en]        ; contextClass                                                                                 ; templateScript[lang = $lang, translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]; rendererType(code)[default = 'velocity']
+                              ; $cmsSiteUID-New_Customer_Activation_Body    ; New Customer Activation Email ; com.namics.distrelec.b2b.facades.process.email.context.DistNewCustomerActivationEmailContext ; $emailResource/email-newCustomerActivationBody.vm                                                                  ;
+                              ; $cmsSiteUID-New_Customer_Activation_Subject ; New Customer Activation Email ; com.namics.distrelec.b2b.facades.process.email.context.DistNewCustomerActivationEmailContext ; $emailResource/email-newCustomerActivationSubject.vm                                                               ;
+
+INSERT_UPDATE EmailPageTemplate; uid[unique = true]                 ; name                                   ; active; frontendTemplateName       ; subject(code)                               ; htmlTemplate(code)                       ; restrictedPageTypes(code); $contentCV[unique = true]
+                               ; NewCustomerActivationEmailTemplate ; New Customer Activation Email Template ; true  ; NewCustomerActivationEmail ; $cmsSiteUID-New_Customer_Activation_Subject ; $cmsSiteUID-New_Customer_Activation_Body ; EmailPage                ;
+
+INSERT_UPDATE EmailPage; uid[unique = true]         ; fromEmail[lang = $lang]        ; fromName[lang = $lang]   ; masterTemplate(uid, $contentCV)    ; $contentCV[unique = true]
+                       ; NewCustomerActivationEmail ; customerservices@distrelec.com ; "Distrelec Kundendienst" ; NewCustomerActivationEmailTemplate ;
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'NewCustomerActivationEmailTemplate']; validComponentTypes(code)
+                             ; Logo                  ;                                                                                         ; BannerComponent,CMSImageComponent
+                             ; MoodImage             ;                                                                                         ; BannerComponent,CMSImageComponent
+                             ; AdvantageImage        ;                                                                                         ; BannerComponent,CMSImageComponent
+                             ; SocialImageFacebook   ;                                                                                         ; BannerComponent,CMSImageComponent
+                             ; SocialImageGooglePlus ;                                                                                         ; BannerComponent,CMSImageComponent
+                             ; SocialImageTwitter    ;                                                                                         ; BannerComponent,CMSImageComponent
+                             ; SocialImageYoutube    ;                                                                                         ; BannerComponent,CMSImageComponent
+                             ; FooterImage1          ;                                                                                         ; BannerComponent,CMSImageComponent
+                             ; FooterImage2          ;                                                                                         ; BannerComponent,CMSImageComponent
+                             ; FooterImage3          ;                                                                                         ; BannerComponent,CMSImageComponent
+
+INSERT_UPDATE ContentSlot; uid[unique = true]                         ; name                                        ; active; $contentCV[unique = true]
+#                         ; EmailLogoSlot                              ; Header Logo Slot                            ; true  ;
+#                         ; EmailSocialImageFacebookSlot               ; Social Image Facebook Slot                  ; true  ;
+#                         ; EmailSocialImageGooglePlusSlot             ; Social Image GooglePlus Slot                ; true  ;
+#                         ; EmailSocialImageTwitterSlot                ; Social Image Twitter Slot                   ; true  ;
+#                         ; EmailSocialImageYoutubeSlot                ; Social Image Youtube Slot                   ; true  ;
+#                         ; EmailAdvantageImageSlot                    ; Advantage Image Slot                        ; true  ;
+#                         ; EmailFooterImage1Slot                      ; Footer Image 1 Slot                         ; true  ;
+#                         ; EmailFooterImage2Slot                      ; Footer Image 2 Slot                         ; true  ;
+#                         ; EmailFooterImage3Slot                      ; Footer Image 3 Slot                         ; true  ;
+                         ; EmailMoodImageSlot-CustomerActivationEmail ; Mood Image Slot for CustomerActivationEmail ; true  ;
+
+# Bind Content Slots to Email Page Templates
+INSERT_UPDATE ContentSlotForTemplate; uid[unique = true]                       ; position[unique = true]; pageTemplate(uid, $contentCV)[unique = true][default = 'NewCustomerActivationEmailTemplate']; contentSlot(uid, $contentCV)[unique = true]; allowOverwrite; $contentCV[unique = true]
+                                    ; Logo-CustomerActivation                  ; Logo                   ;                                                                                             ; EmailLogoSlot                              ; true          ;
+                                    ; SocialImageFacebook-CustomerActivation   ; SocialImageFacebook    ;                                                                                             ; EmailSocialImageFacebookSlot               ; true          ;
+                                    ; SocialImageGooglePlus-CustomerActivation ; SocialImageGooglePlus  ;                                                                                             ; EmailSocialImageGooglePlusSlot             ; true          ;
+                                    ; SocialImageTwitter-CustomerActivation    ; SocialImageTwitter     ;                                                                                             ; EmailSocialImageTwitterSlot                ; true          ;
+                                    ; SocialImageYoutube-CustomerActivation    ; SocialImageYoutube     ;                                                                                             ; EmailSocialImageYoutubeSlot                ; true          ;
+                                    ; AdvantageImage-CustomerActivation        ; AdvantageImage         ;                                                                                             ; EmailAdvantageImageSlot                    ; true          ;
+                                    ; FooterImage1-CustomerActivation          ; FooterImage1           ;                                                                                             ; EmailFooterImage1Slot                      ; true          ;
+                                    ; FooterImage2-CustomerActivation          ; FooterImage2           ;                                                                                             ; EmailFooterImage2Slot                      ; true          ;
+                                    ; FooterImage3-CustomerActivation          ; FooterImage3           ;                                                                                             ; EmailFooterImage3Slot                      ; true          ;
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]                ; position[unique = true]; page(uid, $contentCV)[unique = true]; contentSlot(uid, $contentCV)[unique = true]
+                                ;                          ; MoodImage-CustomerActivationEmail ; MoodImage              ; NewCustomerActivationEmail          ; EmailMoodImageSlot-CustomerActivationEmail

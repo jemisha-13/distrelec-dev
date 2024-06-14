@@ -1,0 +1,33 @@
+$defaultPassword=forward77
+$passwordEncoding=md5
+$setPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultPassword']
+
+$contentCatalog=distrelec_CHContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Staged'])
+
+INSERT_UPDATE B2BUnit;uid[unique=true];salesOrg(code);customerType(code)
+;832rsdjfkjw09jfskdjfljsdf0j;7310;OCI
+;2j30r9fjwepfj92sufhskdnfjw3;7320;OCI
+;e9idjfiwejoi2j3iodjkdjfsjpq;7310;ARIBA
+;2489sdhsklnvklwoejh1ioooqel;7320;ARIBA
+
+INSERT_UPDATE B2BCustomer;uid[unique=true];defaultB2BUnit(uid);groups(uid)[mode=append];name;email;customerType(code);$setPassword
+;oci@test.com      ;832rsdjfkjw09jfskdjfljsdf0j;832rsdjfkjw09jfskdjfljsdf0j,ociCustomerGroup  ;Oci Tester 1  ;oci@test.com;OCI;
+;oci2@test.com     ;2j30r9fjwepfj92sufhskdnfjw3;2j30r9fjwepfj92sufhskdnfjw3,ociCustomerGroup  ;Oci Tester 2  ;oci2@test.com;OCI;
+;ariba1@test.com   ;e9idjfiwejoi2j3iodjkdjfsjpq;e9idjfiwejoi2j3iodjkdjfsjpq,aribaCustomerGroup;Ariba Tester 1;ariba@test.com;ARIBA;
+;ariba2@test.com   ;2489sdhsklnvklwoejh1ioooqel;2489sdhsklnvklwoejh1ioooqel,aribaCustomerGroup;Ariba Tester 2;ariba2@test.com;ARIBA;
+;sysadmin@ariba.com;e9idjfiwejoi2j3iodjkdjfsjpq;e9idjfiwejoi2j3iodjkdjfsjpq,aribaCustomerGroup;Ariba Tester 1;sysadmin@ariba.com;ARIBA;
+
+INSERT_UPDATE OCICustomerConfig;company(uid)[unique=true];restrictCatalogs;useLongDesc;useShipping
+;832rsdjfkjw09jfskdjfljsdf0j;false;false;false
+
+INSERT_UPDATE DistFieldConfig;customerConfig(company(uid))[unique=true];domain;parameter;dynamic;location(code)
+;832rsdjfkjw09jfskdjfljsdf0j;PimId;pimId;true;PRODUCT
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false'];&pageRef;title[lang=en];title[lang=de]
+;;oci1@test.comHomepage;Homepage for Customer oc1@test.com;HomePageTemplate;homepage;false;;;oci1@test.comHomepage;Welcome Oci Tester 1;Willkommen Oci Tester 1
+
+INSERT_UPDATE CMSUserGroupRestriction;$contentCV[unique=true];uid[unique=true];name;userGroups(uid);includeSubgroups;components(&componentRef);pages(uid, $contentCV)
+;;oci1@test.comHomepageHomepageRestriction;oci@test.com Homepage Restriction;832rsdjfkjw09jfskdjfljsdf0j;true;;oci1@test.comHomepage
+
+

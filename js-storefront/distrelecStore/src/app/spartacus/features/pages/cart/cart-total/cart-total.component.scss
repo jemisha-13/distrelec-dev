@@ -1,0 +1,270 @@
+@import 'global-utilities';
+
+.overlay {
+  .bd-cart-recalculate-layer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 4;
+    width: 100%;
+    background: $colour-black;
+    opacity: 0.5;
+  }
+
+  .btn-recalculate-wrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 5;
+    width: 240px;
+    margin: 0 auto;
+    transform: translate(-50%, -50%);
+
+    .btn-recalculate {
+      position: relative;
+      top: auto;
+      bottom: 0;
+      width: 90%;
+      margin: 0 auto;
+      display: block;
+      border-radius: 0%;
+      border-color: #f69f1d;
+      background: #f69f1d;
+      color: $colour-black;
+      cursor: pointer;
+    }
+  }
+}
+
+.calc-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+
+  &.is-totals-open {
+    app-cart-voucher {
+      display: block;
+      order: -1;
+    }
+
+    .calc-box {
+      display: table;
+      order: -2;
+    }
+  }
+
+  .calc-box {
+    display: table;
+    border: 0;
+    width: 100%;
+    background-color: $colour-white;
+
+    @include tabletDown {
+      display: none;
+    }
+
+    &.calc-box-total {
+      position: relative;
+
+      @include tabletDown {
+        order: 0;
+        display: block;
+        margin-bottom: $spacing-unit * 3;
+      }
+
+      .is-show-total-mobile {
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        @include tabletPlus {
+          display: none;
+        }
+
+        button {
+          border: none;
+          background-color: transparent;
+          color: $link-blue;
+          font-weight: $font-weight-semiBold;
+        }
+      }
+    }
+
+    .calc-row {
+      display: table-row;
+      vertical-align: middle;
+
+      &-subtotal,
+      &-discount,
+      &-shipping,
+      &-tax,
+      &-total,
+      &-voucher {
+        display: table;
+        font-weight: $font-weight-normal;
+        border: 0;
+        width: 100%;
+
+        .calc-cell {
+          display: table-cell;
+          font-weight: $font-weight-medium;
+        }
+
+        .nth-1 {
+          @include font-size(15px);
+          @include line-height(18px);
+          width: 60%;
+          padding-right: $spacing-unit;
+
+          @include tabletPlusOnly {
+            @include font-size(12px);
+            @include line-height(16px);
+          }
+
+          .delivery-name {
+            @include font-size(12px);
+            @include line-height(17px);
+            display: block;
+
+            @include tabletPlusOnly {
+              @include font-size(10px);
+              @include line-height(14px);
+            }
+          }
+        }
+
+        .nth-2 {
+          @include font-size(12px);
+          @include line-height(50px);
+          width: 10%;
+          padding-right: $spacing-unit;
+
+          .currency {
+            @include font-size(12px);
+            @include line-height(12px);
+          }
+        }
+
+        .nth-3 {
+          @include font-size(15px);
+          @include line-height(30px);
+          padding-right: 0;
+          width: 30%;
+          text-align: right;
+
+          @include tabletPlusOnly {
+            @include font-size(12px);
+            @include line-height(16px);
+          }
+        }
+      }
+
+      &-total {
+        @include tabletPlus {
+          border-top: 1px solid $border-cart-item;
+        }
+
+        @include tabletDown {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
+        .calc-cell {
+          &.nth-1 {
+            @include tabletDown {
+              width: 100%;
+              margin-bottom: $spacing-unit;
+            }
+          }
+
+          &.nth-2 {
+            @include tabletDown {
+              margin-right: $spacing-unit;
+            }
+          }
+
+          &.nth-2,
+          &.nth-3 {
+            @include tabletDown {
+              width: auto;
+            }
+          }
+
+          &.nth-2,
+          &.nth-2 .currency,
+          &.nth-3 {
+            @include tabletDown {
+              @include font-size(15px);
+              @include line-height(16px);
+              font-weight: $font-weight-normal;
+            }
+          }
+        }
+
+        .nth-2,
+        .nth-3 {
+          font-weight: $font-weight-bold;
+        }
+      }
+    }
+  }
+
+  .delivery-mode {
+    @include font-size(12px);
+    @include line-height(18px);
+    width: 100%;
+    margin-bottom: $spacing-unit * 2;
+    color: $colour-text-grey;
+
+    @include tabletPlus {
+      margin-bottom: $spacing-unit * 4;
+    }
+  }
+
+  .checkout-proceed {
+    width: 100%;
+
+    @include tabletDown {
+      padding-top: $spacing-unit * 3;
+      border-top: 1px solid $border-cart-item;
+    }
+
+    .btn {
+      width: 100%;
+      height: 41px;
+      border: 0;
+      border-radius: 2px;
+      background: $colour-green;
+      color: $colour-white;
+      font-weight: $font-weight-bold;
+
+      @include tabletDown {
+        height: 41px;
+      }
+
+      &:hover {
+        background: darken($colour-green, 5%);
+      }
+    }
+
+    .overlayed {
+      opacity: 0.5;
+      background: $colour-dist-mid-grey;
+      color: black;
+    }
+  }
+
+  app-cart-voucher {
+    display: none;
+    width: 100%;
+
+    @include tabletDown {
+      margin-bottom: $spacing-unit * 2;
+    }
+
+    @include tabletPlus {
+      display: block;
+    }
+  }
+}

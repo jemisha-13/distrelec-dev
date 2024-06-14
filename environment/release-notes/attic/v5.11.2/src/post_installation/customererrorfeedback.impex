@@ -1,0 +1,65 @@
+#
+# Import the CMS content for the Distrelec site emails -distrelec_CHContentCatalog
+#
+
+$contentCatalog=Default
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/essential
+$emailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/contentCatalogs/distrelecContentCatalog/emails
+
+# Language
+$lang=en
+
+# Preview Image for use in the CMS Cockpit
+#INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true]
+#;;EmailPageModel_preview;text/gif;EmailPageModel_preview.gif;$jarResourceCms/preview-images/EmailPageModel_preview.gif
+
+
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];rendererType(code)[default='velocity']
+;Email_Customer_Error_Feedback_Body;Customer Error Feedback Report;$emailResource/email-CustomerErrorFeedback.vm;
+;Email_Customer_Error_Feedback_Subject;Customer Error Feedback Report;$emailResource/email-CustomerErrorFeedbackSubject.vm;
+
+############################################################################################
+# Customer Error Feedback Report
+############################################################################################
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailMoodImageSlot-CustomerErrorFeedbackEmail;Mood Image Slot for CustomerErrorFeedbackEmail;true
+
+# Email page Template
+INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;active;frontendTemplateName;subject(code);htmlTemplate(code);restrictedPageTypes(code)
+;;CustomerErrorFeedbackEmailTemplate;Email for customer error feedback;true;CustomerErrorFeedbackEmail;Email_Customer_Error_Feedback_Subject;Email_Customer_Error_Feedback_Body;EmailPage
+
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;CustomerErrorFeedbackEmail;Email for customer error feedback;CustomerErrorFeedbackEmailTemplate;true
+
+# Email velocity templates - Not require now (May be require when need to store the email address of Delivery Name and Delivery List)
+INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)[default='velocity']
+;Email_Customer_Error_Feedback_Body;com.namics.distrelec.b2b.facades.process.email.context.DistCustomerErrorFeedbackEmailContext;
+;Email_Customer_Error_Feedback_Subject;com.namics.distrelec.b2b.facades.process.email.context.DistCustomerErrorFeedbackEmailContext;
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true];contentSlot(uid,$contentCV)[unique=true]
+;;MoodImage-CustomerErrorFeedbackEmail;MoodImage;CustomerErrorFeedbackEmail;EmailMoodImageSlot-CustomerErrorFeedbackEmail
+
+# Templates for CMS Cockpit Page Edit
+#INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+#;;CustomerErrorFeedbackEmailTemplateStructure;$jarResourceCms/structure-view/structure_customerErrorFeedbackTemplate.vm
+
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CustomerErrorFeedbackEmailTemplate'];validComponentTypes(code)
+;Logo;;BannerComponent,CMSImageComponent
+;MoodImage;;BannerComponent,CMSImageComponent
+
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;EmailLogoSlot;Header Logo Slot;true
+
+# Bind Content Slots to Email Page Templates
+#INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CustomerErrorFeedbackEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+#;;Logo-NewProductNewsLetter;Logo;;EmailLogoSlot;true
+
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang];masterTemplate(uid,$contentCV)
+;;CustomerErrorFeedbackEmail;ecommerce@distrelec.com;"Customer Error Feedback ";CustomerErrorFeedbackEmailTemplate
+
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];rendererType(code)[default='velocity']
+;Email_Customer_Error_Feedback_Body;Customer Error Feedback Report;$emailResource/email-CustomerErrorFeedback.vm;

@@ -1,0 +1,75 @@
+<div class="back-order-item-save">
+  <div class="save-notify" id="backorder-notify-me-mobile">
+    <a class="notify-text" (click)="handleNotifyClick()">{{ 'backorder.page.notifyMe' | cxTranslate }}</a>
+  </div>
+
+  <button class="btn proceed-checkout" id="backorder-save-changes" (click)="handleClick()" type="submit">
+    {{ 'backorder.page.saveChanges' | cxTranslate }}
+  </button>
+
+  <a class="return-cart-btn" id="backorder-return-to-cart" routerLink="/cart" title="Return to cart">
+    {{ 'backorder.page.returnCart' | cxTranslate }}
+  </a>
+
+  <hr />
+
+  <div class="stock-notification" [ngStyle]="{ display: notifyMeSelected && isMobile ? 'none' : 'block' }">
+    <ng-container *ngIf="!hideForm">
+      <div class="stock-notification__form-content">
+        <div class="stock-notification__form-content__instruction" id="backorder-email-instruction">
+          <p id="backorder-email-instruction-text">
+            {{ 'backorder.page.stockEmail' | cxTranslate }}
+          </p>
+        </div>
+
+        <form [formGroup]="notifyForm">
+          <div class="input-wrapper" id="backorder-email-input">
+            <input
+              class="stock-notification__form-content__emailinput"
+              id="notify-email"
+              [(ngModel)]="customerEmail"
+              [class.is-valid]="email?.invalid"
+              [placeholder]="customerEmail"
+              type="email"
+              formControlName="email"
+            />
+
+            <ng-container *ngIf="email?.invalid">
+              <small class="text-danger" id="backorder-email-error">
+                {{ 'validations.email_error_invalid' | cxTranslate }}
+              </small>
+            </ng-container>
+          </div>
+
+          <button class="notify-button" id="backorder-notify-me" (click)="handleSubmit()" type="button">
+            {{ 'backorder.page.notifyMe' | cxTranslate }}
+          </button>
+
+          <p class="stock-notification__form-content__instruction-policy" id="backorder-email-disclaimer-text">
+            {{ 'backorder.page.emailDisclaimer' | cxTranslate }}
+
+            <a routerLink="/cms/datenschutz">{{ 'backorder.page.privacyPolicy' | cxTranslate }}</a>
+          </p>
+        </form>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="emailSuccess === true">
+      <div class="stock-notification__message" id="backorder-stock-notification-success">
+        <div class="stock-notification__message__icon-wrapper">
+          <fa-icon [icon]="faCheckCircle"></fa-icon>
+        </div>
+        {{ 'product.notify_me_section.thank_you' | cxTranslate }}
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="emailSuccess === false">
+      <div class="stock-notification__message" id="backorder-stock-notification-existing">
+        <div class="stock-notification__message__icon-wrapper">
+          <fa-icon [icon]="faCheckCircle"></fa-icon>
+        </div>
+        {{ 'backorder.page.notifyMe.existingUserText' | cxTranslate }}
+      </div>
+    </ng-container>
+  </div>
+</div>

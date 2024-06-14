@@ -1,0 +1,60 @@
+<ng-template
+  *ngIf="templateName$ | async as layoutName"
+  [cxPageTemplateStyle]="layoutName"
+  [cxOutlet]="layoutName"
+  [cxOutletContext]="{ templateName$: templateName$, slots$: slots$ }"
+>
+  <div *ngIf="pagination$ | async as pagination">
+    <div *ngIf="pagination.totalResults > 0 && isNewProductsPage$">
+      <div class="skin-layout-responsive">
+        <div class="container">
+          <h1 class="base page-title page-title--with-count">
+            <a class="page-title__back-navigation" href="#"><i class="fa fa-arrow-left"></i></a>
+            <div *ngIf="isBrowser; else mobileTitle" class="page-title page-title--with-count">
+              <div class="desktop-header__text for-desktop">
+                {{ (page$ | async)?.title }}
+                <span class="matched-products-count">
+                  <b>(</b>
+                  {{ pagination.totalResults }}
+                  <span class="matched-products-count__text">
+                    {{ 'text.products' | cxTranslate }}
+                  </span>
+                  <b>)</b>
+                </span>
+              </div>
+            </div>
+            <ng-template #mobileTitle>
+              <div class="mobile-header__text for-mobile">
+                {{ (page$ | async)?.title }}
+                <span class="matched-products-count">
+                  {{ 'text.plp.showing.of' | cxTranslate: { '0': firstProductNumber, '1': lastProductNumber } }}
+                  {{ pagination.totalResults }}
+                  {{ 'text.products' | cxTranslate }}
+                </span>
+              </div>
+            </ng-template>
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isClearancePage" class="skin-layout-responsive">
+    <div class="container">
+      <h1 class="page-title page-title_clearance">
+        <a class="page-title__back-navigation" href="#"><i class="fa fa-arrow-left"></i></a>
+        <div class="page-title_clearance">
+          {{ (page$ | async)?.title }}
+        </div>
+      </h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <cx-page-slot position="StoreContent"></cx-page-slot>
+  </div>
+  <cx-page-slot position="ProductListTitle"></cx-page-slot>
+  <cx-page-slot position="ProductListPagination"></cx-page-slot>
+  <cx-page-slot position="ProductListFilters"></cx-page-slot>
+  <cx-page-slot position="ProductListMain"></cx-page-slot>
+</ng-template>

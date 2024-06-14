@@ -1,0 +1,310 @@
+## messageSource=classpath:/distrelecB2Bcore/messages/email-orderConfirmation_$lang.properties
+#macro(genHtmlLink $url $label)
+<a style="color: #AA1936; text-decoration: underline;" href="$url" target="_blank"><span style="color: #AA1936;">$label</span></a>
+#end
+
+#set($order=${ctx.order})
+#set($paymentAddress=${ctx.paymentAddress})
+#set($deliveryAddress=${ctx.deliveryAddress})
+#set($pickupLocation=$order.pickupLocation)
+#set($StringEscapeUtils=${ctx.StringEscapeUtils})
+#set($PriceDataFactory=${ctx.priceDataFactory})
+
+<html>
+<head></head>
+<body style="padding: 0; margin: 0; font-family: Verdana, Arial, sans-serif; font-size: 14px; color: #333333; background-color: #ffffff; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+	## HEADER include
+	${ctx.header}
+
+	## MOOD IMAGE
+	<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+		<tr>
+			<td style="border-left: 1px solid #cccccc; border-right: 1px solid #cccccc;">
+				${ctx.cmsSlotContents.MoodImage}
+			</td>
+		</tr>
+		<tr>
+			<td height="5" bgcolor="#AA1936"style="border-right: 1px solid #cccccc; border-left: 1px solid #cccccc;"></td>
+		</tr>
+	</table>
+
+	## CONTENT
+	<table border="0" width="602" cellpadding="0" cellspacing="0" style="border-spacing: 0; text-align:left;">
+		<tr>
+			<td style="border-right: 1px solid #cccccc; border-left: 1px solid #cccccc; padding: 20px;">
+				## title
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 30px;">${ctx.messages.title}</p>
+
+				## salutation
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">$!StringEscapeUtils.escapeHtml(${ctx.title}) $!StringEscapeUtils.escapeHtml(${ctx.displayName})</p>
+
+				## text
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.text}
+				#if (${ctx.showOrderLink})				
+					<a style="font-family: Verdana, Arial, sans-serif; background-color: rgb(0, 159, 180); color: #333333;  font-size: 12px; font-weight: bold; display: inline-block; margin: 10px 172px 4px;; padding: 12px; text-align: center; vertical-align: middle; 
+					   text-decoration: none;" href="${ctx.orderUrl}" target="_blank">${ctx.messages.buttonText}</a>				
+				#end
+				</p>
+
+				## order information
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; font-weight: bold;">${ctx.messages.orderHeadline}</p>
+				<table border="0"  cellpadding="0" cellspacing="0" style="border-spacing: 0;">
+					<tr>
+						<td valign="top"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.webshopOrderId}:</p></td>
+						<td valign="top" style="padding-left: 20px;"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">$!order.code</p></td>
+					</tr>
+					<tr>
+						<td valign="top"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.deliveryMode}:</p></td>
+						<td valign="top" style="padding-left: 20px;"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">$!StringEscapeUtils.escapeHtml(${ctx.deliveryMode})</p></td>
+					</tr>
+					<tr>
+						<td valign="top"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.paymentMode}:</p></td>
+						<td valign="top" style="padding-left: 20px;"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">$!StringEscapeUtils.escapeHtml(${ctx.paymentMode})</p></td>
+					</tr>
+					#if (${order.requestedDeliveryDate})
+					<tr>
+						<td valign="top"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.requestedDeliveryDate}:</p></td>
+						<td valign="top" style="padding-left: 20px;"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${order.requestedDeliveryDate}</p></td>
+					</tr>
+					#end
+				</table>
+				
+				<br/><br/>
+				
+				<table border="0"  cellpadding="0" cellspacing="0" width="100%" style="border-spacing: 0;">
+					<tr>
+						<td valign="top">
+							## payment address
+							<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+								<span style="font-weight: bold;">${ctx.messages.paymentAddress}:</span><br/>
+								${ctx.paymentAddress}
+			
+								#set ($mailToUrl = "mailto:${ctx.customerEmailAddress}")
+								#genHtmlLink($mailToUrl ${ctx.customerEmailAddress})
+							</p>
+						</td>
+						<td valign="top" style="padding-left: 20px;">
+							#if ($deliveryAddress)
+								## delivery address
+								<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+									<span style="font-weight: bold;">${ctx.messages.deliveryAddress}:</span><br/>
+									$deliveryAddress
+									$!StringEscapeUtils.escapeHtml(${ctx.customerEmailAddress})
+								</p>
+							#else
+								## pickup location
+								<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+									<span style="font-weight: bold;">${ctx.messages.pickupLocation}:</span><br/>
+									$!StringEscapeUtils.escapeHtml($pickupLocation.name)<br/>
+									$!StringEscapeUtils.escapeHtml($pickupLocation.streetName) $!StringEscapeUtils.escapeHtml($pickupLocation.streetNumber)<br/>
+									$!StringEscapeUtils.escapeHtml($pickupLocation.postalCode) $!StringEscapeUtils.escapeHtml($pickupLocation.town)<br/>
+									$!StringEscapeUtils.escapeHtml($pickupLocation.phone)<br/>
+									${ctx.messages.pickupOpeningHoursMoFr} $!StringEscapeUtils.escapeHtml($pickupLocation.openingsHourMoFr)<br/>
+									${ctx.messages.pickupOpeningHoursSa} $!StringEscapeUtils.escapeHtml($pickupLocation.openingsHourSa)
+								</p>			
+							#end
+						</td>
+					</tr>
+				</table>				
+				
+
+
+				## order note
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">
+					<span style="font-weight: bold;">${ctx.messages.orderNote}:</span><br/>
+					$!StringEscapeUtils.escapeHtml($order.note)
+				</p>
+
+				## product table
+				<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse; border-spacing: 0;">
+					<tr>
+						<td style="padding-bottom: 10px; border-bottom: 1px solid #cccccc;">&#160;</td>
+						<td style="padding-bottom: 10px; border-bottom: 1px solid #cccccc;">&#160;</td>
+						<td style="text-align: center; padding-bottom: 10px;  padding-right: 10px; border-bottom: 1px solid #cccccc;">
+							<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.tableHeaderQuantity}</p>
+						</td>
+						<td align="right" style="padding-bottom: 10px; border-bottom: 1px solid #cccccc;">
+							<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.tableHeaderSubtotal}</p>
+						</td>
+					</tr>
+
+					#foreach($entry in $order.entries)
+
+						<tr>
+							<td rowspan="2" style="border-collapse: collapse; padding-top:10px; padding-right: 10px; padding-bottom:10px; border-bottom: 1px solid #cccccc;">
+									#if ($entry.product.productImages[0].landscape_medium.altText)
+										#set($altText = $entry.product.productImages[0].landscape_medium.altText)
+									#else
+										#set($altText = "image missing")
+									#end
+									#if ($entry.product.productImages[0].portrait_small.url)
+										#set($imgUrl = $entry.product.productImages[0].portrait_small.url)
+									#else
+										#set($imgUrl = "/_ui/all/media/img/missing_portrait_small.png")
+									#end
+									## TODO: edit image markup
+									<img alt="$altText" src="${ctx.host}${imgUrl}" />
+							</td>
+							<td style="border-collapse: collapse; padding-right: 10px; padding-top:10px; ">
+								<p style="color: #de1417;">
+									<a style="font-family: Verdana, Arial, sans-serif; font-size: 15px; color: #de1417; text-decoration:none;" href="$!{ctx.host}${entry.product.url}">$!entry.product.name</a>
+								</p>
+							</td>
+							<td valign="top" style="border-collapse: collapse; padding-right: 10px; padding-top:8px; text-align: center; font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 18px;">$entry.quantity</td>
+							<td valign="top" style="border-collapse: collapse; border-left: 1px solid #cccccc; padding-top:8px;" >
+								<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-spacing: 0;">
+									<tr>
+										<td valign="top" style="padding-left: 10px; padding-right: 10px; font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 18px;">$order.totalPrice.currencyIso</td>
+										<td valign="top" align="right" style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">$!{ctx.getFormattedPrice($entry.totalPrice.value)}</td>
+
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+						<tr>
+							<td style="border-collapse: collapse; border-bottom: 1px solid #cccccc;">
+								<table border="0" width="100%" cellpadding="0" cellspacing="0">
+									<tr>
+										<td valign="top" style="padding-bottom: 10px;">
+											<p style="margin: 0; font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 18px; font-weight: bold">${ctx.messages.articleNumber}</p>
+											<p style="margin: 0; font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 18px;">$!entry.product.codeErpRelevant</p>
+										</td>
+										<td valign="top" style="padding-bottom: 10px;">
+											<p style="margin: 0; font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 18px; font-weight: bold;">${ctx.messages.reference}</p>
+											<p style="margin: 0; font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 18px;">$!StringEscapeUtils.escapeHtml($entry.customerReference)</p>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td style="border-collapse: collapse; border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc;">&#160;</td>
+							<td style="border-collapse: collapse; border-bottom: 1px solid #cccccc;">&#160;</td>
+						</tr>
+					#end
+
+
+					## calculation summary
+						## subtotal
+						<tr>
+							<td style="border-bottom: 1px solid #cccccc;">&#160;</td>
+							<td colspan="2" style="border-bottom: 1px solid #cccccc;  padding-top: 10px; padding-bottom: 10px;">
+								<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; font-weight:bold;">${ctx.messages.subtotal}</p>
+							</td>
+							<td colspan="2" valign="top" style="border-bottom: 1px solid #cccccc; padding-top: 10px;">
+								<table border="0" width="100%" cellpadding="0" cellspacing="0">
+									<tr>
+										<td valign="bottom" style="padding-right: 10px;">
+											<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 18px;font-weight: bold;">$order.totalPrice.currencyIso</p>
+										</td>
+										<td align="right"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; font-weight: bold;">$!{ctx.getFormattedPrice($order.subTotal.value, 2)}</p></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+						## delivery cost
+						<tr>
+							<td style="border-bottom: 1px solid #cccccc;">&#160;</td>
+							<td colspan="2" style="border-bottom: 1px solid #cccccc; padding-top: 10px; padding-bottom: 10px;">
+								<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.deliveryCost}</p>
+							</td>
+							<td colspan="2" valign="top" style="border-bottom: 1px solid #cccccc; padding-top: 10px;">
+								<table border="0" width="100%" cellpadding="0" cellspacing="0">
+									<tr>
+										<td valign="bottom" style="padding-right: 10px;">
+											<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 18px;">$order.totalPrice.currencyIso</p>
+										</td>
+										<td align="right"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">$!{ctx.getFormattedPrice($order.deliveryCost.value, 2)}</p></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+						## payment cost
+						#if ($order.paymentCost.value > 0.0)
+						<tr>
+							<td style="border-bottom: 1px solid #cccccc;">&#160;</td>
+							<td colspan="2" style="border-bottom: 1px solid #cccccc; padding-top: 10px; padding-bottom: 10px;">
+								<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.paymentCost}</p>
+							</td>
+							<td colspan="2" valign="top" style="border-bottom: 1px solid #cccccc; padding-top: 10px;">
+								<table border="0" width="100%" cellpadding="0" cellspacing="0">
+									<tr>
+										<td valign="bottom" style="padding-right: 10px;">
+											<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 18px;">$order.totalPrice.currencyIso</p>
+										</td>
+										<td align="right"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; ">$!{ctx.getFormattedPrice($order.paymentCost.value, 2)}</p></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						#end
+
+						## tax
+						<tr>
+							<td style="border-bottom: 1px solid #cccccc;">&#160;</td>
+							<td colspan="2" style="border-bottom: 1px solid #cccccc; padding-top: 10px; padding-bottom: 10px;">
+								<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.totalTax}</p>
+							</td>
+							<td colspan="2" valign="top" style="border-bottom: 1px solid #cccccc; padding-top: 10px;">
+								<table border="0" width="100%" cellpadding="0" cellspacing="0">
+									<tr>
+										<td valign="bottom" style="padding-right: 10px;">
+											<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 18px;">$order.totalPrice.currencyIso</p>
+										</td>
+										<td align="right"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; ">$!{ctx.getFormattedPrice($order.totalTax.value, 2)}</p></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+						## total
+						<tr>
+							<td style="border-bottom: 1px solid #cccccc;">&#160;</td>
+							<td colspan="2" style="border-bottom: 1px solid #cccccc; padding-top: 10px; padding-bottom: 10px;">
+								<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; font-weight:bold;">${ctx.messages.totalPrice}</p>
+							</td>
+							<td colspan="2" valign="top" style="border-bottom: 1px solid #cccccc; padding-top: 10px;">
+								<table border="0" width="100%" cellpadding="0" cellspacing="0">
+									<tr>
+										<td valign="bottom" style="padding-right: 10px;">
+											<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 11px; line-height: 18px;font-weight: bold;">$order.totalPrice.currencyIso</p>
+										</td>
+										<td align="right"><p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px; font-weight: bold;">$!{ctx.getFormattedPrice($order.totalPrice.value, 2)}</p></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+				</table>
+
+
+				## greetings
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.complimentaryClosing}</p>
+
+
+
+				## contact us email
+				#set ($mailToUrl = "mailto:${ctx.contactEmail}")
+				<p style="font-family: Verdana, Arial, sans-serif; color: #333333; font-size: 12px; line-height: 18px;">${ctx.messages.getMessage('paragraphContactUs', "#genHtmlLink($mailToUrl ${ctx.contactEmail})")}</p>
+				
+				
+				<table border="0" cellpadding="0" cellspacing="0"  style="border-spacing: 0;width: 100%;">
+					<tr>
+						<td valign="top">
+							<a href="http://www.distrelec.ch/clearance"><img alt="Clearance Shop" src="http://www.distrelec.ch/medias/sys_master/h0c/hc6/8877211254814/lp-clearance-C14-IC-398-sales-chde-1435.jpg" style="float: right; width: 270px; height: 270px;" /></a>
+						</td>
+						<td valign="top" style="padding-left: 20px;">
+							<a href="mailto:info@distrelec.com?subject=EOL%20Kontakt!"><img alt="Fragen? Kontaktieren Sie Uns" src="http://img.srv2.de/bm/54197771390/83101874266.jpg" style="float: right; width: 270px; height: 270px;" /></a>
+						</td>
+					</tr>
+				</table>				
+				
+				
+			</td>
+		</tr>
+	</table>
+
+	## FOOTER include
+	${ctx.footer}
+</body>
+</html>

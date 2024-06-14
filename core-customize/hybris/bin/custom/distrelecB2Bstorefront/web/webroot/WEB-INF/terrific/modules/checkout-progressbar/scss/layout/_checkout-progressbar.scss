@@ -1,0 +1,331 @@
+.mod-checkout-progressbar {
+
+  // Checkout rebuild START
+  &__list {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1;
+    overflow: hidden;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: $cr-progressbar-circle-number-size * 0.5;
+      right: 0;
+      left: 0;
+      border-top: 1px solid $cr-progressbar-default;
+      z-index: -1;
+    }
+
+    &-item {
+
+      &:first-child,
+      &:last-child {
+        position: relative;
+
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          width: 50%;
+          height: $cr-progressbar-circle-number-size;
+          background-color: $colour-white;
+        }
+      }
+
+      &:first-child {
+        &:before {
+          left: 0;
+        }
+      }
+
+      &:last-child {
+        &:before {
+          right: 0;
+        }
+      }
+
+      &.is-done {
+        position: relative;
+
+        &:after {
+          content: '';
+          position: absolute;
+          top: $cr-progressbar-circle-number-size * 0.5;
+          right: 50%;
+          width: 500px;
+          border-top: 1px solid $cr-progressbar-done;
+          z-index: -1;
+        }
+
+        .mod-checkout-progressbar__list-item-link {
+          &__no {
+            @include font-size(22px);
+            background-color: $cr-progressbar-done;
+            color: $colour-white;
+          }
+
+          &__info {}
+        }
+      }
+
+      &.is-active {
+        .mod-checkout-progressbar__list-item-link {
+
+          &__no {
+            background-color: $cr-progressbar-active;
+            color: $colour-white;
+          }
+
+          &__info {}
+        }
+      }
+
+      &-link {
+        @include font-size(14px);
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &__no,
+        &__info {
+
+        }
+
+        &__no {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: $cr-progressbar-circle-number-size;
+          height: $cr-progressbar-circle-number-size;
+          border-radius: 50%;
+          background-color: $cr-progressbar-default;
+        }
+
+        &__info {
+          margin-top: 2px;
+          font-weight: 500;
+        }
+      }
+
+      // To override "base.css" style
+      a {
+        color: $colour-dark-grey;
+      }
+    }
+  }
+  // Checkout rebuild END
+
+  &__steps {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: $spacing-unit;
+    padding-left: 0;
+    width: 100%;
+
+    @media #{$ipad} {
+      margin-left: -$spacing-unit * 2 !important;
+      margin-right: -$spacing-unit * 2 !important;
+    }
+
+    &__item {
+      display: none;
+      text-align: center;
+
+      @media #{$ipad} {
+        display: flex;
+      }
+
+      .link {
+        @include font-size(14px);
+        color: $colour-dist-mid-grey;
+        text-align: center;
+        width: 100%;
+
+        &:hover {
+          color: darken($colour-dist-mid-grey, 20%);
+          transition: color .2s ease;
+        }
+
+      }
+
+      &--active {
+        display: flex;
+        font-weight: 600;
+      }
+
+    }
+
+  }
+  
+  &__indicator {
+    background-color: $colour-progressbar-bg;
+    border-radius: $spacing-unit;
+    height: $spacing-unit;
+    position: relative;
+    width: 100%;
+
+    &__percentage {
+      background-color: $colour-dist-mid-grey;
+      border-bottom-left-radius: $spacing-unit;
+      border-top-left-radius: $spacing-unit;
+      height: $spacing-unit;
+      transition: width .6s ease;
+      width: 0;
+
+      &--step-1 {
+        width: 50%;
+
+        @media #{$ipad} {
+          width: 12%;
+        }
+
+      }
+
+      &--step-2 {
+        width: 50%;
+
+        @media #{$ipad} {
+          width: 36%;
+        }
+
+      }
+
+      &--step-3 {
+        width: 50%;
+
+        @media #{$ipad} {
+          width: 62%;
+        }
+
+      }
+
+      &--step-4 {
+        width: 50%;
+
+        @media #{$ipad} {
+          width: 87%;
+        }
+
+      }
+
+      .step-indicator {
+        background-color: $colour-dist-mid-grey;
+        border-radius: 50%;
+        height: $spacing-unit * 4;
+        left: 46%;
+        position: absolute;
+        top: -($spacing-unit + 3);
+        width: $spacing-unit * 4;
+
+        @media #{$ipad} {
+          left: 10%;
+        }
+
+        &::before {
+          background-color: $colour-white;
+          border-radius: 50%;
+          content: '';
+          height: $spacing-unit * 2;
+          left: $spacing-unit;
+          position: absolute;
+          top: $spacing-unit;
+          width: $spacing-unit * 2;
+        }
+
+        &--step-2 {
+          display: none;
+          left: 35%;
+
+          @media #{$ipad} {
+            display: inherit;
+          }
+
+        }
+
+        &--step-3 {
+          display: none;
+          left: 60%;
+
+          @media #{$ipad} {
+            display: inherit;
+          }
+
+        }
+
+        &--step-4 {
+          display: none;
+          left: 85.5%;
+
+          @media #{$ipad} {
+            display: inherit;
+          }
+
+        }
+
+      }
+
+    }
+
+    &--loggedIn {
+
+      .step-indicator {
+
+        &--step-2 {
+          display: inherit;
+          left: 46%;
+
+          @media #{$ipad} {
+            left: 14.5%;
+          }
+
+        }
+
+        &--step-3 {
+          left: 47.5%;
+        }
+
+        &--step-4 {
+          left: 81%;
+        }
+
+      }
+
+      .mod-checkout-progressbar__indicator__percentage {
+
+       &--step-2 {
+         width: 50%;
+
+         @media #{$ipad} {
+           width: 15%;
+         }
+
+       }
+
+        &--step-3 {
+          width: 50%;
+
+          @media #{$ipad} {
+            width: 49%;
+          }
+        }
+
+        &--step-4 {
+          width: 50%;
+
+          @media #{$ipad} {
+            width: 82%;
+          }
+        }
+
+      }
+
+    }
+
+  }
+
+}

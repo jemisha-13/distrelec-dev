@@ -1,0 +1,879 @@
+$contentCatalog = distrelec_ATContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;SupportAndServicesNavNode,InfoCenterNavNode,ToolsNavNode									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; AGBPageLink,ImpressumPageLink,DatenschutzPageLink,comp_0000005Z,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+##############################################################	                         
+						 
+						 
+$contentCatalog = distrelec_BEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;ServicesNavNode,AboutUsNavNode,quick-links									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; legals_nav_be_agb_BE2016,legals_nav_be_impressum_BE2016,legals_nav_be_datenschutz_BE2016,legals_nav_be_disclaimer_BE2016,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+##############################################################	                         
+
+						 
+$contentCatalog = distrelec_CHContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]		;$contentCV[unique = true]	;name					;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNavComponent	;							;SitemapNavComponent	;SupportAndServicesNavNode,InfoCenterNavNode,ToolsNavNode									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNavComponent
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; comp_00000A35,comp_00000A3L,comp_00000A36,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+
+##############################################################							
+
+
+$contentCatalog = distrelec_CZContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;SupportAndServicesNavNode,About us Navigation Node,ToolsNavNode									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; AGB,Impressum,Privacy,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+
+##############################################################
+
+
+$contentCatalog = distrelec_DEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;SupportAndServicesNavNode,InfoCenterNavNode,ToolsNavNode									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; legal_AGB_de,legal_impressum_de,Privacy,legal_widerruf_de,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+                         
+##############################################################
+
+$contentCatalog = distrelec_DKContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;navigationNode_00000QAB,navigationNode_00000QAL,navigationNode_00000QAX									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; footer_legals_dk_agb,footer_legals_dk_impressum,footer_legals_dk_datenschutz,footer_legals_dk_disclaimer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+                         
+
+##############################################################
+
+$contentCatalog = distrelec_EEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;navigationNode_00000PGO,navigationNode_00000PGQ,navigationNode_00000PGS									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; footer_legals_ee_agb,footer_legals_ee_impressum,footer_legals_ee_datenschutz,footer_legals_ee_disclaimer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+
+##############################################################
+
+$contentCatalog = distrelec_EXContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;navigationNode_00000TCD,navigationNode_00000TCL,navigationNode_00000TD7									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; footer_legals_ex_agb,footer_legals_ex_impressum,footer_legals_ex_datenschutz,footer_legals_ex_disclaimer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+								
+##############################################################
+
+$contentCatalog = distrelec_FIContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;navigationNode_00000SJW,navigationNode_00000TBK,navigationNode_00000TC6									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; footer_legals_fi_agb,footer_legals_fi_impressum,footer_legals_fi_datenschutz,footer_legals_fi_disclaimer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+					
+
+##############################################################
+
+$contentCatalog = distrelec_HUContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;SupportAndServicesNavNode,InfoCenterNavNode,ToolsNavNode									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; AGB,Impressum,Disclaimer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+
+##############################################################
+
+$contentCatalog = distrelec_ITContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;SupportAndServicesNavNode,InfoCenterNavNode,ToolsNavNode									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; AGB_Footer,ImpressumPageLink,Datenschutz_Footer,Widerrufsbelehrung_Footer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+
+##############################################################
+
+$contentCatalog = distrelec_LTContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;SupportAndServicesNavNode,InfoCenterNavNode,ToolsNavNode									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; comp_0000111E,delivery_terms,Impressum,Disclaimer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+
+
+##############################################################
+
+$contentCatalog = distrelec_LVContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;navigationNode_00000Q8G,navigationNode_00000QBE,navigationNode_00000QBX									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; footer_legals_lv_agb,footer_legals_lv_impressum,footer_legals_lv_datenschutz,footer_legals_lv_disclaimer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+	
+##############################################################
+
+$contentCatalog = distrelec_NLContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;navigationNode_00000R08,navigationNode_00000R0G,navigationNode_00000R0U									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; footer_legals_nl_agb,footer_legals_nl_impressum ,footer_legals_nl_datenschutz ,footer_legals_nl_disclaimer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+
+##############################################################
+
+$contentCatalog = distrelec_NOContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;navigationNode_00000R17,navigationNode_00000R1F,navigationNode_00000R1H									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; footer_legals_no_agb,footer_legals_no_impressum ,footer_legals_no_datenschutz ,footer_legals_no_disclaimer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+
+##############################################################
+
+$contentCatalog = distrelec_PLContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;navigationNode_00000R1T,navigationNode_00000R2D,navigationNode_00000RSH
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; footer_legals_pl_agb,footer_legals_pl_impressum ,footer_legals_pl_datenschutz ,footer_legals_pl_disclaimer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+
+
+##############################################################
+
+$contentCatalog = distrelec_ROContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;SupportAndServicesNavNode,InfoCenterNavNode,ToolsNavNode									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; AGBLink,ImpressumLink ,DatenschutzLink ,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+								
+
+##############################################################
+
+$contentCatalog = distrelec_SEContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;navigationNode_00000Q8R,navigationNode_00000Q93,navigationNode_00000Q9R,support-number									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; footer_legals_se_agb,footer_legals_se_impressum ,footer_legals_se_datenschutz ,footer_legals_se_disclaimer,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+								
+
+##############################################################
+
+$contentCatalog = distrelec_SKContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default = $contentCatalog]), CatalogVersion.version[default = Staged])[default = $contentCatalog:Staged]
+$jarResourceCms = jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/project/cockpits/cmscockpit
+
+INSERT_UPDATE PageTemplate; uid[unique = true]   ; name                    ; $contentCV[unique = true]; frontendTemplateName   ; active[default = true]	; restrictedPageTypes(code[default = ContentPage])
+						  ; SitemapTemplate		 ; sitemap Template		   ;                          ; layout/sitemap_template ;						;
+
+INSERT_UPDATE PageTemplate; uid[unique = true]; $contentCV[unique = true]; velocityTemplate[translator = de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+						  ; SitemapTemplate    ;                          ; $jarResourceCms/structure-view/structure_sitemapPageTemplate.vm
+
+INSERT_UPDATE  ContentPage	; uid[unique = true]	; name         			; label      	  		; $contentCV[unique = true]; defaultPage; masterTemplate(uid, $contentCV)		; approvalStatus(code)
+							; sitemapPageTemplate   ; Sitemap Template 	; sitemapPageTemplate	;                          ; true       ; SitemapTemplate		             	; approved
+
+
+INSERT_UPDATE ContentSlotName; name[unique = true]   ; template(uid, $contentCV)[unique = true][default = 'SitemapTemplate']	 ; validComponentTypes(code)[mode = append]
+                             ; Logo                  ;                                                                           ; SimpleBannerComponent
+                             ; ServiceNav            ;                                                                           ; CMSLinkComponent
+                             ; MainNav               ;                                                                           ; DistMainNavigationComponent
+                             ; MainCategoryNav       ;                                                                           ; DistMainNavigationComponent
+                             ; MainTopNavNode        ;                                                                           ; DistMainNavigationComponent							 
+                             ; RightSideCmsLinks   	 ;                                                                           ; CMSLinkComponent
+                             ; RightSideNavNodes   	 ;                                                                           ; DistSitemapNavNodeComponent
+                             ; FooterLinks           ;                                                                           ; DistFooterComponent
+
+insert_update DistSitemapNavNodeComponent	;uid[unique = true]	;$contentCV[unique = true]	;name		;navigationNodeList(uid, $contentCV)																	
+								 			;SitemapNav			;							;SitemapNav	;SupportAndServicesNavNode,About us Navigation Node,quick-links									
+
+											
+INSERT_UPDATE ContentSlot; uid[unique = true]                 ; name                    	; $contentCV[unique = true]; cmsComponents(uid, $contentCV)
+                         ; RightSideNavNodes      			  ; Navigation Node slot      	;                          ; SitemapNav
+                         ; RightSideCmsLinks      			  ; CMS Link slot		      	;                          ; AGB,Impressum ,Disclaimer ,ADR-Link,ODR-link
+                         ; Sitemap-FooterLinks           	  ; Footer links            	;                          ; DistFooterComponent
+                          
+
+INSERT_UPDATE ContentSlotForPage; uid[unique = true]            ; $contentCV[unique = true]; contentSlot(uid, $contentCV)       ; page(uid, $contentCV)[unique = true]; position
+                                ; Sitemap-Logo                  ;                          ; LogoSlot                           ; sitemapPageTemplate                 ; Logo
+                                ; Sitemap-ServiceNavSlot        ;                          ; ServiceNavSlot                     ; sitemapPageTemplate                 ; ServiceNav
+                                ; Sitemap-MainNavSlot           ;                          ; MainNavSlot                        ; sitemapPageTemplate                 ; MainNav
+                                ; Sitemap-MainCategoryNavSlot   ;                          ; MainCategoryNavSlot                ; sitemapPageTemplate                 ; MainCategoryNav
+                                ; RightSideNavNodeSlot		    ;                          ; RightSideNavNodes                  ; sitemapPageTemplate                 ; RightSideNavNodes
+                                ; RightSideCMSLinkSlot		    ;                          ; RightSideCmsLinks                  ; sitemapPageTemplate                 ; RightSideCMSLinks
+                                ; Sitemap-FooterLinks           ;                          ; Sitemap-FooterLinks           		; sitemapPageTemplate                 ; FooterLinks
+
+

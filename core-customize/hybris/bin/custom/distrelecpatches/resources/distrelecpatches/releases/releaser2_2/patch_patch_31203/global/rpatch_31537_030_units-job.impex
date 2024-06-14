@@ -1,0 +1,47 @@
+$productCatalog=distrelecProductCatalog
+$catalogVersions=catalogVersions(catalog(id), version);
+$solrIndexedTypeUnit=unitType
+$fullUnitJob=full-Unit-Fusion
+
+INSERT_UPDATE SolrIndexedType;identifier[unique=true];type(code)                  ;indexName
+                             ;$solrIndexedTypeUnit   ;ClassificationAttributeUnit ;classificationattributeunit
+
+INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[unique=true]                ;type(code);sortableType(code);currency[default=false];localized[default=false];multiValue[default=false];fieldValueProvider              ;valueProviderParameter;ftsPhraseQuery[default=false];ftsPhraseQueryBoost;ftsQuery[default=false];ftsQueryBoost;ftsFuzzyQuery[default=false];ftsFuzzyQueryBoost;ftsWildcardQuery[default=false];ftsWildcardQueryType(code)[default=POSTFIX];ftsWildcardQueryBoost;ftsWildcardQueryMinTermLength
+                                 ;$solrIndexedTypeUnit                    ;code                             ;string    ;                  ;                       ;                        ;                         ;                                ;                      ;                             ;                   ;                       ;             ;                            ;                  ;                               ;                                           ;
+                                 ;$solrIndexedTypeUnit                    ;symbol                           ;string    ;                  ;                       ;false                   ;                         ;                                ;                      ;                             ;                   ;                       ;             ;                            ;                  ;                               ;                                           ;
+                                 ;$solrIndexedTypeUnit                    ;unittype                         ;string    ;                  ;                       ;                        ;                         ;                                ;                      ;                             ;                   ;                       ;             ;                            ;                  ;                               ;                                           ;
+                                 ;$solrIndexedTypeUnit                    ;conversionfactor                 ;double    ;                  ;                       ;                        ;                         ;                                ;                      ;                             ;                   ;                       ;             ;                            ;                  ;                               ;                                           ;
+                                 ;$solrIndexedTypeUnit                    ;excludedForFusionFacetConversion ;boolean   ;                  ;                       ;                        ;                         ;                                ;                      ;                             ;                   ;                       ;             ;                            ;                  ;                               ;                                           ;
+                                 ;$solrIndexedTypeUnit                    ;baseUnitSymbol                   ;string    ;                  ;                       ;                        ;                         ;distBaseUnitSymbolValueResolver ;                      ;                             ;                   ;                       ;             ;                            ;                  ;                               ;                                           ;
+
+#with the query we want to exclude units which are not in a conversion-group and have a duplicate which is in the conversion group
+INSERT_UPDATE SolrIndexerQuery;solrIndexedType(identifier)[unique=true];identifier[unique=true];type(code);injectCurrentDate[default=false];injectCurrentTime[default=false];injectLastIndexTime[default=false];query;user(uid) ;parameterProvider
+                              ;$solrIndexedTypeUnit                    ;units-fullQuery        ;full      ;                                ;                                ;false                             ;"
+SELECT {pk}
+  FROM {ClassificationAttributeUnit}
+  WHERE (
+    {symbol} NOT IN ({{
+     SELECT {symbol}
+       FROM {classificationattributeunit}
+      GROUP BY {symbol}
+     HAVING COUNT(*) > 1
+    }})
+    OR {unittype} NOT IN ({{
+     SELECT {unittype}
+       FROM {classificationattributeunit}
+      GROUP BY {unittype}
+     HAVING COUNT(*) = 1
+    }})
+  )
+  AND ({excludedForUnitConversion} = 0 OR {excludedForUnitConversion} IS NULL)
+"    ;anonymous ;
+
+INSERT_UPDATE SolrFacetSearchConfig;name[unique=true]         ;description     ;indexNamePrefix;languages(isocode);currencies(isocode);solrServerConfig(name);solrSearchConfig(description);solrIndexConfig(name);solrIndexedTypes(identifier);enabledLanguageFallbackMechanism;$catalogVersions
+                                   ;distUnitFacetSearchConfig ;index for units ;units          ;                  ;                   ;fusionServerConfig    ;Default                      ;Default              ;$solrIndexedTypeUnit        ;true                            ;$productCatalog:Online
+
+INSERT_UPDATE SolrIndexerCronJob;code[unique=true];job(code)      ;singleExecutable;sessionLanguage(isocode);active;facetSearchConfig(name)   ;indexerOperation(code);cmsSites(uid);sessionUser(uid)[default=techUserFusion]
+                                ;$fullUnitJob     ;solrIndexerJob ;false           ;en                      ;true  ;distUnitFacetSearchConfig ;full                  ;distrelec_CH ;
+
+# every night at 1 AM -> expression is 23 since +2 hours is added on environment
+INSERT_UPDATE Trigger;code[unique=true]   ;cronJob(code);cronExpression ;active
+                     ;$fullUnitJobTrigger ;$fullUnitJob ;0 0 23 * * ? * ;false

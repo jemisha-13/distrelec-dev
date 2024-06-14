@@ -1,0 +1,187 @@
+
+@mod-detail-accordion-header-height: 49px;
+@mod-detail-accordion-btn-expand-border: 2px;
+
+
+.mod-detail-accordion {
+	position: relative; // for pos absolute
+
+    .detailaccordion-header {
+        height: @mod-detail-accordion-header-height;
+        background-color:@c-greyB;
+        cursor: pointer;
+		position: relative; // for pos absolute
+        #border .border-std(1px, 0, 0, 0);
+
+        h3 {
+            #typo .size-m();
+            line-height: @mod-detail-accordion-header-height;
+            margin:0 45px;
+            padding:0;
+        }
+
+        i {
+            .s-polygon-plus-grey();
+            position: absolute;
+            top: 10px; // Review: KR: Vertical alignment
+            left: 10px;
+        }
+
+        &:hover {
+            background-color: transparent;
+            h3 {
+                color:#AA1936;
+            }
+            i {
+                .s-polygon-plus-blue();
+            }
+        }
+    }
+
+    .detailaccordion-content {
+        height:0px;
+        overflow: hidden;
+        position:relative;
+
+        .inner {
+        	@media screen {
+        		#border .border-std(1px, 0, 0, 0);
+        	}
+            margin-bottom: 45px;
+        }
+    }
+
+    .show-more {
+        padding:12px 10px;
+        #border .border-std(0, 0, 1px, 0);
+
+        .show-more-link {
+			.s-polygon-down-lightblue();
+            &:hover {
+                .s-polygon-down-blue();
+            }
+
+            #typo .size-s();
+            height:24px;
+            width:24px;
+            line-height: 24px;
+            padding:0;
+            display: block;
+            background-repeat: no-repeat;
+
+            span {
+                padding:0 34px;
+                white-space: nowrap;
+            }
+        }
+    }
+
+	.btn-expand {
+		position: absolute;
+		right: 0;
+		top: 0;
+		height: auto;
+		margin-top: -10px;
+
+		.lt-ie8 & {
+			top: 23px;
+		}
+
+		span {
+			display: block;
+			margin: 0 10px 0 45px;
+			padding: 0;
+			#typo .size-m();
+			color: @c-grey20;
+			line-height: @mod-detail-accordion-header-height;
+		}
+
+		i {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			margin-top: 2px;
+			.s-polygon-plus-grey();
+		}
+
+		&:hover {
+			span {
+				color:#AA1936;
+			}
+
+			i {
+				.s-polygon-plus-blue();
+			}
+		}
+
+		&.btn-expand-show {
+			@media screen {
+				display:block;
+
+				i {
+					.s-polygon-plus-grey();
+				}
+				&:hover i {
+					.s-polygon-plus-blue();
+				}
+			}
+		}
+		&.btn-expand-close {
+			display:none;
+
+			i {
+				.s-polygon-minus-grey();
+			}
+			&:hover i {
+				.s-polygon-minus-blue();
+			}
+		}
+	}
+
+    .detailaccordion {
+        &.detailaccordion-last {
+            .detailaccordion-header {
+                border-bottom-width:1px;
+            }
+        }
+
+        &.expanded {
+            .detailaccordion-header {
+                border-bottom-width:0;
+                i {
+                    .s-polygon-minus-grey();
+                }
+                &:hover i {
+                    .s-polygon-minus-blue();
+                }
+            }
+            .detailaccordion-content {
+                height:auto;
+                overflow:hidden;
+            }
+        }
+
+		.anchor:before {// compensate sticky header, using method B from http://nicolasgallagher.com/jump-links-and-viewport-positioning/demo/
+			display: block;
+			content: "";
+			height: 54px;
+			margin: -54px 0 0;
+		}
+    }
+
+	.title-suffix{
+		margin-left: 5px;
+		color: @c-greyD;
+	}
+
+    @media print {
+		button, i {
+			.hidden;
+		}
+
+		.detailaccordion-content {
+			overflow: visible;
+			height:auto;
+		}
+    }
+}

@@ -1,0 +1,399 @@
+$catalogid = testCatalog
+$catalogVersion = catalogVersion(catalog(id[default=$catalogid]), version[default='Online'])
+$languages = en, de
+
+
+# general
+INSERT_UPDATE Language; isocode[unique = true]; active[default = true]
+                      ; de                    ;
+                      ; en                    ;
+                      ; fr                    ;
+                      ; it                    ;
+
+INSERT_UPDATE Unit; unitType[unique = true]; code[unique = true]; name[lang = de]; name[lang = en]; conversion;;;
+                  ; pieces                 ; pieces             ; pieces         ; pieces         ; 1
+
+INSERT_UPDATE Currency; isocode[unique = true]; name[lang = de]  ; name[lang = en]; active; base  ; conversion; digits; symbol
+                      ; EUR                   ; Euro             ; Euro           ; true  ; false ; 1         ; 2     ; €
+                      ; CHF                   ; Schweizerfranken ; Swiss Francs   ; true  ; true  ; 1         ; 2     ; CHF
+
+INSERT_UPDATE Title; code[unique = true]; name[lang = de]; name[lang = en]; sapCode;
+                   ; dr                 ; Dr.            ; dr.            ; Mr.    ;
+                   ; mr                 ; Mr.            ; mr.            ; Mr.    ;
+
+INSERT_UPDATE Country; isocode[unique = true]; name[lang = de]                ; name[lang = en]          ; active;
+                     ; US                    ; Vereinigte Staaten von Amerika ; United States of America ; true  ;
+                     ; CH                    ; Schweiz                        ; Switzerland              ; true  ;
+
+INSERT_UPDATE PromotionGroup; Identifier[unique = true];
+                            ; default                  ;
+
+# catalog
+INSERT_UPDATE Catalog; id[unique = true]
+                     ; $catalogid
+
+INSERT_UPDATE CatalogVersion; catalog(id)[unique = true]; version[unique = true]; active; languages(isoCode);
+                            ; $catalogid                ; Online                ; true  ; $languages        ;
+
+# customer data
+INSERT_UPDATE UserGroup; uid[unique = true]; groups(uid);
+                       ; customergroup     ;
+                       ; b2bcustomergroup  ;
+                       ; b2bgroup          ;
+                       ; b2cgroup          ;
+                       ; b2badmingroup     ;
+                       ; eProcurementGroup ;
+                       ; ociCustomerGroup  ;
+                       ; b2beeshopgroup
+
+INSERT_UPDATE DistBrand; code[unique = true]
+                       ; distrelec
+
+INSERT_UPDATE UserPriceGroup; code[unique = true]
+                            ; SalesOrg_UPG_7310
+
+                            ; B2B_DEFAULT_PRICE_GROUP
+INSERT_UPDATE UserDiscountGroup; code[unique = true]
+                               ; SalesOrg_UDG_7310
+
+INSERT_UPDATE UserTaxGroup; code[unique = true]
+                          ; SalesOrg_UTG_7310
+
+INSERT_UPDATE Vendor; code[unique = true]; name[lang = en]
+                    ; default            ; Default Vendor
+
+INSERT_UPDATE Warehouse; code[unique = true]; name[lang = en]             ; pickupName[lang = en]                     ; default; vendor(code)[default = default]; stockManagementSystem(code)
+                       ; 7311               ; Distrelec NewCo Switzerland ; Abholschalter Distrelec NewCo Switzerland ; false  ;                                ; SAP
+
+INSERT_UPDATE DistSalesOrg; code[unique = true]; brand(code); country(isocode); erpSystem(code)
+                          ; 7310               ; distrelec  ; CH              ; SAP
+
+INSERT_UPDATE CMSSite; uid[unique = true]; country(isocode); defaultCurrency(isocode); registrationCurrencies(isocode); salesOrg(code); userPriceGroup(code); userTaxGroup(code); pickupWarehouses(code)
+                     ; distrelec_CH      ; CH              ; CHF                     ; CHF                            ; 7310          ; SalesOrg_UPG_7310   ; SalesOrg_UTG_7310 ; 7311
+
+# product data
+INSERT_UPDATE Unit; code[unique = true]; name[lang = en]; name[lang = de]; unitType
+                  ; PC                 ; Piece          ; Stück          ; pieces
+
+INSERT_UPDATE DistTransportGroup; code[unique = true]; nameErp[lang = en]
+                                ; 0001               ; Normal products
+                                ; 0002               ; Dangerous goods
+
+# erp-codelist and salesOrg
+INSERT_UPDATE DistShippingMethod; code[unique = true];
+                                ; SAP_A1
+                                ; E1
+                                ; E2
+                                ; N1
+                                ; N2
+                                ; O1
+                                ; S1
+                                ; X1
+
+INSERT_UPDATE DistPaymentMethod; code[unique = true]
+                               ; 000
+                               ; 004
+                               ; 006
+                               ; 008
+                               ; 010
+                               ; 015
+                               ; 021
+                               ; 030
+                               ; 060
+                               ; 090
+                               ; 120
+                               ; WB01
+                               ; WB02
+                               ; WB03
+                               ; WB03ID
+                               ; WB04
+                               ; WB05
+                               ; WB06
+                               ; WB07
+                               ; WB08
+                               ; WB09
+                               ; WB10
+                               ; Z001
+                               ; Z002
+                               ; Z003
+                               ; Z004
+                               ; Z005
+                               ; Z006
+                               ; Z007
+                               ; Z008
+                               ; Z009
+                               ; Z010
+                               ; Z011
+                               ; Z012
+                               ; Z013
+                               ; Z014
+                               ; Z015
+                               ; Z016
+                               ; Z017
+                               ; Z018
+                               ; Z019
+                               ; Z020
+                               ; Z021
+                               ; Z022
+                               ; Z023
+                               ; Z024
+                               ; Z025
+                               ; Z026
+                               ; Z027
+                               ; Z028
+                               ; Z029
+                               ; Z030
+                               ; Z031
+                               ; Z032
+                               ; Z033
+                               ; Z034
+                               ; Z035
+                               ; Z036
+                               ; Z037
+                               ; Z038
+                               ; Z039
+                               ; Z040
+                               ; Z041
+                               ; Z042
+                               ; Z043
+                               ; Z044
+                               ; Z045
+                               ; Z046
+                               ; Z047
+                               ; Z048
+                               ; Z049
+                               ; Z050
+                               ; Z051
+                               ; Z052
+                               ; Z053
+                               ; Z054
+                               ; Z055
+                               ; Z056
+                               ; Z057
+                               ; Z058
+                               ; Z060
+                               ; Z061
+                               ; Z062
+                               ; Z063
+                               ; Z064
+                               ; Z065
+                               ; Z066
+                               ; Z115
+
+# delivery & pamynet modes
+INSERT_UPDATE DistDeliveryMode; code[unique = true]; erpDeliveryMethod(code); active[default = true]; translationKey
+                              ; PickUp             ; SAP_A1                 ;                       ; "deliverymode.pickup"
+                              ; MailOrder          ; N1                     ;                       ; "deliverymode.standard"
+                              ; BulkMailOrder      ; N2                     ;                       ; "deliverymode.economy"
+                              ; ShipperMailOrder   ; O1                     ;                       ; "deliverymode.economy"
+                              ; Express            ; E1                     ;                       ; "deliverymode.express"
+                              ; BulkExpress        ; E2                     ;                       ; "deliverymode.express"
+                              ; FreeShipping       ; S1                     ;                       ; "deliverymode.freeshipping"
+                              ; Emergency          ; X1                     ;                       ; "deliverymode.emergency"
+
+
+INSERT_UPDATE DistPaymentMode; code[unique = true]; paymentInfoType(code) ; active; hop   ; iframe; url                                                         ; erpPaymentMethod(code); translationKey
+# NEW SAP Payment Modes
+                             ; CreditCard         ; CreditCardPaymentInfo ; true  ; true  ; true  ; https://spg.evopayments.eu/pay/payssl.aspx                  ; WB01                  ; "payment.mode.cc"
+                             ; Z001_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z001                  ; "payment.mode.invoice"
+                             ; Z002_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z002                  ; "payment.mode.invoice"
+                             ; Z003_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z003                  ; "payment.mode.invoice"
+                             ; Z004_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z004                  ; "payment.mode.invoice"
+                             ; Z005_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z005                  ; "payment.mode.invoice"
+                             ; Z006_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z006                  ; "payment.mode.invoice"
+                             ; Z007_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z007                  ; "payment.mode.invoice"
+                             ; Z008_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z008                  ; "payment.mode.invoice"
+                             ; Z009_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z009                  ; "payment.mode.invoice"
+                             ; Z010_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z010                  ; "payment.mode.invoice"
+                             ; Z011_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z011                  ; "payment.mode.invoice"
+                             ; Z012_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z012                  ; "payment.mode.invoice"
+                             ; Z013_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z013                  ; "payment.mode.invoice"
+                             ; Z014_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z014                  ; "payment.mode.invoice"
+                             ; Z015_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z015                  ; "payment.mode.invoice"
+                             ; Z016_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z016                  ; "payment.mode.invoice"
+                             ; Z017_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z017                  ; "payment.mode.invoice"
+                             ; Z018_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z018                  ; "payment.mode.invoice"
+                             ; Z019_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z019                  ; "payment.mode.invoice"
+                             ; Z020_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z020                  ; "payment.mode.invoice"
+                             ; Z021_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z021                  ; "payment.mode.invoice"
+                             ; Z022_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z022                  ; "payment.mode.invoice"
+                             ; Z023_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z023                  ; "payment.mode.invoice"
+                             ; Z024_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z024                  ; "payment.mode.invoice"
+                             ; Z025_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z025                  ; "payment.mode.invoice"
+                             ; Z026_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z026                  ; "payment.mode.invoice"
+                             ; Z027_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z027                  ; "payment.mode.invoice"
+                             ; Z028_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z028                  ; "payment.mode.invoice"
+                             ; Z029_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z029                  ; "payment.mode.invoice"
+                             ; Z030_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z030                  ; "payment.mode.invoice"
+                             ; Z031_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z031                  ; "payment.mode.invoice"
+                             ; Z032_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z032                  ; "payment.mode.invoice"
+                             ; Z033_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z033                  ; "payment.mode.invoice"
+                             ; Z034_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z034                  ; "payment.mode.invoice"
+                             ; Z035_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z035                  ; "payment.mode.invoice"
+                             ; Z036_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z036                  ; "payment.mode.invoice"
+                             ; Z037_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z037                  ; "payment.mode.invoice"
+                             ; Z038_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z038                  ; "payment.mode.invoice"
+                             ; Z039_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z039                  ; "payment.mode.invoice"
+                             ; Z040_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z040                  ; "payment.mode.invoice"
+                             ; Z041_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z041                  ; "payment.mode.invoice"
+                             ; Z042_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z042                  ; "payment.mode.invoice"
+                             ; Z043_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z043                  ; "payment.mode.invoice"
+                             ; Z044_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z044                  ; "payment.mode.invoice"
+                             ; Z045_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z045                  ; "payment.mode.invoice"
+                             ; Z046_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z046                  ; "payment.mode.invoice"
+                             ; Z047_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z047                  ; "payment.mode.invoice"
+                             ; Z048_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z048                  ; "payment.mode.invoice"
+                             ; Z049_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z049                  ; "payment.mode.invoice"
+                             ; Z050_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z050                  ; "payment.mode.invoice"
+                             ; Z051_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z051                  ; "payment.mode.invoice"
+                             ; Z052_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z052                  ; "payment.mode.invoice"
+                             ; Z053_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z053                  ; "payment.mode.invoice"
+                             ; Z054_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z054                  ; "payment.mode.invoice"
+                             ; Z055_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z055                  ; "payment.mode.invoice"
+                             ; Z056_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z056                  ; "payment.mode.invoice"
+                             ; Z057_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z057                  ; "payment.mode.invoice"
+                             ; Z058_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z058                  ; "payment.mode.invoice"
+                             ; Z060_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z060                  ; "payment.mode.invoice"
+                             ; Z061_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z061                  ; "payment.mode.invoice"
+                             ; Z062_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z062                  ; "payment.mode.invoice"
+                             ; Z063_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z063                  ; "payment.mode.invoice"
+                             ; Z064_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z064                  ; "payment.mode.invoice"
+                             ; Z065_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z065                  ; "payment.mode.invoice"
+                             ; Z066_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z066                  ; "payment.mode.invoice"
+                             ; Z115_Invoice       ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; Z115                  ; "payment.mode.invoice"
+                             ; PayPal             ; PaymentInfo           ; true  ; true  ; false ; https://spg.evopayments.eu/pay/paypal.aspx                  ; WB03                  ; "payment.mode.paypal"
+                             ; Ideal              ; PaymentInfo           ; true  ; true  ; false ; https://spg.evopayments.eu/pay/payOTF.aspx                  ; WB10                  ; "payment.mode.ideal"
+                             ; ClickAndBuy        ; PaymentInfo           ; true  ; true  ; true  ; https://spg.evopayments.eu/paygate/ClickandBuy.aspx         ; WB04                  ; "payment.mode.clickandbuy"
+#;Eps;PaymentInfo;true;true;false;https://spg.evopayments.eu/paygate/eps.aspx;unknown
+                             ; GiroPay            ; PaymentInfo           ; true  ; true  ; false ; https://spg.evopayments.eu/pay/payOTF.aspx                  ; WB02                  ; "payment.mode.giropay"
+                             ; DirectDebit        ; PaymentInfo           ; true  ; true  ; true  ; https://spg.evopayments.eu/pay/payelv.aspx                  ; WB05                  ; "payment.mode.directdebit"
+                             ; PrePayment         ; PaymentInfo           ; false ; false ; false ;                                                             ; WB06                  ; "payment.mode.prepayment"
+#;BankTransfer;PaymentInfo;false;false;false;;WB07
+                             ; CashOnDelivery     ; PaymentInfo           ; false ; false ; false ;                                                             ; WB08                  ; "payment.mode.cashondelivery"
+                             ; KlarnaFaktura      ; PaymentInfo           ; false ; false ; false ;                                                             ; WB09                  ; "payment.mode.klarnafactura"
+
+# ELFA SAP Payment Modes
+                             ; 000_Cash           ; PaymentInfo           ; false ; false ; false ;                                                             ; 000                   ; "payment.mode.cash"
+                             ; 004_CreditCard     ; CreditCardPaymentInfo ; true  ; true  ; true  ; https://securedt.dibspayment.com/verify/bin/SHOP_NAME/index ; 004                   ; "payment.mode.cc"
+                             ; 006_Prepayment     ; PaymentInfo           ; false ; false ; false ;                                                             ; 006                   ; "payment.mode.prepayment"
+                             ; 008_Invoice        ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; 008                   ; "payment.mode.invoice"
+                             ; 010_Invoice        ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; 010                   ; "payment.mode.invoice"
+                             ; 015_Invoice        ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; 015                   ; "payment.mode.invoice"
+                             ; 021_Invoice        ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; 021                   ; "payment.mode.invoice"
+                             ; 030_Invoice        ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; 030                   ; "payment.mode.invoice"
+                             ; 060_Invoice        ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; 060                   ; "payment.mode.invoice"
+                             ; 090_Invoice        ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; 090                   ; "payment.mode.invoice"
+                             ; 120_Invoice        ; InvoicePaymentInfo    ; true  ; false ; false ;                                                             ; 120                   ; "payment.mode.invoice"
+
+# PaymentTypeCodeMap
+INSERT_UPDATE DistPaymentTypeCodeMap; paymentProviderCode[unique = true]; creditCardTypeCode[unique = true]
+                                    ; VISA                              ; visa
+                                    ; MasterCard                        ; mastercard
+
+INSERT_UPDATE DistB2BBudget; code[unique = true]    ; yearlyBudget; orderBudget; currency(isocode)[default = 'CHF']
+                           ; budgetId               ; 1000        ; 100        ;
+                           ; budgetIdWithoutDefault ; 1000        ; 100        ;
+
+INSERT_UPDATE B2BUnit; uid[unique = true]           ; salesOrg(code); customerType(code)
+                     ; b2bUserUnit                  ; 7310          ; B2B
+                     ; b2cUserUnit                  ; 7310          ; B2C
+                     ; b2cWithoutDefaultUnit        ; 7310          ; B2C
+                     ; b2bWithoutDefaultUnit        ; 7310          ; B2B
+                     ; budgetUserUnit               ; 7310          ; B2B
+                     ; budgetWithoutDefaultUnit     ; 7310          ; B2B
+                     ; b2bKeyUserUnit               ; 7310          ; B2B_KEY_ACCOUNT
+                     ; b2cUserMultiAddressesUnit    ; 7310          ; B2C
+                     ; b2bKeyUserMultiAddressesUnit ; 7310          ; B2B_KEY_ACCOUNT
+
+INSERT_UPDATE B2BCustomer; uid[unique = true]       ; email                             ; name                     ; defaultB2BUnit(uid)          ; groups(uid)                                                ; customerType(code); budget(code)
+                         ; b2buser                  ; b2bUser@test.com                  ; b2bUser                  ; b2bUserUnit                  ; b2bUserUnit,b2bcustomergroup                               ; B2B               ;
+                         ; b2bwithoutdefault        ; b2bUserWithoutDefault@test.com    ; b2bUser                  ; b2bWithoutDefaultUnit        ; b2bWithoutDefaultUnit,b2bcustomergroup                     ; B2B               ;
+                         ; b2cuser                  ; b2cUser@test.com                  ; b2cUser                  ; b2cUserUnit                  ; b2cUserUnit,b2bcustomergroup                               ; B2C               ;
+                         ; b2cwithoutdefault        ; b2cUserWithoutDefault@test.com    ; b2cUser                  ; b2cWithoutDefaultUnit        ; b2cWithoutDefaultUnit,b2bcustomergroup                     ; B2C               ;
+                         ; budgetuser               ; budgetUser@test.com               ; budgetUser               ; budgetUserUnit               ; budgetUserUnit,b2bcustomergroup,b2bcustomergroup           ; B2B               ; budgetId
+                         ; budgetuserwithoutdefault ; budgetUserWithoutDefault@test.com ; budgetUser               ; budgetWithoutDefaultUnit     ; budgetWithoutDefaultUnit,b2bcustomergroup,b2bcustomergroup ; B2B               ; budgetIdWithoutDefault
+                         ; b2bkeyuser               ; b2bKeyUser@test.com               ; b2bKeyUser               ; b2bKeyUserUnit               ; b2bKeyUserUnit,b2bcustomergroup                            ; B2B_KEY_ACCOUNT   ;
+                         ; b2cusermultiaddresses    ; b2cMultiAddressesUser@test.com    ; b2cUserMultiAddresses    ; b2cUserMultiAddressesUnit    ; b2cUserMultiAddressesUnit,b2bcustomergroup                 ; B2C               ;
+                         ; b2bkeyusermultiaddresses ; b2bKeyMultiAddressesUser@test.com ; b2bKeyUserMultiAddresses ; b2bKeyUserMultiAddressesUnit ; b2bKeyUserMultiAddressesUnit,b2bcustomergroup              ; B2B_KEY_ACCOUNT   ;
+
+# Set erpCustomerId and this will create a MovexCustomer and attach it to the B2BUnit.
+# A B2BUnit must always have a customer including address information before an erpCustomerId is being set.
+UPDATE B2BUnit; uid[unique = true]           ; erpCustomerID
+              ; b2bUserUnit                  ; b2buser
+              ; b2cUserUnit                  ; b2cuser
+              ; b2cWithoutDefaultUnit        ; b2cwithoutdefault
+              ; b2bWithoutDefaultUnit        ; b2bwithoutdefault
+              ; budgetUserUnit               ; budgetuser
+              ; budgetWithoutDefaultUnit     ; budgetuserwithoutdefault
+              ; b2bKeyUserUnit               ; b2bkeyuser
+              ; b2cUserMultiAddressesUnit    ; b2cusermultiaddresses
+              ; b2bKeyUserMultiAddressesUnit ; b2bkeyusermultiaddresses
+
+INSERT_UPDATE Address; &addrID                                            ; owner(B2BUnit.uid)[unique = true]; streetname   ; streetnumber; postalcode; town   ; country(isocode); phone1       ; firstname[unique = true]; lastname[unique = true]; company[unique = true]; dateOfBirth[dateformat = yyyy-MM-dd]; billingAddress[unique = true]; shippingAddress[unique = true]
+                     ; b2bUserUnitShippingAddr                            ; b2bUserUnit                      ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max                     ; Mustermann             ;                       ; 1975-01-01                          ; false                        ; true
+                     ; b2bUserUnitBillingAddr                             ; b2bUserUnit                      ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max                     ; Mustermann             ;                       ; 1975-01-01                          ; true                         ; false
+                     ; b2cUserUnitShippingAddr                            ; b2cUserUnit                      ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max                     ; Mustermann             ;                       ; 1975-01-01                          ; false                        ; true
+                     ; b2cUserUnitBillingAddr                             ; b2cUserUnit                      ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max                     ; Mustermann             ;                       ; 1975-01-01                          ; true                         ; false
+                     ; budgetUserUnitShippingAddr                         ; budgetUserUnit                   ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max                     ; Mustermann             ;                       ; 1975-01-01                          ; false                        ; true
+                     ; budgetUserUnitBillingAddr                          ; budgetUserUnit                   ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max                     ; Mustermann             ;                       ; 1975-01-01                          ; true                         ; false
+                     ; b2bKeyUserUnitShippingAddr                         ; b2bKeyUserUnit                   ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max                     ; Mustermann             ;                       ; 1975-01-01                          ; false                        ; true
+                     ; b2bKeyUserUnitBillingAddr                          ; b2bKeyUserUnit                   ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max                     ; Mustermann             ;                       ; 1975-01-01                          ; true                         ; false
+                     ; b2cUserMultiAddressesUnitShippingAddr01            ; b2cUserMultiAddressesUnit        ; Teststrassse ; 42          ; 8000      ; City1  ; CH              ; +41447389876 ; First2                  ; Last2                  ;                       ; 1975-01-01                          ; false                        ; true
+                     ; b2cUserMultiAddressesUnitShippingAddr02            ; b2cUserMultiAddressesUnit        ; Teststrassse ; 42          ; 8000      ; City2  ; CH              ; +41447389876 ; First1                  ; Last1                  ;                       ; 1975-01-01                          ; false                        ; true
+                     ; b2cUserMultiAddressesUnitBillingAddr               ; b2cUserMultiAddressesUnit        ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max                     ; Mustermann             ;                       ; 1975-01-01                          ; true                         ; false
+                     ; b2bKeyUserMultiAddressesUnitShippingAddr01         ; b2bKeyUserMultiAddressesUnit     ; Teststrassse ; 42          ; 8000      ; City1  ; CH              ; +41447389876 ; First2                  ; Last2                  ; Company2              ; 1975-01-01                          ; false                        ; true
+                     ; b2bKeyUserMultiAddressesUnitShippingAddr02         ; b2bKeyUserMultiAddressesUnit     ; Teststrassse ; 42          ; 8000      ; City2  ; CH              ; +41447389876 ; First1                  ; Last1                  ; Company1              ; 1975-01-01                          ; false                        ; true
+                     ; b2bKeyUserMultiAddressesUnitBillingAndShippingAddr ; b2bKeyUserMultiAddressesUnit     ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max                     ; Mustermann             ;                       ; 1975-01-01                          ; true                         ; true
+                     ; b2bKeyUserMultiAddressesUnitBillingAddr            ; b2bKeyUserMultiAddressesUnit     ; Teststrassse ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max                     ; Mustermann             ;                       ; 1975-01-01                          ; true                         ; false
+
+UPDATE B2BUnit; uid[unique = true]           ; billingAddress(&addrID)
+              ; b2cUserUnit                  ; b2cUserUnitBillingAddr
+              ; b2cWithoutDefaultUnit        ; b2cUserUnitBillingAddr
+              ; b2bUserUnit                  ; b2bUserUnitBillingAddr
+              ; b2bWithoutDefaultUnit        ; b2bUserUnitBillingAddr
+              ; budgetUserUnit               ; budgetUserUnitBillingAddr
+              ; budgetWithoutDefaultUnit     ; budgetUserUnitBillingAddr
+              ; b2bKeyUserUnit               ; b2bKeyUserUnitBillingAddr
+              ; b2cUserMultiAddressesUnit    ; b2cUserMultiAddressesUnitBillingAddr
+              ; b2bKeyUserMultiAddressesUnit ; b2bKeyUserMultiAddressesUnitBillingAddr
+
+
+INSERT_UPDATE B2BCostCenter; code[unique = true]; name[lang = en]; Unit(uid)             ; budgets(code)                   ; currency(isocode)[default = 'CHF']
+                           ; Rustic Global      ; Rustic Global  ; b2bWithoutDefaultUnit ; budgetId,budgetIdWithoutDefault ;
+
+INSERT_UPDATE Address; &addrID; owner(B2BCustomer.uid)[unique = true]; streetname    ; streetnumber; postalcode; town   ; country(isocode); phone1       ; firstname; lastname   ; dateOfBirth[dateformat = yyyy-MM-dd]
+                     ; addr01 ; b2buser                              ; Teststrassse  ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+                     ; addr02 ; b2cuser                              ; Teststrassse  ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+                     ; addr03 ; budgetuser                           ; Teststrassse  ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+                     ; addr04 ; b2bwithoutdefault                    ; Teststrassse  ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+                     ; addr05 ; b2cwithoutdefault                    ; Teststrassse  ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+                     ; addr06 ; budgetuserwithoutdefault             ; Teststrassse  ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+                     ; addr07 ; b2bkeyuser                           ; Teststrassse  ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+                     ; addr08 ; b2cusermultiaddresses                ; Teststrassse1 ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+                     ; addr09 ; b2bkeyusermultiaddresses             ; Teststrassse1 ; 42          ; 8000      ; Zürich ; CH              ; +41447389876 ; Max      ; Mustermann ; 1975-01-01
+
+
+
+INSERT_UPDATE Product; code[unique = true]; approvalStatus(code); name[lang = en]    ; description[lang = en]        ; unit(code); transportGroup(code); exclude; showUsedLabel; $catalogVersion
+                     ; 5849020            ; approved            ; Gamer-PC from Asus ; Super fast Computer from Asus ; PC        ; 0001                ; false  ; true
+
+INSERT_UPDATE UserPriceGroup; code[unique = true]   ; name[lang = de]                       ; name[lang = en]
+                            ; SalesOrg_UPG_7310_M01 ; Movex User Price Group Sales Org 7310 ; Movex User Price Group Sales Org 7310
+
+INSERT_UPDATE DistErpPriceConditionType; code[unique = true]; priority
+                                       ; ZN00               ; 1
+                                       ; ZR00               ; 2
+                                       ; PR00               ; 3
+
+INSERT_UPDATE DistPriceRow; product(code)[unique = true]; ug(code)              ; minqtd[unique = true]; price; unit(code); currency(isocode)[unique = true]; net[unique = true]; erpPriceConditionType(code)
+                          ; 5849020                     ; SalesOrg_UPG_7310_M01 ; 1                    ; 42   ; PC        ; CHF                             ; true              ; PR00
+
+INSERT_UPDATE CreditCardPaymentInfo; &paymentId; code[unique = true]; user(uid)[unique = true]; ccOwner  ; number           ; type(code) ; validFromMonth; validFromYear; validToMonth; validToYear; subscriptionId; saved
+                                   ; ccid1     ; ccid1              ; b2buser                 ; John Doe ; 4012888888881881 ; visa       ; 1             ; 2010         ; 12          ; 2014       ; 123           ; true
+                                   ; ccid2     ; ccid2              ; b2buser                 ; John Doe ; 4012888888881882 ; mastercard ; 1             ; 2010         ; 12          ; 2015       ; 123           ; true
+                                   ; ccid3     ; ccid3              ; b2cuser                 ; John Doe ; 4012888888881883 ; mastercard ; 1             ; 2010         ; 12          ; 2015       ; 123           ; true
+                                   ; ccid4     ; ccid4              ; b2cuser                 ; John Doe ; 4012888888881884 ; visa       ; 1             ; 2010         ; 12          ; 2015       ; 123           ; true
+
+INSERT_UPDATE B2BCustomer; uid[unique = true]; defaultPaymentInfo(code)
+                         ; b2buser           ; ccid1
+                         ; b2cuser           ; ccid3

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+	<!-- Search Converters -->
+	<bean id="distff.searchServiceConverter" class="com.namics.hybris.ffsearch.converter.search.SearchServiceConverter" >
+		<property name="authentication" ref="distff.factFinderAuthentication" />
+		<property name="commerceCategoryService" ref="commerceCategoryService" />
+		<property name="searchWebserviceClientWrapper" ref="distff.searchWebserviceClientWrapper" />
+		<property name="sessionService" ref="sessionService" />
+	</bean>
+	<bean id="distff.searchRequestConverter" class="com.namics.hybris.ffsearch.converter.search.SearchRequestConverter" >
+		<property name="requestAdditionalControlParamsPopulator" ref="distff.requestAdditionalControlParamsPopulator" />
+		<property name="requestAdditionalSearchParamsPopulator" ref="distff.requestAdditionalSearchParamsPopulator" />
+		<property name="requestQueryPopulator" ref="distff.requestQueryPopulator" />
+		<property name="requestFiltersPopulator" ref="distff.requestFiltersPopulator" />
+		<property name="requestSortsPopulator" ref="distff.requestSortsPopulator" />
+		<property name="requestPaginationPopulator" ref="distff.requestPaginationPopulator" />
+		<property name="requestManufacturerPopulator" ref="distff.requestManufacturerPopulator" />
+		<property name="requestSessionIdPopulator" ref="distff.requestSessionIdPopulator" />
+	</bean>
+	<bean id="distff.searchResponseConverter" class="com.namics.hybris.ffsearch.converter.search.SearchResponseConverter" >
+		<property name="responseQueryPopulator" ref="distff.responseQueryPopulator" />
+		<property name="responseResultsPopulator" ref="distff.responseResultsPopulator" />
+		<property name="responsePaginationPopulator" ref="distff.responsePaginationPopulator" />
+		<property name="responseSortPopulator" ref="distff.responseSortPopulator" />
+		<property name="responseOtherFacetPopulator" ref="distff.responseOtherFacetPopulator" />
+		<property name="responseLazyFacetPopulator" ref="distff.responseLazyFacetPopulator" />
+		<property name="responseCategoryFacetPopulator" ref="distff.responseCategoryFacetPopulator" />
+		<property name="responseFilterBadgesPopulator" ref="distff.responseFilterBadgesPopulator" />
+		<property name="responseCampaignPopulator" ref="distff.responseCampaignPopulator" />
+		<property name="singleWordSearchItemsPopulator" ref="distff.singleWordSearchItemsPopulator" />
+		<property name="responseSessionIdPopulator" ref="distff.responseSessionIdPopulator" />
+	</bean>
+	<bean id="distff.searchResponsePagingConverter" class="com.namics.hybris.ffsearch.converter.search.SearchResponsePagingConverter" >
+		<property name="responseQueryDataPopulator" ref="distff.responseQueryDataPopulator" />
+		<property name="responseQueryDataSortPopulator" ref="distff.responseQueryDataSortPopulator" />
+	</bean>
+
+
+	<!-- Suggest Converters -->
+	<bean id="distff.suggestRequestConverter" class="com.namics.hybris.ffsearch.converter.suggest.SuggestRequestConverter" >
+		<property name="authentication" ref="distff.factFinderAuthentication" />
+		<property name="searchWebserviceClientWrapper" ref="distff.searchWebserviceClientWrapper" />
+
+	</bean>
+	<bean id="distff.suggestResponseConverter" class="com.namics.hybris.ffsearch.converter.suggest.SuggestResponseConverter" >
+		<property name="productSuggestionConverter" ref="distff.productSuggestionConverter" />
+		<property name="manufacturerSuggestionConverter" ref="distff.manufacturerSuggestionConverter" />
+		<property name="categorySuggestionConverter" ref="distff.categorySuggestionConverter" />
+		<property name="termSuggestionConverter" ref="distff.termSuggestionConverter" />
+	</bean>
+	<bean id="distff.directOrderSuggestResponseConverter" class="com.namics.hybris.ffsearch.converter.suggest.DirectOrderSuggestResponseConverter" parent="distff.suggestResponseConverter"
+		>
+		<property name="productSuggestionConverter" ref="distff.directOrderProductSuggestionConverter" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+	<bean id="distff.productSuggestionConverter" class="com.namics.hybris.ffsearch.converter.suggest.ProductSuggestionConverter" >
+		<property name="baseStoreService" ref="baseStoreService" />
+		<property name="commonI18NService" ref="commonI18NService" />
+		<property name="distSalesOrgService" ref="distSalesOrgService" />
+		<property name="distFactFinderEnergyEfficiencyPopulator" ref="distff.distFactFinderEnergyEfficiencyPopulator" />
+	</bean>
+	<bean id="distff.directOrderProductSuggestionConverter" class="com.namics.hybris.ffsearch.converter.suggest.DirectOrderProductSuggestionConverter" parent="distff.productSuggestionConverter"
+		 />
+	<bean id="distff.manufacturerSuggestionConverter" class="com.namics.hybris.ffsearch.converter.suggest.ManufacturerSuggestionConverter"  />
+	<bean id="distff.categorySuggestionConverter" class="com.namics.hybris.ffsearch.converter.suggest.CategorySuggestionConverter"  />
+	<bean id="distff.termSuggestionConverter" class="com.namics.hybris.ffsearch.converter.suggest.TermSuggestionConverter"  />
+
+
+	<!-- Campaign Converters -->
+	<bean id="distff.cartCampaignRequestConverter" class="com.namics.hybris.ffsearch.converter.campaign.CartCampaignRequestConverter" >
+		<property name="campaignWebserviceClient" ref="namff.campaignWebserviceClient" />
+		<property name="authentication" ref="distff.factFinderAuthentication" />
+	</bean>
+	<bean id="distff.campaignRequestConverter" class="com.namics.hybris.ffsearch.converter.campaign.CampaignRequestConverter" >
+		<property name="campaignWebserviceClient" ref="namff.campaignWebserviceClient" />
+		<property name="authentication" ref="distff.factFinderAuthentication" />
+	</bean>
+	<bean id="distff.campaignResponseConverter" class="com.namics.hybris.ffsearch.converter.campaign.CampaignResponseConverter"  />
+	<bean id="distff.campaignResponseFeedbackTextConverter" class="com.namics.hybris.ffsearch.converter.campaign.CampaignResponseFeedbackTextConverter"  />
+
+	<!-- Recommendation Converters -->
+	<bean id="distff.cartRecommendationRequestConverter" class="com.namics.hybris.ffsearch.converter.recommendation.CartRecommendationRequestConverter" >
+		<property name="recommendationWebserviceClient" ref="namff.recommendationWebserviceClient" />
+		<property name="authentication" ref="distff.factFinderAuthentication" />
+	</bean>
+	<bean id="distff.recommendationRequestConverter" class="com.namics.hybris.ffsearch.converter.recommendation.RecommendationRequestConverter" >
+		<property name="recommendationWebserviceClient" ref="namff.recommendationWebserviceClient" />
+		<property name="authentication" ref="distff.factFinderAuthentication" />
+	</bean>
+	<bean id="distff.recommendationResponseConverter" class="com.namics.hybris.ffsearch.converter.recommendation.RecommendationResponseConverter" />
+
+	<bean id="distff.searchWebserviceClientWrapper" class="com.namics.hybris.ffsearch.service.CookieSearchPortTypeWrapper">
+		<property name="searchWebserviceClient" ref="namff.searchWebserviceClient" />
+		<property name="sessionService" ref="sessionService" />
+	</bean>
+
+</beans>

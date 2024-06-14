@@ -1,0 +1,35 @@
+// Cleanup classification hierarchy.
+// Define "class-root" as supercategory of all classification classes.
+
+import de.hybris.platform.servicelayer.search.FlexibleSearchQuery;
+import com.namics.hybris.toolbox.spring.SpringUtil;
+import org.apache.log4j.Logger;
+
+LOG = Logger.getLogger("BeanShell");
+modelService = SpringUtil.getBean("modelService");
+flexibleSearchService = SpringUtil.getBean("flexibleSearchService");
+
+print("Logging information is written to CONSOLE");
+
+FlexibleSearchQuery query = new FlexibleSearchQuery("SELECT {pk} FROM {ClassificationClass AS cc JOIN CatalogVersion AS cv ON {cv.pk}={cc.catalogVersion} JOIN Catalog AS c ON {c.pk}={cv.catalog}} WHERE {c.id}='DistrelecClassification' AND {cv.version}='1.0' AND {code} LIKE 'class-root'");
+result = flexibleSearchService.search(query);
+rootClass = result.getResult().get(0);
+LOG.info("Root class found: " + rootClass.getPk() + "/" + rootClass.getCode());
+
+superCategories = new ArrayList();
+superCategories.add(rootClass);
+
+FlexibleSearchQuery query = new FlexibleSearchQuery("SELECT {pk} FROM {ClassificationClass AS cc JOIN CatalogVersion AS cv ON {cv.pk}={cc.catalogVersion} JOIN Catalog AS c ON {c.pk}={cv.catalog}} WHERE {c.id}='DistrelecClassification' AND {cv.version}='1.0' AND {code} <> 'class-root'");
+result = flexibleSearchService.search(query);
+subClasses = result.getResult();
+	
+LOG.info("About to update " + subClasses.size() + " classification classes");
+	
+int i = 0;
+for (c : subClasses){
+	i++;
+	LOG.info(i + " Update classification: " + c.getCode());
+	
+	c.setSupercategories(superCategories);
+	modelService.save(c);
+}

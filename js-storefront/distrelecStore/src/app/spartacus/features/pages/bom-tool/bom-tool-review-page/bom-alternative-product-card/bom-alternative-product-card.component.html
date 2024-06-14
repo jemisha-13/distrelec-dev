@@ -1,0 +1,88 @@
+<div class="card-item bom-unavailable-product__item">
+  <div class="card-item__items">
+    <div class="card-item__items__image">
+      <img [id]="'bom_unavailable_product_' + product.code" [src]="thumbnailSrc" width="61" height="46" />
+    </div>
+    <div class="card-item__items__modal">
+      <app-button
+        [modifiers]="['sm', 'sm-text']"
+        (click)="openModal()"
+        buttonId="viewdetails-{{ product.code }}"
+        colour="outline-orange"
+      >
+        {{ 'backorder.item.view.details' | cxTranslate }}
+      </app-button>
+
+      <app-bom-alternative-details-modal
+        *ngIf="isModalOpen"
+        [product]="product"
+        (close)="onClose()"
+      ></app-bom-alternative-details-modal>
+    </div>
+
+    <div class="card-item__items__content">
+      <a
+        class="card-item-anchor"
+        [id]="'bom_unavailable_product_alternative_btn_' + product.code"
+        [routerLink]="product.url"
+        [attr.data-product-id]="product.code"
+        [attr.data-position]="index"
+        [attr.data-scenarioID]="referenceType"
+        data-aainteraction="bom alternative click"
+        data-pagination="Grid"
+      >
+        <h3>{{ product.name.substring(0, 60) }}</h3>
+      </a>
+
+      <div class="card-item__items__content__product-info">
+        <p
+          *ngIf="product.distManufacturer"
+          class="card-item__items__content__product-info__item"
+          [id]="'bom_unavailable_product_man_label_' + product.code"
+        >
+          <strong [id]="'bom_unavailable_product_man_' + product.code">
+            {{ 'bomnomatches.manufacturer' | cxTranslate }}:
+          </strong>
+          {{ product.distManufacturer.name }}
+        </p>
+        <p
+          class="card-item__items__content__product-info__item"
+          [id]="'bom_unavailable_product_article_number_label_' + product.code"
+        >
+          <strong [id]="'bom_unavailable_product_article_number_' + product.code">
+            {{ 'product.articleNumber' | cxTranslate }}:
+          </strong>
+          {{ product.codeErpRelevant }}
+        </p>
+      </div>
+
+      <div class="stock-{{ product.code }} card-item__items__content__stock">
+        <app-erp-sales-status
+          [id]="'bom_unavailable_product_sales_status_' + product.code"
+          [productArtNo]="product.code"
+          [productStatusCode]="product.salesStatus"
+        ></app-erp-sales-status>
+      </div>
+      <p class="card-item__items__content__price">
+        <span class="card-item__items__content__price__item" [id]="'bom_unavailable_product_price_' + product.code">
+          {{ product.price?.value | price }}
+        </span>
+        <span
+          class="card-item__items__content__price__item--small"
+          [id]="'bom_unavailable_product_price_vat_' + product.code"
+        >
+          ({{ 'backorder.item.excl.vat' | cxTranslate }})
+        </span>
+      </p>
+
+      <app-button
+        [buttonId]="'bom_unavailable_product_alternative_select_btn_' + product.code"
+        [dataAttributes]="{ aainteraction: 'select alternative', 'product-code': product.code }"
+        [disabled]="isSelected"
+        (click)="onSelect()"
+      >
+        {{ (isSelected ? 'text.selected' : 'basket.select.product') | cxTranslate }}
+      </app-button>
+    </div>
+  </div>
+</div>

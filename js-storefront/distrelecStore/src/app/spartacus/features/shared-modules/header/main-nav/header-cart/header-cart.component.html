@@ -1,0 +1,86 @@
+<ng-container *ngIf="cartData$ | async as cartData">
+  <a
+    class="menuitem popover-origin"
+    [id]="headerCartHtmlId"
+    (click)="dispatchHeaderInteractionEvent()"
+    routerLink="/cart"
+  >
+    <div class="icon-cart">
+      <div class="icon-wrap">
+        @if (getMobileBreakpoint() | async) {
+          <app-icon iconName="cart-alt" iconType="svg" width="20" height="20"></app-icon>
+        } @else {
+          <app-icon iconName="cart" iconType="svg" width="20" height="20"></app-icon>
+        }
+
+        <span *ngIf="cartData.entries?.length > 0" class="cart-total-count" id="cart-total">
+          {{ cartData.entries ? cartData.entries?.length : 0 }}
+        </span>
+      </div>
+      <span class="label-cart" id="cart-label">{{ 'cart.title' | cxTranslate }}</span>
+    </div>
+  </a>
+
+  <app-dist-slide-drawer
+    *ngIf="(getMobileBreakpoint() | async) === false"
+    (click)="cancelPanelCloseTimeout($event)"
+    direction="RIGHT"
+    uid="cart-tray"
+  >
+    <div class="cart-contents">
+      <div class="cart-count">
+        <span class="cart-title">{{ 'text.added.to.cart' | cxTranslate | uppercase }}</span>
+        <span class="cart-item-count" id="header-cart-items-text">
+          ({{ cartData.entries?.length }}
+          {{ (cartData.entries?.length === 1 ? 'metahd.cart.item' : 'metahd.cart.items') | cxTranslate }})
+        </span>
+      </div>
+
+      <span *ngIf="cartData.entries?.length === 0" class="empty-cart-title">{{ 'cart.empty' | cxTranslate }}</span>
+
+      <ul *ngIf="cartData.entries?.length > 0" class="cart-items" (mouseover)="cancelPanelCloseTimeout($event)">
+        <ng-container *ngIf="productsRecentlyAdded_ | async as productsRecentlyAdded">
+          <ng-container *ngFor="let item of productsRecentlyAdded; index as i">
+            <li *ngIf="i < productDisplaylimit">
+              <a class="cart-item" [routerLink]="item.product?.url">
+                <div class="product-wrapper">
+                  <picture [id]="'productPicture'">
+                    <source
+                      [srcset]="
+                        item.product?.images?.[0]?.url
+                          ? useWebpImg('landscape_small_webp', item.product?.images, item.product?.images[0])
+                          : missingImgSrc
+                      "
+                    />
+                    <img
+                      class="product-image"
+                      [src]="item.product?.images?.[0]?.url ? item.product?.images[0]?.url : missingImgSrc"
+                      loading="lazy"
+                    />
+                  </picture>
+                  <div class="product-info">
+                    <p class="product-name" [innerHTML]="item.product?.name" [id]="'productName-{{i}}'"></p>
+                    <span class="qty" [id]="'productQty-{{i}}'">
+                      {{ 'cart.quantity' | cxTranslate }} {{ item.quantity }}
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          </ng-container>
+        </ng-container>
+      </ul>
+
+      <app-dist-button
+        *ngIf="cartData.entries?.length > 0"
+        buttonId="header-cart-drawer-atc"
+        routerLink="/cart"
+        width="w-fill"
+        type="primary"
+        height="h-large"
+      >
+        {{ 'cart.view_checkout_btn' | cxTranslate }}
+      </app-dist-button>
+    </div>
+  </app-dist-slide-drawer>
+</ng-container>

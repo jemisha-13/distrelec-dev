@@ -1,0 +1,63 @@
+<div *ngIf="showSavedPaymentHeading" class="ch__component__selections--heading">
+  {{ 'checkout.saved_payment_method' | cxTranslate }}
+</div>
+<div class="ch__component__selections">
+  <ng-container *ngIf="paymentDetails_ | async as paymentDetails">
+    <ng-container *ngFor="let cardDetail of paymentDetails.payments; index as i">
+      <!-- CARD HOLDER -->
+      <div
+        class="ch__component__selections__item"
+        [id]="'cardProviderContainer' + cardDetail.cardType.name + '-' + (cardDetail.cardNumber | slice: 13 : 16)"
+        [class.is-expired]="cardDetail.isValid === false"
+        [class.selected]="paymentForm.value.selectedCard === cardDetail.id"
+        (click)="
+          cardDetail.isValid &&
+            paymentForm.value.selectedCard !== cardDetail.id &&
+            cardSelection(cardDetail.cardType.name, cardDetail.id)
+        "
+      >
+        <div class="ch__component__selections__item--row is-align-top">
+          <div class="ch__component__selections__item--content">
+            <div class="ch__component__selections__item--card-content">
+              <div class="ch__component__selections__item--info">
+                <img [src]="'app/spartacus/assets/media/checkout/' + cardDetail.cardType.name + '-card.svg'" />
+              </div>
+
+              <div
+                class="ch__component__selections__item--paymentdetails"
+                [id]="'cardProviderName' + cardDetail.cardType.name + '-' + (cardDetail.cardNumber | slice: 13 : 16)"
+              >
+                <span>
+                  <span class="">{{ cardDetail.cardType.name }} ({{ cardDetail.cardNumber | slice: 13 : 16 }})</span>
+                </span>
+              </div>
+            </div>
+            <div *ngIf="!cardDetail.isValid" class="is-expired-label">
+              {{ 'checkout.payment.card_expired' | cxTranslate }}
+            </div>
+          </div>
+          <div class="o-cr-radio-item__cc__cta">
+            <div class="o-cr-radio-item__cc__cta--removebtn">
+              <button class="btn ux-link" id="checkoutPaymentDeleteCard" (click)="deleteCard($event, cardDetail.id)">
+                <a>{{ 'checkout.remove' | cxTranslate }}</a>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+
+<!-- NEW CARD -->
+<button
+  *ngIf="showNewCard"
+  class="btn ch__component__selections__card is-new-card"
+  id="paymentOptionNewCard"
+  [class.selected]="paymentForm?.value?.paymentCardType === 'NewCreditCard'"
+  (click)="paymentForm.value.selectedCard !== 'NewCreditCard' && cardSelection('NewCreditCard')"
+>
+  <div>
+    <span class="new-card" id="checkoutAddNewCard">{{ 'checkout.payment.add_card' | cxTranslate }}</span>
+  </div>
+</button>

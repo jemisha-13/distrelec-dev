@@ -1,0 +1,44 @@
+#
+# Import the content for the system emails
+#
+# Localization de
+#
+
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+
+
+$catalogVersion=catalogVersion(CatalogVersion.catalog(Catalog.id[default=Default]),CatalogVersion.version[default=Staged])[default=Default:Staged]
+$emailResource=jar:com.namics.distrelec.b2b.core.setup.CoreSystemSetup&/distrelecB2Bcore/import/essential/common/email
+
+# Language
+$lang=de
+
+# Cronjob email velocity templates
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=$lang];content(code)[lang=$lang];contextClass;rendererType(code)[default='velocity']
+;Email_DistSanityCheckNotificationTemplate;Vorlage für das Sanity-Check Email;DistSanityCheckNotificationTemplate;com.namics.distrelec.b2b.core.sanity.DistSanityCheckNotificationContext;
+
+# Email velocity templates
+INSERT_UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator];rendererType(code)[default='velocity']
+;Email_Pim_Import_Notification_Subject;E-Mail-Subject Pim Import Notification;$emailResource/email-pimImportNotificationSubject.vm;
+;Email_Pim_Import_Notification_Body;E-Mail Pim Import Notification;$emailResource/email-pimImportNotificationBody.vm;
+;Email_Check_New_Customer_Registration_Subject;E-Mail-Subject Check New Customer Registration;$emailResource/email-checkNewCustomerRegistrationSubject.vm;
+;Email_Check_New_Customer_Registration_Body;E-Mail Check New Customer Registration;$emailResource/email-checkNewCustomerRegistrationBody.vm;
+
+
+# New Product Newsletter 
+;Email_New_Product_News_Letter_Body;E-Mail News Letter for New Products;$emailResource/email-newProductNewsLetterBody.vm;
+;Email_New_Product_News_Letter_Subject;E-Mail News Letter for New Products;$emailResource/email-newProductNewsLetterSubject.vm;
+
+
+# Payment Notify Order 
+;Email_Payment_Notify_Order_Subject;E-Mail-Subject Payment Notify Order;$emailResource/email-paymentNotifyOrderSubject.vm;
+;Email_Payment_Notify_Order_Body;E-Mail-Body Payment Notify Order;$emailResource/email-paymentNotifyOrderBody.vm;
+
+# Email Pages
+INSERT_UPDATE EmailPage;$catalogVersion[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang];masterTemplate(uid,$catalogVersion);title[lang=$lang]
+;;PimImportNotificationEmail;$config-mail.from;"Pim Import Information";PimImportNotificationEmailTemplate;
+;;CheckNewCustomerRegistrationEmail;anfrage@distrelec.de;"Check New Customer Registration";CheckNewCustomerRegistrationEmailTemplate;
+;;NewProductNewsLetterEmail;$config-mail.from;"New Product Newsletter";NewProductNewsLetterEmailTemplate;
+;;PaymentNotifyOrderEmail;$config-mail.from;"Payment Notify Order creation";PaymentNotifyOrderEmailTemplate;"Payment Notify Order created"

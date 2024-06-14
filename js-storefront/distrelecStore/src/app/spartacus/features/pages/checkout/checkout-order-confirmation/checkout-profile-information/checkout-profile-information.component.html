@@ -1,0 +1,85 @@
+<div class="profile-information">
+  <h2 class="card-item__title" id="checkout.confirmation.complete_profile.title">
+    {{ 'checkout.confirmation.complete_profile' | cxTranslate }}
+  </h2>
+
+  <div class="profile-information__form" [formGroup]="profileForm">
+    <div *ngIf="!hasDepartment" class="form-group">
+      <label class="control-label" id="checkout.confirmation.area_of_use">
+        {{ 'checkout.confirmation.area_of_use' | cxTranslate }}
+      </label>
+
+      <div *ngIf="departmentsList$ | async as departmentsList" class="p-relative select">
+        <select
+          class="form-control js-validate"
+          id="areOfUseProductsSelect"
+          [class.greyed-out]="!profileForm.get('areaOfUse').value"
+          [class.is-correct]="profileForm.get('areaOfUse')?.valid && profileForm.get('areaOfUse')?.dirty"
+          [class.is-invalid]="profileForm.get('areaOfUse')?.errors && profileForm.get('areaOfUse')?.dirty"
+          aria-placeholder="Please select"
+          type="text"
+          formControlName="areaOfUse"
+        >
+          <option id="registration.general.selectArea" [value]="null" [selected]="true" disabled="true">
+            {{ 'registration.general.select' | cxTranslate }}...
+          </option>
+
+          <ng-container *ngFor="let department of departmentsList.departments; let i = index">
+            <option [value]="department.code" [id]="'department-' + i">{{ department.name }}</option>
+          </ng-container>
+        </select>
+
+        <fa-icon id="faAngleDownAreOfUse" [icon]="faAngleDown"></fa-icon>
+      </div>
+    </div>
+
+    <div *ngIf="!hasFunction" class="form-group">
+      <label class="control-label" id="checkout.confirmation.job_role">
+        {{ 'checkout.confirmation.job_role' | cxTranslate }}
+      </label>
+
+      <div *ngIf="functionsList$ | async as functionsList" class="p-relative select">
+        <select
+          class="form-control js-validate"
+          id="jobRoleSelect"
+          [placeholder]="'registration.general.select' | cxTranslate"
+          [class.greyed-out]="!profileForm.get('jobRole').value"
+          [class.is-correct]="profileForm.get('jobRole')?.valid && profileForm.get('jobRole')?.dirty"
+          [class.is-invalid]="profileForm.get('jobRole')?.errors && profileForm.get('jobRole')?.dirty"
+          type="text"
+          formControlName="jobRole"
+        >
+          <option id="registration.general.selectJob" [value]="null" [selected]="true" disabled="true">
+            {{ 'registration.general.select' | cxTranslate }}...
+          </option>
+
+          <ng-container *ngFor="let function of functionsList.functions; let i = index">
+            <option [value]="function.code" [id]="'function-' + i">{{ function.name }}</option>
+          </ng-container>
+        </select>
+        <fa-icon id="faAngleDownJobRole" [icon]="faAngleDown"></fa-icon>
+      </div>
+    </div>
+
+    <div class="pt-2">
+      <app-dist-button
+        [isDisabled]="profileForm.invalid"
+        (click)="updateUserProfile()"
+        width="w-fill"
+        type="primary"
+        buttonId="updateUserProfileBtn"
+      >
+        <ng-container *ngIf="userProfileSubmitted; else userProfileNotSubmitted">
+          <span id="submittedUserProfileBtnLabel">
+            {{ 'checkout.confirmation.complete.profile.submitted' | cxTranslate }}
+          </span>
+          <fa-icon id="userProfileSubmittedCheckIcon" [icon]="faCheck"></fa-icon>
+        </ng-container>
+
+        <ng-template #userProfileNotSubmitted>
+          <span id="updateUserProfileBtnLabel">{{ 'basket.page.update' | cxTranslate }}</span>
+        </ng-template>
+      </app-dist-button>
+    </div>
+  </div>
+</div>

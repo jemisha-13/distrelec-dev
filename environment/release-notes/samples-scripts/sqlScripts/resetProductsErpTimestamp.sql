@@ -1,0 +1,1 @@
+UPDATE products  SET p_lastmodifiederp = null WHERE p_lastmodifiederp != null

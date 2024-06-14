@@ -1,0 +1,506 @@
+@import 'global-utilities';
+
+.back-order-alternative {
+  display: flex;
+  flex-wrap: wrap;
+  float: left;
+
+  .card-item {
+    border-bottom: 1px solid $colour-light-grey;
+    border-radius: ($spacing-unit - 3);
+    margin-bottom: ($spacing-unit * 4);
+    padding-bottom: ($spacing-unit * 4);
+    display: none;
+
+    @media #{$ipad-landscape} {
+      border: 0;
+      display: block;
+      margin-bottom: 0;
+    }
+
+    &:nth-child(1),
+    &:nth-child(2),
+    &:nth-child(3) {
+      display: block;
+
+      @media #{$ipad-landscape} {
+        margin-top: 0;
+      }
+    }
+
+    &:nth-child(3) {
+      border-bottom: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
+
+      @media #{$ipad-landscape} {
+        padding-bottom: ($spacing-unit * 4);
+      }
+    }
+
+    &__items {
+      border: 1px solid $colour-light-grey;
+      border-radius: $spacing-unit - 3;
+      float: left;
+      padding: $spacing-unit * 3;
+
+      &__image {
+        float: left;
+        width: auto;
+      }
+
+      &__holder {
+        float: left;
+        width: auto;
+        max-width: 100%;
+      }
+
+      &__content {
+        float: left;
+        width: 100%;
+
+        a {
+          color: $colour-black;
+          text-decoration: none;
+        }
+
+        h3 {
+          @include font-size(14px);
+          font-weight: $font-weight-semiBold;
+          margin-bottom: ($spacing-unit);
+          margin-top: ($spacing-unit + 2);
+          min-height: 40px;
+        }
+
+        &__stock {
+          color: $colour-green;
+          float: left;
+          margin-bottom: ($spacing-unit * 4);
+          width: 100%;
+
+          p {
+            @include font-size(15.2px);
+            font-weight: $font-weight-semiBold;
+          }
+        }
+
+        &__product-info {
+          float: left;
+          margin-bottom: ($spacing-unit);
+          width: 100%;
+
+          &__item {
+            @include font-size(12px);
+          }
+        }
+
+        &__price {
+          float: left;
+          margin-bottom: ($spacing-unit * 2);
+          width: 100%;
+
+          &__item {
+            @include font-size(18px);
+            font-weight: $font-weight-semiBold;
+
+            &--small {
+              @include font-size(11px);
+              font-weight: $font-weight-semiBold;
+            }
+          }
+        }
+      }
+
+      &__modal {
+        border: 1px solid $colour-mid-grey;
+        border-radius: ($spacing-unit - 3);
+        cursor: pointer;
+        float: left;
+        margin-left: ($spacing-unit * 3);
+        margin-top: ($spacing-unit * 2 + 2);
+        width: auto;
+
+        &--inner {
+          border: 0;
+          display: none;
+          float: none;
+          left: 50%;
+          margin: 0 auto;
+          max-width: 700px;
+          position: fixed;
+          transform: translate(-50%, 0);
+          width: 100%;
+        }
+
+        &:focus {
+          outline: none;
+        }
+
+        a {
+          @include font-size(12px);
+          box-sizing: border-box;
+          color: $link-blue;
+          display: inline-block;
+          font-weight: $font-weight-semiBold;
+          padding: ($spacing-unit - 4) ($spacing-unit + 3);
+          text-align: center;
+          vertical-align: text-top;
+
+          &:hover,
+          &:focus {
+            color: $link-dark-blue;
+            text-decoration: underline;
+          }
+        }
+      }
+
+      &__modal {
+        .modal-content {
+          &__classifications {
+            &__title {
+              margin-bottom: ($spacing-unit * 3);
+            }
+
+            &__item {
+              border-left: 4px solid $colour-red;
+              float: left;
+              padding: ($spacing-unit - 3) ($spacing-unit * 3);
+              width: 100%;
+
+              &:nth-of-type(odd) {
+                background: $colour-button-dark-grey;
+              }
+
+              .title,
+              .value {
+                @include font-size(13px);
+                @include line-height(26px);
+                display: inline-block;
+              }
+
+              .title {
+                font-weight: $font-weight-bold;
+              }
+
+              .value {
+                float: right;
+              }
+            }
+          }
+        }
+
+        &__content {
+          background: $colour-white;
+          float: left;
+          max-height: 500px;
+          overflow: scroll;
+          width: 100%;
+
+          &__close {
+            background: $colour-red;
+            border-radius: ($spacing-unit - 3);
+            box-sizing: border-box;
+            padding: ($spacing-unit - 2) ($spacing-unit * 2);
+            position: absolute;
+            right: 0;
+            top: -35px;
+
+            button {
+              @include font-size(13.5px);
+              color: $colour-white;
+              height: auto;
+
+              span {
+                font-weight: $font-weight-semiBold;
+              }
+            }
+          }
+
+          &__body {
+            box-sizing: border-box;
+            float: left;
+            padding: ($spacing-unit * 6) ($spacing-unit * 13);
+            width: 100%;
+
+            &__title {
+              @include font-size(24px);
+              @include line-height(34px);
+              float: left;
+              margin-bottom: ($spacing-unit * 3);
+              text-align: center;
+              width: 100%;
+            }
+
+            &__product-information {
+              float: left;
+              width: 100%;
+
+              p {
+                @include font-size(14px);
+                color: $link-blue;
+                float: left;
+                text-align: center;
+                width: 100%;
+
+                a {
+                  @include font-size(14px);
+                  padding: 0;
+                  vertical-align: baseline;
+                }
+              }
+
+              &__brand {
+                float: left;
+                margin-top: ($spacing-unit * 6);
+                width: 100%;
+
+                img {
+                  display: block;
+                  float: none;
+                  margin: 0 auto;
+                }
+              }
+
+              &__product-image {
+                float: left;
+                margin-top: ($spacing-unit * 4);
+                width: 100%;
+
+                img {
+                  display: block;
+                  float: none;
+                  margin: 0 auto;
+                }
+              }
+
+              &__download {
+                border-top: ($spacing-unit - 3) solid $colour-black;
+                float: left;
+                margin-top: ($spacing-unit * 8);
+                padding-top: ($spacing-unit * 4);
+                width: 100%;
+
+                &__title {
+                  @include font-size(23px);
+                  color: $colour-black;
+                  float: left;
+                  font-weight: $font-weight-normal;
+                  text-align: left;
+                  width: 100%;
+                }
+
+                &__subtitle {
+                  @include font-size(15px);
+                  border-bottom: ($spacing-unit - 4) solid $colour-button-light-grey;
+                  float: left;
+                  margin-bottom: ($spacing-unit * 2 + 2);
+                  margin-top: ($spacing-unit * 4);
+                  padding-bottom: ($spacing-unit * 2);
+                  width: 100%;
+                }
+
+                .downloads-body {
+                  float: left;
+                  width: 100%;
+
+                  &__title {
+                    @include font-size(15px);
+                    border-bottom: ($spacing-unit - 4) solid $colour-button-light-grey;
+                    float: left;
+                    margin-bottom: ($spacing-unit * 2 + 2);
+                    margin-top: ($spacing-unit * 4);
+                    padding-bottom: ($spacing-unit * 2);
+                    width: 100%;
+                  }
+
+                  &__content {
+                    float: left;
+                    margin-top: ($spacing-unit * 2);
+                    width: 100%;
+                  }
+
+                  .downloadlink {
+                    display: block;
+                    float: left;
+                    color: $colour-black;
+                    padding: 0;
+                    width: 100%;
+                  }
+
+                  .content-holder {
+                    float: left;
+                    width: 100%;
+
+                    &__image {
+                      @include font-size(24px);
+                      float: left;
+                      padding-right: ($spacing-unit * 2 + 2);
+                      vertical-align: top;
+                    }
+
+                    &__content {
+                      @include font-size(13px);
+                      @include line-height(14px);
+                      float: left;
+                      width: auto;
+
+                      .downloadName {
+                        display: block;
+                        text-align: left;
+                      }
+
+                      .downloadwrap {
+                        display: block;
+                        font-weight: $font-weight-normal;
+                        padding-top: ($spacing-unit - 2);
+                        text-align: left;
+
+                        &__type,
+                        &__lang {
+                          display: inline-block;
+                          font-weight: $font-weight-normal;
+                        }
+
+                        &__lang {
+                          padding-left: ($spacing-unit - 2);
+
+                          &:first-of-type {
+                            padding-left: 0;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+              &__illustrate-text {
+                @include font-size(11px);
+                color: $colour-dist-marigold;
+                float: left;
+                padding-top: ($spacing-unit * 7);
+                text-align: center;
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+
+      .modalDownload {
+        &__title {
+          @include font-size(23px);
+          color: $colour-black;
+          float: left;
+          font-weight: $font-weight-normal;
+          text-align: left;
+          width: 100%;
+        }
+
+        &__subtitle {
+          @include font-size(18px);
+          color: $colour-black;
+          float: left;
+          font-weight: $font-weight-normal;
+          margin: ($spacing-unit * 3) 0;
+          width: 100%;
+        }
+
+        &__lists {
+          float: left;
+          list-style-position: inside;
+          list-style-type: disc;
+          width: 100%;
+
+          &__item {
+            @include font-size(13.5px);
+            list-style-type: disc;
+          }
+
+          &__paper {
+            @include font-size(13.5px);
+
+            .type {
+              padding-left: ($spacing-unit);
+            }
+          }
+        }
+
+        &__para {
+          float: left;
+          width: 100%;
+
+          &__item {
+            @include font-size(13.5px);
+            color: $colour-black;
+            margin-bottom: ($spacing-unit * 2);
+            text-align: left;
+          }
+        }
+
+        &__list {
+          box-sizing: border-box;
+          float: left;
+          list-style-type: disc;
+          margin-bottom: ($spacing-unit * 7);
+          padding-left: ($spacing-unit * 6);
+          width: 100%;
+
+          li {
+            @include font-size(13.5px);
+            float: left;
+            list-style-type: disc;
+            width: 100%;
+          }
+
+          &__title {
+            @include font-size(13.5px);
+            float: left;
+            font-weight: $font-weight-semiBold;
+            margin-bottom: ($spacing-unit * 3);
+            width: 100%;
+          }
+
+          &__subTitle {
+            @include font-size(12px);
+            display: block;
+            font-weight: $font-weight-bold;
+            padding-bottom: ($spacing-unit);
+          }
+        }
+
+        &__unlist {
+          float: left;
+          margin-bottom: ($spacing-unit * 5);
+          width: 100%;
+
+          li {
+            @include font-size(13.5px);
+            @include line-height(21px);
+            float: left;
+            width: 100%;
+          }
+        }
+      }
+
+      .downloadWrapper {
+        display: inline-block;
+        margin-top: ($spacing-unit - 3);
+        font-weight: $font-weight-normal;
+
+        span {
+          @include font-size(13px);
+          display: inline-block;
+          font-weight: $font-weight-normal;
+          width: auto;
+        }
+
+        .downloadLanguage {
+          .comma-0 {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

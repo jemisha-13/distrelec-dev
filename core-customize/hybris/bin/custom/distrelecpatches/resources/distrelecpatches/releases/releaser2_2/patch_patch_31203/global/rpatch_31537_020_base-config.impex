@@ -1,0 +1,25 @@
+$passwordEncoding=md5
+$defaultPassword=3xp0rt2f4ctf1nd3r
+$setPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultPassword']
+
+# Technical user factfinder
+INSERT_UPDATE Employee;UID[unique=true];$setPassword;name           ;description                           ;groups(uid)
+                      ;techUserFusion  ;            ;techUserFusion ;technical user for fusion-integration ;admingroup
+
+
+INSERT_UPDATE ServicelayerJob;code[unique=true]     ;springId[unique=true]
+                             ;pimWebUseMigrationJob ;pimWebUseMigrationJob ;
+
+INSERT_UPDATE CronJob;code[unique=true]         ;job(code)[unique=true];active[default=true];sessionUser(uid);sessionLanguage(isocode)
+                     ;pimWebUseMigrationCronJob ;pimWebUseMigrationJob ;                    ;techUserFusion  ;en
+
+#Creates the Solr server configurations
+INSERT_UPDATE SolrServerConfig;name[unique=true]  ;mode(code);username   ;password;indexingUsername;indexingPassword
+                              ;fusionServerConfig ;fusion    ;solrclient ;dummypw ;                ;
+
+# Updates the endpoints for the Solr server configurations
+INSERT_UPDATE SolrEndpointUrl;solrServerConfig(name)[unique=true];url[unique=true];master;
+                             ;fusionServerConfig                 ;dummyurl        ;true  ;
+
+INSERT_UPDATE SolrIndexConfig;name[unique=true];batchSize;numberOfThreads;commitMode(code)
+                             ;Default          ;250      ;8              ;NEVER

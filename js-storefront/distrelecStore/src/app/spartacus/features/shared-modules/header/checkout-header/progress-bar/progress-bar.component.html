@@ -1,0 +1,84 @@
+<ng-container *ngIf="checkoutPageSteps_ | async as checkoutPageSteps">
+  <div *ngIf="userId$ | async as userId" class="checkout-progress-bar">
+    <ul class="checkout-progress-bar__steps">
+      <li class="checkout-progress-bar__steps-item" [ngClass]="checkoutPageSteps.loginRegisterStep">
+        <button
+          class="checkout-progress-bar__steps-item__btn"
+          id="checkoutProgressStep1Btn"
+          (click)="onWelcomeOrDeliveryClick()"
+          type="button"
+        >
+          <strong class="is-step-number">
+            <span *ngIf="checkoutPageSteps.loginRegisterStep !== 'passed'" id="checkoutProgressStep1number">1</span>
+            <img
+              *ngIf="checkoutPageSteps.loginRegisterStep === 'passed'"
+              id="checkoutProgressStep1Icon"
+              [src]="taskDoneCircleImageSrc"
+            />
+          </strong>
+
+          <span class="is-step-label" id="checkoutProgressStep1Label">
+            {{ 'checkout.progressbar.welcome' | cxTranslate }}
+          </span>
+        </button>
+      </li>
+
+      <li class="checkout-progress-bar__steps-item" [ngClass]="checkoutPageSteps.billingStep">
+        <button
+          class="checkout-progress-bar__steps-item__btn"
+          id="checkoutProgressStep2Btn"
+          (click)="onWelcomeOrDeliveryClick(userId)"
+          type="button"
+        >
+          <strong class="is-step-number">
+            <span *ngIf="checkoutPageSteps.billingStep !== 'passed'" id="checkoutProgressStep2number">2</span>
+            <img
+              *ngIf="checkoutPageSteps.billingStep === 'passed'"
+              id="checkoutProgressStep2Icon"
+              [src]="taskDoneCircleImageSrc"
+            />
+          </strong>
+
+          <span class="is-step-label" id="checkoutProgressStep2Label">
+            {{ 'checkout.progressbar.delivery' | cxTranslate }}
+          </span>
+        </button>
+      </li>
+
+      <li class="checkout-progress-bar__steps-item" [ngClass]="checkoutPageSteps.confirmStep">
+        <button
+          class="checkout-progress-bar__steps-item__btn"
+          id="checkoutProgressStep3Btn"
+          (click)="onPaymentClick()"
+          type="button"
+        >
+          <strong class="is-step-number">
+            <span *ngIf="checkoutPageSteps.confirmStep !== 'passed'" id="checkoutProgressStep3number">3</span>
+            <img
+              *ngIf="checkoutPageSteps.confirmStep === 'passed'"
+              id="checkoutProgressStep3Icon"
+              [src]="taskDoneCircleImageSrc"
+            />
+          </strong>
+
+          <span class="is-step-label" id="checkoutProgressStep3Label">
+            {{ 'checkout.progressbar.reviewAndPay' | cxTranslate }}
+          </span>
+        </button>
+      </li>
+    </ul>
+
+    <div class="checkout-progress-bar__security-note">
+      <strong id="checkoutHeaderSecureText">
+        <app-icon
+          class="is-angle-lock"
+          [icon]="angleLock"
+          iconAltText="angle lock icon"
+          width="16px"
+          height="21px"
+        ></app-icon>
+        {{ 'checkout.secure_checkout' | cxTranslate }}
+      </strong>
+    </div>
+  </div>
+</ng-container>

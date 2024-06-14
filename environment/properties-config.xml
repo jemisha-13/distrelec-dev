@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--
+======================================================================
+project:	Distrelec Relaunch 2012 
+topic:	    Properties configuration
+date:		18.02.2013
+author:		rmeier
+======================================================================
+-->
+
+<project name="namics-hybris-build-properties" default="verify" basedir=".">
+
+	<!--
+	Configurable properties 
+	_______________________________________________________
+	These properties are initialized with default values. They can be overridden by using -D parameter,
+	e.g. ant -buildfile build/build.xml verify -Dtarget.environment=env-development
+	-->
+	<property name="mandant.name" value="DISTRELEC-RELEASE-trunk" />
+	<!-- for development purpose it's always 'trunk'! -->
+	<property name="mandant.version" value="trunk" />
+	<!-- one of the available environments env-... -->
+	<property name="target.environment" value="env-development" />
+	<property name="target.environment.node" value="" />
+	<property name="environment.home" location="${project.home}/environment" />
+	
+
+	<!-- set the hybris configuration template to use for this environment -->
+	<property name="input.template" value="develop" /> <!-- one of the hybris config templates develop,production -->
+
+	
+	<!--
+	Not configurable properties
+	_______________________________________________________
+	These properties are in use for several ant tasks. The properties are self-assembled and self-completed by 
+	ant file during excecution. It's not nesseccary to modify these properties.
+	-->
+	<!-- holds all the properties from the os environment. You can access the properties like ${env.JAVA_HOME} -->
+	<property environment="env" />
+	<!-- directory to locate the common files -->
+	<property name="environment.common.directoryname" value="common" />
+	<!-- directory to locate the scripts (bat/sh) files -->
+	<property name="environment.static.directoryname" value="static" />
+	<!-- directory to locate the scripts (bat/sh) files -->
+	<property name="environment.scripts.directoryname" value="scripts" />
+	<!-- directory to locate the files for java -->
+	<property name="environment.javahome.directoryname" value="java/jre" />
+	
+	<!-- this folder contains the environments common files. -->
+	<property name="common.dir" value="${environment.home}/${environment.common.directoryname}" />
+	<!-- this folder contains the environment. -->
+	<property name="common.hybris" value="${environment.home}/${environment.common.directoryname}/hybris" />
+	
+	
+	<!-- directory to locate different downloaded vendor files, like hybris and further jars -->
+	<property name="vendor.dir" location="${project.home}/vendor" />
+	<!-- directory were the init files are copied to replace a current environment -->
+	<property name="initscript.folder.name" value="init" />
+	<!--assumption for all servers -->
+	<property name="hybris.home" location="${project.home}/hybris" />
+	<!--assumption for all servers -->
+	<property name="hybris.platform.home" location="${hybris.home}/bin/platform" />
+	<!--assumption for all servers -->
+	<property name="hybrisserver.home" location="${project.home}/hybrisserver/hybris/" />
+	<!--assumption for all servers -->
+	<property name="hybrisserver.platform.home" location="${hybrisserver.home}/bin/platform" />
+	<!--assumption for all servers -->
+	<property name="hybris.extensions.home" location="${hybris.home}/bin/custom" />
+	<!--assumption for all servers, don't use tomcat.home! has impect to other ant tasks -->
+	<property name="current.os" value="${os.name}" />
+	<!--assumption for all servers -->
+	<property name="java.home" location="${env.JAVA_HOME}" />
+	
+	<!-- - - - - - - - - - - - - 
+	  - primary extensions (like project extensions)
+	  - - - - - - - - - - - -  - -->
+	
+	<!--if you register an extension here, all processes like checkout,tag,branch,tagOfTrunk,setignorelist-->
+	<property name="extensionlist" value="distrelecB2Bcockpits,distrelecB2Bcore,distrelecB2Bfacades,distrelecB2Binitialdata,distrelecB2Bstorefront,distrelecB2Btest,distrelecfactfindersearch" />
+	
+	<property name="svn.repository.url" value="http://svn.distrelec.com/repositories/Distrelec-Relaunch-2012-intern" />
+	<!-- Bitte Änderungen/commits immer mit eigenem User einchecken für die Nachvollziehbarkeit -->
+	<property name="svn.repository.username" value="distrelec_read" />
+	<!-- Bitte Änderungen/commits immer mit eigenem User einchecken für die Nachvollziehbarkeit -->
+	<property name="svn.repository.password" value="e1ectron1cs" />
+	<!-- may be a tag or branch -->
+	<property name="extension.mandant.version" value="${mandant.version}" />
+	
+	<!-- - - - - - - - - - - - - 
+	  - second extension (like namics hybris extensions)
+	  - - - - - - - - - - - -  - -->
+		
+	<!-- If you include extensions of another subversion project, fill in the following property values -->
+	<!-- This properties are used in the targets checkout,tag,tagOfTrunk -->
+	<!--
+		<property name="second.hybris.extensions.home" location="${hybris.home}/bin/ext-namics" />
+		<property name="second.extensionlist" value="namtoolbox,nami18n,namwebservice,namadmin" />
+		<property name="second.svn.repository.url" value="https://svn.namics.com/namics/namics-hybris/NamicsExtensions" />
+		<property name="second.svn.repository.username" value="namics-hybris" />
+		<property name="second.svn.repository.password" value="ds6g763h" />
+		<property name="second.mandant.version" value="tags/v4.8.0" />
+	-->
+		
+	<!-- RHA: 3.10.2016 we don't use secondary extensions anymore
+	<property name="second.hybris.extensions.home" location="${hybris.home}/bin/ext-namics" />
+	<property name="second.extensionlist" value="namtoolbox,nami18n,namwebservice,namadmin" />
+	<property name="second.svn.repository.url" value="http://svn.distrelec.com/repositories/Distrelec-Relaunch-2012-intern/" />
+	<property name="second.svn.repository.username" value="distrelec_read" />
+	<property name="second.svn.repository.password" value="e1ectron1cs" />
+	<property name="second.mandant.version" value="ext-namics" />
+	-->
+		
+	<!-- - - - - - - - - - - - - 
+	  - Deployment configuration for SVN, FTP or SCP
+	  - - - - - - - - - - - -  - -->
+	
+	<!-- SVN configuration for the upload of the deployment unit -->
+	<property name="svn.repository.url.deployment.home" value="http://svn.distrelec.com/repositories/Distrelec-Relaunch-2012-intern/deployment" />
+	
+
+	<!-- FTP configuration for the upload of the deployment unit -->
+	<property name="ftp.server" value="ftp.namics.com" />
+	<property name="ftp.username" value="Distrelec_ftp" />
+	<property name="ftp.password" value="f72Mws!a" />
+	<property name="ftp.deployment.dir.base" value="distrelec_relaunch_2012/deployment" />
+	
+	<!-- FTP configuration for the upload of the deployment unit -->
+	<property name="env-hp-q.scp.server" value="10.191.21.140" />
+	<property name="env-hp-q.scp.username" value="hybris" />
+	<property name="env-hp-q.scp.password" value="aechie3U" />
+	<property name="env-hp-q.scp.deployment.dir.base" value="/data_nfs/env-hp-q/deployments" />
+	<property name="env-hp-q.environmentlist" value="env-hp-q-app00,env-hp-q-app01,env-hp-q-app02,env-hp-q-web01,env-hp-q-web02" />
+	<property name="env-hp-q.environmentinclude" value="common,libs,env-hp-q-app-common,env-hp-q-web-common,${env-hp-q.environmentlist}" />
+
+	<property name="env-hp-q2.scp.server" value="10.191.27.199" />
+	<property name="env-hp-q2.scp.username" value="hybris" />
+	<property name="env-hp-q2.scp.password" value="aechie3U" />
+	<property name="env-hp-q2.scp.deployment.dir.base" value="/data_nfs/env-hp-q2/deployments" />
+	<property name="env-hp-q2.environmentlist" value="env-hp-q2-app00" />
+	<property name="env-hp-q2.environmentinclude" value="common,libs,env-hp-q2-app-common,${env-hp-q2.environmentlist}" />
+
+	
+	<property name="env-hp-p.scp.server" value="10.191.20.140" />
+	<property name="env-hp-p.scp.username" value="hybris" />
+	<property name="env-hp-p.scp.password" value="aechie3U" />
+	<property name="env-hp-p.scp.deployment.dir.base" value="/data_nfs/env-hp-p/deployments" />
+	<property name="env-hp-p.environmentlist" value="env-hp-p-app00,env-hp-p-app01,env-hp-p-app02,env-hp-p-app03,env-hp-p-app04,env-hp-p-app05,env-hp-p-web01,env-hp-p-web02,env-hp-p-web03,env-hp-p-web04,env-hp-p-web05" />
+	<property name="env-hp-p.environmentinclude" value="common,libs,env-hp-p-app-common,env-hp-p-web-common,${env-hp-p.environmentlist}" />
+
+	
+	<!-- - - - - - - - - - - - - 
+	  - Download hybris from hybris website
+	  - - - - - - - - - - - -  - -->
+	
+	<!-- This properties are used in the targets updateHybrisPlatformAndExtensions -->
+	<!-- the user Account.Namics has the E-Mail hybris-list@namics.com 
+		 https://inotes01.namics.com/mail-in/MI_hybris-list.nsf
+	-->
+	<!-- Per default the download of hybris is skiped -->
+	<property name="skip.download" value="true" />
+	<property name="skip.antInstall" value="true" />
+	<property name="hybris.account.user" value="distrelec" />
+	<property name="hybris.account.password" value="d1str313c!" />
+
+	
+	
+	<!-- - - - - - - - - - - - - 
+	  - frontend tests
+	  - - - - - - - - - - - -  - -->
+	
+	<!-- You can wait for a server to be deployed.  -->
+	<!-- This properties are used in the waitforurl -->
+	<property name="waitforurl" value="http://www.google.com" />
+	<property name="maxwaitforseconds" value="30" />
+
+	<!-- All extensions, containing agile acceptance tests with concordion can be listed here to execute tests -->
+	<!-- This properties are used in the specs,cleanspecs,compilespecs,testspecs -->
+	<!--
+	<property name="frontendtests.extensionlist" value="namacceleratorplusfrontendtests" />
+	-->
+
+	<!-- - - - - - - - - - - - - 
+	  - Install ant 
+	  - - - - - - - - - - - -  - -->
+	<!-- This properties are zip files that are downloaded and installed in the given target location -->
+	<property name="ant.external.download.url" value="http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.1-bin.zip" />
+	<property name="ant.external.filename" value="apache-ant-1.9.1" />
+	<property name="ant.external.target.location" value="${project.home}" />
+
+	<fileset id="ant.additional.libs" dir="${environment.home}/libs/ant-lib-dir">
+		<include name="**/*.jar"/>
+	</fileset>
+	
+	
+	<!-- - - - - - - - - - - - - 
+	  - Install sample data 
+	  - - - - - - - - - - - -  - -->
+	<property name="db.external.download.url" value="http://zhfiler.zh.ch.namics.com/projekte/Distrelec/Technology/live-dump/vmimage.zip" />
+	<property name="db.external.target.location" value="${project.home}/vmimage" />
+
+	<property name="media.external.download.url" value="http://zhfiler.zh.ch.namics.com/projekte/Distrelec/Technology/live-dump/medias.zip" />
+	<property name="media.external.target.location" value="${hybris.home}/data/media" />
+
+	<!-- - - - - - - - - - - - - 
+	  - Run hybris as service (windows) / deamon (unix)
+	  - - - - - - - - - - - -  - -->
+	<property name="serviceRunAsUser" value="www" />
+	<property name="serviceServerPath" value="${hybrisserver.platform.home}" />
+	<property name="serviceTomcatPath" value="${serviceServerPath}/tomcat/bin" />
+	<property name="serviceProcessName" value="hybrisserver" />
+	<property name="serviceAutorunDir" value="/etc/init.d" />
+	
+	<!--
+	*********************************
+	target: verify (default target)
+	*********************************
+	-->
+	<target name="verify" description="Print out current configuration and a help function.">
+		<echo message="______________________________________________________________________________" />
+		<echo message="   Configured ant properties: (can be overridden by using -Dparameter=value)" />
+		<echo message="______________________________________________________________________________" />
+		<echo message="project.home is              ${project.home}" />
+		<echo message="mandant.name is              ${mandant.name} " />
+		<echo message="mandant.version is           ${mandant.version}" />
+		<echo message="target.environment is        ${target.environment}" />
+		<echo message="environment.home is          ${environment.home}" />
+		<echo message="common.hybris is             ${common.hybris}" />
+		<echo message="______________________________________________________________________________" />
+		<echo message="   Created and assembled properties by ant:" />
+		<echo message="______________________________________________________________________________" />
+
+		<echo message="hybris.platform.home is      ${hybris.platform.home}" />
+		<echo message="hybris.extensions.home is    ${hybris.extensions.home}" />
+		<echo message="extensionlist is             ${extensionlist}" />
+		<echo message="svn.repository.url is        ${svn.repository.url} " />
+		<echo message="svn.username is              ${svn.repository.username}" />
+		<echo message="svn.password is              *****" />
+		<echo message="current.os is                ${os.name}" />
+		<echo message="JAVA_HOME is                 ${env.JAVA_HOME}" />
+		<echo message="ANT_HOME is                  ${env.ANT_HOME}" />
+		<echo message="______________________________________________________________________________" />
+		<echo message="To see a list of available targets, type 'ant -p' in your console." />
+		<echo message="______________________________________________________________________________" />
+
+		<echo message="______________________________________________________________________________" />
+		<echo message="   Other properties:" />
+		<echo message="______________________________________________________________________________" />
+		<echo message="releaseToInstall is              ${releaseToInstall}" />
+		<echo message="writable svn.username is         ${svnUser}" />
+		<echo message="writable svn.password is         *****" />
+
+	</target>
+
+
+</project>
+
